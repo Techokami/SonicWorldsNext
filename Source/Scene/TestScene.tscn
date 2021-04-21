@@ -18,7 +18,7 @@ radius = 111.651
 [node name="TestScene" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 110.251, 145.931 )
+position = Vector2( 672.811, 165.272 )
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 current = true
@@ -184,6 +184,13 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain2"]
 shape = SubResource( 1 )
+
+[node name="TestTerrain12" type="StaticBody2D" parent="."]
+position = Vector2( 1425.11, -26.3281 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TestTerrain12"]
+polygon = PoolVector2Array( -185.397, 79.8592, 159.213, -69.5969, 155.842, 109.076 )
+one_way_collision = true
 
 [node name="TestTerrain4" type="StaticBody2D" parent="."]
 position = Vector2( 1730.34, 107.77 )
