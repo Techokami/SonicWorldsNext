@@ -1,0 +1,60 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[  ]
+_global_script_class_icons={
+
+}
+
+[application]
+
+config/name="SonicPhysics"
+run/main_scene="res://Scene/TestScene.tscn"
+config/icon="res://icon.png"
+
+[debug]
+
+shapes/collision/shape_color=Color( 1, 1, 1, 0.501961 )
+
+[importer_defaults]
+
+texture={
+"compress/bptc_ldr": 0,
+"compress/hdr_mode": 0,
+"compress/lossy_quality": 0.7,
+"compress/mode": 0,
+"compress/normal_map": 0,
+"detect_3d": false,
+"flags/anisotropic": false,
+"flags/filter": false,
+"flags/mipmaps": false,
+"flags/repeat": 0,
+"flags/srgb": 2,
+"process/HDR_as_SRGB": false,
+"process/fix_alpha_border": true,
+"process/invert_color": false,
+"process/premult_alpha": false,
+"size_limit": 0,
+"stream": false,
+"svg/scale": 1.0
+}
+
+[layer_names]
+
+2d_physics/layer_1="Floors"
+2d_physics/layer_2="Walls"
+2d_physics/layer_3="Ceilings"
+2d_physics/layer_4="High"
+2d_physics/layer_5="Low"
+2d_physics/layer_6="Player"
+
+[rendering]
+
+environment/default_environment="res://default_env.tres"

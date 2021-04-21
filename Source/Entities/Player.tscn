@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Scripts/PhysicsObject.gd" type="Script" id=1]
+[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://Scripts/PropertiesLookup.gd" type="Script" id=4]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 9, 19 )
+
+[node name="Player" type="KinematicBody2D"]
+collision_layer = 16
+collision_mask = 32
+script = ExtResource( 1 )
+
+[node name="PhysicsLookUp" type="Node" parent="."]
+script = ExtResource( 4 )
+sonic2FloorSnap = false
+
+[node name="HitBox" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="icon" type="Sprite" parent="."]
+scale = Vector2( 0.134703, 0.292965 )
+z_index = -1
+texture = ExtResource( 2 )

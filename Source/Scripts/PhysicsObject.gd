@@ -1,0 +1,296 @@
+extends KinematicBody2D
+
+
+# Sensors
+var floorCastLeft = RayCast2D.new();
+var floorCastRight = RayCast2D.new();
+var platCastLeft = RayCast2D.new();
+var platCastRight = RayCast2D.new();
+
+var roofCastLeft = RayCast2D.new();
+var roofCastRight = RayCast2D.new();
+
+var wallCastLeft = RayCast2D.new();
+var wallCastRight = RayCast2D.new();
+
+# Physics variables
+var velocity = Vector2.ZERO;
+var ground = true;
+var angle = Vector2.UP;
+
+# Adjustable/Lookup variables
+onready var speedStepLimit = $PhysicsLookUp.speedStepLimit;
+onready var groundLookDistance = $PhysicsLookUp.groundLookDistance;
+onready var sonic2FloorSnap = $PhysicsLookUp.sonic2FloorSnap; # Use the sonic 2 and onward floor snapping check
+onready var pushRadius = $PhysicsLookUp.pushRadius;
+onready var platformNormal = $PhysicsLookUp.platformNormal;
+
+
+
+func _ready():
+	add_child(floorCastLeft);
+	add_child(floorCastRight);
+	floorCastLeft.enabled = true;
+	floorCastRight.enabled = true;
+	
+	add_child(platCastLeft);
+	add_child(platCastRight);
+	platCastLeft.enabled = true;
+	platCastRight.enabled = true;
+	
+	add_child(roofCastLeft);
+	add_child(roofCastRight);
+	roofCastLeft.enabled = true;
+	roofCastRight.enabled = true;
+	roofCastLeft.set_collision_mask_bit(2,true);
+	roofCastRight.set_collision_mask_bit(2,true);
+	roofCastLeft.set_collision_mask_bit(0,false);
+	roofCastRight.set_collision_mask_bit(0,false);
+	
+	add_child(wallCastLeft);
+	add_child(wallCastRight);
+	wallCastLeft.enabled = true;
+	wallCastRight.enabled = true;
+	wallCastLeft.set_collision_mask_bit(1,true);
+	wallCastRight.set_collision_mask_bit(1,true);
+	wallCastLeft.set_collision_mask_bit(0,false);
+	wallCastRight.set_collision_mask_bit(0,false);
+	
+	update_sensors();
+
+
+# Use this to quickly update all the casts if the hitbox mask gets changed
+func update_sensors():
+	floorCastLeft.position.x = -$HitBox.shape.extents.x;
+	floorCastLeft.cast_to.y = $HitBox.shape.extents.y+groundLookDistance;
+	
+	floorCastRight.position.x = -floorCastLeft.position.x;
+	floorCastRight.cast_to.y = floorCastLeft.cast_to.y;
+	
+	platCastLeft.position = floorCastLeft.position;
+	platCastLeft.cast_to.y = 5;
+	platCastLeft.set_collision_mask_bit(0,true);
+	#platCastLeft.set_collision_mask_bit(3,true);
+	
+	platCastRight.position = floorCastRight.position;
+	platCastRight.cast_to.y = 5;
+	platCastRight.collision_mask = platCastLeft.collision_mask;
+	
+	roofCastLeft.position.x = floorCastLeft.position.x;
+	roofCastRight.position.x = floorCastRight.position.x;
+	
+	wallCastLeft.cast_to = Vector2(-pushRadius,0);
+	wallCastRight.cast_to = Vector2(pushRadius,0);
+
+
+func _physics_process(delta):
+	if (Input.is_action_pressed("ui_right")):
+		velocity.x += 300*delta;
+	if (Input.is_action_pressed("ui_left")):
+		velocity.x -= 300*delta;
+	if (Input.is_action_pressed("ui_up")):
+		velocity.y = -200;
+	elif (Input.is_action_pressed("ui_down")):
+		velocity.y = 200;
+	else:
+		velocity.y = 0;
+	
+	var getFloor;# = get_closest_sensor(floorCastLeft,floorCastRight);
+	var velocityInterp = velocity*delta;
+	
+	
+	# sensor control
+	if (!ground):
+		floorCastLeft.cast_to.y = $HitBox.shape.extents.y;
+		floorCastRight.cast_to.y = floorCastLeft.cast_to.y;
+		roofCastLeft.cast_to.y = -floorCastLeft.cast_to.y;
+		roofCastRight.cast_to.y = -floorCastLeft.cast_to.y;
+		wallCastLeft.position.y = 0;
+		wallCastRight.position.y = 0;
+	else:
+		roofCastLeft.cast_to.y = -$HitBox.shape.extents.y;
+		roofCastRight.cast_to.y = roofCastLeft.cast_to.y;
+		if (angle == Vector2.UP):
+			wallCastLeft.position.y = 8;
+			wallCastRight.position.y = 8;
+		else:
+			wallCastLeft.position.y = 0;
+			wallCastRight.position.y = 0;
+		# Set sonic 2 floor snap to false to restore snapping to sonic 1 floor snap logic
+		if (sonic2FloorSnap):
+			floorCastLeft.cast_to.y = $HitBox.shape.extents.y+min(abs(velocity.x/60)+4,groundLookDistance);
+		else:
+			floorCastLeft.cast_to.y = $HitBox.shape.extents.y+groundLookDistance;
+
+		floorCastRight.cast_to.y = floorCastLeft.cast_to.y;
+	
+	floorCastLeft.clear_exceptions();
+	floorCastRight.clear_exceptions();
+	platCastLeft.clear_exceptions();
+	platCastRight.clear_exceptions();
+	
+	while (velocityInterp != Vector2.ZERO):
+		
+		var clampedVelocity = velocityInterp.clamped(speedStepLimit);
+		
+		move_and_collide(clampedVelocity.rotated(angle.rotated(deg2rad(90)).angle()));
+		
+		# platforms
+		platCastLeft.force_raycast_update();
+		platCastRight.force_raycast_update();
+		
+		# Floor priority
+		# check with the kinematic body if there's a floor below, if there is
+		# set the floor to prioritise this collision
+		var memLayer = collision_layer;
+		collision_layer = 1;
+		
+		var floorPriority = (move_and_collide(Vector2.DOWN.rotated(rotation)*8,true,true,true));
+		
+		collision_layer = memLayer;
+		
+		if (ground):
+			if (floorPriority):
+				# left floor priority
+				while (floorCastLeft.is_colliding()):
+					floorCastLeft.add_exception(floorCastLeft.get_collider());
+					floorCastLeft.force_raycast_update();
+				floorCastLeft.remove_exception(floorPriority.collider);
+				floorCastLeft.force_raycast_update();
+				if (!floorCastLeft.is_colliding()):
+					floorCastLeft.clear_exceptions();
+				
+				# right floor priority
+				while (floorCastRight.is_colliding()):
+					floorCastRight.add_exception(floorCastRight.get_collider());
+					floorCastRight.force_raycast_update();
+				floorCastRight.remove_exception(floorPriority.collider);
+				floorCastRight.force_raycast_update();
+				if (!floorCastRight.is_colliding()):
+					floorCastRight.clear_exceptions();
+			
+			
+		while (platCastLeft.is_colliding()):
+			if (platCastLeft.get_collider() != floorPriority):
+				floorCastLeft.add_exception(platCastLeft.get_collider());
+				floorCastRight.add_exception(platCastLeft.get_collider());
+				platCastLeft.add_exception(platCastLeft.get_collider());
+				platCastRight.add_exception(platCastLeft.get_collider());
+				platCastLeft.force_raycast_update();
+
+
+		while (platCastRight.is_colliding()):
+			if (platCastRight.get_collider() != floorPriority):
+				floorCastRight.add_exception(platCastRight.get_collider());
+				floorCastLeft.add_exception(platCastRight.get_collider());
+				platCastRight.add_exception(platCastRight.get_collider());
+				platCastLeft.add_exception(platCastRight.get_collider());
+				platCastRight.force_raycast_update();
+		
+		
+		# Wall code
+		
+		var getWall = get_closest_sensor(wallCastLeft,wallCastRight);
+		
+		if (getWall):
+			position += getWall.get_collision_point()-getWall.global_position-(Vector2(pushRadius,0)*sign(getWall.cast_to.x)).rotated(rotation);
+		
+		
+		velocityInterp -= clampedVelocity;
+		
+		force_update_transform();
+		
+		getFloor = get_closest_sensor(floorCastLeft,floorCastRight);
+		
+		
+		if (getFloor && round(velocity.y) >= 0):
+			ground = true;
+			position += getFloor.get_collision_point()-getFloor.global_position-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation);
+			
+			var snapped = (snap_rotation(-rad2deg(getFloor.get_collision_normal().angle())-90));
+			
+			# check if angle gets changed
+			if (rotation != snapped.angle()):
+				# get the current rotation
+				var lastRotation = rotation;
+				# do the snap
+				rotation = snapped.angle();
+				
+				# verify new angle won't make the player snap back the next frame
+				# for the original rotation method comment this next part out
+				var lastFloor = getFloor;
+				getFloor = get_closest_sensor(floorCastLeft,floorCastRight);
+				# check new rotation
+				if (getFloor):
+					if (snapped != (snap_rotation(-rad2deg(getFloor.get_collision_normal().angle())-90))):
+						rotation = lastRotation;
+				else:
+					getFloor = lastFloor;
+				
+			
+			
+			$icon.rotation = getFloor.get_collision_normal().angle()+deg2rad(90)-rotation;
+			angle = getFloor.get_collision_normal();
+	
+		else:
+			angle = Vector2.UP;
+			$icon.rotation = 0;
+			rotation = 0;
+			ground = false;
+			
+			var getRoof = get_closest_sensor(roofCastLeft,roofCastRight);
+			if (getRoof):
+				position += getRoof.get_collision_point()-getRoof.global_position+($HitBox.shape.extents*Vector2(0,1));
+			
+		
+	update();
+	
+
+func get_closest_sensor(firstRaycast,secondRaycast):
+	var leftFloor = null;
+	var rightFloor = null;
+	
+	firstRaycast.force_update_transform();
+	secondRaycast.force_update_transform();
+	firstRaycast.force_raycast_update();
+	secondRaycast.force_raycast_update();
+	
+	if (firstRaycast.is_colliding()):
+		leftFloor = firstRaycast;
+	if (secondRaycast.is_colliding()):
+		rightFloor = secondRaycast;
+	
+	if (leftFloor == null || rightFloor == null):
+		if (leftFloor != null):
+			return leftFloor;
+		elif (rightFloor != null):
+			return rightFloor;
+		return null;
+	
+	if ((leftFloor.global_position-leftFloor.get_collision_point()).length() <
+	(rightFloor.global_position-rightFloor.get_collision_point()).length()):
+		return leftFloor;
+	
+	return rightFloor;
+
+func snap_rotation(angle):
+	angle = round(angle);
+	if (angle < 0):
+		angle += 360;
+	
+	#Floor
+	if (angle <= 45 || angle >= 315):
+		return Vector2.RIGHT;
+	#Right Wall
+	elif (angle >= 46 && angle <= 134):
+		return Vector2.UP;
+	#Ceiling
+	elif (angle >= 135 && angle <= 225):
+		return Vector2.LEFT;
+	#Left Wall
+	elif (angle >= 226 && angle <= 314):
+		return Vector2.DOWN;
+
+func _draw():
+	draw_line(Vector2.RIGHT*9,Vector2(9,19),Color.red,1);
+	draw_line(Vector2.LEFT*9,Vector2(-9,19),Color.green,1);

@@ -1,0 +1,358 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Entities/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Graphics/Slope.png" type="Texture" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 223.368, 10 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 114.831, 10 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 8, 8 )
+
+[sub_resource type="CircleShape2D" id=4]
+radius = 111.651
+
+[node name="TestScene" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 110.251, 145.931 )
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+current = true
+
+[node name="TestTerrain" type="StaticBody2D" parent="."]
+position = Vector2( 466.831, 191.543 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain"]
+position = Vector2( -2.83099, 0.457001 )
+shape = SubResource( 1 )
+
+[node name="Platform" type="StaticBody2D" parent="."]
+position = Vector2( 416, 48 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform"]
+modulate = Color( 1, 1, 0, 1 )
+position = Vector2( 0, 1.19209e-07 )
+shape = SubResource( 2 )
+
+[node name="Platform2" type="StaticBody2D" parent="."]
+position = Vector2( 111.425, 175.271 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform2"]
+modulate = Color( 1, 1, 0, 1 )
+position = Vector2( 0, 1.19209e-07 )
+shape = SubResource( 2 )
+one_way_collision = true
+
+[node name="Platform3" type="StaticBody2D" parent="."]
+position = Vector2( 624, 504 )
+scale = Vector2( 0.84, 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform3"]
+modulate = Color( 1, 1, 0, 1 )
+position = Vector2( 0, 1.19209e-07 )
+shape = SubResource( 2 )
+one_way_collision = true
+
+[node name="Platform4" type="StaticBody2D" parent="."]
+position = Vector2( 552, 704 )
+scale = Vector2( 0.84, 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform4"]
+modulate = Color( 1, 1, 0, 1 )
+position = Vector2( 0, 1.19209e-07 )
+shape = SubResource( 2 )
+one_way_collision = true
+
+[node name="Platform5" type="StaticBody2D" parent="."]
+position = Vector2( 536, 680 )
+scale = Vector2( 0.16, 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform5"]
+modulate = Color( 1, 1, 0, 1 )
+position = Vector2( 0, 1.19209e-07 )
+shape = SubResource( 2 )
+one_way_collision = true
+
+[node name="Block" type="StaticBody2D" parent="."]
+position = Vector2( 200, 272 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Block"]
+position = Vector2( 0.169098, 0.456772 )
+shape = SubResource( 3 )
+
+[node name="Block2" type="StaticBody2D" parent="."]
+position = Vector2( 216, 288 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Block2"]
+position = Vector2( 0.169098, 0.456772 )
+shape = SubResource( 3 )
+
+[node name="Block3" type="StaticBody2D" parent="."]
+position = Vector2( 232, 304 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Block3"]
+position = Vector2( 0.169098, 0.456772 )
+shape = SubResource( 3 )
+
+[node name="Block4" type="StaticBody2D" parent="."]
+position = Vector2( 248, 312 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Block4"]
+position = Vector2( 0.169098, 0.456772 )
+shape = SubResource( 3 )
+
+[node name="Block5" type="StaticBody2D" parent="."]
+position = Vector2( 264, 320 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Block5"]
+position = Vector2( 0.169098, 0.456772 )
+shape = SubResource( 3 )
+
+[node name="Block6" type="StaticBody2D" parent="."]
+position = Vector2( 280, 328 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Block6"]
+position = Vector2( 0.169098, 0.456772 )
+shape = SubResource( 3 )
+
+[node name="Block7" type="StaticBody2D" parent="."]
+position = Vector2( 296, 344 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Block7"]
+position = Vector2( 0.169098, 0.456772 )
+shape = SubResource( 3 )
+
+[node name="TestTerrain5" type="StaticBody2D" parent="."]
+position = Vector2( -411.353, 4.89404 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain5"]
+shape = SubResource( 4 )
+
+[node name="Platform6" type="StaticBody2D" parent="."]
+position = Vector2( -241.015, -96.7292 )
+scale = Vector2( 1.48, 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform6"]
+modulate = Color( 1, 1, 0, 1 )
+position = Vector2( 0.425644, 1.19209e-07 )
+shape = SubResource( 2 )
+one_way_collision = true
+
+[node name="TestTerrain11" type="StaticBody2D" parent="."]
+position = Vector2( -68.4807, 4.85001 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain11"]
+shape = SubResource( 4 )
+
+[node name="TestTerrain3" type="StaticBody2D" parent="."]
+position = Vector2( 1303.45, 25.219 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain3"]
+shape = SubResource( 1 )
+
+[node name="TestTerrain2" type="StaticBody2D" parent="."]
+position = Vector2( 878.426, 111.808 )
+rotation = -0.401786
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain2"]
+shape = SubResource( 1 )
+
+[node name="TestTerrain4" type="StaticBody2D" parent="."]
+position = Vector2( 1730.34, 107.77 )
+rotation = 0.382003
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain4"]
+shape = SubResource( 1 )
+
+[node name="TestTerrain9" type="StaticBody2D" parent="."]
+position = Vector2( 712, 472 )
+rotation = 1.57079
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain9"]
+shape = SubResource( 1 )
+
+[node name="TestTerrain10" type="StaticBody2D" parent="."]
+position = Vector2( 448, 896 )
+rotation = 1.57079
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain10"]
+shape = SubResource( 1 )
+
+[node name="Slope" type="Sprite" parent="."]
+position = Vector2( 566, 118 )
+texture = ExtResource( 2 )
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="."]
+position = Vector2( 640, 632 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D2"]
+polygon = PoolVector2Array( 64, 64, -64, 64, -48, 62, -43, 61, -31, 59, -23, 56, -8, 50, 3, 44, 10, 40, 20, 32, 28, 24, 35, 15, 51, -9, 53, -13, 55, -20, 59, -34, 62, -52, 63, -64, 64, -64 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="."]
+position = Vector2( 640, 312 )
+scale = Vector2( 1, -1 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D3"]
+polygon = PoolVector2Array( 64, 64, -64, 64, -48, 62, -43, 61, -31, 59, -23, 56, -8, 50, 3, 44, 10, 40, 20, 32, 28, 24, 35, 15, 51, -9, 53, -13, 55, -20, 59, -34, 62, -52, 63, -64, 64, -64 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="."]
+position = Vector2( 536, 312 )
+scale = Vector2( -1, -1 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D4"]
+polygon = PoolVector2Array( 64, 64, -64, 64, -48, 62, -43, 61, -31, 59, -23, 56, -8, 50, 3, 44, 10, 40, 20, 32, 28, 24, 35, 15, 51, -9, 53, -13, 55, -20, 59, -34, 62, -52, 63, -64, 64, -64 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="StaticBody2D5" type="StaticBody2D" parent="."]
+position = Vector2( 536.667, 432 )
+scale = Vector2( -1, 1 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D5"]
+polygon = PoolVector2Array( 64, 64, -64, 64, -48, 62, -43, 61, -31, 59, -23, 56, -8, 50, 3, 44, 10, 40, 20, 32, 28, 24, 35, 15, 51, -9, 53, -13, 55, -20, 59, -34, 62, -52, 63, -64, 64, -64 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="TestTerrain6" type="StaticBody2D" parent="."]
+position = Vector2( 640, -31 )
+rotation = -1.5708
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain6"]
+position = Vector2( 0.169098, 0.456772 )
+shape = SubResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="StaticBody2D" type="StaticBody2D" parent="TestTerrain6"]
+position = Vector2( -149, -74 )
+rotation = 1.5708
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TestTerrain6/StaticBody2D"]
+polygon = PoolVector2Array( 64, 64, -64, 64, -48, 62, -43, 61, -31, 59, -23, 56, -8, 50, 3, 44, 10, 40, 20, 32, 28, 24, 35, 15, 51, -9, 53, -13, 55, -20, 59, -34, 62, -52, 63, -64, 64, -64 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="TestTerrain7" type="StaticBody2D" parent="."]
+position = Vector2( 418, -264 )
+rotation = -3.14159
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain7"]
+position = Vector2( 0.169098, 0.456772 )
+shape = SubResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="StaticBody2D" type="StaticBody2D" parent="TestTerrain7"]
+position = Vector2( -149, -74 )
+rotation = 1.5708
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TestTerrain7/StaticBody2D"]
+polygon = PoolVector2Array( 64, 64, -64, 64, -48, 62, -43, 61, -31, 59, -23, 56, -8, 50, 3, 44, 10, 40, 20, 32, 28, 24, 35, 15, 51, -9, 53, -13, 55, -20, 59, -34, 62, -52, 63, -64, 64, -64 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="TestTerrain8" type="StaticBody2D" parent="."]
+position = Vector2( 185, -41 )
+rotation = -4.71239
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain8"]
+position = Vector2( -199, -1.09018 )
+shape = SubResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="StaticBody2D" type="StaticBody2D" parent="TestTerrain8"]
+position = Vector2( -149, -74 )
+rotation = 1.5708
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TestTerrain8/StaticBody2D"]
+polygon = PoolVector2Array( 64, 64, -64, 64, -48, 62, -43, 61, -31, 59, -23, 56, -8, 50, 3, 44, 10, 40, 20, 32, 28, 24, 35, 15, 51, -9, 53, -13, 55, -20, 59, -34, 62, -52, 63, -64, 64, -64 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="TestTerrain8"]
+position = Vector2( 161, -73.554 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TestTerrain8/StaticBody2D2"]
+polygon = PoolVector2Array( 64, 64, -64, 64, -48, 62, -43, 61, -31, 59, -23, 56, -8, 50, 3, 44, 10, 40, 20, 32, 28, 24, 35, 15, 51, -9, 53, -13, 55, -20, 59, -34, 62, -52, 63, -64, 64, -64 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2( -920.932, 115.929 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+polygon = PoolVector2Array( 0, -72, 48, -50, 72, 0, 48, 50, 0, 72, -48, 50, -72, 0, -48, -50, 0, -72 )
