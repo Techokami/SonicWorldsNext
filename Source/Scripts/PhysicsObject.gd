@@ -95,6 +95,8 @@ func _physics_process(delta):
 	else:
 		velocity.y = 0;
 	
+	if (Input.is_action_just_pressed("ui_end")):
+		print(move_and_collide(Vector2.RIGHT*16,true,true,true))
 	var getFloor;# = get_closest_sensor(floorCastLeft,floorCastRight);
 	var velocityInterp = velocity*delta;
 	
@@ -124,30 +126,39 @@ func _physics_process(delta):
 
 		floorCastRight.cast_to.y = floorCastLeft.cast_to.y;
 	
-	floorCastLeft.clear_exceptions();
-	floorCastRight.clear_exceptions();
-	platCastLeft.clear_exceptions();
-	platCastRight.clear_exceptions();
+	
+	# Floor priority
+	# check with the kinematic body if there's a floor below, if there is
+	# set the floor to prioritise this collision
+	var memLayer = collision_layer;
+	collision_layer = 1;
+	var floorPriority = (move_and_collide(velocityInterp.rotated(angle.rotated(deg2rad(90)).angle()),true,true,true));
+	collision_layer = memLayer;
 	
 	while (velocityInterp != Vector2.ZERO):
 		
 		var clampedVelocity = velocityInterp.clamped(speedStepLimit);
 		
+		
+		floorCastLeft.clear_exceptions();
+		floorCastRight.clear_exceptions();
+		platCastLeft.clear_exceptions();
+		platCastRight.clear_exceptions();
+		
+		# move the object
 		move_and_collide(clampedVelocity.rotated(angle.rotated(deg2rad(90)).angle()));
+		
+		if (!floorPriority):
+			collision_layer = 1;
+			floorPriority = move_and_collide(Vector2.DOWN.rotated(rotation)*8,true,true,true);
+			collision_layer = memLayer;
+		
+		
 		
 		# platforms
 		platCastLeft.force_raycast_update();
 		platCastRight.force_raycast_update();
 		
-		# Floor priority
-		# check with the kinematic body if there's a floor below, if there is
-		# set the floor to prioritise this collision
-		var memLayer = collision_layer;
-		collision_layer = 1;
-		
-		var floorPriority = (move_and_collide(Vector2.DOWN.rotated(rotation)*8,true,true,true));
-		
-		collision_layer = memLayer;
 		
 		if (ground):
 			if (floorPriority):
@@ -155,6 +166,7 @@ func _physics_process(delta):
 				while (floorCastLeft.is_colliding()):
 					floorCastLeft.add_exception(floorCastLeft.get_collider());
 					floorCastLeft.force_raycast_update();
+				
 				floorCastLeft.remove_exception(floorPriority.collider);
 				floorCastLeft.force_raycast_update();
 				if (!floorCastLeft.is_colliding()):
@@ -164,14 +176,14 @@ func _physics_process(delta):
 				while (floorCastRight.is_colliding()):
 					floorCastRight.add_exception(floorCastRight.get_collider());
 					floorCastRight.force_raycast_update();
+				
 				floorCastRight.remove_exception(floorPriority.collider);
 				floorCastRight.force_raycast_update();
 				if (!floorCastRight.is_colliding()):
 					floorCastRight.clear_exceptions();
 			
 			
-		while (platCastLeft.is_colliding()):
-			if (platCastLeft.get_collider() != floorPriority):
+			while (platCastLeft.is_colliding()):
 				floorCastLeft.add_exception(platCastLeft.get_collider());
 				floorCastRight.add_exception(platCastLeft.get_collider());
 				platCastLeft.add_exception(platCastLeft.get_collider());
@@ -179,8 +191,7 @@ func _physics_process(delta):
 				platCastLeft.force_raycast_update();
 
 
-		while (platCastRight.is_colliding()):
-			if (platCastRight.get_collider() != floorPriority):
+			while (platCastRight.is_colliding()):
 				floorCastRight.add_exception(platCastRight.get_collider());
 				floorCastLeft.add_exception(platCastRight.get_collider());
 				platCastRight.add_exception(platCastRight.get_collider());
