@@ -18,7 +18,7 @@ radius = 111.651
 [node name="TestScene" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 672.811, 165.272 )
+position = Vector2( -917, 13 )
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 current = true
@@ -80,7 +80,7 @@ shape = SubResource( 2 )
 one_way_collision = true
 
 [node name="Block" type="StaticBody2D" parent="."]
-position = Vector2( 200, 272 )
+position = Vector2( 200, 278 )
 collision_layer = 7
 collision_mask = 7
 
