@@ -13,6 +13,9 @@ var roofCastRight = RayCast2D.new();
 var wallCastLeft = RayCast2D.new();
 var wallCastRight = RayCast2D.new();
 
+var castList = [floorCastLeft,floorCastRight,platCastLeft,platCastRight,
+roofCastLeft,roofCastRight,wallCastLeft,wallCastRight];
+
 # Physics variables
 var velocity = Vector2.ZERO;
 var ground = true;
@@ -23,7 +26,7 @@ onready var speedStepLimit = $PhysicsLookUp.speedStepLimit;
 onready var groundLookDistance = $PhysicsLookUp.groundLookDistance;
 onready var sonic2FloorSnap = $PhysicsLookUp.sonic2FloorSnap; # Use the sonic 2 and onward floor snapping check
 onready var pushRadius = $HitBox.shape.extents.x+1;
-
+export (int, "Low", "High") var defaultLayer = 0;
 
 
 func _ready():
@@ -120,6 +123,7 @@ func _physics_process(delta):
 	# set the floor to prioritise this collision
 	var memLayer = collision_layer;
 	collision_layer = 1;
+	
 	var floorPriority = (move_and_collide(velocityInterp.rotated(angle.rotated(deg2rad(90)).angle()),true,true,true));
 	collision_layer = memLayer;
 	
@@ -127,13 +131,16 @@ func _physics_process(delta):
 		
 		var clampedVelocity = velocityInterp.clamped(speedStepLimit);
 		
-		floorCastLeft.clear_exceptions();
-		floorCastRight.clear_exceptions();
-		platCastLeft.clear_exceptions();
-		platCastRight.clear_exceptions();
+		#floorCastLeft.clear_exceptions();
+		#floorCastRight.clear_exceptions();
+		#platCastLeft.clear_exceptions();
+		#platCastRight.clear_exceptions();
+		
+		clear_all_exceptions();
 		
 		# move the object
 		move_and_collide(clampedVelocity.rotated(angle.rotated(deg2rad(90)).angle()));
+		
 		
 		# Floor priority back up check, if there's no floor ahead, check below
 		if (!floorPriority):
@@ -142,6 +149,8 @@ func _physics_process(delta):
 			collision_layer = memLayer;
 		
 		
+		
+		exclude_layers();
 		
 		# platforms
 		platCastLeft.force_raycast_update();
@@ -186,6 +195,7 @@ func _physics_process(delta):
 				platCastLeft.add_exception(platCastRight.get_collider());
 				platCastRight.force_raycast_update();
 		
+		exclude_layers();
 		
 		# Wall code
 		
@@ -301,3 +311,20 @@ func snap_rotation(angle):
 	#Left Wall
 	elif (angle >= 226 && angle <= 314):
 		return Vector2.DOWN;
+
+func exclude_layers():
+	for i in castList:
+		i.force_raycast_update();
+		quick_exclude_check(i);
+
+func quick_exclude_check(rayCast):
+	if (rayCast.is_colliding()):
+		if (rayCast.get_collider().get_collision_mask_bit(4-defaultLayer)):
+			for i in castList:
+				i.add_exception(rayCast.get_collider());
+
+func clear_all_exceptions():
+	for i in castList:
+		i.clear_exceptions();
+	for i in get_collision_exceptions():
+		remove_collision_exception_with(i);

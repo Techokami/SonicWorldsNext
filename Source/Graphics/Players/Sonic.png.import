@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Sonic2F_S3K.png-12926468547306bfd68b7719c4da7f10.stex"
+path="res://.import/Sonic.png-1b06635c58e505fe96f167fa3df41f89.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Graphics/Players/Sonic2F_S3K.png"
-dest_files=[ "res://.import/Sonic2F_S3K.png-12926468547306bfd68b7719c4da7f10.stex" ]
+source_file="res://Graphics/Players/Sonic.png"
+dest_files=[ "res://.import/Sonic.png-1b06635c58e505fe96f167fa3df41f89.stex" ]
 
 [params]
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Scripts/Objects/Player.gd" type="Script" id=1]
-[ext_resource path="res://Graphics/Players/Sonic2F_S3K.png" type="Texture" id=2]
+[ext_resource path="res://Graphics/Players/Sonic.png" type="Texture" id=2]
 [ext_resource path="res://Scripts/PropertiesLookup.gd" type="Script" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
@@ -74,7 +74,7 @@ tracks/0/keys = {
 }
 
 [node name="Player" type="KinematicBody2D"]
-collision_layer = 16
+collision_layer = 0
 collision_mask = 32
 script = ExtResource( 1 )
 
@@ -85,8 +85,8 @@ script = ExtResource( 4 )
 shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
-position = Vector2( 0, -4 )
 texture = ExtResource( 2 )
+offset = Vector2( 0, -4 )
 hframes = 16
 vframes = 16
 
