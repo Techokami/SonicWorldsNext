@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/7. SWD_Drowning.ogg-828b916c28e2776aa16fcd123fa86392.oggstr"
+
+[deps]
+
+source_file="res://Audio/Soundtrack/7. SWD_Drowning.ogg"
+dest_files=[ "res://.import/7. SWD_Drowning.ogg-828b916c28e2776aa16fcd123fa86392.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

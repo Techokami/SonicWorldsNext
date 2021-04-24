@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/9. SWD_TitleScreen.ogg-13ff16bed0156aacbbb26f510c6f76d4.oggstr"
+
+[deps]
+
+source_file="res://Audio/Soundtrack/9. SWD_TitleScreen.ogg"
+dest_files=[ "res://.import/9. SWD_TitleScreen.ogg-13ff16bed0156aacbbb26f510c6f76d4.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Entities/Main Objects/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Graphics/Slope.png" type="Texture" id=2]
 [ext_resource path="res://Entities/Main Objects/LayerSwitcher.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Audio/Soundtrack/6. SWD_TLZa1.ogg" type="AudioStream" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 223.368, 10 )
@@ -19,15 +20,9 @@ radius = 112.0
 [node name="TestScene" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 805, 470 )
+position = Vector2( 488, 672 )
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
-current = true
-
-[node name="Player2" parent="." instance=ExtResource( 1 )]
-position = Vector2( 775, 471 )
-
-[node name="Camera2D" type="Camera2D" parent="Player2"]
 current = true
 
 [node name="TestTerrain" type="StaticBody2D" parent="."]
@@ -73,6 +68,7 @@ scale = Vector2( 2.84, 1 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform3"]
 modulate = Color( 1, 1, 0, 1 )
 position = Vector2( 0, 1.19209e-07 )
+scale = Vector2( 1.39437, 1 )
 shape = SubResource( 2 )
 one_way_collision = true
 
@@ -316,7 +312,7 @@ __meta__ = {
 position = Vector2( 536.667, 432 )
 scale = Vector2( -1, 1 )
 collision_layer = 7
-collision_mask = 7
+collision_mask = 23
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D5"]
 polygon = PoolVector2Array( 64, 64, -64, 64, -48, 62, -43, 61, -31, 59, -23, 56, -8, 50, 3, 44, 10, 40, 20, 32, 28, 24, 35, 15, 51, -9, 53, -13, 55, -20, 59, -34, 62, -52, 63, -64, 64, -64 )
@@ -357,6 +353,22 @@ collision_mask = 7
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D8"]
 polygon = PoolVector2Array( 64, 64, -64, 64, -48, 62, -43, 61, -31, 59, -23, 56, -8, 50, 3, 44, 10, 40, 20, 32, 28, 24, 35, 15, 51, -9, 53, -13, 55, -20, 59, -34, 62, -52, 63, -64, 64, -64 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="LoopCorner" type="StaticBody2D" parent="."]
+position = Vector2( 640, 431 )
+rotation = -1.57079
+scale = Vector2( -1, 1 )
+collision_mask = 9
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="LoopCorner"]
+rotation = -1.57079
+scale = Vector2( -1, 1 )
+polygon = PoolVector2Array( 64, 64, -64, 64, -48, 62, -43, 61, -31, 59, -23, 56, -8, 50, 3, 44, 10, 40, 20, 32, 28, 24, 35, 15, 51, -9, 53, -13, 55, -20, 59, -34, 62, -52, 63, -64, 64, -64 )
+one_way_collision = true
+one_way_collision_margin = 0.1
 __meta__ = {
 "_edit_group_": true
 }
@@ -462,8 +474,8 @@ position = Vector2( 592, 274 )
 position = Vector2( 1128, 274 )
 
 [node name="LayerSwitcher3" parent="." instance=ExtResource( 3 )]
-position = Vector2( 450, 568 )
-size = Vector2( 1, 13 )
+position = Vector2( 450, 505 )
+size = Vector2( 1, 20 )
 leftLayer = 0
 
 [node name="LayerSwitcher6" parent="." instance=ExtResource( 3 )]
@@ -481,3 +493,7 @@ leftLayer = 0
 position = Vector2( 760, 430 )
 size = Vector2( 1, 8 )
 rightLayer = 1
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+autoplay = true

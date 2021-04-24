@@ -18,7 +18,7 @@ roofCastLeft,roofCastRight,wallCastLeft,wallCastRight];
 
 # Physics variables
 var velocity = Vector2.ZERO;
-var ground = true;
+var ground = false;
 var angle = Vector2.UP;
 
 # Adjustable/Lookup variables
@@ -126,6 +126,7 @@ func _physics_process(delta):
 	
 	var floorPriority = (move_and_collide(velocityInterp.rotated(angle.rotated(deg2rad(90)).angle()),true,true,true));
 	collision_layer = memLayer;
+	
 	
 	while (velocityInterp != Vector2.ZERO):
 		
