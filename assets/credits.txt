@@ -1,0 +1,8 @@
+Music files by MCKaosu/NoveltyMan
+
+Amy sprites (player, item icon, goal sign) by E-122-Psi, ChelseaCatGirl, MotorRoach
+Shadow sprites (player, item icon, goal sign) by Gardow
+Ray sprites (item icon, goal sign) by WizToad
+Mighty sprites (item icon, goal sign) by Dolphman
+
+All other graphical assets were taken from the original games and their prototypes, or edited/custom made by the Worlds Next Team.
