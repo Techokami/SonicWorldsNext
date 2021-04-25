@@ -1,0 +1,62 @@
+-------------------------------
+SONIC LEVEL MAKER
+EVERYTHING RIP
+-------------------------------
+
+1) CREDITS
+The sprites and tiles contained within were originally created by
+SEGA and Sonic Team.
+The rip was created by Techokami.
+
+If you use the contents of this package, you must give credit
+to Techokami, SEGA, and Sonic Team.
+
+If you did not download this archive from the following domains:
+https://holenet.info/
+https://www.spriters-resource.com/
+https://www.sounds-resource.com/
+https://www.sonicfangameshq.com/
+then you should immediately start yelling at the webmaster for
+mirroring this file without permission.
+PROTIP: If you ask first, I'll almost always say yes!
+
+2) THE RIPPING PROCESS
+PlaySEGA's Sonic Level Maker was this flash-based thinger that
+loaded assets via external files. Using the greatest (at the time)
+technology in ad blocking - AdBlock - I was able to intercept all
+the requests for external assets and save them locally to my computer.
+
+The conversion of the level chunks into images for the unique tileset
+provided in this game was done with a highly modified version of my
+Sonic 1/2/3K chunk ripper. It was a pain in the arse. That version
+appears to be lost... but generally, it's using the same data formats
+as Sonic 1.
+
+3) EXPLANATION OF ARCHIVES
+There are three versions of this archive: one that has everything, one
+that only has the audio files, and one that has everything but the
+audio files. This is because tSR and tSR. No, those two aren't the same
+site. Also I'm lazy and don't feel like making multiple readme files.
+
+4) CONTACT
+DO NOT ASK FOR LEVEL EDITING INSTRUCTIONS.
+DO NOT ASK FOR THINGS TO BE RIPPED.
+DO NOT ASK HOW I RIPPED THIS.
+DO NOT ASK HOW TO HACK ROMS.
+DO NOT ASK HOW TO WRITE PHP CODE.
+DO NOT ASK WHY IT ISN'T A GIANT SHEET.
+Email: techokami [AT] holenet [D0T] info
+
+5) GREETS
+Texelsaur, Ike Adibe, Kinsie, Shadsy, the Something Awful goons, PC0, 
+Scarred Sun, drx, Dazz, asie, Vexatos, Sangar, Naoshi, and the staff at:
+-Mario Fan Games Galaxy
+-Sonic Fan Games HQ
+-Sonic Retro
+-Dynapolitan
+-The Spriter's Resource
+-SMW Central
+
+6) THE END
+Enjoy the rips.
+-Techokami

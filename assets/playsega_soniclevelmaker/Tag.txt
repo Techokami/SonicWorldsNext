@@ -1,0 +1,8 @@
+Game: Sonic Level Maker (PlaySEGA)
+Subject: EVERYTHING
+Copyright: SEGA, Sonic Team
+Sprite Ripper: Techokami
+Hosting Permissions: The Spriters Resource
+		     Sonic Fan Games HQ
+		     holenet.info
+Notes: You should read the included readme file.
