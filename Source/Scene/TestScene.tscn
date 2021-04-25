@@ -20,7 +20,7 @@ radius = 112.0
 [node name="TestScene" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 488, 672 )
+position = Vector2( 388, 162 )
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 current = true
@@ -387,7 +387,7 @@ __meta__ = {
 }
 
 [node name="StaticBody2D" type="StaticBody2D" parent="TestTerrain6"]
-position = Vector2( -149, -74 )
+position = Vector2( -149, -72.0005 )
 rotation = 1.5708
 collision_layer = 7
 collision_mask = 7
@@ -431,6 +431,14 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain8"]
 position = Vector2( -199, -1.09018 )
+shape = SubResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="TestTerrain8"]
+position = Vector2( 157.625, -1.08985 )
+scale = Vector2( 0.320001, 1 )
 shape = SubResource( 1 )
 __meta__ = {
 "_edit_group_": true
@@ -497,3 +505,4 @@ rightLayer = 1
 [node name="Music" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 4 )
 autoplay = true
+bus = "Music"

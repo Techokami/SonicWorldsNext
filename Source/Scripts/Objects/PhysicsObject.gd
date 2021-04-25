@@ -204,6 +204,7 @@ func _physics_process(delta):
 		
 		if (getWall):
 			position += getWall.get_collision_point()-getWall.global_position-(Vector2(pushRadius,0)*sign(getWall.cast_to.x)).rotated(rotation);
+			touch_wall(getWall);
 		
 		
 		velocityInterp -= clampedVelocity;
@@ -223,7 +224,6 @@ func _physics_process(delta):
 		#	floorCastLeft.cast_to.y = $HitBox.shape.extents.y+min(abs(velocity.x/60)+4,groundLookDistance);
 			
 		if (getFloor && round(velocity.y) >= 0 && s2Check):
-			ground = true;
 			position += getFloor.get_collision_point()-getFloor.global_position-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation);
 			
 			var snapped = (snap_rotation(-rad2deg(getFloor.get_collision_normal().angle())-90));
@@ -250,20 +250,18 @@ func _physics_process(delta):
 			
 			#$icon.rotation = getFloor.get_collision_normal().angle()+deg2rad(90)-rotation;
 			angle = getFloor.get_collision_normal();
+			
+			if (!ground):
+				connect_to_floor();
 	
 		else:
-			# convert velocity
 			if (ground):
-				velocity = velocity.rotated(-angle.angle_to(Vector2.UP));
-			angle = Vector2.UP;
-			#$icon.rotation = 0;
-			rotation = 0;
-			ground = false;
-			
-			var getRoof = get_closest_sensor(roofCastLeft,roofCastRight);
-			if (getRoof):
-				position += getRoof.get_collision_point()-getRoof.global_position+($HitBox.shape.extents*Vector2(0,1));
-			
+				disconect_from_floor();
+			if (velocity.y < 0):
+				var getRoof = get_closest_sensor(roofCastLeft,roofCastRight);
+				if (getRoof):
+					position += getRoof.get_collision_point()-getRoof.global_position+($HitBox.shape.extents*Vector2(0,1));
+					touch_ceiling(getRoof);
 		
 	update();
 	
@@ -329,3 +327,34 @@ func clear_all_exceptions():
 		i.clear_exceptions();
 	for i in get_collision_exceptions():
 		remove_collision_exception_with(i);
+
+func update_raycasts():
+	for i in castList:
+		i.force_raycast_update();
+	
+
+
+func disconect_from_floor():
+	if ground:
+		# convert velocity
+		velocity = velocity.rotated(-angle.angle_to(Vector2.UP));
+		angle = Vector2.UP;
+		rotation = 0;
+		ground = false;
+
+func connect_to_floor():
+	if !ground:
+		ground = true;
+
+func touch_ceiling(caster):
+	var getAngle = -rad2deg(caster.get_collision_normal().angle())-90+360;
+	if (getAngle > 225 || getAngle < 135):
+		rotation = snap_rotation(-rad2deg(caster.get_collision_normal().angle())-90).angle();
+		position += caster.get_collision_point()-caster.global_position-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation);
+		velocity = Vector2(velocity.y*-sign(sin(deg2rad(getAngle))),0);
+		ground = true;
+	else:
+		velocity.y = 0;
+
+func touch_wall(caster):
+	velocity.x = 0;
