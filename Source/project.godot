@@ -18,6 +18,10 @@ config/name="SonicWorldsNext"
 run/main_scene="res://Scene/TestScene.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+GlobalFunctions="*res://Scripts/Global/GlobalFunctions.gd"
+
 [debug]
 
 shapes/collision/shape_color=Color( 1, 1, 1, 0.501961 )
