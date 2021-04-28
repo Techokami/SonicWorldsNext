@@ -1,11 +1,15 @@
 extends "res://Scripts/Objects/PhysicsObject.gd"
 
+const HITBOXESSONIC = {NORMAL = Vector2(9,19), ROLL = Vector2(7,14)};
 
 #Sonic's Speed constants
 var acc = 0.046875;			#acceleration
 var dec = 0.5;				#deceleration
 var frc = 0.046875;			#friction (same as acc)
+var rollfrc = frc*0.5;		#roll friction
+var rolldec = 0.125;		#roll deceleration
 var top = 6*60;				#top horizontal speed
+var toproll = 16*60;		#top horizontal speed rolling
 var slp = 0.125;			#slope factor when walking/running
 var slprollup = 0.078125;	#slope factor when rolling uphill
 var slprolldown = 0.3125;	#slope factor when rolling downhill
@@ -13,13 +17,13 @@ var fall = 2.5*60;				#tolerance ground speed for sticking to walls and ceilings
 
 #Sonic's Airborne Speed Constants
 var air = 0.09375;			#air acceleration (2x acc)
-var jmp = 6.5*60;				#jump force (6 for knuckles)
+var jmp = 6.5*60;			#jump force (6 for knuckles)
 var grv = 0.21875;			#gravity
 
 var lockTimer = 0;
 var spriteRotation = 0;
 
-enum STATES {NORMAL, AIR, ROLL};
+enum STATES {NORMAL, AIR, JUMP, ROLL};
 var currentState = STATES.NORMAL;
 onready var stateList = $States.get_children();
 
@@ -35,6 +39,7 @@ var inputs = [];
 var playerControl = 1;
 
 onready var sfx = $SFX.get_children();
+var airControl = true;
 
 # ALL CODE IS TEMPORARY!
 
@@ -49,17 +54,7 @@ func _ready():
 
 func _input(event):
 	if (playerControl != 0):
-		# I wanted to do match statements but afaik at least right now I don't know how to do it
-		# with functions yet
-		if (event.is_action("gm_left") || event.is_action("gm_right")):
-			inputs[INPUTS.XINPUT] = sign(-int(event.is_action("gm_left"))+int(event.is_action_released("gm_left"))
-			+int(event.is_action("gm_right"))-int(event.is_action_released("gm_right")));
-			
-		elif (event.is_action("gm_up") || event.is_action("gm_down")):
-			inputs[INPUTS.YINPUT] = sign(-int(event.is_action("gm_up"))+int(event.is_action_released("gm_up"))
-			+int(event.is_action("gm_down"))-int(event.is_action_released("gm_down")));
-		
-		elif (event.is_action("gm_action")):
+		if (event.is_action("gm_action")):
 			inputs[INPUTS.ACTION] = GlobalFunctions.calculate_input(event,"gm_action");
 	
 
@@ -77,30 +72,40 @@ func _process(delta):
 
 
 func _physics_process(delta):
-	
-	#if (!ground):
-		#velocity.x = inputDir*top;
-	#if (Input.is_action_just_pressed("gm_action")):
-		#$SFX/SpindashRev.pitch_scale = 0.95;
+	if (playerControl != 0):
+		inputs[INPUTS.XINPUT] = -int(Input.is_action_pressed("gm_left"))+int(Input.is_action_pressed("gm_right"));
+		inputs[INPUTS.YINPUT] = -int(Input.is_action_pressed("gm_up"))+int(Input.is_action_pressed("gm_down"));
 
-	if (Input.is_action_just_pressed("gm_down")):
-		if ($SFX/SpindashRev.pitch_scale < 1.5):
-			$SFX/SpindashRev.pitch_scale += 0.05;
-		sfx[1].play();
-		velocity.x += 30;
 
-func set_state(newState):
+func set_state(newState, forceMask = Vector2.ZERO):
 	for i in stateList:
 		i.set_process(i == stateList[newState]);
 		i.set_physics_process(i == stateList[newState]);
 		i.set_process_input(i == stateList[newState]);
 	currentState = newState;
+	var shapeChangeCheck = $HitBox.shape.extents;
+	if (forceMask == Vector2.ZERO):
+		match(newState):
+			STATES.JUMP, STATES.ROLL:
+				$HitBox.shape.extents = HITBOXESSONIC.ROLL;
+			_:
+				$HitBox.shape.extents = HITBOXESSONIC.NORMAL;
+	else:
+		$HitBox.shape.extents = forceMask;
+	update_sensors();
+	update_raycasts();
+	# snap to floor if old shape is smaller then new shape
+	if (shapeChangeCheck.y < $HitBox.shape.extents.y):
+		var getFloor = get_closest_sensor(floorCastLeft,floorCastRight);
+		if (getFloor):
+			position += getFloor.get_collision_point()-getFloor.global_position-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation);
 
 
-func action_jump(animation = "Roll"):
+func action_jump(animation = "Roll", airJumpControl = true):
 	$AnimationSonic.play(animation);
 	velocity.y = -jmp;
 	sfx[0].play();
+	airControl = airJumpControl;
 
 func connect_to_floor():
 	if (!ground):

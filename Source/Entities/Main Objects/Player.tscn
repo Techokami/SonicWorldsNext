@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Scripts/Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Graphics/Players/Sonic.png" type="Texture" id=2]
@@ -7,6 +7,8 @@
 [ext_resource path="res://Audio/SFX/Player/SpindashRev.wav" type="AudioStream" id=5]
 [ext_resource path="res://Scripts/Player/States/Normal.gd" type="Script" id=6]
 [ext_resource path="res://Scripts/Player/States/Air.gd" type="Script" id=7]
+[ext_resource path="res://Scripts/Player/States/Roll.gd" type="Script" id=8]
+[ext_resource path="res://Audio/SFX/Player/Roll.wav" type="AudioStream" id=9]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 9, 19 )
@@ -90,7 +92,12 @@ script = ExtResource( 6 )
 [node name="Air" type="Node" parent="States"]
 script = ExtResource( 7 )
 
+[node name="Jump" type="Node" parent="States"]
+script = ExtResource( 7 )
+isJump = true
+
 [node name="Roll" type="Node" parent="States"]
+script = ExtResource( 8 )
 
 [node name="PhysicsLookUp" type="Node" parent="."]
 script = ExtResource( 4 )
@@ -117,7 +124,12 @@ anims/Walk = SubResource( 5 )
 stream = ExtResource( 3 )
 bus = "SFX"
 
-[node name="SpindashRev" type="AudioStreamPlayer" parent="SFX"]
+[node name="Roll" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource( 9 )
+volume_db = -10.0
+bus = "SFX"
+
+[node name="SpindashRev2" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource( 5 )
 volume_db = -10.0
 bus = "SFX"

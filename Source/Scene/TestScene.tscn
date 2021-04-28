@@ -20,7 +20,7 @@ radius = 112.0
 [node name="TestScene" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 388, 162 )
+position = Vector2( 417, 153 )
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 current = true
@@ -68,6 +68,14 @@ scale = Vector2( 2.84, 1 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform3"]
 modulate = Color( 1, 1, 0, 1 )
 position = Vector2( 0, 1.19209e-07 )
+scale = Vector2( 1.39437, 1 )
+shape = SubResource( 2 )
+one_way_collision = true
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Platform3"]
+modulate = Color( 1, 1, 0, 1 )
+position = Vector2( -310.475, -64.3457 )
+rotation = 0.410744
 scale = Vector2( 1.39437, 1 )
 shape = SubResource( 2 )
 one_way_collision = true

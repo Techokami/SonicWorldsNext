@@ -125,6 +125,8 @@ func _physics_process(delta):
 	collision_layer = 1;
 	
 	var floorPriority = (move_and_collide(velocityInterp.rotated(angle.rotated(deg2rad(90)).angle()),true,true,true));
+	if (velocity.y < 0):
+		floorPriority = null;
 	collision_layer = memLayer;
 	
 	
@@ -144,7 +146,7 @@ func _physics_process(delta):
 		
 		
 		# Floor priority back up check, if there's no floor ahead, check below
-		if (!floorPriority):
+		if (!floorPriority && velocity.y >= 0):
 			collision_layer = 1;
 			floorPriority = move_and_collide(Vector2.DOWN.rotated(rotation)*8,true,true,true);
 			collision_layer = memLayer;
@@ -234,7 +236,7 @@ func _physics_process(delta):
 				var lastRotation = rotation;
 				# do the snap
 				rotation = snapped.angle();
-				
+				#update_raycasts();
 				# verify new angle won't make the player snap back the next frame
 				# for the original rotation method comment this next part out
 				var lastFloor = getFloor;
@@ -263,7 +265,7 @@ func _physics_process(delta):
 					position += getRoof.get_collision_point()-getRoof.global_position+($HitBox.shape.extents*Vector2(0,1));
 					touch_ceiling(getRoof);
 		
-	update();
+	#update();
 	
 
 func get_closest_sensor(firstRaycast,secondRaycast):
