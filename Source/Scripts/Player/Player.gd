@@ -69,10 +69,13 @@ func _process(delta):
 			spriteRotation = min(360,spriteRotation+(168.75*delta));
 	
 	$Sprite.rotation_degrees = stepify(spriteRotation,45)-rotation_degrees;
-
+	if (lockTimer > 0):
+		lockTimer -= delta;
+		inputs[INPUTS.XINPUT] = 0;
+		inputs[INPUTS.YINPUT] = 0;
 
 func _physics_process(delta):
-	if (playerControl != 0):
+	if (playerControl != 0 && lockTimer <= 0):
 		inputs[INPUTS.XINPUT] = -int(Input.is_action_pressed("gm_left"))+int(Input.is_action_pressed("gm_right"));
 		inputs[INPUTS.YINPUT] = -int(Input.is_action_pressed("gm_up"))+int(Input.is_action_pressed("gm_down"));
 

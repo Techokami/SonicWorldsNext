@@ -20,7 +20,7 @@ radius = 112.0
 [node name="TestScene" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 417, 153 )
+position = Vector2( 368, 150 )
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 current = true
@@ -323,6 +323,7 @@ collision_layer = 7
 collision_mask = 23
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D5"]
+position = Vector2( 404.667, 134 )
 polygon = PoolVector2Array( 64, 64, -64, 64, -48, 62, -43, 61, -31, 59, -23, 56, -8, 50, 3, 44, 10, 40, 20, 32, 28, 24, 35, 15, 51, -9, 53, -13, 55, -20, 59, -34, 62, -52, 63, -64, 64, -64 )
 __meta__ = {
 "_edit_group_": true
@@ -375,7 +376,6 @@ collision_mask = 9
 rotation = -1.57079
 scale = Vector2( -1, 1 )
 polygon = PoolVector2Array( 64, 64, -64, 64, -48, 62, -43, 61, -31, 59, -23, 56, -8, 50, 3, 44, 10, 40, 20, 32, 28, 24, 35, 15, 51, -9, 53, -13, 55, -20, 59, -34, 62, -52, 63, -64, 64, -64 )
-one_way_collision = true
 one_way_collision_margin = 0.1
 __meta__ = {
 "_edit_group_": true

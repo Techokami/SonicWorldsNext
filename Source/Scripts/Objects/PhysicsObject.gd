@@ -84,15 +84,7 @@ func update_sensors():
 	wallCastLeft.cast_to = Vector2(-pushRadius,0);
 	wallCastRight.cast_to = Vector2(pushRadius,0);
 
-
-func _physics_process(delta):
-	if (Input.is_action_just_pressed("ui_end")):
-		print(move_and_collide(Vector2.RIGHT*16,true,true,true))
-	var getFloor;# = get_closest_sensor(floorCastLeft,floorCastRight);
-	var velocityInterp = velocity*delta;
-	
-	
-	# sensor control
+func update_cast_to():
 	if (!ground):
 		floorCastLeft.cast_to.y = $HitBox.shape.extents.y;
 		floorCastRight.cast_to.y = floorCastLeft.cast_to.y;
@@ -109,14 +101,18 @@ func _physics_process(delta):
 		else:
 			wallCastLeft.position.y = 0;
 			wallCastRight.position.y = 0;
-		# Set sonic 2 floor snap to false to restore snapping to sonic 1 floor snap logic
-		#if (sonic2FloorSnap):
-		#	floorCastLeft.cast_to.y = $HitBox.shape.extents.y+min(abs(velocity.x/60)+4,groundLookDistance);
-		#else:
 		floorCastLeft.cast_to.y = $HitBox.shape.extents.y+groundLookDistance;
-
 		floorCastRight.cast_to.y = floorCastLeft.cast_to.y;
+
+func _physics_process(delta):
+	if (Input.is_action_just_pressed("ui_end")):
+		print(move_and_collide(Vector2.RIGHT*16,true,true,true))
+	var getFloor;# = get_closest_sensor(floorCastLeft,floorCastRight);
+	var velocityInterp = velocity*delta;
 	
+	
+	# sensor control
+	update_cast_to();
 	
 	# Floor priority
 	# check with the kinematic body if there's a floor below, if there is
@@ -125,7 +121,7 @@ func _physics_process(delta):
 	collision_layer = 1;
 	
 	var floorPriority = (move_and_collide(velocityInterp.rotated(angle.rotated(deg2rad(90)).angle()),true,true,true));
-	if (velocity.y < 0):
+	if (velocity.y <= 0):
 		floorPriority = null;
 	collision_layer = memLayer;
 	
@@ -222,9 +218,7 @@ func _physics_process(delta):
 			s2Check = ((getFloor.get_collision_point()-getFloor.global_position-
 			($HitBox.shape.extents*Vector2(0,1)).rotated(rotation)).y <= 
 			min(abs(velocity.x/60)+4,groundLookDistance));
-			
-		#	floorCastLeft.cast_to.y = $HitBox.shape.extents.y+min(abs(velocity.x/60)+4,groundLookDistance);
-			
+		
 		if (getFloor && round(velocity.y) >= 0 && s2Check):
 			position += getFloor.get_collision_point()-getFloor.global_position-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation);
 			
@@ -253,17 +247,15 @@ func _physics_process(delta):
 			#$icon.rotation = getFloor.get_collision_normal().angle()+deg2rad(90)-rotation;
 			angle = getFloor.get_collision_normal();
 			
-			if (!ground):
-				connect_to_floor();
+			connect_to_floor();
 	
 		else:
-			if (ground):
-				disconect_from_floor();
+			disconect_from_floor();
 			if (velocity.y < 0):
 				var getRoof = get_closest_sensor(roofCastLeft,roofCastRight);
 				if (getRoof):
-					position += getRoof.get_collision_point()-getRoof.global_position+($HitBox.shape.extents*Vector2(0,1));
-					touch_ceiling(getRoof);
+					if (!touch_ceiling(getRoof)):
+						position += getRoof.get_collision_point()-getRoof.global_position+($HitBox.shape.extents*Vector2(0,1));
 		
 	#update();
 	
@@ -341,22 +333,25 @@ func disconect_from_floor():
 		# convert velocity
 		velocity = velocity.rotated(-angle.angle_to(Vector2.UP));
 		angle = Vector2.UP;
-		rotation = 0;
 		ground = false;
+		if (rotation != 0):
+			rotation = 0;
 
 func connect_to_floor():
-	if !ground:
+	if (!ground):
 		ground = true;
 
 func touch_ceiling(caster):
 	var getAngle = -rad2deg(caster.get_collision_normal().angle())-90+360;
 	if (getAngle > 225 || getAngle < 135):
 		rotation = snap_rotation(-rad2deg(caster.get_collision_normal().angle())-90).angle();
-		position += caster.get_collision_point()-caster.global_position-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation);
+		#position += caster.get_collision_point()-caster.global_position-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation);
 		velocity = Vector2(velocity.y*-sign(sin(deg2rad(getAngle))),0);
-		ground = true;
+		connect_to_floor();
+		return true;
 	else:
 		velocity.y = 0;
+	return false;
 
 func touch_wall(caster):
 	velocity.x = 0;
