@@ -20,7 +20,7 @@ radius = 112.0
 [node name="TestScene" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 368, 150 )
+position = Vector2( -90, -138 )
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 current = true

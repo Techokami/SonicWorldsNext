@@ -106,6 +106,7 @@ script = ExtResource( 4 )
 shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
+z_index = 5
 texture = ExtResource( 2 )
 offset = Vector2( 0, -4 )
 hframes = 16
