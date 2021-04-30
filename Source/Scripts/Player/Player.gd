@@ -13,22 +13,35 @@ var toproll = 16*60;		#top horizontal speed rolling
 var slp = 0.125;			#slope factor when walking/running
 var slprollup = 0.078125;	#slope factor when rolling uphill
 var slprolldown = 0.3125;	#slope factor when rolling downhill
-var fall = 2.5*60;				#tolerance ground speed for sticking to walls and ceilings
+var fall = 2.5*60;			#tolerance ground speed for sticking to walls and ceilings
 
 #Sonic's Airborne Speed Constants
 var air = 0.09375;			#air acceleration (2x acc)
 var jmp = 6.5*60;			#jump force (6 for knuckles)
 var grv = 0.21875;			#gravity
 
+#Varaibles are guessed, more research needs to be made into these
+
+var spindashPower = 0;
+var spindashTap = 1.0/10.0;
+var spindash = 14*60;
+var minSpindash = 4*60;
+
+# ================
+
 var lockTimer = 0;
 var spriteRotation = 0;
 
-enum STATES {NORMAL, AIR, JUMP, ROLL};
+enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH};
 var currentState = STATES.NORMAL;
 onready var stateList = $States.get_children();
 
 onready var animator = $AnimationSonic;
 onready var sprite = $Sprite;
+var rotatableSprites = ["Walk", "Run"];
+var direction = scale.x;
+# ground speed is mostly used for timing and animations, there isn't any functionality to it.
+var groundSpeed = velocity.x;
 
 enum INPUTS {XINPUT, YINPUT, ACTION, ACTION2, ACTION3, SUPER, PAUSE};
 # Input control, 0 = 0ff, 1 = On
@@ -68,19 +81,26 @@ func _process(delta):
 		else:
 			spriteRotation = min(360,spriteRotation+(168.75*delta));
 	
-	$Sprite.rotation_degrees = stepify(spriteRotation,45)-rotation_degrees;
+	if (rotatableSprites.has($AnimationSonic.current_animation)):
+		$Sprite.rotation_degrees = stepify(spriteRotation,45)-rotation_degrees;
+	else:
+		$Sprite.rotation = -rotation;
+	
 	if (lockTimer > 0):
 		lockTimer -= delta;
 		inputs[INPUTS.XINPUT] = 0;
 		inputs[INPUTS.YINPUT] = 0;
 
 func _physics_process(delta):
+	if (ground):
+		groundSpeed = velocity.x;
 	if (playerControl != 0 && lockTimer <= 0):
 		inputs[INPUTS.XINPUT] = -int(Input.is_action_pressed("gm_left"))+int(Input.is_action_pressed("gm_right"));
 		inputs[INPUTS.YINPUT] = -int(Input.is_action_pressed("gm_up"))+int(Input.is_action_pressed("gm_down"));
 
 
 func set_state(newState, forceMask = Vector2.ZERO):
+	animator.playback_speed = 1;
 	for i in stateList:
 		i.set_process(i == stateList[newState]);
 		i.set_physics_process(i == stateList[newState]);

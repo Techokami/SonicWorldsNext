@@ -10,15 +10,19 @@ func _input(event):
 			parent.set_state(parent.STATES.JUMP);
 
 
+func _process(delta):
+	parent.animator.playback_speed = (1.0/4.0)+floor(min(4,abs(parent.groundSpeed/60)))/4;
 
 func _physics_process(delta):
 	
 	
 	if (!parent.ground):
 		parent.set_state(parent.STATES.AIR,parent.HITBOXESSONIC.ROLL);
+		return null;
 	
 	if (parent.velocity.x == 0):
 		parent.set_state(parent.STATES.NORMAL);
+		return null;
 	
 	parent.velocity.y = min(parent.velocity.y,0);
 	

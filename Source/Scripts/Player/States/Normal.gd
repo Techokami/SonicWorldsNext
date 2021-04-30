@@ -5,18 +5,37 @@ extends "res://Scripts/Player/State.gd"
 func _input(event):
 	if (parent.playerControl != 0):
 		if (event.is_action_pressed("gm_action")):
-			parent.action_jump();
-			parent.set_state(parent.STATES.JUMP);
+			if (parent.velocity.x == 0 && parent.inputs[parent.INPUTS.YINPUT] > 0):
+				parent.animator.play("Spindash");
+				parent.sfx[2].play();
+				parent.sfx[2].pitch_scale = 1;
+				parent.spindashPower = 0;
+				parent.set_state(parent.STATES.SPINDASH);
+			else:
+				parent.action_jump();
+				parent.set_state(parent.STATES.JUMP);
 
 func _process(delta):
 	if (parent.velocity.x == 0):
-		parent.animator.play("Idle");
+		if (parent.inputs[parent.INPUTS.YINPUT] > 0):
+			parent.animator.play("Crouch");
+		elif (parent.inputs[parent.INPUTS.YINPUT] < 0):
+			parent.animator.play("LookUp");
+		else:
+			parent.animator.play("Idle");
 	elif(abs(parent.velocity.x) < parent.top):
 		parent.animator.play("Walk");
 	else:
 		parent.animator.play("Run");
 	
-	parent.animator.playback_speed = max(1,abs(parent.velocity.x/parent.top)*1.5);
+	if (parent.velocity.x == 0):
+		parent.animator.playback_speed = 1;
+	else:
+		#(floor(max(0, 8-abs(parent.velocity.x/(60*2))))/8);
+		parent.animator.playback_speed = (1.0/8.0)+floor(min(8,abs(parent.groundSpeed/60)))/8;
+	
+	if (parent.inputs[parent.INPUTS.XINPUT] != 0):
+		parent.direction = parent.inputs[parent.INPUTS.XINPUT];
 
 func _physics_process(delta):
 	
@@ -24,12 +43,14 @@ func _physics_process(delta):
 		parent.set_state(parent.STATES.ROLL);
 		parent.animator.play("Roll");
 		parent.sfx[1].play();
+		return null;
 		#parent.position += Vector2(0,5).rotated(parent.rotation);
 	
 	if (!parent.ground):
 		parent.set_state(parent.STATES.AIR);
-	if (round(parent.velocity.x) != 0):
-		parent.sprite.flip_h = (parent.velocity.x <= 0);
+		#Stop script
+		return null;
+	parent.sprite.flip_h = (parent.direction < 0);
 	
 	parent.velocity.y = min(parent.velocity.y,0);
 	
