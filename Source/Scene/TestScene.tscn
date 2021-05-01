@@ -1,38 +1,50 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=19 format=2]
 
-[ext_resource path="res://Entities/Main Objects/Player.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Graphics/Slope.png" type="Texture" id=2]
-[ext_resource path="res://Entities/Main Objects/LayerSwitcher.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Audio/Soundtrack/6. SWD_TLZa1.ogg" type="AudioStream" id=4]
+[ext_resource path="res://Entities/Main Objects/LayerSwitcher.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Entities/Main Objects/Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scripts/Objects/PathAnimator.gd" type="Script" id=3]
+[ext_resource path="res://Graphics/Gimmicks/LavaReefTurn.png" type="Texture" id=4]
+[ext_resource path="res://Graphics/Slope.png" type="Texture" id=5]
+[ext_resource path="res://Audio/Soundtrack/6. SWD_TLZa1.ogg" type="AudioStream" id=6]
+[ext_resource path="res://Scripts/Objects/ZSwitch.gd" type="Script" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 223.368, 10 )
-
-[sub_resource type="RectangleShape2D" id=7]
-extents = Vector2( 3.83099, 41.457 )
+extents = Vector2( 223, 10 )
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 114.831, 10 )
+extents = Vector2( 3.83099, 41.457 )
 
 [sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 114.831, 10 )
+
+[sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 8, 8 )
 
-[sub_resource type="CircleShape2D" id=4]
+[sub_resource type="CircleShape2D" id=5]
 radius = 112.0
 
-[sub_resource type="RectangleShape2D" id=5]
+[sub_resource type="RectangleShape2D" id=6]
 extents = Vector2( 62, 10 )
 
-[sub_resource type="RectangleShape2D" id=6]
+[sub_resource type="RectangleShape2D" id=7]
 extents = Vector2( 80.8309, 10 )
 
+[sub_resource type="RectangleShape2D" id=8]
+
+[sub_resource type="Curve2D" id=9]
+_data = {
+"points": PoolVector2Array( 79.3308, -26.239, -1.12003, 0.370453, 186, 72, -0.218561, 0.325342, 0.566902, -0.84387, 285, 96, 0, 0, 0, 0, 78, 159, 0, 0, 0, 0, 287, 221, 0, 0, 0, 0, 76, 291, 0, 0, 0, 0, 276, 351, 0, 0, 0, 0, 71, 420, 0, 0, 0, 0, 279, 482, -0.701599, -0.371605, 90.8167, 48.1015, 21, 536 )
+}
+
+[sub_resource type="Curve2D" id=11]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 1.76777, -140.007, -2, -603, 0, 0, 0, 0, 191, -592 )
+}
+
+[sub_resource type="RectangleShape2D" id=10]
+extents = Vector2( 23, 296 )
+
 [node name="TestScene" type="Node2D"]
-
-[node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 186, 25 )
-
-[node name="Camera2D" type="Camera2D" parent="Player"]
-current = true
 
 [node name="TestTerrain" type="StaticBody2D" parent="."]
 position = Vector2( 466.831, 191.543 )
@@ -50,7 +62,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain14"]
 position = Vector2( -2.83099, 0.457001 )
-shape = SubResource( 7 )
+shape = SubResource( 2 )
 
 [node name="Platform" type="StaticBody2D" parent="."]
 position = Vector2( 416, 48 )
@@ -58,7 +70,7 @@ position = Vector2( 416, 48 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform"]
 modulate = Color( 1, 1, 0, 1 )
 position = Vector2( 0, 1.19209e-07 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 one_way_collision = true
 
 [node name="Platform2" type="StaticBody2D" parent="."]
@@ -67,7 +79,7 @@ position = Vector2( 111.425, 175.271 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform2"]
 modulate = Color( 1, 1, 0, 1 )
 position = Vector2( 0, 1.19209e-07 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 one_way_collision = true
 
 [node name="Platform7" type="StaticBody2D" parent="."]
@@ -76,7 +88,7 @@ position = Vector2( 236, -85 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform7"]
 modulate = Color( 1, 1, 0, 1 )
 position = Vector2( 0, 1.19209e-07 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 one_way_collision = true
 
 [node name="Platform3" type="StaticBody2D" parent="."]
@@ -87,7 +99,7 @@ scale = Vector2( 2.84, 1 )
 modulate = Color( 1, 1, 0, 1 )
 position = Vector2( 0, 1.19209e-07 )
 scale = Vector2( 1.39437, 1 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 one_way_collision = true
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Platform3"]
@@ -95,7 +107,7 @@ modulate = Color( 1, 1, 0, 1 )
 position = Vector2( -310.475, -64.3457 )
 rotation = 0.410744
 scale = Vector2( 1.39437, 1 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 one_way_collision = true
 
 [node name="Platform4" type="StaticBody2D" parent="."]
@@ -106,7 +118,7 @@ collision_mask = 9
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform4"]
 modulate = Color( 0.101961, 1, 0, 1 )
 position = Vector2( 0, 1.19209e-07 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 one_way_collision = true
 
 [node name="Platform5" type="StaticBody2D" parent="."]
@@ -116,7 +128,7 @@ scale = Vector2( 0.16, 1 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform5"]
 modulate = Color( 1, 1, 0, 1 )
 position = Vector2( 0, 1.19209e-07 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 one_way_collision = true
 
 [node name="Block" type="StaticBody2D" parent="."]
@@ -126,7 +138,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Block"]
 position = Vector2( 0.169098, 0.456772 )
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="Block2" type="StaticBody2D" parent="."]
 position = Vector2( 216, 288 )
@@ -135,7 +147,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Block2"]
 position = Vector2( 0.169098, 0.456772 )
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="Block3" type="StaticBody2D" parent="."]
 position = Vector2( 232, 304 )
@@ -144,7 +156,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Block3"]
 position = Vector2( 0.169098, 0.456772 )
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="Block4" type="StaticBody2D" parent="."]
 position = Vector2( 248, 312 )
@@ -153,7 +165,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Block4"]
 position = Vector2( 0.169098, 0.456772 )
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="Block5" type="StaticBody2D" parent="."]
 position = Vector2( 264, 320 )
@@ -162,7 +174,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Block5"]
 position = Vector2( 0.169098, 0.456772 )
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="Block6" type="StaticBody2D" parent="."]
 position = Vector2( 280, 328 )
@@ -171,7 +183,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Block6"]
 position = Vector2( 0.169098, 0.456772 )
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="Block7" type="StaticBody2D" parent="."]
 position = Vector2( 296, 344 )
@@ -180,7 +192,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Block7"]
 position = Vector2( 0.169098, 0.456772 )
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="TestTerrain5" type="StaticBody2D" parent="."]
 position = Vector2( -989, 463 )
@@ -188,7 +200,7 @@ collision_layer = 7
 collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain5"]
-shape = SubResource( 4 )
+shape = SubResource( 5 )
 
 [node name="TestTerrain9" type="StaticBody2D" parent="."]
 position = Vector2( 855, 695 )
@@ -197,11 +209,11 @@ collision_layer = 7
 collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain9"]
-shape = SubResource( 4 )
+shape = SubResource( 5 )
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="TestTerrain9"]
 position = Vector2( -65.1299, 44.5157 )
-shape = SubResource( 4 )
+shape = SubResource( 5 )
 
 [node name="Platform6" type="StaticBody2D" parent="."]
 position = Vector2( -820, 361 )
@@ -210,7 +222,7 @@ scale = Vector2( 1.48, 1 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform6"]
 modulate = Color( 1, 1, 0, 1 )
 position = Vector2( 0.425644, 1.19209e-07 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 one_way_collision = true
 
 [node name="TestTerrain11" type="StaticBody2D" parent="."]
@@ -219,7 +231,7 @@ collision_layer = 7
 collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain11"]
-shape = SubResource( 4 )
+shape = SubResource( 5 )
 
 [node name="TestTerrain3" type="StaticBody2D" parent="."]
 position = Vector2( 1303.45, 25.219 )
@@ -227,6 +239,40 @@ collision_layer = 7
 collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain3"]
+position = Vector2( -0.449951, -0.219 )
+shape = SubResource( 1 )
+
+[node name="TestTerrain15" type="StaticBody2D" parent="."]
+position = Vector2( 2113, 177 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain15"]
+shape = SubResource( 1 )
+one_way_collision = true
+
+[node name="TestTerrain18" type="StaticBody2D" parent="."]
+position = Vector2( 2214, 723 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain18"]
+position = Vector2( 63, 5 )
+rotation = -0.202561
+shape = SubResource( 1 )
+
+[node name="TestTerrain17" type="StaticBody2D" parent="."]
+position = Vector2( 2336, 177 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TestTerrain17"]
+polygon = PoolVector2Array( -34, -10, 0, -10, 86, 6, 128, 35, 195, 69, -33, 69 )
+
+[node name="TestTerrain16" type="StaticBody2D" parent="."]
+position = Vector2( 2115, 720 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain16"]
 shape = SubResource( 1 )
 
 [node name="TestTerrain2" type="StaticBody2D" parent="."]
@@ -272,7 +318,7 @@ collision_layer = 7
 collision_mask = 15
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LowTerrain2"]
-shape = SubResource( 5 )
+shape = SubResource( 6 )
 
 [node name="LowTerrain3" type="StaticBody2D" parent="."]
 modulate = Color( 0, 0.0862745, 1, 1 )
@@ -282,7 +328,7 @@ collision_layer = 7
 collision_mask = 23
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LowTerrain3"]
-shape = SubResource( 5 )
+shape = SubResource( 6 )
 
 [node name="HighTerrain" type="StaticBody2D" parent="."]
 modulate = Color( 0, 0, 1, 1 )
@@ -316,7 +362,7 @@ shape = SubResource( 1 )
 
 [node name="Slope" type="Sprite" parent="."]
 position = Vector2( 566, 118 )
-texture = ExtResource( 2 )
+texture = ExtResource( 5 )
 
 [node name="StaticBody2D2" type="StaticBody2D" parent="."]
 position = Vector2( 610, 599 )
@@ -497,7 +543,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain13"]
 position = Vector2( 0.169098, 0.456772 )
-shape = SubResource( 6 )
+shape = SubResource( 7 )
 __meta__ = {
 "_edit_group_": true
 }
@@ -554,47 +600,120 @@ collision_mask = 7
 [node name="CollisionShape2D" type="CollisionPolygon2D" parent="StaticBody2D"]
 polygon = PoolVector2Array( 0, -72, 48, -50, 72, 0, 48, 50, 0, 72, -48, 50, -72, 0, -48, -50, 0, -72 )
 
-[node name="LayerSwitcher" parent="." instance=ExtResource( 3 )]
+[node name="LayerSwitcher" parent="." instance=ExtResource( 1 )]
 position = Vector2( 592, 274 )
 
-[node name="LayerSwitcher5" parent="." instance=ExtResource( 3 )]
+[node name="LayerSwitcher5" parent="." instance=ExtResource( 1 )]
 position = Vector2( 1128, 274 )
 
-[node name="LayerSwitcher3" parent="." instance=ExtResource( 3 )]
+[node name="LayerSwitcher3" parent="." instance=ExtResource( 1 )]
 position = Vector2( 450, 505 )
 size = Vector2( 1, 20 )
 leftLayer = 0
 
-[node name="LayerSwitcher6" parent="." instance=ExtResource( 3 )]
+[node name="LayerSwitcher6" parent="." instance=ExtResource( 1 )]
 position = Vector2( 669, 581 )
 size = Vector2( 4, 1 )
 orientation = 1
 leftLayer = 0
 
-[node name="LayerSwitcher4" parent="." instance=ExtResource( 3 )]
+[node name="LayerSwitcher4" parent="." instance=ExtResource( 1 )]
 position = Vector2( 961, 412 )
 size = Vector2( 1, 13 )
 leftLayer = 0
 
-[node name="LayerSwitcher2" parent="." instance=ExtResource( 3 )]
+[node name="LayerSwitcher2" parent="." instance=ExtResource( 1 )]
 position = Vector2( 760, 430 )
 size = Vector2( 1, 8 )
 rightLayer = 1
 
-[node name="LayerSwitcher7" parent="." instance=ExtResource( 3 )]
+[node name="LayerSwitcher7" parent="." instance=ExtResource( 1 )]
 position = Vector2( 495, -376 )
 
-[node name="LayerSwitcher8" parent="." instance=ExtResource( 3 )]
+[node name="LayerSwitcher8" parent="." instance=ExtResource( 1 )]
 position = Vector2( 383, -301 )
 size = Vector2( 1, 4 )
 leftLayer = 0
 
-[node name="LayerSwitcher9" parent="." instance=ExtResource( 3 )]
+[node name="LayerSwitcher9" parent="." instance=ExtResource( 1 )]
 position = Vector2( 605, -299 )
 size = Vector2( 1, 4 )
 rightLayer = 1
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 4 )
+stream = ExtResource( 6 )
 autoplay = true
 bus = "Music"
+
+[node name="Player" parent="." instance=ExtResource( 2 )]
+position = Vector2( 2285, 143 )
+rotation = -4.65661e-10
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+current = true
+
+[node name="PathAnimator" type="Area2D" parent="."]
+position = Vector2( 2341, 145 )
+collision_layer = 32
+collision_mask = 0
+script = ExtResource( 3 )
+startFrame = 208
+endFrame = 219
+animLoops = 4
+
+[node name="Turn" type="Sprite" parent="PathAnimator"]
+position = Vector2( 179, 262 )
+z_index = -1
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PathAnimator"]
+modulate = Color( 0, 1, 0.0392157, 1 )
+position = Vector2( 185, 72 )
+shape = SubResource( 8 )
+
+[node name="Path" type="Path2D" parent="PathAnimator"]
+curve = SubResource( 9 )
+
+[node name="PathAnimator2" type="Area2D" parent="."]
+position = Vector2( 2041, 685 )
+collision_layer = 32
+collision_mask = 0
+script = ExtResource( 3 )
+animLoops = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PathAnimator2"]
+modulate = Color( 0, 1, 0.0392157, 1 )
+shape = SubResource( 8 )
+
+[node name="Path" type="Path2D" parent="PathAnimator2"]
+curve = SubResource( 11 )
+
+[node name="ZSwitch" type="Area2D" parent="."]
+position = Vector2( 2625, 426 )
+z_index = -10
+collision_layer = 32
+collision_mask = 0
+script = ExtResource( 7 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ZSwitch"]
+modulate = Color( 0.945098, 0, 1, 1 )
+shape = SubResource( 10 )
+
+[node name="ZSwitch2" type="Area2D" parent="."]
+position = Vector2( 2424, 430 )
+z_index = 5
+collision_layer = 32
+collision_mask = 0
+script = ExtResource( 7 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ZSwitch2"]
+modulate = Color( 0.945098, 0, 1, 1 )
+shape = SubResource( 10 )
+
+[connection signal="body_entered" from="PathAnimator" to="PathAnimator" method="_player_touch"]
+[connection signal="body_entered" from="PathAnimator2" to="PathAnimator2" method="_player_touch"]
+[connection signal="body_entered" from="ZSwitch" to="ZSwitch" method="_on_ZSwitch_body_entered"]
+[connection signal="body_entered" from="ZSwitch2" to="ZSwitch2" method="_on_ZSwitch_body_entered"]

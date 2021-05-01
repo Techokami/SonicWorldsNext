@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Scripts/Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Graphics/Players/Sonic.png" type="Texture" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://Audio/SFX/Player/Roll.wav" type="AudioStream" id=9]
 [ext_resource path="res://Scripts/Player/States/SpinDash.gd" type="Script" id=10]
 [ext_resource path="res://Audio/SFX/Player/SpindashRelease.wav" type="AudioStream" id=11]
+[ext_resource path="res://Scripts/Player/States/Animation.gd" type="Script" id=12]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 9, 19 )
@@ -155,6 +156,9 @@ script = ExtResource( 8 )
 [node name="SpinDash" type="Node" parent="States"]
 script = ExtResource( 10 )
 
+[node name="Animation" type="Node" parent="States"]
+script = ExtResource( 12 )
+
 [node name="PhysicsLookUp" type="Node" parent="."]
 script = ExtResource( 4 )
 
@@ -167,7 +171,7 @@ texture = ExtResource( 2 )
 offset = Vector2( 0, -4 )
 hframes = 16
 vframes = 16
-frame = 24
+frame = 219
 
 [node name="AnimationSonic" type="AnimationPlayer" parent="."]
 autoplay = "Idle"

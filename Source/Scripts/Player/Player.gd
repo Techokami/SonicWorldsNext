@@ -32,7 +32,7 @@ var minSpindash = 4*60;
 var lockTimer = 0;
 var spriteRotation = 0;
 
-enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH};
+enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, ANIMATION};
 var currentState = STATES.NORMAL;
 onready var stateList = $States.get_children();
 
