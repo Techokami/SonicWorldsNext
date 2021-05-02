@@ -34,6 +34,8 @@ func _ready():
 	add_child(floorCastRight);
 	floorCastLeft.enabled = true;
 	floorCastRight.enabled = true;
+	floorCastLeft.set_collision_mask_bit(6,true);
+	floorCastRight.set_collision_mask_bit(6,true);
 	
 	add_child(platCastLeft);
 	add_child(platCastRight);
@@ -46,6 +48,8 @@ func _ready():
 	roofCastRight.enabled = true;
 	roofCastLeft.set_collision_mask_bit(2,true);
 	roofCastRight.set_collision_mask_bit(2,true);
+	roofCastLeft.set_collision_mask_bit(6,true);
+	roofCastRight.set_collision_mask_bit(6,true);
 	roofCastLeft.set_collision_mask_bit(0,false);
 	roofCastRight.set_collision_mask_bit(0,false);
 	
@@ -55,6 +59,8 @@ func _ready():
 	wallCastRight.enabled = true;
 	wallCastLeft.set_collision_mask_bit(1,true);
 	wallCastRight.set_collision_mask_bit(1,true);
+	wallCastLeft.set_collision_mask_bit(6,true);
+	wallCastRight.set_collision_mask_bit(6,true);
 	wallCastLeft.set_collision_mask_bit(0,false);
 	wallCastRight.set_collision_mask_bit(0,false);
 	
@@ -138,7 +144,8 @@ func _physics_process(delta):
 		clear_all_exceptions();
 		
 		# move the object
-		move_and_collide(clampedVelocity.rotated(angle.rotated(deg2rad(90)).angle()));
+		translate(clampedVelocity.rotated(angle.rotated(deg2rad(90)).angle()));
+		#move_and_collide(clampedVelocity.rotated(angle.rotated(deg2rad(90)).angle()));
 		
 		
 		# Floor priority back up check, if there's no floor ahead, check below

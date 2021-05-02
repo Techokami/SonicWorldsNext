@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/unknown.png-626efc2e0428f334b6a66350f08ca9d3.stex"
+path="res://.import/springs_red.png-688f690ab166a49314cdb5793653ac93.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Graphics/Gimmicks/unknown.png"
-dest_files=[ "res://.import/unknown.png-626efc2e0428f334b6a66350f08ca9d3.stex" ]
+source_file="res://Graphics/Gimmicks/springs_red.png"
+dest_files=[ "res://.import/springs_red.png-688f690ab166a49314cdb5793653ac93.stex" ]
 
 [params]
 

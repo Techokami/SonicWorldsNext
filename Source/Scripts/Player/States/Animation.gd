@@ -8,12 +8,15 @@ func _process(delta):
 		var pathCurve = path.path.curve;
 		
 		var id = min((pathCurve.get_point_count()-1)*(offset/pathCurve.get_baked_length()),pathCurve.get_point_count()-1);
-		parent.global_position = path.global_position+pathCurve.interpolate(floor(id),fmod(id,1));
+		parent.global_position = path.global_position+pathCurve.interpolate(floor(id),fmod(id,1)).rotated(path.rotation);
+		var relativeOffset = offset/pathCurve.get_baked_length()*pathCurve.get_point_count();
 		
 		# point to point
-		#parent.global_position = path.global_position+pathCurve.interpolate_baked(offset);
+		#if (relativeOffset < 1):
+		#	parent.global_position = path.global_position+pathCurve.interpolate_baked(offset);
 		
 		offset += parent.velocity.length()*delta;
+		
 		
 		
 		var frames = (path.endFrame-path.startFrame+1)*path.animLoops;

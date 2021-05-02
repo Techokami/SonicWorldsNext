@@ -19,7 +19,8 @@ func _physics_process(delta):
 				
 	# Air drag, don't know how accurate this is, may need some better tweaking
 	if (parent.velocity.y < 0 && parent.velocity.y > -4*60):
-		parent.velocity.x -= ((parent.velocity.x / int(0.125/delta)) / 256);
+		#parent.velocity.x -= ((parent.velocity.x / int(0.125/delta)) / 256); old version
+		parent.velocity.x -= ((parent.velocity.x / 0.125) / 256)*60*delta;
 	
 	if (isJump && !parent.inputs[parent.INPUTS.ACTION]):
 		if (parent.velocity.y < -4*60):

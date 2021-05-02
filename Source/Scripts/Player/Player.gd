@@ -22,10 +22,7 @@ var grv = 0.21875;			#gravity
 
 #Varaibles are guessed, more research needs to be made into these
 
-var spindashPower = 0;
-var spindashTap = 1.0/10.0;
-var spindash = 14*60;
-var minSpindash = 4*60;
+var spindashPower = 0.0;
 
 # ================
 

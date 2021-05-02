@@ -113,6 +113,7 @@ gm_pause={
 2d_physics/layer_4="Low"
 2d_physics/layer_5="High"
 2d_physics/layer_6="Player"
+2d_physics/layer_7="Objects"
 
 [rendering]
 

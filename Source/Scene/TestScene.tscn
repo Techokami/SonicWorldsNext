@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://Entities/Main Objects/LayerSwitcher.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Entities/Main Objects/Player.tscn" type="PackedScene" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Graphics/Slope.png" type="Texture" id=5]
 [ext_resource path="res://Audio/Soundtrack/6. SWD_TLZa1.ogg" type="AudioStream" id=6]
 [ext_resource path="res://Scripts/Objects/ZSwitch.gd" type="Script" id=7]
+[ext_resource path="res://Entities/Gimmicks/Spring.tscn" type="PackedScene" id=8]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 223, 10 )
@@ -36,13 +37,13 @@ _data = {
 "points": PoolVector2Array( 79.3308, -26.239, -1.12003, 0.370453, 186, 72, -0.218561, 0.325342, 0.566902, -0.84387, 285, 96, 0, 0, 0, 0, 78, 159, 0, 0, 0, 0, 287, 221, 0, 0, 0, 0, 76, 291, 0, 0, 0, 0, 276, 351, 0, 0, 0, 0, 71, 420, 0, 0, 0, 0, 279, 482, -0.701599, -0.371605, 90.8167, 48.1015, 21, 536 )
 }
 
+[sub_resource type="RectangleShape2D" id=10]
+extents = Vector2( 23, 296 )
+
 [sub_resource type="Curve2D" id=11]
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 1.76777, -140.007, -2, -603, 0, 0, 0, 0, 191, -592 )
 }
-
-[sub_resource type="RectangleShape2D" id=10]
-extents = Vector2( 23, 296 )
 
 [node name="TestScene" type="Node2D"]
 
@@ -646,7 +647,7 @@ autoplay = true
 bus = "Music"
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 2285, 143 )
+position = Vector2( 1168, -24 )
 rotation = -4.65661e-10
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
@@ -677,6 +678,28 @@ shape = SubResource( 8 )
 [node name="Path" type="Path2D" parent="PathAnimator"]
 curve = SubResource( 9 )
 
+[node name="ZSwitch" type="Area2D" parent="PathAnimator"]
+position = Vector2( 284, 281 )
+z_index = -10
+collision_layer = 32
+collision_mask = 0
+script = ExtResource( 7 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PathAnimator/ZSwitch"]
+modulate = Color( 0.945098, 0, 1, 1 )
+shape = SubResource( 10 )
+
+[node name="ZSwitch2" type="Area2D" parent="PathAnimator"]
+position = Vector2( 83, 285 )
+z_index = 5
+collision_layer = 32
+collision_mask = 0
+script = ExtResource( 7 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PathAnimator/ZSwitch2"]
+modulate = Color( 0.945098, 0, 1, 1 )
+shape = SubResource( 10 )
+
 [node name="PathAnimator2" type="Area2D" parent="."]
 position = Vector2( 2041, 685 )
 collision_layer = 32
@@ -691,29 +714,18 @@ shape = SubResource( 8 )
 [node name="Path" type="Path2D" parent="PathAnimator2"]
 curve = SubResource( 11 )
 
-[node name="ZSwitch" type="Area2D" parent="."]
-position = Vector2( 2625, 426 )
-z_index = -10
-collision_layer = 32
-collision_mask = 0
-script = ExtResource( 7 )
+[node name="Spring" parent="." instance=ExtResource( 8 )]
+position = Vector2( 1107, 7 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ZSwitch"]
-modulate = Color( 0.945098, 0, 1, 1 )
-shape = SubResource( 10 )
+[node name="Spring3" parent="." instance=ExtResource( 8 )]
+position = Vector2( 1034, -11 )
+springDirection = 2
 
-[node name="ZSwitch2" type="Area2D" parent="."]
-position = Vector2( 2424, 430 )
-z_index = 5
-collision_layer = 32
-collision_mask = 0
-script = ExtResource( 7 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ZSwitch2"]
-modulate = Color( 0.945098, 0, 1, 1 )
-shape = SubResource( 10 )
+[node name="Spring2" parent="." instance=ExtResource( 8 )]
+position = Vector2( 1140, 7 )
+type = 1
 
 [connection signal="body_entered" from="PathAnimator" to="PathAnimator" method="_player_touch"]
+[connection signal="body_entered" from="PathAnimator/ZSwitch" to="PathAnimator/ZSwitch" method="_on_ZSwitch_body_entered"]
+[connection signal="body_entered" from="PathAnimator/ZSwitch2" to="PathAnimator/ZSwitch2" method="_on_ZSwitch_body_entered"]
 [connection signal="body_entered" from="PathAnimator2" to="PathAnimator2" method="_player_touch"]
-[connection signal="body_entered" from="ZSwitch" to="ZSwitch" method="_on_ZSwitch_body_entered"]
-[connection signal="body_entered" from="ZSwitch2" to="ZSwitch2" method="_on_ZSwitch_body_entered"]
