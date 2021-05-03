@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://Scripts/Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Graphics/Players/Sonic.png" type="Texture" id=2]
@@ -17,7 +17,23 @@
 extents = Vector2( 9, 19 )
 
 [sub_resource type="Animation" id=2]
-resource_name = "Crouch"
+resource_name = "CSSpring"
+length = 1.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59 ]
+}
+
+[sub_resource type="Animation" id=3]
 length = 0.2
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
@@ -32,7 +48,7 @@ tracks/0/keys = {
 "values": [ 12, 13 ]
 }
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=4]
 length = 15.0
 loop = true
 tracks/0/type = "value"
@@ -48,8 +64,7 @@ tracks/0/keys = {
 "values": [ 0, 1, 6, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 9, 1, 2, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 5 ]
 }
 
-[sub_resource type="Animation" id=4]
-resource_name = "LookUp"
+[sub_resource type="Animation" id=5]
 length = 0.2
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
@@ -64,7 +79,7 @@ tracks/0/keys = {
 "values": [ 10, 11 ]
 }
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=6]
 length = 0.2
 loop = true
 step = 0.0166667
@@ -81,7 +96,7 @@ tracks/0/keys = {
 "values": [ 32, 33, 36, 34, 35, 36 ]
 }
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=7]
 length = 0.133334
 loop = true
 step = 0.0166667
@@ -98,8 +113,7 @@ tracks/0/keys = {
 "values": [ 24, 25, 26, 27 ]
 }
 
-[sub_resource type="Animation" id=7]
-resource_name = "Spindash"
+[sub_resource type="Animation" id=8]
 length = 0.2
 loop = true
 step = 0.0166667
@@ -116,7 +130,23 @@ tracks/0/keys = {
 "values": [ 37, 38, 37, 39, 37, 40, 37, 41, 37, 42, 37 ]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=9]
+resource_name = "Spring"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 88 ]
+}
+
+[sub_resource type="Animation" id=10]
 length = 0.266667
 loop = true
 step = 0.0166667
@@ -171,17 +201,19 @@ texture = ExtResource( 2 )
 offset = Vector2( 0, -4 )
 hframes = 16
 vframes = 16
-frame = 219
+frame = 51
 
 [node name="AnimationSonic" type="AnimationPlayer" parent="."]
 autoplay = "Idle"
-anims/Crouch = SubResource( 2 )
-anims/Idle = SubResource( 3 )
-anims/LookUp = SubResource( 4 )
-anims/Roll = SubResource( 5 )
-anims/Run = SubResource( 6 )
-anims/Spindash = SubResource( 7 )
-anims/Walk = SubResource( 8 )
+anims/CSSpring = SubResource( 2 )
+anims/Crouch = SubResource( 3 )
+anims/Idle = SubResource( 4 )
+anims/LookUp = SubResource( 5 )
+anims/Roll = SubResource( 6 )
+anims/Run = SubResource( 7 )
+anims/Spindash = SubResource( 8 )
+anims/Spring = SubResource( 9 )
+anims/Walk = SubResource( 10 )
 
 [node name="SFX" type="Node" parent="."]
 

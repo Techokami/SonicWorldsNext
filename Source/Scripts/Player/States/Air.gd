@@ -5,7 +5,7 @@ export var isJump = false;
 func _process(delta):
 	if (parent.animator.current_animation == "Roll"):
 		parent.animator.playback_speed = (1.0/4.0)+floor(min(4,abs(parent.groundSpeed/60)))/4;
-	else:
+	if (parent.animator.current_animation == "Walk" || parent.animator.current_animation == "Run"):
 		parent.animator.playback_speed = (1.0/8.0)+floor(min(8,abs(parent.groundSpeed/60)))/8;
 
 func _physics_process(delta):

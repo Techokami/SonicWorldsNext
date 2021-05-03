@@ -47,6 +47,13 @@ _data = {
 
 [node name="TestScene" type="Node2D"]
 
+[node name="Player" parent="." instance=ExtResource( 2 )]
+position = Vector2( 388, 140 )
+rotation = -4.65661e-10
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+current = true
+
 [node name="TestTerrain" type="StaticBody2D" parent="."]
 position = Vector2( 466.831, 191.543 )
 collision_layer = 7
@@ -54,6 +61,10 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain"]
 position = Vector2( -2.83099, 0.457001 )
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="TestTerrain"]
+position = Vector2( 399.169, -93.543 )
 shape = SubResource( 1 )
 
 [node name="TestTerrain14" type="StaticBody2D" parent="."]
@@ -646,13 +657,6 @@ stream = ExtResource( 6 )
 autoplay = true
 bus = "Music"
 
-[node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 1168, -24 )
-rotation = -4.65661e-10
-
-[node name="Camera2D" type="Camera2D" parent="Player"]
-current = true
-
 [node name="PathAnimator" type="Area2D" parent="."]
 position = Vector2( 2341, 145 )
 collision_layer = 32
@@ -718,8 +722,34 @@ curve = SubResource( 11 )
 position = Vector2( 1107, 7 )
 
 [node name="Spring3" parent="." instance=ExtResource( 8 )]
-position = Vector2( 1034, -11 )
+position = Vector2( 658, 71 )
+type = 1
 springDirection = 2
+
+[node name="Spring5" parent="." instance=ExtResource( 8 )]
+position = Vector2( 412, -238 )
+scale = Vector2( -1, 1 )
+springDirection = 3
+
+[node name="Spring6" parent="." instance=ExtResource( 8 )]
+position = Vector2( 160, 157 )
+type = 1
+
+[node name="Spring8" parent="." instance=ExtResource( 8 )]
+position = Vector2( 341, 138 )
+type = 1
+
+[node name="Spring7" parent="." instance=ExtResource( 8 )]
+position = Vector2( 437, 113 )
+scale = Vector2( 1, -1 )
+type = 1
+springDirection = 1
+
+[node name="Spring4" parent="." instance=ExtResource( 8 )]
+position = Vector2( 899, 71 )
+scale = Vector2( -1, 1 )
+type = 1
+springDirection = 3
 
 [node name="Spring2" parent="." instance=ExtResource( 8 )]
 position = Vector2( 1140, 7 )
