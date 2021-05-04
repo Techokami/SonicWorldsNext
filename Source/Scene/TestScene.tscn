@@ -34,7 +34,7 @@ extents = Vector2( 80.8309, 10 )
 
 [sub_resource type="Curve2D" id=9]
 _data = {
-"points": PoolVector2Array( 79.3308, -26.239, -1.12003, 0.370453, 186, 72, -0.218561, 0.325342, 0.566902, -0.84387, 285, 96, 0, 0, 0, 0, 78, 159, 0, 0, 0, 0, 287, 221, 0, 0, 0, 0, 76, 291, 0, 0, 0, 0, 276, 351, 0, 0, 0, 0, 71, 420, 0, 0, 0, 0, 279, 482, -0.701599, -0.371605, 90.8167, 48.1015, 21, 536 )
+"points": PoolVector2Array( 79.3308, -26.239, -1.12003, 0.370453, 186, 72, -0.218561, 0.325342, 0.566902, -0.84387, 251, 96, 0, 0, 0, 0, 116, 168, 0, 0, 0, 0, 257, 221, 0, 0, 0, 0, 114, 296, 0, 0, 0, 0, 256, 352, 0, 0, 0, 0, 115, 423, 0, 0, 0, 0, 257, 480, -0.701599, -0.371605, 90.8167, 48.1015, 75, 522 )
 }
 
 [sub_resource type="RectangleShape2D" id=10]
@@ -588,6 +588,7 @@ collision_layer = 7
 collision_mask = 7
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TestTerrain8/StaticBody2D"]
+position = Vector2( 3.99983, -1.52588e-05 )
 polygon = PoolVector2Array( 64, 64, -64, 64, -48, 62, -43, 61, -31, 59, -23, 56, -8, 50, 3, 44, 10, 40, 20, 32, 28, 24, 35, 15, 51, -9, 53, -13, 55, -20, 59, -34, 62, -52, 63, -64, 64, -64 )
 __meta__ = {
 "_edit_group_": true
@@ -683,7 +684,7 @@ shape = SubResource( 8 )
 curve = SubResource( 9 )
 
 [node name="ZSwitch" type="Area2D" parent="PathAnimator"]
-position = Vector2( 284, 281 )
+position = Vector2( 277, 281 )
 z_index = -10
 collision_layer = 32
 collision_mask = 0
@@ -694,7 +695,7 @@ modulate = Color( 0.945098, 0, 1, 1 )
 shape = SubResource( 10 )
 
 [node name="ZSwitch2" type="Area2D" parent="PathAnimator"]
-position = Vector2( 83, 285 )
+position = Vector2( 100, 285 )
 z_index = 5
 collision_layer = 32
 collision_mask = 0
@@ -727,9 +728,15 @@ type = 1
 springDirection = 2
 
 [node name="Spring5" parent="." instance=ExtResource( 8 )]
-position = Vector2( 412, -238 )
-scale = Vector2( -1, 1 )
-springDirection = 3
+position = Vector2( 478, -236 )
+type = 1
+springDirection = 2
+
+[node name="Spring9" parent="." instance=ExtResource( 8 )]
+position = Vector2( 212, 45 )
+scale = Vector2( 1, -1 )
+type = 1
+springDirection = 1
 
 [node name="Spring6" parent="." instance=ExtResource( 8 )]
 position = Vector2( 160, 157 )

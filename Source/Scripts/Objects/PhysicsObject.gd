@@ -361,4 +361,7 @@ func touch_ceiling(caster):
 	return false;
 
 func touch_wall(caster):
-	velocity.x = 0;
+	if (caster.get_collider().has_method("physics_wall_override")):
+		caster.get_collider().physics_wall_override(self,caster);
+	else:
+		velocity.x = 0;
