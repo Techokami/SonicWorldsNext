@@ -253,8 +253,9 @@ func _physics_process(delta):
 			
 			#$icon.rotation = getFloor.get_collision_normal().angle()+deg2rad(90)-rotation;
 			angle = getFloor.get_collision_normal();
-			
 			connect_to_floor();
+			if (getFloor.get_collider() != null):
+				touch_floor(getFloor);
 	
 		else:
 			disconect_from_floor();
@@ -348,17 +349,24 @@ func connect_to_floor():
 	if (!ground):
 		ground = true;
 
+func touch_floor(caster):
+	if (caster.get_collider().has_method("physics_floor_override")):
+		caster.get_collider().physics_floor_override(self,caster);
+
 func touch_ceiling(caster):
-	var getAngle = -rad2deg(caster.get_collision_normal().angle())-90+360;
-	if (getAngle > 225 || getAngle < 135):
-		rotation = snap_rotation(-rad2deg(caster.get_collision_normal().angle())-90).angle();
-		#position += caster.get_collision_point()-caster.global_position-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation);
-		velocity = Vector2(velocity.y*-sign(sin(deg2rad(getAngle))),0);
-		connect_to_floor();
-		return true;
+	if (caster.get_collider().has_method("physics_ceiling_override")):
+		return caster.get_collider().physics_ceiling_override(self,caster);
 	else:
-		velocity.y = 0;
-	return false;
+		var getAngle = -rad2deg(caster.get_collision_normal().angle())-90+360;
+		if (getAngle > 225 || getAngle < 135):
+			rotation = snap_rotation(-rad2deg(caster.get_collision_normal().angle())-90).angle();
+			#position += caster.get_collision_point()-caster.global_position-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation);
+			velocity = Vector2(velocity.y*-sign(sin(deg2rad(getAngle))),0);
+			connect_to_floor();
+			return true;
+		else:
+			velocity.y = 0;
+		return false;
 
 func touch_wall(caster):
 	if (caster.get_collider().has_method("physics_wall_override")):

@@ -201,7 +201,6 @@ texture = ExtResource( 2 )
 offset = Vector2( 0, -4 )
 hframes = 16
 vframes = 16
-frame = 48
 
 [node name="AnimationSonic" type="AnimationPlayer" parent="."]
 autoplay = "Idle"

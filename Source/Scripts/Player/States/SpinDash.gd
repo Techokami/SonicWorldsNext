@@ -21,6 +21,4 @@ func _process(delta):
 		
 		parent.animator.play("Roll");
 	parent.spindashPower -= ((parent.spindashPower / 0.125) / (256))*60*delta;
-	print(parent.spindashPower);
-		#parent.spindashPower = max(0,parent.spindashPower-(delta*0.25));
 		
