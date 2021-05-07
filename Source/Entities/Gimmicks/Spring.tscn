@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Graphics/Gimmicks/springs_yellow.png" type="Texture" id=1]
 [ext_resource path="res://Scripts/Gimmicks/Spring.gd" type="Script" id=2]
@@ -7,8 +7,10 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 16, 8 )
 
-[sub_resource type="Animation" id=2]
-resource_name = "SpringRight"
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 14, 14 )
+
+[sub_resource type="Animation" id=3]
 length = 0.15
 step = 0.05
 tracks/0/type = "value"
@@ -36,8 +38,7 @@ tracks/1/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( 8, 0 ), Vector2( 0, 0 ) ]
 }
 
-[sub_resource type="Animation" id=3]
-resource_name = "SpringUp"
+[sub_resource type="Animation" id=4]
 length = 0.15
 step = 0.05
 tracks/0/type = "value"
@@ -65,8 +66,7 @@ tracks/1/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( 0, -8 ), Vector2( 0, 0 ) ]
 }
 
-[sub_resource type="Animation" id=4]
-resource_name = "SpringUpLeft"
+[sub_resource type="Animation" id=5]
 length = 0.15
 step = 0.05
 tracks/0/type = "value"
@@ -94,8 +94,7 @@ tracks/1/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( -8, -8 ), Vector2( 0, 0 ) ]
 }
 
-[sub_resource type="Animation" id=5]
-resource_name = "SpringUpRight"
+[sub_resource type="Animation" id=6]
 length = 0.15
 step = 0.05
 tracks/0/type = "value"
@@ -131,17 +130,28 @@ script = ExtResource( 2 )
 [node name="HitBox" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
 
+[node name="DiagonalHitBox" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 0
+
+[node name="AreaShape" type="CollisionShape2D" parent="DiagonalHitBox"]
+modulate = Color( 0, 0.298039, 1, 1 )
+shape = SubResource( 2 )
+disabled = true
+
 [node name="Spring" type="Sprite" parent="."]
 texture = ExtResource( 1 )
 region_enabled = true
 region_rect = Rect2( 0, 16, 32, 16 )
 
 [node name="SpringAnimator" type="AnimationPlayer" parent="."]
-anims/SpringRight = SubResource( 2 )
-anims/SpringUp = SubResource( 3 )
-anims/SpringUpLeft = SubResource( 4 )
-anims/SpringUpRight = SubResource( 5 )
+anims/SpringRight = SubResource( 3 )
+anims/SpringUp = SubResource( 4 )
+anims/SpringUpLeft = SubResource( 5 )
+anims/SpringUpRight = SubResource( 6 )
 
 [node name="sfxSpring" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 3 )
 bus = "SFX"
+
+[connection signal="body_entered" from="DiagonalHitBox" to="." method="_on_Diagonal_body_entered"]

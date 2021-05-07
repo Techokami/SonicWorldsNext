@@ -742,9 +742,28 @@ springDirection = 1
 position = Vector2( 160, 157 )
 type = 1
 
-[node name="Spring8" parent="." instance=ExtResource( 8 )]
-position = Vector2( 341, 138 )
+[node name="Spring13" parent="." instance=ExtResource( 8 )]
+position = Vector2( 160, -111 )
 type = 1
+springDirection = 4
+
+[node name="Spring8" parent="." instance=ExtResource( 8 )]
+position = Vector2( 417, -52 )
+springDirection = 4
+
+[node name="Spring10" parent="." instance=ExtResource( 8 )]
+position = Vector2( 385, -52 )
+springDirection = 5
+
+[node name="Spring11" parent="." instance=ExtResource( 8 )]
+position = Vector2( 417, -20 )
+scale = Vector2( 1, -1 )
+springDirection = 6
+
+[node name="Spring12" parent="." instance=ExtResource( 8 )]
+position = Vector2( 385, -20 )
+scale = Vector2( 1, -1 )
+springDirection = 7
 
 [node name="Spring7" parent="." instance=ExtResource( 8 )]
 position = Vector2( 437, 113 )
