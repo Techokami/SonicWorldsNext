@@ -51,6 +51,11 @@ var playerControl = 1;
 onready var sfx = $SFX.get_children();
 var airControl = true;
 
+# Player values
+var shieldID = 0;
+var rings = 0;
+
+
 # ALL CODE IS TEMPORARY!
 
 func _ready():
@@ -60,6 +65,7 @@ func _ready():
 	
 	# disable and enable states
 	set_state(currentState);
+	Global.players.append(self);
 	
 
 func _input(event):

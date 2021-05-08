@@ -1,13 +1,26 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=34 format=2]
 
-[ext_resource path="res://Entities/Main Objects/LayerSwitcher.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Entities/Main Objects/Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Entities/MainObjects/LayerSwitcher.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Entities/MainObjects/Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scripts/Objects/PathAnimator.gd" type="Script" id=3]
 [ext_resource path="res://Graphics/Gimmicks/LavaReefTurn.png" type="Texture" id=4]
 [ext_resource path="res://Graphics/Slope.png" type="Texture" id=5]
 [ext_resource path="res://Audio/Soundtrack/6. SWD_TLZa1.ogg" type="AudioStream" id=6]
 [ext_resource path="res://Scripts/Objects/ZSwitch.gd" type="Script" id=7]
 [ext_resource path="res://Entities/Gimmicks/Spring.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Entities/Misc/HUD.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Entities/Items/Ring.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Entities/Items/Monitor.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Entities/Obstacles/Bumper.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Entities/Obstacles/Switch.tscn" type="PackedScene" id=13]
+[ext_resource path="res://Entities/Obstacles/BreakableBlock.tscn" type="PackedScene" id=14]
+[ext_resource path="res://Graphics/Gimmicks/Tube.png" type="Texture" id=15]
+[ext_resource path="res://Graphics/Gimmicks/TubeConnector.png" type="Texture" id=16]
+[ext_resource path="res://Graphics/Gimmicks/TubeEnd.png" type="Texture" id=17]
+[ext_resource path="res://Scripts/Gimmicks/ZoomTubePath.gd" type="Script" id=18]
+[ext_resource path="res://Audio/Soundtrack/3. SWD_1Up.ogg" type="AudioStream" id=19]
+[ext_resource path="res://Graphics/Players/Sonic.png" type="Texture" id=20]
+[ext_resource path="res://Audio/SFX/Objects/DestroyObject.wav" type="AudioStream" id=21]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 223, 10 )
@@ -45,14 +58,220 @@ _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 1.76777, -140.007, -2, -603, 0, 0, 0, 0, 191, -592 )
 }
 
+[sub_resource type="Animation" id=12]
+resource_name = "Enterance"
+length = 8.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Label:percent_visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 1.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Jingle:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("../Player:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1032, 882 ), Vector2( 1032, 882 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Label:rect_rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 3, 3.1, 3.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ -30.7371, -30.7371, 4.0752, -30.7371 ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Label:rect_size")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 158, 31 ), Vector2( 158, 31 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("Boom:playing")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 3.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("../Player:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0, 3, 3.1, 8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ true, true, false, true ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("ImposterSonic:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"times": PoolRealArray( 0, 3, 3.1, 8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ false, false, true, false ]
+}
+tracks/8/type = "value"
+tracks/8/path = NodePath("ImposterSonic2:visible")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"times": PoolRealArray( 0, 3, 3.1, 8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ false, false, true, false ]
+}
+tracks/9/type = "value"
+tracks/9/path = NodePath("ImposterSonic3:visible")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"times": PoolRealArray( 0, 3, 3.1, 8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ false, false, true, false ]
+}
+tracks/10/type = "value"
+tracks/10/path = NodePath("ImposterSonic4:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"times": PoolRealArray( 0, 3, 3.1, 8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ false, false, true, false ]
+}
+tracks/11/type = "value"
+tracks/11/path = NodePath("ImposterSonic:position")
+tracks/11/interp = 2
+tracks/11/loop_wrap = true
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/keys = {
+"times": PoolRealArray( 3.1, 3.4, 3.9 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( -9, -31 ), Vector2( -38, -56 ), Vector2( -145, 203 ) ]
+}
+tracks/12/type = "value"
+tracks/12/path = NodePath("ImposterSonic2:position")
+tracks/12/interp = 2
+tracks/12/loop_wrap = true
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/keys = {
+"times": PoolRealArray( 3.1, 3.4, 3.9 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 8, -31 ), Vector2( 48, -59 ), Vector2( 142, 200 ) ]
+}
+tracks/13/type = "value"
+tracks/13/path = NodePath("ImposterSonic3:position")
+tracks/13/interp = 2
+tracks/13/loop_wrap = true
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/keys = {
+"times": PoolRealArray( 3.1, 3.4, 3.9 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( -9, -10 ), Vector2( -56, -32 ), Vector2( -193, 198 ) ]
+}
+tracks/14/type = "value"
+tracks/14/path = NodePath("ImposterSonic4:position")
+tracks/14/interp = 2
+tracks/14/loop_wrap = true
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/keys = {
+"times": PoolRealArray( 3.1, 3.4, 3.9 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 8, -10 ), Vector2( 72, -28 ), Vector2( 177, 197 ) ]
+}
+tracks/15/type = "value"
+tracks/15/path = NodePath("../Music:playing")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/keys = {
+"times": PoolRealArray( 0, 8 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+
 [node name="TestScene" type="Node2D"]
 
+[node name="Monitor" parent="." instance=ExtResource( 11 )]
+position = Vector2( 608, 864 )
+rotation = -4.65661e-10
+
+[node name="Monitor2" parent="." instance=ExtResource( 11 )]
+position = Vector2( 1088, 832 )
+rotation = -4.65661e-10
+
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 388, 140 )
+position = Vector2( 522, 866 )
 rotation = -4.65661e-10
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 current = true
+
+[node name="HUD" parent="." instance=ExtResource( 9 )]
 
 [node name="TestTerrain" type="StaticBody2D" parent="."]
 position = Vector2( 466.831, 191.543 )
@@ -297,7 +516,7 @@ collision_mask = 7
 shape = SubResource( 1 )
 
 [node name="TestTerrain12" type="StaticBody2D" parent="."]
-position = Vector2( 1425.11, -26.3281 )
+position = Vector2( 1432, -56 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TestTerrain12"]
 polygon = PoolVector2Array( -185.397, 79.8592, 159.213, -69.5969, 155.842, 109.076 )
@@ -363,6 +582,11 @@ shape = SubResource( 1 )
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="TestTerrain10"]
 position = Vector2( -0.998535, -231 )
+rotation = -1.57079
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="TestTerrain10"]
+position = Vector2( 24.0044, -709 )
 rotation = -1.57079
 shape = SubResource( 1 )
 
@@ -742,6 +966,20 @@ springDirection = 1
 position = Vector2( 160, 157 )
 type = 1
 
+[node name="Spring14" parent="." instance=ExtResource( 8 )]
+position = Vector2( -798, 342 )
+type = 1
+
+[node name="Spring15" parent="." instance=ExtResource( 8 )]
+position = Vector2( -930, 197 )
+scale = Vector2( -1, 1 )
+type = 1
+springDirection = 3
+
+[node name="Spring16" parent="." instance=ExtResource( 8 )]
+position = Vector2( -914, 197 )
+springDirection = 2
+
 [node name="Spring13" parent="." instance=ExtResource( 8 )]
 position = Vector2( 160, -111 )
 type = 1
@@ -780,6 +1018,177 @@ springDirection = 3
 [node name="Spring2" parent="." instance=ExtResource( 8 )]
 position = Vector2( 1140, 7 )
 type = 1
+
+[node name="Ring" parent="." instance=ExtResource( 10 )]
+position = Vector2( 800, 864 )
+
+[node name="Ring2" parent="." instance=ExtResource( 10 )]
+position = Vector2( 824, 864 )
+
+[node name="Ring3" parent="." instance=ExtResource( 10 )]
+position = Vector2( 848, 864 )
+
+[node name="Bumper" parent="." instance=ExtResource( 12 )]
+position = Vector2( 1240, 832 )
+
+[node name="Switch" parent="." instance=ExtResource( 13 )]
+position = Vector2( 1032, 902 )
+animator = NodePath("AnimationPlayer")
+animationName = "Enterance"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Switch"]
+anims/Enterance = SubResource( 12 )
+
+[node name="Label" type="Label" parent="Switch"]
+margin_left = -133.0
+margin_top = -56.0
+margin_right = 25.0
+margin_bottom = -25.0
+rect_rotation = -30.7371
+text = "Sonic worlds next is cool
+:]"
+percent_visible = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ImposterSonic" type="Sprite" parent="Switch"]
+visible = false
+position = Vector2( -145, 203 )
+texture = ExtResource( 20 )
+region_enabled = true
+region_rect = Rect2( 679, 196, 16, 23 )
+
+[node name="ImposterSonic2" type="Sprite" parent="Switch"]
+visible = false
+position = Vector2( 142, 200 )
+texture = ExtResource( 20 )
+region_enabled = true
+region_rect = Rect2( 695, 196, 18, 23 )
+
+[node name="ImposterSonic3" type="Sprite" parent="Switch"]
+visible = false
+position = Vector2( -193, 198 )
+texture = ExtResource( 20 )
+region_enabled = true
+region_rect = Rect2( 679, 219, 16, 20 )
+
+[node name="ImposterSonic4" type="Sprite" parent="Switch"]
+visible = false
+position = Vector2( 177, 197 )
+texture = ExtResource( 20 )
+region_enabled = true
+region_rect = Rect2( 695, 219, 18, 20 )
+
+[node name="Jingle" type="AudioStreamPlayer" parent="Switch"]
+stream = ExtResource( 19 )
+
+[node name="Boom" type="AudioStreamPlayer" parent="Switch"]
+stream = ExtResource( 21 )
+bus = "SFX"
+
+[node name="Switch2" parent="." instance=ExtResource( 13 )]
+position = Vector2( 1392, 1072 )
+
+[node name="Switch3" parent="." instance=ExtResource( 13 )]
+position = Vector2( 1296, 1072 )
+
+[node name="Switch4" parent="." instance=ExtResource( 13 )]
+position = Vector2( 1240, 1072 )
+
+[node name="Switch5" parent="." instance=ExtResource( 13 )]
+position = Vector2( 1200, 1072 )
+
+[node name="Switch6" parent="." instance=ExtResource( 13 )]
+position = Vector2( 1160, 1072 )
+
+[node name="Breakable" parent="." instance=ExtResource( 14 )]
+position = Vector2( 920, 904 )
+
+[node name="Tube1" type="Line2D" parent="."]
+position = Vector2( 918, 919 )
+z_index = 10
+points = PoolVector2Array( 2, 1, 2, 105, 2, 121, 18, 121, 178, 121, 194, 121, 194, 137, 194, 281, 194, 297, 210, 297, 234, 297, 298, 233, 426, 169, 490, 41, 490, 41, 498, 25, 498, 9, 498, -87, 498, -103, 482, -103, 426, -103, 410, -103, 410, -87, 410, -63 )
+width = 32.0
+default_color = Color( 1, 1, 1, 1 )
+texture = ExtResource( 15 )
+texture_mode = 1
+script = ExtResource( 18 )
+
+[node name="TubeSplit" type="Line2D" parent="Tube1"]
+points = PoolVector2Array( 194, 121, 658, 121, 674, 121, 674, 105, 674, -31, 674, -47, 658, -47, 570, -71, 554, -71, 554, -87, 554, -215, 554, -231, 538, -231, 386, -231, 370, -231, 370, -247, 370, -295 )
+width = 32.0
+default_color = Color( 1, 1, 1, 1 )
+texture = ExtResource( 15 )
+texture_mode = 1
+script = ExtResource( 18 )
+split = true
+splitChance = 50
+
+[node name="TubeSplit2" type="Line2D" parent="Tube1/TubeSplit"]
+points = PoolVector2Array( 674, 121, 1250, 121, 1250, -71, 858, -71, 858, -231, 554, -231, 384.476, -231, 370, -231, 370, -247, 370, -295 )
+width = 32.0
+default_color = Color( 1, 1, 1, 1 )
+texture = ExtResource( 15 )
+texture_mode = 1
+script = ExtResource( 18 )
+split = true
+splitChance = 5
+
+[node name="TubeConnector" type="Sprite" parent="Tube1/TubeSplit"]
+position = Vector2( 674, -47 )
+texture = ExtResource( 16 )
+
+[node name="TubeConnector2" type="Sprite" parent="Tube1/TubeSplit"]
+position = Vector2( 674, 121 )
+texture = ExtResource( 16 )
+
+[node name="TubeConnector3" type="Sprite" parent="Tube1/TubeSplit"]
+position = Vector2( 554, -71 )
+texture = ExtResource( 16 )
+
+[node name="TubeConnector4" type="Sprite" parent="Tube1/TubeSplit"]
+position = Vector2( 554, -231 )
+texture = ExtResource( 16 )
+
+[node name="TubeConnector5" type="Sprite" parent="Tube1/TubeSplit"]
+position = Vector2( 370, -231 )
+texture = ExtResource( 16 )
+
+[node name="TubeEnd" type="Sprite" parent="Tube1/TubeSplit"]
+position = Vector2( 370, -295 )
+rotation = -1.57079
+texture = ExtResource( 17 )
+
+[node name="Sprite" type="Sprite" parent="Tube1"]
+position = Vector2( 2, 121 )
+texture = ExtResource( 16 )
+
+[node name="Sprite2" type="Sprite" parent="Tube1"]
+position = Vector2( 194, 121 )
+texture = ExtResource( 16 )
+
+[node name="Sprite3" type="Sprite" parent="Tube1"]
+position = Vector2( 194, 297 )
+texture = ExtResource( 16 )
+
+[node name="Sprite4" type="Sprite" parent="Tube1"]
+position = Vector2( 410, -103 )
+texture = ExtResource( 16 )
+
+[node name="Sprite5" type="Sprite" parent="Tube1"]
+position = Vector2( 498, -103 )
+texture = ExtResource( 16 )
+
+[node name="TubeEnd" type="Sprite" parent="Tube1"]
+position = Vector2( 2, 17 )
+rotation = -1.57079
+texture = ExtResource( 17 )
+
+[node name="TubeEnd2" type="Sprite" parent="Tube1"]
+position = Vector2( 410, -71 )
+rotation = 1.57079
+texture = ExtResource( 17 )
 
 [connection signal="body_entered" from="PathAnimator" to="PathAnimator" method="_player_touch"]
 [connection signal="body_entered" from="PathAnimator/ZSwitch" to="PathAnimator/ZSwitch" method="_on_ZSwitch_body_entered"]

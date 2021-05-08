@@ -20,6 +20,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
+Global="*res://Scripts/Global/Global.gd"
 GlobalFunctions="*res://Scripts/Global/GlobalFunctions.gd"
 
 [debug]

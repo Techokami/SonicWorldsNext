@@ -1,0 +1,98 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Scripts/Misc/NumeralDisplay.gd" type="Script" id=1]
+[ext_resource path="res://Graphics/HUD/hud_lives.png" type="Texture" id=2]
+[ext_resource path="res://Graphics/HUD/hud_text.png" type="Texture" id=3]
+[ext_resource path="res://Graphics/HUD/hud_lives_numerals.png" type="Texture" id=4]
+[ext_resource path="res://Graphics/HUD/hud_numerals.png" type="Texture" id=5]
+[ext_resource path="res://Scripts/Misc/HUD.gd" type="Script" id=6]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource( 6 )
+
+[node name="LifeCounter" type="Control" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = -24.0
+margin_right = 72.0
+margin_bottom = -8.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Icon" type="Sprite" parent="LifeCounter"]
+texture = ExtResource( 2 )
+centered = false
+vframes = 7
+
+[node name="LifeText" type="Sprite" parent="LifeCounter/Icon"]
+position = Vector2( 28, 8 )
+texture = ExtResource( 4 )
+centered = false
+hframes = 10
+script = ExtResource( 1 )
+string = ""
+
+[node name="Counters" type="Control" parent="."]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 48.0
+margin_bottom = 48.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Text" type="Sprite" parent="Counters"]
+texture = ExtResource( 3 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 40, 48 )
+
+[node name="ScoreNumber" type="Sprite" parent="Counters/Text"]
+position = Vector2( 48, 0 )
+texture = ExtResource( 5 )
+centered = false
+hframes = 12
+script = ExtResource( 1 )
+string = ""
+
+[node name="TimeNumbers" type="Sprite" parent="Counters/Text"]
+position = Vector2( 32, 16 )
+texture = ExtResource( 5 )
+centered = false
+hframes = 12
+script = ExtResource( 1 )
+string = " 0:00"
+
+[node name="RingCount" type="Sprite" parent="Counters/Text"]
+position = Vector2( 48, 32 )
+texture = ExtResource( 5 )
+centered = false
+hframes = 12
+script = ExtResource( 1 )
+string = "  0"
+
+[node name="Time" type="Sprite" parent="Counters/Text"]
+visible = false
+position = Vector2( 0, 16 )
+texture = ExtResource( 3 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 48, 40, 16 )
+
+[node name="Rings" type="Sprite" parent="Counters/Text"]
+visible = false
+position = Vector2( 0, 32 )
+texture = ExtResource( 3 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 64, 40, 16 )
+
+[node name="BlueRings" type="Sprite" parent="Counters/Text"]
+visible = false
+position = Vector2( 0, 32 )
+texture = ExtResource( 3 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 80, 40, 16 )
