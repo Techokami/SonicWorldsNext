@@ -20,6 +20,7 @@ roofCastLeft,roofCastRight,wallCastLeft,wallCastRight];
 var velocity = Vector2.ZERO;
 var ground = false;
 var angle = Vector2.UP;
+var canCollide = true;
 
 # Adjustable/Lookup variables
 onready var speedStepLimit = $PhysicsLookUp.speedStepLimit;
@@ -111,8 +112,8 @@ func update_cast_to():
 		floorCastRight.cast_to.y = floorCastLeft.cast_to.y;
 
 func _physics_process(delta):
-	if (Input.is_action_just_pressed("ui_end")):
-		print(move_and_collide(Vector2.RIGHT*16,true,true,true))
+	#if (Input.is_action_just_pressed("ui_end")):
+		#print(move_and_collide(Vector2.RIGHT*16,true,true,true))
 	var getFloor;# = get_closest_sensor(floorCastLeft,floorCastRight);
 	var velocityInterp = velocity*delta;
 	
@@ -131,6 +132,10 @@ func _physics_process(delta):
 		floorPriority = null;
 	collision_layer = memLayer;
 	
+	if (!canCollide):
+		velocityInterp = Vector2.ZERO;
+		translate((velocity*delta).rotated(angle.rotated(deg2rad(90)).angle()));
+		
 	
 	while (velocityInterp != Vector2.ZERO):
 		

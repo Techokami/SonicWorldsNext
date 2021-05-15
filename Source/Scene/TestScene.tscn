@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=2]
+[gd_scene load_steps=35 format=2]
 
 [ext_resource path="res://Entities/MainObjects/LayerSwitcher.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Entities/MainObjects/Player.tscn" type="PackedScene" id=2]
@@ -21,6 +21,7 @@
 [ext_resource path="res://Audio/Soundtrack/3. SWD_1Up.ogg" type="AudioStream" id=19]
 [ext_resource path="res://Graphics/Players/Sonic.png" type="Texture" id=20]
 [ext_resource path="res://Audio/SFX/Objects/DestroyObject.wav" type="AudioStream" id=21]
+[ext_resource path="res://Entities/Hazards/Saw.tscn" type="PackedScene" id=22]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 223, 10 )
@@ -1189,6 +1190,12 @@ texture = ExtResource( 17 )
 position = Vector2( 410, -71 )
 rotation = 1.57079
 texture = ExtResource( 17 )
+
+[node name="Saw" parent="." instance=ExtResource( 22 )]
+position = Vector2( 1160, 904 )
+
+[node name="Saw2" parent="." instance=ExtResource( 22 )]
+position = Vector2( 968, 816 )
 
 [connection signal="body_entered" from="PathAnimator" to="PathAnimator" method="_player_touch"]
 [connection signal="body_entered" from="PathAnimator/ZSwitch" to="PathAnimator/ZSwitch" method="_on_ZSwitch_body_entered"]

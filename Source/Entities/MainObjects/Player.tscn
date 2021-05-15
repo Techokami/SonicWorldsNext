@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://Scripts/Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Graphics/Players/Sonic.png" type="Texture" id=2]
@@ -12,6 +12,8 @@
 [ext_resource path="res://Scripts/Player/States/SpinDash.gd" type="Script" id=10]
 [ext_resource path="res://Audio/SFX/Player/SpindashRelease.wav" type="AudioStream" id=11]
 [ext_resource path="res://Scripts/Player/States/Animation.gd" type="Script" id=12]
+[ext_resource path="res://Audio/SFX/Player/Spike.wav" type="AudioStream" id=13]
+[ext_resource path="res://Scripts/Player/States/Hit.gd" type="Script" id=14]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 9, 19 )
@@ -46,6 +48,22 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1, 1 ),
 "update": 1,
 "values": [ 12, 13 ]
+}
+
+[sub_resource type="Animation" id=11]
+resource_name = "Hurt"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 75 ]
 }
 
 [sub_resource type="Animation" id=4]
@@ -189,6 +207,9 @@ script = ExtResource( 10 )
 [node name="Animation" type="Node" parent="States"]
 script = ExtResource( 12 )
 
+[node name="Hit" type="Node" parent="States"]
+script = ExtResource( 14 )
+
 [node name="PhysicsLookUp" type="Node" parent="."]
 script = ExtResource( 4 )
 
@@ -201,11 +222,13 @@ texture = ExtResource( 2 )
 offset = Vector2( 0, -4 )
 hframes = 16
 vframes = 16
+frame = 75
 
 [node name="AnimationSonic" type="AnimationPlayer" parent="."]
 autoplay = "Idle"
 anims/CSSpring = SubResource( 2 )
 anims/Crouch = SubResource( 3 )
+anims/Hurt = SubResource( 11 )
 anims/Idle = SubResource( 4 )
 anims/LookUp = SubResource( 5 )
 anims/Roll = SubResource( 6 )
@@ -232,4 +255,8 @@ bus = "SFX"
 
 [node name="SpinDash" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource( 11 )
+bus = "SFX"
+
+[node name="Spike" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource( 13 )
 bus = "SFX"

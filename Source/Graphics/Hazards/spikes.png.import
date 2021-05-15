@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/spikes.png-7c7cab96ff34dfa8456bd61c52768081.stex"
+path="res://.import/spikes.png-93827324751c2107a3c959ddaf54ac23.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Graphics/Obstacles/spikes.png"
-dest_files=[ "res://.import/spikes.png-7c7cab96ff34dfa8456bd61c52768081.stex" ]
+source_file="res://Graphics/Hazards/spikes.png"
+dest_files=[ "res://.import/spikes.png-93827324751c2107a3c959ddaf54ac23.stex" ]
 
 [params]
 

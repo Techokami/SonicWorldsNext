@@ -20,16 +20,15 @@ var air = 0.09375;			#air acceleration (2x acc)
 var jmp = 6.5*60;			#jump force (6 for knuckles)
 var grv = 0.21875;			#gravity
 
-#Varaibles are guessed, more research needs to be made into these
-
 var spindashPower = 0.0;
+var invTime = 0;
 
 # ================
 
 var lockTimer = 0;
 var spriteRotation = 0;
 
-enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, ANIMATION};
+enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, ANIMATION, HIT};
 var currentState = STATES.NORMAL;
 onready var stateList = $States.get_children();
 
@@ -93,6 +92,12 @@ func _process(delta):
 		lockTimer -= delta;
 		inputs[INPUTS.XINPUT] = 0;
 		inputs[INPUTS.YINPUT] = 0;
+	if (invTime > 0):
+		visible = !visible;
+		invTime -= delta*Global.originalFPS;
+		if (invTime <= 0):
+			invTime = 0;
+			visible = true;
 
 func _physics_process(delta):
 	if (ground):
@@ -151,3 +156,15 @@ func connect_to_floor():
 			else:
 				velocity.x = velocity.y*-sign(sin(-deg2rad(90)+angle.angle()))
 
+func hit_player(damagePoint = global_position, damageType = 0, soundID = 4):
+	if (currentState != STATES.HIT && invTime <= 0):
+		sfx[soundID].play();
+		velocity.x = sign(global_position.x-damagePoint.x)*2*Global.originalFPS;
+		velocity.y = -4*Global.originalFPS;
+		if (velocity.x == 0):
+			velocity.x = 2*Global.originalFPS;
+		
+		ground = false;
+		set_state(STATES.HIT);
+		return true;
+	return false;
