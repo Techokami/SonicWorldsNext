@@ -38,6 +38,7 @@ playing = true
 
 [node name="SawNoise" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 3 )
+volume_db = -10.0
 autoplay = true
 max_distance = 500.0
 bus = "SFX"

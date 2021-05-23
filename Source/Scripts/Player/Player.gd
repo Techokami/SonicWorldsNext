@@ -22,6 +22,12 @@ var grv = 0.21875;			#gravity
 
 var spindashPower = 0.0;
 var invTime = 0;
+var ringDisTime = 0; # ring collecting disable timer
+
+# ================
+
+var Ring = preload("res://Entities/Items/Ring.tscn");
+var ringChannel = 0;
 
 # ================
 
@@ -30,12 +36,17 @@ var spriteRotation = 0;
 
 enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, ANIMATION, HIT};
 var currentState = STATES.NORMAL;
-onready var stateList = $States.get_children();
+enum SHIELDS {NONE, NORMAL, ELEC, FIRE, BUBBLE};
+var shield = SHIELDS.NONE;
 
+onready var stateList = $States.get_children();
 onready var animator = $AnimationSonic;
 onready var sprite = $Sprite;
+onready var shieldSprite = $Shields;
+
 var rotatableSprites = ["Walk", "Run"];
 var direction = scale.x;
+
 # ground speed is mostly used for timing and animations, there isn't any functionality to it.
 var groundSpeed = velocity.x;
 
@@ -98,6 +109,8 @@ func _process(delta):
 		if (invTime <= 0):
 			invTime = 0;
 			visible = true;
+	if (ringDisTime > 0):
+		ringDisTime -= delta;
 
 func _physics_process(delta):
 	if (ground):
@@ -131,6 +144,22 @@ func set_state(newState, forceMask = Vector2.ZERO):
 		if (getFloor):
 			position += getFloor.get_collision_point()-getFloor.global_position-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation);
 
+# set shields
+func set_shield(shieldID):
+	shield = shieldID;
+	shieldSprite.visible = true;
+	match (shield):
+		SHIELDS.NORMAL:
+			shieldSprite.play("Default");
+			sfx[5].play();
+		SHIELDS.ELEC:
+			shieldSprite.play("Elec");
+		SHIELDS.FIRE:
+			shieldSprite.play("Fire");
+		SHIELDS.BUBBLE:
+			shieldSprite.play("Bubble");
+		_: # disable
+			shieldSprite.visible = false;
 
 func action_jump(animation = "Roll", airJumpControl = true):
 	$AnimationSonic.play(animation);
@@ -158,7 +187,6 @@ func connect_to_floor():
 
 func hit_player(damagePoint = global_position, damageType = 0, soundID = 4):
 	if (currentState != STATES.HIT && invTime <= 0):
-		sfx[soundID].play();
 		velocity.x = sign(global_position.x-damagePoint.x)*2*Global.originalFPS;
 		velocity.y = -4*Global.originalFPS;
 		if (velocity.x == 0):
@@ -166,5 +194,45 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 4):
 		
 		ground = false;
 		set_state(STATES.HIT);
+		# Temp code
+		# Ring loss
+		if (shield == SHIELDS.NONE && rings > 0):
+			sfx[9].play();
+			ringDisTime = 64/Global.originalFPS;
+			var ringCount = 0;
+			var ringAngle = 101.25;
+			var ringAlt = false;
+			var ringSpeed = 4;
+			while (ringCount < min(rings,32)):
+				# Create ring
+				var ring = Ring.instance();
+				ring.global_position = global_position;
+				ring.scattered = true;
+				ring.velocity.y = -sin(deg2rad(ringAngle))*ringSpeed*Global.originalFPS;
+				ring.velocity.x = cos(deg2rad(ringAngle))*ringSpeed*Global.originalFPS;
+				
+				if (ringAlt):
+					ring.velocity.x *= -1;
+					ringAngle += 22.5;
+				ringAlt = !ringAlt;
+				ringCount += 1;
+				# if we're on the second circle, decrease the speed
+				if (ringCount == 16):
+					ringSpeed = 2;
+					ringAngle == 101.25; # Reset angle
+				get_parent().add_child(ring);
+				
+			rings = 0;
+		else:
+			sfx[soundID].play();
+		
+		# Disable Shield
+		set_shield(SHIELDS.NONE);
 		return true;
 	return false;
+
+func get_ring():
+	rings += 1;
+	#sfx[7+ringChannel].play();
+	sfx[7].play();
+	ringChannel = int(!ringChannel);

@@ -27,7 +27,7 @@ region = Rect2( 32, 32, 32, 32 )
 
 [sub_resource type="SpriteFrames" id=6]
 animations = [ {
-"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 3 ) ],
+"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 3 ), SubResource( 4 ), SubResource( 3 ), SubResource( 3 ) ],
 "loop": true,
 "name": "default",
 "speed": 30.0
@@ -170,6 +170,7 @@ frame = 2
 
 [node name="Monitor" type="AnimatedSprite" parent="."]
 frames = SubResource( 6 )
+frame = 3
 playing = true
 
 [node name="Animator" type="AnimationPlayer" parent="."]
