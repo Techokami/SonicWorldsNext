@@ -9,6 +9,7 @@ export var activate = false;
 export var currentOffset = Vector2.ZERO;
 export var grid = Vector2(16,16);
 export var snapRange = 2;
+export var checkCenters = false;
 
 # orientation breaks the current tile grid up and flips the calculations around
 # then when the "get pixel" script is called it takes the orientation and does
@@ -141,26 +142,36 @@ func generate_polygon(getoffset = currentOffset):
 	# check in terrain
 	var get = getoffset+polygon[0].linear_interpolate(polygon[1],0.5)
 	+(polygon[0]-polygon[1]).rotated(deg2rad(90)).normalized();
+	# Timeout is used to prevent the tool getting stuck
+	var timeOut = max(grid.x,grid.y)*2;
+	
 	if (round(get_pixel(image,Vector2(clamp(get.x,0,texture.get_width()),clamp(get.y,0,texture.get_height()))).a) == 1):
 		polygon.append(polygon[1]);
 		polygon[1] = polygon[0];
 		# check edge
 		if (polygon[1].y == 0):
 			while (round(get_pixel(image,getoffset+polygon[1].linear_interpolate(polygon[2],0.5)
-			+(polygon[0]-polygon[2]).rotated(deg2rad(90)).normalized()*0.5).a) == 1):
+			+(polygon[0]-polygon[2]).rotated(deg2rad(90)).normalized()*0.5).a) == 1 && timeOut >= 0):
 				polygon[1].x += 1;
-		else:
+				timeOut -= 1;
+		elif (checkCenters):
 			polygon[1] = polygon[0].linear_interpolate(polygon[2],0.5);
 			while (round(get_pixel(image,getoffset+polygon[1]).a) == 1
 			&& polygon[1].y > 0 && polygon[1].y < grid.y-1
-			&& polygon[1].x > 0 && polygon[1].x < grid.x-1):
+			&& polygon[1].x > 0 && polygon[1].x < grid.x-1 && timeOut >= 0):
 				polygon[1] += (polygon[0]-polygon[2]).rotated(deg2rad(90)).normalized()*0.3;
-		polygon[1].x = clamp(polygon[1].x,0,grid.x-1);
-		polygon[1].y = clamp(polygon[1].y,0,grid.y-1);
-			
-	
+				timeOut -= 1;
+		if (timeOut >= 0):
+			polygon[1].x = clamp(polygon[1].x,0,grid.x-1);
+			polygon[1].y = clamp(polygon[1].y,0,grid.y-1);
+		else:
+			# Revert polygon, if timed out
+			polygon[1] = polygon[2];
+			polygon.remove(2);
+				
+		
 	# check if not touching terrain midway
-	elif (round(get_pixel(image,getoffset+polygon[0].linear_interpolate(polygon[1],0.5)
+	elif (round(get_pixel(image,getoffset+polygon[0].linear_interpolate(polygon[1],0.5 && checkCenters)
 	+(polygon[0]-polygon[1]).rotated(deg2rad(-90)).normalized()).a) == 0):
 	#+polygon[0].linear_interpolate(polygon[1],0.5).rotated(deg2rad(90)).normalized()*0.5).a) == 0):
 		polygon.append(polygon[1]);
@@ -168,10 +179,16 @@ func generate_polygon(getoffset = currentOffset):
 
 		while (round(get_pixel(image,getoffset+polygon[1]).a) == 0
 		&& polygon[1].y > 0 && polygon[1].y < grid.y-1
-		&& polygon[1].x > 0 && polygon[1].x < grid.x-1):
+		&& polygon[1].x > 0 && polygon[1].x < grid.x-1 && timeOut >= 0):
 			polygon[1] += (polygon[0]-polygon[2]).rotated(deg2rad(-90)).normalized()*0.3;
-		polygon[1].x = clamp(polygon[1].x,0,grid.x-1);
-		polygon[1].y = clamp(polygon[1].y,0,grid.y-1);
+			timeOut -= 1;
+		if (timeOut >= 0):
+			polygon[1].x = clamp(polygon[1].x,0,grid.x-1);
+			polygon[1].y = clamp(polygon[1].y,0,grid.y-1);
+		else:
+			# Revert polygon, if timed out
+			polygon[1] = polygon[2];
+			polygon.remove(2);
 	
 	# bottom edge case
 	if (pose.y >= grid.y-1):

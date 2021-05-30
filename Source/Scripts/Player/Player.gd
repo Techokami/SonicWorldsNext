@@ -180,10 +180,10 @@ func connect_to_floor():
 		if (calcAngle >= 22.5 && calcAngle <= 337.5 && abs(velocity.x) < velocity.y):
 			# check half steep
 			if (calcAngle < 45 || calcAngle > 315):
-				velocity.x = velocity.y*0.5*-sign(sin(-deg2rad(90)+angle.angle()))
+				velocity.x = velocity.y*0.5*-sign(sin(-deg2rad(90)+angle.angle()));
 			# else do full steep
 			else:
-				velocity.x = velocity.y*-sign(sin(-deg2rad(90)+angle.angle()))
+				velocity.x = velocity.y*-sign(sin(-deg2rad(90)+angle.angle()));
 
 func hit_player(damagePoint = global_position, damageType = 0, soundID = 4):
 	if (currentState != STATES.HIT && invTime <= 0):

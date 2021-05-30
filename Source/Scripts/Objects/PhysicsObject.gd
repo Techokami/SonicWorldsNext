@@ -7,6 +7,7 @@ var floorCastRight = RayCast2D.new();
 var platCastLeft = RayCast2D.new();
 var platCastRight = RayCast2D.new();
 
+
 var roofCastLeft = RayCast2D.new();
 var roofCastRight = RayCast2D.new();
 
@@ -37,6 +38,7 @@ func _ready():
 	floorCastRight.enabled = true;
 	floorCastLeft.set_collision_mask_bit(6,true);
 	floorCastRight.set_collision_mask_bit(6,true);
+	
 	
 	add_child(platCastLeft);
 	add_child(platCastRight);
@@ -90,7 +92,7 @@ func update_sensors():
 	
 	wallCastLeft.cast_to = Vector2(-pushRadius,0);
 	wallCastRight.cast_to = Vector2(pushRadius,0);
-
+	
 func update_cast_to():
 	if (!ground):
 		floorCastLeft.cast_to.y = $HitBox.shape.extents.y;
@@ -111,12 +113,12 @@ func update_cast_to():
 		floorCastLeft.cast_to.y = $HitBox.shape.extents.y+groundLookDistance;
 		floorCastRight.cast_to.y = floorCastLeft.cast_to.y;
 
+
 func _physics_process(delta):
 	#if (Input.is_action_just_pressed("ui_end")):
 		#print(move_and_collide(Vector2.RIGHT*16,true,true,true))
 	var getFloor;# = get_closest_sensor(floorCastLeft,floorCastRight);
 	var velocityInterp = velocity*delta;
-	
 	
 	# sensor control
 	update_cast_to();
@@ -168,45 +170,45 @@ func _physics_process(delta):
 		platCastRight.force_raycast_update();
 		
 		
-		if (ground):
-			if (floorPriority):
-				# left floor priority
-				while (floorCastLeft.is_colliding()):
-					floorCastLeft.add_exception(floorCastLeft.get_collider());
-					floorCastLeft.force_raycast_update();
-				
-				floorCastLeft.remove_exception(floorPriority.collider);
-				floorCastLeft.force_raycast_update();
-				if (!floorCastLeft.is_colliding()):
-					floorCastLeft.clear_exceptions();
-				
-				# right floor priority
-				while (floorCastRight.is_colliding()):
-					floorCastRight.add_exception(floorCastRight.get_collider());
-					floorCastRight.force_raycast_update();
-				
-				floorCastRight.remove_exception(floorPriority.collider);
-				floorCastRight.force_raycast_update();
-				if (!floorCastRight.is_colliding()):
-					floorCastRight.clear_exceptions();
-			
-			
-			while (platCastLeft.is_colliding()):
-				floorCastLeft.add_exception(platCastLeft.get_collider());
-				floorCastRight.add_exception(platCastLeft.get_collider());
-				platCastLeft.add_exception(platCastLeft.get_collider());
-				platCastRight.add_exception(platCastLeft.get_collider());
-				platCastLeft.force_raycast_update();
-
-
-			while (platCastRight.is_colliding()):
-				floorCastRight.add_exception(platCastRight.get_collider());
-				floorCastLeft.add_exception(platCastRight.get_collider());
-				platCastRight.add_exception(platCastRight.get_collider());
-				platCastLeft.add_exception(platCastRight.get_collider());
-				platCastRight.force_raycast_update();
-		
-		exclude_layers();
+#		if (ground):
+#			if (floorPriority):
+#				# left floor priority
+#				while (floorCastLeft.is_colliding()):
+#					floorCastLeft.add_exception(floorCastLeft.get_collider());
+#					floorCastLeft.force_raycast_update();
+#
+#				floorCastLeft.remove_exception(floorPriority.collider);
+#				floorCastLeft.force_raycast_update();
+#				if (!floorCastLeft.is_colliding()):
+#					floorCastLeft.clear_exceptions();
+#
+#				# right floor priority
+#				while (floorCastRight.is_colliding()):
+#					floorCastRight.add_exception(floorCastRight.get_collider());
+#					floorCastRight.force_raycast_update();
+#
+#				floorCastRight.remove_exception(floorPriority.collider);
+#				floorCastRight.force_raycast_update();
+#				if (!floorCastRight.is_colliding()):
+#					floorCastRight.clear_exceptions();
+#
+#
+#			while (platCastLeft.is_colliding()):
+#				floorCastLeft.add_exception(platCastLeft.get_collider());
+#				floorCastRight.add_exception(platCastLeft.get_collider());
+#				platCastLeft.add_exception(platCastLeft.get_collider());
+#				platCastRight.add_exception(platCastLeft.get_collider());
+#				platCastLeft.force_raycast_update();
+#
+#
+#			while (platCastRight.is_colliding()):
+#				floorCastRight.add_exception(platCastRight.get_collider());
+#				floorCastLeft.add_exception(platCastRight.get_collider());
+#				platCastRight.add_exception(platCastRight.get_collider());
+#				platCastLeft.add_exception(platCastRight.get_collider());
+#				platCastRight.force_raycast_update();
+#
+#		exclude_layers();
 		
 		# Wall code
 		
@@ -230,7 +232,6 @@ func _physics_process(delta):
 			s2Check = ((getFloor.get_collision_point()-getFloor.global_position-
 			($HitBox.shape.extents*Vector2(0,1)).rotated(rotation)).y <= 
 			min(abs(velocity.x/60)+4,groundLookDistance));
-		
 		if (getFloor && round(velocity.y) >= 0 && s2Check):
 			position += getFloor.get_collision_point()-getFloor.global_position-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation);
 			
@@ -294,10 +295,10 @@ func get_closest_sensor(firstRaycast,secondRaycast):
 			return rightFloor;
 		return null;
 	
+	
 	if ((leftFloor.global_position-leftFloor.get_collision_point()).length() <
 	(rightFloor.global_position-rightFloor.get_collision_point()).length()):
 		return leftFloor;
-	
 	return rightFloor;
 
 func snap_rotation(angle):
