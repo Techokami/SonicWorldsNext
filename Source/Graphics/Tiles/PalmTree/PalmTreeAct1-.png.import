@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/PalmTreeAct1 - Copy.png-ecd4d30e8c2e2d4bafbd98e8479d9948.stex"
+path="res://.import/PalmTreeAct1-.png-0034ec18d8d9df27898f5cba8440f9f7.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Graphics/Tiles/PalmTree/PalmTreeAct1 - Copy.png"
-dest_files=[ "res://.import/PalmTreeAct1 - Copy.png-ecd4d30e8c2e2d4bafbd98e8479d9948.stex" ]
+source_file="res://Graphics/Tiles/PalmTree/PalmTreeAct1-.png"
+dest_files=[ "res://.import/PalmTreeAct1-.png-0034ec18d8d9df27898f5cba8440f9f7.stex" ]
 
 [params]
 

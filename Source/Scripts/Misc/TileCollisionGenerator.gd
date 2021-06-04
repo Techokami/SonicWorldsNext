@@ -4,12 +4,18 @@ extends Sprite
 var surfacePattern = [];
 var polygon = [];
 
+var image;
+
 export var activate = false;
 
 export var currentOffset = Vector2.ZERO;
 export var grid = Vector2(16,16);
 export var snapRange = 2;
 export var checkCenters = false;
+
+export var generateMasks = false;
+export var showMetaTiles = false;
+export var createTileLookUpTable = false;
 
 # orientation breaks the current tile grid up and flips the calculations around
 # then when the "get pixel" script is called it takes the orientation and does
@@ -21,10 +27,38 @@ export var checkCenters = false;
 # orientation 1 = slope going right, -1 = slope going left, 2 = ceiling going right, -2 = ceiling going left
 var orientation = 1;
 
+
+# Collission Generators
+
+# TileMetaData Generator (prefill it with data just to save time)
+var metaTiles = [
+	# 0 = empty
+	{"Angle": 0, "HeightMap": [0,0,0,0,0,0,0,0]},
+	# 1 = filled
+	{"Angle": 0, "HeightMap": [8,8,8,8,8,8,8,8]},
+];
+var tile = [
+	# 0 empty tile
+#	{
+#		"TileData": [0,0,0,0],
+#		"Dir": [[0,0],[0,0],[0,0],[0,0]]
+#		"AnglePriority": [null,null,null,null]
+#	},
+];
+
+var tileMap = [
+#	[[0,0,0],[0,0,0]]
+]
+
+func _ready():
+	update();
+
 func _process(delta):
 	if Engine.editor_hint:
 		if (activate):
 			activate = false;
+			image = texture.get_data();
+			image.lock();
 			for y in texture.get_height()/grid.y:
 				for x in texture.get_width()/grid.x:
 					if (generate_polygon(Vector2(x*grid.x,y*grid.y))):
@@ -32,15 +66,29 @@ func _process(delta):
 						var shape = ConvexPolygonShape2D.new();
 						shape.set_point_cloud(PoolVector2Array(polygon));
 						$TileMap.tile_set.tile_add_shape(0,shape,transform,false,Vector2(x,y));
-						
-						#pass;
-#						var collission = CollisionPolygon2D.new();
-#
-#						collission.polygon = PoolVector2Array(polygon);
-#						collission.position = Vector2(x*grid.x,y*grid.y);
-#						add_child(collission);
-#						collission.set_owner(get_tree().get_edited_scene_root());
 		
+		if (generateMasks):
+			generateMasks = false;
+			image = texture.get_data();
+			image.lock();
+			var newMaskCount = 0;
+			#generate_masks(currentOffset);
+			for y in texture.get_height()/grid.y*2:
+				for x in texture.get_width()/grid.x*2:
+					if (generate_masks(Vector2(x*grid.x/2,y*grid.y/2))):
+						newMaskCount += 1;
+			if (newMaskCount > 0):
+				#print(metaTiles);
+				print(newMaskCount," meta tiles generated");
+		
+		if (createTileLookUpTable):
+			image = texture.get_data();
+			image.lock();
+			createTileLookUpTable = false;
+			for y in texture.get_height()/grid.y:
+				for x in texture.get_width()/grid.x:
+					generate_tile_lookup(Vector2(x*grid.x,y*grid.y));
+			
 		update();
 
 
@@ -53,8 +101,6 @@ func generate_polygon(getoffset = currentOffset):
 	var curPat = 0;
 	
 	
-	var image = texture.get_data();
-	image.lock();
 	
 	var pose = Vector2.ZERO;
 	
@@ -233,6 +279,101 @@ func generate_polygon(getoffset = currentOffset):
 	
 	return true;
 
+func generate_masks(getPos = Vector2.ZERO):
+	var heightMap = [8,8,8,8,8,8,8,8];
+	var angle = 0;
+	
+	# make a list of height maps to get ids
+	var metaHeights = [];
+	for i in range(metaTiles.size()):
+		metaHeights.append(metaTiles[i]["HeightMap"]);
+	
+	# check the heights
+	heightMap = calculate_height_map(getPos);
+	
+	# check that heightmap doesn't already exist
+	if (metaHeights.find(heightMap) == -1):
+		# calculate angle
+		var points = [Vector2(0,8-heightMap[0]),Vector2(7,8-heightMap[7])];
+		var check = heightMap.size()-1;
+		
+		while (heightMap[check] == 0 && check > 0):
+			points[1] = Vector2(check,8-heightMap[check]);
+			check -= 1;
+		
+		check = 0;
+		
+		while (heightMap[check] == 0 && check < heightMap.size()-1):
+			points[0] = Vector2(check,8-heightMap[check]);
+			check += 1;
+		
+		angle = deg2rad(round(rad2deg(points[0].direction_to(points[1]).angle())*10)/10);
+	
+		metaTiles.append({"Angle": angle, "HeightMap": heightMap});
+		
+		# return true
+		return true;
+	# return false (indicating no new tile was generated)
+	return false;
+
+func generate_tile_lookup(getPos = Vector2.ZERO):
+	# make a list of height maps to get ids
+	var metaHeights = [];
+	for i in range(metaTiles.size()):
+		metaHeights.append(metaTiles[i]["HeightMap"]);
+		
+	var setTile = [0,0,0,0];
+	var setFlip = [[0,0],[0,0],[0,0],[0,0]];
+	var heightMap = [[],[],[],[]];
+	var offsets = [Vector2.ZERO,Vector2(8,0),Vector2(0,8),Vector2(8,8)];
+	heightMap[0] = calculate_height_map(getPos+offsets[0]);
+	heightMap[1] = calculate_height_map(getPos+offsets[1]);
+	heightMap[2] = calculate_height_map(getPos+offsets[2]);
+	heightMap[3] = calculate_height_map(getPos+offsets[3]);
+	
+	for i in range(heightMap.size()):
+		if (metaHeights.has(heightMap[i])):
+			setTile[i] = metaHeights.find(heightMap[i]);
+			var checkHeight = 0;
+			
+			while (checkHeight < heightMap[i].size()-1 &&
+			(heightMap[i][checkHeight] == 8 || heightMap[i][checkHeight] == 0 || checkHeight == 0)):
+				checkHeight += 1;
+			if (heightMap[i][checkHeight] != 8 && heightMap[i][checkHeight] != 0):
+				setFlip[i][1] = int(round(get_pixel(image,getPos+offsets[i]+Vector2(checkHeight,0)).a) == 1);
+	tile.append(
+		{
+			"TileData": setTile,
+			"Dir": setFlip,
+		}
+	);
+	tileMap.append([tile.size()-1,0,0]);
+
+func calculate_height_map(getPos = Vector2.ZERO):
+	var heightMap = [8,8,8,8,8,8,8,8];
+	var heightID = 0;
+	var curHeight = -8;
+	var checkDir = 1; # 1 = check up, 0 = check down
+	while (heightID < heightMap.size()):
+		# reset cur height
+		curHeight = -8;
+		checkDir = 1;
+		# if bottom and top are filled then just set mask to 8
+		if (round(get_pixel(image,getPos+Vector2(heightID,0)).a) == 1
+		&& round(get_pixel(image,getPos+Vector2(heightID,7)).a) == 1):
+			curHeight = 8;
+		# else calculate heights of collumn
+		else:
+			# if bottom empty then start from bottom and look up
+			if (round(get_pixel(image,getPos+Vector2(heightID,7)).a) == 0):
+				checkDir = 0;
+				curHeight = 8;
+			while (round(get_pixel(image,getPos+Vector2(heightID,(7*checkDir)+curHeight-sign(curHeight))).a) == 0 && round(curHeight) != 0):
+				curHeight -= sign(curHeight);
+		
+		heightMap[heightID] = abs(curHeight);
+		heightID += 1;
+	return heightMap;
 
 func get_pixel(image,getOffset):
 	
@@ -263,3 +404,56 @@ func _draw():
 					currentOffset+polygon[i].linear_interpolate(polygon[getNext],0.5)+(polygon[i]-polygon[getNext]).rotated(deg2rad(90)).clamped(4),Color.green);
 					
 				draw_circle(currentOffset+polygon[i],0.5,Color.red);
+		if (showMetaTiles):
+			var offset = Vector2(0,-64);
+			for i in range(metaTiles.size()):
+				for x in range(metaTiles[i]["HeightMap"].size()):
+					#draw_line(offset+Vector2.DOWN*8,offset+Vector2.DOWN*metaTiles[i]["HeightMap"][x],Color.black,1.1);
+					draw_line(offset+Vector2(x,8),offset+Vector2(x,8-metaTiles[i]["HeightMap"][x]),Color.black,1.1);
+				offset.x += 9;
+			offset = Vector2(0,0);
+			for i in range(tileMap.size()):
+				var id = tileMap[i][0];
+				for x in range(metaTiles[tile[id]["TileData"][0]]["HeightMap"].size()):
+					var flip = tile[id]["Dir"][0];
+					draw_line(offset+Vector2(x+0.5,8-flip[1]*8),
+					offset+Vector2(x+0.5,8-flip[1]*8-(metaTiles[tile[id]["TileData"][0]]["HeightMap"][x])*(1+flip[1]*-2)),
+					Color(0.55,0,0,0.9),1.1);
+					
+					flip = tile[id]["Dir"][1];
+					draw_line(offset+Vector2(x+0.5+8,8-(flip[1]*8)),
+					offset+Vector2(x+0.5+8,8-flip[1]*8-(metaTiles[tile[id]["TileData"][1]]["HeightMap"][x])*(1+flip[1]*-2)),
+					Color(0,0.55,0,0.9),1.1);
+
+					flip = tile[id]["Dir"][2];
+					draw_line(offset+Vector2(x+0.5,8+8-(flip[1]*8)),
+					offset+Vector2(x+0.5,8+8-flip[1]*8-(metaTiles[tile[id]["TileData"][2]]["HeightMap"][x])*(1+flip[1]*-2)),
+					Color(0,0,0.55,0.9),1.1);
+
+					flip = tile[id]["Dir"][3];
+					draw_line(offset+Vector2(x+0.5+8,8+8-(flip[1]*8)),
+					offset+Vector2(x+0.5+8,8+8-flip[1]*8-(metaTiles[tile[id]["TileData"][3]]["HeightMap"][x])*(1+flip[1]*-2)),
+					Color(0.55,0.55,0,0.9),1.1);
+
+				offset += Vector2(16,0);
+				if (offset.x >= texture.get_width()):
+					offset = Vector2(0,offset.y+16);
+
+#var metaTiles = [
+#	# 0 = empty
+#	{"Angle": 0, "HeightMap": [0,0,0,0,0,0,0,0]},
+#	# 1 = filled
+#	{"Angle": 0, "HeightMap": [8,8,8,8,8,8,8,8]},
+#];
+#var tile = [
+#	# 0 empty tile
+##	{
+##		"TileData": [0,0,0,0],
+##		"Dir": [[0,0],[0,0],[0,0],[0,0]]
+##		"AnglePriority": [null,null,null,null]
+##	},
+#];
+#
+#var tileMap = [
+##	[[0,0,0],[0,0,0]]
+#]
