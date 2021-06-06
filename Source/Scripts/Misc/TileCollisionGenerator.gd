@@ -17,6 +17,9 @@ export var generateMasks = false;
 export var showMetaTiles = false;
 export var createTileLookUpTable = false;
 
+export var saveTileSetData = false;
+export var saveGlobalTileData = false;
+
 # orientation breaks the current tile grid up and flips the calculations around
 # then when the "get pixel" script is called it takes the orientation and does
 # some math to determing the direction to trace the surface
@@ -31,24 +34,25 @@ var orientation = 1;
 # Collission Generators
 
 # TileMetaData Generator (prefill it with data just to save time)
-var metaTiles = [
+var metaTiles = {
 	# 0 = empty
-	{"Angle": 0, "HeightMap": [0,0,0,0,0,0,0,0]},
+	0: {"Angle": 0, "HeightMap": [0,0,0,0,0,0,0,0]},
 	# 1 = filled
-	{"Angle": 0, "HeightMap": [8,8,8,8,8,8,8,8]},
-];
-var tile = [
+	1: {"Angle": 0, "HeightMap": [8,8,8,8,8,8,8,8]},
+};
+var tile = {
+	#0:
 	# 0 empty tile
 #	{
 #		"TileData": [0,0,0,0],
 #		"Dir": [[0,0],[0,0],[0,0],[0,0]]
 #		"AnglePriority": [null,null,null,null]
 #	},
-];
+};
 
-var tileMap = [
-#	[[0,0,0],[0,0,0]]
-]
+var tileMap = {
+#	0:[0,0,0],1:[0,0,0]]
+}
 
 func _ready():
 	update();
@@ -88,7 +92,23 @@ func _process(delta):
 			for y in texture.get_height()/grid.y:
 				for x in texture.get_width()/grid.x:
 					generate_tile_lookup(Vector2(x*grid.x,y*grid.y));
-			
+		
+		if (saveGlobalTileData):
+			saveGlobalTileData = false;
+			var file = File.new();
+			file.open("res://Debug/TileMetaData.json", File.WRITE);
+			file.store_var(to_json(metaTiles));
+			file.close();
+		
+		if (saveTileSetData):
+			saveTileSetData = false;
+			var data = {"Tile": tile, "TileMap": tileMap};
+			var file = File.new();
+			file.open("res://Debug/TilesetData.json", File.WRITE);
+			file.store_var(to_json(data));
+			file.close();
+
+		
 		update();
 
 
@@ -309,7 +329,7 @@ func generate_masks(getPos = Vector2.ZERO):
 		
 		angle = deg2rad(round(rad2deg(points[0].direction_to(points[1]).angle())*10)/10);
 	
-		metaTiles.append({"Angle": angle, "HeightMap": heightMap});
+		metaTiles[metaTiles.size()] = {"Angle": angle, "HeightMap": heightMap};
 		
 		# return true
 		return true;
@@ -341,13 +361,19 @@ func generate_tile_lookup(getPos = Vector2.ZERO):
 				checkHeight += 1;
 			if (heightMap[i][checkHeight] != 8 && heightMap[i][checkHeight] != 0):
 				setFlip[i][1] = int(round(get_pixel(image,getPos+offsets[i]+Vector2(checkHeight,0)).a) == 1);
-	tile.append(
-		{
-			"TileData": setTile,
-			"Dir": setFlip,
-		}
-	);
-	tileMap.append([tile.size()-1,0,0]);
+	
+	var duplicateID = -1;
+	var tileDic = {"TileData": setTile,"Dir": setFlip,};
+	for i in range(tile.size()):
+		var getData = tile[i].hash();
+		if (tileDic.hash() == getData):
+			duplicateID = i;
+	
+	if (duplicateID == -1):
+		tile[tile.size()] = tileDic;
+		tileMap[tileMap.size()] = [tile.size()-1,0,0];
+	else:
+		tileMap[tileMap.size()] = [duplicateID,0,0];
 
 func calculate_height_map(getPos = Vector2.ZERO):
 	var heightMap = [8,8,8,8,8,8,8,8];

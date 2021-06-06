@@ -2,39 +2,114 @@ extends TileMap
 
 export (PoolIntArray) var tiles;
 
-var tileMap = [];
-var tile = [
-	{
-		"TileData": [0,4,0,1],
-	},
-	{
-		"TileData": [2,0,3,2],
-		"Dir:": [[1,0],[0,0],[0,1],[0,1]],
-		"AnglePriority": [45,45,null,null],
-	},
-]
+export(String, FILE, "*.json") var metaTileFile;
+export(String, FILE, "*.json") var tilesetFile;
+
+var metaTiles = {
+#	# 0 = empty
+#	0: {"Angle": 0, "HeightMap": [0,0,0,0,0,0,0,0]},
+#	# 1 = filled
+#	1: {"Angle": 0, "HeightMap": [8,8,8,8,8,8,8,8]},
+};
+var tile = {
+	#0:
+	# 0 empty tile
+#	{
+#		"TileData": [0,0,0,0],
+#		"Dir": [[0,0],[0,0],[0,0],[0,0]]
+#		"AnglePriority": [null,null,null,null]
+#	},
+};
+
+var tileMap = {
+#	0:[0,0,0],1:[0,0,0]]
+}
+
+var tileRegion = tile_set.tile_get_region(0).size/tile_set.autotile_get_size(0);
+var tileSize = tile_set.autotile_get_size(0);
 
 func _ready():
-	for i in range(32):
-		tileMap.append([]);
-		for j in range(32):
-			tileMap[i].append(0);
-	tileMap[13][14] = 1;
-	var get_cell = get_cell_autotile_coord(-104/16,1160/16);
-	print(tile[tileMap[get_cell.x][get_cell.y]]["AnglePriority"][0]);
+	if (metaTileFile):
+		var file = File.new();
+		file.open(metaTileFile, File.READ);
+		metaTiles = JSON.parse(file.get_var()).result;
+		file.close();
+	if (tilesetFile):
+		var file = File.new();
+		file.open(tilesetFile, File.READ);
+		var data = JSON.parse(file.get_var()).result;
+		tile = data["Tile"];
+		tileMap = data["TileMap"];
+		file.close();
 
-#func _ready():
-#	var tileTable = {"TileData": [[0,0,1,0],[1,0,2,1]], "TileMap": [0,1,2]};
-##	metaTiles = {"ID0": {"HeightMap": [8,7,6,5,4,3,2,1], "Angle": 45, "XDir": 1, "YDir": 1,},
-##				 "ID1": {"HeightMap": [8,8,8,8,8,8,8,8], "Angle": 0, "XDir": 1, "YDir": 1},};
-##
-##	var file = File.new();
-##	file.open("res://Test.json", File.READ);
-##	var metaGetTile = file.get_var();
-##	file.close();
-##
-#	var file = File.new();
-#	file.open("res://Test2.json", File.WRITE);
-##	file.store_var(to_json(metaTiles));
-#	file.store_var(to_json(tileTable));
-#	file.close();
+	#var getCell = get_cell_autotile_coord(-104/16,1160/16);
+	#print(convertToTileID(getCell));
+	#print(tileMap[str(convertToTileID(getCell))]);
+	#print(metaTiles[ str(tile[str(tileMap[str(convertToTileID(getCell))][0])]["TileData"][3]) ]);
+	var testPose = Vector2(320,1384+5);
+	print(get_tile(testPose));
+	print(get_tile_section(testPose));
+	print(get_meta_tile(testPose));
+	print(get_height(testPose));
+	print(collission_check(testPose));
+
+
+func get_tile_section(pose = Vector2.ZERO):
+	var flip = get_flip(pose);
+	pose = Vector2(fposmod(pose.x,tileSize.x),fposmod(pose.y,tileSize.y));
+	if (flip.x):
+		pose.x = tileSize.x-pose.x-1;
+	if (flip.y):
+		pose.y = tileSize.y-pose.y-1;
+	return round(pose.x/tileSize.x)+round(pose.y/tileSize.y)*2
+
+func convert_to_tile_ID(cellVector = Vector2.ZERO):
+	return cellVector.x+(cellVector.y*tileRegion.x);
+
+func get_tile(pose = Vector2.ZERO):
+	pose = pose/16;
+	var getID = (convert_to_tile_ID(get_cell_autotile_coord(pose.x,pose.y)));
+	return tile[str(tileMap[str(getID)][0])];
+
+func get_meta_tile(pose = Vector2.ZERO):
+	return metaTiles[str(get_tile(pose)["TileData"][get_tile_section(pose)])];
+
+func get_height(pose = Vector2.ZERO):
+	var heightMap = get_meta_tile(pose)["HeightMap"];
+	var flip = get_flip(pose);
+	pose.x = fposmod(pose.x,8);
+	if (flip.x):
+		pose.x = 7-pose.x;
+	return heightMap[floor(pose.x)];
+
+func collission_check(pose = Vector2.ZERO):
+	var flip = get_flip(pose);
+	var getH = get_height(pose);
+	var getPosY = fposmod(pose.y,8);
+	if (flip.y):
+		return (getPosY < getH);
+	else:
+		return (getPosY >= 8-getH);
+	
+func get_flip(pose = Vector2.ZERO):
+	return Vector2(is_cell_x_flipped(pose.x/tileSize.x,pose.y/tileSize.y),is_cell_y_flipped(pose.x/tileSize.x,pose.y/tileSize.y));
+
+#var metaTiles = {
+##	# 0 = empty
+##	0: {"Angle": 0, "HeightMap": [0,0,0,0,0,0,0,0]},
+##	# 1 = filled
+##	1: {"Angle": 0, "HeightMap": [8,8,8,8,8,8,8,8]},
+#};
+#var tile = {
+#	#0:
+#	# 0 empty tile
+##	{
+##		"TileData": [0,0,0,0],
+##		"Dir": [[0,0],[0,0],[0,0],[0,0]]
+##		"AnglePriority": [null,null,null,null]
+##	},
+#};
+#
+#var tileMap = {
+##	0:[0,0,0],1:[0,0,0]]
+#}
