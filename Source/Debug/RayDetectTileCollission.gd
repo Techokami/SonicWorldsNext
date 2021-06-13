@@ -10,14 +10,15 @@ func _physics_process(delta):
 				#while (collider.collision_check(getPose)):
 				#	getPose.y -= 1;#collider.get_height(getPose);
 				#print(collider.get_meta_tile(getPose));
-				var getPose = collider.get_surface_point(global_position,cast_to.y);
+				#var getPose = collider.get_surface_point(global_position,cast_to.y,true);
+				var getPose = collider.get_surface_point(global_position,cast_to.x,true);
 				if (getPose != null):
 					$Polygon2D2.global_position = getPose;
-					$Polygon2D2.rotation = collider.get_angle(getPose);
+					$Polygon2D2.rotation = collider.get_angle(getPose,-cast_to.normalized());
 					print(getPose);
 				#print(collider.get_angle(getPose));
 				#print("Surface: ",collider.get_surface_point(global_position,cast_to.y));
 				#print(getPose.y);
-		position.x += 1;
+		position.y += 1;
 	if Input.is_action_pressed("ui_home"):
-		position.x -= 1;
+		position.y -= 1;

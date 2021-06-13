@@ -46,12 +46,14 @@ func _ready():
 	#print(convertToTileID(getCell));
 	#print(tileMap[str(convertToTileID(getCell))]);
 	#print(metaTiles[ str(tile[str(tileMap[str(convertToTileID(getCell))][0])]["TileData"][3]) ]);
-	var testPose = Vector2(320,1384+5);
+	var testPose = Vector2(832,1620);
 	print(get_tile(testPose));
 	print(get_tile_section(testPose));
 	print(get_meta_tile(testPose));
 	print(get_height(testPose));
 	print(collision_check(testPose));
+	
+	print(get_width(testPose));
 
 
 func get_tile_section(pose = Vector2.ZERO):
@@ -79,21 +81,46 @@ func get_meta_tile(pose = Vector2.ZERO):
 
 func get_height(pose = Vector2.ZERO):
 	var heightMap = get_meta_tile(pose)["HeightMap"];
-	var flip = get_flip(pose);
+	var flip = get_flip(pose,true);
 	pose.x = fposmod(pose.x,8);
 	if (flip.x):
 		pose.x = 7-pose.x;
 	return heightMap[floor(pose.x)];
+	
+func get_width(pose = Vector2.ZERO):
+	var heightMap = get_meta_tile(pose)["HeightMap"];
+	var flip = get_flip(pose,true);
+	pose.y = fposmod(pose.y,8);
+	if (!flip.y):
+		pose.y = 8-pose.y;
+	# calculate the width
+	var width = 0;
+	for i in range(heightMap.size()):
+		if (pose.y < heightMap[i]):
+			width += 1;
+	return width;
 
-func get_angle(pose = Vector2.ZERO):
-	var flip = get_flip(pose);
-	if (!flip.x):
-		return get_meta_tile(pose)["Angle"];
+func get_angle(pose = Vector2.ZERO, var defaultAngle = Vector2.UP):
+	var flip = get_flip(pose,true);
+	if (!flip.y):
+		if (!flip.x):
+			if (get_meta_tile(pose)["Angle"] == deg2rad(0)):
+				return defaultAngle.rotated(deg2rad(90)).angle();
+			else:
+				return get_meta_tile(pose)["Angle"];
+		else:
+			return -get_meta_tile(pose)["Angle"];
 	else:
-		return -get_meta_tile(pose)["Angle"];
+		if (!flip.x):
+			if (get_meta_tile(pose)["Angle"] == deg2rad(0)):
+				return defaultAngle.rotated(deg2rad(90)).angle();
+			else:
+				return deg2rad(180)-get_meta_tile(pose)["Angle"];
+		else:
+			return deg2rad(180)+get_meta_tile(pose)["Angle"];
 
 func collision_check(pose = Vector2.ZERO):
-	var flip = get_flip(pose);
+	var flip = get_flip(pose,true);
 	var getH = get_height(pose);
 	var getPosY = fposmod(pose.y,8);
 	if (flip.y):
@@ -101,33 +128,73 @@ func collision_check(pose = Vector2.ZERO):
 	else:
 		return (getPosY >= 8-getH);
 
-func get_surface_point(origin = Vector2.ZERO, maxDistance = 8):
+func get_surface_point(origin = Vector2.ZERO, maxDistance = 8, horizontal = false):
 	var distance = 0;
 	# Tile Check
-	while (get_height(origin+Vector2.DOWN*distance) == 0 && abs(distance) < abs(maxDistance)):
-		distance = min(abs(distance)+8,abs(maxDistance))*sign(maxDistance);
+	if (!horizontal):
+		while (get_height(origin+Vector2.DOWN*distance) == 0 && abs(distance) < abs(maxDistance)):
+			distance = min(abs(distance)+8,abs(maxDistance))*sign(maxDistance);
+	else:
+		while (get_width(origin+Vector2.RIGHT*distance) == 0 && abs(distance) < abs(maxDistance)):
+			distance = min(abs(distance)+8,abs(maxDistance))*sign(maxDistance);
 	
-	if (distance >= maxDistance):
+	if (distance*sign(maxDistance) >= abs(maxDistance)):
 		return null;
 	
 	# Check by height
 	
-	var getPosY = stepify(distance-4,8);
-	var flip = get_flip(origin+Vector2.DOWN*distance);
-	if (flip.y):
-		distance = getPosY-1;#getPosY+get_height(origin+Vector2.DOWN*distance);
+	var getPos = stepify(distance-4,8);
+	
+	if (!horizontal):
+		var flip = get_flip(origin+Vector2.DOWN*distance,true);
+		if (sign(maxDistance) >= 0):
+			if (flip.y):
+				distance = getPos-1;
+			else:
+				while (get_height(origin+Vector2.DOWN*distance) == 8):
+					distance -= 8;
+					getPos -= 8;
+				distance = getPos+8-get_height(origin+Vector2.DOWN*distance);
+		else:
+			if (!flip.y):
+				distance = getPos+8;
+			else:
+				while (get_height(origin+Vector2.DOWN*distance) == 8):
+					distance += 8;
+					getPos += 8;
+				distance = getPos+get_height(origin+Vector2.DOWN*distance);
 	else:
-		while (get_height(origin+Vector2.DOWN*distance) == 8):
-			distance -= 8;
-			getPosY -= 8;
-		distance = getPosY+8-get_height(origin+Vector2.DOWN*distance);
+		var flip = get_flip(origin+Vector2.RIGHT*distance,true);
+		if (sign(maxDistance) >= 0):
+			if (flip.x):
+				distance = getPos-1;
+			else:
+				while (get_width(origin+Vector2.RIGHT*distance) == 8):
+					distance -= 8;
+					getPos -= 8;
+				distance = getPos+8-get_width(origin+Vector2.RIGHT*distance);
+		else:
+			if (!flip.x):
+				distance = getPos+8;
+			else:
+				while (get_width(origin+Vector2.RIGHT*distance) == 8):
+					distance += 8;
+					getPos += 8;
+				distance = getPos+get_width(origin+Vector2.RIGHT*distance);
 
-	return origin+Vector2.DOWN*distance;
+	if (!horizontal):
+		return origin+Vector2.DOWN*distance;
+	else:
+		return origin+Vector2.RIGHT*distance;
 	
 	
 
-func get_flip(pose = Vector2.ZERO):
-	return Vector2(is_cell_x_flipped(pose.x/tileSize.x,pose.y/tileSize.y),is_cell_y_flipped(pose.x/tileSize.x,pose.y/tileSize.y));
+func get_flip(pose = Vector2.ZERO, includeMeta = false):
+	if (!includeMeta):
+		return Vector2(is_cell_x_flipped(pose.x/tileSize.x,pose.y/tileSize.y),is_cell_y_flipped(pose.x/tileSize.x,pose.y/tileSize.y));
+	else:
+		return Vector2(int(is_cell_x_flipped(pose.x/tileSize.x,pose.y/tileSize.y)) != get_tile(pose)["Dir"][get_tile_section(pose)][0],
+		int(is_cell_y_flipped(pose.x/tileSize.x,pose.y/tileSize.y)) != get_tile(pose)["Dir"][get_tile_section(pose)][1]);
 
 #var metaTiles = {
 ##	# 0 = empty
