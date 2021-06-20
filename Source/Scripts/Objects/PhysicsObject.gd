@@ -214,8 +214,9 @@ func _physics_process(delta):
 		
 		var getWall = get_closest_sensor(wallCastLeft,wallCastRight);
 		
+		
 		if (getWall):
-			position += getWall.get_collision_point()-getWall.global_position-(Vector2(pushRadius,0)*sign(getWall.cast_to.x)).rotated(rotation);
+			position += Vector2(getWall.get_collision_point().x-getWall.global_position.x-pushRadius*sign(getWall.cast_to.x),0).rotated(rotation);
 			touch_wall(getWall);
 		
 		
@@ -249,7 +250,7 @@ func _physics_process(delta):
 		var s2Check = true;
 		if (sonic2FloorSnap && getFloor):
 			s2Check = ((getFloor.get_collision_point()-getFloor.global_position-
-			($HitBox.shape.extents*Vector2(0,1)).rotated(rotation)).y <= 
+			($HitBox.shape.extents*Vector2(0,1)).rotated(rotation)).y <=
 			min(abs(velocity.x/60)+4,groundLookDistance));
 		
 		if (getFloor && round(velocity.y) >= 0 && s2Check):
@@ -301,8 +302,8 @@ func get_closest_sensor(firstRaycast,secondRaycast):
 	
 	var prevPose = [firstRaycast.global_position,secondRaycast.global_position];
 	
-	firstRaycast.global_position = firstRaycast.global_position.round();
-	secondRaycast.global_position = secondRaycast.global_position.round();
+#	firstRaycast.global_position = firstRaycast.global_position.round();
+#	secondRaycast.global_position = secondRaycast.global_position.round();
 	
 	firstRaycast.force_update_transform();
 	secondRaycast.force_update_transform();
@@ -329,7 +330,7 @@ func get_closest_sensor(firstRaycast,secondRaycast):
 	(rightFloor.global_position-rightFloor.get_collision_point()).length()):
 		return leftFloor;
 	return rightFloor;
-
+	
 	
 	
 	if ((firstRaycast.global_position-leftFloor).length() <

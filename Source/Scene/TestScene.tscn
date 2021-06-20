@@ -1933,7 +1933,7 @@ position = Vector2( 393, 1000 )
 rotation = -4.65661e-10
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 624, 1152 )
+position = Vector2( 14.189, 1044.58 )
 rotation = -4.65661e-10
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
@@ -2258,7 +2258,7 @@ rotation = -1.57079
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D5" type="CollisionShape2D" parent="TestTerrain10"]
-position = Vector2( 194, 89.0012 )
+position = Vector2( 197.563, 227.981 )
 rotation = -1.57079
 shape = SubResource( 1 )
 
