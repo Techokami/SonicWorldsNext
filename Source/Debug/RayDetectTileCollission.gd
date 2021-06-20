@@ -10,7 +10,7 @@ func _physics_process(delta):
 				#while (collider.collision_check(getPose)):
 				#	getPose.y -= 1;#collider.get_height(getPose);
 				#print(collider.get_meta_tile(getPose));
-				#var getPose = collider.get_surface_point(global_position,cast_to.y,true);
+				#var getPose = collider.get_surface_point(global_position,cast_to.y,false);
 				var getPose = collider.get_surface_point(global_position,cast_to.x,true);
 				if (getPose != null):
 					$Polygon2D2.global_position = getPose;

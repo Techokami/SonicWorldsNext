@@ -46,14 +46,17 @@ func _ready():
 	#print(convertToTileID(getCell));
 	#print(tileMap[str(convertToTileID(getCell))]);
 	#print(metaTiles[ str(tile[str(tileMap[str(convertToTileID(getCell))][0])]["TileData"][3]) ]);
-	var testPose = Vector2(832,1620);
-	print(get_tile(testPose));
-	print(get_tile_section(testPose));
-	print(get_meta_tile(testPose));
-	print(get_height(testPose));
-	print(collision_check(testPose));
+	var testPose = Vector2(287+8,1523);
+	print("tile: ",get_tile(testPose));
+	print("tile section: ",get_tile_section(testPose));
+	print("Meta: ",get_meta_tile(testPose));
+	print("Height: ",get_height(testPose));
+	print("Collision: ",collision_check(testPose))
 	
-	print(get_width(testPose));
+	print("Angle: ",rad2deg(get_angle(testPose)));
+	print("Width: ",get_width(testPose));
+	print("Flip: ",get_flip(testPose));
+	print("Flip inc meta: ",get_flip(testPose,true));
 
 
 func get_tile_section(pose = Vector2.ZERO):
@@ -81,7 +84,7 @@ func get_meta_tile(pose = Vector2.ZERO):
 
 func get_height(pose = Vector2.ZERO):
 	var heightMap = get_meta_tile(pose)["HeightMap"];
-	var flip = get_flip(pose,true);
+	var flip = get_flip(pose,false);
 	pose.x = fposmod(pose.x,8);
 	if (flip.x):
 		pose.x = 7-pose.x;
@@ -102,22 +105,24 @@ func get_width(pose = Vector2.ZERO):
 
 func get_angle(pose = Vector2.ZERO, var defaultAngle = Vector2.UP):
 	var flip = get_flip(pose,true);
+	if (get_meta_tile(pose)["Angle"] == deg2rad(0)):
+		return defaultAngle.rotated(deg2rad(90)).angle();
 	if (!flip.y):
 		if (!flip.x):
-			if (get_meta_tile(pose)["Angle"] == deg2rad(0)):
-				return defaultAngle.rotated(deg2rad(90)).angle();
-			else:
-				return get_meta_tile(pose)["Angle"];
+			#	print("Default");
+			#else:
+			return abs(get_meta_tile(pose)["Angle"]);
 		else:
-			return -get_meta_tile(pose)["Angle"];
+			return -abs(get_meta_tile(pose)["Angle"]);
 	else:
 		if (!flip.x):
-			if (get_meta_tile(pose)["Angle"] == deg2rad(0)):
-				return defaultAngle.rotated(deg2rad(90)).angle();
-			else:
-				return deg2rad(180)-get_meta_tile(pose)["Angle"];
+			#if (get_meta_tile(pose)["Angle"] == deg2rad(0)):
+				#return defaultAngle.rotated(deg2rad(90)).angle();
+			#	print("Default");
+			#else:
+			return deg2rad(180)-abs(get_meta_tile(pose)["Angle"]);
 		else:
-			return deg2rad(180)+get_meta_tile(pose)["Angle"];
+			return deg2rad(180)+abs(get_meta_tile(pose)["Angle"]);
 
 func collision_check(pose = Vector2.ZERO):
 	var flip = get_flip(pose,true);
@@ -166,7 +171,7 @@ func get_surface_point(origin = Vector2.ZERO, maxDistance = 8, horizontal = fals
 	else:
 		var flip = get_flip(origin+Vector2.RIGHT*distance,true);
 		if (sign(maxDistance) >= 0):
-			if (flip.x):
+			if (!flip.x):
 				distance = getPos-1;
 			else:
 				while (get_width(origin+Vector2.RIGHT*distance) == 8):
@@ -174,7 +179,7 @@ func get_surface_point(origin = Vector2.ZERO, maxDistance = 8, horizontal = fals
 					getPos -= 8;
 				distance = getPos+8-get_width(origin+Vector2.RIGHT*distance);
 		else:
-			if (!flip.x):
+			if (flip.x):
 				distance = getPos+8;
 			else:
 				while (get_width(origin+Vector2.RIGHT*distance) == 8):
@@ -193,7 +198,10 @@ func get_flip(pose = Vector2.ZERO, includeMeta = false):
 	if (!includeMeta):
 		return Vector2(is_cell_x_flipped(pose.x/tileSize.x,pose.y/tileSize.y),is_cell_y_flipped(pose.x/tileSize.x,pose.y/tileSize.y));
 	else:
-		return Vector2(int(is_cell_x_flipped(pose.x/tileSize.x,pose.y/tileSize.y)) != get_tile(pose)["Dir"][get_tile_section(pose)][0],
+		#print(sign(get_meta_tile(pose)["Angle"]))
+#		print(get_tile(pose)["Dir"][get_tile_section(pose)][0]);
+		return Vector2(
+		is_cell_x_flipped(pose.x/tileSize.x,pose.y/tileSize.y) != (get_tile(pose)["Dir"][get_tile_section(pose)][0] || get_meta_tile(pose)["Angle"] < 0),
 		int(is_cell_y_flipped(pose.x/tileSize.x,pose.y/tileSize.y)) != get_tile(pose)["Dir"][get_tile_section(pose)][1]);
 
 #var metaTiles = {

@@ -224,18 +224,36 @@ func _physics_process(delta):
 		force_update_transform();
 		
 		getFloor = get_closest_sensor(floorCastLeft,floorCastRight);
-		
-		
+		var priorityPoint = null;
+		var priorityAngle = rotation;
+		if (getFloor):
+			priorityPoint = getFloor.get_collision_point();
+			priorityAngle = getFloor.get_collision_normal().angle();
+			
+			var getCast = getFloor.cast_to.rotated(getFloor.global_rotation);
+			var floorTile = getFloor.get_collider().get_surface_point(getFloor.global_position.round(),
+			getCast.length()*sign(getCast.x+getCast.y),
+			(abs(getCast.x) > abs(getCast.y)));
+			#print(floorTile);
+			if (floorTile != null):
+				priorityAngle = getFloor.get_collider().get_angle(floorTile,Vector2.UP.rotated(rotation))+deg2rad(-90);
+				#$Pointer.rotation = priorityAngle;
+				#$Pointer.global_position = floorTile;
+				#print(rad2deg(getFloor.get_collider().get_angle(floorTile,Vector2.UP.rotated(rotation))));
+				#print(rad2deg(priorityAngle));
+				#print(snap_rotation(-rad2deg(priorityAngle)-90));
 		# Set sonic 2 floor snap to false to restore snapping to sonic 1 floor snap logic
 		var s2Check = true;
 		if (sonic2FloorSnap && getFloor):
 			s2Check = ((getFloor.get_collision_point()-getFloor.global_position-
 			($HitBox.shape.extents*Vector2(0,1)).rotated(rotation)).y <= 
 			min(abs(velocity.x/60)+4,groundLookDistance));
+		
 		if (getFloor && round(velocity.y) >= 0 && s2Check):
 			position += getFloor.get_collision_point()-getFloor.global_position-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation);
 			
-			var snapped = (snap_rotation(-rad2deg(getFloor.get_collision_normal().angle())-90));
+			
+			var snapped = (snap_rotation(-rad2deg(priorityAngle)-90));
 			
 			# check if angle gets changed
 			if (rotation != snapped.angle()):
@@ -250,7 +268,7 @@ func _physics_process(delta):
 				getFloor = get_closest_sensor(floorCastLeft,floorCastRight);
 				# check new rotation
 				if (getFloor):
-					if (snapped != (snap_rotation(-rad2deg(getFloor.get_collision_normal().angle())-90))):
+					if (snapped != (snap_rotation(-rad2deg(priorityAngle)-90))):
 						rotation = lastRotation;
 				else:
 					getFloor = lastFloor;
@@ -278,6 +296,11 @@ func get_closest_sensor(firstRaycast,secondRaycast):
 	var leftFloor = null;
 	var rightFloor = null;
 	
+	var prevPose = [firstRaycast.global_position,secondRaycast.global_position];
+	
+	firstRaycast.global_position = firstRaycast.global_position.round();
+	secondRaycast.global_position = secondRaycast.global_position.round();
+	
 	firstRaycast.force_update_transform();
 	secondRaycast.force_update_transform();
 	firstRaycast.force_raycast_update();
@@ -287,6 +310,9 @@ func get_closest_sensor(firstRaycast,secondRaycast):
 		leftFloor = firstRaycast;
 	if (secondRaycast.is_colliding()):
 		rightFloor = secondRaycast;
+	
+	firstRaycast.global_position = prevPose[0];
+	secondRaycast.global_position = prevPose[1];
 	
 	if (leftFloor == null || rightFloor == null):
 		if (leftFloor != null):
@@ -300,6 +326,15 @@ func get_closest_sensor(firstRaycast,secondRaycast):
 	(rightFloor.global_position-rightFloor.get_collision_point()).length()):
 		return leftFloor;
 	return rightFloor;
+
+	
+	
+	if ((firstRaycast.global_position-leftFloor).length() <
+	(rightFloor.global_position-rightFloor).length()):
+		return leftFloor;
+	return rightFloor;
+
+
 
 func snap_rotation(angle):
 	angle = round(angle);
