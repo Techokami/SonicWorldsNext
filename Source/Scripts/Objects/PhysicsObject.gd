@@ -231,9 +231,12 @@ func _physics_process(delta):
 			priorityAngle = getFloor.get_collision_normal().angle();
 			
 			var getCast = getFloor.cast_to.rotated(getFloor.global_rotation);
-			var floorTile = getFloor.get_collider().get_surface_point(getFloor.global_position.round(),
-			getCast.length()*sign(getCast.x+getCast.y),
-			(abs(getCast.x) > abs(getCast.y)));
+			var floorTile = null;
+			
+			if (getFloor.get_collider().has_method("get_surface_point")):
+				floorTile = getFloor.get_collider().get_surface_point(getFloor.global_position.round(),
+				getCast.length()*sign(getCast.x+getCast.y),
+				(abs(getCast.x) > abs(getCast.y)));
 			#print(floorTile);
 			if (floorTile != null):
 				priorityAngle = getFloor.get_collider().get_angle(floorTile,Vector2.UP.rotated(rotation))+deg2rad(-90);
