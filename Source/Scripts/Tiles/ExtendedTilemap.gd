@@ -104,6 +104,27 @@ func get_width(pose = Vector2.ZERO):
 	return width;
 
 func get_angle(pose = Vector2.ZERO, var defaultAngle = Vector2.UP):
+	var flip = get_flip(pose,false);
+	if (get_tile(pose)["Angle"] == deg2rad(0)):
+		return defaultAngle.rotated(deg2rad(90)).angle();
+	if (!flip.y):
+		if (!flip.x):
+			#	print("Default");
+			#else:
+			return abs(get_tile(pose)["Angle"]);
+		else:
+			return -abs(get_tile(pose)["Angle"]);
+	else:
+		if (!flip.x):
+			#if (get_meta_tile(pose)["Angle"] == deg2rad(0)):
+				#return defaultAngle.rotated(deg2rad(90)).angle();
+			#	print("Default");
+			#else:
+			return deg2rad(180)-abs(get_tile(pose)["Angle"]);
+		else:
+			return deg2rad(180)+abs(get_tile(pose)["Angle"]);
+
+func get_meta_angle(pose = Vector2.ZERO, var defaultAngle = Vector2.UP):
 	var flip = get_flip(pose,true);
 	if (get_meta_tile(pose)["Angle"] == deg2rad(0)):
 		return defaultAngle.rotated(deg2rad(90)).angle();
