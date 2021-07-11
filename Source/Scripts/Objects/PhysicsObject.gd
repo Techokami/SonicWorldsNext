@@ -246,6 +246,9 @@ func _physics_process(delta):
 				#print(rad2deg(getFloor.get_collider().get_angle(floorTile,Vector2.UP.rotated(rotation))));
 				#print(rad2deg(priorityAngle));
 				#print(snap_rotation(-rad2deg(priorityAngle)-90));
+		
+		#print(snap_rotation(-rad2deg(priorityAngle)-90));
+		
 		# Set sonic 2 floor snap to false to restore snapping to sonic 1 floor snap logic
 		var s2Check = true;
 		if (sonic2FloorSnap && getFloor):
@@ -342,8 +345,9 @@ func get_closest_sensor(firstRaycast,secondRaycast):
 
 func snap_rotation(angle):
 	angle = round(angle);
-	if (angle < 0):
-		angle += 360;
+	angle = posmod(angle,360);
+	#if (angle < 0):
+	#	angle += 360;
 	
 	#Floor
 	if (angle <= 45 || angle >= 315):
