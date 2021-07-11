@@ -283,7 +283,10 @@ func _physics_process(delta):
 			
 			
 			#$icon.rotation = getFloor.get_collision_normal().angle()+deg2rad(90)-rotation;
-			angle = getFloor.get_collision_normal();
+			
+			#angle = getFloor.get_collision_normal();
+			angle = Vector2.RIGHT.rotated(priorityAngle);
+			
 			connect_to_floor();
 			if (getFloor.get_collider() != null):
 				touch_floor(getFloor);
@@ -343,23 +346,23 @@ func get_closest_sensor(firstRaycast,secondRaycast):
 
 
 
-func snap_rotation(angle):
-	angle = round(angle);
-	angle = wrapf(angle,0,360);
+func snap_rotation(getAngle):
+	getAngle = round(getAngle);
+	getAngle = wrapf(getAngle,0,360);
 	#if (angle < 0):
 	#	angle += 360;
 	
 	#Floor
-	if (angle <= 45 || angle >= 315):
+	if (getAngle <= 45 || getAngle >= 315):
 		return Vector2.RIGHT;
 	#Right Wall
-	elif (angle >= 46 && angle <= 134):
+	elif (getAngle >= 46 && getAngle <= 134):
 		return Vector2.UP;
 	#Ceiling
-	elif (angle >= 135 && angle <= 225):
+	elif (getAngle >= 135 && getAngle <= 225):
 		return Vector2.LEFT;
 	#Left Wall
-	elif (angle >= 226 && angle <= 314):
+	elif (getAngle >= 226 && getAngle <= 314):
 		return Vector2.DOWN;
 
 func exclude_layers():
