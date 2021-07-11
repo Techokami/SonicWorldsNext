@@ -345,7 +345,7 @@ func get_closest_sensor(firstRaycast,secondRaycast):
 
 func snap_rotation(angle):
 	angle = round(angle);
-	angle = posmod(angle,360);
+	angle = wrapf(angle,0,360);
 	#if (angle < 0):
 	#	angle += 360;
 	
