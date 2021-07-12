@@ -249,10 +249,14 @@ func _physics_process(delta):
 				rotation = snapped.angle();
 				#update_raycasts();
 				
-				
+				var lastFloor;
 				# verify new angle won't make the player snap back the next frame
 				# for the original rotation method comment this next part out
-				var lastFloor = getFloor;
+				if getFloor == floorCastLeft:
+					lastFloor = floorCastLeft;
+				elif getFloor == floorCastRight:
+					lastFloor = floorCastRight;
+				
 				getFloor = get_closest_sensor(floorCastLeft,floorCastRight);
 				
 				priorityAngle = get_floor_collision(getFloor)
@@ -261,11 +265,14 @@ func _physics_process(delta):
 				if (getFloor):
 					if (snapped != (snap_rotation(-rad2deg(priorityAngle)-90))):
 						rotation = lastRotation;
-						priorityAngle = lastAngle
+						priorityAngle = lastAngle;
 						
 				else:
 					getFloor = lastFloor;
-					priorityAngle = get_floor_collision(getFloor)
+					rotation = lastRotation;
+					priorityAngle = lastAngle;
+#					getFloor.force_raycast_update()
+#					priorityAngle = get_floor_collision(getFloor)
 			
 			
 			
