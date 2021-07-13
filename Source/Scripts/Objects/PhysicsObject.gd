@@ -226,6 +226,8 @@ func _physics_process(delta):
 		
 		getFloor = get_closest_sensor(floorCastLeft,floorCastRight);
 		var priorityAngle = get_floor_collision(getFloor)
+		if abs(wrapf(rad2deg(priorityAngle),0,360) - wrapf(rad2deg(angle.angle()),0,360)) >= 20 and 360-abs(wrapf(rad2deg(priorityAngle),0,360) - wrapf(rad2deg(angle.angle()),0,360)) >= 20:  
+			priorityAngle = deg2rad(lerp(wrapf(rad2deg(priorityAngle),0,360),wrapf(rad2deg(angle.angle()),0,360),0.2))
 		
 		# Set sonic 2 floor snap to false to restore snapping to sonic 1 floor snap logic
 		var s2Check = true;
@@ -240,26 +242,28 @@ func _physics_process(delta):
 			
 			var snapped = (snap_rotation(-rad2deg(priorityAngle)-90));
 			
+			
+			
+			
 			# check if angle gets changed
 			if (rotation != snapped.angle()):
 				# get the current rotation
 				var lastRotation = rotation;
 				var lastAngle = priorityAngle;
+				
 				# do the snap
 				rotation = snapped.angle();
 				#update_raycasts();
 				
-				var lastFloor;
+				var lastFloor = getFloor;
 				# verify new angle won't make the player snap back the next frame
 				# for the original rotation method comment this next part out
-				if getFloor == floorCastLeft:
-					lastFloor = floorCastLeft;
-				elif getFloor == floorCastRight:
-					lastFloor = floorCastRight;
 				
 				getFloor = get_closest_sensor(floorCastLeft,floorCastRight);
 				
 				priorityAngle = get_floor_collision(getFloor)
+				
+#				priorityAngle = deg2rad(lerp(wrapf(rad2deg(priorityAngle),0,360),wrapf(rad2deg(lastAngle),0,360),0. 5))
 				
 				# check new rotation
 				if (getFloor):
@@ -273,7 +277,6 @@ func _physics_process(delta):
 					priorityAngle = lastAngle;
 #					getFloor.force_raycast_update()
 #					priorityAngle = get_floor_collision(getFloor)
-			
 			
 			
 			
