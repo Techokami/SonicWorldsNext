@@ -26,5 +26,6 @@ shape = SubResource( 1 )
 enabled = true
 cast_to = Vector2( 0, 8 )
 
+[connection signal="area_shape_entered" from="Hitbox" to="." method="_on_Hitbox_area_shape_entered"]
 [connection signal="body_entered" from="Hitbox" to="." method="_on_Hitbox_body_entered"]
 [connection signal="body_exited" from="Hitbox" to="." method="_on_Hitbox_body_exited"]

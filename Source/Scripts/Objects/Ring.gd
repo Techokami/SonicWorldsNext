@@ -3,6 +3,8 @@ var scattered = false;
 var lifetime = 256/Global.originalFPS;
 var velocity = Vector2.ZERO;
 var player;
+var magnet = null;
+var ringacceleration = [0.75,0.1875];
 
 func _process(delta):
 	# scattered logic
@@ -25,6 +27,22 @@ func _physics_process(delta):
 		translate(velocity*delta);
 		if ($FloorCheck.is_colliding() && velocity.y > 0):
 			velocity.y *= -0.75;
+	elif (magnet):
+		#relative positions
+		var sx = sign(magnet.global_position.x - global_position.x);
+		var sy = sign(magnet.global_position.y - global_position.y);
+		
+		#check relative movement
+		var tx = int(sign(velocity.x) == sx);
+		var ty = int(sign(velocity.y) == sy);
+		
+		#add to speed
+		velocity.x += (ringacceleration[tx] * sx)/delta;
+		velocity.y += (ringacceleration[ty] * sy)/delta;
+		translate(velocity*delta);
+		#"ringacceleration" would be an array, where: [0] = 0.75 [1] = 0.1875
+		
+		
 
 func _on_Hitbox_body_entered(body):
 	if (player != body):
@@ -34,3 +52,8 @@ func _on_Hitbox_body_entered(body):
 func _on_Hitbox_body_exited(body):
 	if (player == body):
 		player = null;
+
+
+func _on_Hitbox_area_shape_entered(area_id, area, area_shape, local_shape):
+	if (magnet == null):
+		magnet = area;

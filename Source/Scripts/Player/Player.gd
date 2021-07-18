@@ -21,13 +21,18 @@ var jmp = 6.5*60;			#jump force (6 for knuckles)
 var grv = 0.21875;			#gravity
 
 var spindashPower = 0.0;
+var abilityUsed = false;
+var bounceReaction = 0;
 var invTime = 0;
+var supTime = 0;
 var ringDisTime = 0; # ring collecting disable timer
 
 # ================
 
 var Ring = preload("res://Entities/Items/Ring.tscn");
 var ringChannel = 0;
+
+var Star = preload("res://Entities/Misc/StarParticle.tscn");
 
 # ================
 
@@ -38,6 +43,7 @@ enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, ANIMATION, HIT};
 var currentState = STATES.NORMAL;
 enum SHIELDS {NONE, NORMAL, ELEC, FIRE, BUBBLE};
 var shield = SHIELDS.NONE;
+onready var magnetShape = $RingMagnet/CollisionShape2D;
 
 onready var stateList = $States.get_children();
 onready var animator = $AnimationSonic;
@@ -103,6 +109,13 @@ func _process(delta):
 		lockTimer -= delta;
 		inputs[INPUTS.XINPUT] = 0;
 		inputs[INPUTS.YINPUT] = 0;
+	if (supTime > 0):
+		supTime -= delta;
+		if (supTime <= 0):
+			if (shield != SHIELDS.NONE):
+				shieldSprite.visible = true;
+			$InvincibilityBarrier.visible = false;
+			
 	if (invTime > 0):
 		visible = !visible;
 		invTime -= delta*Global.originalFPS;
@@ -111,6 +124,18 @@ func _process(delta):
 			visible = true;
 	if (ringDisTime > 0):
 		ringDisTime -= delta;
+		
+		
+	#Rotating stars
+	if ($InvincibilityBarrier.visible):
+		var stars = $InvincibilityBarrier.get_children();
+		for i in stars:
+			i.position = i.position.rotated(deg2rad(360*delta*2));
+			if (fmod(Global.levelTime,0.1)+delta > 0.1):
+				var star = Star.instance();
+				star.global_position = i.global_position;
+				get_parent().add_child(star);
+				star.frame = rand_range(0,3);
 
 func _physics_process(delta):
 	if (ground):
@@ -146,6 +171,7 @@ func set_state(newState, forceMask = Vector2.ZERO):
 
 # set shields
 func set_shield(shieldID):
+	magnetShape.shape.radius = 0;
 	shield = shieldID;
 	shieldSprite.visible = true;
 	match (shield):
@@ -154,10 +180,14 @@ func set_shield(shieldID):
 			sfx[5].play();
 		SHIELDS.ELEC:
 			shieldSprite.play("Elec");
+			sfx[10].play();
+			magnetShape.shape.radius = 64;
 		SHIELDS.FIRE:
 			shieldSprite.play("Fire");
+			sfx[11].play();
 		SHIELDS.BUBBLE:
 			shieldSprite.play("Bubble");
+			sfx[12].play();
 		_: # disable
 			shieldSprite.visible = false;
 
@@ -170,6 +200,7 @@ func action_jump(animation = "Roll", airJumpControl = true):
 func connect_to_floor():
 	if (!ground):
 		ground = true;
+		abilityUsed = false;
 		
 		# landing velocity calculation
 		var calcAngle = rad2deg(angle.angle())+90;
@@ -184,9 +215,21 @@ func connect_to_floor():
 			# else do full steep
 			else:
 				velocity.x = velocity.y*-sign(sin(-deg2rad(90)+angle.angle()));
+		
+		#Bounce reaction
+		if (bounceReaction > 0):
+			velocity.y = -bounceReaction*Global.originalFPS;
+			bounceReaction = 0;
+		#Shield Checks
+		match (shield):
+			SHIELDS.FIRE:
+				shieldSprite.play("Fire");
+				shieldSprite.flip_h = false;
+			SHIELDS.BUBBLE:
+				shieldSprite.play("Bubble");
 
 func hit_player(damagePoint = global_position, damageType = 0, soundID = 4):
-	if (currentState != STATES.HIT && invTime <= 0):
+	if (currentState != STATES.HIT && invTime <= 0 && supTime <= 0):
 		velocity.x = sign(global_position.x-damagePoint.x)*2*Global.originalFPS;
 		velocity.y = -4*Global.originalFPS;
 		if (velocity.x == 0):

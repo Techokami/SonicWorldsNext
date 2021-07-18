@@ -24,6 +24,10 @@ func destroy():
 		0: # Rings
 			playerTouch.rings += 10;
 			$SFX/Ring.play();
+		2: #invincibility
+			playerTouch.supTime = 30;
+			playerTouch.shieldSprite.visible = false;
+			playerTouch.get_node("InvincibilityBarrier").visible = true;
 		3: # Shield
 			playerTouch.set_shield(playerTouch.SHIELDS.NORMAL);
 		4: # Elec
