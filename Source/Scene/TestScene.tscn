@@ -1,4 +1,4 @@
-[gd_scene load_steps=292 format=2]
+[gd_scene load_steps=293 format=2]
 
 [ext_resource path="res://Entities/MainObjects/LayerSwitcher.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Entities/MainObjects/Player.tscn" type="PackedScene" id=2]
@@ -26,6 +26,7 @@
 [ext_resource path="res://Graphics/Tiles/RawTiles/S3K.png" type="Texture" id=24]
 [ext_resource path="res://Scripts/Tiles/ExtendedTilemap.gd" type="Script" id=25]
 [ext_resource path="res://Debug/RayDetectTileCollission.gd" type="Script" id=26]
+[ext_resource path="res://Entities/Enemies/EnemyBase.tscn" type="PackedScene" id=27]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 223, 10 )
@@ -2605,7 +2606,7 @@ position = Vector2( 1088, 832 )
 rotation = -4.65661e-10
 
 [node name="Monitor10" parent="." instance=ExtResource( 11 )]
-position = Vector2( 393, 1064 )
+position = Vector2( 168, 1264 )
 rotation = -4.65661e-10
 
 [node name="Monitor11" parent="." instance=ExtResource( 11 )]
@@ -2617,7 +2618,7 @@ position = Vector2( 393, 1000 )
 rotation = -4.65661e-10
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 920, 872 )
+position = Vector2( 120, 1264 )
 rotation = -4.65661e-10
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
@@ -3684,6 +3685,18 @@ position = Vector2( 0, 56 )
 color = Color( 0, 0.203922, 1, 1 )
 antialiased = true
 polygon = PoolVector2Array( -2, -8, 0, -40, 2, -8, 0, 0 )
+
+[node name="EnemyBase" parent="." instance=ExtResource( 27 )]
+position = Vector2( 232, 1256 )
+
+[node name="EnemyBase2" parent="." instance=ExtResource( 27 )]
+position = Vector2( 296, 1256 )
+
+[node name="EnemyBase3" parent="." instance=ExtResource( 27 )]
+position = Vector2( 336, 1200 )
+
+[node name="EnemyBase4" parent="." instance=ExtResource( 27 )]
+position = Vector2( 256, 1200 )
 
 [connection signal="body_entered" from="PathAnimator" to="PathAnimator" method="_player_touch"]
 [connection signal="body_entered" from="PathAnimator/ZSwitch" to="PathAnimator/ZSwitch" method="_on_ZSwitch_body_entered"]
