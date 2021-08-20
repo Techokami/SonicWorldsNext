@@ -261,7 +261,7 @@ func _physics_process(delta):
 				
 				getFloor = get_closest_sensor(floorCastLeft,floorCastRight);
 				
-				priorityAngle = get_floor_collision(getFloor)
+				priorityAngle = get_floor_collision(getFloor);
 				
 #				priorityAngle = deg2rad(lerp(wrapf(rad2deg(priorityAngle),0,360),wrapf(rad2deg(lastAngle),0,360),0. 5))
 				
@@ -310,7 +310,7 @@ func get_floor_collision(getFloor):
 		var floorTile = null;
 			
 		if (getFloor.get_collider().has_method("get_surface_point")):
-			floorTile = getFloor.get_collider().get_surface_point(getFloor.global_position.round(),
+			floorTile = getFloor.get_collider().get_surface_point(getFloor.global_position,
 			getCast.length()*sign(getCast.x+getCast.y),
 			(abs(getCast.x) > abs(getCast.y)));
 		if (floorTile != null):
