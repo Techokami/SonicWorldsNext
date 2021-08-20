@@ -138,7 +138,6 @@ func _physics_process(delta):
 		velocityInterp = Vector2.ZERO;
 		translate((velocity*delta).rotated(angle.rotated(deg2rad(90)).angle()));
 		
-	
 	while (velocityInterp != Vector2.ZERO):
 		
 		var clampedVelocity = velocityInterp.clamped(speedStepLimit);
@@ -222,10 +221,10 @@ func _physics_process(delta):
 		
 		velocityInterp -= clampedVelocity;
 		
-		force_update_transform();
+		#force_update_transform();
 		
 		getFloor = get_closest_sensor(floorCastLeft,floorCastRight);
-		var priorityAngle = get_floor_collision(getFloor)
+		var priorityAngle = get_floor_angle(getFloor);
 		if abs(wrapf(rad2deg(priorityAngle),0,360) - wrapf(rad2deg(angle.angle()),0,360)) >= 20 and 360-abs(wrapf(rad2deg(priorityAngle),0,360) - wrapf(rad2deg(angle.angle()),0,360)) >= 20:  
 			priorityAngle = deg2rad(lerp(wrapf(rad2deg(priorityAngle),0,360),wrapf(rad2deg(angle.angle()),0,360),0.2))
 		
@@ -237,14 +236,11 @@ func _physics_process(delta):
 			min(abs(velocity.x/60)+4,groundLookDistance));
 		
 		if (getFloor && round(velocity.y) >= 0 && s2Check):
+			#var getPoint = get_surface(getFloor);
 			position += getFloor.get_collision_point()-getFloor.global_position-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation);
 			
 			
 			var snapped = (snap_rotation(-rad2deg(priorityAngle)-90));
-			
-			
-			
-			
 			# check if angle gets changed
 			if (rotation != snapped.angle()):
 				# get the current rotation
@@ -258,25 +254,28 @@ func _physics_process(delta):
 				var lastFloor = getFloor;
 				# verify new angle won't make the player snap back the next frame
 				# for the original rotation method comment this next part out
-				
 				getFloor = get_closest_sensor(floorCastLeft,floorCastRight);
-				
-				priorityAngle = get_floor_collision(getFloor);
+				priorityAngle = get_floor_angle(getFloor);
 				
 #				priorityAngle = deg2rad(lerp(wrapf(rad2deg(priorityAngle),0,360),wrapf(rad2deg(lastAngle),0,360),0. 5))
 				
 				# check new rotation
 				if (getFloor):
+					# outer corners
 					if (snapped != (snap_rotation(-rad2deg(priorityAngle)-90))):
 						rotation = lastRotation;
 						priorityAngle = lastAngle;
+					#else:
+						# inner corner
 						
+						#print(getFloor.global_rotation);
+						#position += getFloor.get_collision_point()-getFloor.global_position-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation);
 				else:
 					getFloor = lastFloor;
 					rotation = lastRotation;
 					priorityAngle = lastAngle;
 #					getFloor.force_raycast_update()
-#					priorityAngle = get_floor_collision(getFloor)
+#					priorityAngle = get_floor_angle(getFloor)
 			
 			
 			
@@ -299,24 +298,33 @@ func _physics_process(delta):
 		
 	#update();
 
-func get_floor_collision(getFloor):
-	var priorityPoint = null;
+func get_floor_angle(getFloor):
 	var priorityAngle = rotation;
 	if (getFloor):
-		priorityPoint = getFloor.get_collision_point();
 		priorityAngle = getFloor.get_collision_normal().angle();
 		
 		var getCast = getFloor.cast_to.rotated(getFloor.global_rotation);
 		var floorTile = null;
 			
 		if (getFloor.get_collider().has_method("get_surface_point")):
-			floorTile = getFloor.get_collider().get_surface_point(getFloor.global_position,
+			floorTile = getFloor.get_collider().get_surface_point(getFloor.global_position.round(),
 			getCast.length()*sign(getCast.x+getCast.y),
 			(abs(getCast.x) > abs(getCast.y)));
 		if (floorTile != null):
 			priorityAngle = getFloor.get_collider().get_angle(floorTile,Vector2.UP.rotated(rotation))+deg2rad(-90);
 	
 	return priorityAngle
+
+func get_surface(getFloor):
+	var priorityPoint = getFloor.get_collision_point();
+	var getCast = getFloor.cast_to.rotated(getFloor.global_rotation);
+
+	if (getFloor.get_collider().has_method("get_surface_point")):
+		return getFloor.get_collider().get_surface_point(getFloor.global_position.round(),
+		getCast.length()*sign(getCast.x+getCast.y),
+		(abs(getCast.x) > abs(getCast.y)));
+	
+	return priorityPoint;
 
 func get_closest_sensor(firstRaycast,secondRaycast):
 	var leftFloor = null;

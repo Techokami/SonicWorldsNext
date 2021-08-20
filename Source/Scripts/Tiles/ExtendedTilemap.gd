@@ -41,22 +41,26 @@ func _ready():
 		tile = data["Tile"];
 		tileMap = data["TileMap"];
 		file.close();
-
+		
+	#print(get_cell_autotile_coord(-16,1296))
+	var test = (Vector2(-88.0,1216.0)/16);
+	var getID = (convert_to_tile_ID(get_cell_autotile_coord(test.x,test.y)));
+	print(getID);
 	#var getCell = get_cell_autotile_coord(-104/16,1160/16);
 	#print(convertToTileID(getCell));
 	#print(tileMap[str(convertToTileID(getCell))]);
 	#print(metaTiles[ str(tile[str(tileMap[str(convertToTileID(getCell))][0])]["TileData"][3]) ]);
-	var testPose = Vector2(287+8,1523);
-	print("tile: ",get_tile(testPose));
-	print("tile section: ",get_tile_section(testPose));
-	print("Meta: ",get_meta_tile(testPose));
-	print("Height: ",get_height(testPose));
-	print("Collision: ",collision_check(testPose))
-	
-	print("Angle: ",rad2deg(get_angle(testPose)));
-	print("Width: ",get_width(testPose));
-	print("Flip: ",get_flip(testPose));
-	print("Flip inc meta: ",get_flip(testPose,true));
+#	var testPose = Vector2(287+8,1523);
+#	print("tile: ",get_tile(testPose));
+#	print("tile section: ",get_tile_section(testPose));
+#	print("Meta: ",get_meta_tile(testPose));
+#	print("Height: ",get_height(testPose));
+#	print("Collision: ",collision_check(testPose))
+#
+#	print("Angle: ",rad2deg(get_angle(testPose)));
+#	print("Width: ",get_width(testPose));
+#	print("Flip: ",get_flip(testPose));
+#	print("Flip inc meta: ",get_flip(testPose,true));
 
 
 func get_tile_section(pose = Vector2.ZERO):
@@ -72,6 +76,10 @@ func convert_to_tile_ID(cellVector = Vector2.ZERO):
 	return cellVector.x+(cellVector.y*tileRegion.x);
 
 func get_tile(pose = Vector2.ZERO):
+	if (pose.x < 0):
+		pose.x -= tileRegion.x*0.5;
+	if (pose.y < 0):
+		pose.y -= tileRegion.y*0.5;
 	pose = pose/16;
 	var getID = (convert_to_tile_ID(get_cell_autotile_coord(pose.x,pose.y)));
 	if (getID != -1):

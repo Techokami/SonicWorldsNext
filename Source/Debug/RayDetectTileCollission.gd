@@ -15,7 +15,7 @@ func _physics_process(delta):
 				if (getPose != null):
 					$Polygon2D2.global_position = getPose;
 					$Polygon2D2.rotation = collider.get_angle(getPose,-cast_to.normalized());
-					print(getPose);
+					#print(getPose);
 					
 				#print(collider.get_angle(getPose));
 				#print("Surface: ",collider.get_surface_point(global_position,cast_to.y));
