@@ -43,9 +43,11 @@ func _ready():
 		file.close();
 		
 	#print(get_cell_autotile_coord(-16,1296))
-	var test = (Vector2(-88.0,1216.0)/16);
+	var test = (Vector2(-72-1,1256-1));
 	var getID = (convert_to_tile_ID(get_cell_autotile_coord(test.x,test.y)));
-	print(getID);
+	print(get_height(test));
+	print(get_tile(test));
+	print(get_meta_tile(test));
 	#var getCell = get_cell_autotile_coord(-104/16,1160/16);
 	#print(convertToTileID(getCell));
 	#print(tileMap[str(convertToTileID(getCell))]);
@@ -76,11 +78,7 @@ func convert_to_tile_ID(cellVector = Vector2.ZERO):
 	return cellVector.x+(cellVector.y*tileRegion.x);
 
 func get_tile(pose = Vector2.ZERO):
-	if (pose.x < 0):
-		pose.x -= tileRegion.x*0.5;
-	if (pose.y < 0):
-		pose.y -= tileRegion.y*0.5;
-	pose = pose/16;
+	pose = pose_converter(pose)/16;
 	var getID = (convert_to_tile_ID(get_cell_autotile_coord(pose.x,pose.y)));
 	if (getID != -1):
 		return tile[str(tileMap[str(getID)][0])];
@@ -93,10 +91,10 @@ func get_meta_tile(pose = Vector2.ZERO):
 func get_height(pose = Vector2.ZERO):
 	var heightMap = get_meta_tile(pose)["HeightMap"];
 	var flip = get_flip(pose,false);
-	pose.x = fposmod(pose.x,8);
+	var offset = fposmod(pose.x,8);
 	if (flip.x):
-		pose.x = 7-pose.x;
-	return heightMap[floor(pose.x)];
+		offset = 7-offset;
+	return heightMap[floor(offset)];
 	
 func get_width(pose = Vector2.ZERO):
 	var heightMap = get_meta_tile(pose)["HeightMap"];
@@ -176,7 +174,6 @@ func get_surface_point(origin = Vector2.ZERO, maxDistance = 8, horizontal = fals
 		return null;
 	
 	# Check by height
-	
 	var getPos = stepify(distance-4,8);
 	
 	if (!horizontal):
@@ -224,6 +221,7 @@ func get_surface_point(origin = Vector2.ZERO, maxDistance = 8, horizontal = fals
 	
 
 func get_flip(pose = Vector2.ZERO, includeMeta = false):
+	pose = pose_converter(pose);
 	if (!includeMeta):
 		return Vector2(is_cell_x_flipped(pose.x/tileSize.x,pose.y/tileSize.y),is_cell_y_flipped(pose.x/tileSize.x,pose.y/tileSize.y));
 	else:
@@ -252,3 +250,10 @@ func get_flip(pose = Vector2.ZERO, includeMeta = false):
 #var tileMap = {
 ##	0:[0,0,0],1:[0,0,0]]
 #}
+
+func pose_converter(pose = Vector2.ZERO):
+	if (pose.x < 0):
+		pose.x -= 15;
+	if (pose.y < 0):
+		pose.y -= 15;
+	return pose;
