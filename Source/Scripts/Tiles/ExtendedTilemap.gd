@@ -164,9 +164,13 @@ func get_surface_point(origin = Vector2.ZERO, maxDistance = 8, horizontal = fals
 	var distance = 0;
 	# Tile Check
 	if (!horizontal):
+		# stepify origin to fix offset errors
+		origin.y = stepify(origin.y,8);
 		while (get_height(origin+Vector2.DOWN*distance) == 0 && abs(distance) < abs(maxDistance)):
 			distance = min(abs(distance)+8,abs(maxDistance))*sign(maxDistance);
 	else:
+		# stepify origin to fix offset errors
+		#origin.x = stepify(origin.y,8);
 		while (get_width(origin+Vector2.RIGHT*distance) == 0 && abs(distance) < abs(maxDistance)):
 			distance = min(abs(distance)+8,abs(maxDistance))*sign(maxDistance);
 	

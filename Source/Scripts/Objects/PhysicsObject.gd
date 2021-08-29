@@ -312,6 +312,8 @@ func get_floor_angle(getFloor):
 			(abs(getCast.x) > abs(getCast.y)));
 		if (floorTile != null):
 			priorityAngle = getFloor.get_collider().get_angle(floorTile,Vector2.UP.rotated(rotation))+deg2rad(-90);
+			#print("get floor position: ", getFloor.global_position.round(), " Floor: ",floorTile," Point: ",getFloor.get_collision_point());
+			#print(getFloor.position);
 	
 	return priorityAngle
 

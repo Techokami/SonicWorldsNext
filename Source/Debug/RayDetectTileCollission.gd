@@ -20,6 +20,6 @@ func _physics_process(delta):
 				#print(collider.get_angle(getPose));
 				#print("Surface: ",collider.get_surface_point(global_position,cast_to.y));
 				#print(getPose.y);
-		position.x += 1;
+		position.x += delta*10;
 	if Input.is_action_pressed("ui_home"):
 		position.x -= 1;
