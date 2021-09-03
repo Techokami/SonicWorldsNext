@@ -48,21 +48,21 @@ func _physics_process(delta):
 
 # Horizontal check
 func physics_wall_override(body,caster):
-	if (body.velocity.y >= 0 && body.animator.current_animation == "Roll"):
+	if (body.velocity.y >= 0 && body.sprite.animation == "roll"):
 		playerTouch = body;
 		destroy();
 	else:
 		body.velocity.x = 0;
 
 func physics_floor_override(body,caster):
-	if (body.animator.current_animation == "Roll"):
+	if (body.sprite.animation == "roll"):
 		body.velocity.y *= -1;
 		body.ground = false;
 		playerTouch = body;
 		destroy();
 
 func physics_ceiling_override(body,caster):
-	if (body.animator.current_animation == "Roll"):
+	if (body.sprite.animation == "roll"):
 		body.velocity.y *= -1;
 		yspeed = -1.5*Global.originalFPS;
 		physics = true;

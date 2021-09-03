@@ -4,7 +4,7 @@ extends "res://Scripts/Player/State.gd"
 func _input(event):
 	if (parent.playerControl != 0):
 		if (event.is_action_pressed("gm_action")):
-			parent.animator.play("Spindash");
+			parent.sprite.play("spindash");
 			parent.sfx[2].play();
 			if (parent.spindashPower < 8):
 				parent.spindashPower = min(parent.spindashPower+2,8);
@@ -19,6 +19,6 @@ func _process(delta):
 		parent.sfx[2].pitch_scale = 1;
 		parent.set_state(parent.STATES.ROLL);
 		
-		parent.animator.play("Roll");
+		parent.sprite.play("roll");
 	parent.spindashPower -= ((parent.spindashPower / 0.125) / (256))*60*delta;
 		

@@ -3,7 +3,7 @@ export var pieces = Vector2(2,2);
 var Piece = preload("res://Entities/Misc/BlockPiece.tscn");
 
 func physics_floor_override(body,caster):
-	if (body.animator.current_animation == "Roll"):
+	if (body.sprite.animation == "roll"):
 		$CollisionShape2D.disabled = true;
 		$Sprite.visible = false;
 		body.ground = false;

@@ -6,7 +6,7 @@ func _input(event):
 	if (parent.playerControl != 0):
 		if (event.is_action_pressed("gm_action")):
 			if (parent.velocity.x == 0 && parent.inputs[parent.INPUTS.YINPUT] > 0):
-				parent.animator.play("Spindash");
+				parent.sprite.play("spinDash");
 				parent.sfx[2].play();
 				parent.sfx[2].pitch_scale = 1;
 				parent.spindashPower = 0;
@@ -18,21 +18,22 @@ func _input(event):
 func _process(delta):
 	if (parent.velocity.x == 0):
 		if (parent.inputs[parent.INPUTS.YINPUT] > 0):
-			parent.animator.play("Crouch");
+			parent.sprite.play("crouch");
 		elif (parent.inputs[parent.INPUTS.YINPUT] < 0):
-			parent.animator.play("LookUp");
+			parent.sprite.play("lookUp");
 		else:
-			parent.animator.play("Idle");
+			parent.sprite.play("idle");
 	elif(abs(parent.velocity.x) < parent.top):
-		parent.animator.play("Walk");
+		parent.sprite.play("walk");
 	else:
-		parent.animator.play("Run");
+		parent.sprite.play("run");
 	
-	if (parent.velocity.x == 0):
-		parent.animator.playback_speed = 1;
-	else:
-		#(floor(max(0, 8-abs(parent.velocity.x/(60*2))))/8);
-		parent.animator.playback_speed = (1.0/8.0)+floor(min(8,abs(parent.groundSpeed/60)))/8;
+	if (parent.velocity.x != 0):
+		#var setSpeed = (1.0/8.0)+floor(min(8,abs(parent.groundSpeed/60)))/8;
+		var setSpeed = 60/floor(max(1,8-abs(parent.groundSpeed/60)));
+		parent.spriteFrames.set_animation_speed("walk",setSpeed);
+		parent.spriteFrames.set_animation_speed("run",setSpeed);
+		parent.spriteFrames.set_animation_speed("peelOut",setSpeed);
 	
 	if (parent.inputs[parent.INPUTS.XINPUT] != 0):
 		parent.direction = parent.inputs[parent.INPUTS.XINPUT];
@@ -41,7 +42,7 @@ func _physics_process(delta):
 	
 	if (parent.inputs[parent.INPUTS.YINPUT] == 1 && abs(parent.velocity.x) > 0.5*60):
 		parent.set_state(parent.STATES.ROLL);
-		parent.animator.play("Roll");
+		parent.sprite.play("roll");
 		parent.sfx[1].play();
 		return null;
 		#parent.position += Vector2(0,5).rotated(parent.rotation);

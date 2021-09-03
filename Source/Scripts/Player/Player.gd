@@ -47,10 +47,11 @@ onready var magnetShape = $RingMagnet/CollisionShape2D;
 
 onready var stateList = $States.get_children();
 onready var animator = $AnimationSonic;
-onready var sprite = $Sprite;
+onready var sprite = $PlayerSprite;
+onready var spriteFrames = sprite.frames;
 onready var shieldSprite = $Shields;
 
-var rotatableSprites = ["Walk", "Run"];
+var rotatableSprites = ["walk", "run"];
 var direction = scale.x;
 
 # ground speed is mostly used for timing and animations, there isn't any functionality to it.
@@ -100,10 +101,10 @@ func _process(delta):
 		else:
 			spriteRotation = min(360,spriteRotation+(168.75*delta));
 	
-	if (rotatableSprites.has($AnimationSonic.current_animation)):
-		$Sprite.rotation_degrees = stepify(spriteRotation,45)-rotation_degrees;
+	if (rotatableSprites.has(sprite.animation)):
+		sprite.rotation_degrees = stepify(spriteRotation,45)-rotation_degrees;
 	else:
-		$Sprite.rotation = -rotation;
+		sprite.rotation = -rotation;
 	
 	if (lockTimer > 0):
 		lockTimer -= delta;
@@ -146,7 +147,6 @@ func _physics_process(delta):
 
 
 func set_state(newState, forceMask = Vector2.ZERO):
-	animator.playback_speed = 1;
 	for i in stateList:
 		i.set_process(i == stateList[newState]);
 		i.set_physics_process(i == stateList[newState]);
@@ -191,8 +191,8 @@ func set_shield(shieldID):
 		_: # disable
 			shieldSprite.visible = false;
 
-func action_jump(animation = "Roll", airJumpControl = true):
-	$AnimationSonic.play(animation);
+func action_jump(animation = "roll", airJumpControl = true):
+	sprite.play(animation);
 	velocity.y = -jmp;
 	sfx[0].play();
 	airControl = airJumpControl;

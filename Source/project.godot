@@ -33,8 +33,6 @@ window/size/width=320
 window/size/height=224
 window/size/test_width=320
 window/size/test_height=224
-window/stretch/mode="2d"
-window/stretch/aspect="keep"
 
 [importer_defaults]
 

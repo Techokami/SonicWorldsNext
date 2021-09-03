@@ -2618,7 +2618,7 @@ position = Vector2( 393, 1000 )
 rotation = -4.65661e-10
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 2728, 1120 )
+position = Vector2( 888, 864 )
 rotation = -4.65661e-10
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
@@ -3349,13 +3349,13 @@ position = Vector2( -798, 342 )
 type = 1
 
 [node name="Spring15" parent="." instance=ExtResource( 8 )]
-position = Vector2( -930, 197 )
+position = Vector2( -930, 256 )
 scale = Vector2( -1, 1 )
 type = 1
 springDirection = 3
 
 [node name="Spring16" parent="." instance=ExtResource( 8 )]
-position = Vector2( -914, 197 )
+position = Vector2( -914, 256 )
 springDirection = 2
 
 [node name="Spring13" parent="." instance=ExtResource( 8 )]

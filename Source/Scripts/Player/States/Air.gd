@@ -42,10 +42,17 @@ func _input(event):
 					#parent.shieldSprite.frame = ;
 
 func _process(delta):
-	if (parent.animator.current_animation == "Roll"):
-		parent.animator.playback_speed = (1.0/4.0)+floor(min(4,abs(parent.groundSpeed/60)))/4;
-	if (parent.animator.current_animation == "Walk" || parent.animator.current_animation == "Run"):
-		parent.animator.playback_speed = (1.0/8.0)+floor(min(8,abs(parent.groundSpeed/60)))/8;
+	
+	var setSpeed = 60/floor(max(1,4-abs(parent.groundSpeed/60)));
+	parent.spriteFrames.set_animation_speed("roll",setSpeed);
+	setSpeed = 60/floor(max(1,8-abs(parent.groundSpeed/60)));
+	parent.spriteFrames.set_animation_speed("walk",setSpeed);
+	parent.spriteFrames.set_animation_speed("run",setSpeed);
+	parent.spriteFrames.set_animation_speed("peelout",setSpeed);
+#	if (parent.animator.current_animation == "Roll"):
+#		parent.animator.playback_speed = (1.0/4.0)+floor(min(4,abs(parent.groundSpeed/60)))/4;
+	#if (parent.animator.current_animation == "Walk" || parent.animator.current_animation == "Run"):
+	#	parent.animator.playback_speed = (1.0/8.0)+floor(min(8,abs(parent.groundSpeed/60)))/8;
 
 func _physics_process(delta):
 	# air movement

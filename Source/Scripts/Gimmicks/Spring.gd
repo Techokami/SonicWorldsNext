@@ -72,7 +72,7 @@ func physics_ceiling_override(body,caster):
 	else:
 		body.velocity = hitDirection.rotated(rotation).rotated(-body.rotation)*speed[type]*60;
 		$SpringAnimator.play(animList[animID]);
-		body.animator.playback_speed = 1;
+		body.spriteFrames.set_animation_speed("walk",1);
 		body.set_state(body.STATES.AIR);
 		$sfxSpring.play();
 	return true;
@@ -83,9 +83,9 @@ func physics_floor_override(body,caster):
 		body.ground = false;
 		body.velocity = hitDirection.rotated(rotation).rotated(-body.rotation)*speed[type]*60;
 		$SpringAnimator.play(animList[animID]);
-		body.animator.playback_speed = 1;
+		body.spriteFrames.set_animation_speed("corkScrew",1);
 		body.set_state(body.STATES.AIR);
-		body.animator.play("CSSpring");
+		body.sprite.play("corkScrew");
 		$sfxSpring.play();
 	return true;
 
@@ -93,8 +93,8 @@ func physics_floor_override(body,caster):
 func _on_Diagonal_body_entered(body):
 	body.velocity = hitDirection.rotated(rotation).rotated(-body.rotation)*speed[type]*60;
 	$SpringAnimator.play(animList[animID]);
-	body.animator.playback_speed = 1;
+	body.spriteFrames.set_animation_speed("corkScrew",1);
 	if (hitDirection.y < 0):
 		body.set_state(body.STATES.AIR);
-	body.animator.play("CSSpring");
+	body.sprite.play("corkScrew");
 	$sfxSpring.play();

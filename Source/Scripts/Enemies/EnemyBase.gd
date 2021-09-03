@@ -6,8 +6,8 @@ var playerHit = [];
 func _process(delta):
 	if (playerHit.size() > 0):
 		for i in playerHit:
-			if (i.get("animator") != null):
-				if (i.animator.current_animation == "Roll"):
+			if (i.get("sprite") != null):
+				if (i.sprite.animation == "roll"):
 					if (i.velocity.y < 0 || i.global_position.y > global_position.y):
 						i.velocity.y -= Global.originalFPS*sign(i.velocity.y);
 					else:

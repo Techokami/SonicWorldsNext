@@ -34,7 +34,6 @@ func _player_touch(body):
 	if !Engine.editor_hint:
 		if (body.has_method("set_state") && body.currentState != body.STATES.ANIMATION):
 			body.set_state(body.STATES.ANIMATION);
-			body.animator.stop();
 			var animatorNode = body.stateList[body.STATES.ANIMATION];
 			animatorNode.path = self;
 			animatorNode.offset = 0;

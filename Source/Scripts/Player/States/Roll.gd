@@ -11,7 +11,8 @@ func _input(event):
 
 
 func _process(delta):
-	parent.animator.playback_speed = (1.0/4.0)+floor(min(4,abs(parent.groundSpeed/60)))/4;
+	var setSpeed = 60/floor(max(1,4-abs(parent.groundSpeed/60)));
+	parent.spriteFrames.set_animation_speed("roll",setSpeed);
 
 func _physics_process(delta):
 	
