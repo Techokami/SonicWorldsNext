@@ -5,6 +5,7 @@ func _input(event):
 	if (parent.playerControl != 0):
 		if (event.is_action_pressed("gm_action")):
 			parent.sprite.play("spindash");
+			parent.sprite.frame = 0;
 			parent.sfx[2].play();
 			if (parent.spindashPower < 8):
 				parent.spindashPower = min(parent.spindashPower+2,8);
