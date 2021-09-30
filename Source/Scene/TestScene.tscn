@@ -1,4 +1,4 @@
-[gd_scene load_steps=293 format=2]
+[gd_scene load_steps=294 format=2]
 
 [ext_resource path="res://Entities/MainObjects/LayerSwitcher.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Entities/MainObjects/Player.tscn" type="PackedScene" id=2]
@@ -27,6 +27,7 @@
 [ext_resource path="res://Scripts/Tiles/ExtendedTilemap.gd" type="Script" id=25]
 [ext_resource path="res://Debug/RayDetectTileCollission.gd" type="Script" id=26]
 [ext_resource path="res://Entities/Enemies/EnemyBase.tscn" type="PackedScene" id=27]
+[ext_resource path="res://Entities/Enemies/Orbinaut.tscn" type="PackedScene" id=28]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 223, 10 )
@@ -3701,6 +3702,15 @@ position = Vector2( 256, 1200 )
 
 [node name="Node2D" type="Node2D" parent="."]
 position = Vector2( 2884, 1201 )
+
+[node name="Orbinaut" parent="." instance=ExtResource( 28 )]
+position = Vector2( 1008, 792 )
+
+[node name="Orbinaut2" parent="." instance=ExtResource( 28 )]
+position = Vector2( 1024, 848 )
+orbs = 8
+speed = -500
+distance = 32
 
 [connection signal="body_entered" from="PathAnimator" to="PathAnimator" method="_player_touch"]
 [connection signal="body_entered" from="PathAnimator/ZSwitch" to="PathAnimator/ZSwitch" method="_on_ZSwitch_body_entered"]

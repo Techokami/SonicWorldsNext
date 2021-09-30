@@ -3,6 +3,10 @@ extends KinematicBody2D
 export var damageType = 0;
 var playerHit = [];
 
+var velocity = Vector2.ZERO;
+var Explosion = preload("res://Entities/Misc/BadnickSmoke.tscn");
+
+
 func _process(delta):
 	if (playerHit.size() > 0):
 		for i in playerHit:
@@ -12,10 +16,14 @@ func _process(delta):
 						i.velocity.y -= Global.originalFPS*sign(i.velocity.y);
 					else:
 						i.velocity.y = -i.velocity.y;
+					var explosion = Explosion.instance();
+					get_parent().add_child(explosion);
+					explosion.global_position = global_position;
 					queue_free();
 					return false;
 			if (i.has_method("hit_player")):
 				i.hit_player(global_position,damageType);
+	translate(velocity*delta);
 
 func _on_body_entered(body):
 	if (!playerHit.has(body)):
@@ -25,3 +33,4 @@ func _on_body_entered(body):
 func _on_body_exited(body):
 	if (playerHit.has(body)):
 		playerHit.erase(body);
+
