@@ -5,6 +5,7 @@ var playerHit = [];
 
 var velocity = Vector2.ZERO;
 var Explosion = preload("res://Entities/Misc/BadnickSmoke.tscn");
+var Animal = preload("res://Entities/Misc/Animal.tscn");
 
 
 func _process(delta):
@@ -19,6 +20,9 @@ func _process(delta):
 					var explosion = Explosion.instance();
 					get_parent().add_child(explosion);
 					explosion.global_position = global_position;
+					var animal = Animal.instance();
+					get_parent().add_child(animal);
+					animal.global_position = global_position;
 					queue_free();
 					return false;
 			if (i.has_method("hit_player")):

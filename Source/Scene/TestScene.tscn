@@ -1,4 +1,4 @@
-[gd_scene load_steps=294 format=2]
+[gd_scene load_steps=299 format=2]
 
 [ext_resource path="res://Entities/MainObjects/LayerSwitcher.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Entities/MainObjects/Player.tscn" type="PackedScene" id=2]
@@ -28,6 +28,9 @@
 [ext_resource path="res://Debug/RayDetectTileCollission.gd" type="Script" id=26]
 [ext_resource path="res://Entities/Enemies/EnemyBase.tscn" type="PackedScene" id=27]
 [ext_resource path="res://Entities/Enemies/Orbinaut.tscn" type="PackedScene" id=28]
+[ext_resource path="res://Entities/Gimmicks/Bridge.tscn" type="PackedScene" id=29]
+[ext_resource path="res://Graphics/Items/Rings/Ring1.png" type="Texture" id=30]
+[ext_resource path="res://Graphics/Gimmicks/bridge_log_2.png" type="Texture" id=31]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 223, 10 )
@@ -46,6 +49,12 @@ radius = 112.0
 
 [sub_resource type="RectangleShape2D" id=6]
 extents = Vector2( 62, 10 )
+
+[sub_resource type="RectangleShape2D" id=266]
+extents = Vector2( 216, 8 )
+
+[sub_resource type="RectangleShape2D" id=267]
+extents = Vector2( 8, 8 )
 
 [sub_resource type="RectangleShape2D" id=7]
 extents = Vector2( 80.8309, 10 )
@@ -2619,7 +2628,7 @@ position = Vector2( 393, 1000 )
 rotation = -4.65661e-10
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 888, 864 )
+position = Vector2( 1328, 888 )
 rotation = -4.65661e-10
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
@@ -2964,15 +2973,40 @@ rotation = -1.57079
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D4" type="CollisionShape2D" parent="TestTerrain10"]
-position = Vector2( 24.0044, -709 )
+position = Vector2( 24.0045, -712 )
 rotation = -1.57079
-shape = SubResource( 1 )
+shape = SubResource( 266 )
+
+[node name="CollisionShape2D9" type="CollisionShape2D" parent="TestTerrain10"]
+position = Vector2( 24.0087, -1384 )
+rotation = -1.57079
+shape = SubResource( 266 )
+
+[node name="CollisionShape2D13" type="CollisionShape2D" parent="TestTerrain10"]
+position = Vector2( 72.0153, -2432 )
+rotation = -1.57079
+shape = SubResource( 266 )
+
+[node name="CollisionShape2D10" type="CollisionShape2D" parent="TestTerrain10"]
+position = Vector2( 24.0106, -1704 )
+rotation = -1.57079
+shape = SubResource( 267 )
+
+[node name="CollisionShape2D11" type="CollisionShape2D" parent="TestTerrain10"]
+position = Vector2( 24.0121, -1912 )
+rotation = -1.57079
+shape = SubResource( 267 )
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="TestTerrain10"]
 position = Vector2( -148.967, -172.515 )
 rotation = -1.02646
 scale = Vector2( 0.305277, 1.0359 )
 shape = SubResource( 1 )
+
+[node name="CollisionShape2D12" type="CollisionShape2D" parent="TestTerrain10"]
+position = Vector2( 24.0127, -2024 )
+rotation = -1.57079
+shape = SubResource( 267 )
 
 [node name="Slope" type="Sprite" parent="."]
 position = Vector2( 566, 118 )
@@ -3465,7 +3499,7 @@ position = Vector2( 1184, 776 )
 position = Vector2( 1240, 832 )
 
 [node name="Switch" parent="." instance=ExtResource( 13 )]
-position = Vector2( 1032, 902 )
+position = Vector2( 1032, 904 )
 animator = NodePath("AnimationPlayer")
 animationName = "Enterance"
 
@@ -3689,16 +3723,16 @@ antialiased = true
 polygon = PoolVector2Array( -2, -8, 0, -40, 2, -8, 0, 0 )
 
 [node name="EnemyBase" parent="." instance=ExtResource( 27 )]
-position = Vector2( 232, 1256 )
+position = Vector2( 2832, 928 )
 
 [node name="EnemyBase2" parent="." instance=ExtResource( 27 )]
-position = Vector2( 296, 1256 )
+position = Vector2( 2896, 928 )
 
 [node name="EnemyBase3" parent="." instance=ExtResource( 27 )]
-position = Vector2( 336, 1200 )
+position = Vector2( 2944, 928 )
 
 [node name="EnemyBase4" parent="." instance=ExtResource( 27 )]
-position = Vector2( 256, 1200 )
+position = Vector2( 2864, 928 )
 
 [node name="Node2D" type="Node2D" parent="."]
 position = Vector2( 2884, 1201 )
@@ -3711,6 +3745,29 @@ position = Vector2( 1024, 848 )
 orbs = 8
 speed = -500
 distance = 32
+
+[node name="Bridge" parent="." instance=ExtResource( 29 )]
+position = Vector2( 1384, 920 )
+length = 15
+smoothDrop = false
+
+[node name="Bridge2" parent="." instance=ExtResource( 29 )]
+position = Vector2( 2056, 920 )
+length = 6
+texture = ExtResource( 30 )
+
+[node name="Bridge3" parent="." instance=ExtResource( 29 )]
+position = Vector2( 2168, 920 )
+texture = ExtResource( 31 )
+
+[node name="Bridge5" parent="." instance=ExtResource( 29 )]
+position = Vector2( 2486, 922 )
+rotation = 0.261799
+texture = ExtResource( 31 )
+
+[node name="Bridge4" parent="." instance=ExtResource( 29 )]
+position = Vector2( 2376, 920 )
+length = 6
 
 [connection signal="body_entered" from="PathAnimator" to="PathAnimator" method="_player_touch"]
 [connection signal="body_entered" from="PathAnimator/ZSwitch" to="PathAnimator/ZSwitch" method="_on_ZSwitch_body_entered"]

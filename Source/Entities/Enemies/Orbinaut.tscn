@@ -24,7 +24,6 @@ modulate = Color( 1, 0, 0, 1 )
 shape = SubResource( 1 )
 
 [node name="Orb" type="Area2D" parent="."]
-modulate = Color( 1, 1, 1, 0.501961 )
 position = Vector2( 0, -16 )
 collision_layer = 32
 collision_mask = 0
