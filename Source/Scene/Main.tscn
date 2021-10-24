@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Scene/LevelTest.tscn" type="PackedScene" id=1]
+
+[node name="Main" type="Node2D"]
+
+[node name="SceneLoader" type="Node" parent="."]
+
+[node name="TestScene" parent="SceneLoader" instance=ExtResource( 1 )]

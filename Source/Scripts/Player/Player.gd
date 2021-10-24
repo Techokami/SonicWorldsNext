@@ -50,6 +50,7 @@ onready var animator = $AnimationSonic;
 onready var sprite = $PlayerSprite;
 onready var spriteFrames = sprite.frames;
 onready var shieldSprite = $Shields;
+onready var camera = get_node_or_null("Camera");
 
 var rotatableSprites = ["walk", "run"];
 var direction = scale.x;
@@ -72,6 +73,8 @@ var airControl = true;
 var shieldID = 0;
 var rings = 0;
 
+# How far in can the player can be towards the screen edge before they're clamped
+var cameraMargin = 16;
 
 # ALL CODE IS TEMPORARY!
 
@@ -139,12 +142,22 @@ func _process(delta):
 				star.frame = rand_range(0,3);
 
 func _physics_process(delta):
+	
 	if (ground):
 		groundSpeed = velocity.x;
+	
 	if (playerControl != 0 && lockTimer <= 0):
 		inputs[INPUTS.XINPUT] = -int(Input.is_action_pressed("gm_left"))+int(Input.is_action_pressed("gm_right"));
 		inputs[INPUTS.YINPUT] = -int(Input.is_action_pressed("gm_up"))+int(Input.is_action_pressed("gm_down"));
-
+	
+	# Boundry Handling
+	if (camera != null):
+		# Stop velocity at borders
+		if (global_position.x < camera.limit_left+cameraMargin || global_position.x > camera.limit_right-cameraMargin):
+			velocity.x = 0;
+		# Clamp position
+		global_position.x = clamp(global_position.x,camera.limit_left+cameraMargin,camera.limit_right-cameraMargin);
+	
 
 func set_state(newState, forceMask = Vector2.ZERO):
 	for i in stateList:
