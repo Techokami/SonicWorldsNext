@@ -157,7 +157,6 @@ func _physics_process(delta):
 			velocity.x = 0;
 		# Clamp position
 		global_position.x = clamp(global_position.x,camera.limit_left+cameraMargin,camera.limit_right-cameraMargin);
-	
 
 func set_state(newState, forceMask = Vector2.ZERO):
 	for i in stateList:
@@ -214,7 +213,6 @@ func connect_to_floor():
 	if (!ground):
 		ground = true;
 		abilityUsed = false;
-		
 		# landing velocity calculation
 		var calcAngle = rad2deg(angle.angle())+90;
 		if (calcAngle < 0):

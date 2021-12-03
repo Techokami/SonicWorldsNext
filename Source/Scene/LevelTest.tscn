@@ -1,29 +1,22 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://Entities/MainObjects/BoundrySetter.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Entities/MainObjects/Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Entities/Gimmicks/Spring.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Entities/Misc/HUD.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Entities/Gimmicks/Bridge.tscn" type="PackedScene" id=29]
 
-[sub_resource type="RectangleShape2D" id=1]
+[sub_resource type="RectangleShape2D" id=7]
 extents = Vector2( 440, 64 )
+
+[sub_resource type="CircleShape2D" id=6]
+radius = 42.0476
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 37, 26 )
 
 [node name="TestScene" type="Node2D"]
 __meta__ = {
-"_edit_horizontal_guides_": [ 1520.0, 1208.0 ],
-"_edit_vertical_guides_": [ 272.0, 832.0, 568.0, 296.0, 1952.0 ]
-}
-
-[node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 160, 112 )
-rotation = -4.65661e-10
-
-[node name="Camera" type="Camera2D" parent="Player"]
-current = true
-limit_smoothed = true
-__meta__ = {
-"_edit_lock_": true
+"_edit_horizontal_guides_": [ 1520.0, 1208.0 ]
 }
 
 [node name="HUD" parent="." instance=ExtResource( 9 )]
@@ -34,54 +27,70 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain"]
 position = Vector2( 440, 200 )
-shape = SubResource( 1 )
+shape = SubResource( 7 )
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="TestTerrain"]
 position = Vector2( 1512, 200 )
-shape = SubResource( 1 )
+shape = SubResource( 7 )
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="TestTerrain"]
+position = Vector2( 2158, 71 )
+shape = SubResource( 7 )
+
+[node name="CollisionShape2D7" type="CollisionShape2D" parent="TestTerrain"]
+position = Vector2( 1622, 44 )
+shape = SubResource( 6 )
+
+[node name="CollisionShape2D9" type="CollisionShape2D" parent="TestTerrain"]
+position = Vector2( 784, 44 )
+shape = SubResource( 6 )
+
+[node name="CollisionShape2D8" type="CollisionShape2D" parent="TestTerrain"]
+position = Vector2( 1760, 7 )
+shape = SubResource( 6 )
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="TestTerrain"]
+position = Vector2( 1335, 24 )
+rotation = -3.14159
+scale = Vector2( 0.288934, 0.288934 )
+shape = SubResource( 5 )
+one_way_collision = true
+
+[node name="Platforms" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Platforms"]
+position = Vector2( 1362, 91 )
+shape = SubResource( 5 )
+one_way_collision = true
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Platforms"]
+position = Vector2( 745, 29 )
+shape = SubResource( 5 )
+one_way_collision = true
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="Platforms"]
+position = Vector2( 1225, 59 )
+shape = SubResource( 6 )
+one_way_collision = true
+
+[node name="CollisionShape2D6" type="CollisionShape2D" parent="Platforms"]
+position = Vector2( 1483, 45 )
+shape = SubResource( 6 )
+one_way_collision = true
 
 [node name="Bridge" parent="." instance=ExtResource( 29 )]
 position = Vector2( 888, 144 )
-
-[node name="BoundrySetter" parent="." instance=ExtResource( 1 )]
-position = Vector2( 160, 112 )
-rightBoundry = 1952.0
-
-[node name="BoundrySetter2" parent="." instance=ExtResource( 1 )]
-position = Vector2( 1792, 112 )
-leftBoundry = 1312
-topBoundry = -256
-rightBoundry = 1952.0
-bottomBoundry = 560.0
-
-[node name="BoundrySetter3" parent="." instance=ExtResource( 1 )]
-position = Vector2( 1793, -140 )
-topBoundry = -256
-rightBoundry = 1952.0
-bottomBoundry = 560.0
-
-[node name="Spring" parent="." instance=ExtResource( 8 )]
-position = Vector2( 1328, 120 )
-springDirection = 4
-
-[node name="Spring3" parent="." instance=ExtResource( 8 )]
-position = Vector2( 1819, -107 )
-type = 1
-springDirection = 2
-
-[node name="Spring4" parent="." instance=ExtResource( 8 )]
-position = Vector2( 1804, -107 )
-scale = Vector2( -1, 1 )
-type = 1
-springDirection = 3
-
-[node name="Spring5" parent="." instance=ExtResource( 8 )]
-position = Vector2( 1944, 119 )
-scale = Vector2( -1, 1 )
-type = 1
-springDirection = 3
 
 [node name="Spring2" parent="." instance=ExtResource( 8 )]
 position = Vector2( 8, 120 )
 type = 1
 springDirection = 2
+
+[node name="Player" parent="." instance=ExtResource( 2 )]
+position = Vector2( 28, 116 )
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+current = true
+__meta__ = {
+"_edit_lock_": true
+}
