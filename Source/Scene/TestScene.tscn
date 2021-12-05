@@ -1,4 +1,4 @@
-[gd_scene load_steps=299 format=2]
+[gd_scene load_steps=300 format=2]
 
 [ext_resource path="res://Entities/MainObjects/LayerSwitcher.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Entities/MainObjects/Player.tscn" type="PackedScene" id=2]
@@ -55,6 +55,10 @@ extents = Vector2( 216, 8 )
 
 [sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 8, 8 )
+
+[sub_resource type="CapsuleShape2D" id=268]
+radius = 62.6399
+height = 106.904
 
 [sub_resource type="RectangleShape2D" id=9]
 extents = Vector2( 80.8309, 10 )
@@ -2628,7 +2632,7 @@ position = Vector2( 393, 1000 )
 rotation = -4.65661e-10
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 481.712, 662.412 )
+position = Vector2( 815.714, 474.122 )
 rotation = -4.65661e-10
 
 [node name="Camera" type="Camera2D" parent="Player"]
@@ -2701,8 +2705,7 @@ one_way_collision = true
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Platform3"]
 modulate = Color( 1, 1, 0, 1 )
-position = Vector2( -310.475, -64.3457 )
-rotation = 0.410744
+position = Vector2( -287.94, -63.3457 )
 scale = Vector2( 1.39437, 1 )
 shape = SubResource( 3 )
 one_way_collision = true
@@ -2797,19 +2800,6 @@ collision_layer = 7
 collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain5"]
-shape = SubResource( 5 )
-
-[node name="TestTerrain9" type="StaticBody2D" parent="."]
-position = Vector2( 855, 695 )
-scale = Vector2( 1.3665, 0.763775 )
-collision_layer = 7
-collision_mask = 7
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TestTerrain9"]
-shape = SubResource( 5 )
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="TestTerrain9"]
-position = Vector2( -65.1299, 44.5157 )
 shape = SubResource( 5 )
 
 [node name="Platform6" type="StaticBody2D" parent="."]
@@ -2935,6 +2925,8 @@ collision_layer = 7
 collision_mask = 23
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HighTerrain"]
+position = Vector2( 0.394012, -7.3877 )
+scale = Vector2( 1, 0.200005 )
 shape = SubResource( 1 )
 
 [node name="TestTerrain10" type="StaticBody2D" parent="."]
@@ -3012,18 +3004,6 @@ shape = SubResource( 8 )
 position = Vector2( 566, 118 )
 texture = ExtResource( 5 )
 
-[node name="StaticBody2D2" type="StaticBody2D" parent="."]
-position = Vector2( 610, 599 )
-scale = Vector2( 1.49462, 1.49462 )
-collision_layer = 7
-collision_mask = 7
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D2"]
-polygon = PoolVector2Array( 64, 64, -64, 64, -48, 62, -43, 61, -31, 59, -23, 56, -8, 50, 3, 44, 10, 40, 20, 32, 28, 24, 35, 15, 51, -9, 53, -13, 55, -20, 59, -34, 62, -52, 63, -64, 64, -64 )
-__meta__ = {
-"_edit_group_": true
-}
-
 [node name="StaticBody2D3" type="StaticBody2D" parent="."]
 position = Vector2( 640, 312 )
 scale = Vector2( 1, -1 )
@@ -3035,6 +3015,15 @@ polygon = PoolVector2Array( 64, 64, -64, 64, -48, 62, -43, 61, -31, 59, -23, 56,
 __meta__ = {
 "_edit_group_": true
 }
+
+[node name="StaticBody2D11" type="StaticBody2D" parent="."]
+position = Vector2( 945.032, 639.627 )
+scale = Vector2( 1, -1 )
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D11"]
+shape = SubResource( 268 )
 
 [node name="StaticBody2D4" type="StaticBody2D" parent="."]
 position = Vector2( 536, 312 )
@@ -3055,6 +3044,17 @@ collision_layer = 7
 collision_mask = 23
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D5"]
+polygon = PoolVector2Array( 64, 64, -64, 64, -48, 62, -43, 61, -31, 59, -23, 56, -8, 50, 3, 44, 10, 40, 20, 32, 28, 24, 35, 15, 51, -9, 53, -13, 55, -20, 59, -34, 62, -52, 63, -64, 64, -64 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="StaticBody2D12" type="StaticBody2D" parent="."]
+position = Vector2( 639.288, 632.321 )
+collision_layer = 7
+collision_mask = 15
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D12"]
 polygon = PoolVector2Array( 64, 64, -64, 64, -48, 62, -43, 61, -31, 59, -23, 56, -8, 50, 3, 44, 10, 40, 20, 32, 28, 24, 35, 15, 51, -9, 53, -13, 55, -20, 59, -34, 62, -52, 63, -64, 64, -64 )
 __meta__ = {
 "_edit_group_": true
@@ -3093,21 +3093,6 @@ collision_mask = 7
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D8"]
 polygon = PoolVector2Array( 64, 64, -64, 64, -48, 62, -43, 61, -31, 59, -23, 56, -8, 50, 3, 44, 10, 40, 20, 32, 28, 24, 35, 15, 51, -9, 53, -13, 55, -20, 59, -34, 62, -52, 63, -64, 64, -64 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="LoopCorner" type="StaticBody2D" parent="."]
-position = Vector2( 868.258, 431 )
-rotation = -1.57079
-scale = Vector2( -1, 1 )
-collision_mask = 9
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="LoopCorner"]
-rotation = -1.57079
-scale = Vector2( -1, 1 )
-polygon = PoolVector2Array( 64, 64, -64, 64, -48, 62, -43, 61, -31, 59, -23, 56, -8, 50, 3, 44, 10, 40, 20, 32, 28, 24, 35, 15, 51, -9, 53, -13, 55, -20, 59, -34, 62, -52, 63, -64, 64, -64 )
-one_way_collision_margin = 0.1
 __meta__ = {
 "_edit_group_": true
 }
@@ -3261,10 +3246,15 @@ size = Vector2( 1, 20 )
 leftLayer = 0
 
 [node name="LayerSwitcher6" parent="." instance=ExtResource( 1 )]
-position = Vector2( 669, 581 )
-size = Vector2( 4, 1 )
+position = Vector2( 637.486, 521.54 )
+size = Vector2( 8, 1 )
 orientation = 1
 leftLayer = 0
+
+[node name="LayerSwitcher10" parent="." instance=ExtResource( 1 )]
+position = Vector2( 818.245, 640.46 )
+size = Vector2( 8, 1 )
+orientation = 1
 
 [node name="LayerSwitcher4" parent="." instance=ExtResource( 1 )]
 position = Vector2( 961, 412 )
@@ -3738,10 +3728,10 @@ position = Vector2( 2864, 928 )
 position = Vector2( 2884, 1201 )
 
 [node name="Orbinaut" parent="." instance=ExtResource( 28 )]
-position = Vector2( 1008, 792 )
+position = Vector2( 758.267, 792.595 )
 
 [node name="Orbinaut2" parent="." instance=ExtResource( 28 )]
-position = Vector2( 1024, 848 )
+position = Vector2( 774.267, 848.595 )
 orbs = 8
 speed = -500
 distance = 32

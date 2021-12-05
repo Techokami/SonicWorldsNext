@@ -31,6 +31,7 @@ onready var groundLookDistance = $PhysicsLookUp.groundLookDistance;
 onready var sonic2FloorSnap = $PhysicsLookUp.sonic2FloorSnap; # Use the sonic 2 and onward floor snapping check
 onready var pushRadius = $HitBox.shape.extents.x+1;
 export (int, "Low", "High") var defaultLayer = 0;
+var layerExcludeList = []
 
 
 func _ready():
@@ -92,6 +93,8 @@ func update_sensors():
 	
 	wallCastLeft.cast_to = Vector2(-pushRadius,0);
 	wallCastRight.cast_to = Vector2(pushRadius,0);
+	for i in castList:
+		i.update_cast()
 	
 func update_cast_to():
 	if (!ground):
@@ -112,6 +115,8 @@ func update_cast_to():
 			wallCastRight.position.y = 0;
 		floorCastLeft.cast_to.y = $HitBox.shape.extents.y+groundLookDistance;
 		floorCastRight.cast_to.y = floorCastLeft.cast_to.y;
+	for i in castList:
+		i.update_cast()
 
 
 func _physics_process(delta):
@@ -135,15 +140,16 @@ func _physics_process(delta):
 	if (!canCollide):
 		velocityInterp = Vector2.ZERO;
 		translate((velocity*delta).rotated(angle.rotated(deg2rad(90)).angle()));
-		
 	while (velocityInterp != Vector2.ZERO):
 		
 		var clampedVelocity = velocityInterp.clamped(speedStepLimit);
-				
-		clear_all_exceptions();
+		
+		#clear_all_exceptions();
 		
 		# move the object
+		reset_exclude_list()
 		translate(clampedVelocity.rotated(angle.rotated(deg2rad(90)).angle()));
+		exclude_layer()
 		#move_and_collide(clampedVelocity.rotated(angle.rotated(deg2rad(90)).angle()));
 		
 		# Floor priority back up check, if there's no floor ahead, check below
@@ -158,6 +164,7 @@ func _physics_process(delta):
 		
 		# Wall code
 		
+		exclude_layer()
 		var getWall = get_closest_sensor(wallCastLeft,wallCastRight);
 		
 		
@@ -170,6 +177,7 @@ func _physics_process(delta):
 		
 		#force_update_transform();
 		
+		exclude_layer()
 		getFloor = get_closest_sensor(floorCastLeft,floorCastRight);
 		var priorityAngle = get_floor_angle(getFloor);
 		if abs(wrapf(rad2deg(priorityAngle),0,360) - wrapf(rad2deg(angle.angle()),0,360)) >= 20 and 360-abs(wrapf(rad2deg(priorityAngle),0,360) - wrapf(rad2deg(angle.angle()),0,360)) >= 20:  
@@ -226,6 +234,7 @@ func _physics_process(delta):
 		else:
 			disconect_from_floor();
 			if (velocity.y < 0):
+				exclude_layer()
 				var getRoof = get_closest_sensor(roofCastLeft,roofCastRight);
 				if (getRoof):
 					if (!touch_ceiling(getRoof)):
@@ -380,3 +389,20 @@ func touch_wall(caster):
 			return caster.get_collider().physics_wall_override(self,caster);
 	
 	velocity.x = 0;
+
+func exclude_layer():
+	# exclude any casts that collide with layers we are not on
+	for i in castList:
+		var getCol = i.get_collider()
+		if (getCol):
+			if (getCol.get_collision_mask_bit(4-defaultLayer)):
+				i.add_collision_exception_with(getCol)
+				layerExcludeList.append(getCol)
+	
+func reset_exclude_list():
+	for i in castList:
+		for j in layerExcludeList:
+			i.remove_collision_exception_with(j)
+	
+	layerExcludeList.clear()
+	

@@ -87,7 +87,7 @@ type = 1
 springDirection = 2
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 28, 116 )
+position = Vector2( 803, -27 )
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 current = true
