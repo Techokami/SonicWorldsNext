@@ -86,6 +86,20 @@ position = Vector2( 8, 120 )
 type = 1
 springDirection = 2
 
+[node name="Spring3" parent="." instance=ExtResource( 8 )]
+position = Vector2( 779, 103 )
+type = 1
+springDirection = 2
+
+[node name="Spring4" parent="." instance=ExtResource( 8 )]
+position = Vector2( 670, 128 )
+type = 1
+
+[node name="Spring5" parent="." instance=ExtResource( 8 )]
+position = Vector2( 670, -147 )
+scale = Vector2( 1, -1 )
+springDirection = 1
+
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 803, -27 )
 

@@ -169,8 +169,11 @@ func _physics_process(delta):
 		
 		
 		if (getWall):
-			position += Vector2(getWall.get_collision_point().round().x-getWall.global_position.round().x-pushRadius*sign(getWall.cast_to.x),0).rotated(rotation);
 			touch_wall(getWall);
+			position += Vector2(getWall.get_collision_point().round().x-getWall.global_position.round().x-pushRadius*sign(getWall.cast_to.x),0).rotated(rotation);
+			# prevent wall and ceiling sticking
+			if (velocity.x == 0):
+				disconect_from_floor()
 		
 		
 		velocityInterp -= clampedVelocity;
