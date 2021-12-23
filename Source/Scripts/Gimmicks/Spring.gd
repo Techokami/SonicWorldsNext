@@ -83,7 +83,7 @@ func physics_floor_override(body,caster):
 		body.ground = false;
 		body.velocity = hitDirection.rotated(rotation).rotated(-body.rotation)*speed[type]*60;
 		$SpringAnimator.play(animList[animID]);
-		body.spriteFrames.set_animation_speed("corkScrew",1);
+		body.spriteFrames.set_animation_speed("corkScrew",10);
 		body.set_state(body.STATES.AIR);
 		body.sprite.play("corkScrew");
 		$sfxSpring.play();

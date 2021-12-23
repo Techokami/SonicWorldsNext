@@ -42,6 +42,8 @@ func _physics_process(delta):
 		$Bridge.position.y = 0;
 		dropIndex = 1;
 		maxDepression = 0;
+	
+	$PlayerCheck/mask.scale.y = (maxDepression/8)+1;
 		
 	# Loop through all segments to find their y position
 	for i in range(bridges.size()):
