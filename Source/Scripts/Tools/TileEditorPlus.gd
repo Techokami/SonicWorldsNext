@@ -22,6 +22,7 @@ var parent = get_parent();
 # editor settings
 export var active = false;
 export (int, "None", "Tilemap", "Custom") var template = 0;
+export var update = true;
 
 # Button to copy current tile layout to clipboard (paste this under STAMPS)
 export var copyLayoutToClipboard = false;
@@ -62,6 +63,10 @@ func _ready():
 	active = false; # prevent your tiles from being placed when you open a room
 
 func _process(delta):
+	# recheck connections if update is true
+	if (update):
+		parent = get_parent();
+		update = false;
 	# get tile is used to determine what tile map to reference
 	var getTile = parent;
 	

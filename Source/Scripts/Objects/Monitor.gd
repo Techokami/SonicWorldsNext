@@ -16,6 +16,7 @@ func _process(delta):
 		$Item.frame = item+2;
 
 func destroy():
+	$Item.z_index += 1000
 	$Animator.play("DestroyMonitor");
 	$SFX/Destroy.play();
 	yield($Animator,"animation_finished");

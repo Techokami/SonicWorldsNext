@@ -27,7 +27,7 @@ func get_collision_normal():
 		raycast.clear_exceptions()
 		raycast.force_raycast_update()
 		# check that raycast is colliding with our mover, if it's not then default to the collider
-		while (raycast.is_colliding() && raycast.get_collider() != col.collider):
+		while (raycast.is_colliding() && raycast.get_collider() != col.collider && !raycast.get_collider() is TileMap):
 			raycast.add_exception(raycast.get_collider())
 			raycast.force_raycast_update()
 		if (raycast.is_colliding()):

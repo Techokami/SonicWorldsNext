@@ -123,7 +123,7 @@ tracks/1/keys = {
 }
 
 [node name="Spring" type="KinematicBody2D"]
-collision_layer = 47
+collision_layer = 96
 collision_mask = 64
 script = ExtResource( 2 )
 

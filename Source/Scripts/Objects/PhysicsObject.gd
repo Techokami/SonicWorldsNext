@@ -21,7 +21,7 @@ roofCastLeft,roofCastRight,wallCastLeft,wallCastRight];
 
 # Physics variables
 var velocity = Vector2.ZERO;
-var ground = false;
+var ground = true;
 var angle = Vector2.UP;
 var canCollide = true;
 
@@ -140,6 +140,7 @@ func _physics_process(delta):
 	if (!canCollide):
 		velocityInterp = Vector2.ZERO;
 		translate((velocity*delta).rotated(angle.rotated(deg2rad(90)).angle()));
+	
 	while (velocityInterp != Vector2.ZERO):
 		
 		var clampedVelocity = velocityInterp.clamped(speedStepLimit);
@@ -151,7 +152,6 @@ func _physics_process(delta):
 		translate(clampedVelocity.rotated(angle.rotated(deg2rad(90)).angle()));
 		exclude_layer()
 		#move_and_collide(clampedVelocity.rotated(angle.rotated(deg2rad(90)).angle()));
-		
 		# Floor priority back up check, if there's no floor ahead, check below
 		if (!floorPriority && velocity.y >= 0):
 			collision_layer = 1;
@@ -185,6 +185,7 @@ func _physics_process(delta):
 		var priorityAngle = get_floor_angle(getFloor);
 		if abs(wrapf(rad2deg(priorityAngle),0,360) - wrapf(rad2deg(angle.angle()),0,360)) >= 20 and 360-abs(wrapf(rad2deg(priorityAngle),0,360) - wrapf(rad2deg(angle.angle()),0,360)) >= 20:  
 			priorityAngle = deg2rad(lerp(wrapf(rad2deg(priorityAngle),0,360),wrapf(rad2deg(angle.angle()),0,360),0.2))
+		
 		
 		# Set sonic 2 floor snap to false to restore snapping to sonic 1 floor snap logic
 		var s2Check = true;
@@ -408,4 +409,13 @@ func reset_exclude_list():
 			i.remove_collision_exception_with(j)
 	
 	layerExcludeList.clear()
-	
+
+# set collission rays for layers
+func layer_check_casts():
+	for i in castList:
+		i.set_collision_mask_bit(8+(4*defaultLayer),i.get_collision_mask_bit(0))
+		i.set_collision_mask_bit(9+(4*defaultLayer),i.get_collision_mask_bit(1))
+		i.set_collision_mask_bit(10+(4*defaultLayer),i.get_collision_mask_bit(2))
+		i.set_collision_mask_bit(12-(4*defaultLayer),false)
+		i.set_collision_mask_bit(13-(4*defaultLayer),false)
+		i.set_collision_mask_bit(14-(4*defaultLayer),false)

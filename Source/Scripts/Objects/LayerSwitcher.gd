@@ -38,3 +38,5 @@ func _on_LayerSwitcher_body_entered(body):
 				body.defaultLayer = rightLayer;
 			else:
 				body.defaultLayer = leftLayer;
+			if (body.has_method("layer_check_casts")):
+				body.layer_check_casts()

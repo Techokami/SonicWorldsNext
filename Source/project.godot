@@ -113,10 +113,16 @@ gm_pause={
 2d_physics/layer_1="Floors"
 2d_physics/layer_2="Walls"
 2d_physics/layer_3="Ceilings"
-2d_physics/layer_4="Low"
-2d_physics/layer_5="High"
+2d_physics/layer_4="Low (No TileMap)"
+2d_physics/layer_5="High (No TileMap)"
 2d_physics/layer_6="Player"
 2d_physics/layer_7="Objects"
+2d_physics/layer_9="FloorsLow"
+2d_physics/layer_10="WallsLow"
+2d_physics/layer_11="CeilingsLow"
+2d_physics/layer_13="FloorsHigh"
+2d_physics/layer_14="WallsHigh"
+2d_physics/layer_15="CeilingsHigh"
 
 [rendering]
 

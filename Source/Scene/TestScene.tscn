@@ -3685,6 +3685,7 @@ tilesetFile = "res://Tileset/Levels/DefaultCollissionTileMap.json"
 [node name="TileEditorPlus" type="Node2D" parent="TileMap"]
 position = Vector2( 3304, 744 )
 script = ExtResource( 23 )
+update = false
 
 [node name="StaticBody2D10" type="StaticBody2D" parent="."]
 position = Vector2( 16, -8 )
