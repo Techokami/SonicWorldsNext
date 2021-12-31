@@ -39,7 +39,7 @@ var Star = preload("res://Entities/Misc/StarParticle.tscn");
 var lockTimer = 0;
 var spriteRotation = 0;
 
-enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, ANIMATION, HIT};
+enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, ANIMATION, HIT, CORKSCREW};
 var currentState = STATES.NORMAL;
 enum SHIELDS {NONE, NORMAL, ELEC, FIRE, BUBBLE};
 var shield = SHIELDS.NONE;
@@ -99,7 +99,7 @@ func _process(delta):
 	if (ground):
 		spriteRotation = rad2deg(angle.angle())+90;
 	else:
-		if (spriteRotation < 180):
+		if (spriteRotation+180 >= 180):
 			spriteRotation = max(0,spriteRotation-(168.75*delta));
 		else:
 			spriteRotation = min(360,spriteRotation+(168.75*delta));

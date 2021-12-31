@@ -244,7 +244,6 @@ func _physics_process(delta):
 					if (!touch_ceiling(getRoof)):
 						position += getRoof.get_collision_point().round()-getRoof.global_position.round()+($HitBox.shape.extents*Vector2(0,1));
 
-
 func get_floor_angle(getFloor = Vector2.DOWN):
 	var priorityAngle = rotation;
 	if (getFloor):
@@ -361,6 +360,7 @@ func disconect_from_floor():
 		ground = false;
 		if (rotation != 0):
 			rotation = 0;
+			
 
 func connect_to_floor():
 	if (!ground):
@@ -382,6 +382,13 @@ func touch_ceiling(caster):
 		#position += caster.get_collision_point()-caster.global_position-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation);
 		velocity = Vector2(velocity.y*-sign(sin(deg2rad(getAngle))),0);
 		connect_to_floor();
+		
+		# adjust collissions to prevent clipping
+		exclude_layer()
+		var getFloor = get_closest_sensor(floorCastLeft,floorCastRight);
+		if (getFloor):
+			position += getFloor.get_collision_point().round()-getFloor.global_position.round()-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation);
+		
 		return true;
 	else:
 		velocity.y = 0;

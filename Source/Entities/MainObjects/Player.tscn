@@ -1,4 +1,4 @@
-[gd_scene load_steps=120 format=2]
+[gd_scene load_steps=121 format=2]
 
 [ext_resource path="res://Scripts/Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Graphics/Players/Sonic.png" type="Texture" id=2]
@@ -34,36 +34,13 @@
 [ext_resource path="res://Audio/SFX/Player/InstShield.wav" type="AudioStream" id=32]
 [ext_resource path="res://Graphics/Items/invincible_stars.png" type="Texture" id=33]
 [ext_resource path="res://Graphics/Players/SonicFrames.tres" type="SpriteFrames" id=34]
+[ext_resource path="res://Scripts/Player/States/CorkScrew.gd" type="Script" id=35]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 9, 19 )
 
 [sub_resource type="CanvasItemMaterial" id=2]
 blend_mode = 1
-
-[sub_resource type="AtlasTexture" id=30]
-atlas = ExtResource( 17 )
-region = Rect2( 0, 48, 84, 48 )
-
-[sub_resource type="AtlasTexture" id=31]
-atlas = ExtResource( 17 )
-region = Rect2( 84, 48, 84, 48 )
-
-[sub_resource type="AtlasTexture" id=39]
-atlas = ExtResource( 15 )
-region = Rect2( 0, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=40]
-atlas = ExtResource( 15 )
-region = Rect2( 48, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=41]
-atlas = ExtResource( 15 )
-region = Rect2( 96, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=42]
-atlas = ExtResource( 15 )
-region = Rect2( 144, 0, 48, 48 )
 
 [sub_resource type="AtlasTexture" id=32]
 atlas = ExtResource( 17 )
@@ -92,6 +69,30 @@ region = Rect2( 240, 0, 48, 48 )
 [sub_resource type="AtlasTexture" id=38]
 atlas = ExtResource( 17 )
 region = Rect2( 288, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 20 )
+region = Rect2( 0, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=25]
+atlas = ExtResource( 20 )
+region = Rect2( 48, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=26]
+atlas = ExtResource( 20 )
+region = Rect2( 96, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=27]
+atlas = ExtResource( 20 )
+region = Rect2( 144, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=28]
+atlas = ExtResource( 20 )
+region = Rect2( 192, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=29]
+atlas = ExtResource( 20 )
+region = Rect2( 240, 0, 48, 48 )
 
 [sub_resource type="AtlasTexture" id=47]
 atlas = ExtResource( 16 )
@@ -233,45 +234,40 @@ region = Rect2( 128, 96, 64, 48 )
 atlas = ExtResource( 16 )
 region = Rect2( 192, 96, 64, 48 )
 
-[sub_resource type="AtlasTexture" id=24]
-atlas = ExtResource( 20 )
+[sub_resource type="AtlasTexture" id=30]
+atlas = ExtResource( 17 )
+region = Rect2( 0, 48, 84, 48 )
+
+[sub_resource type="AtlasTexture" id=31]
+atlas = ExtResource( 17 )
+region = Rect2( 84, 48, 84, 48 )
+
+[sub_resource type="AtlasTexture" id=39]
+atlas = ExtResource( 15 )
 region = Rect2( 0, 0, 48, 48 )
 
-[sub_resource type="AtlasTexture" id=25]
-atlas = ExtResource( 20 )
+[sub_resource type="AtlasTexture" id=40]
+atlas = ExtResource( 15 )
 region = Rect2( 48, 0, 48, 48 )
 
-[sub_resource type="AtlasTexture" id=26]
-atlas = ExtResource( 20 )
+[sub_resource type="AtlasTexture" id=41]
+atlas = ExtResource( 15 )
 region = Rect2( 96, 0, 48, 48 )
 
-[sub_resource type="AtlasTexture" id=27]
-atlas = ExtResource( 20 )
+[sub_resource type="AtlasTexture" id=42]
+atlas = ExtResource( 15 )
 region = Rect2( 144, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=28]
-atlas = ExtResource( 20 )
-region = Rect2( 192, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=29]
-atlas = ExtResource( 20 )
-region = Rect2( 240, 0, 48, 48 )
 
 [sub_resource type="SpriteFrames" id=57]
 animations = [ {
-"frames": [ SubResource( 30 ), SubResource( 31 ) ],
-"loop": false,
-"name": "BubbleAction",
-"speed": 10.0
-}, {
-"frames": [ SubResource( 39 ), SubResource( 40 ), SubResource( 41 ), SubResource( 42 ) ],
-"loop": true,
-"name": "Default",
-"speed": 15.0
-}, {
 "frames": [ SubResource( 32 ), SubResource( 33 ), SubResource( 32 ), SubResource( 33 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ), SubResource( 35 ), SubResource( 34 ), SubResource( 35 ), SubResource( 34 ), SubResource( 35 ), SubResource( 32 ), SubResource( 36 ), SubResource( 32 ), SubResource( 36 ), SubResource( 32 ), SubResource( 36 ), SubResource( 34 ), SubResource( 37 ), SubResource( 34 ), SubResource( 37 ), SubResource( 34 ), SubResource( 37 ), SubResource( 32 ), SubResource( 38 ), SubResource( 32 ), SubResource( 38 ), SubResource( 32 ), SubResource( 38 ), SubResource( 34 ), SubResource( 37 ), SubResource( 34 ), SubResource( 37 ), SubResource( 34 ), SubResource( 37 ), SubResource( 32 ), SubResource( 36 ), SubResource( 32 ), SubResource( 36 ), SubResource( 32 ), SubResource( 36 ), SubResource( 34 ), SubResource( 35 ), SubResource( 34 ), SubResource( 35 ), SubResource( 34 ), SubResource( 35 ), SubResource( 32 ), SubResource( 33 ), SubResource( 32 ), SubResource( 33 ), SubResource( 32 ), SubResource( 33 ) ],
 "loop": true,
 "name": "Bubble",
+"speed": 30.0
+}, {
+"frames": [ SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ), SubResource( 29 ) ],
+"loop": false,
+"name": "Insta",
 "speed": 30.0
 }, {
 "frames": [ SubResource( 47 ), SubResource( 48 ), SubResource( 49 ), SubResource( 50 ), SubResource( 51 ), SubResource( 52 ), SubResource( 53 ), SubResource( 54 ), SubResource( 55 ), SubResource( 56 ), SubResource( 53 ), SubResource( 54 ), SubResource( 51 ), SubResource( 52 ), SubResource( 49 ), SubResource( 50 ), SubResource( 47 ), SubResource( 48 ) ],
@@ -289,10 +285,15 @@ animations = [ {
 "name": "FireAction",
 "speed": 30.0
 }, {
-"frames": [ SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ), SubResource( 29 ) ],
+"frames": [ SubResource( 30 ), SubResource( 31 ) ],
 "loop": false,
-"name": "Insta",
-"speed": 30.0
+"name": "BubbleAction",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 39 ), SubResource( 40 ), SubResource( 41 ), SubResource( 42 ) ],
+"loop": true,
+"name": "Default",
+"speed": 15.0
 } ]
 
 [sub_resource type="CircleShape2D" id=58]
@@ -444,6 +445,9 @@ script = ExtResource( 12 )
 [node name="Hit" type="Node" parent="States"]
 script = ExtResource( 14 )
 
+[node name="CorkScrew" type="Node" parent="States"]
+script = ExtResource( 35 )
+
 [node name="PhysicsLookUp" type="Node" parent="."]
 script = ExtResource( 4 )
 
@@ -454,7 +458,7 @@ shape = SubResource( 1 )
 z_index = 5
 frames = ExtResource( 34 )
 animation = "idle"
-frame = 106
+frame = 50
 playing = true
 offset = Vector2( 0, -4 )
 
@@ -473,6 +477,7 @@ material = SubResource( 2 )
 z_index = 6
 frames = SubResource( 57 )
 animation = "Default"
+frame = 3
 playing = true
 script = ExtResource( 19 )
 
@@ -491,13 +496,11 @@ z_index = 5
 [node name="StarGenerator1" type="AnimatedSprite" parent="InvincibilityBarrier"]
 position = Vector2( 0, -16 )
 frames = SubResource( 75 )
-frame = 4
 playing = true
 
 [node name="StarGenerator2" type="AnimatedSprite" parent="InvincibilityBarrier"]
 position = Vector2( 0, 16 )
 frames = SubResource( 75 )
-frame = 4
 playing = true
 
 [node name="AnimationSonic" type="AnimationPlayer" parent="."]

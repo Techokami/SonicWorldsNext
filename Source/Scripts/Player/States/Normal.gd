@@ -16,17 +16,18 @@ func _input(event):
 				parent.set_state(parent.STATES.JUMP);
 
 func _process(delta):
-	if (parent.velocity.x == 0):
-		if (parent.inputs[parent.INPUTS.YINPUT] > 0):
-			parent.sprite.play("crouch");
-		elif (parent.inputs[parent.INPUTS.YINPUT] < 0):
-			parent.sprite.play("lookUp");
+	if parent.ground:
+		if parent.velocity.x == 0:
+			if (parent.inputs[parent.INPUTS.YINPUT] > 0):
+				parent.sprite.play("crouch");
+			elif (parent.inputs[parent.INPUTS.YINPUT] < 0):
+				parent.sprite.play("lookUp");
+			else:
+				parent.sprite.play("idle");
+		elif(abs(parent.velocity.x) < parent.top):
+			parent.sprite.play("walk");
 		else:
-			parent.sprite.play("idle");
-	elif(abs(parent.velocity.x) < parent.top):
-		parent.sprite.play("walk");
-	else:
-		parent.sprite.play("run");
+			parent.sprite.play("run");
 	
 	if (parent.velocity.x != 0):
 		#var setSpeed = (1.0/8.0)+floor(min(8,abs(parent.groundSpeed/60)))/8;
@@ -65,7 +66,7 @@ func _physics_process(delta):
 	
 	# drop, if speed below fall speed
 	if (abs(parent.velocity.x) < parent.fall && calcAngle >= 45 && calcAngle <= 315):
-		if (calcAngle >= 90 && calcAngle <= 270):
+		if (round(calcAngle) >= 90 && round(calcAngle) <= 270):
 			parent.disconect_from_floor();
 		parent.lockTimer = 30.0/60.0;
 		

@@ -9,6 +9,8 @@ export (int, "Low", "High") var leftLayer = 1;
 
 func _ready():
 	$Mask.scale = size;
+	if (!Engine.editor_hint):
+		visible = false
 
 func _process(delta):
 	if (Engine.editor_hint):
