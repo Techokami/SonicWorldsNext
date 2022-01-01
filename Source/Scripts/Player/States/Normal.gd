@@ -16,6 +16,13 @@ func _input(event):
 				parent.set_state(parent.STATES.JUMP);
 
 func _process(delta):
+	if (parent.velocity.x != 0):
+		#var setSpeed = (1.0/8.0)+floor(min(8,abs(parent.groundSpeed/60)))/8;
+		var setSpeed = 60/floor(max(1,8-abs(parent.groundSpeed/60)));
+		parent.spriteFrames.set_animation_speed("walk",setSpeed);
+		parent.spriteFrames.set_animation_speed("run",setSpeed);
+		parent.spriteFrames.set_animation_speed("peelOut",setSpeed);
+
 	if parent.ground:
 		if parent.velocity.x == 0:
 			if (parent.inputs[parent.INPUTS.YINPUT] > 0):
@@ -26,15 +33,11 @@ func _process(delta):
 				parent.sprite.play("idle");
 		elif(abs(parent.velocity.x) < parent.top):
 			parent.sprite.play("walk");
-		else:
+		elif(abs(parent.velocity.x) < 10*60):
 			parent.sprite.play("run");
+		else:
+			parent.sprite.play("peelOut");
 	
-	if (parent.velocity.x != 0):
-		#var setSpeed = (1.0/8.0)+floor(min(8,abs(parent.groundSpeed/60)))/8;
-		var setSpeed = 60/floor(max(1,8-abs(parent.groundSpeed/60)));
-		parent.spriteFrames.set_animation_speed("walk",setSpeed);
-		parent.spriteFrames.set_animation_speed("run",setSpeed);
-		parent.spriteFrames.set_animation_speed("peelOut",setSpeed);
 	
 	if (parent.inputs[parent.INPUTS.XINPUT] != 0):
 		parent.direction = parent.inputs[parent.INPUTS.XINPUT];

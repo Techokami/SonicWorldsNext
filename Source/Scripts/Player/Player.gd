@@ -39,7 +39,7 @@ var Star = preload("res://Entities/Misc/StarParticle.tscn");
 var lockTimer = 0;
 var spriteRotation = 0;
 
-enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, ANIMATION, HIT, CORKSCREW};
+enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, ANIMATION, HIT, CORKSCREW, JUMPCANCEL};
 var currentState = STATES.NORMAL;
 enum SHIELDS {NONE, NORMAL, ELEC, FIRE, BUBBLE};
 var shield = SHIELDS.NONE;
@@ -52,7 +52,7 @@ onready var spriteFrames = sprite.frames;
 onready var shieldSprite = $Shields;
 onready var camera = get_node_or_null("Camera");
 
-var rotatableSprites = ["walk", "run"];
+var rotatableSprites = ["walk", "run", "peelOut"];
 var direction = scale.x;
 
 # ground speed is mostly used for timing and animations, there isn't any functionality to it.

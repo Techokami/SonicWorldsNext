@@ -1,0 +1,59 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Graphics/Obstacles/cnz_barrel.png" type="Texture" id=1]
+[ext_resource path="res://Scripts/Gimmicks/SpinningBarrel.gd" type="Script" id=2]
+
+[sub_resource type="RectangleShape2D" id=7]
+extents = Vector2( 32, 32 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 1 )
+region = Rect2( 64, 0, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 1 )
+region = Rect2( 128, 0, 64, 64 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 1 )
+region = Rect2( 192, 0, 64, 64 )
+
+[sub_resource type="SpriteFrames" id=6]
+animations = [ {
+"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ) ],
+"loop": true,
+"name": "default",
+"speed": 15.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 32, 35 )
+
+[node name="SpinningBarrel" type="KinematicBody2D"]
+collision_layer = 71
+collision_mask = 71
+motion/sync_to_physics = true
+script = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 7 )
+
+[node name="Barrel" type="AnimatedSprite" parent="."]
+frames = SubResource( 6 )
+frame = 2
+playing = true
+
+[node name="PlayerCheck" type="Area2D" parent="."]
+visible = false
+collision_layer = 32
+collision_mask = 0
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="PlayerCheck"]
+shape = SubResource( 1 )
+
+[connection signal="body_entered" from="PlayerCheck" to="." method="_on_PlayerCheck_body_entered"]
+[connection signal="body_exited" from="PlayerCheck" to="." method="_on_PlayerCheck_body_exited"]
