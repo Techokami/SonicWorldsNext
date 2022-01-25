@@ -32,7 +32,6 @@ func get_collision_normal():
 			raycast.force_raycast_update()
 		if (raycast.is_colliding()):
 			return raycast.get_collision_normal()
-		
 		return col.normal
 	return null
 

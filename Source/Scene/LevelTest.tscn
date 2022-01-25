@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://Tileset/Worlds/TestTilesGreen.tres" type="TileSet" id=1]
 [ext_resource path="res://Entities/MainObjects/Player.tscn" type="PackedScene" id=2]
@@ -55,38 +55,6 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ Color( 0.364706, 0, 0, 1 ) ]
-}
-
-[sub_resource type="Animation" id=3]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath("SpinningBarrel:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 224, 736 ) ]
-}
-
-[sub_resource type="Animation" id=4]
-resource_name = "move"
-length = 2.0
-loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath("SpinningBarrel:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.5, 1, 1.5 ),
-"transitions": PoolRealArray( -2, -2, -2, -2 ),
-"update": 0,
-"values": [ Vector2( 224, 736 ), Vector2( 160, 736 ), Vector2( 160, 672 ), Vector2( 224, 672 ) ]
 }
 
 [node name="TestScene" type="Node2D"]
@@ -465,15 +433,12 @@ position = Vector2( 3456, 816 )
 [node name="CorkscrewLoop2" parent="Entity" instance=ExtResource( 23 )]
 position = Vector2( 3840, 816 )
 
-[node name="SpinningBarrel" parent="Entity" instance=ExtResource( 24 )]
-position = Vector2( 224, 736 )
+[node name="SpinningBarrel2" parent="Entity" instance=ExtResource( 24 )]
+position = Vector2( 824, 368 )
 
-[node name="Barrel" type="AnimationPlayer" parent="Entity"]
-autoplay = "move"
-playback_process_mode = 0
-playback_speed = 0.4
-anims/RESET = SubResource( 3 )
-anims/move = SubResource( 4 )
+[node name="SpinningBarrel3" parent="Entity" instance=ExtResource( 24 )]
+position = Vector2( 496, 352 )
+bouncer = true
 
 [node name="TestZoneMap" type="Sprite" parent="."]
 visible = false

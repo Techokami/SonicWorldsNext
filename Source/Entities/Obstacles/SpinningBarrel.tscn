@@ -44,7 +44,7 @@ shape = SubResource( 7 )
 
 [node name="Barrel" type="AnimatedSprite" parent="."]
 frames = SubResource( 6 )
-frame = 2
+frame = 1
 playing = true
 
 [node name="PlayerCheck" type="Area2D" parent="."]

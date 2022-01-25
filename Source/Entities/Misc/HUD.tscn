@@ -627,7 +627,6 @@ __meta__ = {
 }
 
 [node name="TitleCardPlayer" type="AnimationPlayer" parent="LevelCard"]
-playback_speed = 5.0
 anims/End = SubResource( 1 )
 anims/RESET = SubResource( 2 )
 anims/Start = SubResource( 3 )
@@ -679,7 +678,7 @@ vframes = 2
 
 [node name="PatternLeft" type="Control" parent="LevelCard"]
 anchor_bottom = 1.0
-margin_bottom = 1152.0
+margin_bottom = 1376.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -688,7 +687,7 @@ __meta__ = {
 anchor_bottom = 1.0
 margin_left = -32.0
 margin_right = 32.0
-margin_bottom = 3520.0
+margin_bottom = 4896.0
 texture = ExtResource( 8 )
 stretch_mode = 2
 __meta__ = {
@@ -708,7 +707,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_top = -32.0
-margin_bottom = 864.0
+margin_bottom = 1088.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -718,7 +717,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 32.0
-margin_right = 3552.0
+margin_right = 3968.0
 margin_bottom = 64.0
 texture = ExtResource( 8 )
 stretch_mode = 2
