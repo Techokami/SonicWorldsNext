@@ -1,5 +1,5 @@
 extends StaticBody2D
-export var pieces = Vector2(2,2);
+@export var pieces = Vector2(2,2);
 var Piece = preload("res://Entities/Misc/BlockPiece.tscn");
 
 func physics_floor_override(body,caster):

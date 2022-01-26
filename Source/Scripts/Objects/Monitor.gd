@@ -1,12 +1,11 @@
-tool
+@tool
 extends KinematicBody2D
 
 var physics = false;
 var grv = 0.21875;
 var yspeed = 0;
 var playerTouch = null;
-export (int, "Ring", "Speed Shoes", "Invincibility", "Shield", "Elec Shield", "Fire Shield",
-"Bubble Shield", "Super", "Blue Ring", "Boost", "1up") var item = 0;
+@export_enum("Ring", "Speed Shoes", "Invincibility", "Shield", "Elec Shield", "Fire Shield", "Bubble Shield", "Super", "Blue Ring", "Boost", "1up") var item = 0;
 
 func _ready():
 	$Item.frame = item+2;
@@ -19,7 +18,7 @@ func destroy():
 	$Item.z_index += 1000
 	$Animator.play("DestroyMonitor");
 	$SFX/Destroy.play();
-	yield($Animator,"animation_finished");
+	await($Animator,"animation_finished");
 	# enable effect
 	match (item):
 		0: # Rings

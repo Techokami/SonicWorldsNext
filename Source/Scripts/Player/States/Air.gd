@@ -2,7 +2,7 @@ extends "res://Scripts/Player/State.gd"
 
 var elecPart = preload("res://Entities/Misc/ElecParticles.tscn");
 
-export var isJump = false;
+@export var isJump = false;
 
 # Jump actions
 func _input(event):
@@ -16,7 +16,7 @@ func _input(event):
 					parent.shieldSprite.play("Insta");
 					parent.shieldSprite.frame = 0;
 					parent.shieldSprite.visible = true;
-					yield(parent.shieldSprite,"animation_finished");
+					await(parent.shieldSprite,"animation_finished");
 					# check shields hasn't changed
 					if (parent.shield == parent.SHIELDS.NONE):
 						parent.shieldSprite.visible = false;

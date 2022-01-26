@@ -2,12 +2,13 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/DestroyObject.wav-d949c1c8581765391b30b29b797aaa78.sample"
+uid="uid://5x40hum7m2d0"
+path="res://.godot/imported/DestroyObject.wav-d949c1c8581765391b30b29b797aaa78.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Objects/DestroyObject.wav"
-dest_files=[ "res://.import/DestroyObject.wav-d949c1c8581765391b30b29b797aaa78.sample" ]
+dest_files=["res://.godot/imported/DestroyObject.wav-d949c1c8581765391b30b29b797aaa78.sample"]
 
 [params]
 

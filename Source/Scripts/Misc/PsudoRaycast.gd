@@ -1,8 +1,8 @@
 extends KinematicBody2D
 
 
-export var cast_to = Vector2.ZERO
-onready var raycast = $RayCast
+@export var cast_to = Vector2.ZERO
+@onready var raycast = $RayCast
 
 func _ready():
 	update_cast()

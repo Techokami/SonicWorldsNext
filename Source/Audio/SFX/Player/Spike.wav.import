@@ -2,12 +2,13 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/Spike.wav-ae742f89e29119d46eeedd4438c6d9e9.sample"
+uid="uid://bomloyvb5bffq"
+path="res://.godot/imported/Spike.wav-ae742f89e29119d46eeedd4438c6d9e9.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Player/Spike.wav"
-dest_files=[ "res://.import/Spike.wav-ae742f89e29119d46eeedd4438c6d9e9.sample" ]
+dest_files=["res://.godot/imported/Spike.wav-ae742f89e29119d46eeedd4438c6d9e9.sample"]
 
 [params]
 

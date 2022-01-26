@@ -1,3 +1,3 @@
 extends Node
 
-onready var parent = get_parent().get_parent();
+@onready var parent = get_parent().get_parent();

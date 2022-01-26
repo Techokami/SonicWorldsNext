@@ -2,12 +2,13 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/Jump.wav-e2f3d3277c2d5f2c0b6fe08fc8925585.sample"
+uid="uid://bvv3ctef4i0xq"
+path="res://.godot/imported/Jump.wav-e2f3d3277c2d5f2c0b6fe08fc8925585.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Player/Jump.wav"
-dest_files=[ "res://.import/Jump.wav-e2f3d3277c2d5f2c0b6fe08fc8925585.sample" ]
+dest_files=["res://.godot/imported/Jump.wav-e2f3d3277c2d5f2c0b6fe08fc8925585.sample"]
 
 [params]
 

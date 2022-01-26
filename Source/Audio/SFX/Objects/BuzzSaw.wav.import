@@ -2,12 +2,13 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/BuzzSaw.wav-4225a1acd5b14ffbee5b8f7a64e2d222.sample"
+uid="uid://dbyy7m0lv62t"
+path="res://.godot/imported/BuzzSaw.wav-4225a1acd5b14ffbee5b8f7a64e2d222.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Objects/BuzzSaw.wav"
-dest_files=[ "res://.import/BuzzSaw.wav-4225a1acd5b14ffbee5b8f7a64e2d222.sample" ]
+dest_files=["res://.godot/imported/BuzzSaw.wav-4225a1acd5b14ffbee5b8f7a64e2d222.sample"]
 
 [params]
 

@@ -2,12 +2,13 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/RingRight.wav-03ebc02188432bc252ab047f9f394382.sample"
+uid="uid://c3s0j754ant8y"
+path="res://.godot/imported/RingRight.wav-03ebc02188432bc252ab047f9f394382.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Objects/RingRight.wav"
-dest_files=[ "res://.import/RingRight.wav-03ebc02188432bc252ab047f9f394382.sample" ]
+dest_files=["res://.godot/imported/RingRight.wav-03ebc02188432bc252ab047f9f394382.sample"]
 
 [params]
 

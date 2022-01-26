@@ -1,4 +1,4 @@
-extends Sprite
+extends Sprite2D
 
 var stringLookup = {
 'A': 0,
@@ -67,17 +67,17 @@ var smallStringLookup = {
 'z': 35,
 };
 
-export var string = "123XYZ";
-onready var stringMem = string;
+@export var string = "123XYZ";
+@onready var stringMem = string;
 
-export (Texture) var smallStringTexture = preload("res://Graphics/HUD/LevelCards/font/smallfont3.png")
-export var hasNumbers = false
-export var smallHasNumber = true
+@export var smallStringTexture = preload("res://Graphics/HUD/LevelCards/font/smallfont3.png")
+@export var hasNumbers = false
+@export var smallHasNumber = true
 
-export var smallHframes = 10
-export var smallVframes = 4
+@export var smallHframes = 10
+@export var smallVframes = 4
 
-export (int, "Top", "Middle", "Bottom") var align = 0
+@export_enum("Top", "Middle", "Bottom") var align = 0
 
 func _ready():
 	region_enabled = true;

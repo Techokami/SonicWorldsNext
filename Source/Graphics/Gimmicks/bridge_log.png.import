@@ -1,8 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture"
-path="res://.import/bridge_log.png-0b0c8416da6fb2b6ba71035412c163c4.stex"
+type="StreamTexture2D"
+uid="uid://cyic0v0vjwvas"
+path="res://.godot/imported/bridge_log.png-0b0c8416da6fb2b6ba71035412c163c4.stex"
 metadata={
 "vram_texture": false
 }
@@ -10,25 +11,24 @@ metadata={
 [deps]
 
 source_file="res://Graphics/Gimmicks/bridge_log.png"
-dest_files=[ "res://.import/bridge_log.png-0b0c8416da6fb2b6ba71035412c163c4.stex" ]
+dest_files=["res://.godot/imported/bridge_log.png-0b0c8416da6fb2b6ba71035412c163c4.stex"]
 
 [params]
 
 compress/mode=0
 compress/lossy_quality=0.7
-compress/hdr_mode=0
+compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
-flags/repeat=0
-flags/filter=false
-flags/mipmaps=false
-flags/anisotropic=false
-flags/srgb=2
+compress/channel_pack=0
+compress/streamed=false
+mipmaps/generate=false
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
 process/fix_alpha_border=true
 process/premult_alpha=false
+process/normal_map_invert_y=false
 process/HDR_as_SRGB=false
-process/invert_color=false
-stream=false
-size_limit=0
-detect_3d=false
-svg/scale=1.0
+process/size_limit=0
+detect_3d/compress_to=1

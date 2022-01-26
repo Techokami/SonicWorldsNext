@@ -1,11 +1,11 @@
 extends "res://Scripts/Enemies/EnemyBase.gd"
 
-export var orbs = 4;
-export var speed = -100;
-export var distance = 16;
+@export var orbs = 4;
+@export var speed = -100;
+@export var distance = 16;
 var spinOffset = 0;
 
-onready var orbList = [get_node("Orb")];
+@onready var orbList = [get_node("Orb")];
 
 func _ready():
 	velocity.x = -10;

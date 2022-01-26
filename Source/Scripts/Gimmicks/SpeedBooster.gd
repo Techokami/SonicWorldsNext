@@ -1,7 +1,7 @@
+@tool
 extends Area2D
-tool
 
-export (int, "left", "right") var boostDirection = 0;
+@export_enum("left", "right") var boostDirection = 0;
 var dirMemory = boostDirection;
 var springTextures = [preload("res://Graphics/Gimmicks/springs_yellow.png"),preload("res://Graphics/Gimmicks/springs_red.png")];
 var speed = 16;

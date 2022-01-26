@@ -1,17 +1,17 @@
 extends CanvasLayer
 
-export var focusPlayer = 0;
+@export var focusPlayer = 0;
 
-onready var scoreText = $Counters/Text/ScoreNumber;
-onready var timeText = $Counters/Text/TimeNumbers;
-onready var ringText = $Counters/Text/RingCount;
+@onready var scoreText = $Counters/Text/ScoreNumber;
+@onready var timeText = $Counters/Text/TimeNumbers;
+@onready var ringText = $Counters/Text/RingCount;
 
-onready var lifeText = $LifeCounter/Icon/LifeText;
+@onready var lifeText = $LifeCounter/Icon/LifeText;
 
-export var playLevelCard = true
-export var zoneName = "Base"
-export var zone = "Zone"
-export var act = 1
+@export var playLevelCard = true
+@export var zoneName = "Base"
+@export var zone = "Zone"
+@export var act = 1
 
 func _ready():
 	if (playLevelCard):
@@ -24,10 +24,10 @@ func _ready():
 		get_tree().paused = true
 		$LevelCard/TitleCardPlayer.play("Start")
 		$LevelCard/CardMover.play("Slider")
-		yield($LevelCard/TitleCardPlayer,"animation_finished")
+		await($LevelCard/TitleCardPlayer,"animation_finished")
 		$LevelCard/TitleCardPlayer.play("End")
 		get_tree().paused = false
-		yield($LevelCard/TitleCardPlayer,"animation_finished")
+		await($LevelCard/TitleCardPlayer,"animation_finished")
 		pause_mode = PAUSE_MODE_INHERIT
 	$LevelCard.queue_free()
 

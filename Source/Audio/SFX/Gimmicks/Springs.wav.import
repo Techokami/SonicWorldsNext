@@ -2,12 +2,13 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/Springs.wav-979905d6697527ab2134a43742fe38e6.sample"
+uid="uid://dsjj4xr66yxim"
+path="res://.godot/imported/Springs.wav-979905d6697527ab2134a43742fe38e6.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Gimmicks/Springs.wav"
-dest_files=[ "res://.import/Springs.wav-979905d6697527ab2134a43742fe38e6.sample" ]
+dest_files=["res://.godot/imported/Springs.wav-979905d6697527ab2134a43742fe38e6.sample"]
 
 [params]
 

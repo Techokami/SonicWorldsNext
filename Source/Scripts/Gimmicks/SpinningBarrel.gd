@@ -5,9 +5,9 @@ var playerOffset = [0]
 var playerDistance = [0]
 var playerContactY = [0]
 
-export var bouncer = false
+@export var bouncer = false
 var selfVelocity = 0
-onready var startOff = position.y
+@onready var startOff = position.y
 
 #func _ready():
 #	set_sync_to_physics(!bouncer)
@@ -18,7 +18,7 @@ func _physics_process(delta):
 	if (bouncer):
 		translate(shift)
 		
-		if (round(stepify(position.y,4)) != round(stepify(startOff,4)) || abs(selfVelocity) > 100):
+		if (round(snapped(position.y,4)) != round(snapped(startOff,4)) || abs(selfVelocity) > 100):
 			if (sign(startOff-position.y) == sign(selfVelocity)):
 				selfVelocity += 600*delta*sign(startOff-position.y)
 			else:

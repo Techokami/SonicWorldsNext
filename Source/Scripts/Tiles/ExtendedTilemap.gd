@@ -1,9 +1,9 @@
 extends TileMap
 
-export (PoolIntArray) var tiles;
+@export (PoolIntArray) var tiles;
 
-export(String, FILE, "*.json") var metaTileFile;
-export(String, FILE, "*.json") var tilesetFile;
+@export(String, FILE, "*.json") var metaTileFile;
+@export(String, FILE, "*.json") var tilesetFile;
 
 var metaTiles = {
 #	# 0 = empty
@@ -164,13 +164,13 @@ func get_surface_point(origin = Vector2.ZERO, maxDistance = 8, horizontal = fals
 	var distance = 0;
 	# Tile Check
 	if (!horizontal):
-		# stepify origin to fix offset errors
-		origin.y = stepify(origin.y,8);
+		# snapped origin to fix offset errors
+		origin.y = snapped(origin.y,8);
 		while (get_height(origin+Vector2.DOWN*distance) == 0 && abs(distance) < abs(maxDistance)):
 			distance = min(abs(distance)+8,abs(maxDistance))*sign(maxDistance);
 	else:
-		# stepify origin to fix offset errors
-		#origin.x = stepify(origin.y,8);
+		# snapped origin to fix offset errors
+		#origin.x = snapped(origin.y,8);
 		while (get_width(origin+Vector2.RIGHT*distance) == 0 && abs(distance) < abs(maxDistance)):
 			distance = min(abs(distance)+8,abs(maxDistance))*sign(maxDistance);
 	
@@ -178,7 +178,7 @@ func get_surface_point(origin = Vector2.ZERO, maxDistance = 8, horizontal = fals
 		return null;
 	
 	# Check by height
-	var getPos = stepify(distance-4,8);
+	var getPos = snapped(distance-4,8);
 	
 	if (!horizontal):
 		var flip = get_flip(origin+Vector2.DOWN*distance,true);

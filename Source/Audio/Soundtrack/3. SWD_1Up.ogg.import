@@ -1,13 +1,14 @@
 [remap]
 
-importer="ogg_vorbis"
+importer="oggvorbisstr"
 type="AudioStreamOGGVorbis"
-path="res://.import/3. SWD_1Up.ogg-d0db1e05756657a3c6ad0761291d88c1.oggstr"
+uid="uid://cml0p4povcm3j"
+path="res://.godot/imported/3. SWD_1Up.ogg-d0db1e05756657a3c6ad0761291d88c1.oggvorbisstr"
 
 [deps]
 
 source_file="res://Audio/Soundtrack/3. SWD_1Up.ogg"
-dest_files=[ "res://.import/3. SWD_1Up.ogg-d0db1e05756657a3c6ad0761291d88c1.oggstr" ]
+dest_files=["res://.godot/imported/3. SWD_1Up.ogg-d0db1e05756657a3c6ad0761291d88c1.oggvorbisstr"]
 
 [params]
 

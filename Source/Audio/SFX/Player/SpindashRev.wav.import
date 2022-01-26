@@ -2,12 +2,13 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/SpindashRev.wav-3ac0b1c0d4fd1410ffa136332197ad35.sample"
+uid="uid://vc2aycsex4rx"
+path="res://.godot/imported/SpindashRev.wav-3ac0b1c0d4fd1410ffa136332197ad35.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Player/SpindashRev.wav"
-dest_files=[ "res://.import/SpindashRev.wav-3ac0b1c0d4fd1410ffa136332197ad35.sample" ]
+dest_files=["res://.godot/imported/SpindashRev.wav-3ac0b1c0d4fd1410ffa136332197ad35.sample"]
 
 [params]
 

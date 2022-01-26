@@ -1,13 +1,14 @@
 [remap]
 
-importer="ogg_vorbis"
+importer="oggvorbisstr"
 type="AudioStreamOGGVorbis"
-path="res://.import/5. SWD_Boss.ogg-88723ee4de1a586b6af161a1f37bc3a5.oggstr"
+uid="uid://cq8pd4db8wbuk"
+path="res://.godot/imported/5. SWD_Boss.ogg-88723ee4de1a586b6af161a1f37bc3a5.oggvorbisstr"
 
 [deps]
 
 source_file="res://Audio/Soundtrack/5. SWD_Boss.ogg"
-dest_files=[ "res://.import/5. SWD_Boss.ogg-88723ee4de1a586b6af161a1f37bc3a5.oggstr" ]
+dest_files=["res://.godot/imported/5. SWD_Boss.ogg-88723ee4de1a586b6af161a1f37bc3a5.oggvorbisstr"]
 
 [params]
 

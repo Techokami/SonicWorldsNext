@@ -1,14 +1,14 @@
 extends TileMap
-export (NodePath) var tileMapLink
+@export (NodePath) var tileMapLink
 
-onready var lowSolid = $LowSolid
-onready var highSolid = $HighSolid
-onready var background = $Background
-onready var lowTop = $LowTop
-onready var highTop = $HighTop
-onready var top = $Top
+@onready var lowSolid = $LowSolid
+@onready var highSolid = $HighSolid
+@onready var background = $Background
+@onready var lowTop = $LowTop
+@onready var highTop = $HighTop
+@onready var top = $Top
 
-onready var tileList = [lowSolid,highSolid,background,lowTop,highTop,top]
+@onready var tileList = [lowSolid,highSolid,background,lowTop,highTop,top]
 
 var tileMap = null
 

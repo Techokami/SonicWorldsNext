@@ -1,9 +1,9 @@
+@tool
 extends Node2D
-tool
 
-export var top = 2
-export var bottom = 2
-export (int, "up", "down") var rightMovement = 0
+@export var top = 2
+@export var bottom = 2
+@export_enum("up", "down") var rightMovement = 0
 
 var players = []
 var activePlayers = []

@@ -1,13 +1,14 @@
 [remap]
 
-importer="ogg_vorbis"
+importer="oggvorbisstr"
 type="AudioStreamOGGVorbis"
-path="res://.import/8. SWD_GameOver.ogg-b94881d7bd930d7769bcbfcee955555d.oggstr"
+uid="uid://drnrfiv8xcnfl"
+path="res://.godot/imported/8. SWD_GameOver.ogg-b94881d7bd930d7769bcbfcee955555d.oggvorbisstr"
 
 [deps]
 
 source_file="res://Audio/Soundtrack/8. SWD_GameOver.ogg"
-dest_files=[ "res://.import/8. SWD_GameOver.ogg-b94881d7bd930d7769bcbfcee955555d.oggstr" ]
+dest_files=["res://.godot/imported/8. SWD_GameOver.ogg-b94881d7bd930d7769bcbfcee955555d.oggvorbisstr"]
 
 [params]
 

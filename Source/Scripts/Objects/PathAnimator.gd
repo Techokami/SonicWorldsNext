@@ -1,10 +1,10 @@
 tool
 extends Area2D
 
-export var startFrame = 48;
-export var endFrame = 59;
-export var animLoops = 1;
-onready var path = $Path;
+@export var startFrame = 48;
+@export var endFrame = 59;
+@export var animLoops = 1;
+@onready var path = $Path;
 
 var player = preload("res://Graphics/Players/Sonic.png");
 

@@ -2,12 +2,13 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/RingStereo.wav-71f9d136978ae670a388961f3ce49a40.sample"
+uid="uid://cwyfw5vn61t4b"
+path="res://.godot/imported/RingStereo.wav-71f9d136978ae670a388961f3ce49a40.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Objects/RingStereo.wav"
-dest_files=[ "res://.import/RingStereo.wav-71f9d136978ae670a388961f3ce49a40.sample" ]
+dest_files=["res://.godot/imported/RingStereo.wav-71f9d136978ae670a388961f3ce49a40.sample"]
 
 [params]
 

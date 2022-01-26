@@ -43,14 +43,14 @@ enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, ANIMATION, HIT, CORKSCREW, JUMPC
 var currentState = STATES.NORMAL;
 enum SHIELDS {NONE, NORMAL, ELEC, FIRE, BUBBLE};
 var shield = SHIELDS.NONE;
-onready var magnetShape = $RingMagnet/CollisionShape2D;
+@onready var magnetShape = $RingMagnet/CollisionShape2D;
 
-onready var stateList = $States.get_children();
-onready var animator = $AnimationSonic;
-onready var sprite = $PlayerSprite;
-onready var spriteFrames = sprite.frames;
-onready var shieldSprite = $Shields;
-onready var camera = get_node_or_null("Camera");
+@onready var stateList = $States.get_children();
+@onready var animator = $AnimationSonic;
+@onready var sprite = $PlayerSprite;
+@onready var spriteFrames = sprite.frames;
+@onready var shieldSprite = $Shields;
+@onready var camera = get_node_or_null("Camera");
 
 var rotatableSprites = ["walk", "run", "peelOut"];
 var direction = scale.x;
@@ -66,7 +66,7 @@ var inputs = [];
 # 0 = ai, 1 = player 1, 2 = player 2
 var playerControl = 1;
 
-onready var sfx = $SFX.get_children();
+@onready var sfx = $SFX.get_children();
 var airControl = true;
 
 # Player values
@@ -105,7 +105,7 @@ func _process(delta):
 			spriteRotation = min(360,spriteRotation+(168.75*delta));
 	
 	if (rotatableSprites.has(sprite.animation)):
-		sprite.rotation_degrees = stepify(spriteRotation,45)-rotation_degrees;
+		sprite.rotation_degrees = snapped(spriteRotation,45)-rotation_degrees;
 	else:
 		sprite.rotation = -rotation;
 	

@@ -2,10 +2,10 @@ tool
 extends Area2D
 
 var texture = preload("res://Graphics/EditorUI/LayerSwitchers.png");
-export var size = Vector2(1,3);
-export (int, "Horizontal", "Vertical") var orientation = 0;
-export (int, "Low", "High") var rightLayer = 0;
-export (int, "Low", "High") var leftLayer = 1;
+@export var size = Vector2(1,3);
+@export (int, "Horizontal", "Vertical") var orientation = 0;
+@export (int, "Low", "High") var rightLayer = 0;
+@export (int, "Low", "High") var leftLayer = 1;
 
 func _ready():
 	$Mask.scale = size;

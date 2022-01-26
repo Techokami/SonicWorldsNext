@@ -2,12 +2,13 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/Death.wav-d4140c8eb1deeb70c9223f159e908494.sample"
+uid="uid://d107cjewk33ww"
+path="res://.godot/imported/Death.wav-d4140c8eb1deeb70c9223f159e908494.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Player/Death.wav"
-dest_files=[ "res://.import/Death.wav-d4140c8eb1deeb70c9223f159e908494.sample" ]
+dest_files=["res://.godot/imported/Death.wav-d4140c8eb1deeb70c9223f159e908494.sample"]
 
 [params]
 

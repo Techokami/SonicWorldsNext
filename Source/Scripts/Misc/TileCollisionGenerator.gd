@@ -1,25 +1,25 @@
 tool
-extends Sprite
+extends Sprite2D
 
 var surfacePattern = [];
 var polygon = [];
 
 var image;
 
-export var activate = false;
+@export var activate = false;
 
-export var currentOffset = Vector2.ZERO;
-export var grid = Vector2(16,16);
-export var snapRange = 2;
-export var checkCenters = false;
+@export var currentOffset = Vector2.ZERO;
+@export var grid = Vector2(16,16);
+@export var snapRange = 2;
+@export var checkCenters = false;
 
-export var generateMasks = false;
-export var showMetaTiles = false;
-export var createTileLookUpTable = false;
-export var ignoreDupes = false;
+@export var generateMasks = false;
+@export var showMetaTiles = false;
+@export var createTileLookUpTable = false;
+@export var ignoreDupes = false;
 
-export var saveTileSetData = false;
-export var saveGlobalTileData = false;
+@export var saveTileSetData = false;
+@export var saveGlobalTileData = false;
 
 # orientation breaks the current tile grid up and flips the calculations around
 # then when the "get pixel" script is called it takes the orientation and does

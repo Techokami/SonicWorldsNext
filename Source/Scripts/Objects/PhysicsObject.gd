@@ -1,6 +1,5 @@
 extends KinematicBody2D
 
-
 # Sensors
 var PsudoRay = preload("res://Entities/Misc/PsudoRaycast.tscn");
 
@@ -26,11 +25,11 @@ var angle = Vector2.UP;
 var canCollide = true;
 
 # Adjustable/Lookup variables
-onready var speedStepLimit = $PhysicsLookUp.speedStepLimit;
-onready var groundLookDistance = $PhysicsLookUp.groundLookDistance;
-onready var sonic2FloorSnap = $PhysicsLookUp.sonic2FloorSnap; # Use the sonic 2 and onward floor snapping check
-onready var pushRadius = $HitBox.shape.extents.x+1;
-export (int, "Low", "High") var defaultLayer = 0;
+@onready var speedStepLimit = $PhysicsLookUp.speedStepLimit;
+@onready var groundLookDistance = $PhysicsLookUp.groundLookDistance;
+@onready var sonic2FloorSnap = $PhysicsLookUp.sonic2FloorSnap; # Use the sonic 2 and onward floor snapping check
+@onready var pushRadius = $HitBox.shape.extents.x+1;
+@export_enum("Low", "High") var defaultLayer = 0;
 var layerExcludeList = []
 
 

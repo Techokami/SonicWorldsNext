@@ -3,17 +3,17 @@ tool
 
 var screenSize = Vector2(320,224);
 
-export var setLeft = true;
-export var leftBoundry  = 0;
-export var setTop = true;
-export var topBoundry  = 0;
+@export var setLeft = true;
+@export var leftBoundry  = 0;
+@export var setTop = true;
+@export var topBoundry  = 0;
 
-export var setRight = true;
-export var rightBoundry = 320;
-export var setBottom = true;
-export var bottomBoundry = 224;
+@export var setRight = true;
+@export var rightBoundry = 320;
+@export var setBottom = true;
+@export var bottomBoundry = 224;
 
-export var scrollSpeed = 0; # 0 will be instant
+@export var scrollSpeed = 0; # 0 will be instant
 
 
 func _on_BoundrySetter_body_entered(body):

@@ -1,13 +1,14 @@
 [remap]
 
-importer="ogg_vorbis"
+importer="oggvorbisstr"
 type="AudioStreamOGGVorbis"
-path="res://.import/4. SWD_StageClear.ogg-82619ca5e6e657a25a37e870604c8ccf.oggstr"
+uid="uid://cocgyaek08cut"
+path="res://.godot/imported/4. SWD_StageClear.ogg-82619ca5e6e657a25a37e870604c8ccf.oggvorbisstr"
 
 [deps]
 
 source_file="res://Audio/Soundtrack/4. SWD_StageClear.ogg"
-dest_files=[ "res://.import/4. SWD_StageClear.ogg-82619ca5e6e657a25a37e870604c8ccf.oggstr" ]
+dest_files=["res://.godot/imported/4. SWD_StageClear.ogg-82619ca5e6e657a25a37e870604c8ccf.oggvorbisstr"]
 
 [params]
 

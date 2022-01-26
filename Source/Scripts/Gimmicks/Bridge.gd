@@ -1,8 +1,8 @@
 extends Node2D
 
-export var length = 12;
-export var smoothDrop = true; #Turn to false to match sonic 1 bridges
-export (Texture)var texture = null;
+@export var length = 12;
+@export var smoothDrop = true; #Turn to false to match sonic 1 bridges
+@export var texture: Texture;
 var dropIndex = 1;
 var maxDepression = 0;
 
@@ -31,7 +31,7 @@ func _ready():
 
 func _physics_process(delta):
 	if (player.size() > 0):
-		$Bridge.position.y = max(floor(length/2)*2-stepify(abs(global_position.x+(length*8)-player[0].position.x)/8,2-int(smoothDrop)),0);
+		$Bridge.position.y = max(floor(length/2)*2-snapped(abs(global_position.x+(length*8)-player[0].position.x)/8,2-int(smoothDrop)),0);
 		dropIndex = max(1,floor((player[0].global_position.x-global_position.x)/16)+1);
 		if (dropIndex <= length/2):
 			maxDepression = dropIndex*2; #Working from the left

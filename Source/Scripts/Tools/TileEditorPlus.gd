@@ -20,15 +20,15 @@ var lmbPress = false;
 var parent = get_parent();
 
 # editor settings
-export var active = false;
-export (int, "None", "Tilemap", "Custom") var template = 0;
-export var update = true;
+@export var active = false;
+@export (int, "None", "Tilemap", "Custom") var template = 0;
+@export var update = true;
 
 # Button to copy current tile layout to clipboard (paste this under STAMPS)
-export var copyLayoutToClipboard = false;
+@export var copyLayoutToClipboard = false;
 
 # used to pick the template set, just add a name for your set onto the list to match STAMPS
-export (int, "no template", "Default template") var set = 0;
+@export (int, "no template", "Default template") var set = 0;
 
 # stamps
 # you may want to put these in their own global script file if you plan on modifying

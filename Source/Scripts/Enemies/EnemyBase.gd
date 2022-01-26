@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-export var damageType = 0;
+@export var damageType = 0;
 var playerHit = [];
 
 var velocity = Vector2.ZERO;

@@ -2,12 +2,13 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/ElecUse.wav-cbd956e21e48bfffb53813f1d9e4b49e.sample"
+uid="uid://d4bgpsbpw827k"
+path="res://.godot/imported/ElecUse.wav-cbd956e21e48bfffb53813f1d9e4b49e.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Player/ElecUse.wav"
-dest_files=[ "res://.import/ElecUse.wav-cbd956e21e48bfffb53813f1d9e4b49e.sample" ]
+dest_files=["res://.godot/imported/ElecUse.wav-cbd956e21e48bfffb53813f1d9e4b49e.sample"]
 
 [params]
 

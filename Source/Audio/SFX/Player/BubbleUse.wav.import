@@ -2,12 +2,13 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/BubbleUse.wav-5751bf1f3b725340f7b731e6cf1258f3.sample"
+uid="uid://c38evf1lxekfp"
+path="res://.godot/imported/BubbleUse.wav-5751bf1f3b725340f7b731e6cf1258f3.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Player/BubbleUse.wav"
-dest_files=[ "res://.import/BubbleUse.wav-5751bf1f3b725340f7b731e6cf1258f3.sample" ]
+dest_files=["res://.godot/imported/BubbleUse.wav-5751bf1f3b725340f7b731e6cf1258f3.sample"]
 
 [params]
 

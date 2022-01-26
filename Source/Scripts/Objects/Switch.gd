@@ -1,11 +1,11 @@
 extends StaticBody2D
 
-export (NodePath) var animator;
-export var animationName = "";
+@export var animator: NodePath;
+@export var animationName = "";
 
 var active = false;
 
-onready var animatorNode = get_node_or_null(animator);
+@onready var animatorNode = get_node_or_null(animator);
 
 
 func physics_floor_override(body,caster):

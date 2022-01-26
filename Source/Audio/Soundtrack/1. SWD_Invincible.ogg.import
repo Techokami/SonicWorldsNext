@@ -1,13 +1,14 @@
 [remap]
 
-importer="ogg_vorbis"
+importer="oggvorbisstr"
 type="AudioStreamOGGVorbis"
-path="res://.import/1. SWD_Invincible.ogg-c76450a96eddb43d7770920f11e4c081.oggstr"
+uid="uid://b5rdujbyp4avi"
+path="res://.godot/imported/1. SWD_Invincible.ogg-c76450a96eddb43d7770920f11e4c081.oggvorbisstr"
 
 [deps]
 
 source_file="res://Audio/Soundtrack/1. SWD_Invincible.ogg"
-dest_files=[ "res://.import/1. SWD_Invincible.ogg-c76450a96eddb43d7770920f11e4c081.oggstr" ]
+dest_files=["res://.godot/imported/1. SWD_Invincible.ogg-c76450a96eddb43d7770920f11e4c081.oggvorbisstr"]
 
 [params]
 

@@ -1,12 +1,12 @@
 extends Node2D
-export (int, "Flap", "Change on fall")var animType = 0;
+@export_enum("Flap", "Change on fall")var animType = 0;
 var animTime = 0;
 var bouncePower = 300;
 var velocity = Vector2(0,-300);
 var speed = 180;
 
 func _ready():
-	var rand = round(rand_range(0,1));
+	var rand = randi_range(0,1);
 	if (rand == 0):
 		scale.x = -scale.x;
 
