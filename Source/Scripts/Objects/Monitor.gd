@@ -1,5 +1,5 @@
 @tool
-extends KinematicBody2D
+extends CharacterBody2D
 
 var physics = false;
 var grv = 0.21875;
@@ -18,7 +18,8 @@ func destroy():
 	$Item.z_index += 1000
 	$Animator.play("DestroyMonitor");
 	$SFX/Destroy.play();
-	await($Animator,"animation_finished");
+	await !$Animator.is_playing()
+	#await($Animator,"animation_finished");
 	# enable effect
 	match (item):
 		0: # Rings

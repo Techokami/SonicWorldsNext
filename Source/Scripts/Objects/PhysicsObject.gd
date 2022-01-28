@@ -1,4 +1,4 @@
-extends KinematicBody2D
+extends CharacterBody2D
 
 # Sensors
 var PsudoRay = preload("res://Entities/Misc/PsudoRaycast.tscn");
@@ -130,8 +130,7 @@ func _physics_process(delta):
 	# set the floor to prioritise this collision
 	var memLayer = collision_layer;
 	collision_layer = 1;
-	
-	var floorPriority = (move_and_collide(velocityInterp.rotated(angle.rotated(deg2rad(90)).angle()),true,true,true));
+	var floorPriority = (move_and_collide(velocityInterp.rotated(angle.rotated(deg2rad(90)).angle()),true));
 	if (velocity.y <= 0):
 		floorPriority = null;
 	collision_layer = memLayer;
@@ -154,7 +153,7 @@ func _physics_process(delta):
 		# Floor priority back up check, if there's no floor ahead, check below
 		if (!floorPriority && velocity.y >= 0):
 			collision_layer = 1;
-			floorPriority = move_and_collide(Vector2.DOWN.rotated(rotation)*8,true,true,true);
+			floorPriority = move_and_collide(Vector2.DOWN.rotated(rotation)*8,true);
 			collision_layer = memLayer;
 		
 		

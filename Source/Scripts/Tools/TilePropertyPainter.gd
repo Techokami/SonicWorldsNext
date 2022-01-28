@@ -1,5 +1,5 @@
 extends TileMap
-@export (NodePath) var tileMapLink
+@export var tileMapLink:NodePath
 
 @onready var lowSolid = $LowSolid
 @onready var highSolid = $HighSolid
@@ -22,20 +22,20 @@ func _ready():
 			remove_child(i)
 			tileMap.add_child(i)
 			i.tile_set = tileMap.tile_set
-			collision_mask = collision_layer
+			#collision_mask = collision_layer
 			i.z_index = tileMap.z_index
 		
-		for i in get_used_cells():
-			var tileUV = get_cell_autotile_coord(i.x,i.y)
-			var tilemapID = tileUV.x+(tileUV.y*3)
+#		for i in get_used_cells():
+#			var tileUV = get_cell_autotile_coord(i.x,i.y)
+#			var tilemapID = tileUV.x+(tileUV.y*3)
+#
+#			var cellTileID = tileMap.get_cell(i.x,i.y)
+#			var cellAuto = tileMap.get_cell_autotile_coord(i.x,i.y)
+#			var cellTransposed = tileMap.is_cell_transposed(i.x,i.y)
+#			var flipX = tileMap.is_cell_x_flipped(i.x,i.y)
+#			var flipY = tileMap.is_cell_y_flipped(i.x,i.y)
 			
-			var cellTileID = tileMap.get_cell(i.x,i.y)
-			var cellAuto = tileMap.get_cell_autotile_coord(i.x,i.y)
-			var cellTransposed = tileMap.is_cell_transposed(i.x,i.y)
-			var flipX = tileMap.is_cell_x_flipped(i.x,i.y)
-			var flipY = tileMap.is_cell_y_flipped(i.x,i.y)
-			
-			tileList[tilemapID].set_cell(i.x,i.y,cellTileID,flipX,flipY,cellTransposed,cellAuto)
+#			tileList[tilemapID].set_cell(i.x,i.y,cellTileID,flipX,flipY,cellTransposed,cellAuto)
 			
 			tileMap.set_cell(i.x,i.y,-1)
 			set_cell(i.x,i.y,-1)

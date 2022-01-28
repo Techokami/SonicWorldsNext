@@ -1,4 +1,4 @@
-extends KinematicBody2D
+extends CharacterBody2D
 
 
 @export var cast_to = Vector2.ZERO
@@ -13,15 +13,15 @@ func update_cast():
 
 
 func is_colliding():
-	return move_and_collide(cast_to.rotated(global_rotation),true,true,true)
+	return move_and_collide(cast_to.rotated(global_rotation),true)
 
 func get_collider():
-	if (move_and_collide(cast_to.rotated(global_rotation),true,true,true)):
-		return move_and_collide(cast_to.rotated(global_rotation),true,true,true).collider
+	if (move_and_collide(cast_to.rotated(global_rotation),true)):
+		return move_and_collide(cast_to.rotated(global_rotation),true).collider
 	return null
 
 func get_collision_normal():
-	var col = move_and_collide(cast_to.rotated(global_rotation),true,true,true)
+	var col = move_and_collide(cast_to.rotated(global_rotation),true)
 	if (col):
 		
 		raycast.clear_exceptions()
@@ -36,8 +36,8 @@ func get_collision_normal():
 	return null
 
 func get_collision_point():
-	if (move_and_collide(cast_to.rotated(global_rotation),true,true,true)):
+	if (move_and_collide(cast_to.rotated(global_rotation),true)):
 		#return raycast.get_collision_point()
-		return move_and_collide(cast_to.rotated(global_rotation),true,true,true).position
+		return move_and_collide(cast_to.rotated(global_rotation),true).position
 	return null
 

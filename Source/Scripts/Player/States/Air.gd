@@ -4,6 +4,8 @@ var elecPart = preload("res://Entities/Misc/ElecParticles.tscn");
 
 @export var isJump = false;
 
+enum SHIELDS {NONE, NORMAL, ELEC, FIRE, BUBBLE};
+
 # Jump actions
 func _input(event):
 	if (parent.playerControl != 0):
@@ -11,17 +13,19 @@ func _input(event):
 		if (event.is_action_pressed("gm_action") && !parent.abilityUsed):
 			parent.abilityUsed = true;
 			match (parent.shield):
-				parent.SHIELDS.NONE:
+				SHIELDS.NONE:
 					parent.sfx[16].play();
 					parent.shieldSprite.play("Insta");
 					parent.shieldSprite.frame = 0;
 					parent.shieldSprite.visible = true;
-					await(parent.shieldSprite,"animation_finished");
+					
+					#await !parent.shieldSprite
+					#await(parent.shieldSprite,"animation_finished");
 					# check shields hasn't changed
 					if (parent.shield == parent.SHIELDS.NONE):
 						parent.shieldSprite.visible = false;
 						parent.shieldSprite.stop();
-				parent.SHIELDS.ELEC:
+				SHIELDS.ELEC:
 					parent.sfx[13].play();
 					parent.velocity.y = -5.5*Global.originalFPS;
 					for i in range(4):
@@ -29,12 +33,12 @@ func _input(event):
 						part.global_position = parent.global_position;
 						part.direction = Vector2(1,1).rotated(deg2rad(90*i));
 						parent.get_parent().add_child(part);
-				parent.SHIELDS.FIRE:
+				SHIELDS.FIRE:
 					parent.sfx[14].play();
 					parent.velocity = Vector2(8*Global.originalFPS*parent.direction,0);
 					parent.shieldSprite.play("FireAction");
 					parent.shieldSprite.flip_h = (parent.direction < 0);
-				parent.SHIELDS.BUBBLE:
+				SHIELDS.BUBBLE:
 					parent.sfx[15].play();
 					parent.velocity = Vector2(0,8*Global.originalFPS);
 					parent.bounceReaction = 7.5;

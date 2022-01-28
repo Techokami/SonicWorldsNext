@@ -1,4 +1,4 @@
-extends KinematicBody2D
+extends CharacterBody2D
 
 @export var damageType = 0;
 var playerHit = [];

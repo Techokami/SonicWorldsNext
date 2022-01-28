@@ -1,4 +1,4 @@
-tool
+@tool
 extends Area2D
 
 @export var startFrame = 48;

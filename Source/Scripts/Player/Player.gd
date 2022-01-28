@@ -105,7 +105,8 @@ func _process(delta):
 			spriteRotation = min(360,spriteRotation+(168.75*delta));
 	
 	if (rotatableSprites.has(sprite.animation)):
-		sprite.rotation_degrees = snapped(spriteRotation,45)-rotation_degrees;
+		
+		sprite.rotation = deg2rad(snapped(spriteRotation,45)-rad2deg(rotation));
 	else:
 		sprite.rotation = -rotation;
 	
@@ -139,7 +140,7 @@ func _process(delta):
 				var star = Star.instance();
 				star.global_position = i.global_position;
 				get_parent().add_child(star);
-				star.frame = rand_range(0,3);
+				star.frame = randi_range(0,3);
 
 func _physics_process(delta):
 	

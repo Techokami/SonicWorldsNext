@@ -1,4 +1,4 @@
-extends KinematicBody2D
+extends CharacterBody2D
 
 
 func _physics_process(delta):
@@ -8,6 +8,6 @@ func _physics_process(delta):
 		move_and_collide(Vector2.UP*delta*60)
 	
 	#$PsudoRaycast.position = Vector2(11,0)
-	var col = $PsudoRaycast.move_and_collide(Vector2.DOWN*8,true,true,true)
+	var col = $PsudoRaycast.move_and_collide(Vector2.DOWN*8,true)
 	if (col):
 		position.y = col.position.y-8

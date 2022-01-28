@@ -20,15 +20,18 @@ func _ready():
 		$LevelCard/Banner/Zone.string = zone
 		$LevelCard/Banner/Act.frame = act-1
 		$LevelCard/Banner/Act.visible = (act > 0)
-		pause_mode = PAUSE_MODE_PROCESS
+		process_mode = Node.PROCESS_MODE_ALWAYS
 		get_tree().paused = true
 		$LevelCard/TitleCardPlayer.play("Start")
 		$LevelCard/CardMover.play("Slider")
-		await($LevelCard/TitleCardPlayer,"animation_finished")
+		await !$LevelCard/TitleCardPlayer.is_playing()
+		
+		#await($LevelCard/TitleCardPlayer,"animation_finished")
 		$LevelCard/TitleCardPlayer.play("End")
 		get_tree().paused = false
-		await($LevelCard/TitleCardPlayer,"animation_finished")
-		pause_mode = PAUSE_MODE_INHERIT
+		await !$LevelCard/TitleCardPlayer.is_playing()
+		#await($LevelCard/TitleCardPlayer,"animation_finished")
+		process_mode = Node.PROCESS_MODE_INHERIT
 	$LevelCard.queue_free()
 
 func _process(delta):

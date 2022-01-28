@@ -1,4 +1,4 @@
-tool
+@tool
 extends Sprite2D
 
 var surfacePattern = [];
@@ -824,7 +824,7 @@ func _process(delta):
 					if (generate_polygon(Vector2(x*grid.x,y*grid.y))):
 						
 						var shape = ConvexPolygonShape2D.new();
-						shape.set_point_cloud(PoolVector2Array(polygon));
+						#shape.set_point_cloud(PoolVector2Array(polygon));
 						$TileMap.tile_set.tile_add_shape(0,shape,transform,false,Vector2(x,y));
 		
 		if (generateMasks):
@@ -853,7 +853,7 @@ func _process(delta):
 			saveGlobalTileData = false;
 			var file = File.new();
 			file.open("res://Debug/TileMetaData.json", File.WRITE);
-			file.store_var(to_json(metaTiles));
+			#file.store_var(to_json(metaTiles));
 			file.close();
 		
 		if (saveTileSetData):
@@ -861,7 +861,7 @@ func _process(delta):
 			var data = {"Tile": tile, "TileMap": tileMap};
 			var file = File.new();
 			file.open("res://Debug/TilesetData.json", File.WRITE);
-			file.store_var(to_json(data));
+			#file.store_var(to_json(data));
 			file.close();
 
 		
@@ -1185,19 +1185,19 @@ func _draw():
 			for i in polygon.size():
 				if (i < polygon.size()):
 					var getNext = fmod(i+1,polygon.size());
-					draw_line(currentOffset+polygon[i],currentOffset+polygon[getNext],Color.orangered);
-					draw_circle(currentOffset+polygon[i].linear_interpolate(polygon[getNext],0.5),0.5,Color.blue);
+					draw_line(currentOffset+polygon[i],currentOffset+polygon[getNext],Color.ORANGE_RED);
+					draw_circle(currentOffset+polygon[i].linear_interpolate(polygon[getNext],0.5),0.5,Color.BLUE);
 					
 					draw_line(currentOffset+polygon[i].linear_interpolate(polygon[getNext],0.5)+(polygon[i]-polygon[getNext]).rotated(deg2rad(-90)).clamped(4),
-					currentOffset+polygon[i].linear_interpolate(polygon[getNext],0.5)+(polygon[i]-polygon[getNext]).rotated(deg2rad(90)).clamped(4),Color.green);
+					currentOffset+polygon[i].linear_interpolate(polygon[getNext],0.5)+(polygon[i]-polygon[getNext]).rotated(deg2rad(90)).clamped(4),Color.GREEN);
 					
-				draw_circle(currentOffset+polygon[i],0.5,Color.red);
+				draw_circle(currentOffset+polygon[i],0.5,Color.RED);
 		if (showMetaTiles):
 			var offset = Vector2(0,-64);
 			for i in range(metaTiles.size()):
 				for x in range(metaTiles[i]["HeightMap"].size()):
 					#draw_line(offset+Vector2.DOWN*8,offset+Vector2.DOWN*metaTiles[i]["HeightMap"][x],Color.black,1.1);
-					draw_line(offset+Vector2(x,8),offset+Vector2(x,8-metaTiles[i]["HeightMap"][x]),Color.black,1.1);
+					draw_line(offset+Vector2(x,8),offset+Vector2(x,8-metaTiles[i]["HeightMap"][x]),Color.BLACK,1.1);
 				offset.x += 9;
 			offset = Vector2(0,0);
 			for i in range(tileMap.size()):
@@ -1223,9 +1223,9 @@ func _draw():
 					offset+Vector2(x+0.5+8,8+8-flip[1]*8-(metaTiles[tile[id]["TileData"][3]]["HeightMap"][x])*(1+flip[1]*-2)),
 					Color(0.55,0.55,0,0.9),1.1);
 				#pointerDir
-				draw_line(offset+Vector2(8,8),offset+Vector2(8,8)+(Vector2.UP*4).rotated((tile[tileMap[i][0]]["Angle"])),Color.lightcoral,2);
+				draw_line(offset+Vector2(8,8),offset+Vector2(8,8)+(Vector2.UP*4).rotated((tile[tileMap[i][0]]["Angle"])),Color.LIGHT_CORAL,2);
 				draw_line(offset+Vector2(8,8)-(Vector2.RIGHT*2).rotated((tile[tileMap[i][0]]["Angle"])),
-				offset+Vector2(8,8)+(Vector2.RIGHT*2).rotated((tile[tileMap[i][0]]["Angle"])),Color.lightblue,2);
+				offset+Vector2(8,8)+(Vector2.RIGHT*2).rotated((tile[tileMap[i][0]]["Angle"])),Color.LIGHT_BLUE,2);
 				#draw_set_transform(Vector2.ZERO,deg2rad(tile[id]["Angle"]),Vector2(1,1));
 				#draw_texture(pointerDir,offset+Vector2(4,4));
 				#draw_set_transform(Vector2.ZERO,deg2rad(-tile[id]["Angle"]),Vector2(1,1));

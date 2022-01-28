@@ -8,7 +8,7 @@
 [ext_resource type="TileSet" uid="uid://ccrpg74ogw2kr" path="res://Tileset/Worlds/TestTilesBlue.tres" id="6"]
 [ext_resource type="Texture2D" uid="uid://kbdcjjk0q1ra" path="res://Graphics/TestZoneMap.png" id="7"]
 [ext_resource type="PackedScene" path="res://Entities/MainObjects/LayerSwitcher.tscn" id="8"]
-[ext_resource type="PackedScene" path="res://Entities/Misc/HUD.tscn" id="9"]
+[ext_resource type="PackedScene" uid="uid://pch7e2dmypud" path="res://Entities/Misc/HUD.tscn" id="9"]
 [ext_resource type="PackedScene" path="res://Entities/Gimmicks/Spring.tscn" id="10"]
 [ext_resource type="PackedScene" path="res://Entities/Items/Ring.tscn" id="11"]
 [ext_resource type="PackedScene" path="res://Entities/Items/Monitor.tscn" id="12"]
@@ -356,13 +356,10 @@ position = Vector2(6848, 1416)
 
 [node name="BoundrySetter" parent="Entity" instance=ExtResource( "15" )]
 position = Vector2(160, 720)
-rightBoundry = 10400.0
-bottomBoundry = 2048.0
 
 [node name="BoundrySetter2" parent="Entity" instance=ExtResource( "15" )]
 position = Vector2(9568, 112)
 leftBoundry = 9024
-rightBoundry = 10400.0
 
 [node name="Bridge" parent="Entity" instance=ExtResource( "16" )]
 position = Vector2(1096, 712)

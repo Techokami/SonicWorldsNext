@@ -1,4 +1,14 @@
+res://Entities/MainObjects/BoundrySetter.gd
+res://Entities/Misc/HUD.tscn
 res://Scene/LevelTest.tscn
 res://Scene/Main.tscn
+res://Scripts/Misc/HUD.gd
+res://Scripts/Misc/TileCollisionGenerator.gd
+res://Scripts/Objects/LayerSwitcher.gd
+res://Scripts/Objects/Monitor.gd
+res://Scripts/Objects/PathAnimator.gd
+res://Scripts/Player/States/Air.gd
+res://Scripts/Tools/TileEditorPlus.gd
+res://Scripts/Tools/TilePropertyPainter.gd
 res://Tileset/Worlds/TestTilesBlue.tres
 res://Tileset/Worlds/TestTilesGreen.tres
