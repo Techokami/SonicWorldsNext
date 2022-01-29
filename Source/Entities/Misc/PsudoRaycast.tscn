@@ -2,8 +2,9 @@
 
 [ext_resource path="res://Scripts/Misc/PsudoRaycast.gd" type="Script" id=1]
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 0.01, 0.01 )
+[sub_resource type="SegmentShape2D" id=1]
+a = Vector2( 0, -0.5 )
+b = Vector2( 0, 0.5 )
 
 [node name="PsudoRaycast" type="KinematicBody2D"]
 collision_layer = 0

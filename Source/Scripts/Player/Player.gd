@@ -168,10 +168,22 @@ func set_state(newState, forceMask = Vector2.ZERO):
 	if (forceMask == Vector2.ZERO):
 		match(newState):
 			STATES.JUMP, STATES.ROLL:
+				# adjust y position
+				position += (HITBOXESSONIC.ROLL-$HitBox.shape.extents)*Vector2.UP.rotated(rotation)
+				
+				# change hitbox size
 				$HitBox.shape.extents = HITBOXESSONIC.ROLL;
 			_:
+				# adjust y position
+				position += (HITBOXESSONIC.NORMAL-$HitBox.shape.extents)*Vector2.UP.rotated(rotation)
+				
+				# change hitbox size
 				$HitBox.shape.extents = HITBOXESSONIC.NORMAL;
 	else:
+		# adjust y position
+		position += (forceMask-$HitBox.shape.extents)*Vector2.UP.rotated(rotation)
+		
+		# change hitbox size
 		$HitBox.shape.extents = forceMask;
 	update_sensors();
 	update_raycasts();
