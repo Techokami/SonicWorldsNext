@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://tvcnbe66j43c"]
+
+[ext_resource type="Script" path="res://scripts/objects/physics_object.gd" id="1_fw1ie"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wua37"]
+size = Vector2(9, 19)
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 4096
+collision_mask = 4096
+floor_constant_speed = true
+moving_platform_floor_layers = 4294965657
+moving_platform_wall_layers = 1638
+script = ExtResource( "1_fw1ie" )
+
+[node name="HitBox" type="CollisionShape2D" parent="."]
+shape = SubResource( "RectangleShape2D_wua37" )

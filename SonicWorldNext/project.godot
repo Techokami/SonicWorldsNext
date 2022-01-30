@@ -1,0 +1,38 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Sonic World Next"
+run/main_scene="res://scenes/TileMap.tscn"
+config/icon="res://icon.png"
+config/features=PackedStringArray("4.0", "Vulkan Clustered")
+
+[layer_names]
+
+2d_physics/layer_1="Top Solid"
+2d_physics/layer_2="Left Solid"
+2d_physics/layer_3="Right Solid"
+2d_physics/layer_4="Bottom Solid"
+2d_physics/layer_5="Top Solid (Low)"
+2d_physics/layer_6="Left Solid (Low)"
+2d_physics/layer_7="Right Solid (Low)"
+2d_physics/layer_8="Bottom Solid (Low)"
+2d_physics/layer_9="Top Solid (High)"
+2d_physics/layer_10="Left Solid (High)"
+2d_physics/layer_11="Right Solid (High)"
+2d_physics/layer_12="Bottom Solid (High)"
+2d_physics/layer_13="Player"
+2d_physics/layer_14="Object"
+2d_physics/layer_15="Enemy"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0

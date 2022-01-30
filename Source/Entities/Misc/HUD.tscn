@@ -617,7 +617,6 @@ region_rect = Rect2( 0, 80, 40, 16 )
 
 [node name="LevelCard" type="Control" parent="."]
 pause_mode = 2
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 2
@@ -717,7 +716,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 32.0
-margin_right = 3968.0
+margin_right = 4064.0
 margin_bottom = 64.0
 texture = ExtResource( 8 )
 stretch_mode = 2

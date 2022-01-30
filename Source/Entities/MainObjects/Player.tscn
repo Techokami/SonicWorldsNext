@@ -43,34 +43,6 @@ extents = Vector2( 9, 19 )
 [sub_resource type="CanvasItemMaterial" id=2]
 blend_mode = 1
 
-[sub_resource type="AtlasTexture" id=32]
-atlas = ExtResource( 17 )
-region = Rect2( 0, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=33]
-atlas = ExtResource( 17 )
-region = Rect2( 96, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=34]
-atlas = ExtResource( 17 )
-region = Rect2( 48, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=35]
-atlas = ExtResource( 17 )
-region = Rect2( 144, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=36]
-atlas = ExtResource( 17 )
-region = Rect2( 192, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=37]
-atlas = ExtResource( 17 )
-region = Rect2( 240, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=38]
-atlas = ExtResource( 17 )
-region = Rect2( 288, 0, 48, 48 )
-
 [sub_resource type="AtlasTexture" id=30]
 atlas = ExtResource( 17 )
 region = Rect2( 0, 48, 84, 48 )
@@ -203,21 +175,33 @@ region = Rect2( 192, 0, 48, 48 )
 atlas = ExtResource( 20 )
 region = Rect2( 240, 0, 48, 48 )
 
-[sub_resource type="AtlasTexture" id=43]
-atlas = ExtResource( 16 )
-region = Rect2( 0, 96, 64, 48 )
+[sub_resource type="AtlasTexture" id=32]
+atlas = ExtResource( 17 )
+region = Rect2( 0, 0, 48, 48 )
 
-[sub_resource type="AtlasTexture" id=44]
-atlas = ExtResource( 16 )
-region = Rect2( 64, 96, 64, 48 )
+[sub_resource type="AtlasTexture" id=33]
+atlas = ExtResource( 17 )
+region = Rect2( 96, 0, 48, 48 )
 
-[sub_resource type="AtlasTexture" id=45]
-atlas = ExtResource( 16 )
-region = Rect2( 128, 96, 64, 48 )
+[sub_resource type="AtlasTexture" id=34]
+atlas = ExtResource( 17 )
+region = Rect2( 48, 0, 48, 48 )
 
-[sub_resource type="AtlasTexture" id=46]
-atlas = ExtResource( 16 )
-region = Rect2( 192, 96, 64, 48 )
+[sub_resource type="AtlasTexture" id=35]
+atlas = ExtResource( 17 )
+region = Rect2( 144, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=36]
+atlas = ExtResource( 17 )
+region = Rect2( 192, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=37]
+atlas = ExtResource( 17 )
+region = Rect2( 240, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=38]
+atlas = ExtResource( 17 )
+region = Rect2( 288, 0, 48, 48 )
 
 [sub_resource type="AtlasTexture" id=47]
 atlas = ExtResource( 16 )
@@ -259,13 +243,24 @@ region = Rect2( 192, 0, 48, 48 )
 atlas = ExtResource( 16 )
 region = Rect2( 192, 48, 48, 48 )
 
+[sub_resource type="AtlasTexture" id=43]
+atlas = ExtResource( 16 )
+region = Rect2( 0, 96, 64, 48 )
+
+[sub_resource type="AtlasTexture" id=44]
+atlas = ExtResource( 16 )
+region = Rect2( 64, 96, 64, 48 )
+
+[sub_resource type="AtlasTexture" id=45]
+atlas = ExtResource( 16 )
+region = Rect2( 128, 96, 64, 48 )
+
+[sub_resource type="AtlasTexture" id=46]
+atlas = ExtResource( 16 )
+region = Rect2( 192, 96, 64, 48 )
+
 [sub_resource type="SpriteFrames" id=57]
 animations = [ {
-"frames": [ SubResource( 32 ), SubResource( 33 ), SubResource( 32 ), SubResource( 33 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ), SubResource( 35 ), SubResource( 34 ), SubResource( 35 ), SubResource( 34 ), SubResource( 35 ), SubResource( 32 ), SubResource( 36 ), SubResource( 32 ), SubResource( 36 ), SubResource( 32 ), SubResource( 36 ), SubResource( 34 ), SubResource( 37 ), SubResource( 34 ), SubResource( 37 ), SubResource( 34 ), SubResource( 37 ), SubResource( 32 ), SubResource( 38 ), SubResource( 32 ), SubResource( 38 ), SubResource( 32 ), SubResource( 38 ), SubResource( 34 ), SubResource( 37 ), SubResource( 34 ), SubResource( 37 ), SubResource( 34 ), SubResource( 37 ), SubResource( 32 ), SubResource( 36 ), SubResource( 32 ), SubResource( 36 ), SubResource( 32 ), SubResource( 36 ), SubResource( 34 ), SubResource( 35 ), SubResource( 34 ), SubResource( 35 ), SubResource( 34 ), SubResource( 35 ), SubResource( 32 ), SubResource( 33 ), SubResource( 32 ), SubResource( 33 ), SubResource( 32 ), SubResource( 33 ) ],
-"loop": true,
-"name": "Bubble",
-"speed": 30.0
-}, {
 "frames": [ SubResource( 30 ), SubResource( 31 ) ],
 "loop": false,
 "name": "BubbleAction",
@@ -286,14 +281,19 @@ animations = [ {
 "name": "Insta",
 "speed": 30.0
 }, {
-"frames": [ SubResource( 43 ), SubResource( 44 ), SubResource( 45 ), SubResource( 46 ) ],
+"frames": [ SubResource( 32 ), SubResource( 33 ), SubResource( 32 ), SubResource( 33 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ), SubResource( 35 ), SubResource( 34 ), SubResource( 35 ), SubResource( 34 ), SubResource( 35 ), SubResource( 32 ), SubResource( 36 ), SubResource( 32 ), SubResource( 36 ), SubResource( 32 ), SubResource( 36 ), SubResource( 34 ), SubResource( 37 ), SubResource( 34 ), SubResource( 37 ), SubResource( 34 ), SubResource( 37 ), SubResource( 32 ), SubResource( 38 ), SubResource( 32 ), SubResource( 38 ), SubResource( 32 ), SubResource( 38 ), SubResource( 34 ), SubResource( 37 ), SubResource( 34 ), SubResource( 37 ), SubResource( 34 ), SubResource( 37 ), SubResource( 32 ), SubResource( 36 ), SubResource( 32 ), SubResource( 36 ), SubResource( 32 ), SubResource( 36 ), SubResource( 34 ), SubResource( 35 ), SubResource( 34 ), SubResource( 35 ), SubResource( 34 ), SubResource( 35 ), SubResource( 32 ), SubResource( 33 ), SubResource( 32 ), SubResource( 33 ), SubResource( 32 ), SubResource( 33 ) ],
 "loop": true,
-"name": "FireAction",
+"name": "Bubble",
 "speed": 30.0
 }, {
 "frames": [ SubResource( 47 ), SubResource( 48 ), SubResource( 49 ), SubResource( 50 ), SubResource( 51 ), SubResource( 52 ), SubResource( 53 ), SubResource( 54 ), SubResource( 55 ), SubResource( 56 ), SubResource( 53 ), SubResource( 54 ), SubResource( 51 ), SubResource( 52 ), SubResource( 49 ), SubResource( 50 ), SubResource( 47 ), SubResource( 48 ) ],
 "loop": true,
 "name": "Fire",
+"speed": 30.0
+}, {
+"frames": [ SubResource( 43 ), SubResource( 44 ), SubResource( 45 ), SubResource( 46 ) ],
+"loop": true,
+"name": "FireAction",
 "speed": 30.0
 } ]
 
@@ -481,7 +481,7 @@ material = SubResource( 2 )
 z_index = 6
 frames = SubResource( 57 )
 animation = "Default"
-frame = 3
+frame = 1
 playing = true
 script = ExtResource( 19 )
 
