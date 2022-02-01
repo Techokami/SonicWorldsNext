@@ -3105,4 +3105,3 @@ shape = SubResource( "CircleShape2D_ybs02" )
 
 [node name="Player" parent="." instance=ExtResource( "2_072v3" )]
 position = Vector2(142, 297)
-rotation = 0.785398

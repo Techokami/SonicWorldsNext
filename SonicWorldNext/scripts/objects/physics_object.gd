@@ -6,9 +6,19 @@ var verticalSensorRight = RayCast2D.new()
 var horizontallSensor = RayCast2D.new()
 
 var groundLookDistance = 14
-@onready var pushRadius = $HitBox.shape.extents.x+1
+@onready var pushRadius = $HitBox.shape.extents.x+0.01 # Extra padding added to prevent floor sensors activating in walls
 
+# physics variables
 var movement = motion_velocity
+var ground = true
+# angle is the rotation based on the floor normal
+var angle = 0
+var angleChangeBuffer = 0
+var gravityAngle = 0
+
+
+signal disconectFloor
+signal connectFloor
 
 func _ready():
 	add_child(verticalSensorLeft)
@@ -31,22 +41,52 @@ func update_sensors():
 
 
 func _physics_process(delta):
-	movement = Vector2(-int(Input.is_action_pressed("ui_left"))+int(Input.is_action_pressed("ui_right")),-int(Input.is_action_pressed("ui_up"))+int(Input.is_action_pressed("ui_down"))).rotated(rotation)*100
+	movement = Vector2(-int(Input.is_action_pressed("ui_left"))+int(Input.is_action_pressed("ui_right")),-int(Input.is_action_pressed("ui_up"))+int(Input.is_action_pressed("ui_down")))*100
 	
-	motion_velocity = movement
+	motion_velocity = movement.rotated(rotation)
 	move_and_slide()
 	update_sensors()
+	var groundMemory = ground
+	ground = is_on_floor()
 	
+	# Wall sensors
 	horizontallSensor.force_raycast_update()
+	# Check if colliding
 	if horizontallSensor.is_colliding():
+		#  Calculate the move distance vectorm, then move
 		var rayHitVec = (horizontallSensor.get_collision_point()-horizontallSensor.global_position)
 		translate(rayHitVec-(rayHitVec.sign()*pushRadius))
 	
+	# Floor sensors
 	var getFloor = get_nearest_vertical_sensor()
+	# check if colliding (get_nearest_vertical_sensor returns false if no floor was detected)
 	if getFloor:
+		# Set ground to true but only if movement is 0 or more
+		ground = bool(movement.y >= 0)
+		# get ground angle
+		angle = getFloor.get_collision_normal().angle()+deg2rad(90)
+		#  Calculate the move distance vectorm, then move
 		var rayHitVec = (getFloor.get_collision_point()-getFloor.global_position)
 		translate(rayHitVec-(rayHitVec.sign()*$HitBox.shape.extents.y))
 	
+	# if not on floor reset angle
+	if !ground:
+		angle = gravityAngle
+	
+	# Emit ground signals if ground has been changed
+	if groundMemory != ground:
+		# if on ground emit "connectFloor"
+		if ground:
+			emit_signal("connectFloor")
+			print("CONNECT")
+		# if no on ground emit "disconectFloor"
+		else:
+			emit_signal("disconectFloor")
+			print("DISCONNECT")
+
+	rotation = snapped(angle,deg2rad(90))
+	
+
 
 func get_nearest_vertical_sensor():
 	verticalSensorLeft.force_raycast_update()
