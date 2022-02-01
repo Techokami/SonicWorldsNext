@@ -15,6 +15,10 @@ run/main_scene="res://scenes/TileMap.tscn"
 config/icon="res://icon.png"
 config/features=PackedStringArray("4.0", "Vulkan Clustered")
 
+[display]
+
+window/stretch/mode="viewport"
+
 [layer_names]
 
 2d_physics/layer_1="Top Solid"

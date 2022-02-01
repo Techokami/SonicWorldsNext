@@ -8,6 +8,8 @@ var horizontallSensor = RayCast2D.new()
 var groundLookDistance = 14
 @onready var pushRadius = $HitBox.shape.extents.x+1
 
+var movement = motion_velocity
+
 func _ready():
 	add_child(verticalSensorLeft)
 	add_child(verticalSensorRight)
@@ -15,29 +17,36 @@ func _ready():
 	update_sensors()
 
 func update_sensors():
+	var rotationSnap = snapped(rotation,deg2rad(90))
 	verticalSensorLeft.position.x = -$HitBox.shape.extents.x
-	verticalSensorLeft.target_position.y = ($HitBox.shape.extents.y+groundLookDistance)*(int(motion_velocity.y >= 0)-int(motion_velocity.y < 0))
+	verticalSensorLeft.target_position.y = ($HitBox.shape.extents.y+groundLookDistance)*(int(motion_velocity.rotated(-rotationSnap).round().y >= 0)-int(motion_velocity.rotated(-rotationSnap).round().y < 0))
 	verticalSensorRight.position.x = -verticalSensorLeft.position.x
 	verticalSensorRight.target_position.y = verticalSensorLeft.target_position.y
-	horizontallSensor.target_position = Vector2(pushRadius*sign(motion_velocity.x),0)
+	horizontallSensor.target_position = Vector2(pushRadius*sign(motion_velocity.rotated(-rotationSnap).x),0)
+	
+	verticalSensorLeft.global_rotation = rotationSnap
+	verticalSensorRight.global_rotation = rotationSnap
+	horizontallSensor.global_rotation = rotationSnap
+	
 
 
 func _physics_process(delta):
-	motion_velocity = Vector2(-int(Input.is_action_pressed("ui_left"))+int(Input.is_action_pressed("ui_right")),-int(Input.is_action_pressed("ui_up"))+int(Input.is_action_pressed("ui_down")))*100
+	movement = Vector2(-int(Input.is_action_pressed("ui_left"))+int(Input.is_action_pressed("ui_right")),-int(Input.is_action_pressed("ui_up"))+int(Input.is_action_pressed("ui_down"))).rotated(rotation)*100
 	
+	motion_velocity = movement
 	move_and_slide()
 	update_sensors()
 	
 	horizontallSensor.force_raycast_update()
 	if horizontallSensor.is_colliding():
-		translate(Vector2(horizontallSensor.get_collision_point().x-horizontallSensor.global_position.x-pushRadius*sign(horizontallSensor.target_position.x),0).rotated(rotation))
+		var rayHitVec = (horizontallSensor.get_collision_point()-horizontallSensor.global_position)
+		translate(rayHitVec-(rayHitVec.sign()*pushRadius))
 	
 	var getFloor = get_nearest_vertical_sensor()
 	if getFloor:
-		translate((getFloor.get_collision_point()-getFloor.global_position+($HitBox.shape.extents*Vector2(0,-sign(getFloor.target_position.y)))))
+		var rayHitVec = (getFloor.get_collision_point()-getFloor.global_position)
+		translate(rayHitVec-(rayHitVec.sign()*$HitBox.shape.extents.y))
 	
-	#getRoof.get_collision_point().round()-getRoof.global_position.round()+($HitBox.shape.extents*Vector2(0,1));
-	#position += Vector2(getWall.get_collision_point().round().x-getWall.global_position.round().x-pushRadius*sign(getWall.cast_to.x),0).rotated(rotation);
 
 func get_nearest_vertical_sensor():
 	verticalSensorLeft.force_raycast_update()
