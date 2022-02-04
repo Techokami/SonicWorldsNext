@@ -1,4 +1,4 @@
-extends CharacterBody2D
+class_name PhysicsObject extends CharacterBody2D
 
 # Sensors
 var verticalSensorLeft = RayCast2D.new()
@@ -6,7 +6,7 @@ var verticalSensorRight = RayCast2D.new()
 var horizontallSensor = RayCast2D.new()
 
 var groundLookDistance = 14
-@onready var pushRadius = $HitBox.shape.extents.x+0.01 # Extra padding added to prevent floor sensors activating in walls
+@onready var pushRadius = $HitBox.shape.extents.x+1 # original push radius is 10
 
 # physics variables
 var movement = motion_velocity
@@ -29,40 +29,46 @@ func _ready():
 
 func update_sensors():
 	var rotationSnap = snapped(rotation,deg2rad(90))
+	
+	# floor sensors
 	verticalSensorLeft.position.x = -$HitBox.shape.extents.x
-	verticalSensorLeft.target_position.y = ($HitBox.shape.extents.y+groundLookDistance)*(int(motion_velocity.rotated(-rotationSnap).round().y >= 0)-int(motion_velocity.rotated(-rotationSnap).round().y < 0))
+	verticalSensorLeft.target_position.y = ($HitBox.shape.extents.y+groundLookDistance)*(int(movement.y >= 0)-int(movement.y < 0))
 	verticalSensorRight.position.x = -verticalSensorLeft.position.x
 	verticalSensorRight.target_position.y = verticalSensorLeft.target_position.y
+	
+	# wall sensor
 	horizontallSensor.target_position = Vector2(pushRadius*sign(motion_velocity.rotated(-rotationSnap).x),0)
+	
 	
 	verticalSensorLeft.global_rotation = rotationSnap
 	verticalSensorRight.global_rotation = rotationSnap
 	horizontallSensor.global_rotation = rotationSnap
 	
+	horizontallSensor.force_raycast_update()
+	verticalSensorLeft.force_raycast_update()
+	verticalSensorRight.force_raycast_update()
 
 
-func _physics_process(delta):
-	movement += Vector2(-int(Input.is_action_pressed("ui_left"))+int(Input.is_action_pressed("ui_right")),-int(Input.is_action_pressed("ui_up"))+int(Input.is_action_pressed("ui_down")))*100*delta
-	
-	var moveRemaining = movement
-	
+func _physics_process(_delta):
+	#movement += Vector2(-int(Input.is_action_pressed("gm_left"))+int(Input.is_action_pressed("gm_right")),-int(Input.is_action_pressed("gm_up"))+int(Input.is_action_pressed("gm_down")))*_delta*100
+	var moveRemaining = movement # copy of the movement variable to cut down on until it hits 0
 	while !moveRemaining.is_equal_approx(Vector2.ZERO):
 		
 		var moveCalc = moveRemaining.normalized()*min(moveStepLength,moveRemaining.length())
 		
-		motion_velocity = moveCalc.rotated(rotation)
+		motion_velocity = moveCalc.rotated(angle)
 		move_and_slide()
 		update_sensors()
 		var groundMemory = ground
 		ground = is_on_floor()
 		
 		# Wall sensors
-		horizontallSensor.force_raycast_update()
 		# Check if colliding
 		if horizontallSensor.is_colliding():
 			#  Calculate the move distance vectorm, then move
 			var rayHitVec = (horizontallSensor.get_collision_point()-horizontallSensor.global_position)
-			translate(rayHitVec-(rayHitVec.sign()*pushRadius))
+			var normHitVec = -Vector2.LEFT.rotated(snap_angle(rayHitVec.normalized().angle()))
+			translate(rayHitVec-(normHitVec*pushRadius))
 		
 		# Floor sensors
 		var getFloor = get_nearest_vertical_sensor()
@@ -74,7 +80,9 @@ func _physics_process(delta):
 			angle = getFloor.get_collision_normal().angle()+deg2rad(90)
 			#  Calculate the move distance vectorm, then move
 			var rayHitVec = (getFloor.get_collision_point()-getFloor.global_position)
-			translate(rayHitVec-(rayHitVec.sign()*$HitBox.shape.extents.y))
+			# Snap the Vector and normalize it
+			var normHitVec = -Vector2.LEFT.rotated(snap_angle(rayHitVec.normalized().angle()))
+			translate(rayHitVec-(normHitVec*$HitBox.shape.extents.y))
 		
 		# if not on floor reset angle
 		if !ground:
@@ -88,19 +96,44 @@ func _physics_process(delta):
 				print("CONNECT")
 			# if no on ground emit "disconectFloor"
 			else:
+				# if not on ground just rotate
 				emit_signal("disconectFloor")
 				print("DISCONNECT")
 		
 		# set rotation
-		rotation = snapped(angle,deg2rad(90))
+		rotation = snap_angle(angle)
+		
+		update_sensors()
+#		if previousRot != rotation:
+#			# retest floor, if no floor then return to previous rotation
+#			getFloor = get_nearest_vertical_sensor()
+#			if !getFloor:
+#				rotation = previousRot
+		
+		
+		#rotation = snapped(angle,deg2rad(90))
 		
 		moveRemaining -= moveRemaining.normalized()*min(moveStepLength,moveRemaining.length())
 	
 
+func snap_angle(angleSnap = 0):
+	var wrapAngle = wrapf(angleSnap,deg2rad(0),deg2rad(360))
+
+	if wrapAngle >= deg2rad(315) or wrapAngle <= deg2rad(45): # Floor
+		return deg2rad(0)
+	elif wrapAngle > deg2rad(45) and wrapAngle <= deg2rad(134): # Right Wall
+		return deg2rad(90)
+	elif wrapAngle > deg2rad(134) and wrapAngle <= deg2rad(225): # Ceiling
+		return deg2rad(180)
+	
+	# Left Wall
+	return deg2rad(270)
+	
 
 func get_nearest_vertical_sensor():
 	verticalSensorLeft.force_raycast_update()
 	verticalSensorRight.force_raycast_update()
+	
 	# check if one sensor is colliding and if the other isn't touching anything
 	if verticalSensorLeft.is_colliding() and not verticalSensorRight.is_colliding():
 		return verticalSensorLeft

@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://bpg66d665k8j4"]
 
 [ext_resource type="Texture2D" uid="uid://b4tb2585hwvwi" path="res://graphics/tiles/WorldsTiles/TilesetDefault.png" id="1_2a4k4"]
-[ext_resource type="PackedScene" uid="uid://tvcnbe66j43c" path="res://entities/player/player.tscn" id="2_072v3"]
+[ext_resource type="PackedScene" uid="uid://dg7b2oxsgrrvd" path="res://entities/player/player.tscn" id="2_072v3"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_8d4re"]
 tile_data = PackedInt32Array(0, 0, 8, 65536, 0, 9, 131072, 0, 10, 1, 65536, 8, 65537, 65536, 9, 131073, 65536, 10, 2, 131072, 8, 65538, 131072, 9, 131074, 131072, 10, 3, 196608, 8, 65539, 196608, 9, 131075, 196608, 10, 65540, 262144, 9, 131076, 262144, 10, 65541, 327680, 9, 131077, 327680, 10, 65542, 393216, 9, 131078, 393216, 10, 65543, 458752, 9, 131079, 458752, 10)
@@ -3104,4 +3104,4 @@ position = Vector2(142, 392)
 shape = SubResource( "CircleShape2D_ybs02" )
 
 [node name="Player" parent="." instance=ExtResource( "2_072v3" )]
-position = Vector2(142, 297)
+position = Vector2(143, 304)

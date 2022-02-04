@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://tvcnbe66j43c"]
+[gd_scene load_steps=5 format=3 uid="uid://dg7b2oxsgrrvd"]
 
-[ext_resource type="Script" path="res://scripts/objects/physics_object.gd" id="1_fw1ie"]
+[ext_resource type="Script" path="res://scripts/objects/player.gd" id="1_v4g82"]
+[ext_resource type="SpriteFrames" path="res://graphics/players/SonicFrames.tres" id="2_0sgng"]
+[ext_resource type="Script" path="res://scripts/objects/player_states/normal.gd" id="2_467sy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wua37"]
-size = Vector2(9, 19)
+size = Vector2(18, 38)
 
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 4096
@@ -11,7 +13,24 @@ collision_mask = 4096
 floor_constant_speed = true
 moving_platform_floor_layers = 4294965657
 moving_platform_wall_layers = 1638
-script = ExtResource( "1_fw1ie" )
+script = ExtResource( "1_v4g82" )
+
+[node name="States" type="Node" parent="."]
+
+[node name="Normal" type="Node" parent="States"]
+script = ExtResource( "2_467sy" )
+
+[node name="Air" type="Node" parent="States"]
+
+[node name="Camera" type="Camera2D" parent="."]
 
 [node name="HitBox" type="CollisionShape2D" parent="."]
 shape = SubResource( "RectangleShape2D_wua37" )
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+position = Vector2(1, -4)
+frames = ExtResource( "2_0sgng" )
+animation = &"run"
+frame = 1
+speed_scale = 2.0
+playing = true
