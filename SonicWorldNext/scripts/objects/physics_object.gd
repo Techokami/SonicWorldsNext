@@ -4,6 +4,7 @@ class_name PhysicsObject extends CharacterBody2D
 var verticalSensorLeft = RayCast2D.new()
 var verticalSensorRight = RayCast2D.new()
 var horizontallSensor = RayCast2D.new()
+var slopeCheck = RayCast2D.new()
 
 var groundLookDistance = 14
 @onready var pushRadius = $HitBox.shape.extents.x+1 # original push radius is 10
@@ -25,6 +26,7 @@ func _ready():
 	add_child(verticalSensorLeft)
 	add_child(verticalSensorRight)
 	add_child(horizontallSensor)
+	add_child(slopeCheck)
 	update_sensors()
 
 func update_sensors():
@@ -39,14 +41,20 @@ func update_sensors():
 	# wall sensor
 	horizontallSensor.target_position = Vector2(pushRadius*sign(motion_velocity.rotated(-rotationSnap).x),0)
 	
+	# slop sensor
+	slopeCheck.position.y = $HitBox.shape.extents.x
+	slopeCheck.target_position = Vector2(($HitBox.shape.extents.y+groundLookDistance)*sign(rotation-angle),0)
+	
 	
 	verticalSensorLeft.global_rotation = rotationSnap
 	verticalSensorRight.global_rotation = rotationSnap
 	horizontallSensor.global_rotation = rotationSnap
+	slopeCheck.global_rotation = rotationSnap
 	
 	horizontallSensor.force_raycast_update()
 	verticalSensorLeft.force_raycast_update()
 	verticalSensorRight.force_raycast_update()
+	slopeCheck.force_raycast_update()
 
 
 func _physics_process(_delta):
@@ -82,11 +90,10 @@ func _physics_process(_delta):
 			var rayHitVec = (getFloor.get_collision_point()-getFloor.global_position)
 			# Snap the Vector and normalize it
 			var normHitVec = -Vector2.LEFT.rotated(snap_angle(rayHitVec.normalized().angle()))
-			translate(rayHitVec-(normHitVec*$HitBox.shape.extents.y))
-		
-		# if not on floor reset angle
-		if !ground:
-			angle = gravityAngle
+			if move_and_collide(rayHitVec-(normHitVec*$HitBox.shape.extents.y),true):
+				move_and_collide(rayHitVec-(normHitVec*$HitBox.shape.extents.y))
+			else:
+				translate(rayHitVec-(normHitVec*$HitBox.shape.extents.y))
 		
 		# Emit ground signals if ground has been changed
 		if groundMemory != ground:
@@ -98,10 +105,20 @@ func _physics_process(_delta):
 			else:
 				# if not on ground just rotate
 				emit_signal("disconectFloor")
+				disconect_from_floor(true)
 				print("DISCONNECT")
 		
 		# set rotation
-		rotation = snap_angle(angle)
+		
+		# slope check
+		slopeCheck.force_raycast_update()
+		if slopeCheck.is_colliding():
+			var getSlope = snap_angle(slopeCheck.get_collision_normal().angle()+deg2rad(90))
+			# compare slope to current angle, check that it's not going to result in our current angle if we rotated
+			if getSlope != rotation:
+				rotation = snap_angle(angle)
+		else: #if no slope check then just rotate
+			rotation = snap_angle(angle)
 		
 		update_sensors()
 #		if previousRot != rotation:
@@ -148,3 +165,15 @@ func get_nearest_vertical_sensor():
 		return verticalSensorLeft
 	else:
 		return verticalSensorRight
+
+func disconect_from_floor(force = false):
+	if ground or force:
+		# convert velocity
+		print("pre:",movement,":",angle)
+		movement = movement.rotated(angle)
+		print("post:",movement)
+		angle = gravityAngle
+		ground = false
+		emit_signal("disconectFloor")
+		if (rotation != 0):
+			rotation = 0

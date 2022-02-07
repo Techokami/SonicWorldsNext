@@ -67,8 +67,8 @@ func _physics_process(delta):
 	
 	# drop, if speed below fall speed
 	if (abs(parent.movement.x) < parent.fall && calcAngle >= 45 && calcAngle <= 315):
-		#if (round(calcAngle) >= 90 && round(calcAngle) <= 270):
-			#parent.disconect_from_floor();
+		if (round(calcAngle) >= 90 && round(calcAngle) <= 270):
+			parent.disconect_from_floor();
 		parent.lockTimer = 30.0/60.0;
 		
 	if (parent.inputs[parent.INPUTS.XINPUT] != 0):

@@ -98,7 +98,7 @@ func _process(delta):
 		spriteRotation = rad2deg(angle)+90;
 	else:
 		if (spriteRotation+180 >= 180):
-			spriteRotation = max(0,spriteRotation-(168.75*delta));
+			spriteRotation = max(90,spriteRotation-(168.75*delta));
 		else:
 			spriteRotation = min(360,spriteRotation+(168.75*delta));
 
@@ -108,7 +108,7 @@ func _process(delta):
 #		sprite.rotation = -rotation;
 
 	if (lockTimer > 0):
-		lockTimer -= delta*60;
+		lockTimer -= delta;
 		inputs[INPUTS.XINPUT] = 0;
 		inputs[INPUTS.YINPUT] = 0;
 #	if (supTime > 0):
