@@ -6,6 +6,8 @@ var verticalSensorRight = RayCast2D.new()
 var horizontallSensor = RayCast2D.new()
 var slopeCheck = RayCast2D.new()
 
+@onready var sensorList = [verticalSensorLeft,verticalSensorRight,horizontallSensor,slopeCheck]
+
 var groundLookDistance = 14
 @onready var pushRadius = $HitBox.shape.extents.x+1 # original push radius is 10
 
@@ -51,11 +53,17 @@ func update_sensors():
 	horizontallSensor.global_rotation = rotationSnap
 	slopeCheck.global_rotation = rotationSnap
 	
+	for i in sensorList:
+		i.set_collision_mask_value(1,i.target_position.y > 0)
+		i.set_collision_mask_value(2,i.target_position.x > 0)
+		i.set_collision_mask_value(3,i.target_position.x < 0)
+		i.set_collision_mask_value(4,i.target_position.y < 0)
+	
 	horizontallSensor.force_raycast_update()
 	verticalSensorLeft.force_raycast_update()
 	verticalSensorRight.force_raycast_update()
 	slopeCheck.force_raycast_update()
-
+	
 
 func _physics_process(_delta):
 	#movement += Vector2(-int(Input.is_action_pressed("gm_left"))+int(Input.is_action_pressed("gm_right")),-int(Input.is_action_pressed("gm_up"))+int(Input.is_action_pressed("gm_down")))*_delta*100
