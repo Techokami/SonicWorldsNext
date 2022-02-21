@@ -8,6 +8,7 @@ func _input(event):
 #				parent.sfx[2].play();
 #				parent.sfx[2].pitch_scale = 1;
 				parent.spindashPower = 0;
+				parent.sprite.play("spindash");
 				parent.set_state(parent.STATES.SPINDASH);
 			else:
 				parent.action_jump();

@@ -78,10 +78,11 @@ var cameraMargin = 16;
 # ALL CODE IS TEMPORARY!
 func _ready():
 	super()
-	
 	# disable and enable states
 	set_state(currentState);
 	#Global.players.append(self);
+	connect("connectFloor",land_floor)
+	connect("connectCeiling",touch_ceiling)
 
 
 func _input(event):
@@ -142,6 +143,10 @@ func _process(delta):
 func _physics_process(delta):
 	if (ground):
 		groundSpeed = movement.x;
+	# wall detection
+	if horizontallSensor.is_colliding() or is_on_wall():
+		if sign(movement.x) == sign(horizontallSensor.target_position.x):
+			movement.x = 0
 
 	if (playerControl != 0 && lockTimer <= 0):
 		inputs[INPUTS.XINPUT] = -int(Input.is_action_pressed("gm_left"))+int(Input.is_action_pressed("gm_right"));
@@ -166,20 +171,18 @@ func set_state(newState, forceMask = Vector2.ZERO):
 		match(newState):
 			STATES.JUMP, STATES.ROLL:
 				# adjust y position
-				position += (HITBOXESSONIC.ROLL-$HitBox.shape.extents)*Vector2.UP.rotated(rotation)
-
+				position += ((HITBOXESSONIC.ROLL-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
 				# change hitbox size
 				$HitBox.shape.extents = HITBOXESSONIC.ROLL;
 			_:
 				# adjust y position
-				position += (HITBOXESSONIC.NORMAL-$HitBox.shape.extents)*Vector2.UP.rotated(rotation)
+				position += ((HITBOXESSONIC.NORMAL-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
 
 				# change hitbox size
 				$HitBox.shape.extents = HITBOXESSONIC.NORMAL;
 	else:
 		# adjust y position
-		position += (forceMask-$HitBox.shape.extents)*Vector2.UP.rotated(rotation)
-
+		position += ((forceMask-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
 		# change hitbox size
 		$HitBox.shape.extents = forceMask;
 	#update_sensors();
@@ -218,35 +221,6 @@ func action_jump(animation = "roll", airJumpControl = true):
 	#sfx[0].play();
 	airControl = airJumpControl;
 
-func connect_to_floor():
-	if (!ground):
-		ground = true;
-		abilityUsed = false;
-		# landing movement calculation
-		var calcAngle = rad2deg(angle)-90;
-		if (calcAngle < 0):
-			calcAngle += 360;
-
-		# check not shallow
-		if (calcAngle >= 22.5 && calcAngle <= 337.5 && abs(movement.x) < movement.y):
-			# check half steep
-			if (calcAngle < 45 || calcAngle > 315):
-				movement.x = movement.y*0.5*-sign(sin(-deg2rad(90)+angle));
-			# else do full steep
-			else:
-				movement.x = movement.y*-sign(sin(-deg2rad(90)+angle));
-
-		#Bounce reaction
-		if (bounceReaction > 0):
-			movement.y = -bounceReaction*60;
-			bounceReaction = 0;
-		#Shield Checks
-#		match (shield):
-#			SHIELDS.FIRE:
-#				shieldSprite.play("Fire");
-#				shieldSprite.flip_h = false;
-#			SHIELDS.BUBBLE:
-#				shieldSprite.play("Bubble");
 
 func hit_player(damagePoint = global_position, damageType = 0, soundID = 4):
 	if (currentState != STATES.HIT && invTime <= 0 && supTime <= 0):
@@ -299,3 +273,41 @@ func get_ring():
 	#sfx[7+ringChannel].play();
 	#sfx[7].play();
 	ringChannel = int(!ringChannel);
+
+func touch_ceiling():
+	if getVert != null:
+		var getAngle = wrapf(-rad2deg(getVert.get_collision_normal().angle())-90,0,360);
+		if (getAngle > 225 || getAngle < 135):
+			angle = getAngle#snap_angle(-(getVert.get_collision_normal().angle()));
+			#rotation = snap_angle(-(getVert.get_collision_normal().angle())-90);
+			rotation = snap_angle(-deg2rad(getAngle))
+			update_sensors()
+			#position += caster.get_collision_point()-caster.global_position-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation);
+			movement = -Vector2(movement.y*sign(sin(deg2rad(getAngle))),0);
+			ground = true
+			return true
+	movement.y = 0
+
+func land_floor():
+	
+	abilityUsed = false;
+	# landing movement calculation
+	
+	# recalculate ground angle
+	#if getVert != null:
+	#	angle = getVert.get_collision_normal().angle()+deg2rad(90)
+	#	print(angle)
+	var calcAngle = wrapf(rad2deg(angle),0,360);
+	#if (calcAngle < 0):
+	#	calcAngle += 360
+	
+	# check not shallow
+	if (calcAngle >= 22.5 && calcAngle <= 337.5 && abs(movement.x) < movement.y):
+		# check half steep
+		if (calcAngle < 45 || calcAngle > 315):
+			#movement.x = movement.y*0.5*-sign(sin(-deg2rad(90)+angle));
+			movement.x = movement.y*0.5*sign(sin(angle));
+		# else do full steep
+		else:
+			#movement.x = movement.y*-sign(sin(-deg2rad(90)+angle));
+			movement.x = movement.y*sign(sin(angle));

@@ -14,15 +14,21 @@ var groundLookDistance = 14
 # physics variables
 var movement = motion_velocity
 var ground = true
+var roof = false
 var moveStepLength = 8*60
 # angle is the rotation based on the floor normal
 var angle = 0
-var angleChangeBuffer = 0
 var gravityAngle = 0
+# the collission layer, 0 for low, 1 for high
+var collissionLayer = 0
 
+# Vertical sensor reference
+var getVert = null
 
 signal disconectFloor
 signal connectFloor
+signal disconectCeiling
+signal connectCeiling
 
 func _ready():
 	add_child(verticalSensorLeft)
@@ -36,16 +42,23 @@ func update_sensors():
 	
 	# floor sensors
 	verticalSensorLeft.position.x = -$HitBox.shape.extents.x
-	verticalSensorLeft.target_position.y = ($HitBox.shape.extents.y+groundLookDistance)*(int(movement.y >= 0)-int(movement.y < 0))
+	
+	# calculate how far down to look if on the floor, the sensor extends more if the objects is moving, if the objects moving up then it's ignored,
+	# if you want behaviour similar to sonic 1, replace "min(abs(movement.x/60)+4,groundLookDistance)" with "groundLookDistance"
+	var extendFloorLook = min(abs(movement.x/60)+4,groundLookDistance)*(int(movement.y >= 0)*int(ground))
+	
+	verticalSensorLeft.target_position.y = ($HitBox.shape.extents.y+extendFloorLook)*(int(movement.y >= 0)-int(movement.y < 0))
 	verticalSensorRight.position.x = -verticalSensorLeft.position.x
 	verticalSensorRight.target_position.y = verticalSensorLeft.target_position.y
 	
 	# wall sensor
 	horizontallSensor.target_position = Vector2(pushRadius*sign(motion_velocity.rotated(-rotationSnap).x),0)
+	# if the player is on a completely flat surface then move the sensor down 8 pixels
+	horizontallSensor.position.y = 8*int(round(rad2deg(angle)) == round(rad2deg(gravityAngle)) && ground)
 	
 	# slop sensor
 	slopeCheck.position.y = $HitBox.shape.extents.x
-	slopeCheck.target_position = Vector2(($HitBox.shape.extents.y+groundLookDistance)*sign(rotation-angle),0)
+	slopeCheck.target_position = Vector2(($HitBox.shape.extents.y+extendFloorLook)*sign(rotation-angle),0)
 	
 	
 	verticalSensorLeft.global_rotation = rotationSnap
@@ -53,11 +66,27 @@ func update_sensors():
 	horizontallSensor.global_rotation = rotationSnap
 	slopeCheck.global_rotation = rotationSnap
 	
+	# set collission mask values
 	for i in sensorList:
-		i.set_collision_mask_value(1,i.target_position.y > 0)
-		i.set_collision_mask_value(2,i.target_position.x > 0)
-		i.set_collision_mask_value(3,i.target_position.x < 0)
-		i.set_collision_mask_value(4,i.target_position.y < 0)
+		i.set_collision_mask_value(1,i.target_position.rotated(rotationSnap).y > 0)
+		i.set_collision_mask_value(2,i.target_position.rotated(rotationSnap).x > 0)
+		i.set_collision_mask_value(3,i.target_position.rotated(rotationSnap).x < 0)
+		i.set_collision_mask_value(4,i.target_position.rotated(rotationSnap).y < 0)
+		# reset layer masks
+		i.set_collision_mask_value(5,false)
+		i.set_collision_mask_value(6,false)
+		i.set_collision_mask_value(7,false)
+		i.set_collision_mask_value(8,false)
+		i.set_collision_mask_value(9,false)
+		i.set_collision_mask_value(10,false)
+		i.set_collision_mask_value(11,false)
+		i.set_collision_mask_value(12,false)
+		
+		# set layer masks
+		i.set_collision_mask_value(1+((collissionLayer+1)*4),i.get_collision_mask_value(1))
+		i.set_collision_mask_value(2+((collissionLayer+1)*4),i.get_collision_mask_value(2))
+		i.set_collision_mask_value(3+((collissionLayer+1)*4),i.get_collision_mask_value(3))
+		i.set_collision_mask_value(4+((collissionLayer+1)*4),i.get_collision_mask_value(4))
 	
 	horizontallSensor.force_raycast_update()
 	verticalSensorLeft.force_raycast_update()
@@ -76,7 +105,9 @@ func _physics_process(_delta):
 		move_and_slide()
 		update_sensors()
 		var groundMemory = ground
+		var roofMemory = roof
 		ground = is_on_floor()
+		roof = is_on_ceiling()
 		
 		# Wall sensors
 		# Check if colliding
@@ -87,34 +118,28 @@ func _physics_process(_delta):
 			translate(rayHitVec-(normHitVec*pushRadius))
 		
 		# Floor sensors
-		var getFloor = get_nearest_vertical_sensor()
+		getVert = get_nearest_vertical_sensor()
 		# check if colliding (get_nearest_vertical_sensor returns false if no floor was detected)
-		if getFloor:
-			# Set ground to true but only if movement is 0 or more
-			ground = bool(movement.y >= 0)
-			# get ground angle
-			angle = getFloor.get_collision_normal().angle()+deg2rad(90)
+		if getVert:
+			# check if movement is going downward, if it is then run some ground routines
+			if (movement.y >= 0):
+				# ground routine
+				# Set ground to true but only if movement is 0 or more
+				ground = true
+				# get ground angle
+				angle = getVert.get_collision_normal().angle()+deg2rad(90)
+			else:
+				# ceiling routine
+				roof = true
+			
 			#  Calculate the move distance vectorm, then move
-			var rayHitVec = (getFloor.get_collision_point()-getFloor.global_position)
+			var rayHitVec = (getVert.get_collision_point()-getVert.global_position)
 			# Snap the Vector and normalize it
 			var normHitVec = -Vector2.LEFT.rotated(snap_angle(rayHitVec.normalized().angle()))
 			if move_and_collide(rayHitVec-(normHitVec*$HitBox.shape.extents.y),true):
 				move_and_collide(rayHitVec-(normHitVec*$HitBox.shape.extents.y))
 			else:
 				translate(rayHitVec-(normHitVec*$HitBox.shape.extents.y))
-		
-		# Emit ground signals if ground has been changed
-		if groundMemory != ground:
-			# if on ground emit "connectFloor"
-			if ground:
-				emit_signal("connectFloor")
-				print("CONNECT")
-			# if no on ground emit "disconectFloor"
-			else:
-				# if not on ground just rotate
-				emit_signal("disconectFloor")
-				disconect_from_floor(true)
-				print("DISCONNECT")
 		
 		# set rotation
 		
@@ -126,7 +151,30 @@ func _physics_process(_delta):
 			if getSlope != rotation:
 				rotation = snap_angle(angle)
 		else: #if no slope check then just rotate
+			var preRotate = rotation
 			rotation = snap_angle(angle)
+			# verify if new angle would find ground
+			if get_nearest_vertical_sensor() == null:
+				rotation = preRotate
+		
+		# Emit Signals
+		if groundMemory != ground:
+			# if on ground emit "connectFloor"
+			if ground:
+				emit_signal("connectFloor")
+			# if no on ground emit "disconectFloor"
+			else:
+				emit_signal("disconectFloor")
+				disconect_from_floor(true)
+		if roofMemory != roof:
+			# if on roof emit "connectCeiling"
+			if roof:
+				emit_signal("connectCeiling")
+			# if no on roof emit "disconectCeiling"
+			else:
+				emit_signal("disconectCeiling")
+		
+		
 		
 		update_sensors()
 #		if previousRot != rotation:
@@ -177,11 +225,7 @@ func get_nearest_vertical_sensor():
 func disconect_from_floor(force = false):
 	if ground or force:
 		# convert velocity
-		print("pre:",movement,":",angle)
 		movement = movement.rotated(angle)
-		print("post:",movement)
 		angle = gravityAngle
-		ground = false
-		emit_signal("disconectFloor")
 		if (rotation != 0):
 			rotation = 0

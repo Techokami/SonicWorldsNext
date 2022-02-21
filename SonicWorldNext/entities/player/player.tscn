@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://dg7b2oxsgrrvd"]
+[gd_scene load_steps=8 format=3 uid="uid://dg7b2oxsgrrvd"]
 
 [ext_resource type="Script" path="res://scripts/objects/player.gd" id="1_v4g82"]
 [ext_resource type="SpriteFrames" path="res://graphics/players/SonicFrames.tres" id="2_0sgng"]
 [ext_resource type="Script" path="res://scripts/objects/player_states/normal.gd" id="2_467sy"]
 [ext_resource type="Script" path="res://scripts/objects/player_states/air.gd" id="3_bqqar"]
 [ext_resource type="Script" path="res://scripts/objects/player_states/roll.gd" id="4_upmun"]
+[ext_resource type="Script" path="res://scripts/objects/player_states/spin_dash.gd" id="5_q1t76"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wua37"]
 size = Vector2(18, 38)
@@ -33,6 +34,7 @@ isJump = true
 script = ExtResource( "4_upmun" )
 
 [node name="SpinDash" type="Node" parent="States"]
+script = ExtResource( "5_q1t76" )
 
 [node name="Hit" type="Node" parent="States"]
 
@@ -42,9 +44,7 @@ script = ExtResource( "4_upmun" )
 shape = SubResource( "RectangleShape2D_wua37" )
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
-position = Vector2(1, -4)
 frames = ExtResource( "2_0sgng" )
-animation = &"run"
-frame = 1
 speed_scale = 2.0
 playing = true
+offset = Vector2(1, -4)
