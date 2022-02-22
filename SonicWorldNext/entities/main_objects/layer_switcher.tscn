@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://c4pewrsi4ppli"]
+
+[ext_resource type="Script" path="res://scripts/objects/Main/LayerSwitcher.gd" id="1_n0iqp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kc0lk"]
+size = Vector2(16, 16)
+
+[node name="LayerSwitcher" type="Area2D"]
+collision_layer = 0
+collision_mask = 4096
+script = ExtResource( "1_n0iqp" )
+
+[node name="Mask" type="CollisionShape2D" parent="."]
+scale = Vector2(1, 3)
+shape = SubResource( "RectangleShape2D_kc0lk" )
+
+[connection signal="body_entered" from="." to="." method="_on_layer_switcher_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_layer_switcher_body_exited"]
