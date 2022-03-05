@@ -45,8 +45,11 @@ var shield = SHIELDS.NONE;
 #@onready var magnetShape = $RingMagnet/CollisionShape2D;
 
 @onready var stateList = $States.get_children();
-#@onready var animator = $AnimationSonic;
-@onready var sprite = $Sprite;
+
+@onready var animator = $Sprite/PlayerAnimation;
+@onready var sprite = $Sprite/Sprite;
+var lastActiveAnimation = ""
+
 #@onready var spriteFrames = sprite.frames;
 #@onready var shieldSprite = $Shields;
 @onready var camera = get_node_or_null("Camera");
@@ -103,10 +106,10 @@ func _process(delta):
 		else:
 			spriteRotation = min(360,spriteRotation+(168.75*delta));
 
-	#if (rotatableSprites.has(sprite.animation)):
-	sprite.rotation = deg2rad(snapped(spriteRotation,45)-90)-rotation;
-#	else:
-#		sprite.rotation = -rotation;
+	if (rotatableSprites.has(animator.current_animation)):
+		sprite.rotation = deg2rad(snapped(spriteRotation,45)-90)-rotation;
+	else:
+		sprite.rotation = -rotation;
 
 	if (lockTimer > 0):
 		lockTimer -= delta;
@@ -139,6 +142,25 @@ func _process(delta):
 #				star.global_position = i.global_position;
 #				get_parent().add_child(star);
 #				star.frame = rand_range(0,3);
+
+	# Animator
+	match(animator.current_animation):
+		"walk", "run", "peelOut":
+			var duration = floor(max(0,8.0-abs(groundSpeed/60)))
+			animator.playback_speed = (1.0/(duration+1))*(60/10)
+		"roll":
+			var duration = floor(max(0,4.0-abs(groundSpeed/60)))
+			animator.playback_speed = (1.0/(duration+1))*(60/10)
+		"push":
+			var duration = floor(max(0,8.0-abs(groundSpeed/60)) * 4)
+			animator.playback_speed = (1.0/(duration+1))*(60/10)
+		"spinDash": #animate at 60fps (fps were animated at 0.1 seconds)
+			animator.playback_speed = 60/10
+		_:
+			animator.playback_speed = 1
+	
+	if animator.current_animation != "":
+		lastActiveAnimation = animator.current_animation
 
 func _physics_process(delta):
 	if (ground):
@@ -216,7 +238,8 @@ func set_shield(shieldID):
 #			shieldSprite.visible = false;
 
 func action_jump(animation = "roll", airJumpControl = true):
-	sprite.play(animation);
+	#sprite.play(animation);
+	animator.play(animation)
 	movement.y = -jmp;
 	#sfx[0].play();
 	airControl = airJumpControl;
@@ -311,3 +334,4 @@ func land_floor():
 		else:
 			#movement.x = movement.y*-sign(sin(-deg2rad(90)+angle));
 			movement.x = movement.y*sign(sin(angle));
+

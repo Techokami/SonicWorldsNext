@@ -1,0 +1,262 @@
+[gd_scene load_steps=8 format=3 uid="uid://cdb5rup5uj72w"]
+
+[ext_resource type="Texture2D" uid="uid://brq384xtei4as" path="res://graphics/hud/LevelCards/EdgePattern.png" id="1_mhl4j"]
+[ext_resource type="Texture2D" uid="uid://ccceyuc2qabk2" path="res://graphics/hud/LevelCards/Banner.png" id="1_vy4mr"]
+[ext_resource type="Texture2D" uid="uid://djqfbovvco257" path="res://graphics/hud/LevelCards/font/largefont4.png" id="2_4iyxg"]
+[ext_resource type="Script" path="res://scripts/main/TextDisplay.gd" id="3_cveuj"]
+
+[sub_resource type="Animation" id="Animation_y41od"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Control:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -224)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ColorRect:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("TrianglesLeft:rect_position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-64, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("TrianglesRight:rect_position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(320, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Control/TextureRect:rect_position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(76, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Control/TextureRect:anchor_left")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.266406]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Control/TextureRect:anchor_right")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.266406]
+}
+
+[sub_resource type="Animation" id="Animation_dbyop"]
+resource_name = "TileCardEnd"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Control:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.995455, 2),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -225)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("TrianglesRight:rect_position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1, 2),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector2(288, 0), Vector2(320, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("TrianglesLeft:rect_position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1, 2),
+"transitions": PackedFloat32Array(2, 1),
+"update": 0,
+"values": [Vector2(-32, 0), Vector2(-64, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_3l3n5"]
+resource_name = "TitleCardStart"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Control:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(0, -224), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ColorRect:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("TrianglesLeft:rect_position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(-64, 0), Vector2(-32, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("TrianglesRight:rect_position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(320, 0), Vector2(288, 0)]
+}
+
+[node name="TitleCard" type="CanvasLayer"]
+process_mode = 3
+layer = 100
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 1, 0)
+
+[node name="TrianglesLeft" type="TextureRect" parent="."]
+offset_left = -64.0
+offset_bottom = 224.0
+texture = ExtResource( "1_mhl4j" )
+stretch_mode = 1
+
+[node name="TrianglesRight" type="TextureRect" parent="."]
+offset_left = 320.0
+offset_right = 384.0
+offset_bottom = 224.0
+texture = ExtResource( "1_mhl4j" )
+stretch_mode = 1
+
+[node name="Control" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -224.0
+offset_right = 320.0
+
+[node name="TextureRect" type="TextureRect" parent="Control"]
+anchor_left = 0.266406
+anchor_right = 0.266406
+offset_left = -94.4998
+offset_right = 94.5002
+offset_bottom = 203.0
+grow_horizontal = 2
+texture = ExtResource( "1_vy4mr" )
+__meta__ = {
+"_edit_layout_mode": 1,
+"_edit_use_anchors_": true,
+"_edit_use_custom_anchors": true
+}
+
+[node name="TopName" type="Sprite2D" parent="Control"]
+position = Vector2(136, 71)
+texture = ExtResource( "2_4iyxg" )
+hframes = 11
+vframes = 3
+script = ExtResource( "3_cveuj" )
+string = "Green"
+vAlign = 2
+
+[node name="BottomName" type="Sprite2D" parent="Control/TopName"]
+position = Vector2(0, 42)
+texture = ExtResource( "2_4iyxg" )
+hframes = 11
+vframes = 3
+script = ExtResource( "3_cveuj" )
+string = "Hill"
+
+[node name="TitleCardAnimator" type="AnimationPlayer" parent="."]
+autoplay = "TitleCardStart"
+anims/RESET = SubResource( "Animation_y41od" )
+anims/TileCardEnd = SubResource( "Animation_dbyop" )
+anims/TitleCardStart = SubResource( "Animation_3l3n5" )

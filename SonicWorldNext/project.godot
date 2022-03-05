@@ -21,9 +21,13 @@ _global_script_class_icons={
 [application]
 
 config/name="Sonic World Next"
-run/main_scene="res://scenes/TileMap.tscn"
+run/main_scene="res://scenes/main.tscn"
 config/icon="res://icon.png"
 config/features=PackedStringArray("4.0", "Vulkan Clustered")
+
+[autoload]
+
+Global="*res://scripts/main/Global.gd"
 
 [display]
 

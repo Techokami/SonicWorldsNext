@@ -1,0 +1,144 @@
+[gd_scene load_steps=11 format=3 uid="uid://d08jxvltchm6d"]
+
+[ext_resource type="Script" path="res://scripts/objects/Starpost.gd" id="1_vo7di"]
+[ext_resource type="Texture2D" uid="uid://6eix58v81tl8" path="res://graphics/items/starpost.png" id="2_aames"]
+[ext_resource type="AudioStream" uid="uid://cv018l8pn3ppf" path="res://Audio/SFX/Gimmicks/Checkpoint.wav" id="3_0k6ia"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2p4nu"]
+size = Vector2(16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5w76y"]
+atlas = ExtResource( "2_aames" )
+region = Rect2(16, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ppm0a"]
+atlas = ExtResource( "2_aames" )
+region = Rect2(16, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qo7k0"]
+atlas = ExtResource( "2_aames" )
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_l1eln"]
+animations = [{
+"frames": [SubResource( "AtlasTexture_5w76y" )],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [SubResource( "AtlasTexture_ppm0a" ), SubResource( "AtlasTexture_qo7k0" )],
+"loop": true,
+"name": &"flash",
+"speed": 10.0
+}]
+
+[sub_resource type="Animation" id="Animation_5w77u"]
+resource_name = "Activate"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Offset/StarOrb:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.983651),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [&"default", &"flash"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Offset:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 12.5664]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Offset/StarOrb:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, -12.5664]
+}
+
+[sub_resource type="Animation" id="Animation_7pu7f"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Offset/StarOrb:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [&"default"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Offset:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Offset/StarOrb:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[node name="Starpost" type="Node2D"]
+script = ExtResource( "1_vo7di" )
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4096
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource( "RectangleShape2D_2p4nu" )
+
+[node name="Starpost" type="Sprite2D" parent="."]
+texture = ExtResource( "2_aames" )
+hframes = 2
+
+[node name="Offset" type="Node2D" parent="."]
+position = Vector2(0, -21)
+
+[node name="StarOrb" type="AnimatedSprite2D" parent="Offset"]
+position = Vector2(0, -11)
+frames = SubResource( "SpriteFrames_l1eln" )
+playing = true
+
+[node name="Animator" type="AnimationPlayer" parent="."]
+playback_speed = 2.0
+anims/Activate = SubResource( "Animation_5w77u" )
+anims/RESET = SubResource( "Animation_7pu7f" )
+
+[node name="Starpost2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( "3_0k6ia" )
+bus = &"SFX"
+
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]

@@ -380,6 +380,11 @@ position = Vector2( 1096, 712 )
 [node name="Breakable" parent="Entity" instance=ExtResource( 17 )]
 position = Vector2( 80, 272 )
 
+[node name="Breakable4" parent="Entity" instance=ExtResource( 17 )]
+position = Vector2( 1056, 672 )
+scale = Vector2( 2, 2 )
+pieces = Vector2( 16, 16 )
+
 [node name="Breakable2" parent="Entity" instance=ExtResource( 17 )]
 position = Vector2( 208, 304 )
 

@@ -1,0 +1,16 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOGGVorbis"
+uid="uid://lxglaekw6sbj"
+path="res://.godot/imported/6. SWD_TLZa1.ogg-91859a6ddfe0792b14743868a91a559c.oggvorbisstr"
+
+[deps]
+
+source_file="res://Audio/Soundtrack/6. SWD_TLZa1.ogg"
+dest_files=["res://.godot/imported/6. SWD_TLZa1.ogg-91859a6ddfe0792b14743868a91a559c.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=0

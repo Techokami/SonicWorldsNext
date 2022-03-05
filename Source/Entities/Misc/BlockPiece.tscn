@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Scripts/Misc/BreakableBlockPiece.gd" type="Script" id=1]
-[ext_resource path="res://Graphics/Obstacles/Blocks/breakable_block.png" type="Texture" id=2]
+[ext_resource path="res://Graphics/Gimmicks/Barrel.tres" type="Texture" id=2]
 
 [node name="BlockPiece" type="Sprite"]
 texture = ExtResource( 2 )
