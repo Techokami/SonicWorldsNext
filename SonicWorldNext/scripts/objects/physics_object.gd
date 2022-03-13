@@ -92,7 +92,6 @@ func update_sensors():
 	verticalSensorLeft.force_raycast_update()
 	verticalSensorRight.force_raycast_update()
 	slopeCheck.force_raycast_update()
-	
 
 func _physics_process(_delta):
 	#movement += Vector2(-int(Input.is_action_pressed("gm_left"))+int(Input.is_action_pressed("gm_right")),-int(Input.is_action_pressed("gm_up"))+int(Input.is_action_pressed("gm_down")))*_delta*100
@@ -188,6 +187,38 @@ func _physics_process(_delta):
 		
 		moveRemaining -= moveRemaining.normalized()*min(moveStepLength,moveRemaining.length())
 	
+	#Object checks
+	
+	# temporarily reset mask and layer
+	var layerMemory = collision_layer
+	var maskMemory = collision_mask
+	#collision_layer = 0
+	#collision_mask = 0
+	#set_collision_mask_value(14,true)
+#	var floorCheck = move_and_collide(Vector2.DOWN,true,0)
+#	var leftCheck = move_and_collide(Vector2.LEFT,true,0)
+#	var rightCheck = move_and_collide(Vector2.RIGHT,true,0)
+#	var ceilingCheck = move_and_collide(Vector2.UP,true,0)
+	
+	var dirList = [Vector2.DOWN,Vector2.LEFT,Vector2.RIGHT,Vector2.UP]
+	for i in dirList:
+		var col = move_and_collide(i,true,0)
+		if col:
+			if col.get_collider().has_method("physics_collision"):
+				col.get_collider().physics_collision(self,i,col)
+#	if floorCheck:
+#		if floorCheck.get_collider().has_method("physics_collision"):
+#			floorCheck.get_collider().physics_collision(self,Vector2.DOWN,floorCheck)
+#	if rightCheck:
+#		print("rightCheck")
+#	if leftCheck:
+#		print("leftCheck")
+#	if ceilingCheck:
+#		print("ceilingCheck")
+	
+	# reload memory for layers
+	collision_mask = maskMemory
+	collision_layer = layerMemory
 
 func snap_angle(angleSnap = 0):
 	var wrapAngle = wrapf(angleSnap,deg2rad(0),deg2rad(360))

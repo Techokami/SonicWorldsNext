@@ -1,14 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://bfkr0i3pp6ans"]
+[gd_scene load_steps=7 format=3 uid="uid://bfkr0i3pp6ans"]
 
 [ext_resource type="TileSet" uid="uid://idcabx5u5pbk" path="res://tilesets/TestTileMap.tres" id="1_3yg48"]
 [ext_resource type="Script" path="res://scripts/main/level_settings.gd" id="1_s5ple"]
 [ext_resource type="PackedScene" uid="uid://dg7b2oxsgrrvd" path="res://entities/player/player.tscn" id="2_072v3"]
 [ext_resource type="PackedScene" uid="uid://c4pewrsi4ppli" path="res://entities/main_objects/layer_switcher.tscn" id="3_ahb8q"]
 [ext_resource type="PackedScene" uid="uid://d08jxvltchm6d" path="res://entities/main_objects/starpost.tscn" id="5_6bjwe"]
+[ext_resource type="PackedScene" uid="uid://25x1mmynyg1j" path="res://entities/main_objects/spring.tscn" id="6_mwtth"]
 
 [node name="GreenHill" type="Node2D"]
 script = ExtResource( "1_s5ple" )
-music = null
 
 [node name="Tileset" type="TileMap" parent="."]
 tile_set = ExtResource( "1_3yg48" )
@@ -70,3 +70,14 @@ position = Vector2(473, 936)
 [node name="Starpost2" parent="." instance=ExtResource( "5_6bjwe" )]
 position = Vector2(744, 936)
 starpostID = 1
+
+[node name="Spring" parent="." instance=ExtResource( "6_mwtth" )]
+position = Vector2(411, 952)
+
+[node name="Spring2" parent="." instance=ExtResource( "6_mwtth" )]
+position = Vector2(816, 808)
+
+[node name="Spring3" parent="." instance=ExtResource( "6_mwtth" )]
+position = Vector2(1016, 880)
+type = 1
+springDirection = 4

@@ -9,10 +9,11 @@ extends Node2D
 var TitleCard = preload("res://entities/main/title_card.tscn")
 
 func _ready():
-	# set main music stream to the music file
-	Global.main.music.stream = music
-	# restart the music player
-	Global.main.music.play()
+	if Global.main != null:
+		# set main music stream to the music file
+		Global.main.music.stream = music
+		# restart the music player
+		Global.main.music.play()
 
 	# Title card
 	if showCard:
