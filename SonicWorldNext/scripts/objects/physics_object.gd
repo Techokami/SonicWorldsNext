@@ -126,7 +126,7 @@ func _physics_process(_delta):
 				# Set ground to true but only if movement is 0 or more
 				ground = true
 				# get ground angle
-				angle = getVert.get_collision_normal().angle()+deg2rad(90)
+				angle = deg2rad(snapped(rad2deg(getVert.get_collision_normal().rotated(deg2rad(90)).angle()),0.01))
 			else:
 				# ceiling routine
 				roof = true

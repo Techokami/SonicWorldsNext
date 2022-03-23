@@ -157,7 +157,6 @@ frame = 2
 
 [node name="Monitor" type="AnimatedSprite2D" parent="."]
 frames = SubResource( "SpriteFrames_hs2ro" )
-frame = 2
 playing = true
 
 [node name="Animator" type="AnimationPlayer" parent="."]

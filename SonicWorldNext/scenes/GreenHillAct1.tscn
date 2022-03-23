@@ -95,3 +95,8 @@ position = Vector2(312, 888)
 [node name="Monitor2" parent="." instance=ExtResource( "7_twjgn" )]
 position = Vector2(216, 944)
 item = 10
+
+[connection signal="body_entered" from="Tileset/Ring" to="Tileset/Ring" method="_on_ring_body_entered"]
+[connection signal="body_entered" from="Tileset/@Ring@20722" to="Tileset/@Ring@20722" method="_on_ring_body_entered"]
+[connection signal="body_entered" from="Tileset/@Ring@20728" to="Tileset/@Ring@20728" method="_on_ring_body_entered"]
+[connection signal="body_entered" from="Tileset/@Ring@20730" to="Tileset/@Ring@20730" method="_on_ring_body_entered"]
