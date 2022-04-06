@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://pefbafm77amh"
-path="res://.godot/imported/ScrewPipe.png-bae602e84b6912c1f70ac2ae006046d5.stex"
+type="CompressedTexture2D"
+uid="uid://bpkr8u4m1gjbd"
+path="res://.godot/imported/ScrewPipe.png-bae602e84b6912c1f70ac2ae006046d5.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/gimmicks/ScrewPipe.png"
-dest_files=["res://.godot/imported/ScrewPipe.png-bae602e84b6912c1f70ac2ae006046d5.stex"]
+dest_files=["res://.godot/imported/ScrewPipe.png-bae602e84b6912c1f70ac2ae006046d5.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

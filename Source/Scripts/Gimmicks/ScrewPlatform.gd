@@ -33,12 +33,12 @@ func _physics_process(delta):
 			return null
 		
 		for i in players:
-			if sign(global_position.x-i.global_position.x) != sign(global_position.x-i.global_position.x+(i.velocity.x*delta)):
+			if sign(global_position.x-i.global_position.x) != sign(global_position.x-i.global_position.x+(i.movement.x*delta)):
 				if !activePlayers.has(i):
 					activePlayers.append(i)
 		for i in activePlayers:
 			# movement power
-			var goDirection = i.velocity.x*delta/4
+			var goDirection = i.movement.x*delta/4
 			
 			if ((!$Screw/FloorCheck.is_colliding() || goDirection > 0) && (!$Screw/CeilingCheck.is_colliding() || goDirection < 0)
 			&& $Screw.position.y-goDirection > (-top*8)+12 && i.ground):

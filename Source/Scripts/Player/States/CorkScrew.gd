@@ -8,7 +8,7 @@ func _input(event):
 
 func _physics_process(delta):
 	# gravity
-	parent.velocity.y += parent.grv/delta;
+	parent.movement.y += parent.grv/delta;
 	
 	parent.sprite.flip_h = (parent.direction < 0);
 		
@@ -18,23 +18,23 @@ func _physics_process(delta):
 	
 		
 	if (parent.inputs[parent.INPUTS.XINPUT] != 0):
-		if (parent.velocity.x*parent.inputs[parent.INPUTS.XINPUT] < parent.top):
-			if (sign(parent.velocity.x) == parent.inputs[parent.INPUTS.XINPUT]):
-				if (abs(parent.velocity.x) < parent.top):
-					parent.velocity.x = clamp(parent.velocity.x+parent.acc/delta*parent.inputs[parent.INPUTS.XINPUT],-parent.top,parent.top);
+		if (parent.movement.x*parent.inputs[parent.INPUTS.XINPUT] < parent.top):
+			if (sign(parent.movement.x) == parent.inputs[parent.INPUTS.XINPUT]):
+				if (abs(parent.movement.x) < parent.top):
+					parent.movement.x = clamp(parent.movement.x+parent.acc/delta*parent.inputs[parent.INPUTS.XINPUT],-parent.top,parent.top);
 			else:
 				# reverse direction
-				parent.velocity.x += parent.dec/delta*parent.inputs[parent.INPUTS.XINPUT];
+				parent.movement.x += parent.dec/delta*parent.inputs[parent.INPUTS.XINPUT];
 				# implament weird turning quirk
-				if (sign(parent.velocity.x) != sign(parent.velocity.x-parent.dec/delta*parent.inputs[parent.INPUTS.XINPUT])):
-					parent.velocity.x = 0.5*60*sign(parent.velocity.x);
+				if (sign(parent.movement.x) != sign(parent.movement.x-parent.dec/delta*parent.inputs[parent.INPUTS.XINPUT])):
+					parent.movement.x = 0.5*60*sign(parent.movement.x);
 	else:
-		if (parent.velocity.x != 0):
+		if (parent.movement.x != 0):
 			# needs better code
-			if (sign(parent.velocity.x - (parent.frc/delta)*sign(parent.velocity.x)) == sign(parent.velocity.x)):
-				parent.velocity.x -= (parent.frc/delta)*sign(parent.velocity.x);
+			if (sign(parent.movement.x - (parent.frc/delta)*sign(parent.movement.x)) == sign(parent.movement.x)):
+				parent.movement.x -= (parent.frc/delta)*sign(parent.movement.x);
 			else:
-				parent.velocity.x -= parent.velocity.x;
+				parent.movement.x -= parent.movement.x;
 	
 	if parent.ground:
 		parent.set_state(parent.STATES.NORMAL);

@@ -35,8 +35,8 @@ func _draw():
 
 func _on_LayerSwitcher_body_entered(body):
 	if (!Engine.editor_hint):
-		if (body.get("defaultLayer") != null && body.get("velocity") != null):
-			if (body.velocity.rotated(body.rotation).x > 0):
+		if (body.get("defaultLayer") != null && body.get("movement") != null):
+			if (body.movement.rotated(body.rotation).x > 0):
 				body.defaultLayer = rightLayer;
 			else:
 				body.defaultLayer = leftLayer;

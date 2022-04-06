@@ -1,11 +1,11 @@
-[gd_scene load_steps=51 format=3 uid="uid://dg7b2oxsgrrvd"]
+[gd_scene load_steps=51 format=3 uid="uid://m2dg0qeebfw8"]
 
 [ext_resource type="Script" path="res://scripts/objects/player.gd" id="1_v4g82"]
 [ext_resource type="Script" path="res://scripts/objects/player_states/normal.gd" id="2_467sy"]
 [ext_resource type="Script" path="res://scripts/objects/player_states/air.gd" id="3_bqqar"]
 [ext_resource type="Script" path="res://scripts/objects/player_states/roll.gd" id="4_upmun"]
 [ext_resource type="Script" path="res://scripts/objects/player_states/spin_dash.gd" id="5_q1t76"]
-[ext_resource type="Texture2D" uid="uid://cb2b71ykgllp0" path="res://graphics/players/Sonic.png" id="7_jtd2m"]
+[ext_resource type="Texture2D" uid="uid://xseth2buolka" path="res://graphics/players/Sonic.png" id="7_jtd2m"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wua37"]
 size = Vector2(18, 38)

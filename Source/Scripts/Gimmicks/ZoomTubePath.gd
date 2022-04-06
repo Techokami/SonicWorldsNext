@@ -57,4 +57,4 @@ func _on_hitbox_enter(body):
 			animatorNode.pipePoint = 1;
 			animatorNode.pipeDirection = 1;
 			body.global_position = global_position+get_point_position(0);
-			body.velocity = Vector2.ZERO;
+			body.movement = Vector2.ZERO;

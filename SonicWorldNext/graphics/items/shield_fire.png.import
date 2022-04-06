@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://s3t5bcx0pw8t"
-path="res://.godot/imported/shield_fire.png-be8042290826b051f2f423655de5e0ec.stex"
+type="CompressedTexture2D"
+uid="uid://c1gw8pc2qbd00"
+path="res://.godot/imported/shield_fire.png-be8042290826b051f2f423655de5e0ec.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/items/shield_fire.png"
-dest_files=["res://.godot/imported/shield_fire.png-be8042290826b051f2f423655de5e0ec.stex"]
+dest_files=["res://.godot/imported/shield_fire.png-be8042290826b051f2f423655de5e0ec.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

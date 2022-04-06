@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://dl12uqgtfe5po"
-path="res://.godot/imported/27190.png-e1d02812252999331d9b7cd302e61c20.stex"
+type="CompressedTexture2D"
+uid="uid://dqk0ed0sh0blv"
+path="res://.godot/imported/27190.png-e1d02812252999331d9b7cd302e61c20.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/zones/Green Hill Zone/27190.png"
-dest_files=["res://.godot/imported/27190.png-e1d02812252999331d9b7cd302e61c20.stex"]
+dest_files=["res://.godot/imported/27190.png-e1d02812252999331d9b7cd302e61c20.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

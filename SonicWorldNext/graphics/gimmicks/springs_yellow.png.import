@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://br5i7p2ydwvfu"
-path="res://.godot/imported/springs_yellow.png-18c0ba78a52e6918b67a5857110be752.stex"
+type="CompressedTexture2D"
+uid="uid://bkxj4dasqste4"
+path="res://.godot/imported/springs_yellow.png-18c0ba78a52e6918b67a5857110be752.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/gimmicks/springs_yellow.png"
-dest_files=["res://.godot/imported/springs_yellow.png-18c0ba78a52e6918b67a5857110be752.stex"]
+dest_files=["res://.godot/imported/springs_yellow.png-18c0ba78a52e6918b67a5857110be752.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

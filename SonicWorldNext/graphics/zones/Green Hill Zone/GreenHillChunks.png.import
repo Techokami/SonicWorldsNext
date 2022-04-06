@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://28kr33t77lgu"
-path="res://.godot/imported/GreenHillChunks.png-9b121d00c0d160043ae4f5db81d22fac.stex"
+type="CompressedTexture2D"
+uid="uid://dfbx6dkqwh5t6"
+path="res://.godot/imported/GreenHillChunks.png-9b121d00c0d160043ae4f5db81d22fac.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/zones/Green Hill Zone/GreenHillChunks.png"
-dest_files=["res://.godot/imported/GreenHillChunks.png-9b121d00c0d160043ae4f5db81d22fac.stex"]
+dest_files=["res://.godot/imported/GreenHillChunks.png-9b121d00c0d160043ae4f5db81d22fac.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://cafk015m7ynsp"
-path="res://.godot/imported/LavaReefTurn.png-3163e73feb63f59608ef2db0c9d04f0f.stex"
+type="CompressedTexture2D"
+uid="uid://cgpabe5tw60f8"
+path="res://.godot/imported/LavaReefTurn.png-3163e73feb63f59608ef2db0c9d04f0f.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/gimmicks/LavaReefTurn.png"
-dest_files=["res://.godot/imported/LavaReefTurn.png-3163e73feb63f59608ef2db0c9d04f0f.stex"]
+dest_files=["res://.godot/imported/LavaReefTurn.png-3163e73feb63f59608ef2db0c9d04f0f.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

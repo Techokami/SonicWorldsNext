@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://6eix58v81tl8"
-path="res://.godot/imported/starpost.png-b1b762272953e0999f21de7e4ecd3410.stex"
+type="CompressedTexture2D"
+uid="uid://cy7554d4qoqok"
+path="res://.godot/imported/starpost.png-b1b762272953e0999f21de7e4ecd3410.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/items/starpost.png"
-dest_files=["res://.godot/imported/starpost.png-b1b762272953e0999f21de7e4ecd3410.stex"]
+dest_files=["res://.godot/imported/starpost.png-b1b762272953e0999f21de7e4ecd3410.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

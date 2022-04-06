@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://bwih266if3xc0"
-path="res://.godot/imported/orbinaut.png-1ff5b98a6099ab8db4a9280426773536.stex"
+type="CompressedTexture2D"
+uid="uid://cb2hnkyaonywl"
+path="res://.godot/imported/orbinaut.png-1ff5b98a6099ab8db4a9280426773536.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/enemies/orbinaut.png"
-dest_files=["res://.godot/imported/orbinaut.png-1ff5b98a6099ab8db4a9280426773536.stex"]
+dest_files=["res://.godot/imported/orbinaut.png-1ff5b98a6099ab8db4a9280426773536.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

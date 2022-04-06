@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://bi7qfqox1ehdj"
-path="res://.godot/imported/TubeConnector.png-73e234acaa6562276009ae5a9f4c5d70.stex"
+type="CompressedTexture2D"
+uid="uid://dphsrt1hom7mx"
+path="res://.godot/imported/TubeConnector.png-73e234acaa6562276009ae5a9f4c5d70.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/gimmicks/TubeConnector.png"
-dest_files=["res://.godot/imported/TubeConnector.png-73e234acaa6562276009ae5a9f4c5d70.stex"]
+dest_files=["res://.godot/imported/TubeConnector.png-73e234acaa6562276009ae5a9f4c5d70.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

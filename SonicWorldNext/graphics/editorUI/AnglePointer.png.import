@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://b47sl2uugvtli"
-path="res://.godot/imported/AnglePointer.png-cba6efb602efdf3b22abcbbd97391875.stex"
+type="CompressedTexture2D"
+uid="uid://32ukodb81cfi"
+path="res://.godot/imported/AnglePointer.png-cba6efb602efdf3b22abcbbd97391875.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/editorUI/AnglePointer.png"
-dest_files=["res://.godot/imported/AnglePointer.png-cba6efb602efdf3b22abcbbd97391875.stex"]
+dest_files=["res://.godot/imported/AnglePointer.png-cba6efb602efdf3b22abcbbd97391875.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

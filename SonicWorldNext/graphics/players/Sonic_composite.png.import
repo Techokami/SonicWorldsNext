@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://824kvmhy2i6w"
-path="res://.godot/imported/Sonic_composite.png-69dc40a7d4e91ee06a1942fac3c34ab2.stex"
+type="CompressedTexture2D"
+uid="uid://ccy88t8of1k3l"
+path="res://.godot/imported/Sonic_composite.png-69dc40a7d4e91ee06a1942fac3c34ab2.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/players/Sonic_composite.png"
-dest_files=["res://.godot/imported/Sonic_composite.png-69dc40a7d4e91ee06a1942fac3c34ab2.stex"]
+dest_files=["res://.godot/imported/Sonic_composite.png-69dc40a7d4e91ee06a1942fac3c34ab2.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

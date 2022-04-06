@@ -14,7 +14,7 @@ func _input(event):
 func _process(delta):
 	# release
 	if (parent.inputs[parent.INPUTS.YINPUT] <= 0):
-		parent.velocity.x = (8+(floor(parent.spindashPower) / 2))*60*parent.direction;
+		parent.movement.x = (8+(floor(parent.spindashPower) / 2))*60*parent.direction;
 		parent.sfx[3].play();
 		parent.sfx[2].stop();
 		parent.sfx[2].pitch_scale = 1;

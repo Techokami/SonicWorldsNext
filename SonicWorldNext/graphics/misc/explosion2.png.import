@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://dtqutvbeq2if7"
-path="res://.godot/imported/explosion2.png-8443f5a0259d19801fc338a3f8634116.stex"
+type="CompressedTexture2D"
+uid="uid://cych6fo0wjn0f"
+path="res://.godot/imported/explosion2.png-8443f5a0259d19801fc338a3f8634116.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/misc/explosion2.png"
-dest_files=["res://.godot/imported/explosion2.png-8443f5a0259d19801fc338a3f8634116.stex"]
+dest_files=["res://.godot/imported/explosion2.png-8443f5a0259d19801fc338a3f8634116.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

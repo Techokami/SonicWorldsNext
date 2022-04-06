@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://dcfe27c3jhw6v"
-path="res://.godot/imported/TubeEnd.png-c42b0bdadd4b38e22110e381c6bf3004.stex"
+type="CompressedTexture2D"
+uid="uid://0p7abyh1inkx"
+path="res://.godot/imported/TubeEnd.png-c42b0bdadd4b38e22110e381c6bf3004.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/gimmicks/TubeEnd.png"
-dest_files=["res://.godot/imported/TubeEnd.png-c42b0bdadd4b38e22110e381c6bf3004.stex"]
+dest_files=["res://.godot/imported/TubeEnd.png-c42b0bdadd4b38e22110e381c6bf3004.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

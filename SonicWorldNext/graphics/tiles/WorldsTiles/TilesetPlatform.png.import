@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://bcauyj5at2mtj"
-path="res://.godot/imported/TilesetPlatform.png-4955fb93c09725e5384194cfd6f8cd32.stex"
+type="CompressedTexture2D"
+uid="uid://jhcoxi6mbm8s"
+path="res://.godot/imported/TilesetPlatform.png-4955fb93c09725e5384194cfd6f8cd32.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/tiles/WorldsTiles/TilesetPlatform.png"
-dest_files=["res://.godot/imported/TilesetPlatform.png-4955fb93c09725e5384194cfd6f8cd32.stex"]
+dest_files=["res://.godot/imported/TilesetPlatform.png-4955fb93c09725e5384194cfd6f8cd32.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

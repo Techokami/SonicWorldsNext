@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://chv6c2lalglyx"
-path="res://.godot/imported/monitors.png-4be6ecc54470e523623066a5c33b636f.stex"
+type="CompressedTexture2D"
+uid="uid://n08tcc17fe1c"
+path="res://.godot/imported/monitors.png-4be6ecc54470e523623066a5c33b636f.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/items/monitors.png"
-dest_files=["res://.godot/imported/monitors.png-4be6ecc54470e523623066a5c33b636f.stex"]
+dest_files=["res://.godot/imported/monitors.png-4be6ecc54470e523623066a5c33b636f.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

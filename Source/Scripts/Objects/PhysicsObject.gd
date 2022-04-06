@@ -1,428 +1,240 @@
-extends KinematicBody2D
-
+class_name PhysicsObject extends KinematicBody2D
 
 # Sensors
-var PsudoRay = preload("res://Entities/Misc/PsudoRaycast.tscn");
+var verticalSensorLeft = RayCast2D.new()
+var verticalSensorRight = RayCast2D.new()
+var horizontallSensor = RayCast2D.new()
+var slopeCheck = RayCast2D.new()
 
-var floorCastLeft = PsudoRay.instance();
-var floorCastRight = PsudoRay.instance();
-var platCastLeft = PsudoRay.instance();
-var platCastRight = PsudoRay.instance();
+onready var sensorList = [verticalSensorLeft,verticalSensorRight,horizontallSensor,slopeCheck]
 
+var groundLookDistance = 14
+onready var pushRadius = $HitBox.shape.extents.x+1 # original push radius is 10
 
-var roofCastLeft = PsudoRay.instance();
-var roofCastRight = PsudoRay.instance();
+# physics variables
+var velocity = Vector2.ZERO # velocity is for future proofing
+var movement = velocity
+var ground = true
+var roof = false
+var moveStepLength = 8*60
+# angle is the rotation based on the floor normal
+var angle = 0
+var gravityAngle = 0
+# the collission layer, 0 for low, 1 for high
+var collissionLayer = 0
 
-var wallCastLeft = PsudoRay.instance();
-var wallCastRight = PsudoRay.instance();
+# Vertical sensor reference
+var getVert = null
 
-var castList = [floorCastLeft,floorCastRight,platCastLeft,platCastRight,
-roofCastLeft,roofCastRight,wallCastLeft,wallCastRight];
-
-# Physics variables
-var velocity = Vector2.ZERO;
-var ground = true;
-var angle = Vector2.UP;
-var canCollide = true;
-
-# Adjustable/Lookup variables
-onready var speedStepLimit = $PhysicsLookUp.speedStepLimit;
-onready var groundLookDistance = $PhysicsLookUp.groundLookDistance;
-onready var sonic2FloorSnap = $PhysicsLookUp.sonic2FloorSnap; # Use the sonic 2 and onward floor snapping check
-onready var pushRadius = $HitBox.shape.extents.x+1;
-export (int, "Low", "High") var defaultLayer = 0;
-var layerExcludeList = []
-
+signal disconectFloor
+signal connectFloor
+signal disconectCeiling
+signal connectCeiling
 
 func _ready():
-	add_child(floorCastLeft);
-	add_child(floorCastRight);
-	floorCastLeft.set_collision_mask_bit(6,true);
-	floorCastRight.set_collision_mask_bit(6,true);
-	floorCastLeft.set_collision_mask_bit(0,true);
-	floorCastRight.set_collision_mask_bit(0,true);
-	
-	
-	add_child(platCastLeft);
-	add_child(platCastRight);
-	platCastLeft.set_collision_mask_bit(0,true);
-	platCastRight.set_collision_mask_bit(0,true);
-	
-	add_child(roofCastLeft);
-	add_child(roofCastRight);
-	roofCastLeft.set_collision_mask_bit(2,true);
-	roofCastRight.set_collision_mask_bit(2,true);
-	roofCastLeft.set_collision_mask_bit(6,true);
-	roofCastRight.set_collision_mask_bit(6,true);
-	
-	add_child(wallCastLeft);
-	add_child(wallCastRight);
-	wallCastLeft.set_collision_mask_bit(1,true);
-	wallCastRight.set_collision_mask_bit(1,true);
-	wallCastLeft.set_collision_mask_bit(6,true);
-	wallCastRight.set_collision_mask_bit(6,true);
-	wallCastLeft.set_collision_mask_bit(0,false);
-	wallCastRight.set_collision_mask_bit(0,false);
-	
-	update_sensors();
-	for i in castList:
-		for j in castList:
-			i.add_collision_exception_with(j)
-		i.add_collision_exception_with(self)
-		add_collision_exception_with(i)
-
-
-# Use this to quickly update all the casts if the hitbox mask gets changed
-func update_sensors():
-	floorCastLeft.position.x = -$HitBox.shape.extents.x;
-	floorCastLeft.cast_to.y = $HitBox.shape.extents.y+groundLookDistance;
-	
-	floorCastRight.position.x = -floorCastLeft.position.x;
-	floorCastRight.cast_to.y = floorCastLeft.cast_to.y;
-	
-	platCastLeft.position = floorCastLeft.position;
-	platCastLeft.cast_to.y = 5;
-	platCastLeft.set_collision_mask_bit(0,true);
-	
-	platCastRight.position = floorCastRight.position;
-	platCastRight.cast_to.y = 5;
-	platCastRight.collision_mask = platCastLeft.collision_mask;
-	
-	roofCastLeft.position.x = floorCastLeft.position.x;
-	roofCastRight.position.x = floorCastRight.position.x;
-	
-	wallCastLeft.cast_to = Vector2(-pushRadius,0);
-	wallCastRight.cast_to = Vector2(pushRadius,0);
-	for i in castList:
-		i.update_cast()
-	
-func update_cast_to():
-	if (!ground):
-		floorCastLeft.cast_to.y = $HitBox.shape.extents.y;
-		floorCastRight.cast_to.y = floorCastLeft.cast_to.y;
-		roofCastLeft.cast_to.y = -floorCastLeft.cast_to.y;
-		roofCastRight.cast_to.y = -floorCastLeft.cast_to.y;
-		wallCastLeft.position.y = 0;
-		wallCastRight.position.y = 0;
-	else:
-		roofCastLeft.cast_to.y = -$HitBox.shape.extents.y;
-		roofCastRight.cast_to.y = roofCastLeft.cast_to.y;
-		if (angle == Vector2.UP):
-			wallCastLeft.position.y = 8;
-			wallCastRight.position.y = 8;
-		else:
-			wallCastLeft.position.y = 0;
-			wallCastRight.position.y = 0;
-		floorCastLeft.cast_to.y = $HitBox.shape.extents.y+groundLookDistance;
-		floorCastRight.cast_to.y = floorCastLeft.cast_to.y;
-	for i in castList:
-		i.update_cast()
-
-
-func _physics_process(delta):
-	var getFloor;
-	var velocityInterp = velocity*delta;
-	
-	# sensor control
-	update_cast_to();
-	
-	# Floor priority
-	# check with the kinematic body if there's a floor below, if there is
-	# set the floor to prioritise this collision
-	var memLayer = collision_layer;
-	collision_layer = 1;
-	
-	var floorPriority = (move_and_collide(velocityInterp.rotated(angle.rotated(deg2rad(90)).angle()),true,true,true));
-	if (velocity.y <= 0):
-		floorPriority = null;
-	collision_layer = memLayer;
-	
-	if (!canCollide):
-		velocityInterp = Vector2.ZERO;
-		translate((velocity*delta).rotated(angle.rotated(deg2rad(90)).angle()));
-	
-	while (velocityInterp != Vector2.ZERO):
-		
-		var clampedVelocity = velocityInterp.clamped(speedStepLimit);
-		
-		#clear_all_exceptions();
-		
-		# move the object
-		reset_exclude_list()
-		translate(clampedVelocity.rotated(angle.rotated(deg2rad(90)).angle()));
-		exclude_layer()
-		#move_and_collide(clampedVelocity.rotated(angle.rotated(deg2rad(90)).angle()));
-		# Floor priority back up check, if there's no floor ahead, check below
-		if (!floorPriority && velocity.y >= 0):
-			collision_layer = 1;
-			floorPriority = move_and_collide(Vector2.DOWN.rotated(rotation)*8,true,true,true);
-			collision_layer = memLayer;
-		
-		
-		
-		#exclude_layers();
-		
-		# Wall code
-		
-		exclude_layer()
-		var getWall = get_closest_sensor(wallCastLeft,wallCastRight);
-		
-		
-		if (getWall):
-			touch_wall(getWall);
-			position += Vector2(getWall.get_collision_point().round().x-getWall.global_position.round().x-pushRadius*sign(getWall.cast_to.x),0).rotated(rotation);
-			# prevent wall and ceiling sticking
-			if (velocity.x == 0):
-				disconect_from_floor()
-		
-		
-		velocityInterp -= clampedVelocity;
-		
-		#force_update_transform();
-		
-		exclude_layer()
-		getFloor = get_closest_sensor(floorCastLeft,floorCastRight);
-		var priorityAngle = get_floor_angle(getFloor);
-		if abs(wrapf(rad2deg(priorityAngle),0,360) - wrapf(rad2deg(angle.angle()),0,360)) >= 20 and 360-abs(wrapf(rad2deg(priorityAngle),0,360) - wrapf(rad2deg(angle.angle()),0,360)) >= 20:  
-			priorityAngle = deg2rad(lerp(wrapf(rad2deg(priorityAngle),0,360),wrapf(rad2deg(angle.angle()),0,360),0.2))
-		
-		
-		# Set sonic 2 floor snap to false to restore snapping to sonic 1 floor snap logic
-		var s2Check = true;
-		if (sonic2FloorSnap && getFloor):
-			s2Check = ((getFloor.get_collision_point()-getFloor.global_position-
-			($HitBox.shape.extents*Vector2(0,1)).rotated(rotation)).y <=
-			min(abs(velocity.x/60)+4,groundLookDistance));
-		
-		if (getFloor && round(velocity.y) >= 0 && s2Check):
-			#var getPoint = get_surface(getFloor);
-			
-			position += getFloor.get_collision_point().round()-getFloor.global_position.round()-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation);
-			
-			
-			var snapped = (snap_rotation(-rad2deg(priorityAngle)-90));
-			# check if angle gets changed
-			if (rotation != snapped.angle()):
-				# get the current rotation
-				var lastRotation = rotation;
-				var lastAngle = priorityAngle;
-				
-				# do the snap
-				rotation = snapped.angle();
-				
-				var lastFloor = getFloor;
-				# verify new angle won't make the player snap back the next frame
-				# for the original rotation method comment this next part out
-				getFloor = get_closest_sensor(floorCastLeft,floorCastRight);
-				priorityAngle = get_floor_angle(getFloor);
-
-				# check new rotation
-				if (getFloor):
-					# outer corners
-					if (snapped != (snap_rotation(-rad2deg(priorityAngle)-90))):
-						rotation = lastRotation;
-						priorityAngle = lastAngle;
-				else:
-					getFloor = lastFloor;
-					rotation = lastRotation;
-					priorityAngle = lastAngle;
-			
-			
-			
-			angle = Vector2.RIGHT.rotated(priorityAngle);
-			
-			connect_to_floor();
-			if (getFloor.get_collider() != null):
-				touch_floor(getFloor);
-	
-		else:
-			disconect_from_floor();
-			if (velocity.y < 0):
-				exclude_layer()
-				var getRoof = get_closest_sensor(roofCastLeft,roofCastRight);
-				if (getRoof):
-					if (!touch_ceiling(getRoof)):
-						position += getRoof.get_collision_point().round()-getRoof.global_position.round()+($HitBox.shape.extents*Vector2(0,1));
-
-func get_floor_angle(getFloor = Vector2.DOWN):
-	var priorityAngle = rotation;
-	if (getFloor):
-		priorityAngle = getFloor.get_collision_normal().angle();
-		
-		var getCast = getFloor.cast_to.rotated(getFloor.global_rotation);
-		var floorTile = null;
-		if (getFloor.get_collider()):
-			if (getFloor.get_collider().has_method("get_surface_point")):
-				floorTile = getFloor.get_collider().get_surface_point(getFloor.global_position.round(),
-				getCast.length()*sign(getCast.x+getCast.y),
-				(abs(getCast.x) > abs(getCast.y)));
-		if (floorTile != null):
-			priorityAngle = getFloor.get_collider().get_angle(floorTile,Vector2.UP.rotated(rotation))+deg2rad(-90);
-	
-	return priorityAngle
-
-func get_surface(getFloor):
-	var priorityPoint = getFloor.get_collision_point();
-	var getCast = getFloor.cast_to.rotated(getFloor.global_rotation);
-	if (getFloor.get_collider()):
-		if (getFloor.get_collider().has_method("get_surface_point")):
-			return getFloor.get_collider().get_surface_point(getFloor.global_position.round(),
-			getCast.length()*sign(getCast.x+getCast.y),
-			(abs(getCast.x) > abs(getCast.y)));
-	
-	return priorityPoint;
-
-func get_closest_sensor(firstRaycast,secondRaycast):
+	add_child(verticalSensorLeft)
+	add_child(verticalSensorRight)
+	add_child(horizontallSensor)
+	add_child(slopeCheck)
 	update_sensors()
-	var leftFloor = null;
-	var rightFloor = null;
-	
-	var prevPose = [firstRaycast.global_position,secondRaycast.global_position];
-	
-#	firstRaycast.global_position = firstRaycast.global_position.round();
-#	secondRaycast.global_position = secondRaycast.global_position.round();
-	
-	
-	if (firstRaycast.is_colliding()):
-		leftFloor = firstRaycast;
-	if (secondRaycast.is_colliding()):
-		rightFloor = secondRaycast;
-	
-	firstRaycast.global_position = prevPose[0];
-	secondRaycast.global_position = prevPose[1];
-	
-	if (leftFloor == null || rightFloor == null):
-		if (leftFloor != null):
-			return leftFloor;
-		elif (rightFloor != null):
-			return rightFloor;
-		return null;
-	
-	
-	if ((leftFloor.global_position-leftFloor.get_collision_point()).length() <
-	(rightFloor.global_position-rightFloor.get_collision_point()).length()):
-		return leftFloor;
-	return rightFloor;
 
-
-
-func snap_rotation(getAngle):
-	getAngle = round(getAngle);
-	getAngle = wrapf(getAngle,0,360);
-	#if (angle < 0):
-	#	angle += 360;
+func update_sensors():
+	var rotationSnap = stepify(rotation,deg2rad(90))
 	
-	#Floor
-	if (getAngle <= 45 || getAngle >= 315):
-		return Vector2.RIGHT;
-	#Right Wall
-	elif (getAngle >= 46 && getAngle <= 134):
-		return Vector2.UP;
-	#Ceiling
-	elif (getAngle >= 135 && getAngle <= 225):
-		return Vector2.LEFT;
-	#Left Wall
-	elif (getAngle >= 226 && getAngle <= 314):
-		return Vector2.DOWN;
-
-func exclude_layers():
-	pass
-	#for i in castList:
-		#i.force_raycast_update();
-		#quick_exclude_check(i);
-
-func quick_exclude_check(rayCast):
-	if (rayCast.is_colliding()):
-		if (rayCast.get_collider().get_collision_mask_bit(4-defaultLayer)):
-			for i in castList:
-				i.add_exception(rayCast.get_collider());
-
-func clear_all_exceptions():
-	pass;
-#	for i in castList:
-#		i.clear_exceptions();
-#	for i in get_collision_exceptions():
-#		remove_collision_exception_with(i);
-
-func update_raycasts():
-	for i in castList:
-		i.force_update_transform()
-#	for i in castList:
-#		i.force_raycast_update();
+	# floor sensors
+	verticalSensorLeft.position.x = -$HitBox.shape.extents.x
 	
+	# calculate how far down to look if on the floor, the sensor extends more if the objects is moving, if the objects moving up then it's ignored,
+	# if you want behaviour similar to sonic 1, replace "min(abs(movement.x/60)+4,groundLookDistance)" with "groundLookDistance"
+	var extendFloorLook = min(abs(movement.x/60)+4,groundLookDistance)*(int(movement.y >= 0)*int(ground))
+	
+	verticalSensorLeft.cast_to.y = ($HitBox.shape.extents.y+extendFloorLook)*(int(movement.y >= 0)-int(movement.y < 0))
+	verticalSensorRight.position.x = -verticalSensorLeft.position.x
+	verticalSensorRight.cast_to.y = verticalSensorLeft.cast_to.y
+	
+	# wall sensor
+	horizontallSensor.cast_to = Vector2(pushRadius*sign(velocity.rotated(-rotationSnap).x),0)
+	# if the player is on a completely flat surface then move the sensor down 8 pixels
+	horizontallSensor.position.y = 8*int(round(rad2deg(angle)) == round(rad2deg(gravityAngle)) && ground)
+	
+	# slop sensor
+	slopeCheck.position.y = $HitBox.shape.extents.x
+	slopeCheck.cast_to = Vector2(($HitBox.shape.extents.y+extendFloorLook)*sign(rotation-angle),0)
+	
+	
+	verticalSensorLeft.global_rotation = rotationSnap
+	verticalSensorRight.global_rotation = rotationSnap
+	horizontallSensor.global_rotation = rotationSnap
+	slopeCheck.global_rotation = rotationSnap
+	
+	# set collission mask values
+	for i in sensorList:
+		i.set_collision_mask_bit(1,i.cast_to.rotated(rotationSnap).y > 0)
+		i.set_collision_mask_bit(2,i.cast_to.rotated(rotationSnap).x > 0)
+		i.set_collision_mask_bit(3,i.cast_to.rotated(rotationSnap).x < 0)
+		i.set_collision_mask_bit(4,i.cast_to.rotated(rotationSnap).y < 0)
+		# reset layer masks
+		i.set_collision_mask_bit(5,false)
+		i.set_collision_mask_bit(6,false)
+		i.set_collision_mask_bit(7,false)
+		i.set_collision_mask_bit(8,false)
+		i.set_collision_mask_bit(9,false)
+		i.set_collision_mask_bit(10,false)
+		i.set_collision_mask_bit(11,false)
+		i.set_collision_mask_bit(12,false)
+		
+		# set layer masks
+		i.set_collision_mask_bit(1+((collissionLayer+1)*4),i.get_collision_mask_bit(1))
+		i.set_collision_mask_bit(2+((collissionLayer+1)*4),i.get_collision_mask_bit(2))
+		i.set_collision_mask_bit(3+((collissionLayer+1)*4),i.get_collision_mask_bit(3))
+		i.set_collision_mask_bit(4+((collissionLayer+1)*4),i.get_collision_mask_bit(4))
+	
+	horizontallSensor.force_raycast_update()
+	verticalSensorLeft.force_raycast_update()
+	verticalSensorRight.force_raycast_update()
+	slopeCheck.force_raycast_update()
 
-
-func disconect_from_floor():
-	if ground:
-		# convert velocity
-		velocity = velocity.rotated(-angle.angle_to(Vector2.UP));
-		angle = Vector2.UP;
-		ground = false;
-		if (rotation != 0):
-			rotation = 0;
+func _physics_process(_delta):
+	#movement += Vector2(-int(Input.is_action_pressed("gm_left"))+int(Input.is_action_pressed("gm_right")),-int(Input.is_action_pressed("gm_up"))+int(Input.is_action_pressed("gm_down")))*_delta*100
+	var moveRemaining = movement # copy of the movement variable to cut down on until it hits 0
+	while !moveRemaining.is_equal_approx(Vector2.ZERO):
+		
+		var moveCalc = moveRemaining.normalized()*min(moveStepLength,moveRemaining.length())
+		
+		velocity = moveCalc.rotated(angle)
+		move_and_slide(velocity)
+		update_sensors()
+		var groundMemory = ground
+		var roofMemory = roof
+		ground = is_on_floor()
+		roof = is_on_ceiling()
+		
+		# Wall sensors
+		# Check if colliding
+		if horizontallSensor.is_colliding():
+			#  Calculate the move distance vectorm, then move
+			var rayHitVec = (horizontallSensor.get_collision_point()-horizontallSensor.global_position)
+			var normHitVec = -Vector2.LEFT.rotated(snap_angle(rayHitVec.normalized().angle()))
+			translate(rayHitVec-(normHitVec*pushRadius))
+		
+		# Floor sensors
+		getVert = get_nearest_vertical_sensor()
+		# check if colliding (get_nearest_vertical_sensor returns false if no floor was detected)
+		if getVert:
+			# check if movement is going downward, if it is then run some ground routines
+			if (movement.y >= 0):
+				# ground routine
+				# Set ground to true but only if movement.y is 0 or more
+				ground = true
+				# get ground angle
+				angle = deg2rad(stepify(rad2deg(getVert.get_collision_normal().rotated(deg2rad(90)).angle()),0.01))
+			else:
+				# ceiling routine
+				roof = true
 			
-
-func connect_to_floor():
-	if (!ground):
-		ground = true;
-
-func touch_floor(caster):
-	if (caster.get_collider()):
-		if (caster.get_collider().has_method("physics_floor_override")):
-			return caster.get_collider().physics_floor_override(self,caster);
-
-func touch_ceiling(caster):
-	if (caster.get_collider()):
-		if (caster.get_collider().has_method("physics_ceiling_override")):
-			return caster.get_collider().physics_ceiling_override(self,caster);
+			#  Calculate the move distance vectorm, then move
+			var rayHitVec = (getVert.get_collision_point()-getVert.global_position)
+			# Snap the Vector and normalize it
+			var normHitVec = -Vector2.LEFT.rotated(snap_angle(rayHitVec.normalized().angle()))
+			# FIX THIS
+			#if move_and_collide(rayHitVec-(normHitVec*$HitBox.shape.extents.y),true):
+			#	move_and_collide(rayHitVec-(normHitVec*$HitBox.shape.extents.y))
+			#else:
+			translate(rayHitVec-(normHitVec*$HitBox.shape.extents.y))
+		
+		# set rotation
+		
+		# slope check
+		slopeCheck.force_raycast_update()
+		if slopeCheck.is_colliding():
+			var getSlope = snap_angle(slopeCheck.get_collision_normal().angle()+deg2rad(90))
+			# compare slope to current angle, check that it's not going to result in our current angle if we rotated
+			if getSlope != rotation:
+				rotation = snap_angle(angle)
+		else: #if no slope check then just rotate
+			var preRotate = rotation
+			rotation = snap_angle(angle)
+			# verify if new angle would find ground
+			if get_nearest_vertical_sensor() == null:
+				rotation = preRotate
+		
+		# Emit Signals
+		if groundMemory != ground:
+			# if on ground emit "connectFloor"
+			if ground:
+				emit_signal("connectFloor")
+			# if no on ground emit "disconectFloor"
+			else:
+				emit_signal("disconectFloor")
+				disconect_from_floor(true)
+		if roofMemory != roof:
+			# if on roof emit "connectCeiling"
+			if roof:
+				emit_signal("connectCeiling")
+			# if no on roof emit "disconectCeiling"
+			else:
+				emit_signal("disconectCeiling")
+		
+		
+		
+		update_sensors()
+		
+		moveRemaining -= moveRemaining.normalized()*min(moveStepLength,moveRemaining.length())
 	
-	var getAngle = -rad2deg(caster.get_collision_normal().angle())-90+360;
-	if (getAngle > 225 || getAngle < 135):
-		rotation = snap_rotation(-rad2deg(caster.get_collision_normal().angle())-90).angle();
-		#position += caster.get_collision_point()-caster.global_position-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation);
-		velocity = Vector2(velocity.y*-sign(sin(deg2rad(getAngle))),0);
-		connect_to_floor();
-		
-		# adjust collissions to prevent clipping
-		exclude_layer()
-		var getFloor = get_closest_sensor(floorCastLeft,floorCastRight);
-		if (getFloor):
-			position += getFloor.get_collision_point().round()-getFloor.global_position.round()-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation);
-		
-		return true;
+	#Object checks
+	
+	# temporarily reset mask and layer
+	var layerMemory = collision_layer
+	var maskMemory = collision_mask
+	
+	var dirList = [Vector2.DOWN,Vector2.LEFT,Vector2.RIGHT,Vector2.UP]
+	for i in dirList:
+		var col = move_and_collide(i,true,0)
+		if col:
+			if col.get_collider().has_method("physics_collision"):
+				col.get_collider().physics_collision(self,i,col)
+	
+	# reload memory for layers
+	collision_mask = maskMemory
+	collision_layer = layerMemory
+
+func snap_angle(angleSnap = 0):
+	var wrapAngle = wrapf(angleSnap,deg2rad(0),deg2rad(360))
+
+	if wrapAngle >= deg2rad(315) or wrapAngle <= deg2rad(45): # Floor
+		return deg2rad(0)
+	elif wrapAngle > deg2rad(45) and wrapAngle <= deg2rad(134): # Right Wall
+		return deg2rad(90)
+	elif wrapAngle > deg2rad(134) and wrapAngle <= deg2rad(225): # Ceiling
+		return deg2rad(180)
+	
+	# Left Wall
+	return deg2rad(270)
+	
+
+func get_nearest_vertical_sensor():
+	verticalSensorLeft.force_raycast_update()
+	verticalSensorRight.force_raycast_update()
+	
+	# check if one sensor is colliding and if the other isn't touching anything
+	if verticalSensorLeft.is_colliding() and not verticalSensorRight.is_colliding():
+		return verticalSensorLeft
+	elif not verticalSensorLeft.is_colliding() and verticalSensorRight.is_colliding():
+		return verticalSensorRight
+	# if neither are colliding then return null (nothing), this way we can skip over collission checks
+	elif not verticalSensorLeft.is_colliding() and not verticalSensorRight.is_colliding():
+		return null
+	
+	# check if the left sensort is closer, else return the sensor on the right
+	if verticalSensorLeft.get_collision_point().distance_to(global_position) <= verticalSensorRight.get_collision_point().distance_to(global_position):
+		return verticalSensorLeft
 	else:
-		velocity.y = 0;
-	return false;
+		return verticalSensorRight
 
-func touch_wall(caster):
-	if (caster.get_collider()):
-		if (caster.get_collider().has_method("physics_wall_override")):
-			return caster.get_collider().physics_wall_override(self,caster);
-	
-	velocity.x = 0;
-
-func exclude_layer():
-	# exclude any casts that collide with layers we are not on
-	for i in castList:
-		var getCol = i.get_collider()
-		if (getCol):
-			if (getCol.get_collision_mask_bit(4-defaultLayer)):
-				i.add_collision_exception_with(getCol)
-				layerExcludeList.append(getCol)
-	
-func reset_exclude_list():
-	for i in castList:
-		for j in layerExcludeList:
-			i.remove_collision_exception_with(j)
-	
-	layerExcludeList.clear()
-
-# set collission rays for layers
-func layer_check_casts():
-	for i in castList:
-		i.set_collision_mask_bit(8+(4*defaultLayer),i.get_collision_mask_bit(0))
-		i.set_collision_mask_bit(9+(4*defaultLayer),i.get_collision_mask_bit(1))
-		i.set_collision_mask_bit(10+(4*defaultLayer),i.get_collision_mask_bit(2))
-		i.set_collision_mask_bit(12-(4*defaultLayer),false)
-		i.set_collision_mask_bit(13-(4*defaultLayer),false)
-		i.set_collision_mask_bit(14-(4*defaultLayer),false)
+func disconect_from_floor(force = false):
+	if ground or force:
+		# convert velocity
+		movement = movement.rotated(angle)
+		angle = gravityAngle
+		if (rotation != 0):
+			rotation = 0

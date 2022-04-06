@@ -1,5 +1,7 @@
 extends KinematicBody2D
 
+# Depricated, to be removed, use at own risk
+
 var playerList = []
 var playerOffset = [0]
 var playerDistance = [0]

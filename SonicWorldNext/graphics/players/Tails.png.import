@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://vapsxftescn2"
-path="res://.godot/imported/Tails.png-2d98e22b44a86605cbb414f11af18905.stex"
+type="CompressedTexture2D"
+uid="uid://driuutpi5imm"
+path="res://.godot/imported/Tails.png-2d98e22b44a86605cbb414f11af18905.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/players/Tails.png"
-dest_files=["res://.godot/imported/Tails.png-2d98e22b44a86605cbb414f11af18905.stex"]
+dest_files=["res://.godot/imported/Tails.png-2d98e22b44a86605cbb414f11af18905.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://du66ai7twjbeb"
-path="res://.godot/imported/shield_bubble.png-b22171fd1ae3f93aa0873eb0dc238692.stex"
+type="CompressedTexture2D"
+uid="uid://rxikufs3u7de"
+path="res://.godot/imported/shield_bubble.png-b22171fd1ae3f93aa0873eb0dc238692.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/items/shield_bubble.png"
-dest_files=["res://.godot/imported/shield_bubble.png-b22171fd1ae3f93aa0873eb0dc238692.stex"]
+dest_files=["res://.godot/imported/shield_bubble.png-b22171fd1ae3f93aa0873eb0dc238692.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

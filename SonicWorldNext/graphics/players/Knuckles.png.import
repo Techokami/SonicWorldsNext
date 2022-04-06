@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://d0xfxh71r0jin"
-path="res://.godot/imported/Knuckles.png-7532def1df715e4068533aff740605b4.stex"
+type="CompressedTexture2D"
+uid="uid://dfhphwhivakjq"
+path="res://.godot/imported/Knuckles.png-7532def1df715e4068533aff740605b4.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/players/Knuckles.png"
-dest_files=["res://.godot/imported/Knuckles.png-7532def1df715e4068533aff740605b4.stex"]
+dest_files=["res://.godot/imported/Knuckles.png-7532def1df715e4068533aff740605b4.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

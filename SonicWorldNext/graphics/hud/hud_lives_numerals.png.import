@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://c03fi1v76r14c"
-path="res://.godot/imported/hud_lives_numerals.png-2c455814c4fcf8d9d74ff1995d4eb1a0.stex"
+type="CompressedTexture2D"
+uid="uid://clmbxd25bqdw1"
+path="res://.godot/imported/hud_lives_numerals.png-2c455814c4fcf8d9d74ff1995d4eb1a0.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/hud/hud_lives_numerals.png"
-dest_files=["res://.godot/imported/hud_lives_numerals.png-2c455814c4fcf8d9d74ff1995d4eb1a0.stex"]
+dest_files=["res://.godot/imported/hud_lives_numerals.png-2c455814c4fcf8d9d74ff1995d4eb1a0.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://dqeyny8xb4wjs"
-path="res://.godot/imported/WorldsBackground.png-859d45efa054f68392cfde7f7c79fe6d.stex"
+type="CompressedTexture2D"
+uid="uid://bfkfi8k4jdn75"
+path="res://.godot/imported/WorldsBackground.png-859d45efa054f68392cfde7f7c79fe6d.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/backgrounds/WorldsBackground.png"
-dest_files=["res://.godot/imported/WorldsBackground.png-859d45efa054f68392cfde7f7c79fe6d.stex"]
+dest_files=["res://.godot/imported/WorldsBackground.png-859d45efa054f68392cfde7f7c79fe6d.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

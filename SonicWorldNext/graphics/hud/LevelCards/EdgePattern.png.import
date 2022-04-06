@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://brq384xtei4as"
-path="res://.godot/imported/EdgePattern.png-6ef5c9b28f2255ab3b1e9dac3b720240.stex"
+type="CompressedTexture2D"
+uid="uid://p3xb2oo2pfsv"
+path="res://.godot/imported/EdgePattern.png-6ef5c9b28f2255ab3b1e9dac3b720240.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/hud/LevelCards/EdgePattern.png"
-dest_files=["res://.godot/imported/EdgePattern.png-6ef5c9b28f2255ab3b1e9dac3b720240.stex"]
+dest_files=["res://.godot/imported/EdgePattern.png-6ef5c9b28f2255ab3b1e9dac3b720240.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

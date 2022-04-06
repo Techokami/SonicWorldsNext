@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://Tileset/Worlds/TestTilesGreen.tres" type="TileSet" id=1]
 [ext_resource path="res://Entities/MainObjects/Player.tscn" type="PackedScene" id=2]
@@ -23,7 +23,6 @@
 [ext_resource path="res://Entities/Gimmicks/ScrewPlatform.tscn" type="PackedScene" id=21]
 [ext_resource path="res://Entities/Gimmicks/SpeedBooster.tscn" type="PackedScene" id=22]
 [ext_resource path="res://Entities/Gimmicks/CorkscrewLoop.tscn" type="PackedScene" id=23]
-[ext_resource path="res://Entities/Obstacles/SpinningBarrel.tscn" type="PackedScene" id=24]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Glow"
@@ -380,11 +379,6 @@ position = Vector2( 1096, 712 )
 [node name="Breakable" parent="Entity" instance=ExtResource( 17 )]
 position = Vector2( 80, 272 )
 
-[node name="Breakable4" parent="Entity" instance=ExtResource( 17 )]
-position = Vector2( 1056, 672 )
-scale = Vector2( 2, 2 )
-pieces = Vector2( 16, 16 )
-
 [node name="Breakable2" parent="Entity" instance=ExtResource( 17 )]
 position = Vector2( 208, 304 )
 
@@ -437,13 +431,6 @@ position = Vector2( 3456, 816 )
 
 [node name="CorkscrewLoop2" parent="Entity" instance=ExtResource( 23 )]
 position = Vector2( 3840, 816 )
-
-[node name="SpinningBarrel2" parent="Entity" instance=ExtResource( 24 )]
-position = Vector2( 824, 368 )
-
-[node name="SpinningBarrel3" parent="Entity" instance=ExtResource( 24 )]
-position = Vector2( 496, 352 )
-bouncer = true
 
 [node name="TestZoneMap" type="Sprite" parent="."]
 visible = false

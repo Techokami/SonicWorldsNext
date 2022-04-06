@@ -10,17 +10,17 @@ var playerList = []
 func _physics_process(delta):
 	# Check for player encounters
 	for i in playerListL:
-		if sign($EnteranceL.global_position.x-i.global_position.x) < sign($EnteranceL.global_position.x-i.global_position.x+(i.velocity.x*delta)) && abs(i.velocity.x) >= i.top/2:
+		if sign($EnteranceL.global_position.x-i.global_position.x) < sign($EnteranceL.global_position.x-i.global_position.x+(i.movement.x*delta)) && abs(i.movement.x) >= i.top/2:
 			if (!playerList.has(i)):
 				playerList.append(i)
 	
 	for i in playerListR:
-		if sign($EnteranceR.global_position.x-i.global_position.x) > sign($EnteranceR.global_position.x-i.global_position.x+(i.velocity.x*delta)) && abs(i.velocity.x) >= i.top/2:
+		if sign($EnteranceR.global_position.x-i.global_position.x) > sign($EnteranceR.global_position.x-i.global_position.x+(i.movement.x*delta)) && abs(i.movement.x) >= i.top/2:
 			if (!playerList.has(i)):
 				playerList.append(i)
 	
 	for i in playerList:
-		i.velocity.y = 0
+		i.movement.y = 0
 		if (i.currentState != i.STATES.CORKSCREW):
 			i.set_state(i.STATES.CORKSCREW);
 			i.spriteFrames.set_animation_speed("corkScrew",0);
@@ -39,7 +39,7 @@ func _physics_process(delta):
 				i.sprite.position.y = 8
 				i.sprite.frame = posmod((i.spriteFrames.get_frame_count("corkScrew")/2)-i.spriteFrames.get_frame_count("corkScrew")+((global_position.x-i.global_position.x+192)/(192*2)*i.spriteFrames.get_frame_count("corkScrew")),i.spriteFrames.get_frame_count("corkScrew"))
 				
-		if (i.global_position.x < $EnteranceL.global_position.x || i.global_position.x > $EnteranceR.global_position.x || abs(i.velocity.x) < i.top/2):
+		if (i.global_position.x < $EnteranceL.global_position.x || i.global_position.x > $EnteranceR.global_position.x || abs(i.movement.x) < i.top/2):
 			if (playerList.has(i)):
 				playerList.erase(i)
 				i.sprite.flip_v = false

@@ -12,7 +12,7 @@ var groundLookDistance = 14
 @onready var pushRadius = $HitBox.shape.extents.x+1 # original push radius is 10
 
 # physics variables
-var movement = motion_velocity
+var movement = velocity
 var ground = true
 var roof = false
 var moveStepLength = 8*60
@@ -52,7 +52,7 @@ func update_sensors():
 	verticalSensorRight.target_position.y = verticalSensorLeft.target_position.y
 	
 	# wall sensor
-	horizontallSensor.target_position = Vector2(pushRadius*sign(motion_velocity.rotated(-rotationSnap).x),0)
+	horizontallSensor.target_position = Vector2(pushRadius*sign(velocity.rotated(-rotationSnap).x),0)
 	# if the player is on a completely flat surface then move the sensor down 8 pixels
 	horizontallSensor.position.y = 8*int(round(rad2deg(angle)) == round(rad2deg(gravityAngle)) && ground)
 	
@@ -100,7 +100,7 @@ func _physics_process(_delta):
 		
 		var moveCalc = moveRemaining.normalized()*min(moveStepLength,moveRemaining.length())
 		
-		motion_velocity = moveCalc.rotated(angle)
+		velocity = moveCalc.rotated(angle)
 		move_and_slide()
 		update_sensors()
 		var groundMemory = ground

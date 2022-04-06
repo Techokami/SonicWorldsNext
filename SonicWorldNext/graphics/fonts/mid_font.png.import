@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://v8m0bt5qxdlk"
-path="res://.godot/imported/mid_font.png-ee40164cd0ee32a4619554478b6b005b.stex"
+type="CompressedTexture2D"
+uid="uid://c7b48yqo8000h"
+path="res://.godot/imported/mid_font.png-ee40164cd0ee32a4619554478b6b005b.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/fonts/mid_font.png"
-dest_files=["res://.godot/imported/mid_font.png-ee40164cd0ee32a4619554478b6b005b.stex"]
+dest_files=["res://.godot/imported/mid_font.png-ee40164cd0ee32a4619554478b6b005b.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

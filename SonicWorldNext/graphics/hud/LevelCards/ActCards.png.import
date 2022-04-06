@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://bwxktlnop008x"
-path="res://.godot/imported/ActCards.png-2cb7db57daf519579a220a09aaee36aa.stex"
+type="CompressedTexture2D"
+uid="uid://b4the03nuqu5p"
+path="res://.godot/imported/ActCards.png-2cb7db57daf519579a220a09aaee36aa.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/hud/LevelCards/ActCards.png"
-dest_files=["res://.godot/imported/ActCards.png-2cb7db57daf519579a220a09aaee36aa.stex"]
+dest_files=["res://.godot/imported/ActCards.png-2cb7db57daf519579a220a09aaee36aa.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

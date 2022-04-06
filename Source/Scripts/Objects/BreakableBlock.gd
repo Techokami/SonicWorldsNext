@@ -7,7 +7,7 @@ func physics_floor_override(body,caster):
 		$CollisionShape2D.disabled = true;
 		$Sprite.visible = false;
 		body.ground = false;
-		body.velocity.y = -3*Global.originalFPS;
+		body.movement.y = -3*Global.originalFPS;
 		for i in range(pieces.x):
 			for j in range (pieces.y):
 				var piece = Piece.instance();

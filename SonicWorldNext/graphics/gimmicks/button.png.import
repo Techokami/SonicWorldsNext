@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://b4vn7nn7bv4pd"
-path="res://.godot/imported/button.png-60e40c9e494df093baea26adefd537f9.stex"
+type="CompressedTexture2D"
+uid="uid://d8uisdfx2lgy"
+path="res://.godot/imported/button.png-60e40c9e494df093baea26adefd537f9.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/gimmicks/button.png"
-dest_files=["res://.godot/imported/button.png-60e40c9e494df093baea26adefd537f9.stex"]
+dest_files=["res://.godot/imported/button.png-60e40c9e494df093baea26adefd537f9.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

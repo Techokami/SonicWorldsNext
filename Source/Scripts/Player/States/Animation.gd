@@ -18,7 +18,7 @@ func _process(delta):
 		#if (relativeOffset < 1):
 		#	parent.global_position = path.global_position+pathCurve.interpolate_baked(offset);
 		
-		offset += parent.velocity.length()*delta;
+		offset += parent.movement.length()*delta;
 		
 		
 		
@@ -30,20 +30,20 @@ func _process(delta):
 		if (offset/pathCurve.get_baked_length() >= 1):
 			parent.set_state(parent.STATES.NORMAL);
 			offset = 0;
-			parent.velocity = (pathCurve.get_point_position(pathCurve.get_point_count()-1)-pathCurve.get_point_position(pathCurve.get_point_count()-2)).normalized()*parent.velocity.length();
+			parent.movement = (pathCurve.get_point_position(pathCurve.get_point_count()-1)-pathCurve.get_point_position(pathCurve.get_point_count()-2)).normalized()*parent.movement.length();
 	elif (pipe != null):
 		
 		# get next pipe point
 		var point = pipe.global_position+pipe.get_point_position(pipePoint);
-		# set velocity
-		parent.velocity = ((point-parent.global_position).clamped(pipe.speed))/delta;
+		# set movement
+		parent.movement = ((point-parent.global_position).clamped(pipe.speed))/delta;
 		
 		if (parent.global_position.distance_to(point) < pipe.speed):
 			if (pipePoint < pipe.get_point_count()-1):
 				parent.global_position = point;
-				parent.velocity = Vector2.ZERO;
+				parent.movement = Vector2.ZERO;
 				pipePoint += 1;
 			else:
 				# release the player if no other point can be found
-				parent.velocity = (point-(pipe.global_position+pipe.get_point_position(pipePoint-1))).normalized()*pipe.speed*Global.originalFPS;
+				parent.movement = (point-(pipe.global_position+pipe.get_point_position(pipePoint-1))).normalized()*pipe.speed*Global.originalFPS;
 				parent.set_state(parent.STATES.AIR);

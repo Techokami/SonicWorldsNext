@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://b8jvppuc4ib74"
-path="res://.godot/imported/smallfont1.png-1f490423149ea02036286fa02d6d205c.stex"
+type="CompressedTexture2D"
+uid="uid://cfefbcqopfbgg"
+path="res://.godot/imported/smallfont1.png-1f490423149ea02036286fa02d6d205c.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/hud/LevelCards/font/smallfont1.png"
-dest_files=["res://.godot/imported/smallfont1.png-1f490423149ea02036286fa02d6d205c.stex"]
+dest_files=["res://.godot/imported/smallfont1.png-1f490423149ea02036286fa02d6d205c.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

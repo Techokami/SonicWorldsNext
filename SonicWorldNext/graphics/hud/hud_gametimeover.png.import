@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://ca8q3khj4pbed"
-path="res://.godot/imported/hud_gametimeover.png-10379521ded4597aab3e337a69c97cb2.stex"
+type="CompressedTexture2D"
+uid="uid://43i5w7b0pi1r"
+path="res://.godot/imported/hud_gametimeover.png-10379521ded4597aab3e337a69c97cb2.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/hud/hud_gametimeover.png"
-dest_files=["res://.godot/imported/hud_gametimeover.png-10379521ded4597aab3e337a69c97cb2.stex"]
+dest_files=["res://.godot/imported/hud_gametimeover.png-10379521ded4597aab3e337a69c97cb2.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

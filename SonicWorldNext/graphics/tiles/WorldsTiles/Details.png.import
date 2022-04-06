@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://ktvbfb0bw5gd"
-path="res://.godot/imported/Details.png-f4d7584291adfcd1dcff50a5e87bfeea.stex"
+type="CompressedTexture2D"
+uid="uid://bpnkyjjewbgdc"
+path="res://.godot/imported/Details.png-f4d7584291adfcd1dcff50a5e87bfeea.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/tiles/WorldsTiles/Details.png"
-dest_files=["res://.godot/imported/Details.png-f4d7584291adfcd1dcff50a5e87bfeea.stex"]
+dest_files=["res://.godot/imported/Details.png-f4d7584291adfcd1dcff50a5e87bfeea.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

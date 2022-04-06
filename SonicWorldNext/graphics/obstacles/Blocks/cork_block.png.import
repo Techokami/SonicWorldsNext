@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://d2u35na1kup74"
-path="res://.godot/imported/cork_block.png-6d8519d37363df831d9855615ae01402.stex"
+type="CompressedTexture2D"
+uid="uid://dh4i4qogs3xkf"
+path="res://.godot/imported/cork_block.png-6d8519d37363df831d9855615ae01402.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/obstacles/Blocks/cork_block.png"
-dest_files=["res://.godot/imported/cork_block.png-6d8519d37363df831d9855615ae01402.stex"]
+dest_files=["res://.godot/imported/cork_block.png-6d8519d37363df831d9855615ae01402.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://ss8d4xj4gqrf"
-path="res://.godot/imported/Tube.png-b9eb9929b33b0986b6cd3e38153f958b.stex"
+type="CompressedTexture2D"
+uid="uid://b5o88pfqywsvv"
+path="res://.godot/imported/Tube.png-b9eb9929b33b0986b6cd3e38153f958b.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/gimmicks/Tube.png"
-dest_files=["res://.godot/imported/Tube.png-b9eb9929b33b0986b6cd3e38153f958b.stex"]
+dest_files=["res://.godot/imported/Tube.png-b9eb9929b33b0986b6cd3e38153f958b.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

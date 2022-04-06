@@ -1,9 +1,9 @@
 [gd_resource type="TileSet" load_steps=20 format=3 uid="uid://idcabx5u5pbk"]
 
-[ext_resource type="Texture2D" uid="uid://b4tb2585hwvwi" path="res://graphics/tiles/WorldsTiles/TilesetDefault.png" id="1_x4gje"]
-[ext_resource type="Texture2D" uid="uid://sosyy3yw78ab" path="res://graphics/tiles/WorldsTiles/TilesetLow.png" id="2_4lsi4"]
-[ext_resource type="Texture2D" uid="uid://2ou46vltll6m" path="res://graphics/tiles/WorldsTiles/TilesetHigh.png" id="2_x6pn3"]
-[ext_resource type="Texture2D" uid="uid://bcauyj5at2mtj" path="res://graphics/tiles/WorldsTiles/TilesetPlatform.png" id="4_5qybc"]
+[ext_resource type="Texture2D" uid="uid://peu6hqmlsdmd" path="res://graphics/tiles/WorldsTiles/TilesetDefault.png" id="1_x4gje"]
+[ext_resource type="Texture2D" uid="uid://dsrtigca8pae2" path="res://graphics/tiles/WorldsTiles/TilesetLow.png" id="2_4lsi4"]
+[ext_resource type="Texture2D" uid="uid://bu0hr0tsbovcg" path="res://graphics/tiles/WorldsTiles/TilesetHigh.png" id="2_x6pn3"]
+[ext_resource type="Texture2D" uid="uid://jhcoxi6mbm8s" path="res://graphics/tiles/WorldsTiles/TilesetPlatform.png" id="4_5qybc"]
 [ext_resource type="PackedScene" uid="uid://bylwmywnhci5b" path="res://entities/main_objects/ring.tscn" id="5_gekc1"]
 [ext_resource type="PackedScene" uid="uid://kbistdxhbnik" path="res://entities/main_objects/extended/ring_offset_right.tscn" id="6_wwi8p"]
 [ext_resource type="PackedScene" uid="uid://d0phj6ph420kc" path="res://entities/main_objects/extended/ring_offset_down.tscn" id="7_tvtwx"]

@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://bdc4ml1qm1v40"
-path="res://.godot/imported/shield_lightning.png-13b2c9f646e0ee4854794a7fb2a06c42.stex"
+type="CompressedTexture2D"
+uid="uid://bemp1mu6uurgf"
+path="res://.godot/imported/shield_lightning.png-13b2c9f646e0ee4854794a7fb2a06c42.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/items/shield_lightning.png"
-dest_files=["res://.godot/imported/shield_lightning.png-13b2c9f646e0ee4854794a7fb2a06c42.stex"]
+dest_files=["res://.godot/imported/shield_lightning.png-13b2c9f646e0ee4854794a7fb2a06c42.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

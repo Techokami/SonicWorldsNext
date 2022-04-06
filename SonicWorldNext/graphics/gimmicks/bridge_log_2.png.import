@@ -1,9 +1,9 @@
 [remap]
 
 importer="texture"
-type="StreamTexture2D"
-uid="uid://cm6toese05r0p"
-path="res://.godot/imported/bridge_log_2.png-ea491f5e671bc2f255c08c719d2d7a44.stex"
+type="CompressedTexture2D"
+uid="uid://dgs3hb0aqtrkw"
+path="res://.godot/imported/bridge_log_2.png-ea491f5e671bc2f255c08c719d2d7a44.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://graphics/gimmicks/bridge_log_2.png"
-dest_files=["res://.godot/imported/bridge_log_2.png-ea491f5e671bc2f255c08c719d2d7a44.stex"]
+dest_files=["res://.godot/imported/bridge_log_2.png-ea491f5e671bc2f255c08c719d2d7a44.ctex"]
 
 [params]
 
@@ -21,7 +21,6 @@ compress/hdr_compression=1
 compress/bptc_ldr=0
 compress/normal_map=0
 compress/channel_pack=0
-compress/streamed=false
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0

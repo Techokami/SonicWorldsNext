@@ -7,14 +7,14 @@ var hitDirection = Vector2.UP;
 var animList = ["SpringUp","SpringRight","SpringUpLeft","SpringUpRight"];
 var animID = 0;
 var dirMemory = springDirection;
-var springTextures = [preload("res://Graphics/Gimmicks/springs_yellow.png"),preload("res://Graphics/Gimmicks/springs_red.png")];
+var springTextures = [preload("res://graphics/gimmicks/springs_yellow.png"),preload("res://graphics/gimmicks/springs_red.png")];
 var speed = [10,16];
 
 func _ready():
 	set_spring();
 
 func _process(delta):
-	if Engine.editor_hint:
+	if Engine.is_editor_hint():
 		if (springDirection != dirMemory):
 			dirMemory = springDirection;
 			set_spring();
@@ -26,14 +26,14 @@ func set_spring():
 			$HitBox.disabled = false;
 			$DiagonalHitBox/AreaShape.disabled = true;
 			animID = 0;
-			$HitBox.rotation_degrees = 0;
+			$HitBox.rotation = deg2rad(0);
 			scale = Vector2(1,1-(springDirection*2));
 			hitDirection = Vector2(0,-1+(springDirection*2));
 		2, 3:
 			$HitBox.disabled = false;
 			$DiagonalHitBox/AreaShape.disabled = true;
 			animID = 1;
-			$HitBox.rotation_degrees = 90;
+			$HitBox.rotation = deg2rad(90);
 			scale = Vector2(1-((springDirection-2)*2),1);
 			hitDirection = Vector2(1-((springDirection-2)*2),0);
 		4, 6:
@@ -56,45 +56,27 @@ func set_spring():
 	if ($Spring.texture != springTextures[type]):
 		$Spring.texture = springTextures[type];
 
-# Horizontal check
-func physics_wall_override(body,caster):
-	if (!caster.get_collision_normal().is_equal_approx(hitDirection)):
-		body.velocity.x = 0;
-	else:
-		body.velocity = hitDirection.rotated(rotation).rotated(-body.rotation)*speed[type]*60;
+# Collision check
+func physics_collision(body, hitVector, collision):
+	if hitVector == -hitDirection:
+		#body.ground = false;
+		var setMove = hitDirection.rotated(rotation).rotated(-body.rotation).round()*speed[type]*60
+		if setMove.y != 0:
+			body.ground = false
+			body.set_state(body.STATES.AIR);
+			body.animator.play("spring")
+			body.movement.y = setMove.y
+		else:
+			body.movement.x = setMove.x
 		$SpringAnimator.play(animList[animID]);
 		$sfxSpring.play();
-
-# Ceiling check
-func physics_ceiling_override(body,caster):
-	if (!caster.get_collision_normal().is_equal_approx(hitDirection)):
-		body.velocity.y = 0;
-	else:
-		body.velocity = hitDirection.rotated(rotation).rotated(-body.rotation)*speed[type]*60;
-		$SpringAnimator.play(animList[animID]);
-		body.spriteFrames.set_animation_speed("walk",1);
-		body.set_state(body.STATES.AIR);
-		$sfxSpring.play();
-	return true;
-
-# Floor check
-func physics_floor_override(body,caster):
-	if (caster.get_collision_normal().is_equal_approx(hitDirection)):
-		body.ground = false;
-		body.velocity = hitDirection.rotated(rotation).rotated(-body.rotation)*speed[type]*60;
-		$SpringAnimator.play(animList[animID]);
-		body.spriteFrames.set_animation_speed("corkScrew",10);
-		body.set_state(body.STATES.AIR);
-		body.sprite.play("corkScrew");
-		$sfxSpring.play();
-	return true;
-
+		return true;
+	
 
 func _on_Diagonal_body_entered(body):
-	body.velocity = hitDirection.rotated(rotation).rotated(-body.rotation)*speed[type]*60;
+	body.movement = hitDirection.rotated(rotation).rotated(-body.rotation)*speed[type]*60;
 	$SpringAnimator.play(animList[animID]);
-	body.spriteFrames.set_animation_speed("corkScrew",10);
 	if (hitDirection.y < 0):
 		body.set_state(body.STATES.AIR);
-	body.sprite.play("corkScrew");
+		body.animator.play("corkScrew")
 	$sfxSpring.play();
