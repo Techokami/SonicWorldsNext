@@ -5,6 +5,7 @@ var verticalSensorLeft = RayCast2D.new()
 var verticalSensorRight = RayCast2D.new()
 var horizontallSensor = RayCast2D.new()
 var slopeCheck = RayCast2D.new()
+var objectCheck = RayCast2D.new()
 
 onready var sensorList = [verticalSensorLeft,verticalSensorRight,horizontallSensor,slopeCheck]
 
@@ -36,19 +37,27 @@ func _ready():
 	add_child(verticalSensorRight)
 	add_child(horizontallSensor)
 	add_child(slopeCheck)
+	add_child(objectCheck)
+	for i in sensorList:
+		i.enabled = true
 	update_sensors()
+	# Object check only needs to be set once
+	objectCheck.set_collision_mask_bit(0,false)
+	objectCheck.set_collision_mask_bit(13,true)
+	objectCheck.enabled = true
 
 func update_sensors():
 	var rotationSnap = stepify(rotation,deg2rad(90))
+	var shape = $HitBox.shape.extents
 	
 	# floor sensors
-	verticalSensorLeft.position.x = -$HitBox.shape.extents.x
+	verticalSensorLeft.position.x = -shape.x
 	
 	# calculate how far down to look if on the floor, the sensor extends more if the objects is moving, if the objects moving up then it's ignored,
 	# if you want behaviour similar to sonic 1, replace "min(abs(movement.x/60)+4,groundLookDistance)" with "groundLookDistance"
 	var extendFloorLook = min(abs(movement.x/60)+4,groundLookDistance)*(int(movement.y >= 0)*int(ground))
 	
-	verticalSensorLeft.cast_to.y = ($HitBox.shape.extents.y+extendFloorLook)*(int(movement.y >= 0)-int(movement.y < 0))
+	verticalSensorLeft.cast_to.y = (shape.y+extendFloorLook)*(int(movement.y >= 0)-int(movement.y < 0))
 	verticalSensorRight.position.x = -verticalSensorLeft.position.x
 	verticalSensorRight.cast_to.y = verticalSensorLeft.cast_to.y
 	
@@ -58,8 +67,8 @@ func update_sensors():
 	horizontallSensor.position.y = 8*int(round(rad2deg(angle)) == round(rad2deg(gravityAngle)) && ground)
 	
 	# slop sensor
-	slopeCheck.position.y = $HitBox.shape.extents.x
-	slopeCheck.cast_to = Vector2(($HitBox.shape.extents.y+extendFloorLook)*sign(rotation-angle),0)
+	slopeCheck.position.y = shape.x
+	slopeCheck.cast_to = Vector2((shape.y+extendFloorLook)*sign(rotation-angle),0)
 	
 	
 	verticalSensorLeft.global_rotation = rotationSnap
@@ -69,11 +78,12 @@ func update_sensors():
 	
 	# set collission mask values
 	for i in sensorList:
-		i.set_collision_mask_bit(1,i.cast_to.rotated(rotationSnap).y > 0)
-		i.set_collision_mask_bit(2,i.cast_to.rotated(rotationSnap).x > 0)
-		i.set_collision_mask_bit(3,i.cast_to.rotated(rotationSnap).x < 0)
-		i.set_collision_mask_bit(4,i.cast_to.rotated(rotationSnap).y < 0)
+		i.set_collision_mask_bit(0,i.cast_to.rotated(rotationSnap).y > 0)
+		i.set_collision_mask_bit(1,i.cast_to.rotated(rotationSnap).x > 0)
+		i.set_collision_mask_bit(2,i.cast_to.rotated(rotationSnap).x < 0)
+		i.set_collision_mask_bit(3,i.cast_to.rotated(rotationSnap).y < 0)
 		# reset layer masks
+		i.set_collision_mask_bit(4,false)
 		i.set_collision_mask_bit(5,false)
 		i.set_collision_mask_bit(6,false)
 		i.set_collision_mask_bit(7,false)
@@ -81,18 +91,18 @@ func update_sensors():
 		i.set_collision_mask_bit(9,false)
 		i.set_collision_mask_bit(10,false)
 		i.set_collision_mask_bit(11,false)
-		i.set_collision_mask_bit(12,false)
 		
 		# set layer masks
+		i.set_collision_mask_bit(0+((collissionLayer+1)*4),i.get_collision_mask_bit(0))
 		i.set_collision_mask_bit(1+((collissionLayer+1)*4),i.get_collision_mask_bit(1))
 		i.set_collision_mask_bit(2+((collissionLayer+1)*4),i.get_collision_mask_bit(2))
 		i.set_collision_mask_bit(3+((collissionLayer+1)*4),i.get_collision_mask_bit(3))
-		i.set_collision_mask_bit(4+((collissionLayer+1)*4),i.get_collision_mask_bit(4))
 	
 	horizontallSensor.force_raycast_update()
 	verticalSensorLeft.force_raycast_update()
 	verticalSensorRight.force_raycast_update()
 	slopeCheck.force_raycast_update()
+
 
 func _physics_process(_delta):
 	#movement += Vector2(-int(Input.is_action_pressed("gm_left"))+int(Input.is_action_pressed("gm_right")),-int(Input.is_action_pressed("gm_up"))+int(Input.is_action_pressed("gm_down")))*_delta*100
@@ -102,7 +112,7 @@ func _physics_process(_delta):
 		var moveCalc = moveRemaining.normalized()*min(moveStepLength,moveRemaining.length())
 		
 		velocity = moveCalc.rotated(angle)
-		move_and_slide(velocity)
+		move_and_slide(velocity,Vector2.UP.rotated(gravityAngle))
 		update_sensors()
 		var groundMemory = ground
 		var roofMemory = roof
@@ -137,10 +147,10 @@ func _physics_process(_delta):
 			# Snap the Vector and normalize it
 			var normHitVec = -Vector2.LEFT.rotated(snap_angle(rayHitVec.normalized().angle()))
 			# FIX THIS
-			#if move_and_collide(rayHitVec-(normHitVec*$HitBox.shape.extents.y),true):
-			#	move_and_collide(rayHitVec-(normHitVec*$HitBox.shape.extents.y))
-			#else:
-			translate(rayHitVec-(normHitVec*$HitBox.shape.extents.y))
+			if move_and_collide(rayHitVec-(normHitVec*$HitBox.shape.extents.y),true,true,true):
+				move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.extents.y)))
+			else:
+				translate(rayHitVec-(normHitVec*($HitBox.shape.extents.y+1)))
 		
 		# set rotation
 		
@@ -181,19 +191,36 @@ func _physics_process(_delta):
 		
 		moveRemaining -= moveRemaining.normalized()*min(moveStepLength,moveRemaining.length())
 	
+	
+	
 	#Object checks
 	
 	# temporarily reset mask and layer
 	var layerMemory = collision_layer
 	var maskMemory = collision_mask
 	
+	
 	var dirList = [Vector2.DOWN,Vector2.LEFT,Vector2.RIGHT,Vector2.UP]
 	for i in dirList:
-		var col = move_and_collide(i,true,0)
-		if col:
-			if col.get_collider().has_method("physics_collision"):
-				col.get_collider().physics_collision(self,i,col)
-	
+		match i:
+			Vector2.DOWN:
+				objectCheck.position = Vector2(-$HitBox.shape.extents.x,$HitBox.shape.extents.y+1)
+				objectCheck.cast_to = Vector2($HitBox.shape.extents.x*2,0)
+			Vector2.UP:
+				objectCheck.position = Vector2(-$HitBox.shape.extents.x,-$HitBox.shape.extents.y-1)
+				objectCheck.cast_to = Vector2($HitBox.shape.extents.x*2,0)
+			Vector2.RIGHT:
+				objectCheck.position = Vector2($HitBox.shape.extents.x+1,-$HitBox.shape.extents.y)
+				objectCheck.cast_to = Vector2(0,$HitBox.shape.extents.y*2)
+			Vector2.LEFT:
+				objectCheck.position = Vector2(-$HitBox.shape.extents.x-1,-$HitBox.shape.extents.y)
+				objectCheck.cast_to = Vector2(0,$HitBox.shape.extents.y*2)
+		
+		objectCheck.force_raycast_update()
+		if objectCheck.is_colliding():
+			if objectCheck.get_collider().has_method("physics_collision"):
+				objectCheck.get_collider().physics_collision(self,i.rotated(angle).round())
+		
 	# reload memory for layers
 	collision_mask = maskMemory
 	collision_layer = layerMemory

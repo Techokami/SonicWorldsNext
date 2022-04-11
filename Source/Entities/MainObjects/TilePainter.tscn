@@ -36,14 +36,14 @@ script = ExtResource( 2 )
 
 [node name="LowSolid" type="TileMap" parent="."]
 cell_size = Vector2( 16, 16 )
-collision_layer = 1792
-collision_mask = 1792
+collision_layer = 240
+collision_mask = 240
 format = 1
 
 [node name="HighSolid" type="TileMap" parent="."]
 cell_size = Vector2( 16, 16 )
-collision_layer = 28672
-collision_mask = 28672
+collision_layer = 3840
+collision_mask = 3840
 format = 1
 
 [node name="Background" type="TileMap" parent="."]
@@ -54,14 +54,14 @@ format = 1
 
 [node name="LowTop" type="TileMap" parent="."]
 cell_size = Vector2( 16, 16 )
-collision_layer = 256
-collision_mask = 256
+collision_layer = 16
+collision_mask = 16
 format = 1
 
 [node name="HighTop" type="TileMap" parent="."]
 cell_size = Vector2( 16, 16 )
-collision_layer = 4096
-collision_mask = 4096
+collision_layer = 256
+collision_mask = 256
 format = 1
 
 [node name="Top" type="TileMap" parent="."]

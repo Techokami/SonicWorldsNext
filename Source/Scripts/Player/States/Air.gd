@@ -41,8 +41,6 @@ func _input(event):
 					parent.shieldSprite.play("BubbleAction");
 					#parent.shieldSprite.frame = ;
 
-func _process(delta):
-	var setSpeed = 60/floor(max(1,4-abs(parent.groundSpeed/60)));
 
 func _physics_process(delta):
 	# air movement
@@ -51,11 +49,11 @@ func _physics_process(delta):
 			if (abs(parent.movement.x) < parent.top):
 				parent.movement.x = clamp(parent.movement.x+parent.air/delta*parent.inputs[parent.INPUTS.XINPUT],-parent.top,parent.top);
 				
-	# Air drag, don't know how accurate this is, may need some better tweaking
+	# Air drag, don't know how accurate this is, may need some tweaking
 	if (parent.movement.y < 0 && parent.movement.y > -4*60):
-		#parent.movement.x -= ((parent.movement.x / int(0.125/delta)) / 256); old version
 		parent.movement.x -= ((parent.movement.x / 0.125) / 256)*60*delta;
 	
+	# Cut vertical movement if jump released
 	if (isJump && !parent.inputs[parent.INPUTS.ACTION]):
 		if (parent.movement.y < -4*60):
 			parent.movement.y = -4*60;
@@ -63,6 +61,7 @@ func _physics_process(delta):
 	# gravity
 	parent.movement.y += parent.grv/delta;
 	
+	# reset state if on ground
 	if (parent.ground):
 		parent.set_state(parent.STATES.NORMAL);
 	

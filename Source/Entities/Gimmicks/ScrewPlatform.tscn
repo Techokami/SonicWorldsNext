@@ -40,10 +40,10 @@ script = ExtResource( 3 )
 [node name="ScrewPipe" type="Sprite" parent="."]
 texture = ExtResource( 2 )
 region_enabled = true
-region_rect = Rect2( 0, 0, 32, 24 )
+region_rect = Rect2( 0, 0, 32, 32 )
 
 [node name="ScrewBottom" type="Sprite" parent="."]
-position = Vector2( 0, 16 )
+position = Vector2( 0, 20 )
 texture = ExtResource( 2 )
 hframes = 2
 frame = 1
@@ -51,8 +51,8 @@ frame = 1
 [node name="Screw" type="KinematicBody2D" parent="."]
 position = Vector2( 0, -4 )
 z_index = 5
-collision_layer = 64
-collision_mask = 64
+collision_layer = 8192
+collision_mask = 8192
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Screw"]
 shape = SubResource( 1 )
@@ -62,7 +62,7 @@ frames = SubResource( 6 )
 
 [node name="playerChecker" type="Area2D" parent="Screw"]
 position = Vector2( 0, -12 )
-collision_layer = 32
+collision_layer = 4096
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Screw/playerChecker"]

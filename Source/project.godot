@@ -116,19 +116,21 @@ gm_pause={
 
 [layer_names]
 
-2d_physics/layer_1="Floors"
-2d_physics/layer_2="Walls"
-2d_physics/layer_3="Ceilings"
-2d_physics/layer_4="Low (No TileMap)"
-2d_physics/layer_5="High (No TileMap)"
-2d_physics/layer_6="Player"
-2d_physics/layer_7="Objects"
-2d_physics/layer_9="FloorsLow"
-2d_physics/layer_10="WallsLow"
-2d_physics/layer_11="CeilingsLow"
-2d_physics/layer_13="FloorsHigh"
-2d_physics/layer_14="WallsHigh"
-2d_physics/layer_15="CeilingsHigh"
+2d_physics/layer_1="Top Solid"
+2d_physics/layer_2="Left Solid"
+2d_physics/layer_3="Right Solid"
+2d_physics/layer_4="Bottom Solid"
+2d_physics/layer_5="Top Solid (Low)"
+2d_physics/layer_6="Left Solid (Low)"
+2d_physics/layer_7="Right Solid (Low)"
+2d_physics/layer_8="Bottom Solid (Low)"
+2d_physics/layer_9="Top Solid (High)"
+2d_physics/layer_10="Left Solid (High)"
+2d_physics/layer_11="Right Solid (High)"
+2d_physics/layer_12="Bottom Solid (High)"
+2d_physics/layer_13="Player"
+2d_physics/layer_14="Object"
+2d_physics/layer_15="Enemy"
 
 [rendering]
 

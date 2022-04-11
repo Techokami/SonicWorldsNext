@@ -7,7 +7,7 @@
 extents = Vector2( 8, 8 )
 
 [node name="EnemyBase" type="KinematicBody2D"]
-collision_layer = 32
+collision_layer = 16384
 collision_mask = 0
 script = ExtResource( 1 )
 

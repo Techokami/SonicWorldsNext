@@ -55,7 +55,6 @@ func _physics_process(delta):
 	# Apply slope factor
 	# ignore this if not moving for sonic 1 style slopes
 	parent.movement.x += (parent.slp*sin(parent.angle))/delta;
-	#parent.movement.x = 100*parent.inputs[parent.INPUTS.XINPUT]
 	
 	var calcAngle = rad2deg(parent.angle)
 	if (calcAngle < 0):
@@ -80,7 +79,7 @@ func _physics_process(delta):
 					parent.movement.x = 0.5*60*sign(parent.movement.x)
 	else:
 		if (parent.movement.x != 0):
-			# needs better code
+			# check that decreasing movement won't go too far
 			if (sign(parent.movement.x - (parent.frc/delta)*sign(parent.movement.x)) == sign(parent.movement.x)):
 				parent.movement.x -= (parent.frc/delta)*sign(parent.movement.x)
 			else:

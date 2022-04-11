@@ -11,7 +11,7 @@ func _physics_process(delta):
 					i.movement.x = 2*sign(-1+(forceDirection*2))*Global.originalFPS
 				if i.currentState != i.STATES.ROLL:
 					i.set_state(i.STATES.ROLL)
-					#i.sprite.play("roll");
+					i.animator.play("roll");
 					i.sfx[1].play();
 
 func _on_ForceRoll_body_entered(body):

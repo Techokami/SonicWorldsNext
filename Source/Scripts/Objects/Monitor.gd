@@ -9,62 +9,56 @@ export (int, "Ring", "Speed Shoes", "Invincibility", "Shield", "Elec Shield", "F
 "Bubble Shield", "Super", "Blue Ring", "Boost", "1up") var item = 0;
 
 func _ready():
-	$Item.frame = item+2;
+	$Item.frame = item+2
 
 func _process(delta):
-	if (Engine.editor_hint):
-		$Item.frame = item+2;
+	if (Engine.is_editor_hint()):
+		$Item.frame = item+2
 
 func destroy():
 	$Item.z_index += 1000
-	$Animator.play("DestroyMonitor");
-	$SFX/Destroy.play();
-	yield($Animator,"animation_finished");
+	$Animator.play("DestroyMonitor")
+	$SFX/Destroy.play()
+	yield($Animator,"animation_finished")
 	# enable effect
 	match (item):
 		0: # Rings
-			playerTouch.rings += 10;
-			$SFX/Ring.play();
+			playerTouch.rings += 10
+			$SFX/Ring.play()
 		2: #invincibility
-			playerTouch.supTime = 30;
-			playerTouch.shieldSprite.visible = false;
-			playerTouch.get_node("InvincibilityBarrier").visible = true;
+			playerTouch.supTime = 30
+			playerTouch.shieldSprite.visible = false
+			playerTouch.get_node("InvincibilityBarrier").visible = true
 		3: # Shield
-			playerTouch.set_shield(playerTouch.SHIELDS.NORMAL);
+			playerTouch.set_shield(playerTouch.SHIELDS.NORMAL)
 		4: # Elec
-			playerTouch.set_shield(playerTouch.SHIELDS.ELEC);
+			playerTouch.set_shield(playerTouch.SHIELDS.ELEC)
 		5: # Fire
-			playerTouch.set_shield(playerTouch.SHIELDS.FIRE);
+			playerTouch.set_shield(playerTouch.SHIELDS.FIRE)
 		6: # Bubble
-			playerTouch.set_shield(playerTouch.SHIELDS.BUBBLE);
+			playerTouch.set_shield(playerTouch.SHIELDS.BUBBLE)
 
 func _physics_process(delta):
-	if (!Engine.editor_hint):
+	if (!Engine.is_editor_hint()):
 		if (physics):
-			var collide = move_and_collide(Vector2(0,yspeed)*delta);
-			yspeed += grv/delta;
+			var collide = move_and_collide(Vector2(0,yspeed)*delta)
+			yspeed += grv/delta
 			if (collide && yspeed > 0):
-				print(collide);
-				physics = false;
+				print(collide)
+				physics = false
 
-# Horizontal check
-func physics_wall_override(body,caster):
-	if (body.movement.y >= 0 && body.sprite.animation == "roll"):
-		playerTouch = body;
-		destroy();
-	else:
-		body.movement.x = 0;
-
-func physics_floor_override(body,caster):
-	if (body.sprite.animation == "roll"):
-		body.movement.y *= -1;
-		body.ground = false;
-		playerTouch = body;
-		destroy();
-
-func physics_ceiling_override(body,caster):
-	if (body.sprite.animation == "roll"):
-		body.movement.y *= -1;
-		yspeed = -1.5*Global.originalFPS;
-		physics = true;
+func physics_collision(body, hitVector):
+	if (body.animator.current_animation == "roll"):
+		if hitVector.y < 0:
+			body.movement.y *= -1
+			yspeed = -1.5*60
+			physics = true
+		elif hitVector.x != 0:
+			playerTouch = body
+			destroy()
+		else:
+			body.movement.y *= -1
+			body.ground = false
+			playerTouch = body
+			destroy()
 	return true;

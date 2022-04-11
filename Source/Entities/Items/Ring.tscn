@@ -15,8 +15,8 @@ z_index = 4
 texture = ExtResource( 2 )
 
 [node name="Hitbox" type="Area2D" parent="."]
-collision_layer = 32
-collision_mask = 0
+collision_layer = 0
+collision_mask = 4096
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 modulate = Color( 1, 0, 0.819608, 1 )

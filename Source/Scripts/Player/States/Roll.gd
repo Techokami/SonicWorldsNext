@@ -10,21 +10,19 @@ func _input(event):
 			parent.set_state(parent.STATES.JUMP);
 
 
-func _process(delta):
-	var setSpeed = 60/floor(max(1,4-abs(parent.groundSpeed/60)));
-	#parent.spriteFrames.set_animation_speed("roll",setSpeed);
 
 func _physics_process(delta):
 	
-	
+	# Set air if not on floor
 	if (!parent.ground):
 		parent.set_state(parent.STATES.AIR,parent.HITBOXESSONIC.ROLL);
 		return null;
-	
+	# Set normal if speed is 0
 	if (parent.movement.x == 0):
 		parent.set_state(parent.STATES.NORMAL);
 		return null;
 	
+	# Lock vertical movement
 	parent.movement.y = min(parent.movement.y,0);
 	
 	# Apply slope factor
@@ -41,6 +39,7 @@ func _physics_process(delta):
 	if (abs(parent.movement.x) < parent.fall && calcAngle >= 45 && calcAngle <= 315):
 		if (round(calcAngle) >= 90 && round(calcAngle) <= 270):
 			parent.disconect_from_floor();
+		
 		parent.lockTimer = 30.0/60.0;
 	
 	

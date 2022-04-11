@@ -24,7 +24,7 @@ animations = [ {
 } ]
 
 [node name="Saw" type="Area2D"]
-collision_layer = 32
+collision_layer = 4096
 collision_mask = 0
 script = ExtResource( 2 )
 
@@ -34,7 +34,6 @@ shape = SubResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 4 )
-frame = 1
 playing = true
 
 [node name="SawNoise" type="AudioStreamPlayer2D" parent="."]

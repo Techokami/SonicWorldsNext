@@ -1,19 +1,39 @@
 tool
 extends Area2D
 
-var texture = preload("res://Graphics/EditorUI/LayerSwitchers.png");
+var texture = preload("res://graphics/editorUI/LayerSwitchers.png");
 export var size = Vector2(1,3);
 export (int, "Horizontal", "Vertical") var orientation = 0;
 export (int, "Low", "High") var rightLayer = 0;
 export (int, "Low", "High") var leftLayer = 1;
+export var onlyOnFloor = false
+
+var playerList = []
 
 func _ready():
 	$Mask.scale = size;
-	if (!Engine.editor_hint):
+	if not Engine.is_editor_hint():
 		visible = false
 
+func _physics_process(delta):
+	if playerList.size() > 0:
+		for i in playerList:
+			if "collissionLayer" in i and "movement" in i and "ground" in i:
+				if i.ground or not onlyOnFloor:
+					match(orientation):
+						0: #Horizontal
+							if (i.global_position.x > global_position.x):
+								i.collissionLayer = rightLayer;
+							else:
+								i.collissionLayer = leftLayer;
+						1: #Vertical
+							if (i.global_position.y > global_position.y):
+								i.collissionLayer = rightLayer;
+							else:
+								i.collissionLayer = leftLayer;
+
 func _process(delta):
-	if (Engine.editor_hint):
+	if Engine.is_editor_hint():
 		$Mask.scale = size;
 		update();
 
@@ -33,12 +53,13 @@ func _draw():
 	
 
 
-func _on_LayerSwitcher_body_entered(body):
-	if (!Engine.editor_hint):
-		if (body.get("defaultLayer") != null && body.get("movement") != null):
-			if (body.movement.rotated(body.rotation).x > 0):
-				body.defaultLayer = rightLayer;
-			else:
-				body.defaultLayer = leftLayer;
-			if (body.has_method("layer_check_casts")):
-				body.layer_check_casts()
+func _on_layer_switcher_body_entered(body):
+	if not Engine.is_editor_hint():
+		if not playerList.has(body):
+			playerList.append(body)
+
+
+func _on_layer_switcher_body_exited(body):
+	if not Engine.is_editor_hint():
+		if playerList.has(body):
+			playerList.erase(body)

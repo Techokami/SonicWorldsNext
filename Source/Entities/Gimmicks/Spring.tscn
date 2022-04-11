@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://Graphics/Gimmicks/springs_yellow.png" type="Texture" id=1]
+[ext_resource path="res://graphics/gimmicks/springs_yellow.png" type="Texture" id=1]
 [ext_resource path="res://Scripts/Gimmicks/Spring.gd" type="Script" id=2]
 [ext_resource path="res://Audio/SFX/Gimmicks/Springs.wav" type="AudioStream" id=3]
 
@@ -123,15 +123,15 @@ tracks/1/keys = {
 }
 
 [node name="Spring" type="KinematicBody2D"]
-collision_layer = 96
-collision_mask = 64
+collision_layer = 8192
+collision_mask = 8192
 script = ExtResource( 2 )
 
 [node name="HitBox" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
 
 [node name="DiagonalHitBox" type="Area2D" parent="."]
-collision_layer = 32
+collision_layer = 4096
 collision_mask = 0
 
 [node name="AreaShape" type="CollisionShape2D" parent="DiagonalHitBox"]
@@ -142,7 +142,7 @@ disabled = true
 [node name="Spring" type="Sprite" parent="."]
 texture = ExtResource( 1 )
 region_enabled = true
-region_rect = Rect2( 0, 16, 32, 16 )
+region_rect = Rect2( 0, 32, 32, 16 )
 
 [node name="SpringAnimator" type="AnimationPlayer" parent="."]
 anims/SpringRight = SubResource( 3 )

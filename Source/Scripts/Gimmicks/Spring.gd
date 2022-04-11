@@ -57,7 +57,8 @@ func set_spring():
 		$Spring.texture = springTextures[type];
 
 # Collision check
-func physics_collision(body, hitVector, collision):
+func physics_collision(body, hitVector):
+	print(hitVector,": ",-hitDirection)
 	if hitVector == -hitDirection:
 		#body.ground = false;
 		var setMove = hitDirection.rotated(rotation).rotated(-body.rotation).round()*speed[type]*60

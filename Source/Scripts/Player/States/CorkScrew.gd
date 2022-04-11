@@ -12,7 +12,8 @@ func _physics_process(delta):
 	
 	parent.sprite.flip_h = (parent.direction < 0);
 		
-	var calcAngle = rad2deg(parent.angle.angle())+90;
+	#var calcAngle = rad2deg(parent.angle.angle())+90;
+	var calcAngle = wrapf(rad2deg(parent.angle),0,360)
 	if (calcAngle < 0):
 		calcAngle += 360;
 	
