@@ -42,7 +42,7 @@ func _physics_process(delta):
 			
 			if ((!$Screw/FloorCheck.is_colliding() || goDirection > 0) && (!$Screw/CeilingCheck.is_colliding() || goDirection < 0)
 			&& $Screw.position.y-goDirection > (-top*8)+12 && i.ground):
-				i.position.y -= goDirection
+				#i.position.y -= goDirection
 				i.global_position.x = global_position.x
 				$Screw/Screw.frame = posmod(floor(-$Screw.position.y/4),4)
 			else:

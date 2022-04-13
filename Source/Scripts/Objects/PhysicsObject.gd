@@ -107,12 +107,13 @@ func update_sensors():
 func _physics_process(_delta):
 	#movement += Vector2(-int(Input.is_action_pressed("gm_left"))+int(Input.is_action_pressed("gm_right")),-int(Input.is_action_pressed("gm_up"))+int(Input.is_action_pressed("gm_down")))*_delta*100
 	var moveRemaining = movement # copy of the movement variable to cut down on until it hits 0
-	while !moveRemaining.is_equal_approx(Vector2.ZERO):
-		
+	var checkOverride = true
+	while !moveRemaining.is_equal_approx(Vector2.ZERO) || checkOverride:
+		checkOverride = false
 		var moveCalc = moveRemaining.normalized()*min(moveStepLength,moveRemaining.length())
 		
 		velocity = moveCalc.rotated(angle)
-		move_and_slide(velocity,Vector2.UP.rotated(gravityAngle))
+		move_and_slide_with_snap(velocity,Vector2.DOWN.rotated(gravityAngle),Vector2.UP.rotated(gravityAngle))
 		update_sensors()
 		var groundMemory = ground
 		var roofMemory = roof
@@ -147,8 +148,8 @@ func _physics_process(_delta):
 			# Snap the Vector and normalize it
 			var normHitVec = -Vector2.LEFT.rotated(snap_angle(rayHitVec.normalized().angle()))
 			# FIX THIS
-			if move_and_collide(rayHitVec-(normHitVec*$HitBox.shape.extents.y),true,true,true):
-				move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.extents.y)))
+			if move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.extents.y+1)),true,true,true):
+				move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.extents.y+1)))
 			else:
 				translate(rayHitVec-(normHitVec*($HitBox.shape.extents.y+1)))
 		

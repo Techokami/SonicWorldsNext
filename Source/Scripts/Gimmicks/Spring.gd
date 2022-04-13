@@ -58,7 +58,7 @@ func set_spring():
 
 # Collision check
 func physics_collision(body, hitVector):
-	print(hitVector,": ",-hitDirection)
+	#print(hitVector,": ",-hitDirection)
 	if hitVector == -hitDirection:
 		#body.ground = false;
 		var setMove = hitDirection.rotated(rotation).rotated(-body.rotation).round()*speed[type]*60
