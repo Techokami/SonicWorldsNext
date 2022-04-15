@@ -2,6 +2,11 @@ tool
 extends AnimatedSprite
 
 
+func _process(delta):
+	# prevent rotation
+	if (!Engine.is_editor_hint()):
+		global_rotation = 0
+
 
 func _on_Shields_frame_changed():
 	match (animation):

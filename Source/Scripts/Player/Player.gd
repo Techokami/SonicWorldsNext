@@ -24,7 +24,31 @@ var abilityUsed = false
 var bounceReaction = 0
 var invTime = 0
 var supTime = 0
+var shoeTime = 0
 var ringDisTime = 0 # ring collecting disable timer
+
+# physics list
+# order
+# 0 Acceleration
+# 1 Deceleration
+# 2 Friction
+# 3 Top Speed
+# 4 Air Acceleration 
+# 5 Rolling Friction 
+# 6 Rolling Deceleration
+
+# 0 = Sonic, 1 = Tails, 2 = Knuckles, 3 = Shoes, 4 = Super
+
+var physicsList = [
+# 0 Sonic
+[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125],
+# 1 Tails
+[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125],
+# 2 Knuckles
+[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125],
+# 3 Shoes
+[0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875, 0.125],
+]
 
 # ================
 
@@ -83,7 +107,7 @@ func _ready():
 	#super()
 	# disable and enable states
 	set_state(currentState)
-	#Global.players.append(self)
+	Global.players.append(self)
 	connect("connectFloor",self,"land_floor")
 	connect("connectCeiling",self,"touch_ceiling")
 
@@ -115,12 +139,26 @@ func _process(delta):
 		lockTimer -= delta
 		inputs[INPUTS.XINPUT] = 0
 		inputs[INPUTS.YINPUT] = 0
-#	if (supTime > 0):
-#		supTime -= delta
-#		if (supTime <= 0):
-#			if (shield != SHIELDS.NONE):
-#				shieldSprite.visible = true
-#			$InvincibilityBarrier.visible = false
+
+	if (supTime > 0):
+		supTime -= delta
+		if (supTime <= 0):
+			if (shield != SHIELDS.NONE):
+				shieldSprite.visible = true
+			$InvincibilityBarrier.visible = false
+			if Global.currentTheme == 0:
+				Global.music.stream_paused = false
+				Global.music.play()
+				Global.effectTheme.stop()
+	
+	if (shoeTime > 0):
+		shoeTime -= delta
+		if (shoeTime <= 0):
+			switch_physics()
+			if Global.currentTheme == 1:
+				Global.music.stream_paused = false
+				Global.music.play()
+				Global.effectTheme.stop()
 
 	if (invTime > 0):
 		visible = !visible
@@ -324,3 +362,20 @@ func land_floor():
 		else:
 			movement.x = movement.y*sign(sin(angle))
 
+
+# clean animation
+func _on_PlayerAnimation_animation_started(anim_name):
+	if (sprite != null):
+		sprite.flip_v = false
+		sprite.offset = Vector2(0,-4)
+		animator.advance(0)
+
+func switch_physics(physicsRide = -1):
+	var getList = physicsList[max(0,physicsRide)]
+	acc = getList[0]
+	dec = getList[1]
+	frc = getList[2]
+	top = getList[3]
+	air = getList[4]
+	rollfrc = getList[5]
+	rolldec = getList[6]

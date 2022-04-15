@@ -1,4 +1,4 @@
-[gd_scene load_steps=123 format=2]
+[gd_scene load_steps=124 format=2]
 
 [ext_resource path="res://Scripts/Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Graphics/Players/Sonic.png" type="Texture" id=2]
@@ -53,6 +53,42 @@ tracks/0/keys = {
 "update": 0,
 "values": [ 0 ]
 }
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite/Sprite:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, -4 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Sprite/Sprite:flip_h")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Sprite/Sprite:flip_v")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
 
 [sub_resource type="Animation" id=76]
 resource_name = "corkScrew"
@@ -69,6 +105,47 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59 ]
+}
+
+[sub_resource type="Animation" id=88]
+resource_name = "corkScrewOffset"
+length = 1.4
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 54, 53, 52, 51, 50, 49, 48, 59, 58, 57, 56, 55, 54 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite/Sprite:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, 4 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Sprite/Sprite:flip_v")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
 }
 
 [sub_resource type="Animation" id=77]
@@ -205,7 +282,8 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id=84]
 resource_name = "spring"
-length = 0.1
+length = 0.783333
+step = 0.0166667
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite/Sprite:frame")
 tracks/0/interp = 1
@@ -246,6 +324,58 @@ region = Rect2( 0, 48, 84, 48 )
 [sub_resource type="AtlasTexture" id=31]
 atlas = ExtResource( 17 )
 region = Rect2( 84, 48, 84, 48 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 20 )
+region = Rect2( 0, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=25]
+atlas = ExtResource( 20 )
+region = Rect2( 48, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=26]
+atlas = ExtResource( 20 )
+region = Rect2( 96, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=27]
+atlas = ExtResource( 20 )
+region = Rect2( 144, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=28]
+atlas = ExtResource( 20 )
+region = Rect2( 192, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=29]
+atlas = ExtResource( 20 )
+region = Rect2( 240, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=32]
+atlas = ExtResource( 17 )
+region = Rect2( 0, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=33]
+atlas = ExtResource( 17 )
+region = Rect2( 96, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=34]
+atlas = ExtResource( 17 )
+region = Rect2( 48, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=35]
+atlas = ExtResource( 17 )
+region = Rect2( 144, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=36]
+atlas = ExtResource( 17 )
+region = Rect2( 192, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=37]
+atlas = ExtResource( 17 )
+region = Rect2( 240, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=38]
+atlas = ExtResource( 17 )
+region = Rect2( 288, 0, 48, 48 )
 
 [sub_resource type="AtlasTexture" id=43]
 atlas = ExtResource( 16 )
@@ -302,30 +432,6 @@ region = Rect2( 192, 0, 48, 48 )
 [sub_resource type="AtlasTexture" id=56]
 atlas = ExtResource( 16 )
 region = Rect2( 192, 48, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=24]
-atlas = ExtResource( 20 )
-region = Rect2( 0, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=25]
-atlas = ExtResource( 20 )
-region = Rect2( 48, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=26]
-atlas = ExtResource( 20 )
-region = Rect2( 96, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=27]
-atlas = ExtResource( 20 )
-region = Rect2( 144, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=28]
-atlas = ExtResource( 20 )
-region = Rect2( 192, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=29]
-atlas = ExtResource( 20 )
-region = Rect2( 240, 0, 48, 48 )
 
 [sub_resource type="AtlasTexture" id=3]
 atlas = ExtResource( 18 )
@@ -411,34 +517,6 @@ region = Rect2( 48, 0, 48, 48 )
 atlas = ExtResource( 18 )
 region = Rect2( 96, 0, 48, 48 )
 
-[sub_resource type="AtlasTexture" id=32]
-atlas = ExtResource( 17 )
-region = Rect2( 0, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=33]
-atlas = ExtResource( 17 )
-region = Rect2( 96, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=34]
-atlas = ExtResource( 17 )
-region = Rect2( 48, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=35]
-atlas = ExtResource( 17 )
-region = Rect2( 144, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=36]
-atlas = ExtResource( 17 )
-region = Rect2( 192, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=37]
-atlas = ExtResource( 17 )
-region = Rect2( 240, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=38]
-atlas = ExtResource( 17 )
-region = Rect2( 288, 0, 48, 48 )
-
 [sub_resource type="AtlasTexture" id=39]
 atlas = ExtResource( 15 )
 region = Rect2( 0, 0, 48, 48 )
@@ -462,6 +540,16 @@ animations = [ {
 "name": "BubbleAction",
 "speed": 10.0
 }, {
+"frames": [ SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ), SubResource( 29 ) ],
+"loop": false,
+"name": "Insta",
+"speed": 30.0
+}, {
+"frames": [ SubResource( 32 ), SubResource( 33 ), SubResource( 32 ), SubResource( 33 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ), SubResource( 35 ), SubResource( 34 ), SubResource( 35 ), SubResource( 34 ), SubResource( 35 ), SubResource( 32 ), SubResource( 36 ), SubResource( 32 ), SubResource( 36 ), SubResource( 32 ), SubResource( 36 ), SubResource( 34 ), SubResource( 37 ), SubResource( 34 ), SubResource( 37 ), SubResource( 34 ), SubResource( 37 ), SubResource( 32 ), SubResource( 38 ), SubResource( 32 ), SubResource( 38 ), SubResource( 32 ), SubResource( 38 ), SubResource( 34 ), SubResource( 37 ), SubResource( 34 ), SubResource( 37 ), SubResource( 34 ), SubResource( 37 ), SubResource( 32 ), SubResource( 36 ), SubResource( 32 ), SubResource( 36 ), SubResource( 32 ), SubResource( 36 ), SubResource( 34 ), SubResource( 35 ), SubResource( 34 ), SubResource( 35 ), SubResource( 34 ), SubResource( 35 ), SubResource( 32 ), SubResource( 33 ), SubResource( 32 ), SubResource( 33 ), SubResource( 32 ), SubResource( 33 ) ],
+"loop": true,
+"name": "Bubble",
+"speed": 30.0
+}, {
 "frames": [ SubResource( 43 ), SubResource( 44 ), SubResource( 45 ), SubResource( 46 ) ],
 "loop": true,
 "name": "FireAction",
@@ -472,20 +560,10 @@ animations = [ {
 "name": "Fire",
 "speed": 30.0
 }, {
-"frames": [ SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ), SubResource( 29 ) ],
-"loop": false,
-"name": "Insta",
-"speed": 30.0
-}, {
 "frames": [ SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 21 ), SubResource( 22 ), SubResource( 23 ) ],
 "loop": true,
 "name": "Elec",
 "speed": 15.0
-}, {
-"frames": [ SubResource( 32 ), SubResource( 33 ), SubResource( 32 ), SubResource( 33 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ), SubResource( 35 ), SubResource( 34 ), SubResource( 35 ), SubResource( 34 ), SubResource( 35 ), SubResource( 32 ), SubResource( 36 ), SubResource( 32 ), SubResource( 36 ), SubResource( 32 ), SubResource( 36 ), SubResource( 34 ), SubResource( 37 ), SubResource( 34 ), SubResource( 37 ), SubResource( 34 ), SubResource( 37 ), SubResource( 32 ), SubResource( 38 ), SubResource( 32 ), SubResource( 38 ), SubResource( 32 ), SubResource( 38 ), SubResource( 34 ), SubResource( 37 ), SubResource( 34 ), SubResource( 37 ), SubResource( 34 ), SubResource( 37 ), SubResource( 32 ), SubResource( 36 ), SubResource( 32 ), SubResource( 36 ), SubResource( 32 ), SubResource( 36 ), SubResource( 34 ), SubResource( 35 ), SubResource( 34 ), SubResource( 35 ), SubResource( 34 ), SubResource( 35 ), SubResource( 32 ), SubResource( 33 ), SubResource( 32 ), SubResource( 33 ), SubResource( 32 ), SubResource( 33 ) ],
-"loop": true,
-"name": "Bubble",
-"speed": 30.0
 }, {
 "frames": [ SubResource( 39 ), SubResource( 40 ), SubResource( 41 ), SubResource( 42 ) ],
 "loop": true,
@@ -615,13 +693,13 @@ script = ExtResource( 4 )
 shape = SubResource( 1 )
 
 [node name="Sprite" type="Node2D" parent="."]
-z_index = 5
 
 [node name="PlayerAnimation" type="AnimationPlayer" parent="Sprite"]
 root_node = NodePath("../..")
 autoplay = "idle"
 anims/RESET = SubResource( 86 )
 anims/corkScrew = SubResource( 76 )
+anims/corkScrewOffset = SubResource( 88 )
 anims/crouch = SubResource( 77 )
 anims/hurt = SubResource( 78 )
 anims/idle = SubResource( 79 )
@@ -665,13 +743,13 @@ z_index = 5
 [node name="StarGenerator1" type="AnimatedSprite" parent="InvincibilityBarrier"]
 position = Vector2( 0, -16 )
 frames = SubResource( 75 )
-frame = 4
+frame = 2
 playing = true
 
 [node name="StarGenerator2" type="AnimatedSprite" parent="InvincibilityBarrier"]
 position = Vector2( 0, 16 )
 frames = SubResource( 75 )
-frame = 4
+frame = 2
 playing = true
 
 [node name="SFX" type="Node" parent="."]
@@ -746,4 +824,6 @@ bus = "SFX"
 stream = ExtResource( 32 )
 bus = "SFX"
 
+[connection signal="animation_changed" from="Sprite/PlayerAnimation" to="." method="_on_PlayerAnimation_animation_changed"]
+[connection signal="animation_started" from="Sprite/PlayerAnimation" to="." method="_on_PlayerAnimation_animation_started"]
 [connection signal="frame_changed" from="Shields" to="Shields" method="_on_Shields_frame_changed"]

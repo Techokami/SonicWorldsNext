@@ -3,7 +3,6 @@ export var pieces = Vector2(2,2)
 var Piece = preload("res://Entities/Misc/BlockPiece.tscn")
 
 func physics_collision(body, hitVector):
-	#print(hitVector,": ",-hitDirection)
 	if hitVector == Vector2.DOWN && body.animator.current_animation == "roll":
 		$CollisionShape2D.disabled = true
 		$Sprite.visible = false

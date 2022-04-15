@@ -142,7 +142,7 @@ disabled = true
 [node name="Spring" type="Sprite" parent="."]
 texture = ExtResource( 1 )
 region_enabled = true
-region_rect = Rect2( 0, 32, 32, 16 )
+region_rect = Rect2( 0, 16, 32, 16 )
 
 [node name="SpringAnimator" type="AnimationPlayer" parent="."]
 anims/SpringRight = SubResource( 3 )

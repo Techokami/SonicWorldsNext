@@ -8,6 +8,7 @@ var playerTouch = null;
 export (int, "Ring", "Speed Shoes", "Invincibility", "Shield", "Elec Shield", "Fire Shield",
 "Bubble Shield", "Super", "Blue Ring", "Boost", "1up") var item = 0;
 
+
 func _ready():
 	$Item.frame = item+2
 
@@ -25,10 +26,21 @@ func destroy():
 		0: # Rings
 			playerTouch.rings += 10
 			$SFX/Ring.play()
-		2: #invincibility
+		1: # Speed Shoes
+			playerTouch.shoeTime = 30
+			playerTouch.switch_physics(3)
+			Global.music.stream_paused = true
+			Global.currentTheme = 1
+			Global.effectTheme.stream = Global.themes[Global.currentTheme]
+			Global.effectTheme.play()
+		2: # Invincibility
 			playerTouch.supTime = 30
 			playerTouch.shieldSprite.visible = false
 			playerTouch.get_node("InvincibilityBarrier").visible = true
+			Global.music.stream_paused = true
+			Global.currentTheme = 0
+			Global.effectTheme.stream = Global.themes[Global.currentTheme]
+			Global.effectTheme.play()
 		3: # Shield
 			playerTouch.set_shield(playerTouch.SHIELDS.NORMAL)
 		4: # Elec
@@ -44,7 +56,6 @@ func _physics_process(delta):
 			var collide = move_and_collide(Vector2(0,yspeed)*delta)
 			yspeed += grv/delta
 			if (collide && yspeed > 0):
-				print(collide)
 				physics = false
 
 func physics_collision(body, hitVector):

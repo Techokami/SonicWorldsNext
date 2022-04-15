@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://Tileset/Worlds/TestTilesGreen.tres" type="TileSet" id=1]
 [ext_resource path="res://Entities/MainObjects/Player.tscn" type="PackedScene" id=2]
@@ -13,7 +13,7 @@
 [ext_resource path="res://Entities/Items/Ring.tscn" type="PackedScene" id=11]
 [ext_resource path="res://Entities/Items/Monitor.tscn" type="PackedScene" id=12]
 [ext_resource path="res://Entities/Obstacles/Bumper.tscn" type="PackedScene" id=13]
-[ext_resource path="res://Audio/Soundtrack/6. SWD_TLZa1.ogg" type="AudioStream" id=14]
+[ext_resource path="res://Scripts/Level/Level.gd" type="Script" id=14]
 [ext_resource path="res://Entities/MainObjects/BoundrySetter.tscn" type="PackedScene" id=15]
 [ext_resource path="res://Entities/Gimmicks/Bridge.tscn" type="PackedScene" id=16]
 [ext_resource path="res://Entities/Obstacles/BreakableBlock.tscn" type="PackedScene" id=17]
@@ -23,6 +23,7 @@
 [ext_resource path="res://Entities/Gimmicks/ScrewPlatform.tscn" type="PackedScene" id=21]
 [ext_resource path="res://Entities/Gimmicks/SpeedBooster.tscn" type="PackedScene" id=22]
 [ext_resource path="res://Entities/Gimmicks/CorkscrewLoop.tscn" type="PackedScene" id=23]
+[ext_resource path="res://Entities/Enemies/Orbinaut.tscn" type="PackedScene" id=24]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Glow"
@@ -57,6 +58,7 @@ tracks/0/keys = {
 }
 
 [node name="TestScene" type="Node2D"]
+script = ExtResource( 14 )
 __meta__ = {
 "_edit_horizontal_guides_": [ 2048.0, 0.0 ],
 "_edit_vertical_guides_": [ 10400.0 ]
@@ -88,12 +90,6 @@ texture = ExtResource( 20 )
 centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 512, 512 )
-
-[node name="Music" type="AudioStreamPlayer" parent="."]
-pause_mode = 2
-stream = ExtResource( 14 )
-autoplay = true
-bus = "Music"
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 80, 748 )
@@ -168,12 +164,12 @@ rightLayer = 1
 position = Vector2( 3136, 440 )
 
 [node name="LayerSwitcher4" parent="Entity" instance=ExtResource( 8 )]
-position = Vector2( 4848, 304 )
+position = Vector2( 4864, 304 )
 size = Vector2( 2, 6 )
 rightLayer = 1
 
 [node name="LayerSwitcher5" parent="Entity" instance=ExtResource( 8 )]
-position = Vector2( 4752, 400 )
+position = Vector2( 4752, 416 )
 size = Vector2( 6, 2 )
 orientation = 1
 leftLayer = 0
@@ -241,7 +237,7 @@ rightLayer = 1
 position = Vector2( 5440, 184 )
 
 [node name="Spring" parent="Entity" instance=ExtResource( 10 )]
-position = Vector2( 607, 679 )
+position = Vector2( 608, 680 )
 type = 1
 
 [node name="Spring25" parent="Entity" instance=ExtResource( 10 )]
@@ -431,6 +427,9 @@ position = Vector2( 3456, 816 )
 
 [node name="CorkscrewLoop2" parent="Entity" instance=ExtResource( 23 )]
 position = Vector2( 3840, 816 )
+
+[node name="Orbinaut" parent="Entity" instance=ExtResource( 24 )]
+position = Vector2( 5848, 168 )
 
 [node name="TestZoneMap" type="Sprite" parent="."]
 visible = false

@@ -26,7 +26,7 @@ func _process(delta):
 					parent.animator.play("lookUp")
 			else:
 				parent.animator.play("idle")
-		elif(abs(parent.movement.x) < parent.top):
+		elif(abs(parent.movement.x) < min(6*60,parent.top)):
 			parent.animator.play("walk")
 		elif(abs(parent.movement.x) < 10*60):
 			parent.animator.play("run")

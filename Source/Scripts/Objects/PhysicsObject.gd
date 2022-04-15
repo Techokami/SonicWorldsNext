@@ -1,6 +1,7 @@
 class_name PhysicsObject extends KinematicBody2D
 
 # Sensors
+var verticalObjectCheck = RayCast2D.new()
 var verticalSensorLeft = RayCast2D.new()
 var verticalSensorRight = RayCast2D.new()
 var horizontallSensor = RayCast2D.new()
@@ -35,6 +36,7 @@ signal connectCeiling
 func _ready():
 	add_child(verticalSensorLeft)
 	add_child(verticalSensorRight)
+	add_child(verticalObjectCheck)
 	add_child(horizontallSensor)
 	add_child(slopeCheck)
 	add_child(objectCheck)
@@ -44,22 +46,59 @@ func _ready():
 	# Object check only needs to be set once
 	objectCheck.set_collision_mask_bit(0,false)
 	objectCheck.set_collision_mask_bit(13,true)
+	verticalObjectCheck.set_collision_mask_bit(0,false)
+	verticalObjectCheck.set_collision_mask_bit(13,true)
 	objectCheck.enabled = true
+	verticalObjectCheck.enabled = true
 
 func update_sensors():
 	var rotationSnap = stepify(rotation,deg2rad(90))
 	var shape = $HitBox.shape.extents
 	
 	# floor sensors
-	verticalSensorLeft.position.x = -shape.x
+	verticalSensorLeft.position = Vector2(-shape.x,0)
 	
 	# calculate how far down to look if on the floor, the sensor extends more if the objects is moving, if the objects moving up then it's ignored,
 	# if you want behaviour similar to sonic 1, replace "min(abs(movement.x/60)+4,groundLookDistance)" with "groundLookDistance"
 	var extendFloorLook = min(abs(movement.x/60)+4,groundLookDistance)*(int(movement.y >= 0)*int(ground))
 	
 	verticalSensorLeft.cast_to.y = (shape.y+extendFloorLook)*(int(movement.y >= 0)-int(movement.y < 0))
-	verticalSensorRight.position.x = -verticalSensorLeft.position.x
+	
+	
+	verticalSensorRight.position = -verticalSensorLeft.position
 	verticalSensorRight.cast_to.y = verticalSensorLeft.cast_to.y
+	
+	
+	# Object offsets, prevent clipping
+	if !ground:
+		# check left
+		var offset = 0
+		verticalObjectCheck.position.y = verticalSensorLeft.position.y
+		# give a bit of distance for collissions
+		verticalObjectCheck.cast_to = Vector2(0,-(shape.y*0.25)+shape.y*-sign(verticalSensorLeft.cast_to.y))
+		
+		# check left sensor
+		verticalObjectCheck.position.x = verticalSensorLeft.position.x
+		verticalObjectCheck.force_raycast_update()
+		if verticalObjectCheck.is_colliding():
+			# calculate the offset using the collission point and the cast positions
+			offset = (verticalObjectCheck.get_collision_point()-(verticalObjectCheck.global_position+verticalObjectCheck.cast_to)).y
+		
+		# check right sensor
+		verticalObjectCheck.position.x = verticalSensorRight.position.x
+		verticalObjectCheck.force_raycast_update()
+		if verticalObjectCheck.is_colliding():
+			# calculate the offset using the collission point and the cast positions,
+			# compare it to the old offset, if it's larger then use new offset
+			var newOffset = (verticalObjectCheck.get_collision_point()-(verticalObjectCheck.global_position+verticalObjectCheck.cast_to)).y
+			if abs(newOffset) > abs(offset):
+				offset = newOffset
+		
+		# set the offsets for sensors
+		if offset != 0:
+			verticalSensorLeft.position.y = max(verticalSensorLeft.position.y,offset)
+			verticalSensorRight.position.y = max(verticalSensorRight.position.y,offset)
+		
 	
 	# wall sensor
 	horizontallSensor.cast_to = Vector2(pushRadius*sign(velocity.rotated(-rotationSnap).x),0)
@@ -113,7 +152,7 @@ func _physics_process(_delta):
 		var moveCalc = moveRemaining.normalized()*min(moveStepLength,moveRemaining.length())
 		
 		velocity = moveCalc.rotated(angle)
-		move_and_slide_with_snap(velocity,Vector2.DOWN.rotated(gravityAngle),Vector2.UP.rotated(gravityAngle))
+		move_and_slide_with_snap(velocity,(Vector2.DOWN*3).rotated(gravityAngle),Vector2.UP.rotated(gravityAngle))
 		update_sensors()
 		var groundMemory = ground
 		var roofMemory = roof

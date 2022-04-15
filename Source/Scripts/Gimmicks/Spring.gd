@@ -58,14 +58,21 @@ func set_spring():
 
 # Collision check
 func physics_collision(body, hitVector):
-	#print(hitVector,": ",-hitDirection)
 	if hitVector == -hitDirection:
 		#body.ground = false;
 		var setMove = hitDirection.rotated(rotation).rotated(-body.rotation).round()*speed[type]*60
 		if setMove.y != 0:
 			body.ground = false
 			body.set_state(body.STATES.AIR);
+			var curAnim = "walk"
+			match(body.animator.current_animation):
+				"walk", "run", "peelOut":
+					curAnim = body.animator.current_animation
+				_:
+					if(abs(body.groundSpeed) >= min(6*60,body.top)):
+						curAnim = "run"
 			body.animator.play("spring")
+			body.animator.queue(curAnim)
 			body.movement.y = setMove.y
 		else:
 			body.movement.x = setMove.x
