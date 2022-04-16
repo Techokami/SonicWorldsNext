@@ -49,6 +49,16 @@ func destroy():
 			playerTouch.set_shield(playerTouch.SHIELDS.FIRE)
 		6: # Bubble
 			playerTouch.set_shield(playerTouch.SHIELDS.BUBBLE)
+		7: # Super
+			playerTouch.switch_physics(4)
+			playerTouch.supTime = 3000
+			playerTouch.shoeTime = playerTouch.supTime
+			playerTouch.rings += 50
+			playerTouch.shieldSprite.visible = false
+			Global.music.stream_paused = true
+			Global.currentTheme = 0
+			Global.effectTheme.stream = Global.themes[Global.currentTheme]
+			Global.effectTheme.play()
 
 func _physics_process(delta):
 	if (!Engine.is_editor_hint()):

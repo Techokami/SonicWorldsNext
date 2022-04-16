@@ -4,9 +4,9 @@ extends "res://Scripts/Player/State.gd"
 func _input(event):
 	if (parent.playerControl != 0):
 		if (event.is_action_pressed("gm_action")):
-			# use parent.action_jump("Roll",false); to have jump lock similar to sonic 1-3
+			# use parent.action_jump("roll",false); to have jump lock similar to sonic 1-3
 			# true replicates CD and Mania
-			parent.action_jump("Roll",true);
+			parent.action_jump("roll",true);
 			parent.set_state(parent.STATES.JUMP);
 
 

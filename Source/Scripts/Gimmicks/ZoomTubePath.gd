@@ -1,7 +1,7 @@
 extends Line2D
 
 export var speed = 8;
-export var animation = "Roll";
+export var animation = "roll";
 export var twoWay = false;
 export var hitBoxSize = Vector2(4,4);
 

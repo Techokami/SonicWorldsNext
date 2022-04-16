@@ -12,7 +12,7 @@ func _process(delta):
 	if (playerHit.size() > 0):
 		for i in playerHit:
 			if (i.get("sprite") != null):
-				if (i.sprite.animation == "roll"):
+				if (i.animator.current_animation == "roll" || i.supTime > 0):
 					if (i.velocity.y < 0 || i.global_position.y > global_position.y):
 						i.velocity.y -= Global.originalFPS*sign(i.velocity.y);
 					else:

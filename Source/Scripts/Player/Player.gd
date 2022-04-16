@@ -37,7 +37,7 @@ var ringDisTime = 0 # ring collecting disable timer
 # 5 Rolling Friction 
 # 6 Rolling Deceleration
 
-# 0 = Sonic, 1 = Tails, 2 = Knuckles, 3 = Shoes, 4 = Super
+# 0 = Sonic, 1 = Tails, 2 = Knuckles, 3 = Shoes, 4 = Super Sonic
 
 var physicsList = [
 # 0 Sonic
@@ -48,6 +48,8 @@ var physicsList = [
 [0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125],
 # 3 Shoes
 [0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875, 0.125],
+# 4 Super Sonic
+[0.1875, 1, 0.046875, 10*60, 0.375, 0.09375, 0.125],
 ]
 
 # ================
