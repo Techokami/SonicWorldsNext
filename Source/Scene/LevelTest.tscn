@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://Tileset/Worlds/TestTilesGreen.tres" type="TileSet" id=1]
 [ext_resource path="res://Entities/MainObjects/Player.tscn" type="PackedScene" id=2]
@@ -24,6 +24,7 @@
 [ext_resource path="res://Entities/Gimmicks/SpeedBooster.tscn" type="PackedScene" id=22]
 [ext_resource path="res://Entities/Gimmicks/CorkscrewLoop.tscn" type="PackedScene" id=23]
 [ext_resource path="res://Entities/Enemies/Orbinaut.tscn" type="PackedScene" id=24]
+[ext_resource path="res://Entities/Gimmicks/WaterLevel.tscn" type="PackedScene" id=25]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Glow"
@@ -430,6 +431,9 @@ position = Vector2( 3840, 816 )
 
 [node name="Orbinaut" parent="Entity" instance=ExtResource( 24 )]
 position = Vector2( 5848, 168 )
+
+[node name="WaterLevel" parent="Entity" instance=ExtResource( 25 )]
+position = Vector2( 0, 800 )
 
 [node name="TestZoneMap" type="Sprite" parent="."]
 visible = false

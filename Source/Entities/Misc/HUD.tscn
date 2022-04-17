@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Scripts/Misc/NumeralDisplay.gd" type="Script" id=1]
 [ext_resource path="res://Graphics/HUD/hud_lives.png" type="Texture" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://Scripts/Misc/TextDisplay.gd" type="Script" id=9]
 [ext_resource path="res://Graphics/HUD/LevelCards/font/largefont4.png" type="Texture" id=10]
 [ext_resource path="res://Graphics/HUD/LevelCards/ActCards.png" type="Texture" id=11]
+[ext_resource path="res://Shaders/WaterPalette.tres" type="Material" id=12]
 
 [sub_resource type="Animation" id=1]
 resource_name = "End"
@@ -678,7 +679,7 @@ vframes = 2
 
 [node name="PatternLeft" type="Control" parent="LevelCard"]
 anchor_bottom = 1.0
-margin_bottom = 1376.0
+margin_bottom = 2272.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -687,7 +688,7 @@ __meta__ = {
 anchor_bottom = 1.0
 margin_left = -32.0
 margin_right = 32.0
-margin_bottom = 4896.0
+margin_bottom = 12640.0
 texture = ExtResource( 8 )
 stretch_mode = 2
 __meta__ = {
@@ -707,7 +708,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_top = -32.0
-margin_bottom = 1088.0
+margin_bottom = 1984.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -717,7 +718,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 32.0
-margin_right = 4096.0
+margin_right = 7232.0
 margin_bottom = 64.0
 texture = ExtResource( 8 )
 stretch_mode = 2
@@ -730,3 +731,16 @@ autoplay = "Slider"
 playback_speed = 4.0
 anims/RESET = SubResource( 5 )
 anims/Slider = SubResource( 6 )
+
+[node name="Water" type="CanvasLayer" parent="."]
+
+[node name="WaterOverlay" type="ColorRect" parent="Water"]
+material = ExtResource( 12 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -160.0
+margin_top = -112.0
+margin_right = 160.0
+margin_bottom = 112.0

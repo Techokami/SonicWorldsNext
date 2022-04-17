@@ -14,6 +14,11 @@ func _input(event):
 			parent.sfx[2].pitch_scale = 1.0+((float(parent.spindashPower)/8.0)*0.5);
 		
 func _process(delta):
+	var dash = parent.sprite.get_node("DashDust")
+	dash.visible = !parent.water
+	dash.flip_h = parent.sprite.flip_h
+	dash.offset.x = abs(dash.offset.x)*sign(-1+int(dash.flip_h)*2)
+	
 	# release
 	if (parent.inputs[parent.INPUTS.YINPUT] <= 0):
 		parent.movement.x = (8+(floor(parent.spindashPower) / 2))*60*parent.direction;

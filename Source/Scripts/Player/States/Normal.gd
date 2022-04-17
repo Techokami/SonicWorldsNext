@@ -8,7 +8,7 @@ func _input(event):
 				parent.sfx[2].play()
 				parent.sfx[2].pitch_scale = 1;
 				parent.spindashPower = 0;
-				parent.animator.play("spindash")
+				parent.animator.play("spinDash")
 				parent.set_state(parent.STATES.SPINDASH)
 			else:
 				parent.action_jump()
@@ -26,7 +26,7 @@ func _process(delta):
 					parent.animator.play("lookUp")
 			else:
 				parent.animator.play("idle")
-		elif(abs(parent.movement.x) < min(6*60,parent.top)):
+		elif(abs(parent.movement.x) < 6*60):#min(6*60,parent.top)):
 			parent.animator.play("walk")
 		elif(abs(parent.movement.x) < 10*60):
 			parent.animator.play("run")

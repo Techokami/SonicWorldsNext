@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Splash.wav-f2049b57300b2a6f52b216d4e91d52f6.sample"
+
+[deps]
+
+source_file="res://Audio/SFX/Gimmicks/Splash.wav"
+dest_files=[ "res://.import/Splash.wav-f2049b57300b2a6f52b216d4e91d52f6.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

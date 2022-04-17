@@ -18,6 +18,7 @@ var fall = 2.5*60			#tolerance ground speed for sticking to walls and ceilings
 var air = 0.09375			#air acceleration (2x acc)
 var jmp = 6.5*60			#jump force (6 for knuckles)
 var grv = 0.21875			#gravity
+var releaseJmp = 4			#jump release velocity
 
 var spindashPower = 0.0
 var abilityUsed = false
@@ -26,6 +27,8 @@ var invTime = 0
 var supTime = 0
 var shoeTime = 0
 var ringDisTime = 0 # ring collecting disable timer
+
+var water = false
 
 # physics list
 # order
@@ -36,20 +39,38 @@ var ringDisTime = 0 # ring collecting disable timer
 # 4 Air Acceleration 
 # 5 Rolling Friction 
 # 6 Rolling Deceleration
+# 7 Gravity
+# 8 Jump
+# 9 Jump release velocity
 
 # 0 = Sonic, 1 = Tails, 2 = Knuckles, 3 = Shoes, 4 = Super Sonic
 
+var lastPhysicsState = 0
+
 var physicsList = [
 # 0 Sonic
-[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125],
+[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125, 0.21875, 6.5*60, 4],
 # 1 Tails
-[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125],
+[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125, 0.21875, 6.5*60, 4],
 # 2 Knuckles
-[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125],
+[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125, 0.21875, 6*60, 4],
 # 3 Shoes
-[0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875, 0.125],
+[0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875, 0.125, 0.21875, 6.5*60, 4],
 # 4 Super Sonic
-[0.1875, 1, 0.046875, 10*60, 0.375, 0.09375, 0.125],
+[0.1875, 1, 0.046875, 10*60, 0.375, 0.0234375, 0.125, 0.21875, 8*60, 4],
+]
+
+var waterPhysicsList = [
+# 0 Sonic
+[0.046875/2, 0.5/2, 0.046875/2, 6*60/2, 0.09375/2, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
+# 1 Tails
+[0.046875/2, 0.5/2, 0.046875/2, 6*60/2, 0.09375/2, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
+# 2 Knuckles
+[0.046875/2, 0.5/2, 0.046875/2, 6*60/2, 0.09375/2, 0.046875*0.5, 0.125, 0.0625, 3*60, 2],
+# 3 Shoes
+[0.046875/2, 0.5/2, 0.046875/2, 6*60/2, 0.09375/2, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
+# 4 Super Sonic
+[0.09375, 0.5, 0.046875, 5*60, 0.1875, 0.046875, 0.125, 0.0625, 3.5*60, 2],
 ]
 
 # ================
@@ -57,7 +78,7 @@ var physicsList = [
 var Ring = preload("res://Entities/Items/Ring.tscn")
 var ringChannel = 0
 
-var Star = preload("res://Entities/Misc/StarParticle.tscn")
+var Particle = preload("res://Entities/Misc/GenericParticle.tscn")
 
 # ================
 
@@ -106,7 +127,6 @@ var cameraMargin = 16
 
 # ALL CODE IS TEMPORARY!
 func _ready():
-	#super()
 	# disable and enable states
 	set_state(currentState)
 	Global.players.append(self)
@@ -178,7 +198,7 @@ func _process(delta):
 		for i in stars:
 			i.position = i.position.rotated(deg2rad(360*delta*2))
 			if (fmod(Global.levelTime,0.1)+delta > 0.1):
-				var star = Star.instance()
+				var star = Particle.instance()
 				star.global_position = i.global_position
 				get_parent().add_child(star)
 				star.frame = rand_range(0,3)
@@ -221,7 +241,36 @@ func _physics_process(delta):
 			movement.x = 0
 		# Clamp position
 		global_position.x = clamp(global_position.x,camera.limit_left+cameraMargin,camera.limit_right-cameraMargin)
-	#super(delta)
+	
+	# Water
+	if Global.waterLevel != null:
+		# Enter water
+		if global_position.y > Global.waterLevel && !water:
+			water = true
+			switch_physics(lastPhysicsState,true)
+			movement.x *= 0.5
+			movement.y *= 0.25
+			sfx[17].play();
+			var splash = Particle.instance()
+			splash.global_position = Vector2(global_position.x,Global.waterLevel-16)
+			splash.play("Splash")
+			splash.z_index = sprite.z_index+10
+			get_parent().add_child(splash)
+			match (shield):
+				SHIELDS.ELEC, SHIELDS.FIRE:
+					set_shield(SHIELDS.NONE)
+		# Exit water
+		if global_position.y < Global.waterLevel && water:
+			water = false
+			switch_physics(lastPhysicsState,false)
+			movement.y *= 2
+			sfx[17].play();
+			var splash = Particle.instance()
+			splash.global_position = Vector2(global_position.x,Global.waterLevel-16)
+			splash.play("Splash")
+			splash.z_index = sprite.z_index+10
+			get_parent().add_child(splash)
+			
 
 func set_state(newState, forceMask = Vector2.ZERO):
 	for i in stateList:
@@ -248,6 +297,7 @@ func set_state(newState, forceMask = Vector2.ZERO):
 		position += ((forceMask-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
 		# change hitbox size
 		$HitBox.shape.extents = forceMask
+	sprite.get_node("DashDust").visible = false
 	#update_sensors()
 	# snap to floor if old shape is smaller then new shape
 #	if (shapeChangeCheck.y < $HitBox.shape.extents.y):
@@ -372,8 +422,10 @@ func _on_PlayerAnimation_animation_started(anim_name):
 		sprite.offset = Vector2(0,-4)
 		animator.advance(0)
 
-func switch_physics(physicsRide = -1):
+func switch_physics(physicsRide = -1, isWater = false):
 	var getList = physicsList[max(0,physicsRide)]
+	if isWater:
+		getList = waterPhysicsList[max(0,physicsRide)]
 	acc = getList[0]
 	dec = getList[1]
 	frc = getList[2]
@@ -381,3 +433,8 @@ func switch_physics(physicsRide = -1):
 	air = getList[4]
 	rollfrc = getList[5]
 	rolldec = getList[6]
+	grv = getList[7]
+	jmp = getList[8]
+	releaseJmp = getList[9]
+	if physicsRide >= 0:
+		lastPhysicsState = physicsRide

@@ -1,7 +1,7 @@
 extends Node
 
-var originalFPS = 60;
-var players = [];
+var originalFPS = 60
+var players = []
 var main
 
 # Music
@@ -12,12 +12,13 @@ var themes = [preload("res://Audio/Soundtrack/1. SWD_Invincible.ogg"),preload("r
 var currentTheme = 0
 
 # Gameplay values
-var score = 0;
-var lives = 3;
-var continues = 0;
-var levelTime = 0;
+var score = 0
+var lives = 3
+var continues = 0
+var levelTime = 0
 
+var waterLevel = null
 
 func _process(delta):
-	originalFPS = 60*Engine.time_scale;
-	levelTime += delta;
+	originalFPS = 60*Engine.time_scale
+	levelTime += delta

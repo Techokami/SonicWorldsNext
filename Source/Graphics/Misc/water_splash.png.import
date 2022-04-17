@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/SuperSonicPal.png-42f03489a2e6e86e4050a6d2c9415dd8.stex"
+path="res://.import/water_splash.png-6ff6701d72fc37a521802c4c461e1ab3.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Graphics/Players/SuperSonicPal.png"
-dest_files=[ "res://.import/SuperSonicPal.png-42f03489a2e6e86e4050a6d2c9415dd8.stex" ]
+source_file="res://Graphics/Misc/water_splash.png"
+dest_files=[ "res://.import/water_splash.png-6ff6701d72fc37a521802c4c461e1ab3.stex" ]
 
 [params]
 

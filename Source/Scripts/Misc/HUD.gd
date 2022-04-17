@@ -39,3 +39,11 @@ func _process(delta):
 	
 	
 	lifeText.string = "%2d" % Global.lives;
+	
+	# Water Overlay
+	if Global.waterLevel != null:
+		$Water/WaterOverlay.rect_position.y = clamp(Global.waterLevel-GlobalFunctions.getCurrentCamera2D().global_position.y+(get_viewport().get_visible_rect().size.y/2),0,get_viewport().get_visible_rect().size.y)
+		$Water/WaterOverlay.rect_scale.y = clamp(Global.waterLevel-$Water/WaterOverlay.rect_position.y,0,get_viewport().size.y)
+		#$Water/WaterOverlay/TextureRect.rect_position.y = Global.waterLevel-GlobalFunctions.getCurrentCamera2D().global_position.y-$Water/WaterOverlay/TextureRect.rect_position.y
+	else:
+		$Water/WaterOverlay.visible = false

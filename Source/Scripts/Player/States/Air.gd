@@ -50,7 +50,7 @@ func _physics_process(delta):
 				parent.movement.x = clamp(parent.movement.x+parent.air/delta*parent.inputs[parent.INPUTS.XINPUT],-parent.top,parent.top);
 				
 	# Air drag, don't know how accurate this is, may need some tweaking
-	if (parent.movement.y < 0 && parent.movement.y > -4*60):
+	if (parent.movement.y < 0 && parent.movement.y > -parent.releaseJmp*60):
 		parent.movement.x -= ((parent.movement.x / 0.125) / 256)*60*delta;
 	
 	# Cut vertical movement if jump released
