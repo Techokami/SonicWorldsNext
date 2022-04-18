@@ -5,6 +5,7 @@ uniform float row : hint_range(1,999,1);
 uniform float approximation : hint_range(0.0,5.0,0.01);
 uniform sampler2D paletteTexture;
 
+
 void fragment(){
 	if (row > 1.0) {
 		vec3 pal = texture(paletteTexture,UV).rgb;

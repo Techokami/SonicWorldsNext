@@ -27,20 +27,22 @@ func destroy():
 			playerTouch.rings += 10
 			$SFX/Ring.play()
 		1: # Speed Shoes
-			playerTouch.shoeTime = 30
-			playerTouch.switch_physics(3)
-			Global.music.stream_paused = true
-			Global.currentTheme = 1
-			Global.effectTheme.stream = Global.themes[Global.currentTheme]
-			Global.effectTheme.play()
+			if !playerTouch.super:
+				playerTouch.shoeTime = 30
+				playerTouch.switch_physics(3)
+				Global.music.stream_paused = true
+				Global.currentTheme = 1
+				Global.effectTheme.stream = Global.themes[Global.currentTheme]
+				Global.effectTheme.play()
 		2: # Invincibility
-			playerTouch.supTime = 30
-			playerTouch.shieldSprite.visible = false
-			playerTouch.get_node("InvincibilityBarrier").visible = true
-			Global.music.stream_paused = true
-			Global.currentTheme = 0
-			Global.effectTheme.stream = Global.themes[Global.currentTheme]
-			Global.effectTheme.play()
+			if !playerTouch.super:
+				playerTouch.supTime = 30
+				playerTouch.shieldSprite.visible = false
+				playerTouch.get_node("InvincibilityBarrier").visible = true
+				Global.music.stream_paused = true
+				Global.currentTheme = 0
+				Global.effectTheme.stream = Global.themes[Global.currentTheme]
+				Global.effectTheme.play()
 		3: # Shield
 			playerTouch.set_shield(playerTouch.SHIELDS.NORMAL)
 		4: # Elec
@@ -50,15 +52,11 @@ func destroy():
 		6: # Bubble
 			playerTouch.set_shield(playerTouch.SHIELDS.BUBBLE)
 		7: # Super
-			playerTouch.switch_physics(4)
-			playerTouch.supTime = 3000
-			playerTouch.shoeTime = playerTouch.supTime
 			playerTouch.rings += 50
-			playerTouch.shieldSprite.visible = false
-			Global.music.stream_paused = true
-			Global.currentTheme = 0
-			Global.effectTheme.stream = Global.themes[Global.currentTheme]
-			Global.effectTheme.play()
+			playerTouch.set_state(playerTouch.STATES.SUPER)
+		10: # 1up
+			Global.life.play()
+			Global.lives += 1
 
 func _physics_process(delta):
 	if (!Engine.is_editor_hint()):

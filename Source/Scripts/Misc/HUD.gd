@@ -13,6 +13,8 @@ export var zoneName = "Base"
 export var zone = "Zone"
 export var act = 1
 
+var flashTimer = 0
+
 func _ready():
 	if (playLevelCard):
 		$LevelCard.visible = true
@@ -47,3 +49,12 @@ func _process(delta):
 		#$Water/WaterOverlay/TextureRect.rect_position.y = Global.waterLevel-GlobalFunctions.getCurrentCamera2D().global_position.y-$Water/WaterOverlay/TextureRect.rect_position.y
 	else:
 		$Water/WaterOverlay.visible = false
+	
+	if flashTimer < 0:
+		flashTimer = 0.1
+		if Global.players[focusPlayer].rings <= 0:
+			$Counters/Text/Rings.visible = !$Counters/Text/Rings.visible
+		else:
+			$Counters/Text/Rings.visible = false
+	else:
+		flashTimer -= delta

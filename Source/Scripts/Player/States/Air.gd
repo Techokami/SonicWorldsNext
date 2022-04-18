@@ -8,19 +8,22 @@ export var isJump = false;
 func _input(event):
 	if (parent.playerControl != 0):
 		# Shield actions
-		if (event.is_action_pressed("gm_action") && !parent.abilityUsed):
+		if (event.is_action_pressed("gm_action") && !parent.abilityUsed && isJump):
 			parent.abilityUsed = true;
 			match (parent.shield):
 				parent.SHIELDS.NONE:
-					parent.sfx[16].play();
-					parent.shieldSprite.play("Insta");
-					parent.shieldSprite.frame = 0;
-					parent.shieldSprite.visible = true;
-					yield(parent.shieldSprite,"animation_finished");
-					# check shields hasn't changed
-					if (parent.shield == parent.SHIELDS.NONE):
-						parent.shieldSprite.visible = false;
-						parent.shieldSprite.stop();
+					if parent.rings >= 50 && !parent.super:
+						parent.set_state(parent.STATES.SUPER)
+					else:
+						parent.sfx[16].play();
+						parent.shieldSprite.play("Insta");
+						parent.shieldSprite.frame = 0;
+						parent.shieldSprite.visible = true;
+						yield(parent.shieldSprite,"animation_finished");
+						# check shields hasn't changed
+						if (parent.shield == parent.SHIELDS.NONE):
+							parent.shieldSprite.visible = false;
+							parent.shieldSprite.stop();
 				parent.SHIELDS.ELEC:
 					parent.sfx[13].play();
 					parent.movement.y = -5.5*Global.originalFPS;

@@ -25,6 +25,7 @@ var abilityUsed = false
 var bounceReaction = 0
 var invTime = 0
 var supTime = 0
+var super = false
 var shoeTime = 0
 var ringDisTime = 0 # ring collecting disable timer
 
@@ -80,12 +81,16 @@ var ringChannel = 0
 
 var Particle = preload("res://Entities/Misc/GenericParticle.tscn")
 
+var superSprite = preload("res://Graphics/Players/SuperSonic.png")
+onready var normalSprite = $Sprite/Sprite.texture
+var sonicPal = preload("res://Shaders/SonicPalette.tres")
+
 # ================
 
 var lockTimer = 0
 var spriteRotation = 0
 
-enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, ANIMATION, HIT, CORKSCREW, JUMPCANCEL}
+enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, ANIMATION, HIT, DIE, CORKSCREW, JUMPCANCEL, SUPER}
 var currentState = STATES.NORMAL
 enum SHIELDS {NONE, NORMAL, ELEC, FIRE, BUBBLE}
 var shield = SHIELDS.NONE
@@ -162,8 +167,23 @@ func _process(delta):
 		inputs[INPUTS.XINPUT] = 0
 		inputs[INPUTS.YINPUT] = 0
 
+	# super / invincibility handling
 	if (supTime > 0):
-		supTime -= delta
+		if !super:
+			supTime -= delta
+		else:
+			# Animate Palette
+			sonicPal.set_shader_param("row",wrapf(sonicPal.get_shader_param("row")+delta*5,sonicPal.get_shader_param("palRows")-3,sonicPal.get_shader_param("palRows")))
+			# check if ring count is greater then 0
+			if rings > 0:
+				rings -= delta
+			else:
+				# Deactivate super
+				super = false
+				supTime = 0
+				sprite.texture = normalSprite
+				switch_physics(0)
+				
 		if (supTime <= 0):
 			if (shield != SHIELDS.NONE):
 				shieldSprite.visible = true
@@ -172,6 +192,9 @@ func _process(delta):
 				Global.music.stream_paused = false
 				Global.music.play()
 				Global.effectTheme.stop()
+	else:
+	# Deactivate super
+		sonicPal.set_shader_param("row",clamp(sonicPal.get_shader_param("row")-delta*10,0,sonicPal.get_shader_param("palRows")-3))
 	
 	if (shoeTime > 0):
 		shoeTime -= delta
@@ -239,18 +262,23 @@ func _physics_process(delta):
 		# Stop movement at borders
 		if (global_position.x < camera.limit_left+cameraMargin || global_position.x > camera.limit_right-cameraMargin):
 			movement.x = 0
+		
+		# Death at border bottom
+		if global_position.y > camera.limit_bottom:
+			kill()
+		
 		# Clamp position
 		global_position.x = clamp(global_position.x,camera.limit_left+cameraMargin,camera.limit_right-cameraMargin)
 	
 	# Water
-	if Global.waterLevel != null:
+	if Global.waterLevel != null && currentState != STATES.DIE:
 		# Enter water
 		if global_position.y > Global.waterLevel && !water:
 			water = true
 			switch_physics(lastPhysicsState,true)
 			movement.x *= 0.5
 			movement.y *= 0.25
-			sfx[17].play();
+			sfx[17].play()
 			var splash = Particle.instance()
 			splash.global_position = Vector2(global_position.x,Global.waterLevel-16)
 			splash.play("Splash")
@@ -264,7 +292,7 @@ func _physics_process(delta):
 			water = false
 			switch_physics(lastPhysicsState,false)
 			movement.y *= 2
-			sfx[17].play();
+			sfx[17].play()
 			var splash = Particle.instance()
 			splash.global_position = Vector2(global_position.x,Global.waterLevel-16)
 			splash.play("Splash")
@@ -277,7 +305,13 @@ func set_state(newState, forceMask = Vector2.ZERO):
 		i.set_process(i == stateList[newState])
 		i.set_physics_process(i == stateList[newState])
 		i.set_process_input(i == stateList[newState])
-	currentState = newState
+	
+	if currentState != newState:
+		if stateList[currentState].has_method("state_exit"):
+			stateList[currentState].state_exit()
+		if stateList[newState].has_method("state_activated"):
+			stateList[newState].state_activated()
+		currentState = newState
 	var shapeChangeCheck = $HitBox.shape.extents
 	if (forceMask == Vector2.ZERO):
 		match(newState):
@@ -334,7 +368,7 @@ func action_jump(animation = "roll", airJumpControl = true):
 	airControl = airJumpControl
 
 
-func hit_player(damagePoint = global_position, damageType = 0, soundID = 4):
+func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 	if (currentState != STATES.HIT && invTime <= 0 && supTime <= 0):
 		movement.x = sign(global_position.x-damagePoint.x)*2*60
 		movement.y = -4*60
@@ -372,12 +406,24 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 4):
 
 			rings = 0
 		else:
-			sfx[soundID].play()
+			kill()
 
 		# Disable Shield
 		set_shield(SHIELDS.NONE)
 		return true
 	return false
+
+func kill():
+	if currentState != STATES.DIE:
+		super = false
+		supTime = 0
+		collision_layer = 0
+		collision_mask = 0
+		z_index = 100
+		movement = Vector2(0,-7*60)
+		set_state(STATES.DIE)
+		animator.play("Die")
+		sfx[6].play()
 
 func get_ring():
 	rings += 1
@@ -422,7 +468,7 @@ func _on_PlayerAnimation_animation_started(anim_name):
 		sprite.offset = Vector2(0,-4)
 		animator.advance(0)
 
-func switch_physics(physicsRide = -1, isWater = false):
+func switch_physics(physicsRide = -1, isWater = water):
 	var getList = physicsList[max(0,physicsRide)]
 	if isWater:
 		getList = waterPhysicsList[max(0,physicsRide)]

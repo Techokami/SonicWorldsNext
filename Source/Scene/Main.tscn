@@ -1,8 +1,85 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Audio/Soundtrack/2. SWD_SpeedUp.ogg" type="AudioStream" id=1]
 [ext_resource path="res://Scripts/Global/Main.gd" type="Script" id=2]
 [ext_resource path="res://Audio/Soundtrack/3. SWD_1Up.ogg" type="AudioStream" id=3]
+
+[sub_resource type="CanvasItemMaterial" id=1]
+blend_mode = 2
+
+[sub_resource type="Animation" id=2]
+resource_name = "FadeOut"
+tracks/0/type = "value"
+tracks/0/path = NodePath("ScreenFader:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 0, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("ScreenFader:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 0, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ScreenFader:material:blend_mode")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 2 ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "SetAdd"
+length = 0.01
+tracks/0/type = "value"
+tracks/0/path = NodePath("ScreenFader:material:blend_mode")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 1 ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "SetSub"
+length = 0.01
+tracks/0/type = "value"
+tracks/0/path = NodePath("ScreenFader:material:blend_mode")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 2 ]
+}
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 2 )
@@ -23,3 +100,19 @@ bus = "Music"
 pause_mode = 2
 stream = ExtResource( 3 )
 bus = "Music"
+
+[node name="GUI" type="CanvasLayer" parent="."]
+pause_mode = 2
+layer = 128
+
+[node name="ScreenFader" type="ColorRect" parent="GUI"]
+material = SubResource( 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 1, 1, 0, 0 )
+
+[node name="Fader" type="AnimationPlayer" parent="GUI"]
+anims/FadeOut = SubResource( 2 )
+anims/RESET = SubResource( 3 )
+anims/SetAdd = SubResource( 4 )
+anims/SetSub = SubResource( 5 )

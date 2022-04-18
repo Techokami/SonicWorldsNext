@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://Scripts/Misc/NumeralDisplay.gd" type="Script" id=1]
 [ext_resource path="res://Graphics/HUD/hud_lives.png" type="Texture" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://Graphics/HUD/LevelCards/font/largefont4.png" type="Texture" id=10]
 [ext_resource path="res://Graphics/HUD/LevelCards/ActCards.png" type="Texture" id=11]
 [ext_resource path="res://Shaders/WaterPalette.tres" type="Material" id=12]
+[ext_resource path="res://Shaders/SonicPalette.tres" type="Material" id=13]
 
 [sub_resource type="Animation" id=1]
 resource_name = "End"
@@ -541,6 +542,7 @@ __meta__ = {
 }
 
 [node name="Icon" type="Sprite" parent="LifeCounter"]
+material = ExtResource( 13 )
 texture = ExtResource( 2 )
 centered = false
 vframes = 7
@@ -679,7 +681,7 @@ vframes = 2
 
 [node name="PatternLeft" type="Control" parent="LevelCard"]
 anchor_bottom = 1.0
-margin_bottom = 2272.0
+margin_bottom = 3168.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -688,7 +690,7 @@ __meta__ = {
 anchor_bottom = 1.0
 margin_left = -32.0
 margin_right = 32.0
-margin_bottom = 12640.0
+margin_bottom = 23968.0
 texture = ExtResource( 8 )
 stretch_mode = 2
 __meta__ = {
@@ -708,7 +710,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_top = -32.0
-margin_bottom = 1984.0
+margin_bottom = 2880.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -718,7 +720,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 32.0
-margin_right = 7232.0
+margin_right = 8896.0
 margin_bottom = 64.0
 texture = ExtResource( 8 )
 stretch_mode = 2

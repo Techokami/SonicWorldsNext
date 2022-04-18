@@ -2,7 +2,7 @@ extends "res://Scripts/Player/State.gd"
 
 
 func _physics_process(delta):
-	parent.sprite.play("hurt");
+	parent.animator.play("hurt");
 	# gravity
 	parent.movement.y += 0.1875/delta;
 	

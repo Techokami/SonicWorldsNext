@@ -22,3 +22,9 @@ var waterLevel = null
 func _process(delta):
 	originalFPS = 60*Engine.time_scale
 	levelTime += delta
+
+func reset_values():
+	lives = 3
+	score = 0
+	continues = 0
+	levelTime = 0

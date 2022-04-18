@@ -6,7 +6,7 @@
 [resource]
 shader = ExtResource( 2 )
 shader_param/amount = 13.0
-shader_param/palRows = 18.0
-shader_param/row = 0.0
+shader_param/palRows = 9.0
+shader_param/row = 1.0
 shader_param/approximation = 0.0
 shader_param/paletteTexture = ExtResource( 1 )

@@ -25,6 +25,9 @@ var gravityAngle = 0
 # the collission layer, 0 for low, 1 for high
 var collissionLayer = 0
 
+# translate, ignore physics
+var translate = false
+
 # Vertical sensor reference
 var getVert = null
 
@@ -143,11 +146,11 @@ func update_sensors():
 	slopeCheck.force_raycast_update()
 
 
-func _physics_process(_delta):
+func _physics_process(delta):
 	#movement += Vector2(-int(Input.is_action_pressed("gm_left"))+int(Input.is_action_pressed("gm_right")),-int(Input.is_action_pressed("gm_up"))+int(Input.is_action_pressed("gm_down")))*_delta*100
 	var moveRemaining = movement # copy of the movement variable to cut down on until it hits 0
 	var checkOverride = true
-	while !moveRemaining.is_equal_approx(Vector2.ZERO) || checkOverride:
+	while (!moveRemaining.is_equal_approx(Vector2.ZERO) || checkOverride) && !translate:
 		checkOverride = false
 		var moveCalc = moveRemaining.normalized()*min(moveStepLength,moveRemaining.length())
 		
@@ -231,39 +234,41 @@ func _physics_process(_delta):
 		
 		moveRemaining -= moveRemaining.normalized()*min(moveStepLength,moveRemaining.length())
 	
-	
+	if translate:
+		translate(movement*delta)
 	
 	#Object checks
 	
-	# temporarily reset mask and layer
-	var layerMemory = collision_layer
-	var maskMemory = collision_mask
-	
-	
-	var dirList = [Vector2.DOWN,Vector2.LEFT,Vector2.RIGHT,Vector2.UP]
-	for i in dirList:
-		match i:
-			Vector2.DOWN:
-				objectCheck.position = Vector2(-$HitBox.shape.extents.x,$HitBox.shape.extents.y+1)
-				objectCheck.cast_to = Vector2($HitBox.shape.extents.x*2,0)
-			Vector2.UP:
-				objectCheck.position = Vector2(-$HitBox.shape.extents.x,-$HitBox.shape.extents.y-1)
-				objectCheck.cast_to = Vector2($HitBox.shape.extents.x*2,0)
-			Vector2.RIGHT:
-				objectCheck.position = Vector2($HitBox.shape.extents.x+1,-$HitBox.shape.extents.y)
-				objectCheck.cast_to = Vector2(0,$HitBox.shape.extents.y*2)
-			Vector2.LEFT:
-				objectCheck.position = Vector2(-$HitBox.shape.extents.x-1,-$HitBox.shape.extents.y)
-				objectCheck.cast_to = Vector2(0,$HitBox.shape.extents.y*2)
+	if !translate:
+		# temporarily reset mask and layer
+		var layerMemory = collision_layer
+		var maskMemory = collision_mask
 		
-		objectCheck.force_raycast_update()
-		if objectCheck.is_colliding():
-			if objectCheck.get_collider().has_method("physics_collision"):
-				objectCheck.get_collider().physics_collision(self,i.rotated(angle).round())
 		
-	# reload memory for layers
-	collision_mask = maskMemory
-	collision_layer = layerMemory
+		var dirList = [Vector2.DOWN,Vector2.LEFT,Vector2.RIGHT,Vector2.UP]
+		for i in dirList:
+			match i:
+				Vector2.DOWN:
+					objectCheck.position = Vector2(-$HitBox.shape.extents.x,$HitBox.shape.extents.y+1)
+					objectCheck.cast_to = Vector2($HitBox.shape.extents.x*2,0)
+				Vector2.UP:
+					objectCheck.position = Vector2(-$HitBox.shape.extents.x,-$HitBox.shape.extents.y-1)
+					objectCheck.cast_to = Vector2($HitBox.shape.extents.x*2,0)
+				Vector2.RIGHT:
+					objectCheck.position = Vector2($HitBox.shape.extents.x+1,-$HitBox.shape.extents.y)
+					objectCheck.cast_to = Vector2(0,$HitBox.shape.extents.y*2)
+				Vector2.LEFT:
+					objectCheck.position = Vector2(-$HitBox.shape.extents.x-1,-$HitBox.shape.extents.y)
+					objectCheck.cast_to = Vector2(0,$HitBox.shape.extents.y*2)
+			
+			objectCheck.force_raycast_update()
+			if objectCheck.is_colliding():
+				if objectCheck.get_collider().has_method("physics_collision"):
+					objectCheck.get_collider().physics_collision(self,i.rotated(angle).round())
+			
+		# reload memory for layers
+		collision_mask = maskMemory
+		collision_layer = layerMemory
 
 func snap_angle(angleSnap = 0):
 	var wrapAngle = wrapf(angleSnap,deg2rad(0),deg2rad(360))

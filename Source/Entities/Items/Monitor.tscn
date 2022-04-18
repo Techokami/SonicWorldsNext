@@ -1,10 +1,11 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Graphics/Items/MonitorIcons.png" type="Texture" id=1]
 [ext_resource path="res://Graphics/Items/monitors.png" type="Texture" id=2]
 [ext_resource path="res://Scripts/Objects/Monitor.gd" type="Script" id=3]
 [ext_resource path="res://Audio/SFX/Objects/DestroyObject.wav" type="AudioStream" id=4]
 [ext_resource path="res://Audio/SFX/Objects/RingStereo.wav" type="AudioStream" id=5]
+[ext_resource path="res://Shaders/SonicPalette.tres" type="Material" id=6]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 15.5, 15.5 )
@@ -162,6 +163,7 @@ script = ExtResource( 3 )
 shape = SubResource( 1 )
 
 [node name="Item" type="Sprite" parent="."]
+material = ExtResource( 6 )
 position = Vector2( 0, -2 )
 texture = ExtResource( 1 )
 hframes = 11
@@ -170,7 +172,7 @@ frame = 2
 
 [node name="Monitor" type="AnimatedSprite" parent="."]
 frames = SubResource( 6 )
-frame = 2
+frame = 5
 playing = true
 
 [node name="Animator" type="AnimationPlayer" parent="."]

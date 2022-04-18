@@ -368,7 +368,7 @@ bottomBoundry = 2048.0
 [node name="BoundrySetter2" parent="Entity" instance=ExtResource( 15 )]
 position = Vector2( 9568, 112 )
 leftBoundry = 9024
-rightBoundry = 10400.0
+rightBoundry = 10464.0
 
 [node name="Bridge" parent="Entity" instance=ExtResource( 16 )]
 position = Vector2( 1096, 712 )
@@ -429,11 +429,8 @@ position = Vector2( 3456, 816 )
 [node name="CorkscrewLoop2" parent="Entity" instance=ExtResource( 23 )]
 position = Vector2( 3840, 816 )
 
-[node name="Orbinaut" parent="Entity" instance=ExtResource( 24 )]
-position = Vector2( 5848, 168 )
-
 [node name="WaterLevel" parent="Entity" instance=ExtResource( 25 )]
-position = Vector2( 0, 800 )
+position = Vector2( 0, 832 )
 
 [node name="TestZoneMap" type="Sprite" parent="."]
 visible = false
@@ -941,3 +938,11 @@ item = 2
 [node name="Monitor17" parent="Monitors" instance=ExtResource( 12 )]
 position = Vector2( 8864, 288 )
 item = 10
+
+[node name="Hazards" type="Node2D" parent="."]
+
+[node name="Orbinaut" parent="Hazards" instance=ExtResource( 24 )]
+position = Vector2( 5848, 168 )
+
+[node name="Orbinaut2" parent="Hazards" instance=ExtResource( 24 )]
+position = Vector2( 512, 672 )
