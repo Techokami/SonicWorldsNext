@@ -10,7 +10,6 @@ func _ready():
 func _process(_delta):
 	$Water.global_position = Vector2(GlobalFunctions.getCurrentCamera2D().get_camera_screen_center().x,Global.waterLevel)
 	$Water.region_rect.position.x = $Water.global_position.x
-	visible = !visible
 
 func _physics_process(_delta):
 	if !isStatic:

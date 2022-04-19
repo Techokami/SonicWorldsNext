@@ -8,10 +8,14 @@ func _ready():
 	Global.effectTheme = $EffectTheme
 	Global.life = $Life
 	Global.reset_values()
-	change_scene(load("res://Scene/LevelTest.tscn"))
+	# give game a frame wait time to ensure the game loads first
+	yield(get_tree(),"idle_frame")
+	change_scene(load("res://Scene/Title.tscn"))
 	
 
-func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub"):
+func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", length = 1):
+	
+	$GUI/Fader.playback_speed = 1/length
 	
 	$GUI/Fader.play(setType)
 	

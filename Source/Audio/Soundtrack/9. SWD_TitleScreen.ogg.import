@@ -11,5 +11,5 @@ dest_files=[ "res://.import/9. SWD_TitleScreen.ogg-13ff16bed0156aacbbb26f510c6f7
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0

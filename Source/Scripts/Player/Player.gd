@@ -312,25 +312,26 @@ func set_state(newState, forceMask = Vector2.ZERO):
 		if stateList[newState].has_method("state_activated"):
 			stateList[newState].state_activated()
 		currentState = newState
-	var shapeChangeCheck = $HitBox.shape.extents
-	if (forceMask == Vector2.ZERO):
-		match(newState):
-			STATES.JUMP, STATES.ROLL:
-				# adjust y position
-				position += ((HITBOXESSONIC.ROLL-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
-				# change hitbox size
-				$HitBox.shape.extents = HITBOXESSONIC.ROLL
-			_:
-				# adjust y position
-				position += ((HITBOXESSONIC.NORMAL-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
+	if ground:
+		var shapeChangeCheck = $HitBox.shape.extents
+		if (forceMask == Vector2.ZERO):
+			match(newState):
+				STATES.JUMP, STATES.ROLL:
+					# adjust y position
+					position += ((HITBOXESSONIC.ROLL-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
+					# change hitbox size
+					$HitBox.shape.extents = HITBOXESSONIC.ROLL
+				_:
+					# adjust y position
+					position += ((HITBOXESSONIC.NORMAL-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
 
-				# change hitbox size
-				$HitBox.shape.extents = HITBOXESSONIC.NORMAL
-	else:
-		# adjust y position
-		position += ((forceMask-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
-		# change hitbox size
-		$HitBox.shape.extents = forceMask
+					# change hitbox size
+					$HitBox.shape.extents = HITBOXESSONIC.NORMAL
+		else:
+			# adjust y position
+			position += ((forceMask-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
+			# change hitbox size
+			$HitBox.shape.extents = forceMask
 	sprite.get_node("DashDust").visible = false
 	#update_sensors()
 	# snap to floor if old shape is smaller then new shape
