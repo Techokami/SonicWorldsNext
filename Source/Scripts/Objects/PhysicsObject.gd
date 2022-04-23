@@ -11,7 +11,8 @@ var objectCheck = RayCast2D.new()
 onready var sensorList = [verticalSensorLeft,verticalSensorRight,horizontallSensor,slopeCheck]
 
 var groundLookDistance = 14
-onready var pushRadius = $HitBox.shape.extents.x+1 # original push radius is 10
+onready var pushRadius = max($HitBox.shape.extents.x+1,10) # original push radius is 10
+#var pushRadius = 10
 
 # physics variables
 var velocity = Vector2.ZERO # velocity is for future proofing
@@ -168,7 +169,7 @@ func _physics_process(delta):
 			#  Calculate the move distance vectorm, then move
 			var rayHitVec = (horizontallSensor.get_collision_point()-horizontallSensor.global_position)
 			var normHitVec = -Vector2.LEFT.rotated(snap_angle(rayHitVec.normalized().angle()))
-			translate(rayHitVec-(normHitVec*pushRadius))
+			translate(rayHitVec-(normHitVec*(pushRadius)))
 		
 		# Floor sensors
 		getVert = get_nearest_vertical_sensor()

@@ -10,7 +10,7 @@ func _ready():
 	Global.reset_values()
 	# give game a frame wait time to ensure the game loads first
 	yield(get_tree(),"idle_frame")
-	change_scene(load("res://Scene/Title.tscn"))
+	change_scene(Global.startScene)
 	
 
 func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", length = 1):
@@ -28,7 +28,8 @@ func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", l
 		i.queue_free()
 	# Error prevention
 	Global.players = []
-		
+	Global.checkPoints = []
+	
 	if scene == null:
 		if lastScene != null:
 			$SceneLoader.add_child(lastScene.instance())

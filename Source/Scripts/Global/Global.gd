@@ -3,6 +3,10 @@ extends Node
 var originalFPS = 60
 var players = []
 var main
+var checkPoints = []
+var currentCheckPoint = -1
+
+var startScene = preload("res://Scene/Title.tscn")
 
 # Music
 var music = null
@@ -28,3 +32,4 @@ func reset_values():
 	score = 0
 	continues = 0
 	levelTime = 0
+	checkPoints = []

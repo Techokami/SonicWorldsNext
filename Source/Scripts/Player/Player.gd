@@ -22,7 +22,7 @@ var releaseJmp = 4			#jump release velocity
 
 var spindashPower = 0.0
 var abilityUsed = false
-var bounceReaction = 0
+var bounceReaction = 0 # for bubble shield
 var invTime = 0
 var supTime = 0
 var super = false
@@ -137,6 +137,12 @@ func _ready():
 	Global.players.append(self)
 	connect("connectFloor",self,"land_floor")
 	connect("connectCeiling",self,"touch_ceiling")
+	# Checkpoints
+	yield(get_tree(),"idle_frame")
+	for i in Global.checkPoints:
+		if Global.currentCheckPoint == i.checkPointID:
+			global_position = i.global_position+Vector2(0,8)
+	
 
 
 func _input(event):
@@ -152,7 +158,7 @@ func _process(delta):
 	if (ground):
 		spriteRotation = rad2deg(angle)+90
 	else:
-		if (spriteRotation+180 >= 180):
+		if (spriteRotation+90 >= 180):
 			spriteRotation = max(90,spriteRotation-(168.75*delta))
 		else:
 			spriteRotation = min(360,spriteRotation+(168.75*delta))
@@ -422,7 +428,7 @@ func kill():
 		collision_mask = 0
 		z_index = 100
 		movement = Vector2(0,-7*60)
-		set_state(STATES.DIE)
+		set_state(STATES.DIE,HITBOXESSONIC.NORMAL)
 		animator.play("Die")
 		sfx[6].play()
 

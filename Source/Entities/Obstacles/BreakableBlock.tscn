@@ -16,3 +16,6 @@ shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )
+
+[node name="BreakSound" type="AudioStreamPlayer" parent="."]
+bus = "SFX"

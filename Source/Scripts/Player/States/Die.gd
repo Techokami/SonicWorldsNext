@@ -18,5 +18,5 @@ func _physics_process(delta):
 			Global.main.change_scene(null,"FadeOut")
 			parent.pause_mode = PAUSE_MODE_STOP
 		else:
-			print("GAME OVER")
-			get_tree().reload_current_scene()
+			Global.main.change_scene(Global.startScene,"FadeOut")
+			Global.reset_values()

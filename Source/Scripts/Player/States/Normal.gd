@@ -1,5 +1,10 @@
 extends "res://Scripts/Player/State.gd"
 
+var skid = false
+
+func state_exit():
+	skid = false
+
 func _input(event):
 	if (parent.playerControl != 0):
 		if (event.is_action_pressed("gm_action")):
@@ -16,7 +21,7 @@ func _input(event):
 
 func _process(delta):
 
-	if parent.ground:
+	if parent.ground && !skid:
 		if parent.movement.x == 0:
 			if (parent.inputs[parent.INPUTS.YINPUT] > 0):
 				if parent.lastActiveAnimation != "crouch":
@@ -32,22 +37,45 @@ func _process(delta):
 			parent.animator.play("run")
 		else:
 			parent.animator.play("peelOut")
+		
 	
-	if (parent.inputs[parent.INPUTS.XINPUT] != 0):
+	if parent.inputs[parent.INPUTS.XINPUT] != 0 && !skid:
 		parent.direction = parent.inputs[parent.INPUTS.XINPUT]
+	elif parent.movement.x != 0 && skid:
+		parent.direction = sign(parent.movement.x)
 
 func _physics_process(delta):
 	
-	if (parent.inputs[parent.INPUTS.YINPUT] == 1 && abs(parent.movement.x) > 0.5*60):
+	# rolling
+	if (parent.inputs[parent.INPUTS.YINPUT] == 1 && parent.inputs[parent.INPUTS.XINPUT] == 0 && abs(parent.movement.x) > 0.5*60):
 		parent.set_state(parent.STATES.ROLL)
 		parent.animator.play("roll")
 		parent.sfx[1].play()
 		return null;
 	
+	# set air state
 	if (!parent.ground):
 		parent.set_state(parent.STATES.AIR)
 		#Stop script
 		return null;
+	
+	# skidding
+	if !skid && sign(parent.inputs[parent.INPUTS.XINPUT]) != sign(parent.movement.x) && abs(parent.movement.x) >= 5*60 && parent.inputs[parent.INPUTS.XINPUT] != 0:
+		skid = true
+		parent.sfx[19].play()
+		parent.animator.play("skid")
+		$SkidDustTimer.start(0.1)
+	
+	elif skid:
+		var inputX = parent.inputs[parent.INPUTS.XINPUT]
+		
+		if round(parent.movement.x/200) == 0 && sign(inputX) != sign(parent.movement.x):
+			parent.animator.play("skidTurn")
+		
+		if !parent.animator.is_playing() || inputX == sign(parent.movement.x):
+			skid = (round(parent.movement.x) != 0 && inputX != sign(parent.movement.x) && inputX != 0)
+		
+	
 	parent.sprite.flip_h = (parent.direction < 0)
 	
 	parent.movement.y = min(parent.movement.y,0)
@@ -64,6 +92,7 @@ func _physics_process(delta):
 	if (abs(parent.movement.x) < parent.fall && calcAngle >= 45 && calcAngle <= 315):
 		if (round(calcAngle) >= 90 && round(calcAngle) <= 270):
 			parent.disconect_from_floor()
+			parent.ground = false
 		parent.lockTimer = 30.0/60.0;
 		
 	if (parent.inputs[parent.INPUTS.XINPUT] != 0):
@@ -84,3 +113,13 @@ func _physics_process(delta):
 				parent.movement.x -= (parent.frc/delta)*sign(parent.movement.x)
 			else:
 				parent.movement.x -= parent.movement.x;
+
+
+func _on_SkidDustTimer_timeout():
+	if !skid:
+		$SkidDustTimer.stop()
+	else:
+		var dust = parent.Particle.instance()
+		dust.play("SkidDust")
+		dust.global_position = parent.global_position+(Vector2.DOWN*16).rotated(deg2rad(parent.spriteRotation-90))
+		parent.get_parent().add_child(dust)
