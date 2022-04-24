@@ -75,8 +75,9 @@ func physics_collision(body, hitVector):
 			yspeed = -1.5*60
 			physics = true
 		elif hitVector.x != 0:
-			playerTouch = body
-			destroy()
+			if body.movement.y >= 0:
+				playerTouch = body
+				destroy()
 		else:
 			body.movement.y *= -1
 			body.ground = false
