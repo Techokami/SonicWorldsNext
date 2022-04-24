@@ -50,6 +50,8 @@ func _ready():
 	# Object check only needs to be set once
 	objectCheck.set_collision_mask_bit(0,false)
 	objectCheck.set_collision_mask_bit(13,true)
+	objectCheck.set_collision_mask_bit(15,true)
+	objectCheck.set_collision_mask_bit(16,true)
 	verticalObjectCheck.set_collision_mask_bit(0,false)
 	verticalObjectCheck.set_collision_mask_bit(13,true)
 	objectCheck.enabled = true
@@ -245,9 +247,16 @@ func _physics_process(delta):
 		var layerMemory = collision_layer
 		var maskMemory = collision_mask
 		
+		# move in place to make sure the player doesn't clip into objects
+		set_collision_mask_bit(16,true)
+		#move_and_slide(Vector2.ZERO,Vector2.UP.rotated(gravityAngle))
+		move_and_collide(Vector2.ZERO)
 		
 		var dirList = [Vector2.DOWN,Vector2.LEFT,Vector2.RIGHT,Vector2.UP]
+		# loop through directions for collisions
 		for i in dirList:
+			# reset exceptions
+			objectCheck.clear_exceptions()
 			match i:
 				Vector2.DOWN:
 					objectCheck.position = Vector2(-$HitBox.shape.extents.x,$HitBox.shape.extents.y+1)
@@ -263,9 +272,14 @@ func _physics_process(delta):
 					objectCheck.cast_to = Vector2(0,$HitBox.shape.extents.y*2)
 			
 			objectCheck.force_raycast_update()
-			if objectCheck.is_colliding():
+			
+			while objectCheck.is_colliding():
 				if objectCheck.get_collider().has_method("physics_collision"):
 					objectCheck.get_collider().physics_collision(self,i.rotated(angle).round())
+				# add exclusion, this loop will continue until there isn't any objects
+				objectCheck.add_exception(objectCheck.get_collider())
+				# update raycast
+				objectCheck.force_raycast_update()
 			
 		# reload memory for layers
 		collision_mask = maskMemory

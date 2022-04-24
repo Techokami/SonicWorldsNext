@@ -122,7 +122,7 @@ tracks/1/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( 8, -8 ), Vector2( 0, 0 ) ]
 }
 
-[node name="Spring" type="KinematicBody2D"]
+[node name="Spring" type="StaticBody2D"]
 collision_layer = 8192
 collision_mask = 8192
 script = ExtResource( 2 )
@@ -153,5 +153,10 @@ anims/SpringUpRight = SubResource( 6 )
 [node name="sfxSpring" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 3 )
 bus = "SFX"
+
+[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
+scale = Vector2( 2.5, 2.6 )
+process_parent = true
+physics_process_parent = true
 
 [connection signal="body_entered" from="DiagonalHitBox" to="." method="_on_Diagonal_body_entered"]

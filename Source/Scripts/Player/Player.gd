@@ -31,6 +31,8 @@ var ringDisTime = 0 # ring collecting disable timer
 
 var water = false
 
+var enemyCounter = 0
+
 # physics list
 # order
 # 0 Acceleration
@@ -252,6 +254,9 @@ func _process(delta):
 		lastActiveAnimation = animator.current_animation
 
 func _physics_process(delta):
+	# physics sets
+	set_collision_mask_bit(15,animator.current_animation != "roll")
+	
 	if (ground):
 		groundSpeed = movement.x
 	# wall detection
@@ -319,6 +324,7 @@ func set_state(newState, forceMask = Vector2.ZERO):
 			stateList[newState].state_activated()
 		currentState = newState
 	if ground:
+		enemyCounter = 0
 		var shapeChangeCheck = $HitBox.shape.extents
 		if (forceMask == Vector2.ZERO):
 			match(newState):
@@ -383,6 +389,7 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 			movement.x = 2*60
 
 		ground = false
+		disconect_from_floor()
 		set_state(STATES.HIT)
 		# Ring loss
 		if (shield == SHIELDS.NONE && rings > 0):
@@ -412,7 +419,7 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 				get_parent().add_child(ring)
 
 			rings = 0
-		else:
+		elif shield == SHIELDS.NONE:
 			kill()
 
 		# Disable Shield

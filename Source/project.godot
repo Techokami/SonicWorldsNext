@@ -131,6 +131,9 @@ gm_pause={
 2d_physics/layer_13="Player"
 2d_physics/layer_14="Object"
 2d_physics/layer_15="Enemy"
+2d_physics/layer_16="Solid if not Rolling"
+2d_physics/layer_17="Block Player (no physics change)"
+2d_physics/layer_18="Solid if not Knuckles"
 
 [rendering]
 

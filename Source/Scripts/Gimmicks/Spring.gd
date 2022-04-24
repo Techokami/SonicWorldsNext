@@ -1,5 +1,5 @@
 tool
-extends KinematicBody2D
+extends StaticBody2D
 
 export (int, "Yellow", "Red") var type = 0;
 export (int, "Up", "Down", "Right", "Left", "Diagonal Up Right", "Diagonal Up Left", "Diagonal Down Right", "Diagonal Down Left") var springDirection = 0;

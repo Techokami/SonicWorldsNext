@@ -155,7 +155,7 @@ tracks/4/keys = {
 }
 
 [node name="Monitor" type="KinematicBody2D"]
-collision_layer = 8192
+collision_layer = 98304
 collision_mask = 8193
 script = ExtResource( 3 )
 
@@ -172,7 +172,7 @@ frame = 2
 
 [node name="Monitor" type="AnimatedSprite" parent="."]
 frames = SubResource( 6 )
-frame = 5
+frame = 3
 playing = true
 
 [node name="Animator" type="AnimationPlayer" parent="."]
@@ -188,3 +188,8 @@ bus = "SFX"
 [node name="Ring" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource( 5 )
 bus = "SFX"
+
+[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
+scale = Vector2( 3.2, 3.2 )
+process_parent = true
+physics_process_parent = true

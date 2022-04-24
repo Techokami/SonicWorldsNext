@@ -20,6 +20,8 @@ func destroy():
 	$Item.z_index += 1000
 	$Animator.play("DestroyMonitor")
 	$SFX/Destroy.play()
+	# remove visibility enabler to prevent items from not being activated
+	$VisibilityEnabler2D.queue_free()
 	yield($Animator,"animation_finished")
 	# enable effect
 	match (item):

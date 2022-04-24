@@ -8,7 +8,7 @@ export var isJump = false
 func _input(event):
 	if (parent.playerControl != 0):
 		# Shield actions
-		if (event.is_action_pressed("gm_action") && !parent.abilityUsed && isJump):
+		if (event.is_action_pressed("gm_action") && !parent.abilityUsed && isJump && parent.supTime <= 0):
 			parent.abilityUsed = true
 			match (parent.shield):
 				parent.SHIELDS.NONE:
@@ -42,14 +42,18 @@ func _input(event):
 						getTimer.start(0.5)
 					parent.shieldSprite.flip_h = (parent.direction < 0)
 				parent.SHIELDS.BUBBLE:
-					parent.sfx[15].play()
-					parent.movement = Vector2(0,8*Global.originalFPS)
-					parent.bounceReaction = 7.5
-					parent.shieldSprite.play("BubbleAction")
-					var getTimer = parent.shieldSprite.get_node_or_null("ShieldTimer")
-					# Start bubble timer
-					if getTimer != null:
-						getTimer.start(0.25)
+					# check animation isn't bouncing
+					if parent.shieldSprite.animation != "BubbleBounce":
+						parent.sfx[15].play()
+						parent.movement = Vector2(0,8*Global.originalFPS)
+						parent.bounceReaction = 7.5
+						parent.shieldSprite.play("BubbleAction")
+						var getTimer = parent.shieldSprite.get_node_or_null("ShieldTimer")
+						# Start bubble timer
+						if getTimer != null:
+							getTimer.start(0.25)
+					else:
+						parent.abilityUsed = false
 
 
 func _physics_process(delta):
@@ -88,9 +92,11 @@ func _physics_process(delta):
 				var getTimer = parent.shieldSprite.get_node_or_null("ShieldTimer")
 				# Start bubble timer
 				if getTimer != null:
-					getTimer.start(0.5)
+					getTimer.start(0.15)
 		else:
 			parent.set_state(parent.STATES.NORMAL)
+	elif parent.movement.y < 0:
+		parent.bounceReaction = 0
 	
 	# set facing direction
 	parent.sprite.flip_h = (parent.direction < 0)
