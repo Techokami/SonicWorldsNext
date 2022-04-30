@@ -252,7 +252,7 @@ func _process(delta):
 	
 	if animator.current_animation != "":
 		lastActiveAnimation = animator.current_animation
-
+	
 func _physics_process(delta):
 	# physics sets
 	set_collision_mask_bit(15,animator.current_animation != "roll")

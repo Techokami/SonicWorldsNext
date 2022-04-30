@@ -7,15 +7,18 @@ var checkPoints = []
 var currentCheckPoint = -1
 
 var startScene = preload("res://Scene/Title.tscn")
+var nextZone = preload("res://Scene/Zones/BaseZone.tscn")
 
 var Score = preload("res://Entities/Misc/Score.tscn")
 const SCORE_COMBO = [1,2,3,4,4,4,4,4,4,4,4,4,4,4,4,5]
+
+var stageClear = false
 
 # Music
 var music = null
 var effectTheme = null
 var life = null
-var themes = [preload("res://Audio/Soundtrack/1. SWD_Invincible.ogg"),preload("res://Audio/Soundtrack/2. SWD_SpeedUp.ogg")]
+var themes = [preload("res://Audio/Soundtrack/1. SWD_Invincible.ogg"),preload("res://Audio/Soundtrack/2. SWD_SpeedUp.ogg"),preload("res://Audio/Soundtrack/4. SWD_StageClear.ogg")]
 var currentTheme = 0
 
 # Sound
@@ -35,7 +38,8 @@ func _ready():
 
 func _process(delta):
 	originalFPS = 60*Engine.time_scale
-	levelTime += delta
+	if !stageClear:
+		levelTime += delta
 
 func reset_values():
 	lives = 3
@@ -43,6 +47,7 @@ func reset_values():
 	continues = 0
 	levelTime = 0
 	checkPoints = []
+	nextZone = load("res://Scene/Zones/BaseZone.tscn")
 
 func play_sound(sound = null):
 	if sound != null:
@@ -54,3 +59,9 @@ func score(position = Vector2.ZERO,value = 0):
 	scoreObj.scoreID = value
 	scoreObj.global_position = position
 	add_child(scoreObj)
+
+func stage_clear():
+	if !stageClear:
+		stageClear = true
+		music.stream = themes[2]
+		music.play()

@@ -11,5 +11,5 @@ dest_files=[ "res://.import/4. SWD_StageClear.ogg-82619ca5e6e657a25a37e870604c8c
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0

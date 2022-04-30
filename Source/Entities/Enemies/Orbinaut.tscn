@@ -38,6 +38,13 @@ texture = ExtResource( 2 )
 hframes = 2
 frame = 1
 
+[node name="InstaArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 524288
+
+[node name="CollissionMask" type="CollisionShape2D" parent="InstaArea"]
+shape = SubResource( 1 )
+
 [node name="orbinaut" type="Sprite" parent="."]
 texture = ExtResource( 2 )
 hframes = 2
@@ -53,3 +60,4 @@ physics_process_parent = true
 [connection signal="body_exited" from="DamageArea" to="." method="_on_body_exited"]
 [connection signal="body_entered" from="Orb" to="Orb" method="_on_body_entered"]
 [connection signal="body_exited" from="Orb" to="Orb" method="_on_body_exited"]
+[connection signal="area_entered" from="InstaArea" to="." method="_on_InstaArea_area_entered"]

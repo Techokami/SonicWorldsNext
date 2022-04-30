@@ -385,100 +385,10 @@ rightBoundry = 10464.0
 position = Vector2( 1096, 712 )
 
 [node name="Breakable" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 80, 272 )
-
-[node name="Breakable6" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9583, 272.007 )
-
-[node name="Breakable7" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9534, 304.007 )
-
-[node name="Breakable8" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9485, 336.007 )
-
-[node name="Breakable9" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9436, 368.007 )
-
-[node name="Breakable10" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9411, 384.007 )
-
-[node name="Breakable11" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.946, 352.007 )
-
-[node name="Breakable12" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.951, 320.007 )
-
-[node name="Breakable13" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9559, 288.007 )
-
-[node name="Breakable14" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9608, 256.007 )
-
-[node name="Breakable15" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9632, 240.007 )
-
-[node name="Breakable16" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9595, 264.007 )
-
-[node name="Breakable17" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9546, 296.007 )
-
-[node name="Breakable18" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9497, 328.007 )
-
-[node name="Breakable19" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9448, 360.007 )
-
-[node name="Breakable20" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9424, 376.007 )
-
-[node name="Breakable21" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9473, 344.007 )
-
-[node name="Breakable22" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9522, 312.007 )
-
-[node name="Breakable23" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9571, 280.007 )
-
-[node name="Breakable24" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.962, 248.007 )
-
-[node name="Breakable25" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9644, 232.007 )
-
-[node name="Breakable26" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9608, 256.007 )
-
-[node name="Breakable27" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9559, 288.007 )
-
-[node name="Breakable28" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.951, 320.007 )
-
-[node name="Breakable29" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9461, 352.007 )
-
-[node name="Breakable30" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9436, 368.007 )
-
-[node name="Breakable31" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9485, 336.007 )
-
-[node name="Breakable32" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9534, 304.007 )
-
-[node name="Breakable33" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9583, 272.007 )
-
-[node name="Breakable34" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9632, 240.007 )
-
-[node name="Breakable35" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 47.9657, 224.007 )
+position = Vector2( 79.9583, 272.012 )
 
 [node name="Breakable2" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 208, 304 )
+position = Vector2( 207.953, 304.032 )
 
 [node name="Breakable4" parent="Entity" instance=ExtResource( 6 )]
 position = Vector2( 5536, 1088 )
@@ -489,7 +399,7 @@ position = Vector2( 9583.93, 449.469 )
 z_index = 11
 
 [node name="Breakable3" parent="Entity" instance=ExtResource( 6 )]
-position = Vector2( 240, 304 )
+position = Vector2( 239.953, 304.037 )
 
 [node name="ForceRoll" parent="Entity" instance=ExtResource( 9 )]
 position = Vector2( 2496, 816 )
@@ -657,9 +567,6 @@ position = Vector2( 1335.86, 928.205 )
 
 [node name="GoalPost" parent="Entity" instance=ExtResource( 34 )]
 position = Vector2( 10096, 193.547 )
-
-[node name="GoalPost2" parent="Entity" instance=ExtResource( 34 )]
-position = Vector2( 223.882, 768.034 )
 
 [node name="TestZoneMap" type="Sprite" parent="."]
 visible = false

@@ -8,7 +8,7 @@
 [ext_resource path="res://Shaders/SonicPalette.tres" type="Material" id=6]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 15.5, 15.5 )
+extents = Vector2( 15, 15 )
 
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 2 )
@@ -156,7 +156,7 @@ tracks/4/keys = {
 
 [node name="Monitor" type="KinematicBody2D"]
 collision_layer = 98304
-collision_mask = 8193
+collision_mask = 8192
 script = ExtResource( 3 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -172,7 +172,7 @@ frame = 2
 
 [node name="Monitor" type="AnimatedSprite" parent="."]
 frames = SubResource( 6 )
-frame = 3
+frame = 1
 playing = true
 
 [node name="Animator" type="AnimationPlayer" parent="."]
@@ -193,3 +193,13 @@ bus = "SFX"
 scale = Vector2( 3.2, 3.2 )
 process_parent = true
 physics_process_parent = true
+
+[node name="InstaArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 524288
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InstaArea"]
+visible = false
+shape = SubResource( 1 )
+
+[connection signal="area_entered" from="InstaArea" to="." method="_on_InstaArea_area_entered"]

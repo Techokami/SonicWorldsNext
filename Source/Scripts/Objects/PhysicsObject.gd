@@ -192,7 +192,6 @@ func _physics_process(delta):
 			var rayHitVec = (getVert.get_collision_point()-getVert.global_position)
 			# Snap the Vector and normalize it
 			var normHitVec = -Vector2.LEFT.rotated(snap_angle(rayHitVec.normalized().angle()))
-			# FIX THIS
 			if move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.extents.y+1)),true,true,true):
 				move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.extents.y+1)))
 			else:

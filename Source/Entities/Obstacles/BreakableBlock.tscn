@@ -4,7 +4,7 @@
 [ext_resource path="res://Graphics/Obstacles/Blocks/breakable_block.png" type="Texture" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 15.5, 15.5 )
+extents = Vector2( 15, 15 )
 
 [node name="Breakable" type="StaticBody2D"]
 collision_layer = 8192

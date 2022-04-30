@@ -2,6 +2,8 @@ extends Node2D
 
 var lastScene = null
 
+signal scene_faded
+
 func _ready():
 	Global.main = self
 	Global.music = $Music
@@ -29,6 +31,11 @@ func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", l
 	# Error prevention
 	Global.players = []
 	Global.checkPoints = []
+	if Global.stageClear:
+		Global.currentCheckPoint = -1
+	Global.stageClear = false
+	Global.waterLevel = null
+	emit_signal("scene_faded")
 	
 	if scene == null:
 		if lastScene != null:

@@ -15,6 +15,12 @@ export var act = 1
 
 var flashTimer = 0
 
+var endingPhase = 0
+var timeBonus = 0
+var ringBonus = 0
+
+signal tally_clear
+
 func _ready():
 	if (playLevelCard):
 		$LevelCard.visible = true
@@ -24,12 +30,12 @@ func _ready():
 		$LevelCard/Banner/Act.visible = (act > 0)
 		pause_mode = PAUSE_MODE_PROCESS
 		get_tree().paused = true
-		$LevelCard/TitleCardPlayer.play("Start")
+		$LevelCard/CardPlayer.play("Start")
 		$LevelCard/CardMover.play("Slider")
-		yield($LevelCard/TitleCardPlayer,"animation_finished")
-		$LevelCard/TitleCardPlayer.play("End")
+		yield($LevelCard/CardPlayer,"animation_finished")
+		$LevelCard/CardPlayer.play("End")
 		get_tree().paused = false
-		yield($LevelCard/TitleCardPlayer,"animation_finished")
+		yield($LevelCard/CardPlayer,"animation_finished")
 		pause_mode = PAUSE_MODE_INHERIT
 	$LevelCard.queue_free()
 
@@ -44,8 +50,11 @@ func _process(delta):
 	
 	# Water Overlay
 	if Global.waterLevel != null:
-		$Water/WaterOverlay.rect_position.y = clamp(Global.waterLevel-GlobalFunctions.getCurrentCamera2D().global_position.y+(get_viewport().get_visible_rect().size.y/2),0,get_viewport().get_visible_rect().size.y)
+		var cam = GlobalFunctions.getCurrentCamera2D()
+		if cam != null:
+			$Water/WaterOverlay.rect_position.y = clamp(Global.waterLevel-GlobalFunctions.getCurrentCamera2D().global_position.y+(get_viewport().get_visible_rect().size.y/2),0,get_viewport().get_visible_rect().size.y)
 		$Water/WaterOverlay.rect_scale.y = clamp(Global.waterLevel-$Water/WaterOverlay.rect_position.y,0,get_viewport().size.y)
+		$Water/WaterOverlay.visible = true
 		#$Water/WaterOverlay/TextureRect.rect_position.y = Global.waterLevel-GlobalFunctions.getCurrentCamera2D().global_position.y-$Water/WaterOverlay/TextureRect.rect_position.y
 	else:
 		$Water/WaterOverlay.visible = false
@@ -58,3 +67,57 @@ func _process(delta):
 			$Counters/Text/Rings.visible = false
 	else:
 		flashTimer -= delta
+	
+	if Global.stageClear:
+		if endingPhase == 0:
+			endingPhase = 1
+			$LevelClear.visible = true
+			$LevelClear/Tally/ScoreNumber.string = scoreText.string
+			$LevelClear/Animator.play("LevelClear")
+			ringBonus = Global.players[focusPlayer].rings*100
+			$LevelClear/Tally/RingNumbers.string = "%6d" % ringBonus
+			timeBonus = 0
+			if Global.levelTime < 60*5:
+				timeBonus = 500
+				if Global.levelTime < 60*4:
+					timeBonus = 1000
+					if Global.levelTime < 60*3:
+						timeBonus = 2000
+						if Global.levelTime < 60*2:
+							timeBonus = 3000
+							if Global.levelTime < 60*1.5:
+								timeBonus = 4000
+								if Global.levelTime < 60:
+									timeBonus = 5000
+									if Global.levelTime < 45:
+										timeBonus = 10000
+										if Global.levelTime < 30:
+											timeBonus = 50000
+			$LevelClear/Tally/TimeNumbers.string = "%6d" % timeBonus
+			$LevelClear/CounterWait.start()
+			yield($LevelClear/CounterWait,"timeout")
+			$LevelClear/CounterCount.start()
+			yield(self,"tally_clear")
+			$LevelClear/CounterWait.start(2)
+			yield($LevelClear/CounterWait,"timeout")
+			Global.main.change_scene(Global.nextZone,"FadeOut","FadeOut","SetSub",1)
+
+
+func _on_CounterCount_timeout():
+	$LevelClear/Counter.play()
+	
+	if timeBonus > 0:
+		timeBonus -= 100
+		Global.score += 100
+	elif ringBonus > 0:
+		ringBonus -= 100
+		Global.score += 100
+	else:
+		$LevelClear/Counter.play()
+		$LevelClear/CounterCount.stop()
+		$LevelClear/Score.play()
+		emit_signal("tally_clear")
+	$LevelClear/Tally/ScoreNumber.string = scoreText.string
+	$LevelClear/Tally/TimeNumbers.string = "%6d" % timeBonus
+	$LevelClear/Tally/RingNumbers.string = "%6d" % ringBonus
+	

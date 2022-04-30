@@ -19,11 +19,13 @@ func _input(event):
 						parent.shieldSprite.play("Insta")
 						parent.shieldSprite.frame = 0
 						parent.shieldSprite.visible = true
+						parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = false
 						yield(parent.shieldSprite,"animation_finished")
 						# check shields hasn't changed
 						if (parent.shield == parent.SHIELDS.NONE):
 							parent.shieldSprite.visible = false
 							parent.shieldSprite.stop()
+						parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = true
 				parent.SHIELDS.ELEC:
 					parent.sfx[13].play()
 					parent.movement.y = -5.5*Global.originalFPS
@@ -73,8 +75,8 @@ func _physics_process(delta):
 		if !parent.inputs[parent.INPUTS.ACTION] && parent.movement.y < -4*60:
 				parent.movement.y = -4*60
 		# change parent direction
-		elif (parent.inputs[parent.INPUTS.XINPUT] != 0):
-			parent.direction = parent.inputs[parent.INPUTS.XINPUT]
+	if (parent.inputs[parent.INPUTS.XINPUT] != 0):
+		parent.direction = parent.inputs[parent.INPUTS.XINPUT]
 		
 	
 	# gravity

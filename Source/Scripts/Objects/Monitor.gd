@@ -5,6 +5,7 @@ var physics = false;
 var grv = 0.21875;
 var yspeed = 0;
 var playerTouch = null;
+var isActive = true
 export (int, "Ring", "Speed Shoes", "Invincibility", "Shield", "Elec Shield", "Fire Shield",
 "Bubble Shield", "Super", "Blue Ring", "Boost", "1up") var item = 0;
 
@@ -17,6 +18,9 @@ func _process(delta):
 		$Item.frame = item+2
 
 func destroy():
+	if !isActive:
+		return false
+	isActive = false
 	$Item.z_index += 1000
 	$Animator.play("DestroyMonitor")
 	$SFX/Destroy.play()
@@ -81,9 +85,15 @@ func physics_collision(body, hitVector):
 			else:
 				# Stop horizontal movement
 				body.movement.x = 0
+		# check player has vertical momentum
 		else:
 			body.movement.y *= -1
 			body.ground = false
 			playerTouch = body
 			destroy()
 	return true;
+
+
+func _on_InstaArea_area_entered(area):
+	playerTouch = area.get_parent().get_parent()
+	destroy()
