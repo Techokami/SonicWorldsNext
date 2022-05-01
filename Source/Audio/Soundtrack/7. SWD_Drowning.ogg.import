@@ -11,5 +11,5 @@ dest_files=[ "res://.import/7. SWD_Drowning.ogg-828b916c28e2776aa16fcd123fa86392
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0

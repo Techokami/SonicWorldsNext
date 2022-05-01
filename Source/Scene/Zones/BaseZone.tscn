@@ -497,6 +497,16 @@ texture = ExtResource( 29 )
 position = Vector2( 5632, 880 )
 texture = ExtResource( 29 )
 
+[node name="Shortcut" type="Line2D" parent="Entity"]
+z_index = 11
+points = PoolVector2Array( 15.9853, 96.0024, 15.9975, 16.0025, 9504, 17.4566, 9503.99, 57.4566 )
+width = 32.0
+default_color = Color( 1, 1, 1, 1 )
+texture = ExtResource( 27 )
+texture_mode = 1
+script = ExtResource( 26 )
+speed = 100
+
 [node name="ZoomTube2" type="Line2D" parent="Entity"]
 z_index = 11
 points = PoolVector2Array( 9583.93, 481.469, 9583.92, 545.469, 9583.91, 561.469, 9591.91, 561.47, 9759.91, 561.496, 9775.91, 561.498, 9775.92, 545.498, 9775.96, 241.498, 9775.97, 225.498, 9759.97, 225.496, 9599.97, 225.471, 9583.97, 225.469, 9583.97, 209.469, 9583.97, 193.469 )

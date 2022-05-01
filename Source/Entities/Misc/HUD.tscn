@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://Scripts/Misc/NumeralDisplay.gd" type="Script" id=1]
 [ext_resource path="res://Graphics/HUD/hud_lives.png" type="Texture" id=2]
@@ -17,6 +17,8 @@
 [ext_resource path="res://Graphics/HUD/hud_results_text.png" type="Texture" id=15]
 [ext_resource path="res://Audio/SFX/Gimmicks/Switch.wav" type="AudioStream" id=16]
 [ext_resource path="res://Audio/SFX/Misc/Score.wav" type="AudioStream" id=17]
+[ext_resource path="res://Graphics/HUD/hud_gametimeover.png" type="Texture" id=18]
+[ext_resource path="res://Audio/Soundtrack/8. SWD_GameOver.ogg" type="AudioStream" id=19]
 
 [sub_resource type="CanvasItemMaterial" id=4]
 blend_mode = 2
@@ -359,7 +361,7 @@ tracks/16/keys = {
 "values": [ Vector2( -256, 64 ) ]
 }
 tracks/17/type = "value"
-tracks/17/path = NodePath("../LevelClear/Zone:position")
+tracks/17/path = NodePath("../LevelClear/Through:position")
 tracks/17/interp = 1
 tracks/17/loop_wrap = true
 tracks/17/imported = false
@@ -582,7 +584,7 @@ tracks/0/keys = {
 "values": [ Vector2( -256, 56 ), Vector2( 64, 56 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("../LevelClear/Zone:position")
+tracks/1/path = NodePath("Through:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -603,7 +605,7 @@ tracks/2/keys = {
 "times": PoolRealArray( 0, 0.5 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( 520, 100 ), Vector2( 200, 100 ) ]
+"values": [ Vector2( 520, 75 ), Vector2( 200, 75 ) ]
 }
 tracks/3/type = "value"
 tracks/3/path = NodePath("Tally:position")
@@ -615,7 +617,7 @@ tracks/3/keys = {
 "times": PoolRealArray( 0, 0.5 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( -256, 144 ), Vector2( 88, 144 ) ]
+"values": [ Vector2( -256, 128 ), Vector2( 88, 128 ) ]
 }
 
 [sub_resource type="Animation" id=8]
@@ -630,10 +632,10 @@ tracks/0/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( -256, 64 ) ]
+"values": [ Vector2( -256, 56 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("../LevelClear/Zone:position")
+tracks/1/path = NodePath("Through:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -642,10 +644,10 @@ tracks/1/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( -256, 108 ) ]
+"values": [ Vector2( -256, 80 ) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("../LevelClear/Act:position")
+tracks/2/path = NodePath("Act:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -654,10 +656,10 @@ tracks/2/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( 328, 120 ) ]
+"values": [ Vector2( 528, 75 ) ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath("Act:position")
+tracks/3/path = NodePath("Tally:position")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -666,22 +668,114 @@ tracks/3/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( 528, 104 ) ]
+"values": [ Vector2( -256, 128 ) ]
 }
-tracks/4/type = "value"
-tracks/4/path = NodePath("Tally:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
+
+[sub_resource type="Animation" id=9]
+resource_name = "GameOver"
+length = 13.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Game:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( -256, 0 ), Vector2( 0, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Over:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 256, 0 ), Vector2( 0, 0 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Game:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1e-05 ), Vector2( 1, 1 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Over:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1e-05 ), Vector2( 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=10]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Game:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( -256, 144 ) ]
+"values": [ Vector2( -256, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Over:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 256, 0 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Over:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1e-05 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Game:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1e-05 ) ]
 }
 
 [node name="HUD" type="CanvasLayer"]
+pause_mode = 2
 script = ExtResource( 6 )
 
 [node name="LifeCounter" type="Control" parent="."]
@@ -830,7 +924,7 @@ vframes = 2
 
 [node name="PatternLeft" type="Control" parent="LevelCard"]
 anchor_bottom = 1.0
-margin_bottom = 3616.0
+margin_bottom = 4064.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -839,7 +933,7 @@ __meta__ = {
 anchor_bottom = 1.0
 margin_left = -32.0
 margin_right = 32.0
-margin_bottom = 30976.0
+margin_bottom = 38880.0
 texture = ExtResource( 8 )
 stretch_mode = 2
 __meta__ = {
@@ -859,7 +953,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_top = -32.0
-margin_bottom = 3328.0
+margin_bottom = 3776.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -869,7 +963,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 32.0
-margin_right = 12256.0
+margin_right = 13824.0
 margin_bottom = 64.0
 texture = ExtResource( 8 )
 stretch_mode = 2
@@ -898,28 +992,28 @@ size_flags_horizontal = 2
 size_flags_vertical = 2
 
 [node name="Passed" type="Sprite" parent="LevelClear"]
-position = Vector2( -256, 64 )
+position = Vector2( -256, 56 )
 texture = ExtResource( 14 )
 centered = false
 hframes = 10
 vframes = 4
 script = ExtResource( 9 )
-string = "sonic passed"
+string = "sonic got"
 smallStringTexture = ExtResource( 14 )
 align = 2
 
-[node name="Zone" type="Sprite" parent="LevelClear"]
-position = Vector2( -256, 108 )
+[node name="Through" type="Sprite" parent="LevelClear"]
+position = Vector2( -256, 80 )
 texture = ExtResource( 14 )
 centered = false
 hframes = 11
 vframes = 4
 script = ExtResource( 9 )
-string = "base zone"
+string = "through"
 smallStringTexture = ExtResource( 14 )
 
 [node name="Act" type="Sprite" parent="LevelClear"]
-position = Vector2( 528, 104 )
+position = Vector2( 528, 75 )
 texture = ExtResource( 11 )
 centered = false
 hframes = 2
@@ -930,7 +1024,7 @@ anims/LevelClear = SubResource( 7 )
 anims/RESET = SubResource( 8 )
 
 [node name="Tally" type="Sprite" parent="LevelClear"]
-position = Vector2( -256, 144 )
+position = Vector2( -256, 128 )
 texture = ExtResource( 15 )
 centered = false
 region_enabled = true
@@ -979,6 +1073,35 @@ bus = "SFX"
 [node name="Score" type="AudioStreamPlayer" parent="LevelClear"]
 stream = ExtResource( 17 )
 bus = "SFX"
+
+[node name="GameOver" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+
+[node name="Game" type="Sprite" parent="GameOver"]
+position = Vector2( -256, 0 )
+scale = Vector2( 1, 1e-05 )
+texture = ExtResource( 18 )
+offset = Vector2( -40, 0 )
+vframes = 3
+
+[node name="Over" type="Sprite" parent="GameOver"]
+position = Vector2( 256, 0 )
+scale = Vector2( 1, 1e-05 )
+texture = ExtResource( 18 )
+offset = Vector2( 40, 0 )
+vframes = 3
+frame = 2
+
+[node name="GameOver" type="AnimationPlayer" parent="GameOver"]
+anims/GameOver = SubResource( 9 )
+anims/RESET = SubResource( 10 )
+
+[node name="GameOverMusic" type="AudioStreamPlayer" parent="GameOver"]
+stream = ExtResource( 19 )
+bus = "Music"
 
 [node name="Water" type="CanvasLayer" parent="."]
 

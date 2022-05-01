@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Audio/Soundtrack/2. SWD_SpeedUp.ogg" type="AudioStream" id=1]
 [ext_resource path="res://Scripts/Global/Main.gd" type="Script" id=2]
 [ext_resource path="res://Audio/Soundtrack/3. SWD_1Up.ogg" type="AudioStream" id=3]
+[ext_resource path="res://Scene/Title.tscn" type="PackedScene" id=4]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 2
@@ -86,6 +87,8 @@ script = ExtResource( 2 )
 
 [node name="SceneLoader" type="Node" parent="."]
 
+[node name="TitleScreen" parent="SceneLoader" instance=ExtResource( 4 )]
+
 [node name="Music" type="AudioStreamPlayer" parent="."]
 pause_mode = 2
 autoplay = true
@@ -116,3 +119,5 @@ anims/FadeOut = SubResource( 2 )
 anims/RESET = SubResource( 3 )
 anims/SetAdd = SubResource( 4 )
 anims/SetSub = SubResource( 5 )
+
+[connection signal="finished" from="Life" to="." method="_on_Life_finished"]

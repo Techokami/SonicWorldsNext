@@ -5,6 +5,7 @@ export var speed = 0
 var titleEnd = false
 
 func _ready():
+	yield(get_tree(),"idle_frame")
 	Global.music.stream = music
 	Global.music.play()
 

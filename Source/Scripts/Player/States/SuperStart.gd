@@ -18,7 +18,6 @@ func _process(delta):
 		parent.animator.play(lastAnim)
 		parent.set_state(parent.STATES.AIR)
 		activated = true
-		Global.music.stream_paused = true
 		Global.currentTheme = 0
 		Global.effectTheme.stream = Global.themes[Global.currentTheme]
 		Global.effectTheme.play()

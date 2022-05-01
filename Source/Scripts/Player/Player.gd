@@ -153,7 +153,7 @@ func _input(event):
 			inputs[INPUTS.ACTION] = calculate_input(event,"gm_action")
 
 func calculate_input(event, action = "gm_action"):
-	return int(event.is_action(action) || event.is_action_pressed(action))-int(event.is_action_released(action))
+	return int(event.is_action(action) or event.is_action_pressed(action))-int(event.is_action_released(action))
 
 
 func _process(delta):
@@ -183,7 +183,8 @@ func _process(delta):
 			# Animate Palette
 			sonicPal.set_shader_param("row",wrapf(sonicPal.get_shader_param("row")+delta*5,sonicPal.get_shader_param("palRows")-3,sonicPal.get_shader_param("palRows")))
 			# check if ring count is greater then 0
-			if rings > 0:
+			# deactivate if stage cleared
+			if rings > 0 and Global.stageClearPhase == 0:
 				rings -= delta
 			else:
 				# Deactivate super
@@ -197,7 +198,7 @@ func _process(delta):
 				shieldSprite.visible = true
 			$InvincibilityBarrier.visible = false
 			if Global.currentTheme == 0:
-				Global.music.stream_paused = false
+				#Global.music.stream_paused = false
 				Global.music.play()
 				Global.effectTheme.stop()
 	else:
@@ -209,7 +210,7 @@ func _process(delta):
 		if (shoeTime <= 0):
 			switch_physics()
 			if Global.currentTheme == 1:
-				Global.music.stream_paused = false
+				#Global.music.stream_paused = false
 				Global.music.play()
 				Global.effectTheme.stop()
 
@@ -265,13 +266,13 @@ func _physics_process(delta):
 		if sign(movement.x) == sign(horizontallSensor.cast_to.x):
 			movement.x = 0
 
-	if (playerControl != 0 && lockTimer <= 0):
+	if (playerControl != 0 and lockTimer <= 0):
 		inputs[INPUTS.XINPUT] = -int(Input.is_action_pressed("gm_left"))+int(Input.is_action_pressed("gm_right"))
 		inputs[INPUTS.YINPUT] = -int(Input.is_action_pressed("gm_up"))+int(Input.is_action_pressed("gm_down"))
 	# Boundry Handling
 	if (camera != null):
 		# Stop movement at borders
-		if (global_position.x < camera.limit_left+cameraMargin || global_position.x > camera.limit_right-cameraMargin):
+		if (global_position.x < camera.limit_left+cameraMargin or global_position.x > camera.limit_right-cameraMargin):
 			movement.x = 0
 		
 		# Death at border bottom
@@ -282,9 +283,9 @@ func _physics_process(delta):
 		global_position.x = clamp(global_position.x,camera.limit_left+cameraMargin,camera.limit_right-cameraMargin)
 	
 	# Water
-	if Global.waterLevel != null && currentState != STATES.DIE:
+	if Global.waterLevel != null and currentState != STATES.DIE:
 		# Enter water
-		if global_position.y > Global.waterLevel && !water:
+		if global_position.y > Global.waterLevel and !water:
 			water = true
 			switch_physics(lastPhysicsState,true)
 			movement.x *= 0.5
@@ -299,7 +300,7 @@ func _physics_process(delta):
 				SHIELDS.ELEC, SHIELDS.FIRE:
 					set_shield(SHIELDS.NONE)
 		# Exit water
-		if global_position.y < Global.waterLevel && water:
+		if global_position.y < Global.waterLevel and water:
 			water = false
 			switch_physics(lastPhysicsState,false)
 			movement.y *= 2
@@ -382,7 +383,7 @@ func action_jump(animation = "roll", airJumpControl = true):
 
 
 func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
-	if (currentState != STATES.HIT && invTime <= 0 && supTime <= 0):
+	if (currentState != STATES.HIT and invTime <= 0 and supTime <= 0):
 		movement.x = sign(global_position.x-damagePoint.x)*2*60
 		movement.y = -4*60
 		if (movement.x == 0):
@@ -392,7 +393,7 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 		disconect_from_floor()
 		set_state(STATES.HIT)
 		# Ring loss
-		if (shield == SHIELDS.NONE && rings > 0):
+		if (shield == SHIELDS.NONE and rings > 0):
 			sfx[9].play()
 			ringDisTime = 64/Global.originalFPS
 			var ringCount = 0
@@ -421,7 +422,8 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 			rings = 0
 		elif shield == SHIELDS.NONE:
 			kill()
-
+		else:
+			sfx[soundID].play()
 		# Disable Shield
 		set_shield(SHIELDS.NONE)
 		return true
@@ -448,7 +450,7 @@ func get_ring():
 func touch_ceiling():
 	if getVert != null:
 		var getAngle = wrapf(-rad2deg(getVert.get_collision_normal().angle())-90,0,360)
-		if (getAngle > 225 || getAngle < 135):
+		if (getAngle > 225 or getAngle < 135):
 			angle = getAngle
 			rotation = snap_angle(-deg2rad(getAngle))
 			update_sensors()
@@ -466,9 +468,9 @@ func land_floor():
 	var calcAngle = wrapf(rad2deg(angle),0,360)
 	
 	# check not shallow
-	if (calcAngle >= 22.5 && calcAngle <= 337.5 && abs(movement.x) < movement.y):
+	if (calcAngle >= 22.5 and calcAngle <= 337.5 and abs(movement.x) < movement.y):
 		# check half steep
-		if (calcAngle < 45 || calcAngle > 315):
+		if (calcAngle < 45 or calcAngle > 315):
 			movement.x = movement.y*0.5*sign(sin(angle))
 		# else do full steep
 		else:

@@ -2,7 +2,8 @@ extends Node
 
 var originalFPS = 60
 var players = []
-var main
+var main = null
+var hud = null
 var checkPoints = []
 var currentCheckPoint = -1
 
@@ -12,7 +13,8 @@ var nextZone = preload("res://Scene/Zones/BaseZone.tscn")
 var Score = preload("res://Entities/Misc/Score.tscn")
 const SCORE_COMBO = [1,2,3,4,4,4,4,4,4,4,4,4,4,4,4,5]
 
-var stageClear = false
+var stageClearPhase = 0
+var gameOver = false
 
 # Music
 var music = null
@@ -38,7 +40,7 @@ func _ready():
 
 func _process(delta):
 	originalFPS = 60*Engine.time_scale
-	if !stageClear:
+	if stageClearPhase == 0 && !gameOver && !get_tree().paused:
 		levelTime += delta
 
 func reset_values():
@@ -61,7 +63,6 @@ func score(position = Vector2.ZERO,value = 0):
 	add_child(scoreObj)
 
 func stage_clear():
-	if !stageClear:
-		stageClear = true
+	if stageClearPhase == 0:
 		music.stream = themes[2]
 		music.play()

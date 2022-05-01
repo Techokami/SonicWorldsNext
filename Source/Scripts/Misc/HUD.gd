@@ -19,16 +19,18 @@ var endingPhase = 0
 var timeBonus = 0
 var ringBonus = 0
 
+var gameOver = false
+
 signal tally_clear
 
 func _ready():
+	Global.hud = self
 	if (playLevelCard):
 		$LevelCard.visible = true
 		$LevelCard/Banner/LevelName.string = zoneName
 		$LevelCard/Banner/Zone.string = zone
 		$LevelCard/Banner/Act.frame = act-1
 		$LevelCard/Banner/Act.visible = (act > 0)
-		pause_mode = PAUSE_MODE_PROCESS
 		get_tree().paused = true
 		$LevelCard/CardPlayer.play("Start")
 		$LevelCard/CardMover.play("Slider")
@@ -36,7 +38,6 @@ func _ready():
 		$LevelCard/CardPlayer.play("End")
 		get_tree().paused = false
 		yield($LevelCard/CardPlayer,"animation_finished")
-		pause_mode = PAUSE_MODE_INHERIT
 	$LevelCard.queue_free()
 
 func _process(delta):
@@ -68,13 +69,13 @@ func _process(delta):
 	else:
 		flashTimer -= delta
 	
-	if Global.stageClear:
+	if Global.stageClearPhase > 2:
 		if endingPhase == 0:
 			endingPhase = 1
 			$LevelClear.visible = true
 			$LevelClear/Tally/ScoreNumber.string = scoreText.string
 			$LevelClear/Animator.play("LevelClear")
-			ringBonus = Global.players[focusPlayer].rings*100
+			ringBonus = floor(Global.players[focusPlayer].rings)*100
 			$LevelClear/Tally/RingNumbers.string = "%6d" % ringBonus
 			timeBonus = 0
 			if Global.levelTime < 60*5:
@@ -101,6 +102,17 @@ func _process(delta):
 			$LevelClear/CounterWait.start(2)
 			yield($LevelClear/CounterWait,"timeout")
 			Global.main.change_scene(Global.nextZone,"FadeOut","FadeOut","SetSub",1)
+	elif Global.gameOver && !gameOver:
+		gameOver = true
+		$GameOver/GameOver.play("GameOver")
+		$GameOver/GameOverMusic.play()
+		Global.music.stop()
+		Global.effectTheme.stop()
+		Global.life.stop()
+		yield($GameOver/GameOver,"animation_finished")
+		Global.main.change_scene(Global.startScene,"FadeOut")
+		yield(Global.main,"scene_faded")
+		Global.reset_values()
 
 
 func _on_CounterCount_timeout():

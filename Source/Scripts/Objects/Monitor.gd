@@ -36,7 +36,6 @@ func destroy():
 			if !playerTouch.super:
 				playerTouch.shoeTime = 30
 				playerTouch.switch_physics(3)
-				Global.music.stream_paused = true
 				Global.currentTheme = 1
 				Global.effectTheme.stream = Global.themes[Global.currentTheme]
 				Global.effectTheme.play()
@@ -45,7 +44,6 @@ func destroy():
 				playerTouch.supTime = 30
 				playerTouch.shieldSprite.visible = false
 				playerTouch.get_node("InvincibilityBarrier").visible = true
-				Global.music.stream_paused = true
 				Global.currentTheme = 0
 				Global.effectTheme.stream = Global.themes[Global.currentTheme]
 				Global.effectTheme.play()
@@ -63,6 +61,8 @@ func destroy():
 		10: # 1up
 			Global.life.play()
 			Global.lives += 1
+			Global.effectTheme.volume_db = -100
+			Global.music.volume_db = -100
 
 func _physics_process(delta):
 	if (!Engine.is_editor_hint()):
