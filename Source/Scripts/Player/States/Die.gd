@@ -11,10 +11,10 @@ func _physics_process(delta):
 		parent.get_parent().add_child(parent.camera)
 		parent.camera.global_position = camPose
 
-	if parent.movement.y > 1000 && Global.lives > 0:
+	if parent.movement.y > 1000 && Global.lives > 0 && !Global.gameOver:
 		parent.movement = Vector2.ZERO
 		Global.lives -= 1
-		if Global.lives > 0:
+		if Global.lives > 0 && Global.levelTime < Global.maxTime:
 			Global.main.change_scene(null,"FadeOut")
 			parent.pause_mode = PAUSE_MODE_STOP
 		else:

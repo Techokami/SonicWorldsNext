@@ -15,8 +15,8 @@ script = ExtResource( 1 )
 shape = SubResource( 1 )
 
 [node name="DamageArea" type="Area2D" parent="."]
-collision_layer = 4096
-collision_mask = 0
+collision_layer = 0
+collision_mask = 4096
 
 [node name="HitBox" type="CollisionShape2D" parent="DamageArea"]
 modulate = Color( 1, 0, 0, 1 )

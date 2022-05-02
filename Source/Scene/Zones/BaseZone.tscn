@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=2]
+[gd_scene load_steps=38 format=2]
 
 [ext_resource path="res://Tileset/Worlds/TestTilesGreen.tres" type="TileSet" id=1]
 [ext_resource path="res://Scripts/Level/Level.gd" type="Script" id=2]
@@ -34,6 +34,7 @@
 [ext_resource path="res://Entities/Hazards/Spikes.tscn" type="PackedScene" id=32]
 [ext_resource path="res://Entities/Obstacles/BreakableWall.tscn" type="PackedScene" id=33]
 [ext_resource path="res://Entities/MainObjects/GoalPost.tscn" type="PackedScene" id=34]
+[ext_resource path="res://Entities/Enemies/Chomper.tscn" type="PackedScene" id=35]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Glow"
@@ -282,6 +283,17 @@ position = Vector2( 3695.95, 312.566 )
 [node name="Spring9" parent="Entity" instance=ExtResource( 12 )]
 position = Vector2( 4015.84, 1048.62 )
 
+[node name="Spring26" parent="Entity" instance=ExtResource( 12 )]
+position = Vector2( 4783.76, 1128.67 )
+scale = Vector2( 1, -1 )
+type = 1
+springDirection = 1
+
+[node name="Spring27" parent="Entity" instance=ExtResource( 12 )]
+position = Vector2( 4335.87, 880.664 )
+type = 1
+springDirection = 2
+
 [node name="Spring10" parent="Entity" instance=ExtResource( 12 )]
 position = Vector2( 4783.9, 632.733 )
 type = 1
@@ -445,7 +457,7 @@ position = Vector2( 3456, 816 )
 position = Vector2( 3840, 816 )
 
 [node name="WaterLevel" parent="Entity" instance=ExtResource( 15 )]
-position = Vector2( -0.176564, 1152 )
+position = Vector2( -0.218253, 1424 )
 
 [node name="ZoomTube" type="Line2D" parent="Entity"]
 z_index = 11
@@ -1095,12 +1107,6 @@ item = 10
 
 [node name="Hazards" type="Node2D" parent="."]
 
-[node name="Orbinaut" parent="Hazards" instance=ExtResource( 20 )]
-position = Vector2( 5848, 168 )
-
-[node name="Orbinaut2" parent="Hazards" instance=ExtResource( 20 )]
-position = Vector2( 512, 672 )
-
 [node name="Spikes" parent="Hazards" instance=ExtResource( 32 )]
 position = Vector2( 5168, 1296 )
 
@@ -1136,3 +1142,17 @@ position = Vector2( 5392, 1296 )
 
 [node name="Spikes9" parent="Hazards" instance=ExtResource( 32 )]
 position = Vector2( 5424, 1296 )
+
+[node name="Enemies" type="Node2D" parent="."]
+
+[node name="Orbinaut" parent="Enemies" instance=ExtResource( 20 )]
+position = Vector2( 5848, 168 )
+
+[node name="Orbinaut2" parent="Enemies" instance=ExtResource( 20 )]
+position = Vector2( 512, 672 )
+
+[node name="Chomper" parent="Enemies" instance=ExtResource( 35 )]
+position = Vector2( 1144, 832 )
+
+[node name="Chomper2" parent="Enemies" instance=ExtResource( 35 )]
+position = Vector2( 1224, 936 )

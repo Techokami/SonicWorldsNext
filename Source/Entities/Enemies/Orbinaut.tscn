@@ -25,8 +25,8 @@ shape = SubResource( 1 )
 
 [node name="Orb" type="Area2D" parent="."]
 position = Vector2( 0, -16 )
-collision_layer = 4096
-collision_mask = 0
+collision_layer = 0
+collision_mask = 4096
 script = ExtResource( 3 )
 
 [node name="HitBox" type="CollisionShape2D" parent="Orb"]

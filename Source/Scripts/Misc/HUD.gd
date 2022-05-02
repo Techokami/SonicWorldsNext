@@ -42,7 +42,8 @@ func _ready():
 
 func _process(delta):
 	scoreText.string = "%6d" % Global.score;
-	timeText.string = "%2d" % floor(Global.levelTime/60) + ":" + str(fmod(floor(Global.levelTime),60)).pad_zeros(2);
+	var timeClamp = min(Global.levelTime,Global.maxTime-1)
+	timeText.string = "%2d" % floor(timeClamp/60) + ":" + str(fmod(floor(timeClamp),60)).pad_zeros(2);
 	if (Global.players.size() > 0):
 		ringText.string = "%3d" % Global.players[focusPlayer].rings;
 	
@@ -66,6 +67,10 @@ func _process(delta):
 			$Counters/Text/Rings.visible = !$Counters/Text/Rings.visible
 		else:
 			$Counters/Text/Rings.visible = false
+		if Global.levelTime >= 60*9:
+			$Counters/Text/Time.visible = !$Counters/Text/Time.visible
+		else:
+			$Counters/Text/Time.visible = false
 	else:
 		flashTimer -= delta
 	
@@ -78,22 +83,20 @@ func _process(delta):
 			ringBonus = floor(Global.players[focusPlayer].rings)*100
 			$LevelClear/Tally/RingNumbers.string = "%6d" % ringBonus
 			timeBonus = 0
-			if Global.levelTime < 60*5:
-				timeBonus = 500
-				if Global.levelTime < 60*4:
-					timeBonus = 1000
-					if Global.levelTime < 60*3:
-						timeBonus = 2000
-						if Global.levelTime < 60*2:
-							timeBonus = 3000
-							if Global.levelTime < 60*1.5:
-								timeBonus = 4000
-								if Global.levelTime < 60:
-									timeBonus = 5000
-									if Global.levelTime < 45:
-										timeBonus = 10000
-										if Global.levelTime < 30:
-											timeBonus = 50000
+			var bonusTable = [
+			[60*5,500],
+			[60*4,1000],
+			[60*3,2000],
+			[60*2,3000],
+			[60*1.5,4000],
+			[60,5000],
+			[45,10000],
+			[30,50000],
+			]
+			
+			for i in bonusTable:
+				if Global.levelTime < i[0]:
+					timeBonus = i[1]
 			$LevelClear/Tally/TimeNumbers.string = "%6d" % timeBonus
 			$LevelClear/CounterWait.start()
 			yield($LevelClear/CounterWait,"timeout")
@@ -104,15 +107,23 @@ func _process(delta):
 			Global.main.change_scene(Global.nextZone,"FadeOut","FadeOut","SetSub",1)
 	elif Global.gameOver && !gameOver:
 		gameOver = true
+		if Global.levelTime >= Global.maxTime:
+			$GameOver/Game.frame = 1
 		$GameOver/GameOver.play("GameOver")
 		$GameOver/GameOverMusic.play()
 		Global.music.stop()
 		Global.effectTheme.stop()
 		Global.life.stop()
 		yield($GameOver/GameOver,"animation_finished")
-		Global.main.change_scene(Global.startScene,"FadeOut")
-		yield(Global.main,"scene_faded")
-		Global.reset_values()
+		# reset game
+		if Global.levelTime < Global.maxTime || Global.lives <= 0:
+			Global.main.change_scene(Global.startScene,"FadeOut")
+			yield(Global.main,"scene_faded")
+			Global.reset_values()
+		else:
+			Global.main.change_scene(null,"FadeOut")
+			yield(Global.main,"scene_faded")
+			Global.levelTime = 0
 
 
 func _on_CounterCount_timeout():

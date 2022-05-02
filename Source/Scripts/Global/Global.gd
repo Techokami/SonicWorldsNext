@@ -31,6 +31,7 @@ var score = 0
 var lives = 3
 var continues = 0
 var levelTime = 0
+var maxTime = 60*10
 
 var waterLevel = null
 

@@ -253,6 +253,10 @@ func _process(delta):
 	
 	if animator.current_animation != "":
 		lastActiveAnimation = animator.current_animation
+		
+	# Time over
+	if Global.levelTime >= Global.maxTime:
+		kill()
 	
 func _physics_process(delta):
 	# physics sets
@@ -431,6 +435,7 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 
 func kill():
 	if currentState != STATES.DIE:
+		disconect_from_floor()
 		super = false
 		supTime = 0
 		collision_layer = 0
