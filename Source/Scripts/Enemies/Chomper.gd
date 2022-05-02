@@ -15,14 +15,15 @@ func _physics_process(delta):
 	$VisibilityEnabler2D.position = -position
 
 func _process(delta):
-	if velocity.y > 0:
-		# stationary
-		animFrame = 0
-	elif position.y > -192:
-		# slow animation
-		animFrame += 60.0/7.0*delta
+	if position.y > -192:
+		if velocity.y > 0:
+			# stationary
+			animFrame = 0
+		else:
+			# slow animation
+			animFrame += 4*delta
 	else:
 		# fast animation
-		animFrame += 60.0/7.0*delta
+		animFrame += 8*delta
 	animFrame = fmod(animFrame,($Chomper.hframes*$Chomper.vframes))
 	$Chomper.frame = floor(animFrame)
