@@ -67,16 +67,16 @@ func physics_floor_override(body,caster):
 		#	body.velocity.y = selfVelocity
 	#else:
 	body.velocity = Vector2.DOWN
-	body.sprite.play("turnStand");
-	body.spriteFrames.set_animation_speed("turnStand",0);
+	body.sprite.play("turnStand")
+	body.spriteFrames.set_animation_speed("turnStand",0)
 	body.sprite.flip_h = true
-	body.set_state(body.STATES.JUMPCANCEL);
+	body.set_state(body.STATES.JUMPCANCEL)
 	if (!playerList.has(body)):
 		playerDistance[playerList.size()] = (body.global_position.x-global_position.x)/(24*global_scale.x)
 		playerOffset[playerList.size()] = 0
 		playerContactY[playerList.size()] = body.global_position.y-global_position.y+1
 		playerList.append(body)
-	return true;
+	return true
 
 # player leaving check
 func _on_PlayerCheck_body_exited(body):

@@ -43,6 +43,7 @@ func _process(delta):
 	originalFPS = 60*Engine.time_scale
 	if stageClearPhase == 0 && !gameOver && !get_tree().paused:
 		levelTime += delta
+	
 
 func reset_values():
 	lives = 3

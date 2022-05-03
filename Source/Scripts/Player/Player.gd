@@ -29,7 +29,9 @@ var super = false
 var shoeTime = 0
 var ringDisTime = 0 # ring collecting disable timer
 
+# collision related values
 var water = false
+var pushingWall = 0
 
 var enemyCounter = 0
 
@@ -82,6 +84,7 @@ var Ring = preload("res://Entities/Items/Ring.tscn")
 var ringChannel = 0
 
 var Particle = preload("res://Entities/Misc/GenericParticle.tscn")
+var RotatingParticle = preload("res://Entities/Misc/RotatingParticle.tscn")
 
 var superSprite = preload("res://Graphics/Players/SuperSonic.png")
 onready var normalSprite = $Sprite/Sprite.texture
@@ -91,9 +94,13 @@ var sonicPal = preload("res://Shaders/SonicPalette.tres")
 
 var lockTimer = 0
 var spriteRotation = 0
+var airControl = true
 
+# States
 enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, ANIMATION, HIT, DIE, CORKSCREW, JUMPCANCEL, SUPER}
 var currentState = STATES.NORMAL
+
+# Shield variables
 enum SHIELDS {NONE, NORMAL, ELEC, FIRE, BUBBLE}
 var shield = SHIELDS.NONE
 onready var magnetShape = $RingMagnet/CollisionShape2D
@@ -104,14 +111,13 @@ onready var animator = $Sprite/PlayerAnimation
 onready var sprite = $Sprite/Sprite
 var lastActiveAnimation = ""
 
-#onready var spriteFrames = sprite.frames
 onready var shieldSprite = $Shields
 onready var camera = get_node_or_null("Camera")
 
 var rotatableSprites = ["walk", "run", "peelOut"]
 var direction = scale.x
 
-# ground speed is mostly used for timing and animations, there isn't any functionality to it.
+# Ground speed is mostly used for timing and animations, there isn't any functionality to it.
 var groundSpeed = 0
 
 enum INPUTS {XINPUT, YINPUT, ACTION, ACTION2, ACTION3, SUPER, PAUSE}
@@ -122,8 +128,8 @@ var inputs = [0,0,0,0,0,0,0]
 # 0 = ai, 1 = player 1, 2 = player 2
 var playerControl = 1
 
+# Get sfx list
 onready var sfx = $SFX.get_children()
-var airControl = true
 
 # Player values
 var shieldID = 0
@@ -214,7 +220,7 @@ func _process(delta):
 				Global.music.play()
 				Global.effectTheme.stop()
 
-	if (invTime > 0):
+	if (invTime > 0 and currentState != STATES.HIT and currentState != STATES.DIE):
 		visible = !visible
 		invTime -= delta*60
 		if (invTime <= 0):
@@ -229,11 +235,14 @@ func _process(delta):
 		var stars = $InvincibilityBarrier.get_children()
 		for i in stars:
 			i.position = i.position.rotated(deg2rad(360*delta*2))
-			if (fmod(Global.levelTime,0.1)+delta > 0.1):
-				var star = Particle.instance()
-				star.global_position = i.global_position
-				get_parent().add_child(star)
-				star.frame = rand_range(0,3)
+		if (fmod(Global.levelTime,0.1)+delta > 0.1):
+			var star = RotatingParticle.instance()
+			var starPart = star.get_node("GenericParticle")
+			star.global_position = global_position
+			get_parent().add_child(star)
+			starPart.position = starPart.position.rotated(deg2rad(rand_range(0,90)))
+			starPart.play("StarSingle")
+			starPart.frame = rand_range(0,4)
 
 	# Animator
 	match(animator.current_animation):
@@ -265,10 +274,15 @@ func _physics_process(delta):
 	if (ground):
 		groundSpeed = movement.x
 	# wall detection
-	if horizontallSensor.is_colliding() or is_on_wall():
-		
-		if sign(movement.x) == sign(horizontallSensor.cast_to.x):
+	if horizontalSensor.is_colliding() or is_on_wall():
+		# give pushingWall a buffer otherwise this just switches on and off
+		pushingWall = 2
+		if sign(movement.x) == sign(horizontalSensor.cast_to.x):
 			movement.x = 0
+		
+	elif pushingWall > 0:
+		# count down pushingwall
+		pushingWall -= 1
 
 	if (playerControl != 0 and lockTimer <= 0):
 		inputs[INPUTS.XINPUT] = -int(Input.is_action_pressed("gm_left"))+int(Input.is_action_pressed("gm_right"))
@@ -396,6 +410,7 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 		ground = false
 		disconect_from_floor()
 		set_state(STATES.HIT)
+		invTime = 120
 		# Ring loss
 		if (shield == SHIELDS.NONE and rings > 0):
 			sfx[9].play()
@@ -443,7 +458,7 @@ func kill():
 		z_index = 100
 		movement = Vector2(0,-7*60)
 		set_state(STATES.DIE,HITBOXESSONIC.NORMAL)
-		animator.play("Die")
+		animator.play("die")
 		sfx[6].play()
 
 func get_ring():

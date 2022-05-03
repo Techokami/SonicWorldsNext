@@ -11,8 +11,8 @@ func _input(event):
 			if (parent.movement.x == 0 && parent.inputs[parent.INPUTS.YINPUT] > 0):
 				parent.animator.play("spinDash")
 				parent.sfx[2].play()
-				parent.sfx[2].pitch_scale = 1;
-				parent.spindashPower = 0;
+				parent.sfx[2].pitch_scale = 1
+				parent.spindashPower = 0
 				parent.animator.play("spinDash")
 				parent.set_state(parent.STATES.SPINDASH)
 			else:
@@ -30,8 +30,27 @@ func _process(delta):
 				if parent.lastActiveAnimation != "lookUp":
 					parent.animator.play("lookUp")
 			else:
-				parent.animator.play("idle")
-		elif(abs(parent.movement.x) < 6*60):#min(6*60,parent.top)):
+				# edge checking
+				var getL = parent.verticalSensorLeft.is_colliding()
+				var getR = parent.verticalSensorRight.is_colliding()
+				var getM = parent.verticalSensorMiddle.is_colliding()
+				var getMEdge = parent.verticalSensorMiddleEdge.is_colliding()
+				# flip sensors
+				if parent.direction < 0:
+					getL = getR
+					getR = parent.verticalSensorLeft.is_colliding()
+				if getM:
+					parent.animator.play("idle")
+				elif !getL && getR: # reverse edge
+					parent.animator.play("edge3")
+				elif !getMEdge: # far edge
+					parent.animator.play("edge2")
+				else: # normal edge
+					parent.animator.play("edge1")
+					
+		elif parent.pushingWall:
+			parent.animator.play("push")
+		elif(abs(parent.movement.x) < 6*60):
 			parent.animator.play("walk")
 		elif(abs(parent.movement.x) < 10*60):
 			parent.animator.play("run")
@@ -51,13 +70,13 @@ func _physics_process(delta):
 		parent.set_state(parent.STATES.ROLL)
 		parent.animator.play("roll")
 		parent.sfx[1].play()
-		return null;
+		return null
 	
 	# set air state
 	if (!parent.ground):
 		parent.set_state(parent.STATES.AIR)
 		#Stop script
-		return null;
+		return null
 	
 	# skidding
 	if !skid && sign(parent.inputs[parent.INPUTS.XINPUT]) != sign(parent.movement.x) && abs(parent.movement.x) >= 5*60 && parent.inputs[parent.INPUTS.XINPUT] != 0:
@@ -82,18 +101,18 @@ func _physics_process(delta):
 	
 	# Apply slope factor
 	# ignore this if not moving for sonic 1 style slopes
-	parent.movement.x += (parent.slp*sin(parent.angle))/delta;
+	parent.movement.x += (parent.slp*sin(parent.angle))/delta
 	
 	var calcAngle = rad2deg(parent.angle)
 	if (calcAngle < 0):
-		calcAngle += 360;
+		calcAngle += 360
 	
 	# drop, if speed below fall speed
 	if (abs(parent.movement.x) < parent.fall && calcAngle >= 45 && calcAngle <= 315):
 		if (round(calcAngle) >= 90 && round(calcAngle) <= 270):
 			parent.disconect_from_floor()
 			parent.ground = false
-		parent.lockTimer = 30.0/60.0;
+		parent.lockTimer = 30.0/60.0
 		
 	if (parent.inputs[parent.INPUTS.XINPUT] != 0):
 		if (parent.movement.x*parent.inputs[parent.INPUTS.XINPUT] < parent.top):
@@ -112,7 +131,7 @@ func _physics_process(delta):
 			if (sign(parent.movement.x - (parent.frc/delta)*sign(parent.movement.x)) == sign(parent.movement.x)):
 				parent.movement.x -= (parent.frc/delta)*sign(parent.movement.x)
 			else:
-				parent.movement.x -= parent.movement.x;
+				parent.movement.x -= parent.movement.x
 
 
 func _on_SkidDustTimer_timeout():

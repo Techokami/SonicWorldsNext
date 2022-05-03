@@ -1,12 +1,12 @@
 extends CanvasLayer
 
-export var focusPlayer = 0;
+export var focusPlayer = 0
 
-onready var scoreText = $Counters/Text/ScoreNumber;
-onready var timeText = $Counters/Text/TimeNumbers;
-onready var ringText = $Counters/Text/RingCount;
+onready var scoreText = $Counters/Text/ScoreNumber
+onready var timeText = $Counters/Text/TimeNumbers
+onready var ringText = $Counters/Text/RingCount
 
-onready var lifeText = $LifeCounter/Icon/LifeText;
+onready var lifeText = $LifeCounter/Icon/LifeText
 
 export var playLevelCard = true
 export var zoneName = "Base"
@@ -41,14 +41,14 @@ func _ready():
 	$LevelCard.queue_free()
 
 func _process(delta):
-	scoreText.string = "%6d" % Global.score;
+	scoreText.string = "%6d" % Global.score
 	var timeClamp = min(Global.levelTime,Global.maxTime-1)
-	timeText.string = "%2d" % floor(timeClamp/60) + ":" + str(fmod(floor(timeClamp),60)).pad_zeros(2);
+	timeText.string = "%2d" % floor(timeClamp/60) + ":" + str(fmod(floor(timeClamp),60)).pad_zeros(2)
 	if (Global.players.size() > 0):
-		ringText.string = "%3d" % Global.players[focusPlayer].rings;
+		ringText.string = "%3d" % Global.players[focusPlayer].rings
 	
 	
-	lifeText.string = "%2d" % Global.lives;
+	lifeText.string = "%2d" % Global.lives
 	
 	# Water Overlay
 	if Global.waterLevel != null:

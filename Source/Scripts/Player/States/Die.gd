@@ -1,7 +1,7 @@
 extends "res://Scripts/Player/State.gd"
 
 func _physics_process(delta):
-	parent.movement.y += parent.grv/delta;
+	parent.movement.y += parent.grv/delta
 	parent.translate = true
 	get_tree().paused = true
 	parent.pause_mode = PAUSE_MODE_PROCESS

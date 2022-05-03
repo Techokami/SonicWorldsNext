@@ -27,7 +27,7 @@ var stringLookup = {
 'X': 23,
 'Y': 24,
 'Z': 25,
-};
+}
 var smallStringLookup = {
 '0': 0,
 '1': 1,
@@ -65,10 +65,10 @@ var smallStringLookup = {
 'x': 33,
 'y': 34,
 'z': 35,
-};
+}
 
-export var string = "123XYZ";
-onready var stringMem = string;
+export var string = "123XYZ"
+onready var stringMem = string
 
 export (Texture) var smallStringTexture = preload("res://Graphics/HUD/LevelCards/font/smallfont3.png")
 export var hasNumbers = false
@@ -80,21 +80,21 @@ export var smallVframes = 4
 export (int, "Top", "Middle", "Bottom") var align = 0
 
 func _ready():
-	region_enabled = true;
+	region_enabled = true
 
 func _process(delta):
 	if (stringMem != string):
-		stringMem = string;
-		update();
+		stringMem = string
+		update()
 
 
 func _draw():
-	var getRes = Vector2(texture.get_width()/hframes,texture.get_height()/vframes);
+	var getRes = Vector2(texture.get_width()/hframes,texture.get_height()/vframes)
 	var getX = 0
 	var vAlign = ((texture.get_height()/vframes)-(smallStringTexture.get_height()/smallVframes))*(align/2)
 	for i in string.length():
 		if (stringLookup.has(string[i]) || smallStringLookup.has(string[i])):
-			var charID = 0;
+			var charID = 0
 			var gethFrames = hframes
 			var getvFrames = vframes
 			var getTexture = texture
@@ -108,9 +108,9 @@ func _draw():
 			else:
 				charID = stringLookup[string[i]]
 			
-			getRes = Vector2(getTexture.get_width()/gethFrames,getTexture.get_height()/getvFrames);
+			getRes = Vector2(getTexture.get_width()/gethFrames,getTexture.get_height()/getvFrames)
 				
 			draw_texture_rect_region(getTexture,
 			Rect2(Vector2(getX,yOff),getRes),
-			Rect2(Vector2(fmod(charID,gethFrames)*getRes.x,floor(charID/gethFrames)*getRes.y),getRes));
+			Rect2(Vector2(fmod(charID,gethFrames)*getRes.x,floor(charID/gethFrames)*getRes.y),getRes))
 		getX += getRes.x

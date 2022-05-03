@@ -21,9 +21,9 @@ func _process(delta):
 			animFrame = 0
 		else:
 			# slow animation
-			animFrame += 4*delta
+			animFrame += (60.0/8.0)*delta
 	else:
 		# fast animation
-		animFrame += 8*delta
+		animFrame += (60.0/4.0)*delta
 	animFrame = fmod(animFrame,($Chomper.hframes*$Chomper.vframes))
 	$Chomper.frame = floor(animFrame)

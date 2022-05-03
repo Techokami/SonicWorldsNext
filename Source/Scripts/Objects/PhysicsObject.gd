@@ -3,12 +3,14 @@ class_name PhysicsObject extends KinematicBody2D
 # Sensors
 var verticalObjectCheck = RayCast2D.new()
 var verticalSensorLeft = RayCast2D.new()
+var verticalSensorMiddle = RayCast2D.new() # mostly used for edge detection and clipping prevention
+var verticalSensorMiddleEdge = RayCast2D.new() # used for far edge detection
 var verticalSensorRight = RayCast2D.new()
-var horizontallSensor = RayCast2D.new()
+var horizontalSensor = RayCast2D.new()
 var slopeCheck = RayCast2D.new()
 var objectCheck = RayCast2D.new()
 
-onready var sensorList = [verticalSensorLeft,verticalSensorRight,horizontallSensor,slopeCheck]
+onready var sensorList = [verticalSensorLeft,verticalSensorMiddle,verticalSensorMiddleEdge,verticalSensorRight,horizontalSensor,slopeCheck]
 
 var groundLookDistance = 14
 onready var pushRadius = max($HitBox.shape.extents.x+1,10) # original push radius is 10
@@ -39,9 +41,11 @@ signal connectCeiling
 
 func _ready():
 	add_child(verticalSensorLeft)
+	add_child(verticalSensorMiddle)
+	add_child(verticalSensorMiddleEdge)
 	add_child(verticalSensorRight)
 	add_child(verticalObjectCheck)
-	add_child(horizontallSensor)
+	add_child(horizontalSensor)
 	add_child(slopeCheck)
 	add_child(objectCheck)
 	for i in sensorList:
@@ -56,6 +60,11 @@ func _ready():
 	verticalObjectCheck.set_collision_mask_bit(13,true)
 	objectCheck.enabled = true
 	verticalObjectCheck.enabled = true
+	# middle should also check for objects
+	verticalSensorMiddle.set_collision_mask_bit(13,true)
+	verticalSensorMiddleEdge.set_collision_mask_bit(13,true)
+	verticalSensorMiddle.set_collision_mask_bit(16,true)
+	verticalSensorMiddleEdge.set_collision_mask_bit(16,true)
 
 func update_sensors():
 	var rotationSnap = stepify(rotation,deg2rad(90))
@@ -73,6 +82,10 @@ func update_sensors():
 	
 	verticalSensorRight.position = -verticalSensorLeft.position
 	verticalSensorRight.cast_to.y = verticalSensorLeft.cast_to.y
+	verticalSensorMiddle.cast_to.y = verticalSensorLeft.cast_to.y*1.1
+	if movement.x != 0:
+		verticalSensorMiddleEdge.position = verticalSensorLeft.position*0.5*sign(movement.x)
+	verticalSensorMiddleEdge.cast_to.y = verticalSensorLeft.cast_to.y*1.1
 	
 	
 	# Object offsets, prevent clipping
@@ -107,9 +120,9 @@ func update_sensors():
 		
 	
 	# wall sensor
-	horizontallSensor.cast_to = Vector2(pushRadius*sign(velocity.rotated(-rotationSnap).x),0)
+	horizontalSensor.cast_to = Vector2(pushRadius*sign(velocity.rotated(-rotationSnap).x),0)
 	# if the player is on a completely flat surface then move the sensor down 8 pixels
-	horizontallSensor.position.y = 8*int(round(rad2deg(angle)) == round(rad2deg(gravityAngle)) && ground)
+	horizontalSensor.position.y = 8*int(round(rad2deg(angle)) == round(rad2deg(gravityAngle)) && ground)
 	
 	# slop sensor
 	slopeCheck.position.y = shape.x
@@ -118,7 +131,7 @@ func update_sensors():
 	
 	verticalSensorLeft.global_rotation = rotationSnap
 	verticalSensorRight.global_rotation = rotationSnap
-	horizontallSensor.global_rotation = rotationSnap
+	horizontalSensor.global_rotation = rotationSnap
 	slopeCheck.global_rotation = rotationSnap
 	
 	# set collission mask values
@@ -143,10 +156,12 @@ func update_sensors():
 		i.set_collision_mask_bit(2+((collissionLayer+1)*4),i.get_collision_mask_bit(2))
 		i.set_collision_mask_bit(3+((collissionLayer+1)*4),i.get_collision_mask_bit(3))
 	
-	horizontallSensor.force_raycast_update()
+	
+	horizontalSensor.force_raycast_update()
 	verticalSensorLeft.force_raycast_update()
 	verticalSensorRight.force_raycast_update()
 	slopeCheck.force_raycast_update()
+	
 
 
 func _physics_process(delta):
@@ -167,9 +182,9 @@ func _physics_process(delta):
 		
 		# Wall sensors
 		# Check if colliding
-		if horizontallSensor.is_colliding():
+		if horizontalSensor.is_colliding():
 			#  Calculate the move distance vectorm, then move
-			var rayHitVec = (horizontallSensor.get_collision_point()-horizontallSensor.global_position)
+			var rayHitVec = (horizontalSensor.get_collision_point()-horizontalSensor.global_position)
 			var normHitVec = -Vector2.LEFT.rotated(snap_angle(rayHitVec.normalized().angle()))
 			translate(rayHitVec-(normHitVec*(pushRadius)))
 		

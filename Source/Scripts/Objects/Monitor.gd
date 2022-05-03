@@ -1,13 +1,13 @@
 tool
 extends KinematicBody2D
 
-var physics = false;
-var grv = 0.21875;
-var yspeed = 0;
-var playerTouch = null;
+var physics = false
+var grv = 0.21875
+var yspeed = 0
+var playerTouch = null
 var isActive = true
 export (int, "Ring", "Speed Shoes", "Invincibility", "Shield", "Elec Shield", "Fire Shield",
-"Bubble Shield", "Super", "Blue Ring", "Boost", "1up") var item = 0;
+"Bubble Shield", "Super", "Blue Ring", "Boost", "1up") var item = 0
 
 
 func _ready():
@@ -91,7 +91,7 @@ func physics_collision(body, hitVector):
 			body.ground = false
 			playerTouch = body
 			destroy()
-	return true;
+	return true
 
 
 func _on_InstaArea_area_entered(area):
