@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/invincible_stars.png-a5d40941ccc4a952f70674fa7f4fab59.stex"
+path="res://.import/SuperSparkles.png-613e8ee03c786062ce7166033986a895.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Graphics/Items/invincible_stars.png"
-dest_files=[ "res://.import/invincible_stars.png-a5d40941ccc4a952f70674fa7f4fab59.stex" ]
+source_file="res://Graphics/Misc/SuperSparkles.png"
+dest_files=[ "res://.import/SuperSparkles.png-613e8ee03c786062ce7166033986a895.stex" ]
 
 [params]
 

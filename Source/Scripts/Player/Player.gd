@@ -97,7 +97,7 @@ var spriteRotation = 0
 var airControl = true
 
 # States
-enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, ANIMATION, HIT, DIE, CORKSCREW, JUMPCANCEL, SUPER}
+enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, ANIMATION, HIT, DIE, CORKSCREW, JUMPCANCEL, SUPER}
 var currentState = STATES.NORMAL
 
 # Shield variables
@@ -112,7 +112,16 @@ onready var sprite = $Sprite/Sprite
 var lastActiveAnimation = ""
 
 onready var shieldSprite = $Shields
+
+# Camera
 onready var camera = get_node_or_null("Camera")
+var camLockRef = Node2D.new()
+var camDist = Vector2(32,64)
+var camLookDist = [-104,88] # Up and Down
+var camLookAmount = 0
+var cameraDragLerp = 0
+var camLockPos = null
+var camLockTime = 0
 
 var rotatableSprites = ["walk", "run", "peelOut"]
 var direction = scale.x
@@ -140,11 +149,22 @@ var cameraMargin = 16
 
 # ALL CODE IS TEMPORARY!
 func _ready():
-	# disable and enable states
+	# Disable and enable states
+	get_parent().add_child(camLockRef)
 	set_state(currentState)
 	Global.players.append(self)
 	connect("connectFloor",self,"land_floor")
 	connect("connectCeiling",self,"touch_ceiling")
+	# Camera settings
+	if camera != null:
+		var viewSize = get_viewport_rect().size
+		camera.drag_margin_left =   camDist.x/viewSize.x
+		camera.drag_margin_right =  camDist.x/viewSize.x
+		camera.drag_margin_top =    camDist.y/viewSize.y
+		camera.drag_margin_bottom = camDist.y/viewSize.y
+		camera.drag_margin_h_enabled = true
+		camera.drag_margin_v_enabled = true
+	
 	# Checkpoints
 	yield(get_tree(),"idle_frame")
 	for i in Global.checkPoints:
@@ -239,10 +259,11 @@ func _process(delta):
 			var star = RotatingParticle.instance()
 			var starPart = star.get_node("GenericParticle")
 			star.global_position = global_position
+			starPart.direction = direction
 			get_parent().add_child(star)
-			starPart.position = starPart.position.rotated(deg2rad(rand_range(0,90)))
-			starPart.play("StarSingle")
-			starPart.frame = rand_range(0,4)
+			var options = ["StarSingle","StarSinglePat2","default"]
+			starPart.play(options[round(randf()*2)])
+			starPart.frame = rand_range(0,6)
 
 	# Animator
 	match(animator.current_animation):
@@ -257,6 +278,8 @@ func _process(delta):
 			animator.playback_speed = (1.0/(duration+1))*(60/10)
 		"spinDash": #animate at 60fps (fps were animated at 0.1 seconds)
 			animator.playback_speed = 60/10
+		"dropDash":
+			animator.playback_speed = 20/10
 		_:
 			animator.playback_speed = 1
 	
@@ -268,8 +291,15 @@ func _process(delta):
 		kill()
 	
 func _physics_process(delta):
+	
+	# Attacking is for rolling type animations
+	var attacking = (animator.current_animation == "roll" or animator.current_animation == "dropDash" or animator.current_animation == "spinDash" )
+	
 	# physics sets
-	set_collision_mask_bit(15,animator.current_animation != "roll")
+	# collid with solids if not rolling layer
+	set_collision_mask_bit(15,!attacking)
+	# damage mask bit
+	set_collision_layer_bit(19,attacking)
 	
 	if (ground):
 		groundSpeed = movement.x
@@ -287,8 +317,60 @@ func _physics_process(delta):
 	if (playerControl != 0 and lockTimer <= 0):
 		inputs[INPUTS.XINPUT] = -int(Input.is_action_pressed("gm_left"))+int(Input.is_action_pressed("gm_right"))
 		inputs[INPUTS.YINPUT] = -int(Input.is_action_pressed("gm_up"))+int(Input.is_action_pressed("gm_down"))
-	# Boundry Handling
+	
+	
+	# Camera settings
 	if (camera != null):
+		# Camera vertical drag
+		var viewSize = get_viewport_rect().size
+		
+		# Set margins
+		camera.drag_margin_top =    lerp(0,camDist.y/viewSize.y,cameraDragLerp)
+		camera.drag_margin_bottom = camera.drag_margin_top
+		
+		# Lerp camera scroll based on if on floor
+		var playerOffset = ((abs(global_position.y-camera.get_camera_position().y)*2)/camDist.y)
+		
+		cameraDragLerp = max(int(!ground),min(cameraDragLerp,playerOffset)-6*delta)
+		
+		# Looking/Lag
+		# camLookDist is the distance, 0 is up, 1 is down
+		camLookAmount = clamp(camLookAmount,-1,1)
+		var camLookOff = lerp(0,camLookDist[0],min(0,-camLookAmount))+lerp(0,camLookDist[1],min(0,camLookAmount))
+		
+		
+		if camLookAmount != 0:
+			var scrollSpeed = sign(camLookAmount)*delta*2
+			if sign(camLookAmount - scrollSpeed) == sign(camLookAmount):
+				camLookAmount -= sign(camLookAmount)*delta*2
+			else:
+				camLookAmount = 0
+		
+		# Camera Lock
+		
+		if camLockTime > 0:
+			if camLockPos == null:
+				camLockPos = camera.global_position-Vector2(0,camLookOff)
+			camLookOff = 0
+			camLockTime -= delta
+		else:
+			camLockTime = 0
+			if camLockPos != null:
+				if camLockPos.distance_to(global_position) >= 16:
+					camLockPos = camLockPos.move_toward(global_position,delta*16*60)
+				else:
+					camLockPos = null
+		
+		if camLockPos != null:
+			camLockRef.global_position = camLockPos
+			camera.global_position = camLockRef.global_position
+		else:
+			camera.position = Vector2(0,camLookOff)
+			camLockRef.global_position = global_position
+		
+		
+		
+		# Boundry handling
 		# Stop movement at borders
 		if (global_position.x < camera.limit_left+cameraMargin or global_position.x > camera.limit_right-cameraMargin):
 			movement.x = 0
@@ -375,7 +457,7 @@ func set_state(newState, forceMask = Vector2.ZERO):
 func set_shield(shieldID):
 	magnetShape.shape.radius = 0
 	shield = shieldID
-	shieldSprite.visible = true
+	shieldSprite.visible = !super
 	match (shield):
 		SHIELDS.NORMAL:
 			shieldSprite.play("Default")
@@ -520,3 +602,12 @@ func switch_physics(physicsRide = -1, isWater = water):
 	releaseJmp = getList[9]
 	if physicsRide >= 0:
 		lastPhysicsState = physicsRide
+
+
+
+func _on_SparkleTimer_timeout():
+	if super && abs(movement.x) >= top:
+		var sparkle = Particle.instance()
+		sparkle.global_position = global_position
+		sparkle.play("Super")
+		get_parent().add_child(sparkle)

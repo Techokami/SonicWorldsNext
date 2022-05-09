@@ -27,6 +27,11 @@ func _process(delta):
 		parent.sfx[2].pitch_scale = 1
 		parent.set_state(parent.STATES.ROLL)
 		
+		# Lock camera
+		parent.camLockTime = (parent.spindashPower+8)/60.0
+		parent.camLockPos = parent.camera.global_position
+		parent.camLockRef.global_position = parent.camLockPos
+		
 		parent.animator.play("roll")
 	parent.spindashPower -= ((parent.spindashPower / 0.125) / (256))*60*delta
 		

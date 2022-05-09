@@ -141,7 +141,7 @@ gm_pause={
 2d_physics/layer_17="Block Player (no physics change)"
 2d_physics/layer_18="Solid if not on Floor"
 2d_physics/layer_19="Solid if not Knuckles"
-2d_physics/layer_20="Insta Shield"
+2d_physics/layer_20="Damage Entities"
 
 [rendering]
 

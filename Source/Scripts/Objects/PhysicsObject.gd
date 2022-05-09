@@ -250,7 +250,8 @@ func _physics_process(delta):
 		update_sensors()
 		
 		moveRemaining -= moveRemaining.normalized()*min(moveStepLength,moveRemaining.length())
-	
+		force_update_transform()
+		
 	if translate:
 		translate(movement*delta)
 	

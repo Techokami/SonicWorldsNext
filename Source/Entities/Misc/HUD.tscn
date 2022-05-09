@@ -785,9 +785,6 @@ margin_left = 8.0
 margin_top = -24.0
 margin_right = 72.0
 margin_bottom = -8.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Icon" type="Sprite" parent="LifeCounter"]
 material = ExtResource( 13 )
@@ -933,7 +930,7 @@ __meta__ = {
 anchor_bottom = 1.0
 margin_left = -32.0
 margin_right = 32.0
-margin_bottom = 38880.0
+margin_bottom = 43168.0
 texture = ExtResource( 8 )
 stretch_mode = 2
 __meta__ = {
@@ -963,7 +960,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 32.0
-margin_right = 14368.0
+margin_right = 14496.0
 margin_bottom = 64.0
 texture = ExtResource( 8 )
 stretch_mode = 2

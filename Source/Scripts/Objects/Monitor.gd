@@ -73,7 +73,7 @@ func _physics_process(delta):
 				physics = false
 
 func physics_collision(body, hitVector):
-	if (body.animator.current_animation == "roll"):
+	if (body.get_collision_layer_bit(19)):
 		if hitVector.y < 0:
 			body.movement.y *= -1
 			yspeed = -1.5*60
@@ -95,5 +95,7 @@ func physics_collision(body, hitVector):
 
 
 func _on_InstaArea_area_entered(area):
-	playerTouch = area.get_parent().get_parent()
-	destroy()
+	if area.get("parent") != null and isActive:
+		playerTouch = area.parent
+		area.parent.movement.y *= -1
+		destroy()

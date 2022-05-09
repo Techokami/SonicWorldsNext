@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/invincible_stars.png-a5d40941ccc4a952f70674fa7f4fab59.stex"
+path="res://.import/DropDashDust.png-18c2a7f71435544370a1bbb1f432799a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Graphics/Items/invincible_stars.png"
-dest_files=[ "res://.import/invincible_stars.png-a5d40941ccc4a952f70674fa7f4fab59.stex" ]
+source_file="res://Graphics/Misc/DropDashDust.png"
+dest_files=[ "res://.import/DropDashDust.png-18c2a7f71435544370a1bbb1f432799a.stex" ]
 
 [params]
 

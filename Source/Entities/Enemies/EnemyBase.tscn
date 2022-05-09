@@ -16,17 +16,10 @@ shape = SubResource( 1 )
 
 [node name="DamageArea" type="Area2D" parent="."]
 collision_layer = 0
-collision_mask = 4096
+collision_mask = 528384
 
 [node name="HitBox" type="CollisionShape2D" parent="DamageArea"]
 modulate = Color( 1, 0, 0, 1 )
-shape = SubResource( 1 )
-
-[node name="InstaArea" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 524288
-
-[node name="CollissionMask" type="CollisionShape2D" parent="InstaArea"]
 shape = SubResource( 1 )
 
 [node name="orbinaut" type="Sprite" parent="."]
@@ -39,6 +32,6 @@ scale = Vector2( 6.4, 6.4 )
 process_parent = true
 physics_process_parent = true
 
+[connection signal="area_entered" from="DamageArea" to="." method="_on_DamageArea_area_entered"]
 [connection signal="body_entered" from="DamageArea" to="." method="_on_body_entered"]
 [connection signal="body_exited" from="DamageArea" to="." method="_on_body_exited"]
-[connection signal="area_entered" from="InstaArea" to="." method="_on_InstaArea_area_entered"]

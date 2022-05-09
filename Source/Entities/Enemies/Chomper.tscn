@@ -18,17 +18,10 @@ shape = SubResource( 1 )
 
 [node name="DamageArea" type="Area2D" parent="Chomper"]
 collision_layer = 0
-collision_mask = 4096
+collision_mask = 528384
 
 [node name="HitBox" type="CollisionShape2D" parent="Chomper/DamageArea"]
 modulate = Color( 1, 0, 0, 1 )
-shape = SubResource( 1 )
-
-[node name="InstaArea" type="Area2D" parent="Chomper"]
-collision_layer = 0
-collision_mask = 524288
-
-[node name="CollissionMask" type="CollisionShape2D" parent="Chomper/InstaArea"]
 shape = SubResource( 1 )
 
 [node name="Chomper" type="Sprite" parent="Chomper"]
@@ -41,6 +34,6 @@ scale = Vector2( 3.2, 15.6 )
 process_parent = true
 physics_process_parent = true
 
+[connection signal="area_entered" from="Chomper/DamageArea" to="Chomper" method="_on_DamageArea_area_entered"]
 [connection signal="body_entered" from="Chomper/DamageArea" to="Chomper" method="_on_body_entered"]
 [connection signal="body_exited" from="Chomper/DamageArea" to="Chomper" method="_on_body_exited"]
-[connection signal="area_entered" from="Chomper/InstaArea" to="Chomper" method="_on_InstaArea_area_entered"]

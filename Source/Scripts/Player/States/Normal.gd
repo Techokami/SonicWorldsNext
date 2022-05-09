@@ -1,6 +1,9 @@
 extends "res://Scripts/Player/State.gd"
 
 var skid = false
+# timer for looking up and down
+# the original game uses 120 frames before panning over, so multiply delta by 0.5 for the same time
+var lookTimer = 0
 
 func state_exit():
 	skid = false
@@ -15,6 +18,11 @@ func _input(event):
 				parent.spindashPower = 0
 				parent.animator.play("spinDash")
 				parent.set_state(parent.STATES.SPINDASH)
+			elif (parent.movement.x == 0 && parent.inputs[parent.INPUTS.YINPUT] < 0):
+				parent.sfx[2].play()
+				parent.sfx[2].pitch_scale = 1
+				parent.spindashPower = 0
+				parent.set_state(parent.STATES.PEELOUT)
 			else:
 				parent.action_jump()
 				parent.set_state(parent.STATES.JUMP)
@@ -24,12 +32,19 @@ func _process(delta):
 	if parent.ground && !skid:
 		if parent.movement.x == 0:
 			if (parent.inputs[parent.INPUTS.YINPUT] > 0):
+				lookTimer = max(0,lookTimer+delta*0.5)
 				if parent.lastActiveAnimation != "crouch":
 					parent.animator.play("crouch")
 			elif (parent.inputs[parent.INPUTS.YINPUT] < 0):
+				lookTimer = min(0,lookTimer-delta*0.5)
 				if parent.lastActiveAnimation != "lookUp":
 					parent.animator.play("lookUp")
 			else:
+				# Idle pose animation
+				
+				# reset look timer
+				lookTimer = 0
+				
 				# edge checking
 				var getL = parent.verticalSensorLeft.is_colliding()
 				var getR = parent.verticalSensorRight.is_colliding()
@@ -40,6 +55,7 @@ func _process(delta):
 					getL = getR
 					getR = parent.verticalSensorLeft.is_colliding()
 				if getM:
+					# Play default idle animation
 					parent.animator.play("idle")
 				elif !getL && getR: # reverse edge
 					parent.animator.play("edge3")
@@ -98,6 +114,10 @@ func _physics_process(delta):
 	parent.sprite.flip_h = (parent.direction < 0)
 	
 	parent.movement.y = min(parent.movement.y,0)
+	
+	# Camera look
+	if abs(lookTimer) >= 1:
+		parent.camLookAmount += delta*4*sign(lookTimer)
 	
 	# Apply slope factor
 	# ignore this if not moving for sonic 1 style slopes

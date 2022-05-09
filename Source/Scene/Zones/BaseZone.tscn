@@ -104,6 +104,13 @@ position = Vector2( 88, 752 )
 
 [node name="Camera" type="Camera2D" parent="Player"]
 current = true
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
+drag_margin_left = 0.05
+drag_margin_top = 0.29
+drag_margin_right = 0.05
+drag_margin_bottom = 0.29
+editor_draw_drag_margin = true
 __meta__ = {
 "_edit_lock_": true
 }

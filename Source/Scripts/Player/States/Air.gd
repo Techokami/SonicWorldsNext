@@ -4,58 +4,74 @@ var elecPart = preload("res://Entities/Misc/ElecParticles.tscn")
 
 export var isJump = false
 
+# drop dash variables
+var dropSpeed = [8,12] #the base speed for a drop dash, second is super
+var dropMax = [12,13]   #the top speed for a drop dash, second is super
+var dropTimer = 0
+
 # Jump actions
 func _input(event):
 	if (parent.playerControl != 0):
 		# Shield actions
-		if (event.is_action_pressed("gm_action") && !parent.abilityUsed && isJump && parent.supTime <= 0):
-			parent.abilityUsed = true
-			match (parent.shield):
-				parent.SHIELDS.NONE:
-					if parent.rings >= 50 && !parent.super:
-						parent.set_state(parent.STATES.SUPER)
-					else:
-						parent.sfx[16].play()
-						parent.shieldSprite.play("Insta")
-						parent.shieldSprite.frame = 0
-						parent.shieldSprite.visible = true
-						parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = false
-						yield(parent.shieldSprite,"animation_finished")
-						# check shields hasn't changed
-						if (parent.shield == parent.SHIELDS.NONE):
-							parent.shieldSprite.visible = false
-							parent.shieldSprite.stop()
-						parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = true
-				parent.SHIELDS.ELEC:
-					parent.sfx[13].play()
-					parent.movement.y = -5.5*Global.originalFPS
-					for i in range(4):
-						var part = elecPart.instance()
-						part.global_position = parent.global_position
-						part.direction = Vector2(1,1).rotated(deg2rad(90*i))
-						parent.get_parent().add_child(part)
-				parent.SHIELDS.FIRE:
-					parent.sfx[14].play()
-					parent.movement = Vector2(8*Global.originalFPS*parent.direction,0)
-					parent.shieldSprite.play("FireAction")
-					var getTimer = parent.shieldSprite.get_node_or_null("ShieldTimer")
-					# Start fire dash timer
-					if getTimer != null:
-						getTimer.start(0.5)
-					parent.shieldSprite.flip_h = (parent.direction < 0)
-				parent.SHIELDS.BUBBLE:
-					# check animation isn't bouncing
-					if parent.shieldSprite.animation != "BubbleBounce":
-						parent.sfx[15].play()
-						parent.movement = Vector2(0,8*Global.originalFPS)
-						parent.bounceReaction = 7.5
-						parent.shieldSprite.play("BubbleAction")
+		if (event.is_action_pressed("gm_action") && !parent.abilityUsed && isJump):
+			# Super actions
+			if parent.super:
+				parent.abilityUsed = true # has to be set to true for drop dash
+			# Normal actions
+			else:
+				parent.abilityUsed = true
+				match (parent.shield):
+					parent.SHIELDS.NONE:
+						if parent.rings >= 50:
+							parent.set_state(parent.STATES.SUPER)
+						else:
+							parent.sfx[16].play()
+							parent.shieldSprite.play("Insta")
+							parent.shieldSprite.frame = 0
+							parent.shieldSprite.visible = true
+							parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = false
+							yield(parent.shieldSprite,"animation_finished")
+							# check shields hasn't changed
+							if (parent.shield == parent.SHIELDS.NONE):
+								parent.shieldSprite.visible = false
+								parent.shieldSprite.stop()
+							parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = true
+					
+					parent.SHIELDS.ELEC:
+						parent.sfx[13].play()
+						parent.movement.y = -5.5*Global.originalFPS
+						for i in range(4):
+							var part = elecPart.instance()
+							part.global_position = parent.global_position
+							part.direction = Vector2(1,1).rotated(deg2rad(90*i))
+							parent.get_parent().add_child(part)
+					
+					parent.SHIELDS.FIRE:
+						parent.sfx[14].play()
+						parent.movement = Vector2(8*Global.originalFPS*parent.direction,0)
+						parent.shieldSprite.play("FireAction")
 						var getTimer = parent.shieldSprite.get_node_or_null("ShieldTimer")
-						# Start bubble timer
+						# Start fire dash timer
 						if getTimer != null:
-							getTimer.start(0.25)
-					else:
-						parent.abilityUsed = false
+							getTimer.start(0.5)
+						parent.shieldSprite.flip_h = (parent.direction < 0)
+						parent.camLockTime = 16.0/60.0
+						parent.camLockPos = parent.camera.global_position
+						parent.camLockRef.global_position = parent.camLockPos
+					
+					parent.SHIELDS.BUBBLE:
+						# check animation isn't bouncing
+						if parent.shieldSprite.animation != "BubbleBounce":
+							parent.sfx[15].play()
+							parent.movement = Vector2(0,8*Global.originalFPS)
+							parent.bounceReaction = 7.5
+							parent.shieldSprite.play("BubbleAction")
+							var getTimer = parent.shieldSprite.get_node_or_null("ShieldTimer")
+							# Start bubble timer
+							if getTimer != null:
+								getTimer.start(0.25)
+						else:
+							parent.abilityUsed = false
 
 
 func _physics_process(delta):
@@ -70,24 +86,43 @@ func _physics_process(delta):
 	if (parent.movement.y < 0 && parent.movement.y > -parent.releaseJmp*60):
 		parent.movement.x -= ((parent.movement.x / 0.125) / 256)*60*delta
 	
+	# Mechanics if jumping
 	if (isJump):
 		# Cut vertical movement if jump released
 		if !parent.inputs[parent.INPUTS.ACTION] && parent.movement.y < -4*60:
-				parent.movement.y = -4*60
-		# change parent direction
+			parent.movement.y = -4*60
+		# Drop dash
+		if parent.inputs[parent.INPUTS.ACTION] && parent.abilityUsed:
+			if dropTimer < 1:
+				dropTimer += (delta/20)*60 # should be ready in the equivelent of 20 frames at 60FPS
+			else:
+				if parent.animator.current_animation != "dropDash":
+					parent.sfx[20].play()
+					parent.animator.play("dropDash")
+		# Drop dash code
+		elif !parent.inputs[parent.INPUTS.ACTION] and dropTimer > 0:
+			dropTimer = 0
+			if parent.animator.current_animation == "dropDash":
+				parent.animator.play("roll")
+	
+		
+	# Change parent direction
 	if (parent.inputs[parent.INPUTS.XINPUT] != 0):
 		parent.direction = parent.inputs[parent.INPUTS.XINPUT]
-		
 	
-	# gravity
+	# set facing direction
+	parent.sprite.flip_h = (parent.direction < 0)
+	
+	# Gravity
 	parent.movement.y += parent.grv/delta
 	
-	# reset state if on ground
+	# Reset state if on ground
 	if (parent.ground):
-		# check bubble shield first
+		# Check bounce reaction first
 		if parent.bounceReaction != 0:
 			parent.movement.y = -parent.bounceReaction*60
 			parent.bounceReaction = 0
+			# bubble shield actions
 			if parent.shieldSprite.animation == "BubbleAction" || parent.shieldSprite.animation == "Bubble":
 				parent.shieldSprite.play("BubbleBounce")
 				parent.sfx[15].play()
@@ -97,11 +132,41 @@ func _physics_process(delta):
 					getTimer.start(0.15)
 		else:
 			parent.set_state(parent.STATES.NORMAL)
+			
+			# Drop dash release
+			if dropTimer >= 1:
+				# Check if moving forward or back
+				# Forward landing
+				if sign(parent.movement.x) == sign(parent.direction) or parent.movement.x == 0:
+					# Calculate landing and limit to top speed
+					parent.movement.x = clamp((parent.movement.x/4) + (dropSpeed[int(parent.super)]*60*parent.direction), -dropMax[int(parent.super)]*60,dropMax[int(parent.super)]*60)
+				# Backwards landing
+				else:
+					# if floor angle is flat then just set to drop speed
+					if is_equal_approx(parent.angle,parent.gravityAngle):
+						parent.movement.x = dropSpeed[int(parent.super)]*60*parent.direction
+					# else calculate landing
+					else:
+						parent.movement.x = clamp((parent.movement.x/2) + (dropSpeed[int(parent.super)]*60*parent.direction), -dropMax[int(parent.super)]*60,dropMax[int(parent.super)]*60)
+				parent.set_state(parent.STATES.ROLL)
+				parent.animator.play("roll")
+				parent.sfx[20].stop()
+				parent.sfx[3].play()
+				# Lag camera
+				parent.camLockTime = 16.0/60.0
+				parent.camLockPos = parent.camera.global_position
+				parent.camLockRef.global_position = parent.camLockPos
+				
+				# drop dash dust
+				var dust = parent.Particle.instance()
+				dust.play("DropDash")
+				dust.global_position = parent.global_position
+				dust.scale.x = parent.direction
+				parent.get_parent().add_child(dust)
+					
 	elif parent.movement.y < 0:
 		parent.bounceReaction = 0
 	
-	# set facing direction
-	parent.sprite.flip_h = (parent.direction < 0)
 	
 
 
@@ -113,3 +178,6 @@ func _on_ShieldTimer_timeout():
 			parent.shieldSprite.play("Bubble")
 		"BubbleBounce":
 			parent.shieldSprite.play("Bubble")
+
+func state_activated():
+	dropTimer = 0
