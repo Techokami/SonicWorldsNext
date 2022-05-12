@@ -114,11 +114,13 @@ var lastActiveAnimation = ""
 onready var shieldSprite = $Shields
 
 # Camera
-onready var camera = get_node_or_null("Camera")
-var camLockRef = Node2D.new()
+#onready var camera = get_node_or_null("Camera")
+var camera = Camera2D.new()
 var camDist = Vector2(32,64)
 var camLookDist = [-104,88] # Up and Down
 var camLookAmount = 0
+var camLookOff = 0
+var camAdjust = Vector2.ZERO
 var cameraDragLerp = 0
 var camLockPos = null
 var camLockTime = 0
@@ -150,20 +152,23 @@ var cameraMargin = 16
 # ALL CODE IS TEMPORARY!
 func _ready():
 	# Disable and enable states
-	get_parent().add_child(camLockRef)
 	set_state(currentState)
 	Global.players.append(self)
 	connect("connectFloor",self,"land_floor")
 	connect("connectCeiling",self,"touch_ceiling")
+	
 	# Camera settings
-	if camera != null:
-		var viewSize = get_viewport_rect().size
-		camera.drag_margin_left =   camDist.x/viewSize.x
-		camera.drag_margin_right =  camDist.x/viewSize.x
-		camera.drag_margin_top =    camDist.y/viewSize.y
-		camera.drag_margin_bottom = camDist.y/viewSize.y
-		camera.drag_margin_h_enabled = true
-		camera.drag_margin_v_enabled = true
+	get_parent().call_deferred("add_child", (camera))
+	camera.current = true
+	var viewSize = get_viewport_rect().size
+	camera.drag_margin_left =   camDist.x/viewSize.x
+	camera.drag_margin_right =  camDist.x/viewSize.x
+	camera.drag_margin_top =    camDist.y/viewSize.y
+	camera.drag_margin_bottom = camDist.y/viewSize.y
+	camera.drag_margin_h_enabled = true
+	camera.drag_margin_v_enabled = true
+	connect("positionChanged",self,"on_position_changed")
+	camera.global_position = global_position
 	
 	# Checkpoints
 	yield(get_tree(),"idle_frame")
@@ -193,6 +198,7 @@ func _process(delta):
 
 	if (rotatableSprites.has(animator.current_animation)):
 		sprite.rotation = deg2rad(stepify(spriteRotation,45)-90)-rotation
+		#sprite.rotation = deg2rad(spriteRotation-90)-rotation
 	else:
 		sprite.rotation = -rotation
 
@@ -321,12 +327,6 @@ func _physics_process(delta):
 	
 	# Camera settings
 	if (camera != null):
-		# Camera vertical drag
-		var viewSize = get_viewport_rect().size
-		
-		# Set margins
-		camera.drag_margin_top =    lerp(0,camDist.y/viewSize.y,cameraDragLerp)
-		camera.drag_margin_bottom = camera.drag_margin_top
 		
 		# Lerp camera scroll based on if on floor
 		var playerOffset = ((abs(global_position.y-camera.get_camera_position().y)*2)/camDist.y)
@@ -336,7 +336,7 @@ func _physics_process(delta):
 		# Looking/Lag
 		# camLookDist is the distance, 0 is up, 1 is down
 		camLookAmount = clamp(camLookAmount,-1,1)
-		var camLookOff = lerp(0,camLookDist[0],min(0,-camLookAmount))+lerp(0,camLookDist[1],min(0,camLookAmount))
+		camLookOff = lerp(0,camLookDist[0],min(0,-camLookAmount))+lerp(0,camLookDist[1],min(0,camLookAmount))
 		
 		
 		if camLookAmount != 0:
@@ -349,26 +349,17 @@ func _physics_process(delta):
 		# Camera Lock
 		
 		if camLockTime > 0:
-			if camLockPos == null:
-				camLockPos = camera.global_position-Vector2(0,camLookOff)
-			camLookOff = 0
+#			if camLockPos == null:
+#				camLockPos = camera.global_position-Vector2(0,camLookOff)
+#			camLookOff = 0
 			camLockTime -= delta
-		else:
-			camLockTime = 0
-			if camLockPos != null:
-				if camLockPos.distance_to(global_position) >= 16:
-					camLockPos = camLockPos.move_toward(global_position,delta*16*60)
-				else:
-					camLockPos = null
-		
-		if camLockPos != null:
-			camLockRef.global_position = camLockPos
-			camera.global_position = camLockRef.global_position
-		else:
-			camera.position = Vector2(0,camLookOff)
-			camLockRef.global_position = global_position
-		
-		
+#		else:
+#			camLockTime = 0
+#			if camLockPos != null:
+#				if camera.global_position.distance_to(global_position) >= 16:
+#					camera.global_position = camera.global_position.move_toward(global_position,delta*16*60)
+#				else:
+#					camLockPos = null
 		
 		# Boundry handling
 		# Stop movement at borders
@@ -426,25 +417,35 @@ func set_state(newState, forceMask = Vector2.ZERO):
 		currentState = newState
 	if ground:
 		enemyCounter = 0
-		var shapeChangeCheck = $HitBox.shape.extents
-		if (forceMask == Vector2.ZERO):
-			match(newState):
-				STATES.JUMP, STATES.ROLL:
-					# adjust y position
-					position += ((HITBOXESSONIC.ROLL-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
-					# change hitbox size
-					$HitBox.shape.extents = HITBOXESSONIC.ROLL
-				_:
-					# adjust y position
-					position += ((HITBOXESSONIC.NORMAL-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
-
-					# change hitbox size
-					$HitBox.shape.extents = HITBOXESSONIC.NORMAL
-		else:
-			# adjust y position
-			position += ((forceMask-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
-			# change hitbox size
-			$HitBox.shape.extents = forceMask
+	
+	var shapeChangeCheck = $HitBox.shape.extents
+	var forcePoseChange = Vector2.ZERO
+	
+	if (forceMask == Vector2.ZERO):
+		match(newState):
+			STATES.JUMP, STATES.ROLL:
+				# adjust y position
+				forcePoseChange = ((HITBOXESSONIC.ROLL-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
+				
+				# change hitbox size
+				$HitBox.shape.extents = HITBOXESSONIC.ROLL
+			_:
+				# adjust y position
+				forcePoseChange = ((HITBOXESSONIC.NORMAL-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
+				
+				# change hitbox size
+				$HitBox.shape.extents = HITBOXESSONIC.NORMAL
+	else:
+		# adjust y position
+		forcePoseChange = ((forceMask-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
+		# change hitbox size
+		$HitBox.shape.extents = forceMask
+	
+	position += forcePoseChange
+	
+	#cam_update()
+	
+	
 	sprite.get_node("DashDust").visible = false
 	#update_sensors()
 	# snap to floor if old shape is smaller then new shape
@@ -480,6 +481,8 @@ func action_jump(animation = "roll", airJumpControl = true):
 	movement.y = -jmp
 	sfx[0].play()
 	airControl = airJumpControl
+	cameraDragLerp = 1
+	set_state(STATES.JUMP)
 
 
 func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
@@ -611,3 +614,34 @@ func _on_SparkleTimer_timeout():
 		sparkle.global_position = global_position
 		sparkle.play("Super")
 		get_parent().add_child(sparkle)
+
+func on_position_changed():
+	cam_update(true)
+
+func cam_update(forceMove = false):
+	# Cancel camera movement
+	if currentState == STATES.DIE:
+		return false
+	# Camera vertical drag
+	var viewSize = get_viewport_rect().size
+	
+	camera.drag_margin_top =    lerp(0,camDist.y/viewSize.y,cameraDragLerp)
+	camera.drag_margin_bottom = camera.drag_margin_top
+	
+	# Extra drag margin for rolling
+	match($HitBox.shape.extents):
+		HITBOXESSONIC.ROLL:
+			camAdjust = Vector2(0,-5)
+		_:
+			camAdjust = Vector2.ZERO
+
+	# Camera lock
+	var getPos = global_position+Vector2(0,camLookOff)+camAdjust
+	if camLockTime <= 0 && forceMove || camera.global_position.distance_to(getPos) <= 16:
+		# clamped speed camera
+		camera.global_position = camera.global_position.move_toward(getPos,16*60*get_physics_process_delta_time())
+		# uncomment below for immediate camera
+		#camera.global_position = getPos
+
+func lock_camera(time = 1):
+	camLockTime = max(time,camLockTime)

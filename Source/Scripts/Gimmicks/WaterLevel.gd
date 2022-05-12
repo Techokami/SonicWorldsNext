@@ -8,7 +8,9 @@ func _ready():
 	$Water.region_rect.size.x = get_viewport_rect().size.x
 	
 func _process(_delta):
-	$Water.global_position = Vector2(GlobalFunctions.getCurrentCamera2D().get_camera_screen_center().x,Global.waterLevel)
+	var cam = GlobalFunctions.getCurrentCamera2D()
+	if cam != null:
+		$Water.global_position = Vector2(cam.get_camera_screen_center().x,Global.waterLevel)
 	$Water.region_rect.position.x = $Water.global_position.x
 
 func _physics_process(_delta):

@@ -38,6 +38,7 @@ signal disconectFloor
 signal connectFloor
 signal disconectCeiling
 signal connectCeiling
+signal positionChanged
 
 func _ready():
 	add_child(verticalSensorLeft)
@@ -207,10 +208,10 @@ func _physics_process(delta):
 			var rayHitVec = (getVert.get_collision_point()-getVert.global_position)
 			# Snap the Vector and normalize it
 			var normHitVec = -Vector2.LEFT.rotated(snap_angle(rayHitVec.normalized().angle()))
-			if move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.extents.y+1)),true,true,true):
-				move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.extents.y+1)))
+			if move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.extents.y)),true,true,true):
+				move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.extents.y)))
 			else:
-				translate(rayHitVec-(normHitVec*($HitBox.shape.extents.y+1)))
+				translate(rayHitVec-(normHitVec*($HitBox.shape.extents.y+0.25)))
 		
 		# set rotation
 		
@@ -299,6 +300,8 @@ func _physics_process(delta):
 		# reload memory for layers
 		collision_mask = maskMemory
 		collision_layer = layerMemory
+	emit_signal("positionChanged")
+	
 
 func snap_angle(angleSnap = 0):
 	var wrapAngle = wrapf(angleSnap,deg2rad(0),deg2rad(360))

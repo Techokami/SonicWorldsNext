@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=2]
+[gd_scene load_steps=39 format=2]
 
 [ext_resource path="res://Tileset/Worlds/TestTilesGreen.tres" type="TileSet" id=1]
 [ext_resource path="res://Scripts/Level/Level.gd" type="Script" id=2]
@@ -35,6 +35,7 @@
 [ext_resource path="res://Entities/Obstacles/BreakableWall.tscn" type="PackedScene" id=33]
 [ext_resource path="res://Entities/MainObjects/GoalPost.tscn" type="PackedScene" id=34]
 [ext_resource path="res://Entities/Enemies/Chomper.tscn" type="PackedScene" id=35]
+[ext_resource path="res://Entities/Gimmicks/ConveyorBelt.tscn" type="PackedScene" id=36]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Glow"
@@ -101,19 +102,6 @@ region_rect = Rect2( 0, 0, 512, 512 )
 
 [node name="Player" parent="." instance=ExtResource( 18 )]
 position = Vector2( 88, 752 )
-
-[node name="Camera" type="Camera2D" parent="Player"]
-current = true
-drag_margin_h_enabled = true
-drag_margin_v_enabled = true
-drag_margin_left = 0.05
-drag_margin_top = 0.29
-drag_margin_right = 0.05
-drag_margin_bottom = 0.29
-editor_draw_drag_margin = true
-__meta__ = {
-"_edit_lock_": true
-}
 
 [node name="Default" type="TileMap" parent="."]
 z_index = 11
@@ -455,6 +443,10 @@ boostDirection = 1
 
 [node name="SpeedBooster3" parent="Entity" instance=ExtResource( 8 )]
 position = Vector2( 5664, 696 )
+boostDirection = 1
+
+[node name="SpeedBooster5" parent="Entity" instance=ExtResource( 8 )]
+position = Vector2( 6527.97, 185.001 )
 boostDirection = 1
 
 [node name="CorkscrewLoop" parent="Entity" instance=ExtResource( 10 )]
@@ -1163,3 +1155,9 @@ position = Vector2( 1144, 832 )
 
 [node name="Chomper2" parent="Enemies" instance=ExtResource( 35 )]
 position = Vector2( 1224, 936 )
+
+[node name="ConveyorBelt" parent="." instance=ExtResource( 36 )]
+position = Vector2( 4864, 880 )
+constant_linear_velocity = Vector2( -60, 0 )
+speed = -60
+length = 7

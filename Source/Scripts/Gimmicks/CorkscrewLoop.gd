@@ -31,6 +31,7 @@ func _physics_process(delta):
 			i.movement.y = 0
 		
 		i.global_position.y = ((global_position.y+cos(clamp((i.global_position.x-global_position.x)/(192*scale.x),-1,1)*PI)*-32)-4)*scale.y
+		i.cam_update()
 		# animation
 		if i.animator.current_animation == "corkScrew" || i.animator.current_animation == "corkScrewOffset":
 			var animSize = i.animator.current_animation_length

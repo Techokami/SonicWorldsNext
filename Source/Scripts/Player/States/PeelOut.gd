@@ -14,9 +14,7 @@ func _process(delta):
 	parent.spindashPower = min(parent.spindashPower+delta*24,dashPower)
 	
 	# Lock camera
-	parent.camLockTime = (parent.spindashPower+4)/60.0
-	parent.camLockPos = parent.camera.global_position
-	parent.camLockRef.global_position = parent.camLockPos
+	parent.lock_camera((parent.spindashPower+4)/60.0)
 	
 	parent.groundSpeed = speedCalc
 	

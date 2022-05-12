@@ -55,9 +55,7 @@ func _input(event):
 						if getTimer != null:
 							getTimer.start(0.5)
 						parent.shieldSprite.flip_h = (parent.direction < 0)
-						parent.camLockTime = 16.0/60.0
-						parent.camLockPos = parent.camera.global_position
-						parent.camLockRef.global_position = parent.camLockPos
+						parent.lock_camera(16.0/60.0)
 					
 					parent.SHIELDS.BUBBLE:
 						# check animation isn't bouncing
@@ -153,9 +151,7 @@ func _physics_process(delta):
 				parent.sfx[20].stop()
 				parent.sfx[3].play()
 				# Lag camera
-				parent.camLockTime = 16.0/60.0
-				parent.camLockPos = parent.camera.global_position
-				parent.camLockRef.global_position = parent.camLockPos
+				parent.lock_camera(16.0/60.0)
 				
 				# drop dash dust
 				var dust = parent.Particle.instance()
