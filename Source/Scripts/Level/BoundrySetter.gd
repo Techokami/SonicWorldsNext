@@ -23,13 +23,13 @@ func _on_BoundrySetter_body_entered(body):
 		if (body.get("camera") != null):
 			# Check if set boundry is true, if it is then set the camera's boundries
 			if (setLeft):
-				body.camera.limit_left = leftBoundry
+				body.limitLeft = leftBoundry
 			if (setTop):
-				body.camera.limit_top = topBoundry
+				body.limitTop = topBoundry
 			if (setRight):
-				body.camera.limit_right = rightBoundry
+				body.limitRight = rightBoundry
 			if (setBottom):
-				body.camera.limit_bottom = bottomBoundry
+				body.limitBottom = bottomBoundry
 
 
 func _process(delta):

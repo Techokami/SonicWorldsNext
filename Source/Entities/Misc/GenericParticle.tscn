@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=2]
+[gd_scene load_steps=71 format=2]
 
 [ext_resource path="res://Graphics/Items/invincible_stars.png" type="Texture" id=1]
 [ext_resource path="res://Scripts/Misc/FreeOnAnimationCompletion.gd" type="Script" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://Graphics/Misc/skid_dust.png" type="Texture" id=4]
 [ext_resource path="res://Graphics/Misc/DropDashDust.png" type="Texture" id=5]
 [ext_resource path="res://Graphics/Misc/SuperSparkles.png" type="Texture" id=6]
+[ext_resource path="res://Graphics/Items/Rings/RingSparkle.png" type="Texture" id=7]
 
 [sub_resource type="AtlasTexture" id=108]
 atlas = ExtResource( 1 )
@@ -71,17 +72,37 @@ region = Rect2( 155, 0, 31, 31 )
 atlas = ExtResource( 1 )
 region = Rect2( 93, 0, 31, 31 )
 
-[sub_resource type="AtlasTexture" id=116]
-atlas = ExtResource( 6 )
-region = Rect2( 0, 0, 48, 48 )
+[sub_resource type="AtlasTexture" id=139]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 31, 31 )
 
-[sub_resource type="AtlasTexture" id=117]
-atlas = ExtResource( 6 )
-region = Rect2( 48, 0, 48, 48 )
+[sub_resource type="AtlasTexture" id=132]
+atlas = ExtResource( 1 )
+region = Rect2( 186, 0, 31, 31 )
 
-[sub_resource type="AtlasTexture" id=59]
-atlas = ExtResource( 6 )
-region = Rect2( 96, 0, 48, 48 )
+[sub_resource type="AtlasTexture" id=133]
+atlas = ExtResource( 1 )
+region = Rect2( 217, 0, 31, 31 )
+
+[sub_resource type="AtlasTexture" id=134]
+atlas = ExtResource( 1 )
+region = Rect2( 155, 0, 31, 31 )
+
+[sub_resource type="AtlasTexture" id=135]
+atlas = ExtResource( 1 )
+region = Rect2( 124, 0, 31, 31 )
+
+[sub_resource type="AtlasTexture" id=136]
+atlas = ExtResource( 1 )
+region = Rect2( 93, 0, 31, 31 )
+
+[sub_resource type="AtlasTexture" id=137]
+atlas = ExtResource( 1 )
+region = Rect2( 62, 0, 31, 31 )
+
+[sub_resource type="AtlasTexture" id=138]
+atlas = ExtResource( 1 )
+region = Rect2( 31, 0, 31, 31 )
 
 [sub_resource type="AtlasTexture" id=118]
 atlas = ExtResource( 5 )
@@ -139,38 +160,6 @@ region = Rect2( 32, 0, 16, 16 )
 atlas = ExtResource( 4 )
 region = Rect2( 48, 0, 16, 16 )
 
-[sub_resource type="AtlasTexture" id=139]
-atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 31, 31 )
-
-[sub_resource type="AtlasTexture" id=132]
-atlas = ExtResource( 1 )
-region = Rect2( 186, 0, 31, 31 )
-
-[sub_resource type="AtlasTexture" id=133]
-atlas = ExtResource( 1 )
-region = Rect2( 217, 0, 31, 31 )
-
-[sub_resource type="AtlasTexture" id=134]
-atlas = ExtResource( 1 )
-region = Rect2( 155, 0, 31, 31 )
-
-[sub_resource type="AtlasTexture" id=135]
-atlas = ExtResource( 1 )
-region = Rect2( 124, 0, 31, 31 )
-
-[sub_resource type="AtlasTexture" id=136]
-atlas = ExtResource( 1 )
-region = Rect2( 93, 0, 31, 31 )
-
-[sub_resource type="AtlasTexture" id=137]
-atlas = ExtResource( 1 )
-region = Rect2( 62, 0, 31, 31 )
-
-[sub_resource type="AtlasTexture" id=138]
-atlas = ExtResource( 1 )
-region = Rect2( 31, 0, 31, 31 )
-
 [sub_resource type="AtlasTexture" id=140]
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 32, 32 )
@@ -207,6 +196,18 @@ region = Rect2( 224, 0, 32, 32 )
 atlas = ExtResource( 3 )
 region = Rect2( 256, 0, 32, 32 )
 
+[sub_resource type="AtlasTexture" id=116]
+atlas = ExtResource( 6 )
+region = Rect2( 0, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=117]
+atlas = ExtResource( 6 )
+region = Rect2( 48, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=59]
+atlas = ExtResource( 6 )
+region = Rect2( 96, 0, 48, 48 )
+
 [sub_resource type="AtlasTexture" id=149]
 atlas = ExtResource( 1 )
 region = Rect2( 0, 0, 31, 31 )
@@ -239,6 +240,22 @@ region = Rect2( 186, 0, 31, 31 )
 atlas = ExtResource( 1 )
 region = Rect2( 217, 0, 31, 31 )
 
+[sub_resource type="AtlasTexture" id=166]
+atlas = ExtResource( 7 )
+region = Rect2( 0, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=167]
+atlas = ExtResource( 7 )
+region = Rect2( 16, 0, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=168]
+atlas = ExtResource( 7 )
+region = Rect2( 0, 16, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=169]
+atlas = ExtResource( 7 )
+region = Rect2( 16, 16, 16, 16 )
+
 [sub_resource type="SpriteFrames" id=157]
 animations = [ {
 "frames": [ SubResource( 108 ), SubResource( 109 ), SubResource( 110 ), SubResource( 111 ), SubResource( 112 ), SubResource( 113 ), SubResource( 114 ), SubResource( 115 ) ],
@@ -251,10 +268,10 @@ animations = [ {
 "name": "StarSinglePat2",
 "speed": 20.0
 }, {
-"frames": [ SubResource( 116 ), SubResource( 117 ), SubResource( 59 ), SubResource( 117 ), SubResource( 116 ) ],
-"loop": true,
-"name": "Super",
-"speed": 30.0
+"frames": [ SubResource( 139 ), SubResource( 132 ), SubResource( 133 ), SubResource( 134 ), SubResource( 135 ), SubResource( 136 ), SubResource( 137 ), SubResource( 138 ) ],
+"loop": false,
+"name": "StarSingle",
+"speed": 20.0
 }, {
 "frames": [ SubResource( 118 ), SubResource( 119 ), SubResource( 120 ), SubResource( 121 ), SubResource( 122 ), SubResource( 123 ), SubResource( 124 ), SubResource( 125 ), SubResource( 126 ), SubResource( 127 ) ],
 "loop": true,
@@ -266,20 +283,25 @@ animations = [ {
 "name": "SkidDust",
 "speed": 15.0
 }, {
-"frames": [ SubResource( 139 ), SubResource( 132 ), SubResource( 133 ), SubResource( 134 ), SubResource( 135 ), SubResource( 136 ), SubResource( 137 ), SubResource( 138 ) ],
-"loop": false,
-"name": "StarSingle",
-"speed": 20.0
-}, {
 "frames": [ SubResource( 140 ), SubResource( 141 ), SubResource( 142 ), SubResource( 143 ), SubResource( 144 ), SubResource( 145 ), SubResource( 146 ), SubResource( 147 ), SubResource( 148 ) ],
 "loop": false,
 "name": "Splash",
 "speed": 15.0
 }, {
+"frames": [ SubResource( 116 ), SubResource( 117 ), SubResource( 59 ), SubResource( 117 ), SubResource( 116 ) ],
+"loop": true,
+"name": "Super",
+"speed": 30.0
+}, {
 "frames": [ SubResource( 149 ), SubResource( 150 ), SubResource( 151 ), SubResource( 152 ), SubResource( 153 ), SubResource( 154 ), SubResource( 155 ), SubResource( 156 ) ],
 "loop": true,
 "name": "Invincibility",
 "speed": 30.0
+}, {
+"frames": [ SubResource( 166 ), SubResource( 167 ), SubResource( 168 ), SubResource( 169 ) ],
+"loop": false,
+"name": "RingSparkle",
+"speed": 15.0
 } ]
 
 [node name="GenericParticle" type="AnimatedSprite"]

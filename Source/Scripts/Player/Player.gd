@@ -114,7 +114,7 @@ var lastActiveAnimation = ""
 onready var shieldSprite = $Shields
 
 # Camera
-#onready var camera = get_node_or_null("Camera")
+# onready var camera = get_node_or_null("Camera")
 var camera = Camera2D.new()
 var camDist = Vector2(32,64)
 var camLookDist = [-104,88] # Up and Down
@@ -122,8 +122,13 @@ var camLookAmount = 0
 var camLookOff = 0
 var camAdjust = Vector2.ZERO
 var cameraDragLerp = 0
-var camLockPos = null
 var camLockTime = 0
+
+# boundries
+var limitLeft = 0
+var limitRight = 0
+var limitTop = 0
+var limitBottom = 0
 
 var rotatableSprites = ["walk", "run", "peelOut"]
 var direction = scale.x
@@ -170,11 +175,23 @@ func _ready():
 	connect("positionChanged",self,"on_position_changed")
 	camera.global_position = global_position
 	
+	limitLeft = camera.limit_left
+	limitRight = camera.limit_right
+	limitTop = camera.limit_top
+	limitBottom = camera.limit_bottom
+	
 	# Checkpoints
 	yield(get_tree(),"idle_frame")
 	for i in Global.checkPoints:
 		if Global.currentCheckPoint == i.checkPointID:
 			global_position = i.global_position+Vector2(0,8)
+	
+	yield(get_tree(),"idle_frame")
+	# reset camera limits to border if it's been set at the start of the level
+	camera.limit_left = limitLeft
+	camera.limit_right = limitRight
+	camera.limit_top = limitTop
+	camera.limit_bottom = limitBottom
 	
 
 
@@ -349,29 +366,72 @@ func _physics_process(delta):
 		# Camera Lock
 		
 		if camLockTime > 0:
-#			if camLockPos == null:
-#				camLockPos = camera.global_position-Vector2(0,camLookOff)
-#			camLookOff = 0
 			camLockTime -= delta
-#		else:
-#			camLockTime = 0
-#			if camLockPos != null:
-#				if camera.global_position.distance_to(global_position) >= 16:
-#					camera.global_position = camera.global_position.move_toward(global_position,delta*16*60)
-#				else:
-#					camLockPos = null
 		
 		# Boundry handling
-		# Stop movement at borders
-		if (global_position.x < camera.limit_left+cameraMargin or global_position.x > camera.limit_right-cameraMargin):
-			movement.x = 0
+		# Pan camera limits to boundries
+		
+		var viewSize = get_viewport_rect().size
+		var viewPos = camera.get_camera_screen_center()
+		var scrollSpeed = 4.0*60.0*delta
+		
+		# Left
+		# snap the limit to the edge of the camera if snap out of range
+		if limitLeft > viewPos.x-viewSize.x*0.5:
+			camera.limit_left = max(viewPos.x-viewSize.x*0.5,camera.limit_left)
+		# if limit is inside the camera then pan over
+		if abs(camera.limit_left-(viewPos.x-viewSize.x*0.5)) <= viewSize.x*0.5:
+			camera.limit_left = move_toward(camera.limit_left,limitLeft,scrollSpeed)
+		# else just snap the camera limit since it's not going to move the camera
+		else:
+			camera.limit_left = limitLeft
+		
+
+		# Right
+		# snap the limit to the edge of the camera if snap out of range
+		if limitRight < viewPos.x+viewSize.x*0.5:
+			camera.limit_right = min(viewPos.x+viewSize.x*0.5,camera.limit_right)
+		# if limit is inside the camera then pan over
+		if abs(camera.limit_right-(viewPos.x+viewSize.x*0.5)) <= viewSize.x*0.5:
+			camera.limit_right = move_toward(camera.limit_right,limitRight,scrollSpeed)
+		# else just snap the camera limit since it's not going to move the camera
+		else:
+			camera.limit_right = limitRight
+
+		# Top
+		# snap the limit to the edge of the camera if snap out of range
+		if limitTop > viewPos.y-viewSize.y*0.5:
+			camera.limit_top = max(viewPos.y-viewSize.y*0.5,camera.limit_top)
+		# if limit is inside the camera then pan over
+		if abs(camera.limit_top-(viewPos.y-viewSize.y*0.5)) <= viewSize.y*0.5:
+			camera.limit_top = move_toward(camera.limit_top,limitTop,scrollSpeed)
+		# else just snap the camera limit since it's not going to move the camera
+		else:
+			camera.limit_top = limitTop
+		
+
+		# Bottom
+		# snap the limit to the edge of the camera if snap out of range
+		if limitBottom < viewPos.y+viewSize.y*0.5:
+			camera.limit_bottom = min(viewPos.y+viewSize.y*0.5,camera.limit_bottom)
+		# if limit is inside the camera then pan over
+		if abs(camera.limit_bottom-(viewPos.y+viewSize.y*0.5)) <= viewSize.y*0.5:
+			camera.limit_bottom = move_toward(camera.limit_bottom,limitBottom,scrollSpeed)
+		# else just snap the camera limit since it's not going to move the camera
+		else:
+			camera.limit_bottom = limitBottom
 		
 		# Death at border bottom
-		if global_position.y > camera.limit_bottom:
+		if global_position.y > limitBottom:
 			kill()
 		
-		# Clamp position
-		global_position.x = clamp(global_position.x,camera.limit_left+cameraMargin,camera.limit_right-cameraMargin)
+	
+	
+	# Stop movement at borders
+	if (global_position.x < limitLeft+cameraMargin or global_position.x > limitRight-cameraMargin):
+		movement.x = 0
+	# Clamp position
+	global_position.x = clamp(global_position.x,limitLeft+cameraMargin,limitRight-cameraMargin)
 	
 	# Water
 	if Global.waterLevel != null and currentState != STATES.DIE:
@@ -609,7 +669,7 @@ func switch_physics(physicsRide = -1, isWater = water):
 
 
 func _on_SparkleTimer_timeout():
-	if super && abs(movement.x) >= top:
+	if super and abs(movement.x) >= top:
 		var sparkle = Particle.instance()
 		sparkle.global_position = global_position
 		sparkle.play("Super")
@@ -637,7 +697,7 @@ func cam_update(forceMove = false):
 
 	# Camera lock
 	var getPos = global_position+Vector2(0,camLookOff)+camAdjust
-	if camLockTime <= 0 && forceMove || camera.global_position.distance_to(getPos) <= 16:
+	if camLockTime <= 0 and forceMove or camera.global_position.distance_to(getPos) <= 16:
 		# clamped speed camera
 		camera.global_position = camera.global_position.move_toward(getPos,16*60*get_physics_process_delta_time())
 		# uncomment below for immediate camera

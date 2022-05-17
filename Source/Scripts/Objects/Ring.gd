@@ -5,6 +5,8 @@ var velocity = Vector2.ZERO
 var player
 var magnet = null
 var ringacceleration = [0.75,0.1875]
+var Particle = preload("res://Entities/Misc/GenericParticle.tscn")
+
 
 func _process(delta):
 	# scattered logic
@@ -18,6 +20,10 @@ func _process(delta):
 		if (player.ringDisTime <= 0 && (player.invTime*Global.originalFPS <= 90 || scattered)):
 			z_index = 1
 			player.get_ring()
+			var part = Particle.instance()
+			get_parent().add_child(part)
+			part.global_position = global_position
+			part.play("RingSparkle")
 			queue_free()
 
 func _physics_process(delta):

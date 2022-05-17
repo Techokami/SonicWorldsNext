@@ -7,8 +7,8 @@ func _physics_process(delta):
 		player = Global.players[0]
 		
 		# Camera limit set
-		player.camera.limit_left = global_position.x -320/2
-		player.camera.limit_right = global_position.x +(320/2)+48
+		player.limitLeft = global_position.x -320/2
+		player.limitRight = global_position.x +(320/2)+48
 		getCam = player.camera
 		
 		$Animator.play("Spinner")

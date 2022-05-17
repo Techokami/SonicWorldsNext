@@ -510,7 +510,7 @@ texture = ExtResource( 29 )
 
 [node name="Shortcut" type="Line2D" parent="Entity"]
 z_index = 11
-points = PoolVector2Array( 15.9853, 96.0024, 15.9975, 16.0025, 9504, 17.4566, 9503.99, 57.4566 )
+points = PoolVector2Array( 207.988, 80.0319, 15.9975, 16.0025, 9504, 17.4566, 9503.99, 57.4566 )
 width = 32.0
 default_color = Color( 1, 1, 1, 1 )
 texture = ExtResource( 27 )
