@@ -35,6 +35,9 @@ var maxTime = 60*10
 
 var waterLevel = null
 
+
+signal stage_started
+
 func _ready():
 	add_child(soundChannel)
 	soundChannel.bus = "SFX"

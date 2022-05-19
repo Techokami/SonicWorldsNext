@@ -5,6 +5,7 @@ func _input(event):
 	if (parent.playerControl != 0):
 		if (event.is_action_pressed("gm_action")):
 			# reset animation
+			parent.animator.stop()
 			parent.animator.play("spinDash")
 			parent.sprite.frame = 0
 			# play rev sound

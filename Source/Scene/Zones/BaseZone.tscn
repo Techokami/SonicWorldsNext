@@ -101,7 +101,7 @@ region_enabled = true
 region_rect = Rect2( 0, 0, 512, 512 )
 
 [node name="Player" parent="." instance=ExtResource( 18 )]
-position = Vector2( 88, 752 )
+position = Vector2( 80, 744 )
 
 [node name="Default" type="TileMap" parent="."]
 z_index = 11
@@ -277,17 +277,6 @@ position = Vector2( 3695.95, 312.566 )
 
 [node name="Spring9" parent="Entity" instance=ExtResource( 12 )]
 position = Vector2( 4015.84, 1048.62 )
-
-[node name="Spring26" parent="Entity" instance=ExtResource( 12 )]
-position = Vector2( 4783.76, 1128.67 )
-scale = Vector2( 1, -1 )
-type = 1
-springDirection = 1
-
-[node name="Spring27" parent="Entity" instance=ExtResource( 12 )]
-position = Vector2( 4335.87, 880.664 )
-type = 1
-springDirection = 2
 
 [node name="Spring10" parent="Entity" instance=ExtResource( 12 )]
 position = Vector2( 4783.9, 632.733 )

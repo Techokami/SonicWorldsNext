@@ -13,7 +13,7 @@ var dropTimer = 0
 func _input(event):
 	if (parent.playerControl != 0):
 		# Shield actions
-		if (event.is_action_pressed("gm_action") && !parent.abilityUsed && isJump):
+		if (event.is_action_pressed("gm_action") and !parent.abilityUsed and isJump):
 			# Super actions
 			if parent.super:
 				parent.abilityUsed = true # has to be set to true for drop dash
@@ -74,30 +74,30 @@ func _input(event):
 
 func _physics_process(delta):
 	# air movement
-	if (parent.inputs[parent.INPUTS.XINPUT] != 0 && parent.airControl):
+	if (parent.inputs[parent.INPUTS.XINPUT] != 0 and parent.airControl):
 		
 		if (parent.movement.x*parent.inputs[parent.INPUTS.XINPUT] < parent.top):
 			if (abs(parent.movement.x) < parent.top):
 				parent.movement.x = clamp(parent.movement.x+parent.air/delta*parent.inputs[parent.INPUTS.XINPUT],-parent.top,parent.top)
 				
 	# Air drag, don't know how accurate this is, may need some tweaking
-	if (parent.movement.y < 0 && parent.movement.y > -parent.releaseJmp*60):
+	if (parent.movement.y < 0 and parent.movement.y > -parent.releaseJmp*60):
 		parent.movement.x -= ((parent.movement.x / 0.125) / 256)*60*delta
 	
 	# Mechanics if jumping
 	if (isJump):
 		# Cut vertical movement if jump released
-		if !parent.inputs[parent.INPUTS.ACTION] && parent.movement.y < -4*60:
+		if !parent.inputs[parent.INPUTS.ACTION] and parent.movement.y < -4*60:
 			parent.movement.y = -4*60
 		# Drop dash
-		if parent.inputs[parent.INPUTS.ACTION] && parent.abilityUsed:
+		if parent.inputs[parent.INPUTS.ACTION] and parent.abilityUsed and (parent.shield == parent.SHIELDS.NONE or parent.shield == parent.SHIELDS.NORMAL):
 			if dropTimer < 1:
 				dropTimer += (delta/20)*60 # should be ready in the equivelent of 20 frames at 60FPS
 			else:
 				if parent.animator.current_animation != "dropDash":
 					parent.sfx[20].play()
 					parent.animator.play("dropDash")
-		# Drop dash code
+		# Drop dash reset
 		elif !parent.inputs[parent.INPUTS.ACTION] and dropTimer > 0:
 			dropTimer = 0
 			if parent.animator.current_animation == "dropDash":
@@ -121,7 +121,7 @@ func _physics_process(delta):
 			parent.movement.y = -parent.bounceReaction*60
 			parent.bounceReaction = 0
 			# bubble shield actions
-			if parent.shieldSprite.animation == "BubbleAction" || parent.shieldSprite.animation == "Bubble":
+			if parent.shieldSprite.animation == "BubbleAction" or parent.shieldSprite.animation == "Bubble":
 				parent.shieldSprite.play("BubbleBounce")
 				parent.sfx[15].play()
 				var getTimer = parent.shieldSprite.get_node_or_null("ShieldTimer")
@@ -130,7 +130,6 @@ func _physics_process(delta):
 					getTimer.start(0.15)
 		else:
 			parent.set_state(parent.STATES.NORMAL)
-			
 			# Drop dash release
 			if dropTimer >= 1:
 				# Check if moving forward or back
@@ -146,6 +145,8 @@ func _physics_process(delta):
 					# else calculate landing
 					else:
 						parent.movement.x = clamp((parent.movement.x/2) + (dropSpeed[int(parent.super)]*60*parent.direction), -dropMax[int(parent.super)]*60,dropMax[int(parent.super)]*60)
+				# stop vertical movement downard
+				parent.movement.y = min(0,parent.movement.y)
 				parent.set_state(parent.STATES.ROLL)
 				parent.animator.play("roll")
 				parent.sfx[20].stop()
@@ -177,3 +178,10 @@ func _on_ShieldTimer_timeout():
 
 func state_activated():
 	dropTimer = 0
+	
+func state_exit():
+	# deactivate insta shield
+	if (parent.shield == parent.SHIELDS.NONE):
+		parent.shieldSprite.visible = false
+		parent.shieldSprite.stop()
+	parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = true

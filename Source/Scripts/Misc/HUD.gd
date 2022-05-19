@@ -23,6 +23,7 @@ var gameOver = false
 
 signal tally_clear
 
+
 func _ready():
 	Global.hud = self
 	if (playLevelCard):
@@ -37,7 +38,10 @@ func _ready():
 		yield($LevelCard/CardPlayer,"animation_finished")
 		$LevelCard/CardPlayer.play("End")
 		get_tree().paused = false
+		Global.emit_signal("stage_started")
 		yield($LevelCard/CardPlayer,"animation_finished")
+	else:
+		Global.emit_signal("stage_started")
 	$LevelCard.queue_free()
 
 func _process(delta):

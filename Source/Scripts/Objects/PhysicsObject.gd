@@ -41,6 +41,7 @@ signal connectCeiling
 signal positionChanged
 
 func _ready():
+	slopeCheck.modulate = Color.blueviolet
 	add_child(verticalSensorLeft)
 	add_child(verticalSensorMiddle)
 	add_child(verticalSensorMiddleEdge)
@@ -172,7 +173,7 @@ func _physics_process(delta):
 	while (!moveRemaining.is_equal_approx(Vector2.ZERO) || checkOverride) && !translate:
 		checkOverride = false
 		var moveCalc = moveRemaining.normalized()*min(moveStepLength,moveRemaining.length())
-		
+				
 		velocity = moveCalc.rotated(angle)
 		move_and_slide_with_snap(velocity,(Vector2.DOWN*3).rotated(gravityAngle),Vector2.UP.rotated(gravityAngle))
 		update_sensors()
@@ -180,6 +181,7 @@ func _physics_process(delta):
 		var roofMemory = roof
 		ground = is_on_floor()
 		roof = is_on_ceiling()
+		
 		
 		# Wall sensors
 		# Check if colliding
@@ -199,7 +201,7 @@ func _physics_process(delta):
 				# Set ground to true but only if movement.y is 0 or more
 				ground = true
 				# get ground angle
-				angle = deg2rad(stepify(rad2deg(getVert.get_collision_normal().rotated(deg2rad(90)).angle()),0.01))
+				angle = deg2rad(stepify(rad2deg(getVert.get_collision_normal().rotated(deg2rad(90)).angle()),0.001))
 			else:
 				# ceiling routine
 				roof = true
@@ -217,6 +219,7 @@ func _physics_process(delta):
 		
 		# slope check
 		slopeCheck.force_raycast_update()
+		
 		if slopeCheck.is_colliding():
 			var getSlope = snap_angle(slopeCheck.get_collision_normal().angle()+deg2rad(90))
 			# compare slope to current angle, check that it's not going to result in our current angle if we rotated
@@ -228,6 +231,11 @@ func _physics_process(delta):
 			# verify if new angle would find ground
 			if get_nearest_vertical_sensor() == null:
 				rotation = preRotate
+		
+		# re check ground angle post shifting
+		getVert = get_nearest_vertical_sensor()
+		if getVert:
+			angle = deg2rad(stepify(rad2deg(getVert.get_collision_normal().rotated(deg2rad(90)).angle()),0.001))
 		
 		# Emit Signals
 		if groundMemory != ground:

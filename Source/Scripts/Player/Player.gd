@@ -186,13 +186,14 @@ func _ready():
 		if Global.currentCheckPoint == i.checkPointID:
 			global_position = i.global_position+Vector2(0,8)
 	
-	yield(get_tree(),"idle_frame")
 	# reset camera limits to border if it's been set at the start of the level
-	camera.limit_left = limitLeft
-	camera.limit_right = limitRight
-	camera.limit_top = limitTop
-	camera.limit_bottom = limitBottom
-	
+	snap_camera_to_limits()
+	# Buffer for border setter, mostly used for title card handling
+	yield(Global,"stage_started")
+	yield(get_tree(),"idle_frame")
+	yield(get_tree(),"idle_frame")
+	snap_camera_to_limits()
+
 
 
 func _input(event):
@@ -218,6 +219,8 @@ func _process(delta):
 		#sprite.rotation = deg2rad(spriteRotation-90)-rotation
 	else:
 		sprite.rotation = -rotation
+
+	sprite.global_position = global_position.round()
 
 	if (lockTimer > 0):
 		lockTimer -= delta
@@ -546,14 +549,14 @@ func action_jump(animation = "roll", airJumpControl = true):
 
 
 func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
-	if (currentState != STATES.HIT and invTime <= 0 and supTime <= 0):
+	if (currentState != STATES.HIT and invTime <= 0 and supTime <= 0 and shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled):
 		movement.x = sign(global_position.x-damagePoint.x)*2*60
 		movement.y = -4*60
 		if (movement.x == 0):
 			movement.x = 2*60
 
-		ground = false
 		disconect_from_floor()
+		ground = false
 		set_state(STATES.HIT)
 		invTime = 120
 		# Ring loss
@@ -669,7 +672,7 @@ func switch_physics(physicsRide = -1, isWater = water):
 
 
 func _on_SparkleTimer_timeout():
-	if super and abs(movement.x) >= top:
+	if super and abs(groundSpeed) >= top:
 		var sparkle = Particle.instance()
 		sparkle.global_position = global_position
 		sparkle.play("Super")
@@ -696,12 +699,21 @@ func cam_update(forceMove = false):
 			camAdjust = Vector2.ZERO
 
 	# Camera lock
-	var getPos = global_position+Vector2(0,camLookOff)+camAdjust
+	# remove round() if you are not making a pixel perfect game
+	var getPos = (global_position+Vector2(0,camLookOff)+camAdjust).round()
 	if camLockTime <= 0 and forceMove or camera.global_position.distance_to(getPos) <= 16:
 		# clamped speed camera
-		camera.global_position = camera.global_position.move_toward(getPos,16*60*get_physics_process_delta_time())
+		camera.global_position.x = move_toward(camera.global_position.x,getPos.x,16*60*get_physics_process_delta_time())
+		camera.global_position.y = move_toward(camera.global_position.y,getPos.y,16*60*get_physics_process_delta_time())
+		#camera.global_position = camera.global_position.move_toward(getPos,16*60*get_physics_process_delta_time())
 		# uncomment below for immediate camera
 		#camera.global_position = getPos
 
 func lock_camera(time = 1):
 	camLockTime = max(time,camLockTime)
+
+func snap_camera_to_limits():
+	camera.limit_left = limitLeft
+	camera.limit_right = limitRight
+	camera.limit_top = limitTop
+	camera.limit_bottom = limitBottom

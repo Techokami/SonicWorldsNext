@@ -69,7 +69,7 @@ func _physics_process(delta):
 		if (physics):
 			var collide = move_and_collide(Vector2(0,yspeed)*delta)
 			yspeed += grv/delta
-			if (collide && yspeed > 0):
+			if (collide and yspeed > 0):
 				physics = false
 
 func physics_collision(body, hitVector):
@@ -79,7 +79,7 @@ func physics_collision(body, hitVector):
 			yspeed = -1.5*60
 			physics = true
 		elif hitVector.x != 0:
-			if body.movement.y >= 0:
+			if body.movement.y >= 0 and body.movement.x != 0:
 				playerTouch = body
 				destroy()
 			else:
