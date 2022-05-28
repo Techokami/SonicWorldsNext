@@ -8,6 +8,9 @@ var startVolumeLevel = 0
 var setVolumeLevel = 0
 var volumeLerp = 0
 
+var wasPaused = false
+var sceneCanPause = false
+
 func _ready():
 	Global.main = self
 	Global.music = $Music
@@ -23,8 +26,20 @@ func _process(delta):
 		volumeLerp = clamp(volumeLerp+delta,0,1)
 		Global.music.volume_db = lerp(startVolumeLevel,setVolumeLevel,volumeLerp)
 		Global.effectTheme.volume_db = Global.music.volume_db
+
+func _input(event):
+	# Pausing
+	if event.is_action_pressed("gm_pause") and sceneCanPause:
+		if !get_tree().paused:
+			wasPaused = false
 		
-		
+		if !wasPaused and !get_tree().paused:
+			wasPaused = true
+			get_tree().paused = true
+		elif wasPaused and get_tree().paused:
+			get_tree().paused = false
+
+
 
 func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", length = 1):
 	
@@ -49,6 +64,7 @@ func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", l
 	Global.stageClearPhase = 0
 	Global.waterLevel = null
 	Global.gameOver = false
+	sceneCanPause = false
 	
 	if scene == null:
 		if lastScene != null:

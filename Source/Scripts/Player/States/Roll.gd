@@ -1,21 +1,27 @@
 extends "res://Scripts/Player/State.gd"
 
 
-func _input(event):
-	if (parent.playerControl != 0):
-		if (event.is_action_pressed("gm_action")):
-			# use parent.action_jump("roll",false) to have jump lock similar to sonic 1-3
-			# true replicates CD and Mania
-			parent.action_jump("roll",true)
-			parent.set_state(parent.STATES.JUMP)
+#func _input(event):
+#	if (parent.playerControl != 0):
+#		if (event.is_action_pressed("gm_action")):
+#			# use parent.action_jump("roll",false) to have jump lock similar to sonic 1-3
+#			# true replicates CD and Mania
+#			parent.action_jump("roll",true)
+#			parent.set_state(parent.STATES.JUMP)
 
 
+func _process(delta):
+	if parent.inputs[parent.INPUTS.ACTION] == 1:
+		# use parent.action_jump("roll",false) to have jump lock similar to sonic 1-3
+		# true replicates CD and Mania
+		parent.action_jump("roll",true)
+		parent.set_state(parent.STATES.JUMP)
 
 func _physics_process(delta):
 	
 	# Set air if not on floor
 	if (!parent.ground):
-		parent.set_state(parent.STATES.AIR,parent.HITBOXESSONIC.ROLL)
+		parent.set_state(parent.STATES.AIR,parent.currentHitbox.ROLL)
 		return null
 	# Set normal if speed is 0
 	if (parent.movement.x == 0):

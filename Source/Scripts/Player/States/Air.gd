@@ -10,66 +10,71 @@ var dropMax = [12,13]   #the top speed for a drop dash, second is super
 var dropTimer = 0
 
 # Jump actions
-func _input(event):
-	if (parent.playerControl != 0):
+func _process(delta):
+	if parent.playerControl != 0 or (parent.inputs[parent.INPUTS.YINPUT] < 0 and parent.character == parent.CHARACTERS.TAILS):
+		# Super
+		if parent.inputs[parent.INPUTS.SUPER] == 1:
+			if parent.rings >= 50:
+				parent.set_state(parent.STATES.SUPER)
 		# Shield actions
-		if (event.is_action_pressed("gm_action") and !parent.abilityUsed and isJump):
+		if (parent.inputs[parent.INPUTS.ACTION] == 1 and !parent.abilityUsed and isJump):
 			# Super actions
 			if parent.super:
 				parent.abilityUsed = true # has to be set to true for drop dash
 			# Normal actions
 			else:
-				parent.abilityUsed = true
-				match (parent.shield):
-					parent.SHIELDS.NONE:
-						if parent.rings >= 50:
-							parent.set_state(parent.STATES.SUPER)
-						else:
-							parent.sfx[16].play()
-							parent.shieldSprite.play("Insta")
-							parent.shieldSprite.frame = 0
-							parent.shieldSprite.visible = true
-							parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = false
-							yield(parent.shieldSprite,"animation_finished")
-							# check shields hasn't changed
-							if (parent.shield == parent.SHIELDS.NONE):
-								parent.shieldSprite.visible = false
-								parent.shieldSprite.stop()
-							parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = true
-					
-					parent.SHIELDS.ELEC:
-						parent.sfx[13].play()
-						parent.movement.y = -5.5*Global.originalFPS
-						for i in range(4):
-							var part = elecPart.instance()
-							part.global_position = parent.global_position
-							part.direction = Vector2(1,1).rotated(deg2rad(90*i))
-							parent.get_parent().add_child(part)
-					
-					parent.SHIELDS.FIRE:
-						parent.sfx[14].play()
-						parent.movement = Vector2(8*Global.originalFPS*parent.direction,0)
-						parent.shieldSprite.play("FireAction")
-						var getTimer = parent.shieldSprite.get_node_or_null("ShieldTimer")
-						# Start fire dash timer
-						if getTimer != null:
-							getTimer.start(0.5)
-						parent.shieldSprite.flip_h = (parent.direction < 0)
-						parent.lock_camera(16.0/60.0)
-					
-					parent.SHIELDS.BUBBLE:
-						# check animation isn't bouncing
-						if parent.shieldSprite.animation != "BubbleBounce":
-							parent.sfx[15].play()
-							parent.movement = Vector2(0,8*Global.originalFPS)
-							parent.bounceReaction = 7.5
-							parent.shieldSprite.play("BubbleAction")
-							var getTimer = parent.shieldSprite.get_node_or_null("ShieldTimer")
-							# Start bubble timer
-							if getTimer != null:
-								getTimer.start(0.25)
-						else:
-							parent.abilityUsed = false
+				match (parent.character):
+					parent.CHARACTERS.SONIC:
+						parent.abilityUsed = true
+						match (parent.shield):
+							parent.SHIELDS.NONE:
+								parent.sfx[16].play()
+								parent.shieldSprite.play("Insta")
+								parent.shieldSprite.frame = 0
+								parent.shieldSprite.visible = true
+								parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = false
+								yield(parent.shieldSprite,"animation_finished")
+								# check shields hasn't changed
+								if (parent.shield == parent.SHIELDS.NONE):
+									parent.shieldSprite.visible = false
+									parent.shieldSprite.stop()
+								parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = true
+							
+							parent.SHIELDS.ELEC:
+								parent.sfx[13].play()
+								parent.movement.y = -5.5*Global.originalFPS
+								for i in range(4):
+									var part = elecPart.instance()
+									part.global_position = parent.global_position
+									part.direction = Vector2(1,1).rotated(deg2rad(90*i))
+									parent.get_parent().add_child(part)
+							
+							parent.SHIELDS.FIRE:
+								parent.sfx[14].play()
+								parent.movement = Vector2(8*Global.originalFPS*parent.direction,0)
+								parent.shieldSprite.play("FireAction")
+								var getTimer = parent.shieldSprite.get_node_or_null("ShieldTimer")
+								# Start fire dash timer
+								if getTimer != null:
+									getTimer.start(0.5)
+								parent.shieldSprite.flip_h = (parent.direction < 0)
+								parent.lock_camera(16.0/60.0)
+							
+							parent.SHIELDS.BUBBLE:
+								# check animation isn't bouncing
+								if parent.shieldSprite.animation != "BubbleBounce":
+									parent.sfx[15].play()
+									parent.movement = Vector2(0,8*Global.originalFPS)
+									parent.bounceReaction = 7.5
+									parent.shieldSprite.play("BubbleAction")
+									var getTimer = parent.shieldSprite.get_node_or_null("ShieldTimer")
+									# Start bubble timer
+									if getTimer != null:
+										getTimer.start(0.25)
+								else:
+									parent.abilityUsed = false
+					parent.CHARACTERS.TAILS:
+						parent.set_state(parent.STATES.FLY)
 
 
 func _physics_process(delta):
@@ -80,7 +85,7 @@ func _physics_process(delta):
 			if (abs(parent.movement.x) < parent.top):
 				parent.movement.x = clamp(parent.movement.x+parent.air/delta*parent.inputs[parent.INPUTS.XINPUT],-parent.top,parent.top)
 				
-	# Air drag, don't know how accurate this is, may need some tweaking
+	# Air drag
 	if (parent.movement.y < 0 and parent.movement.y > -parent.releaseJmp*60):
 		parent.movement.x -= ((parent.movement.x / 0.125) / 256)*60*delta
 	
@@ -185,3 +190,4 @@ func state_exit():
 		parent.shieldSprite.visible = false
 		parent.shieldSprite.stop()
 	parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = true
+	parent.enemyCounter = 0

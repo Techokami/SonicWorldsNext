@@ -13,3 +13,4 @@ func _ready():
 	
 	if nextZone != null:
 		Global.nextZone = nextZone
+	Global.main.sceneCanPause = true

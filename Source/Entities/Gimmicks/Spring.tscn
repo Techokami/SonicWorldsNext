@@ -131,8 +131,8 @@ script = ExtResource( 2 )
 shape = SubResource( 1 )
 
 [node name="DiagonalHitBox" type="Area2D" parent="."]
-collision_layer = 4096
-collision_mask = 0
+collision_layer = 0
+collision_mask = 4096
 
 [node name="AreaShape" type="CollisionShape2D" parent="DiagonalHitBox"]
 modulate = Color( 0, 0.298039, 1, 1 )

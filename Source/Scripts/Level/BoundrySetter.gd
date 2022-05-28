@@ -17,7 +17,6 @@ export var scrollSpeed = 0 # 0 will be instant
 
 
 func _on_BoundrySetter_body_entered(body):
-	print("Activated Border")
 	# set boundry settings
 	if (!Engine.editor_hint):
 		# Check body has a camera variable

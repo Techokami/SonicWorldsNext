@@ -20,8 +20,8 @@ one_way_collision = true
 texture = ExtResource( 1 )
 
 [node name="PlayerCheck" type="Area2D" parent="."]
-collision_layer = 4096
-collision_mask = 0
+collision_layer = 0
+collision_mask = 4096
 
 [node name="mask" type="CollisionShape2D" parent="PlayerCheck"]
 position = Vector2( -8, -16 )

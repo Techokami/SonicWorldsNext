@@ -79,18 +79,20 @@ func physics_collision(body, hitVector):
 			yspeed = -1.5*60
 			physics = true
 		elif hitVector.x != 0:
-			if body.movement.y >= 0 and body.movement.x != 0:
+			if body.movement.y >= 0 and body.movement.x != 0 and body.playerControl == 1:
 				playerTouch = body
 				destroy()
 			else:
 				# Stop horizontal movement
 				body.movement.x = 0
 		# check player has vertical momentum
-		else:
+		elif body.playerControl == 1:
 			body.movement.y *= -1
 			body.ground = false
 			playerTouch = body
 			destroy()
+		else:
+			body.movement.y = 0
 	return true
 
 

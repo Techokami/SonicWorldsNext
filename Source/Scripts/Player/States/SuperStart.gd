@@ -21,7 +21,8 @@ func _process(delta):
 		Global.currentTheme = 0
 		Global.effectTheme.stream = Global.themes[Global.currentTheme]
 		Global.effectTheme.play()
-		parent.sprite.texture = parent.superSprite
+		if parent.character == parent.CHARACTERS.SONIC:
+			parent.sprite.texture = parent.superSprite
 		parent.movement = remVel
 		parent.super = true
 		parent.supTime = 1

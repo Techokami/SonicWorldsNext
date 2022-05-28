@@ -12,7 +12,11 @@ func _physics_process(delta):
 		getCam = player.camera
 		
 		$Animator.play("Spinner")
-		$Animator.queue("Sonic")
+		match player.character:
+			1:
+				$Animator.queue("Tails")
+			_:
+				$Animator.queue("Sonic")
 		$GoalPost.play()
 		Global.stageClearPhase = 1
 		yield($Animator,"animation_finished")

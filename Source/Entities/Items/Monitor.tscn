@@ -156,7 +156,6 @@ tracks/4/keys = {
 
 [node name="Monitor" type="KinematicBody2D"]
 collision_layer = 98304
-collision_mask = 8192
 script = ExtResource( 3 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -172,7 +171,6 @@ frame = 2
 
 [node name="Monitor" type="AnimatedSprite" parent="."]
 frames = SubResource( 6 )
-frame = 5
 playing = true
 
 [node name="Animator" type="AnimationPlayer" parent="."]

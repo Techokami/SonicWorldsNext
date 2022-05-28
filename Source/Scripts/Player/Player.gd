@@ -1,5 +1,7 @@
 extends PhysicsObject
 const HITBOXESSONIC = {NORMAL = Vector2(9,19), ROLL = Vector2(7,14)}
+const HITBOXESTAILS = {NORMAL = Vector2(9,15), ROLL = Vector2(7,14)}
+var currentHitbox = HITBOXESSONIC
 
 #Sonic's Speed constants
 var acc = 0.046875			#acceleration
@@ -47,6 +49,9 @@ var enemyCounter = 0
 # 7 Gravity
 # 8 Jump
 # 9 Jump release velocity
+
+enum CHARACTERS {SONIC, TAILS}
+var character = CHARACTERS.SONIC
 
 # 0 = Sonic, 1 = Tails, 2 = Knuckles, 3 = Shoes, 4 = Super Sonic
 
@@ -97,7 +102,7 @@ var spriteRotation = 0
 var airControl = true
 
 # States
-enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, ANIMATION, HIT, DIE, CORKSCREW, JUMPCANCEL, SUPER}
+enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, ANIMATION, HIT, DIE, CORKSCREW, JUMPCANCEL, SUPER, FLY}
 var currentState = STATES.NORMAL
 
 # Shield variables
@@ -109,6 +114,7 @@ onready var stateList = $States.get_children()
 
 onready var animator = $Sprite/PlayerAnimation
 onready var sprite = $Sprite/Sprite
+onready var spriteControler = $Sprite
 var lastActiveAnimation = ""
 
 onready var shieldSprite = $Shields
@@ -137,12 +143,20 @@ var direction = scale.x
 var groundSpeed = 0
 
 enum INPUTS {XINPUT, YINPUT, ACTION, ACTION2, ACTION3, SUPER, PAUSE}
-# Input control, 0 = 0ff, 1 = On
+# Input control, 0 = 0ff, 1 = pressed, 2 = held
 # (for held it's best to use inputs[INPUTS.ACTION] > 0)
 # XInput and YInput are directions and are either -1, 0 or 1.
 var inputs = [0,0,0,0,0,0,0]
+const INPUTACTIONS = [null,null,"gm_action","gm_action","gm_action","gm_super","gm_pause"]
 # 0 = ai, 1 = player 1, 2 = player 2
 var playerControl = 1
+var partner = null
+
+var inputMemory = []
+const INPUT_MEMORY_LENGTH = 20
+
+var Player = load("res://Entities/MainObjects/Player.tscn")
+var tailsAnimations = preload("res://Graphics/Players/PlayerAnimations/Tails.tscn")
 
 # Get sfx list
 onready var sfx = $SFX.get_children()
@@ -154,8 +168,8 @@ var rings = 0
 # How far in can the player can be towards the screen edge before they're clamped
 var cameraMargin = 16
 
-# ALL CODE IS TEMPORARY!
 func _ready():
+	character = CHARACTERS.TAILS
 	# Disable and enable states
 	set_state(currentState)
 	Global.players.append(self)
@@ -164,7 +178,7 @@ func _ready():
 	
 	# Camera settings
 	get_parent().call_deferred("add_child", (camera))
-	camera.current = true
+	camera.current = (playerControl == 1)
 	var viewSize = get_viewport_rect().size
 	camera.drag_margin_left =   camDist.x/viewSize.x
 	camera.drag_margin_right =  camDist.x/viewSize.x
@@ -180,11 +194,40 @@ func _ready():
 	limitTop = camera.limit_top
 	limitBottom = camera.limit_bottom
 	
+	# Partner
+	if playerControl == 1:
+		for i in range(INPUT_MEMORY_LENGTH):
+			inputMemory.append(inputs.duplicate(true))
+		partner = Player.instance()
+		partner.playerControl = 0
+		partner.z_index = z_index-1
+		get_parent().call_deferred("add_child", (partner))
+		partner.global_position = global_position+Vector2(-32,0)
+		partner.partner = self
+		# for some reason setting the character of the partner sets us to the character
+		# don't ask me why, I don't know why it happens
+		character = CHARACTERS.TAILS
+	
+	
 	# Checkpoints
 	yield(get_tree(),"idle_frame")
 	for i in Global.checkPoints:
 		if Global.currentCheckPoint == i.checkPointID:
 			global_position = i.global_position+Vector2(0,8)
+	
+	
+	# Character settings
+	match (character):
+		CHARACTERS.TAILS:
+			# Set sprites
+			currentHitbox = HITBOXESTAILS
+			partner.get_node("Sprite").queue_free()
+			yield(get_tree(),"idle_frame")
+			var tails = tailsAnimations.instance()
+			partner.add_child(tails)
+			partner.sprite = tails.get_node("Sprite")
+			partner.animator = tails.get_node("PlayerAnimation")
+			partner.spriteControler = tails
 	
 	# reset camera limits to border if it's been set at the start of the level
 	snap_camera_to_limits()
@@ -196,16 +239,44 @@ func _ready():
 
 
 
-func _input(event):
-	if (playerControl != 0):
-		if (event.is_action("gm_action")):
-			inputs[INPUTS.ACTION] = calculate_input(event,"gm_action")
+#func _input(event):
+#	if (playerControl != 0):
+#		if (event.is_action("gm_action")):
+#			inputs[INPUTS.ACTION] = calculate_input(event,"gm_action")
+#		if (event.is_action("gm_super")):
+#			inputs[INPUTS.SUPER] = calculate_input(event,"gm_super")
 
+# 0 not pressed, 1 pressed, 2 held (best to do > 0 when checking input), -1 released
 func calculate_input(event, action = "gm_action"):
 	return int(event.is_action(action) or event.is_action_pressed(action))-int(event.is_action_released(action))
 
 
 func _process(delta):
+	
+	# Player 1 input settings and partner AI
+	if playerControl == 1:
+		#input memory
+		for i in range(INPUT_MEMORY_LENGTH-1):
+			for j in range(inputs.size()):
+				inputMemory[INPUT_MEMORY_LENGTH-1-i][j] = inputMemory[INPUT_MEMORY_LENGTH-i-2][j]
+		for i in range(inputs.size()):
+			inputMemory[0][i] = inputs[i]
+		
+		#partner ai
+		if partner != null:
+			if partner.playerControl == 0:
+				partner.inputs = inputMemory[INPUT_MEMORY_LENGTH-1]
+			# x distance difference
+			if partner.inputs[INPUTS.XINPUT] == 0 and global_position.distance_to(partner.global_position) > 48 and partner.inputs[INPUTS.YINPUT] == 0:
+				partner.inputs[INPUTS.XINPUT] = sign(global_position.x - partner.global_position.x)
+			# jump if pushing a wall, slower then half speed, on a flat surface and is either normal or jumping
+			if (partner.currentState == STATES.NORMAL or partner.currentState == STATES.JUMP) and abs(partner.movement.x) < top/2 and snap_angle(partner.angle) == 0 or (partner.pushingWall and !pushingWall):
+				if global_position.y+32 < partner.global_position.y and partner.inputs[INPUTS.ACTION] == 0 and partner.ground and ground:
+					partner.inputs[INPUTS.ACTION] = 1
+				elif global_position.y < partner.global_position.y and ground and !partner.ground:
+					partner.inputs[INPUTS.ACTION] = 2
+	
+	# Sprite rotation handling
 	if (ground):
 		spriteRotation = rad2deg(angle)+90
 	else:
@@ -213,14 +284,15 @@ func _process(delta):
 			spriteRotation = max(90,spriteRotation-(168.75*delta))
 		else:
 			spriteRotation = min(360,spriteRotation+(168.75*delta))
-
+	
+	# set the sprite to match the sprite rotation variable if it's in the rotatable Sprites list
 	if (rotatableSprites.has(animator.current_animation)):
 		sprite.rotation = deg2rad(stepify(spriteRotation,45)-90)-rotation
 		#sprite.rotation = deg2rad(spriteRotation-90)-rotation
 	else:
 		sprite.rotation = -rotation
 
-	sprite.global_position = global_position.round()
+	spriteControler.global_position = global_position.round()
 
 	if (lockTimer > 0):
 		lockTimer -= delta
@@ -255,7 +327,8 @@ func _process(delta):
 				Global.effectTheme.stop()
 	else:
 	# Deactivate super
-		sonicPal.set_shader_param("row",clamp(sonicPal.get_shader_param("row")-delta*10,0,sonicPal.get_shader_param("palRows")-3))
+		if playerControl != 0:
+			sonicPal.set_shader_param("row",clamp(sonicPal.get_shader_param("row")-delta*10,0,sonicPal.get_shader_param("palRows")-3))
 	
 	if (shoeTime > 0):
 		shoeTime -= delta
@@ -315,6 +388,12 @@ func _process(delta):
 	# Time over
 	if Global.levelTime >= Global.maxTime:
 		kill()
+	
+	
+	# Input buttons, there have to be in process for the ai to work
+	if playerControl != 0:
+		inputs[INPUTS.ACTION] = (int(Input.is_action_pressed("gm_action"))*2)-int(Input.is_action_just_pressed("gm_action"))
+		inputs[INPUTS.SUPER] =  (int(Input.is_action_pressed("gm_super"))*2)-int(Input.is_action_just_pressed("gm_super"))
 	
 func _physics_process(delta):
 	
@@ -478,8 +557,6 @@ func set_state(newState, forceMask = Vector2.ZERO):
 		if stateList[newState].has_method("state_activated"):
 			stateList[newState].state_activated()
 		currentState = newState
-	if ground:
-		enemyCounter = 0
 	
 	var shapeChangeCheck = $HitBox.shape.extents
 	var forcePoseChange = Vector2.ZERO
@@ -488,16 +565,16 @@ func set_state(newState, forceMask = Vector2.ZERO):
 		match(newState):
 			STATES.JUMP, STATES.ROLL:
 				# adjust y position
-				forcePoseChange = ((HITBOXESSONIC.ROLL-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
+				forcePoseChange = ((currentHitbox.ROLL-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
 				
 				# change hitbox size
-				$HitBox.shape.extents = HITBOXESSONIC.ROLL
+				$HitBox.shape.extents = currentHitbox.ROLL
 			_:
 				# adjust y position
-				forcePoseChange = ((HITBOXESSONIC.NORMAL-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
+				forcePoseChange = ((currentHitbox.NORMAL-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
 				
 				# change hitbox size
-				$HitBox.shape.extents = HITBOXESSONIC.NORMAL
+				$HitBox.shape.extents = currentHitbox.NORMAL
 	else:
 		# adjust y position
 		forcePoseChange = ((forceMask-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
@@ -505,6 +582,7 @@ func set_state(newState, forceMask = Vector2.ZERO):
 		$HitBox.shape.extents = forceMask
 	
 	position += forcePoseChange
+
 	
 	#cam_update()
 	
@@ -560,7 +638,7 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 		set_state(STATES.HIT)
 		invTime = 120
 		# Ring loss
-		if (shield == SHIELDS.NONE and rings > 0):
+		if (shield == SHIELDS.NONE and rings > 0 and playerControl == 1):
 			sfx[9].play()
 			ringDisTime = 64/Global.originalFPS
 			var ringCount = 0
@@ -587,7 +665,7 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 				get_parent().add_child(ring)
 
 			rings = 0
-		elif shield == SHIELDS.NONE:
+		elif shield == SHIELDS.NONE and playerControl == 1:
 			kill()
 		else:
 			sfx[soundID].play()
@@ -597,7 +675,7 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 	return false
 
 func kill():
-	if currentState != STATES.DIE:
+	if currentState != STATES.DIE and playerControl == 1:
 		disconect_from_floor()
 		super = false
 		supTime = 0
@@ -605,15 +683,18 @@ func kill():
 		collision_mask = 0
 		z_index = 100
 		movement = Vector2(0,-7*60)
-		set_state(STATES.DIE,HITBOXESSONIC.NORMAL)
+		set_state(STATES.DIE,currentHitbox.NORMAL)
 		animator.play("die")
 		sfx[6].play()
 
 func get_ring():
-	rings += 1
-	sfx[7+ringChannel].play()
-	sfx[7].play()
-	ringChannel = int(!ringChannel)
+	if playerControl == 1:
+		rings += 1
+		sfx[7+ringChannel].play()
+		sfx[7].play()
+		ringChannel = int(!ringChannel)
+	elif partner != null:
+		partner.get_ring()
 
 func touch_ceiling():
 	if getVert != null:
@@ -692,11 +773,19 @@ func cam_update(forceMove = false):
 	camera.drag_margin_bottom = camera.drag_margin_top
 	
 	# Extra drag margin for rolling
-	match($HitBox.shape.extents):
-		HITBOXESSONIC.ROLL:
-			camAdjust = Vector2(0,-5)
-		_:
-			camAdjust = Vector2.ZERO
+	match(character):
+		CHARACTERS.TAILS:
+			match($HitBox.shape.extents):
+				currentHitbox.ROLL:
+					camAdjust = Vector2(0,-1)
+				_:
+					camAdjust = Vector2.ZERO
+		_: # default
+			match($HitBox.shape.extents):
+				currentHitbox.ROLL:
+					camAdjust = Vector2(0,-5)
+				_:
+					camAdjust = Vector2.ZERO
 
 	# Camera lock
 	# remove round() if you are not making a pixel perfect game

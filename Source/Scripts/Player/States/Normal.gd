@@ -4,31 +4,35 @@ var skid = false
 # timer for looking up and down
 # the original game uses 120 frames before panning over, so multiply delta by 0.5 for the same time
 var lookTimer = 0
+var actionPressed = false
 
 func state_exit():
 	skid = false
 
-func _input(event):
-	if (parent.playerControl != 0):
-		if (event.is_action_pressed("gm_action")):
-			if (parent.movement.x == 0 && parent.inputs[parent.INPUTS.YINPUT] > 0):
-				parent.animator.play("spinDash")
-				parent.sfx[2].play()
-				parent.sfx[2].pitch_scale = 1
-				parent.spindashPower = 0
-				parent.animator.play("spinDash")
-				parent.set_state(parent.STATES.SPINDASH)
-			elif (parent.movement.x == 0 && parent.inputs[parent.INPUTS.YINPUT] < 0):
-				parent.sfx[2].play()
-				parent.sfx[2].pitch_scale = 1
-				parent.spindashPower = 0
-				parent.set_state(parent.STATES.PEELOUT)
-			else:
-				parent.action_jump()
-				parent.set_state(parent.STATES.JUMP)
+#func _input(event):
+	#if (parent.playerControl != 0):
 
 func _process(delta):
 
+	if parent.inputs[parent.INPUTS.ACTION] == 1:
+	#if (event.is_action_pressed(parent.INPUTACTIONS[parent.INPUTS.ACTION])):
+		if (parent.movement.x == 0 && parent.inputs[parent.INPUTS.YINPUT] > 0):
+			parent.animator.play("spinDash")
+			parent.sfx[2].play()
+			parent.sfx[2].pitch_scale = 1
+			parent.spindashPower = 0
+			parent.animator.play("spinDash")
+			parent.set_state(parent.STATES.SPINDASH)
+		elif (parent.movement.x == 0 && parent.inputs[parent.INPUTS.YINPUT] < 0):
+			parent.sfx[2].play()
+			parent.sfx[2].pitch_scale = 1
+			parent.spindashPower = 0
+			parent.set_state(parent.STATES.PEELOUT)
+		else:
+			parent.action_jump()
+			parent.set_state(parent.STATES.JUMP)
+		return null
+	
 	if parent.ground && !skid:
 		if parent.movement.x == 0:
 			if (parent.inputs[parent.INPUTS.YINPUT] > 0):
