@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Audio/Soundtrack/2. SWD_SpeedUp.ogg" type="AudioStream" id=1]
 [ext_resource path="res://Scripts/Global/Main.gd" type="Script" id=2]
 [ext_resource path="res://Audio/Soundtrack/3. SWD_1Up.ogg" type="AudioStream" id=3]
 [ext_resource path="res://Scene/Title.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Audio/Soundtrack/7. SWD_Drowning.ogg" type="AudioStream" id=5]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 2
@@ -99,6 +100,11 @@ bus = "Music"
 [node name="EffectTheme" type="AudioStreamPlayer" parent="."]
 pause_mode = 2
 stream = ExtResource( 1 )
+bus = "Music"
+
+[node name="Downing" type="AudioStreamPlayer" parent="."]
+pause_mode = 2
+stream = ExtResource( 5 )
 bus = "Music"
 
 [node name="Life" type="AudioStreamPlayer" parent="."]

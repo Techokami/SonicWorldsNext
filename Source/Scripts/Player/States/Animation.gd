@@ -26,6 +26,7 @@ func _process(delta):
 			parent.translate = false
 			offset = 0
 			parent.movement = (pathCurve.get_point_position(pathCurve.get_point_count()-1)-pathCurve.get_point_position(pathCurve.get_point_count()-2)).normalized()*parent.movement.length()
+	
 	elif (pipe != null):
 		
 		# get next pipe point

@@ -232,10 +232,11 @@ func _physics_process(delta):
 			if get_nearest_vertical_sensor() == null:
 				rotation = preRotate
 		
-		# re check ground angle post shifting
-		getVert = get_nearest_vertical_sensor()
-		if getVert:
-			angle = deg2rad(stepify(rad2deg(getVert.get_collision_normal().rotated(deg2rad(90)).angle()),0.001))
+		# re check ground angle post shifting if on floor still
+		if ground:
+			getVert = get_nearest_vertical_sensor()
+			if getVert:
+				angle = deg2rad(stepify(rad2deg(getVert.get_collision_normal().rotated(deg2rad(90)).angle()),0.001))
 		
 		# Emit Signals
 		if groundMemory != ground:
@@ -253,7 +254,6 @@ func _physics_process(delta):
 			# if no on roof emit "disconectCeiling"
 			else:
 				emit_signal("disconectCeiling")
-		
 		
 		
 		update_sensors()

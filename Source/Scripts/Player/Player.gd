@@ -31,8 +31,14 @@ var super = false
 var shoeTime = 0
 var ringDisTime = 0 # ring collecting disable timer
 
-# collision related values
+# water settings
 var water = false
+var defaultAirTime = 30 # 30 seconds
+var panicTime = 12 # start count down at 12 seconds
+var airWarning = 5 # time between air meter sound
+var airTimer = defaultAirTime
+
+# collision related values
 var pushingWall = 0
 
 var enemyCounter = 0
@@ -89,6 +95,8 @@ var Ring = preload("res://Entities/Items/Ring.tscn")
 var ringChannel = 0
 
 var Particle = preload("res://Entities/Misc/GenericParticle.tscn")
+var Bubble = preload("res://Entities/Misc/Bubbles.tscn")
+var CountDown = preload("res://Entities/Misc/CountDownTimer.tscn")
 var RotatingParticle = preload("res://Entities/Misc/RotatingParticle.tscn")
 
 var superSprite = preload("res://Graphics/Players/SuperSonic.png")
@@ -97,12 +105,12 @@ var sonicPal = preload("res://Shaders/SonicPalette.tres")
 
 # ================
 
-var lockTimer = 0
+var horizontalLockTimer = 0
 var spriteRotation = 0
 var airControl = true
 
 # States
-enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, ANIMATION, HIT, DIE, CORKSCREW, JUMPCANCEL, SUPER, FLY}
+enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, ANIMATION, HIT, DIE, CORKSCREW, JUMPCANCEL, SUPER, FLY, RESPAWN}
 var currentState = STATES.NORMAL
 
 # Shield variables
@@ -151,6 +159,13 @@ const INPUTACTIONS = [null,null,"gm_action","gm_action","gm_action","gm_super","
 # 0 = ai, 1 = player 1, 2 = player 2
 var playerControl = 1
 var partner = null
+const RESPAWN_DEFAULT_TIME = 0.5
+var respawnTime = RESPAWN_DEFAULT_TIME
+
+# defaults
+onready var defaultLayer = collision_layer
+onready var defaultMask = collision_mask
+onready var defaultZIndex = z_index
 
 var inputMemory = []
 const INPUT_MEMORY_LENGTH = 20
@@ -169,7 +184,7 @@ var rings = 0
 var cameraMargin = 16
 
 func _ready():
-	character = CHARACTERS.TAILS
+	#character = CHARACTERS.TAILS
 	# Disable and enable states
 	set_state(currentState)
 	Global.players.append(self)
@@ -204,9 +219,7 @@ func _ready():
 		get_parent().call_deferred("add_child", (partner))
 		partner.global_position = global_position+Vector2(-32,0)
 		partner.partner = self
-		# for some reason setting the character of the partner sets us to the character
-		# don't ask me why, I don't know why it happens
-		character = CHARACTERS.TAILS
+		partner.character = CHARACTERS.TAILS
 	
 	
 	# Checkpoints
@@ -221,13 +234,13 @@ func _ready():
 		CHARACTERS.TAILS:
 			# Set sprites
 			currentHitbox = HITBOXESTAILS
-			partner.get_node("Sprite").queue_free()
+			get_node("Sprite").queue_free()
 			yield(get_tree(),"idle_frame")
 			var tails = tailsAnimations.instance()
-			partner.add_child(tails)
-			partner.sprite = tails.get_node("Sprite")
-			partner.animator = tails.get_node("PlayerAnimation")
-			partner.spriteControler = tails
+			add_child(tails)
+			sprite = tails.get_node("Sprite")
+			animator = tails.get_node("PlayerAnimation")
+			spriteControler = tails
 	
 	# reset camera limits to border if it's been set at the start of the level
 	snap_camera_to_limits()
@@ -266,8 +279,8 @@ func _process(delta):
 		if partner != null:
 			if partner.playerControl == 0:
 				partner.inputs = inputMemory[INPUT_MEMORY_LENGTH-1]
-			# x distance difference
-			if partner.inputs[INPUTS.XINPUT] == 0 and global_position.distance_to(partner.global_position) > 48 and partner.inputs[INPUTS.YINPUT] == 0:
+			# x distance difference check, if greater then 48 try to go to the partner
+			if partner.inputs[INPUTS.XINPUT] == 0 and global_position.distance_to(partner.global_position) > 48 and partner.inputs[INPUTS.YINPUT] == 0 and abs(global_position.x-partner.global_position.x) >= 8 :
 				partner.inputs[INPUTS.XINPUT] = sign(global_position.x - partner.global_position.x)
 			# jump if pushing a wall, slower then half speed, on a flat surface and is either normal or jumping
 			if (partner.currentState == STATES.NORMAL or partner.currentState == STATES.JUMP) and abs(partner.movement.x) < top/2 and snap_angle(partner.angle) == 0 or (partner.pushingWall and !pushingWall):
@@ -275,6 +288,21 @@ func _process(delta):
 					partner.inputs[INPUTS.ACTION] = 1
 				elif global_position.y < partner.global_position.y and ground and !partner.ground:
 					partner.inputs[INPUTS.ACTION] = 2
+			
+			# Panic
+			# if partner is locked, and stopped then do a spindash
+			# panic for 128 frames before letting go of spindash
+	# respawn mechanics
+	else:
+		if $ScreenCheck.is_on_screen():
+			respawnTime = RESPAWN_DEFAULT_TIME
+		else:
+			if respawnTime > 0:
+				respawnTime -= delta
+			else:
+				respawn()
+				
+			
 	
 	# Sprite rotation handling
 	if (ground):
@@ -294,10 +322,10 @@ func _process(delta):
 
 	spriteControler.global_position = global_position.round()
 
-	if (lockTimer > 0):
-		lockTimer -= delta
+	if (horizontalLockTimer > 0):
+		horizontalLockTimer -= delta
 		inputs[INPUTS.XINPUT] = 0
-		inputs[INPUTS.YINPUT] = 0
+		#inputs[INPUTS.YINPUT] = 0
 
 	# super / invincibility handling
 	if (supTime > 0):
@@ -389,6 +417,32 @@ func _process(delta):
 	if Global.levelTime >= Global.maxTime:
 		kill()
 	
+	# Water timer
+	if water and shield != SHIELDS.BUBBLE:
+		if airTimer > 0:
+			if playerControl == 1:
+				if stepify(airTimer,airWarning) != stepify(airTimer-delta,airWarning) and airTimer > panicTime:
+					sfx[24].play()
+			# Count down timer
+			if airTimer <= panicTime and stepify(airTimer,1.8) != stepify(airTimer-delta,1.8):
+				if round(airTimer/1.8)-2 >= 0:
+					var count = CountDown.instance()
+					get_parent().add_child(count)
+					count.countTime = clamp(round(airTimer/1.8)-2,0,5)
+					count.global_position = global_position+Vector2(8*direction,0)
+			airTimer -= delta
+		elif currentState != STATES.DIE: # Drown (kill checks if air timer is greater then 0)
+			$BubbleTimer.start(0.1)
+			kill()
+	else:
+		airTimer = defaultAirTime
+	
+	# drowning theme related
+	if playerControl == 1:
+		if !Global.drowning.playing and airTimer <= panicTime:
+			Global.drowning.play()
+		elif Global.drowning.playing and airTimer > panicTime:
+			Global.drowning.stop()
 	
 	# Input buttons, there have to be in process for the ai to work
 	if playerControl != 0:
@@ -419,7 +473,7 @@ func _physics_process(delta):
 		# count down pushingwall
 		pushingWall -= 1
 
-	if (playerControl != 0 and lockTimer <= 0):
+	if (playerControl != 0 and horizontalLockTimer <= 0):
 		inputs[INPUTS.XINPUT] = -int(Input.is_action_pressed("gm_left"))+int(Input.is_action_pressed("gm_right"))
 		inputs[INPUTS.YINPUT] = -int(Input.is_action_pressed("gm_up"))+int(Input.is_action_pressed("gm_down"))
 	
@@ -674,19 +728,6 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 		return true
 	return false
 
-func kill():
-	if currentState != STATES.DIE and playerControl == 1:
-		disconect_from_floor()
-		super = false
-		supTime = 0
-		collision_layer = 0
-		collision_mask = 0
-		z_index = 100
-		movement = Vector2(0,-7*60)
-		set_state(STATES.DIE,currentHitbox.NORMAL)
-		animator.play("die")
-		sfx[6].play()
-
 func get_ring():
 	if playerControl == 1:
 		rings += 1
@@ -695,6 +736,35 @@ func get_ring():
 		ringChannel = int(!ringChannel)
 	elif partner != null:
 		partner.get_ring()
+	
+func kill():
+	if currentState != STATES.DIE:
+		disconect_from_floor()
+		super = false
+		supTime = 0
+		collision_layer = 0
+		collision_mask = 0
+		z_index = 100
+		if airTimer > 0:
+			movement = Vector2(0,-7*60)
+			animator.play("die")
+			sfx[6].play()
+		else:
+			movement = Vector2(0,0)
+			animator.play("drown")
+			sfx[25].play()
+		set_state(STATES.DIE,currentHitbox.NORMAL)
+
+func respawn():
+	airTimer = 1
+	collision_layer = 0
+	collision_mask = 0
+	z_index = defaultZIndex
+	respawnTime = RESPAWN_DEFAULT_TIME
+	movement = Vector2.ZERO
+	global_position = partner.global_position+Vector2(0,-128)
+	set_state(STATES.RESPAWN)
+
 
 func touch_ceiling():
 	if getVert != null:
@@ -806,3 +876,20 @@ func snap_camera_to_limits():
 	camera.limit_right = limitRight
 	camera.limit_top = limitTop
 	camera.limit_bottom = limitBottom
+
+# Water bubble timer
+func _on_BubbleTimer_timeout():
+	if water:
+		# Generate Bubble
+		var bub = Bubble.instance()
+		if airTimer > 0:
+			bub.global_position = global_position+Vector2(8*direction,0)
+			$BubbleTimer.start(max(randf()*3,0.5))
+		else:
+			bub.global_position = global_position+Vector2(0,-8)
+			# pick either 0 or 1 for the bubble type
+			bub.bubbleType = int(round(randf()))
+			$BubbleTimer.start(0.05)
+		bub.z_index = z_index+3
+		get_parent().add_child(bub)
+

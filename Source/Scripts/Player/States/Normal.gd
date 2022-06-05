@@ -16,14 +16,14 @@ func _process(delta):
 
 	if parent.inputs[parent.INPUTS.ACTION] == 1:
 	#if (event.is_action_pressed(parent.INPUTACTIONS[parent.INPUTS.ACTION])):
-		if (parent.movement.x == 0 && parent.inputs[parent.INPUTS.YINPUT] > 0):
+		if (parent.movement.x == 0 and parent.inputs[parent.INPUTS.YINPUT] > 0):
 			parent.animator.play("spinDash")
 			parent.sfx[2].play()
 			parent.sfx[2].pitch_scale = 1
 			parent.spindashPower = 0
 			parent.animator.play("spinDash")
 			parent.set_state(parent.STATES.SPINDASH)
-		elif (parent.movement.x == 0 && parent.inputs[parent.INPUTS.YINPUT] < 0):
+		elif (parent.movement.x == 0 and parent.inputs[parent.INPUTS.YINPUT] < 0):
 			parent.sfx[2].play()
 			parent.sfx[2].pitch_scale = 1
 			parent.spindashPower = 0
@@ -33,7 +33,7 @@ func _process(delta):
 			parent.set_state(parent.STATES.JUMP)
 		return null
 	
-	if parent.ground && !skid:
+	if parent.ground and !skid:
 		if parent.movement.x == 0:
 			if (parent.inputs[parent.INPUTS.YINPUT] > 0):
 				lookTimer = max(0,lookTimer+delta*0.5)
@@ -61,7 +61,7 @@ func _process(delta):
 				if getM:
 					# Play default idle animation
 					parent.animator.play("idle")
-				elif !getL && getR: # reverse edge
+				elif !getL and getR: # reverse edge
 					parent.animator.play("edge3")
 				elif !getMEdge: # far edge
 					parent.animator.play("edge2")
@@ -78,15 +78,15 @@ func _process(delta):
 			parent.animator.play("peelOut")
 		
 	
-	if parent.inputs[parent.INPUTS.XINPUT] != 0 && !skid:
+	if parent.inputs[parent.INPUTS.XINPUT] != 0 and !skid:
 		parent.direction = parent.inputs[parent.INPUTS.XINPUT]
-	elif parent.movement.x != 0 && skid:
+	elif parent.movement.x != 0 and skid:
 		parent.direction = sign(parent.movement.x)
 
 func _physics_process(delta):
 	
 	# rolling
-	if (parent.inputs[parent.INPUTS.YINPUT] == 1 && parent.inputs[parent.INPUTS.XINPUT] == 0 && abs(parent.movement.x) > 0.5*60):
+	if (parent.inputs[parent.INPUTS.YINPUT] == 1 and parent.inputs[parent.INPUTS.XINPUT] == 0 and abs(parent.movement.x) > 0.5*60):
 		parent.set_state(parent.STATES.ROLL)
 		parent.animator.play("roll")
 		parent.sfx[1].play()
@@ -99,7 +99,7 @@ func _physics_process(delta):
 		return null
 	
 	# skidding
-	if !skid && sign(parent.inputs[parent.INPUTS.XINPUT]) != sign(parent.movement.x) && abs(parent.movement.x) >= 5*60 && parent.inputs[parent.INPUTS.XINPUT] != 0:
+	if !skid and sign(parent.inputs[parent.INPUTS.XINPUT]) != sign(parent.movement.x) and abs(parent.movement.x) >= 5*60 and parent.inputs[parent.INPUTS.XINPUT] != 0 and parent.horizontalLockTimer <= 0:
 		skid = true
 		parent.sfx[19].play()
 		parent.animator.play("skid")
@@ -108,11 +108,11 @@ func _physics_process(delta):
 	elif skid:
 		var inputX = parent.inputs[parent.INPUTS.XINPUT]
 		
-		if round(parent.movement.x/200) == 0 && sign(inputX) != sign(parent.movement.x):
+		if round(parent.movement.x/200) == 0 and sign(inputX) != sign(parent.movement.x):
 			parent.animator.play("skidTurn")
 		
 		if !parent.animator.is_playing() || inputX == sign(parent.movement.x):
-			skid = (round(parent.movement.x) != 0 && inputX != sign(parent.movement.x) && inputX != 0)
+			skid = (round(parent.movement.x) != 0 and inputX != sign(parent.movement.x) and inputX != 0)
 		
 	
 	parent.sprite.flip_h = (parent.direction < 0)
@@ -131,12 +131,13 @@ func _physics_process(delta):
 	if (calcAngle < 0):
 		calcAngle += 360
 	
-	# drop, if speed below fall speed
-	if (abs(parent.movement.x) < parent.fall && calcAngle >= 45 && calcAngle <= 315):
-		if (round(calcAngle) >= 90 && round(calcAngle) <= 270):
+	# if speed below fall speed, either drop or slide down slopes
+	if (abs(parent.movement.x) < parent.fall and calcAngle >= 45 and calcAngle <= 315):
+		if (round(calcAngle) >= 90 and round(calcAngle) <= 270):
 			parent.disconect_from_floor()
 			parent.ground = false
-		parent.lockTimer = 30.0/60.0
+		else:
+			parent.horizontalLockTimer = 30.0/60.0
 		
 	if (parent.inputs[parent.INPUTS.XINPUT] != 0):
 		if (parent.movement.x*parent.inputs[parent.INPUTS.XINPUT] < parent.top):

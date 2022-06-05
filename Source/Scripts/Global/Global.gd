@@ -19,6 +19,7 @@ var gameOver = false
 # Music
 var music = null
 var effectTheme = null
+var drowning = null
 var life = null
 var themes = [preload("res://Audio/Soundtrack/1. SWD_Invincible.ogg"),preload("res://Audio/Soundtrack/2. SWD_SpeedUp.ogg"),preload("res://Audio/Soundtrack/4. SWD_StageClear.ogg")]
 var currentTheme = 0

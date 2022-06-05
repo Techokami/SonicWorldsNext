@@ -46,7 +46,7 @@ func _physics_process(delta):
 		if (round(calcAngle) >= 90 && round(calcAngle) <= 270):
 			parent.disconect_from_floor()
 		
-		parent.lockTimer = 30.0/60.0
+		parent.horizontalLockTimer = 30.0/60.0
 	
 	
 	

@@ -22,28 +22,28 @@ func _process(delta):
 
 func set_spring():
 	match (springDirection):
-		0, 1:
+		0, 1: # up, down
 			$HitBox.disabled = false
 			$DiagonalHitBox/AreaShape.disabled = true
 			animID = 0
 			$HitBox.rotation = deg2rad(0)
 			scale = Vector2(1,1-(springDirection*2))
 			hitDirection = Vector2(0,-1+(springDirection*2))
-		2, 3:
+		2, 3: # right, left
 			$HitBox.disabled = false
 			$DiagonalHitBox/AreaShape.disabled = true
 			animID = 1
 			$HitBox.rotation = deg2rad(90)
 			scale = Vector2(1-((springDirection-2)*2),1)
 			hitDirection = Vector2(1-((springDirection-2)*2),0)
-		4, 6:
+		4, 6: #diagonal right
 			$HitBox.disabled = true
 			$DiagonalHitBox/AreaShape.disabled = false
 			animID = 3
 			scale = Vector2(1,1-(springDirection-4))
 			# place .normalized() at the end for CD physics
 			hitDirection = scale*Vector2(1,-1)
-		5, 7:
+		5, 7: #diagonal left
 			$HitBox.disabled = true
 			$DiagonalHitBox/AreaShape.disabled = false
 			animID = 2
@@ -76,6 +76,8 @@ func physics_collision(body, hitVector):
 			body.movement.y = setMove.y
 		else:
 			body.movement.x = setMove.x
+			body.horizontalLockTimer = (15.0/60.0) # lock for 15 frames
+			body.direction = sign(setMove.x)
 		$SpringAnimator.play(animList[animID])
 		$sfxSpring.play()
 		return true

@@ -15,17 +15,21 @@ func _ready():
 	Global.main = self
 	Global.music = $Music
 	Global.effectTheme = $EffectTheme
+	Global.drowning = $Downing
 	Global.life = $Life
 	Global.reset_values()
 	# give game a frame wait time to ensure the game loads first
 	yield(get_tree(),"idle_frame")
 
 func _process(delta):
-	Global.music.stream_paused = Global.effectTheme.playing
+	Global.music.stream_paused = Global.effectTheme.playing or Global.drowning.playing
+	Global.effectTheme.stream_paused = Global.drowning.playing
+	
 	if volumeLerp < 1:
 		volumeLerp = clamp(volumeLerp+delta,0,1)
 		Global.music.volume_db = lerp(startVolumeLevel,setVolumeLevel,volumeLerp)
 		Global.effectTheme.volume_db = Global.music.volume_db
+		Global.drowning.volume_db = Global.music.volume_db
 
 func _input(event):
 	# Pausing

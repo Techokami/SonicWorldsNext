@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=50 format=2]
 
 [ext_resource path="res://Shaders/SonicPalette.tres" type="Material" id=1]
 [ext_resource path="res://Graphics/Players/Tails.png" type="Texture" id=2]
@@ -79,6 +79,21 @@ tracks/5/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ Vector2( 0, -4 ) ]
+}
+
+[sub_resource type="Animation" id=121]
+resource_name = "air"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 77 ]
 }
 
 [sub_resource type="Animation" id=76]
@@ -929,6 +944,7 @@ tracks/2/keys = {
 root_node = NodePath("../..")
 autoplay = "idle"
 anims/RESET = SubResource( 86 )
+anims/air = SubResource( 121 )
 anims/corkScrew = SubResource( 76 )
 anims/corkScrewOffset = SubResource( 88 )
 anims/crouch = SubResource( 77 )
@@ -960,17 +976,19 @@ anims/walk = SubResource( 85 )
 
 [node name="Sprite" type="Sprite" parent="."]
 material = ExtResource( 1 )
+position = Vector2( 0, -4 )
 z_index = 5
 texture = ExtResource( 2 )
 offset = Vector2( 0, -4 )
 hframes = 16
 vframes = 16
+frame = 77
 script = ExtResource( 5 )
 
 [node name="DashDust" type="AnimatedSprite" parent="Sprite"]
 visible = false
 frames = SubResource( 96 )
-frame = 3
+frame = 6
 playing = true
 offset = Vector2( -9, -4 )
 

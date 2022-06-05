@@ -8,6 +8,11 @@ func state_activated():
 	flightTime = 8
 	flyGrav = 0.03125
 	actionPressed = true
+	
+func state_exit():
+	# stop flight sound
+	parent.sfx[21].stop()
+	parent.sfx[22].stop()
 
 func _process(delta):
 	# Animation
@@ -21,6 +26,19 @@ func _process(delta):
 			parent.animator.play("fly")
 		else:
 			parent.animator.play("tired")
+	
+	# flight sound
+	if !parent.water:
+		if flightTime > 0:
+			if !parent.sfx[21].playing:
+				parent.sfx[21].play()
+		else:
+			if !parent.sfx[22].playing:
+				parent.sfx[21].stop()
+				parent.sfx[22].play()
+	else:
+		parent.sfx[21].stop()
+		parent.sfx[22].stop()
 
 func _physics_process(delta):
 	# air movement
