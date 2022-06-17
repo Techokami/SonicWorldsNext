@@ -23,9 +23,13 @@ var gameOver = false
 
 signal tally_clear
 
+var characterNames = ["sonic","tails","knuckles"]
 
 func _ready():
 	Global.hud = self
+	# Set character Icon
+	$LifeCounter/Icon.frame = Global.PlayerChar1-1
+	
 	if (playLevelCard):
 		$LevelCard.visible = true
 		$LevelCard/Banner/LevelName.string = zoneName
@@ -43,6 +47,8 @@ func _ready():
 	else:
 		Global.emit_signal("stage_started")
 	$LevelCard.queue_free()
+	
+	$LevelClear/Passed.string = $LevelClear/Passed.string.replace("sonic",characterNames[Global.PlayerChar1-1])
 
 func _process(delta):
 	scoreText.string = "%6d" % Global.score
@@ -58,7 +64,7 @@ func _process(delta):
 	if Global.waterLevel != null:
 		var cam = GlobalFunctions.getCurrentCamera2D()
 		if cam != null:
-			$Water/WaterOverlay.rect_position.y = clamp(Global.waterLevel-GlobalFunctions.getCurrentCamera2D().global_position.y+(get_viewport().get_visible_rect().size.y/2),0,get_viewport().get_visible_rect().size.y)
+			$Water/WaterOverlay.rect_position.y = clamp(Global.waterLevel-GlobalFunctions.getCurrentCamera2D().get_camera_screen_center().y+(get_viewport().get_visible_rect().size.y/2),0,get_viewport().get_visible_rect().size.y)
 		$Water/WaterOverlay.rect_scale.y = clamp(Global.waterLevel-$Water/WaterOverlay.rect_position.y,0,get_viewport().size.y)
 		$Water/WaterOverlay.visible = true
 		#$Water/WaterOverlay/TextureRect.rect_position.y = Global.waterLevel-GlobalFunctions.getCurrentCamera2D().global_position.y-$Water/WaterOverlay/TextureRect.rect_position.y

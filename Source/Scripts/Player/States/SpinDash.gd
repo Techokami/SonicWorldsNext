@@ -13,8 +13,17 @@ extends "res://Scripts/Player/State.gd"
 #			if (parent.spindashPower < 8):
 #				parent.spindashPower = min(parent.spindashPower+2,8)
 #			parent.sfx[2].pitch_scale = 1.0+((float(parent.spindashPower)/8.0)*0.5)
-		
+
+func state_exit():
+	parent.crouchBox.disabled = true
+	parent.get_node("HitBox").disabled = false
+	
+func state_activated():
+	parent.crouchBox.disabled = false
+	parent.get_node("HitBox").disabled = true
+	
 func _process(delta):
+	
 	if parent.inputs[parent.INPUTS.ACTION] == 1:
 		# reset animation
 		parent.animator.stop()

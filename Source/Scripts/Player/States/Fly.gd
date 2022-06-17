@@ -8,9 +8,17 @@ func state_activated():
 	flightTime = 8
 	flyGrav = 0.03125
 	actionPressed = true
+	parent.get_node("TailsFlightHitArea/HitBox").disabled = false
 	
 func state_exit():
+	parent.get_node("TailsFlightHitArea/HitBox").disabled = true
 	# stop flight sound
+	parent.sfx[21].stop()
+	parent.sfx[22].stop()
+	# delay sound stop, for some reason it bugs out sometimes
+	yield(get_tree(),"idle_frame")
+	yield(get_tree(),"idle_frame")
+	yield(get_tree(),"idle_frame")
 	parent.sfx[21].stop()
 	parent.sfx[22].stop()
 
@@ -27,7 +35,7 @@ func _process(delta):
 		else:
 			parent.animator.play("tired")
 	
-	# flight sound
+	# flight sound (verify we are not underwater)
 	if !parent.water:
 		if flightTime > 0:
 			if !parent.sfx[21].playing:
@@ -39,8 +47,10 @@ func _process(delta):
 	else:
 		parent.sfx[21].stop()
 		parent.sfx[22].stop()
+	
 
 func _physics_process(delta):
+	
 	# air movement
 	if (parent.inputs[parent.INPUTS.XINPUT] != 0):
 		

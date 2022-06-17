@@ -15,8 +15,8 @@ void fragment(){
 		vec3 new_color = color;
 		
 		for (float i = 1.0; i<=amount; i++){
-			pal = texture(paletteTexture,vec2(i/amount,0)).rgb;
-			repal = texture(paletteTexture,vec2(i/amount,(row-1.0)/(palRows-1.0))).rgb;
+			pal = texture(paletteTexture,vec2(i/(amount+1.0),0)).rgb;
+			repal = texture(paletteTexture,vec2(i/(amount+1.0),(row-1.0)/(palRows-1.0))).rgb;
 			
 			if (distance(pal,color) - distance(new_color, color) <= approximation) {
 				new_color = repal;

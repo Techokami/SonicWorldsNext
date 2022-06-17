@@ -12,6 +12,9 @@ export (int, "Ring", "Speed Shoes", "Invincibility", "Shield", "Elec Shield", "F
 
 func _ready():
 	$Item.frame = item+2
+	# Life Icon
+	if item == 10:
+		$Item.frame = item+1+Global.PlayerChar1
 
 func _process(delta):
 	if (Engine.is_editor_hint()):
@@ -35,7 +38,7 @@ func destroy():
 		1: # Speed Shoes
 			if !playerTouch.super:
 				playerTouch.shoeTime = 30
-				playerTouch.switch_physics(3)
+				playerTouch.switch_physics()
 				Global.currentTheme = 1
 				Global.effectTheme.stream = Global.themes[Global.currentTheme]
 				Global.effectTheme.play()
@@ -87,11 +90,12 @@ func physics_collision(body, hitVector):
 				body.movement.x = 0
 		# check player has vertical momentum
 		elif body.playerControl == 1:
-			body.movement.y *= -1
+			body.movement.y = -abs(body.movement.y)
 			body.ground = false
 			playerTouch = body
 			destroy()
 		else:
+			body.ground = true
 			body.movement.y = 0
 	return true
 

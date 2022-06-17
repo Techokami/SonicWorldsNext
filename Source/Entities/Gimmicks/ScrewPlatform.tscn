@@ -35,6 +35,7 @@ animations = [ {
 extents = Vector2( 24, 8 )
 
 [node name="CorkScrew" type="Node2D"]
+process_priority = 5
 script = ExtResource( 3 )
 
 [node name="ScrewPipe" type="Sprite" parent="."]

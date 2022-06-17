@@ -1,0 +1,28 @@
+needed changes
+- corkscrewloops funky collisions
+- game reset on game over
+- fix pipe shooting offset
+- add force angle clip entity
+- make partner ai go right on stage clear too
+- proper timer reset on checkpoints
+- fix respawn clipping on partner respawn
+- shield protection element types (bounce projectiles off shields, regular doesn't protect)
+- element immunity (fire resistance, electric resistance)
+- code panic mode for ai
+- fix invincibility stars on level clear
+- fix music looping on level clear
+- stop animations on pause
+
+minor changes
+- tails carry
+- idle animations
+- edge wobble on objects
+- knuckles
+- spindash on top of breakable objects
+- tails helicopter sounds on landing frame
+- fix pipe travel offsets
+- delete unused and redundant code
+- rebindable controls
+
+probably needs more testing
+- tails flying sounds not stopping (tends to happen when a state change happens)

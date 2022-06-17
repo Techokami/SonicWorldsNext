@@ -14,7 +14,6 @@ func _process(delta):
 		# wait for aniamtion to finish before activating super completely
 		yield(parent.animator,"animation_finished")
 		
-		parent.switch_physics(4)
 		parent.animator.play(lastAnim)
 		parent.set_state(parent.STATES.AIR)
 		activated = true
@@ -25,6 +24,7 @@ func _process(delta):
 			parent.sprite.texture = parent.superSprite
 		parent.movement = remVel
 		parent.super = true
+		parent.switch_physics()
 		parent.supTime = 1
 
 func state_exit():

@@ -1,6 +1,6 @@
-[gd_scene load_steps=36 format=2]
+[gd_scene load_steps=39 format=2]
 
-[ext_resource path="res://Shaders/SonicPalette.tres" type="Material" id=1]
+[ext_resource path="res://Shaders/PlayerPalette.tres" type="Material" id=1]
 [ext_resource path="res://Graphics/Players/Sonic.png" type="Texture" id=2]
 [ext_resource path="res://Graphics/Misc/DashDust.png" type="Texture" id=3]
 
@@ -255,6 +255,23 @@ tracks/0/keys = {
 "values": [ 100, 101 ]
 }
 
+[sub_resource type="Animation" id=110]
+resource_name = "edge_super"
+length = 0.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 43, 44, 45, 46 ]
+}
+
 [sub_resource type="Animation" id=78]
 resource_name = "hurt"
 length = 0.1
@@ -286,6 +303,23 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 0, 1, 6, 7, 8, 7, 8, 7, 8, 7, 8, 1 ]
+}
+
+[sub_resource type="Animation" id=109]
+resource_name = "idle_super"
+length = 0.9
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
 }
 
 [sub_resource type="Animation" id=80]
@@ -519,6 +553,9 @@ animations = [ {
 "speed": 30.0
 } ]
 
+[sub_resource type="RectangleShape2D" id=111]
+extents = Vector2( 9, 11 )
+
 [node name="Sprite" type="Node2D"]
 
 [node name="PlayerAnimation" type="AnimationPlayer" parent="."]
@@ -535,8 +572,10 @@ anims/drown = SubResource( 99 )
 anims/edge1 = SubResource( 104 )
 anims/edge2 = SubResource( 105 )
 anims/edge3 = SubResource( 106 )
+anims/edge_super = SubResource( 110 )
 anims/hurt = SubResource( 78 )
 anims/idle = SubResource( 79 )
+anims/idle_super = SubResource( 109 )
 anims/lookUp = SubResource( 80 )
 anims/peelOut = SubResource( 87 )
 anims/push = SubResource( 103 )
@@ -560,5 +599,11 @@ vframes = 16
 [node name="DashDust" type="AnimatedSprite" parent="Sprite"]
 visible = false
 frames = SubResource( 96 )
+frame = 4
 playing = true
 offset = Vector2( -9, -4 )
+
+[node name="CrouchBox" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 8 )
+shape = SubResource( 111 )
+disabled = true

@@ -1,6 +1,6 @@
 extends Area2D
 
-export var damageType = 0
+export (int, "Normal", "Fire", "Elec", "Water") var damageType = 0
 var playerHit = []
 
 func _process(delta):

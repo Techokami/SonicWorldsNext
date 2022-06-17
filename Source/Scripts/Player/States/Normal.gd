@@ -8,6 +8,8 @@ var actionPressed = false
 
 func state_exit():
 	skid = false
+	parent.crouchBox.disabled = true
+	parent.get_node("HitBox").disabled = false
 
 #func _input(event):
 	#if (parent.playerControl != 0):
@@ -23,7 +25,8 @@ func _process(delta):
 			parent.spindashPower = 0
 			parent.animator.play("spinDash")
 			parent.set_state(parent.STATES.SPINDASH)
-		elif (parent.movement.x == 0 and parent.inputs[parent.INPUTS.YINPUT] < 0):
+		# peelout (Sonic only)
+		elif (parent.movement.x == 0 and parent.inputs[parent.INPUTS.YINPUT] < 0 and parent.character == parent.CHARACTERS.SONIC):
 			parent.sfx[2].play()
 			parent.sfx[2].pitch_scale = 1
 			parent.spindashPower = 0
@@ -58,9 +61,15 @@ func _process(delta):
 				if parent.direction < 0:
 					getL = getR
 					getR = parent.verticalSensorLeft.is_colliding()
-				if getM:
+				if getM || !parent.ground:
 					# Play default idle animation
-					parent.animator.play("idle")
+					if parent.super and parent.animator.has_animation("idle_super"):
+						parent.animator.play("idle_super")
+					else:
+						parent.animator.play("idle")
+				# super edge
+				elif parent.super and parent.animator.has_animation("edge_super"):
+					parent.animator.play("edge_super")
 				elif !getL and getR: # reverse edge
 					parent.animator.play("edge3")
 				elif !getMEdge: # far edge
@@ -77,6 +86,8 @@ func _process(delta):
 		else:
 			parent.animator.play("peelOut")
 		
+	parent.crouchBox.disabled = (parent.lastActiveAnimation != "crouch")
+	parent.get_node("HitBox").disabled = !parent.crouchBox.disabled
 	
 	if parent.inputs[parent.INPUTS.XINPUT] != 0 and !skid:
 		parent.direction = parent.inputs[parent.INPUTS.XINPUT]

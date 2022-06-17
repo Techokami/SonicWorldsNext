@@ -36,6 +36,18 @@ var maxTime = 60*10
 
 var waterLevel = null
 
+enum CHARACTERS {NONE,SONIC,TAILS}
+var PlayerChar1 = CHARACTERS.SONIC
+var PlayerChar2 = CHARACTERS.TAILS
+
+# Level settings
+var hardBorderLeft   = -100000000
+var hardBorderRight  =  100000000
+var hardBorderTop    = -100000000
+var hardBorderBottom =  100000000
+
+# Hazards
+enum HAZARDS {NORMAL, FIRE, ELEC, WATER}
 
 signal stage_started
 

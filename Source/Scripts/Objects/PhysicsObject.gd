@@ -12,9 +12,15 @@ var objectCheck = RayCast2D.new()
 
 onready var sensorList = [verticalSensorLeft,verticalSensorMiddle,verticalSensorMiddleEdge,verticalSensorRight,horizontalSensor,slopeCheck]
 
-var groundLookDistance = 14
+var maxCharGroundHeight = 16 # this is to stop players getting stuck at the bottom of 16x16 tiles, 
+# you may want to adjust this to match the height of your tile collisions
+# this only works when on the floor
+var yGroundDiff = 0 # used for y differences on ground sensors
+
+
+var groundLookDistance = 14 # how far down to look
 onready var pushRadius = max($HitBox.shape.extents.x+1,10) # original push radius is 10
-#var pushRadius = 10
+
 
 # physics variables
 var velocity = Vector2.ZERO # velocity is for future proofing
@@ -73,16 +79,21 @@ func update_sensors():
 	var shape = $HitBox.shape.extents
 	
 	# floor sensors
-	verticalSensorLeft.position = Vector2(-shape.x,0)
+	yGroundDiff = 0
+	# calculate ground difference for smaller height masks
+	if ground and shape.y <= maxCharGroundHeight:
+		yGroundDiff = abs((shape.y)-(maxCharGroundHeight))
+	
+	verticalSensorLeft.position = Vector2(-shape.x,-yGroundDiff)
 	
 	# calculate how far down to look if on the floor, the sensor extends more if the objects is moving, if the objects moving up then it's ignored,
 	# if you want behaviour similar to sonic 1, replace "min(abs(movement.x/60)+4,groundLookDistance)" with "groundLookDistance"
 	var extendFloorLook = min(abs(movement.x/60)+4,groundLookDistance)*(int(movement.y >= 0)*int(ground))
 	
-	verticalSensorLeft.cast_to.y = (shape.y+extendFloorLook)*(int(movement.y >= 0)-int(movement.y < 0))
+	verticalSensorLeft.cast_to.y = ((shape.y+extendFloorLook)*(int(movement.y >= 0)-int(movement.y < 0)))+yGroundDiff
 	
 	
-	verticalSensorRight.position = -verticalSensorLeft.position
+	verticalSensorRight.position = Vector2(-verticalSensorLeft.position.x,verticalSensorLeft.position.y)
 	verticalSensorRight.cast_to.y = verticalSensorLeft.cast_to.y
 	verticalSensorMiddle.cast_to.y = verticalSensorLeft.cast_to.y*1.1
 	if movement.x != 0:
@@ -210,10 +221,10 @@ func _physics_process(delta):
 			var rayHitVec = (getVert.get_collision_point()-getVert.global_position)
 			# Snap the Vector and normalize it
 			var normHitVec = -Vector2.LEFT.rotated(snap_angle(rayHitVec.normalized().angle()))
-			if move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.extents.y)),true,true,true):
-				move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.extents.y)))
+			if move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.extents.y))-Vector2(0,yGroundDiff).rotated(rotation),true,true,true):
+				move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.extents.y))-Vector2(0,yGroundDiff).rotated(rotation))
 			else:
-				translate(rayHitVec-(normHitVec*($HitBox.shape.extents.y+0.25)))
+				translate(rayHitVec-(normHitVec*($HitBox.shape.extents.y+0.25))-Vector2(0,yGroundDiff).rotated(rotation))
 		
 		# set rotation
 		

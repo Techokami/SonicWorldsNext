@@ -42,3 +42,4 @@ func _physics_process(delta):
 			parent.set_state(parent.STATES.ROLL)
 		else:
 			parent.set_state(parent.STATES.NORMAL)
+			parent.animator.play("RESET")

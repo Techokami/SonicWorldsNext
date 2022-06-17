@@ -3,6 +3,8 @@ extends "res://Scripts/Player/State.gd"
 # this is for respawning a second player
 var targetPoint = Vector2.ZERO
 
+var spawnTicker = (1.0/64.0)*60.0
+
 func state_activated():
 	targetPoint = parent.partner.global_position
 
@@ -17,7 +19,8 @@ func _physics_process(delta):
 	parent.translate = true
 	# slowly move the target point towards the player based on distance
 	targetPoint = targetPoint.linear_interpolate(parent.partner.global_position,(targetPoint.distance_to(parent.partner.global_position)/32)*delta)
-	# if player is a valid state, in range, on the 64th frame (or if player 2 mashes buttons) return to normal
+	
+	# if player is a valid state, in range, return to normal
 	var goToNormal = (parent.global_position.distance_to(targetPoint) <= 64 and round(parent.global_position.y) == round(targetPoint.y)) and (
 		parent.partner.currentState == parent.STATES.NORMAL or parent.partner.currentState == parent.STATES.AIR
 		or parent.partner.currentState == parent.STATES.JUMP)
@@ -56,3 +59,4 @@ func _physics_process(delta):
 				parent.limitRight = parent.partner.limitRight
 				parent.limitTop = parent.partner.limitTop
 				parent.limitBottom = parent.partner.limitBottom
+

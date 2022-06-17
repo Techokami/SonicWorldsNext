@@ -1,6 +1,6 @@
-[gd_scene load_steps=50 format=2]
+[gd_scene load_steps=51 format=2]
 
-[ext_resource path="res://Shaders/SonicPalette.tres" type="Material" id=1]
+[ext_resource path="res://Shaders/PlayerPalette.tres" type="Material" id=1]
 [ext_resource path="res://Graphics/Players/Tails.png" type="Texture" id=2]
 [ext_resource path="res://Graphics/Misc/DashDust.png" type="Texture" id=3]
 [ext_resource path="res://Scripts/Player/TailsAnimator.gd" type="Script" id=4]
@@ -938,6 +938,9 @@ tracks/2/keys = {
 "values": [ Vector2( 0, 4 ) ]
 }
 
+[sub_resource type="RectangleShape2D" id=122]
+extents = Vector2( 9, 9.5 )
+
 [node name="Sprite" type="Node2D"]
 
 [node name="PlayerAnimation" type="AnimationPlayer" parent="."]
@@ -982,7 +985,7 @@ texture = ExtResource( 2 )
 offset = Vector2( 0, -4 )
 hframes = 16
 vframes = 16
-frame = 77
+frame = 66
 script = ExtResource( 5 )
 
 [node name="DashDust" type="AnimatedSprite" parent="Sprite"]
@@ -1013,6 +1016,11 @@ anims/fly = SubResource( 120 )
 anims/roll = SubResource( 110 )
 anims/spinDash = SubResource( 111 )
 anims/stop = SubResource( 112 )
+
+[node name="CrouchBox" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 5.5 )
+shape = SubResource( 122 )
+disabled = true
 
 [connection signal="animation_started" from="PlayerAnimation" to="Sprite" method="_on_PlayerAnimation_animation_started"]
 [connection signal="animation_started" from="PlayerAnimation" to="Sprite/Tails" method="_on_PlayerAnimation_animation_started"]

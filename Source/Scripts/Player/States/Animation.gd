@@ -43,6 +43,6 @@ func _process(delta):
 			else:
 				# release the player if no other point can be found
 				parent.movement = (point-(pipe.global_position+pipe.get_point_position(pipePoint-1))).normalized()*pipe.speed*Global.originalFPS
-				parent.set_state(parent.STATES.ROLL,parent.currentHitbox.ROLL)
+				parent.set_state(parent.STATES.ROLL)
 				parent.translate = false
 				parent.sfx[3].play()

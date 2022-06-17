@@ -12,7 +12,7 @@
 [ext_resource path="res://Graphics/HUD/LevelCards/font/largefont4.png" type="Texture" id=10]
 [ext_resource path="res://Graphics/HUD/LevelCards/ActCards.png" type="Texture" id=11]
 [ext_resource path="res://Shaders/WaterPalette.tres" type="Material" id=12]
-[ext_resource path="res://Shaders/SonicPalette.tres" type="Material" id=13]
+[ext_resource path="res://Shaders/PlayerPalette.tres" type="Material" id=13]
 [ext_resource path="res://Graphics/HUD/LevelCards/font/smallfont2.png" type="Texture" id=14]
 [ext_resource path="res://Graphics/HUD/hud_results_text.png" type="Texture" id=15]
 [ext_resource path="res://Audio/SFX/Gimmicks/Switch.wav" type="AudioStream" id=16]
@@ -921,7 +921,7 @@ vframes = 2
 
 [node name="PatternLeft" type="Control" parent="LevelCard"]
 anchor_bottom = 1.0
-margin_bottom = 4064.0
+margin_bottom = 4288.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -930,7 +930,7 @@ __meta__ = {
 anchor_bottom = 1.0
 margin_left = -32.0
 margin_right = 32.0
-margin_bottom = 43168.0
+margin_bottom = 47456.0
 texture = ExtResource( 8 )
 stretch_mode = 2
 __meta__ = {
@@ -950,7 +950,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_top = -32.0
-margin_bottom = 3776.0
+margin_bottom = 4000.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -960,7 +960,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 32.0
-margin_right = 14496.0
+margin_right = 15296.0
 margin_bottom = 64.0
 texture = ExtResource( 8 )
 stretch_mode = 2
@@ -982,7 +982,6 @@ anims/Start = SubResource( 3 )
 
 [node name="LevelClear" type="Control" parent="."]
 pause_mode = 2
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 2

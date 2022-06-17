@@ -61,8 +61,6 @@ var character = CHARACTERS.SONIC
 
 # 0 = Sonic, 1 = Tails, 2 = Knuckles, 3 = Shoes, 4 = Super Sonic
 
-var lastPhysicsState = 0
-
 var physicsList = [
 # 0 Sonic
 [0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125, 0.21875, 6.5*60, 4],
@@ -101,7 +99,7 @@ var RotatingParticle = preload("res://Entities/Misc/RotatingParticle.tscn")
 
 var superSprite = preload("res://Graphics/Players/SuperSonic.png")
 onready var normalSprite = $Sprite/Sprite.texture
-var sonicPal = preload("res://Shaders/SonicPalette.tres")
+var playerPal = preload("res://Shaders/PlayerPalette.tres")
 
 # ================
 
@@ -112,6 +110,7 @@ var airControl = true
 # States
 enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, ANIMATION, HIT, DIE, CORKSCREW, JUMPCANCEL, SUPER, FLY, RESPAWN}
 var currentState = STATES.NORMAL
+var crouchBox = null
 
 # Shield variables
 enum SHIELDS {NONE, NORMAL, ELEC, FIRE, BUBBLE}
@@ -155,12 +154,16 @@ enum INPUTS {XINPUT, YINPUT, ACTION, ACTION2, ACTION3, SUPER, PAUSE}
 # (for held it's best to use inputs[INPUTS.ACTION] > 0)
 # XInput and YInput are directions and are either -1, 0 or 1.
 var inputs = [0,0,0,0,0,0,0]
-const INPUTACTIONS = [null,null,"gm_action","gm_action","gm_action","gm_super","gm_pause"]
+const INPUTACTIONS_P1 = [["gm_left","gm_right"],["gm_up","gm_down"],"gm_action","gm_action","gm_action","gm_super","gm_pause"]
+const INPUTACTIONS_P2 = [["gm_left_P2","gm_right_P2"],["gm_up_P2","gm_down_P2"],"gm_action_P2","gm_action_P2","gm_action_P2","gm_super_P2","gm_pause_P2"]
+var inputActions = INPUTACTIONS_P1
 # 0 = ai, 1 = player 1, 2 = player 2
 var playerControl = 1
 var partner = null
-const RESPAWN_DEFAULT_TIME = 0.5
+const RESPAWN_DEFAULT_TIME = 5
 var respawnTime = RESPAWN_DEFAULT_TIME
+const DEFAULT_PLAYER2_CONTROL_TIME = 10
+var partnerControlTime = DEFAULT_PLAYER2_CONTROL_TIME
 
 # defaults
 onready var defaultLayer = collision_layer
@@ -184,7 +187,6 @@ var rings = 0
 var cameraMargin = 16
 
 func _ready():
-	#character = CHARACTERS.TAILS
 	# Disable and enable states
 	set_state(currentState)
 	Global.players.append(self)
@@ -204,22 +206,36 @@ func _ready():
 	connect("positionChanged",self,"on_position_changed")
 	camera.global_position = global_position
 	
-	limitLeft = camera.limit_left
-	limitRight = camera.limit_right
-	limitTop = camera.limit_top
-	limitBottom = camera.limit_bottom
-	
-	# Partner
+	# verify that we're not an ai
 	if playerControl == 1:
+		# input memory
 		for i in range(INPUT_MEMORY_LENGTH):
 			inputMemory.append(inputs.duplicate(true))
-		partner = Player.instance()
-		partner.playerControl = 0
-		partner.z_index = z_index-1
-		get_parent().call_deferred("add_child", (partner))
-		partner.global_position = global_position+Vector2(-32,0)
-		partner.partner = self
-		partner.character = CHARACTERS.TAILS
+		# Partner (if player character 2 isn't none)
+		if Global.PlayerChar2 != Global.CHARACTERS.NONE:
+			partner = Player.instance()
+			partner.playerControl = 0
+			partner.z_index = z_index-1
+			get_parent().call_deferred("add_child", (partner))
+			partner.global_position = global_position+Vector2(-32,0)
+			partner.partner = self
+			partner.character = Global.PlayerChar2-1
+			partner.inputActions = INPUTACTIONS_P2
+		
+		# set my character
+		character = Global.PlayerChar1-1
+		
+		# set palettes
+		match (character):
+			CHARACTERS.SONIC:
+				playerPal.set_shader_param("amount",3)
+				playerPal.set_shader_param("palRows",9)
+				playerPal.set_shader_param("paletteTexture",load("res://Graphics/Palettes/SuperSonicPal.png"))
+		
+			CHARACTERS.TAILS:
+				playerPal.set_shader_param("amount",6)
+				playerPal.set_shader_param("palRows",10)
+				playerPal.set_shader_param("paletteTexture",load("res://Graphics/Palettes/SuperTails.png"))
 	
 	
 	# Checkpoints
@@ -242,22 +258,23 @@ func _ready():
 			animator = tails.get_node("PlayerAnimation")
 			spriteControler = tails
 	
-	# reset camera limits to border if it's been set at the start of the level
+	# Set hitbox
+	$HitBox.shape.extents = currentHitbox.NORMAL
+	
+	crouchBox = get_node_or_null("Sprite/CrouchBox")
+	if crouchBox != null:
+		crouchBox.get_parent().remove_child(crouchBox)
+		add_child(crouchBox)
+		crouchBox.disabled = true
+	
+	# reset camera limits
+	limitLeft = Global.hardBorderLeft
+	limitRight = Global.hardBorderRight
+	limitTop = Global.hardBorderTop
+	limitBottom = Global.hardBorderBottom
 	snap_camera_to_limits()
-	# Buffer for border setter, mostly used for title card handling
-	yield(Global,"stage_started")
-	yield(get_tree(),"idle_frame")
-	yield(get_tree(),"idle_frame")
-	snap_camera_to_limits()
 
 
-
-#func _input(event):
-#	if (playerControl != 0):
-#		if (event.is_action("gm_action")):
-#			inputs[INPUTS.ACTION] = calculate_input(event,"gm_action")
-#		if (event.is_action("gm_super")):
-#			inputs[INPUTS.SUPER] = calculate_input(event,"gm_super")
 
 # 0 not pressed, 1 pressed, 2 held (best to do > 0 when checking input), -1 released
 func calculate_input(event, action = "gm_action"):
@@ -333,7 +350,11 @@ func _process(delta):
 			supTime -= delta
 		else:
 			# Animate Palette
-			sonicPal.set_shader_param("row",wrapf(sonicPal.get_shader_param("row")+delta*5,sonicPal.get_shader_param("palRows")-3,sonicPal.get_shader_param("palRows")))
+			match character:
+				CHARACTERS.SONIC:
+					playerPal.set_shader_param("row",wrapf(playerPal.get_shader_param("row")+delta*5,playerPal.get_shader_param("palRows")-3,playerPal.get_shader_param("palRows")))
+				CHARACTERS.TAILS:
+					playerPal.set_shader_param("row",wrapf(playerPal.get_shader_param("row")+delta*5,playerPal.get_shader_param("palRows")-4,playerPal.get_shader_param("palRows")))
 			# check if ring count is greater then 0
 			# deactivate if stage cleared
 			if rings > 0 and Global.stageClearPhase == 0:
@@ -342,8 +363,9 @@ func _process(delta):
 				# Deactivate super
 				super = false
 				supTime = 0
-				sprite.texture = normalSprite
-				switch_physics(0)
+				if character == CHARACTERS.SONIC:
+					sprite.texture = normalSprite
+				switch_physics()
 				
 		if (supTime <= 0):
 			if (shield != SHIELDS.NONE):
@@ -356,7 +378,7 @@ func _process(delta):
 	else:
 	# Deactivate super
 		if playerControl != 0:
-			sonicPal.set_shader_param("row",clamp(sonicPal.get_shader_param("row")-delta*10,0,sonicPal.get_shader_param("palRows")-3))
+			playerPal.set_shader_param("row",clamp(playerPal.get_shader_param("row")-delta*10,0,playerPal.get_shader_param("palRows")-3))
 	
 	if (shoeTime > 0):
 		shoeTime -= delta
@@ -444,11 +466,13 @@ func _process(delta):
 		elif Global.drowning.playing and airTimer > panicTime:
 			Global.drowning.stop()
 	
-	# Input buttons, there have to be in process for the ai to work
-	if playerControl != 0:
-		inputs[INPUTS.ACTION] = (int(Input.is_action_pressed("gm_action"))*2)-int(Input.is_action_just_pressed("gm_action"))
-		inputs[INPUTS.SUPER] =  (int(Input.is_action_pressed("gm_super"))*2)-int(Input.is_action_just_pressed("gm_super"))
+	# partner control timer for player 2
+	if partnerControlTime > 0:
+		partnerControlTime -= delta
 	
+	# Set player inputs
+	set_inputs()
+
 func _physics_process(delta):
 	
 	# Attacking is for rolling type animations
@@ -472,10 +496,7 @@ func _physics_process(delta):
 	elif pushingWall > 0:
 		# count down pushingwall
 		pushingWall -= 1
-
-	if (playerControl != 0 and horizontalLockTimer <= 0):
-		inputs[INPUTS.XINPUT] = -int(Input.is_action_pressed("gm_left"))+int(Input.is_action_pressed("gm_right"))
-		inputs[INPUTS.YINPUT] = -int(Input.is_action_pressed("gm_up"))+int(Input.is_action_pressed("gm_down"))
+	
 	
 	
 	# Camera settings
@@ -574,7 +595,7 @@ func _physics_process(delta):
 		# Enter water
 		if global_position.y > Global.waterLevel and !water:
 			water = true
-			switch_physics(lastPhysicsState,true)
+			switch_physics(true)
 			movement.x *= 0.5
 			movement.y *= 0.25
 			sfx[17].play()
@@ -589,7 +610,7 @@ func _physics_process(delta):
 		# Exit water
 		if global_position.y < Global.waterLevel and water:
 			water = false
-			switch_physics(lastPhysicsState,false)
+			switch_physics(false)
 			movement.y *= 2
 			sfx[17].play()
 			var splash = Particle.instance()
@@ -599,6 +620,35 @@ func _physics_process(delta):
 			get_parent().add_child(splash)
 			
 
+# Input buttons
+func set_inputs():
+	# player control inputs
+	if playerControl == 0 or playerControl == 2:
+		if partnerControlTime <= 0 and playerControl == 2:
+			playerControl = 0
+		
+		for i in inputActions.size():
+			# 0 and 1 in inputActions are arrays
+			if i <= 1:
+				if !Input.is_action_just_pressed(inputActions[i][0]) and !Input.is_action_just_pressed(inputActions[i][1]):
+					break
+			# rest are inputs
+			elif !Input.is_action_just_pressed(inputActions[i]):
+				break
+			# if none of the button checks fail, give the player control
+			playerControl = 2
+			partnerControlTime = DEFAULT_PLAYER2_CONTROL_TIME
+		
+	
+	if playerControl > 0:
+		inputs[INPUTS.ACTION] = (int(Input.is_action_pressed(inputActions[INPUTS.ACTION]))*2)-int(Input.is_action_just_pressed(inputActions[INPUTS.ACTION]))
+		inputs[INPUTS.SUPER] =  (int(Input.is_action_pressed(inputActions[INPUTS.SUPER]))*2)-int(Input.is_action_just_pressed(inputActions[INPUTS.SUPER]))
+	
+	if (playerControl > 0 and horizontalLockTimer <= 0):
+		inputs[INPUTS.XINPUT] = -int(Input.is_action_pressed(inputActions[INPUTS.XINPUT][0]))+int(Input.is_action_pressed(inputActions[INPUTS.XINPUT][1]))
+		inputs[INPUTS.YINPUT] = -int(Input.is_action_pressed(inputActions[INPUTS.YINPUT][0]))+int(Input.is_action_pressed(inputActions[INPUTS.YINPUT][1]))
+	
+
 func set_state(newState, forceMask = Vector2.ZERO):
 	for i in stateList:
 		i.set_process(i == stateList[newState])
@@ -606,11 +656,13 @@ func set_state(newState, forceMask = Vector2.ZERO):
 		i.set_process_input(i == stateList[newState])
 	
 	if currentState != newState:
-		if stateList[currentState].has_method("state_exit"):
-			stateList[currentState].state_exit()
+		var lastState = currentState
+		currentState = newState
+		if stateList[lastState].has_method("state_exit"):
+			stateList[lastState].state_exit()
+		
 		if stateList[newState].has_method("state_activated"):
 			stateList[newState].state_activated()
-		currentState = newState
 	
 	var shapeChangeCheck = $HitBox.shape.extents
 	var forcePoseChange = Vector2.ZERO
@@ -651,7 +703,7 @@ func set_state(newState, forceMask = Vector2.ZERO):
 
 # set shields
 func set_shield(shieldID):
-	magnetShape.shape.radius = 0
+	magnetShape.disabled = true
 	shield = shieldID
 	shieldSprite.visible = !super
 	match (shield):
@@ -661,7 +713,7 @@ func set_shield(shieldID):
 		SHIELDS.ELEC:
 			shieldSprite.play("Elec")
 			sfx[10].play()
-			magnetShape.shape.radius = 64
+			magnetShape.disabled = false
 		SHIELDS.FIRE:
 			shieldSprite.play("Fire")
 			sfx[11].play()
@@ -681,7 +733,7 @@ func action_jump(animation = "roll", airJumpControl = true):
 
 
 func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
-	if (currentState != STATES.HIT and invTime <= 0 and supTime <= 0 and shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled):
+	if (currentState != STATES.HIT and invTime <= 0 and supTime <= 0 and (shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled or character != CHARACTERS.SONIC)):
 		movement.x = sign(global_position.x-damagePoint.x)*2*60
 		movement.y = -4*60
 		if (movement.x == 0):
@@ -762,7 +814,7 @@ func respawn():
 	z_index = defaultZIndex
 	respawnTime = RESPAWN_DEFAULT_TIME
 	movement = Vector2.ZERO
-	global_position = partner.global_position+Vector2(0,-128)
+	global_position = partner.global_position+Vector2(0,-get_viewport_rect().size.y)
 	set_state(STATES.RESPAWN)
 
 
@@ -803,10 +855,30 @@ func _on_PlayerAnimation_animation_started(anim_name):
 		sprite.offset = Vector2(0,-4)
 		animator.advance(0)
 
-func switch_physics(physicsRide = -1, isWater = water):
-	var getList = physicsList[max(0,physicsRide)]
+# return the physics id variable, see physicsList array for reference
+func determine_physics():
+	# get physics from character
+	match (character):
+		CHARACTERS.SONIC:
+			if super:
+				return 4 # Super Sonic
+			elif shoeTime > 0:
+				return 3 # Shoes
+			return 0 # Sonic
+		CHARACTERS.TAILS:
+			if super:
+				return 4 # Super Sonic
+			elif shoeTime > 0:
+				return 3 # Shoes
+			return 1 # Tails
+	
+	return -1
+
+func switch_physics(isWater = water):
+	var physicsID = determine_physics()
+	var getList = physicsList[max(0,physicsID)]
 	if isWater:
-		getList = waterPhysicsList[max(0,physicsRide)]
+		getList = waterPhysicsList[max(0,physicsID)]
 	acc = getList[0]
 	dec = getList[1]
 	frc = getList[2]
@@ -817,8 +889,6 @@ func switch_physics(physicsRide = -1, isWater = water):
 	grv = getList[7]
 	jmp = getList[8]
 	releaseJmp = getList[9]
-	if physicsRide >= 0:
-		lastPhysicsState = physicsRide
 
 
 
@@ -872,10 +942,10 @@ func lock_camera(time = 1):
 	camLockTime = max(time,camLockTime)
 
 func snap_camera_to_limits():
-	camera.limit_left = limitLeft
-	camera.limit_right = limitRight
-	camera.limit_top = limitTop
-	camera.limit_bottom = limitBottom
+	camera.limit_left = max(limitLeft,Global.hardBorderLeft)
+	camera.limit_right = min(limitRight,Global.hardBorderRight)
+	camera.limit_top = max(limitTop,Global.hardBorderTop)
+	camera.limit_bottom = min(limitBottom,Global.hardBorderBottom)
 
 # Water bubble timer
 func _on_BubbleTimer_timeout():

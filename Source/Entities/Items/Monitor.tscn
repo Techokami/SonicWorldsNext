@@ -5,7 +5,7 @@
 [ext_resource path="res://Scripts/Objects/Monitor.gd" type="Script" id=3]
 [ext_resource path="res://Audio/SFX/Objects/DestroyObject.wav" type="AudioStream" id=4]
 [ext_resource path="res://Audio/SFX/Objects/RingStereo.wav" type="AudioStream" id=5]
-[ext_resource path="res://Shaders/SonicPalette.tres" type="Material" id=6]
+[ext_resource path="res://Shaders/PlayerPalette.tres" type="Material" id=6]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 15, 15 )

@@ -19,8 +19,8 @@ func _process(delta):
 		# Shield actions
 		if (parent.inputs[parent.INPUTS.ACTION] == 1 and !parent.abilityUsed and isJump):
 			# Super actions
-			if parent.super:
-				parent.abilityUsed = true # has to be set to true for drop dash
+			if parent.super and parent.character == parent.CHARACTERS.SONIC:
+				parent.abilityUsed = true # has to be set to true for drop dash (Sonic only)
 			# Normal actions
 			else:
 				match (parent.character):
@@ -95,7 +95,7 @@ func _physics_process(delta):
 		if !parent.inputs[parent.INPUTS.ACTION] and parent.movement.y < -4*60:
 			parent.movement.y = -4*60
 		# Drop dash
-		if parent.inputs[parent.INPUTS.ACTION] and parent.abilityUsed and (parent.shield == parent.SHIELDS.NONE or parent.shield == parent.SHIELDS.NORMAL):
+		if parent.inputs[parent.INPUTS.ACTION] and parent.abilityUsed and (parent.shield == parent.SHIELDS.NONE or parent.shield == parent.SHIELDS.NORMAL or parent.super):
 			if dropTimer < 1:
 				dropTimer += (delta/20)*60 # should be ready in the equivelent of 20 frames at 60FPS
 			else:

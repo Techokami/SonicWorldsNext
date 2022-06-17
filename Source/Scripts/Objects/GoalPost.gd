@@ -21,7 +21,7 @@ func _physics_process(delta):
 		Global.stageClearPhase = 1
 		yield($Animator,"animation_finished")
 		Global.stageClearPhase = 2
-		player.playerControl = 0
+		player.playerControl = -1
 		player.inputs[player.INPUTS.XINPUT] = 1
 		player.inputs[player.INPUTS.YINPUT] = 0
 		
