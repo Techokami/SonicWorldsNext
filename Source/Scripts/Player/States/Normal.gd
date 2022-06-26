@@ -8,16 +8,14 @@ var actionPressed = false
 
 func state_exit():
 	skid = false
-	parent.crouchBox.disabled = true
+	if parent.crouchBox:
+		parent.crouchBox.disabled = true
 	parent.get_node("HitBox").disabled = false
-
-#func _input(event):
-	#if (parent.playerControl != 0):
+	lookTimer = 0
 
 func _process(delta):
 
 	if parent.inputs[parent.INPUTS.ACTION] == 1:
-	#if (event.is_action_pressed(parent.INPUTACTIONS[parent.INPUTS.ACTION])):
 		if (parent.movement.x == 0 and parent.inputs[parent.INPUTS.YINPUT] > 0):
 			parent.animator.play("spinDash")
 			parent.sfx[2].play()
@@ -32,6 +30,8 @@ func _process(delta):
 			parent.spindashPower = 0
 			parent.set_state(parent.STATES.PEELOUT)
 		else:
+			# reset animations
+			parent.animator.play("RESET")
 			parent.action_jump()
 			parent.set_state(parent.STATES.JUMP)
 		return null
@@ -146,10 +146,11 @@ func _physics_process(delta):
 	if (abs(parent.movement.x) < parent.fall and calcAngle >= 45 and calcAngle <= 315):
 		if (round(calcAngle) >= 90 and round(calcAngle) <= 270):
 			parent.disconect_from_floor()
-			parent.ground = false
+			#parent.ground = false
 		else:
 			parent.horizontalLockTimer = 30.0/60.0
 		
+	# movement
 	if (parent.inputs[parent.INPUTS.XINPUT] != 0):
 		if (parent.movement.x*parent.inputs[parent.INPUTS.XINPUT] < parent.top):
 			if (sign(parent.movement.x) == parent.inputs[parent.INPUTS.XINPUT]):

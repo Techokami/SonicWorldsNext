@@ -360,5 +360,6 @@ func disconect_from_floor(force = false):
 		# convert velocity
 		movement = movement.rotated(angle)
 		angle = gravityAngle
+		ground = false
 		if (rotation != 0):
 			rotation = 0

@@ -40,6 +40,8 @@ func _on_BubbleCollect_body_entered(body):
 	if !body.ground and $Bubble.frame >= 6:
 		body.airTimer = body.defaultAirTime
 		body.sfx[23].play()
+		
+		body.set_state(body.STATES.AIR)
 		body.animator.play("air")
 		body.animator.queue("walk")
 		body.movement = Vector2.ZERO

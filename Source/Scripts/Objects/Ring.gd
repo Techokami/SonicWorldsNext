@@ -17,7 +17,7 @@ func _process(delta):
 		else:
 			queue_free()
 	if (player):
-		if (player.ringDisTime <= 0 && (player.invTime*Global.originalFPS <= 90 || scattered)):
+		if (player.ringDisTime <= 0 && (player.invTime*Global.originalFPS <= 90 || !scattered)):
 			z_index = 1
 			player.get_ring()
 			var part = Particle.instance()

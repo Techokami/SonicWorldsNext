@@ -36,12 +36,16 @@ func _ready():
 		$LevelCard/Banner/Zone.string = zone
 		$LevelCard/Banner/Act.frame = act-1
 		$LevelCard/Banner/Act.visible = (act > 0)
+		$LevelCard/CardPlayer.pause_mode = PAUSE_MODE_PROCESS
+		Global.musicParent.pause_mode = PAUSE_MODE_PROCESS
 		get_tree().paused = true
 		$LevelCard/CardPlayer.play("Start")
 		$LevelCard/CardMover.play("Slider")
 		yield($LevelCard/CardPlayer,"animation_finished")
 		$LevelCard/CardPlayer.play("End")
 		get_tree().paused = false
+		Global.musicParent.pause_mode = PAUSE_MODE_STOP
+		$LevelCard/CardPlayer.pause_mode = PAUSE_MODE_STOP
 		Global.emit_signal("stage_started")
 		yield($LevelCard/CardPlayer,"animation_finished")
 	else:
@@ -73,10 +77,11 @@ func _process(delta):
 	
 	if flashTimer < 0:
 		flashTimer = 0.1
-		if Global.players[focusPlayer].rings <= 0:
-			$Counters/Text/Rings.visible = !$Counters/Text/Rings.visible
-		else:
-			$Counters/Text/Rings.visible = false
+		if Global.players.size() > 0:
+			if Global.players[focusPlayer].rings <= 0:
+				$Counters/Text/Rings.visible = !$Counters/Text/Rings.visible
+			else:
+				$Counters/Text/Rings.visible = false
 		if Global.levelTime >= 60*9:
 			$Counters/Text/Time.visible = !$Counters/Text/Time.visible
 		else:

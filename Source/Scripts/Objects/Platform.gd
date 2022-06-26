@@ -40,7 +40,7 @@ func _process(delta):
 func _physics_process(delta):
 	if !Engine.is_editor_hint():
 		# Sync the position up to tween between the start and end point based on level time
-		var getPos = (endPosition*(cos((Global.levelTime*speed)+offset)*0.5+0.5))
+		var getPos = (endPosition*(cos((Global.globalTimer*speed)+offset)*0.5+0.5))
 		# set platform to rounded position to prevent jittering
 		if fallSpeed == 0:
 			$Platform.position = (getPos+Vector2(0,dropDistance)).round()
@@ -50,10 +50,6 @@ func _physics_process(delta):
 		
 		
 		# drop
-		if dropSlightly:
-			$Platform.set_collision_mask_bit(12,true)
-			doDrop = $Platform.test_move($Platform.global_transform,Vector2.UP)
-			$Platform.set_collision_mask_bit(12,false)
 		
 		if doDrop:
 			# if a player collision was detected then activate fall if fall timer greater then 0

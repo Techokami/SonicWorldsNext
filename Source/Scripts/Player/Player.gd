@@ -113,18 +113,20 @@ var currentState = STATES.NORMAL
 var crouchBox = null
 
 # Shield variables
-enum SHIELDS {NONE, NORMAL, ELEC, FIRE, BUBBLE}
+enum SHIELDS {NONE, NORMAL, FIRE, ELEC, BUBBLE}
 var shield = SHIELDS.NONE
 onready var magnetShape = $RingMagnet/CollisionShape2D
+onready var shieldSprite = $Shields
 
+# state array
 onready var stateList = $States.get_children()
 
+# animation related
 onready var animator = $Sprite/PlayerAnimation
 onready var sprite = $Sprite/Sprite
 onready var spriteControler = $Sprite
 var lastActiveAnimation = ""
 
-onready var shieldSprite = $Shields
 
 # Camera
 # onready var camera = get_node_or_null("Camera")
@@ -182,6 +184,7 @@ onready var sfx = $SFX.get_children()
 # Player values
 var shieldID = 0
 var rings = 0
+var ring1upCounter = 100
 
 # How far in can the player can be towards the screen edge before they're clamped
 var cameraMargin = 16
@@ -243,6 +246,7 @@ func _ready():
 	for i in Global.checkPoints:
 		if Global.currentCheckPoint == i.checkPointID:
 			global_position = i.global_position+Vector2(0,8)
+			camera.global_position = i.global_position+Vector2(0,8)
 	
 	
 	# Character settings
@@ -363,6 +367,7 @@ func _process(delta):
 				# Deactivate super
 				super = false
 				supTime = 0
+				rings = round(rings)
 				if character == CHARACTERS.SONIC:
 					sprite.texture = normalSprite
 				switch_physics()
@@ -398,13 +403,21 @@ func _process(delta):
 	if (ringDisTime > 0):
 		ringDisTime -= delta
 
+	# Rings 1up
+	if rings >= ring1upCounter:
+		ring1upCounter += 100
+		# award 1up
+		Global.life.play()
+		Global.lives += 1
+		Global.effectTheme.volume_db = -100
+		Global.music.volume_db = -100
 
 	#Rotating stars
 	if ($InvincibilityBarrier.visible):
 		var stars = $InvincibilityBarrier.get_children()
 		for i in stars:
 			i.position = i.position.rotated(deg2rad(360*delta*2))
-		if (fmod(Global.levelTime,0.1)+delta > 0.1):
+		if (fmod(Global.globalTimer,0.1)+delta > 0.1):
 			var star = RotatingParticle.instance()
 			var starPart = star.get_node("GenericParticle")
 			star.global_position = global_position
@@ -581,7 +594,8 @@ func _physics_process(delta):
 		# Death at border bottom
 		if global_position.y > limitBottom:
 			kill()
-		
+	
+	
 	
 	
 	# Stop movement at borders
@@ -600,6 +614,7 @@ func _physics_process(delta):
 			movement.y *= 0.25
 			sfx[17].play()
 			var splash = Particle.instance()
+			splash.behaviour = splash.TYPE.FOLLOW_WATER_SURFACE
 			splash.global_position = Vector2(global_position.x,Global.waterLevel-16)
 			splash.play("Splash")
 			splash.z_index = sprite.z_index+10
@@ -614,11 +629,29 @@ func _physics_process(delta):
 			movement.y *= 2
 			sfx[17].play()
 			var splash = Particle.instance()
+			splash.behaviour = splash.TYPE.FOLLOW_WATER_SURFACE
 			splash.global_position = Vector2(global_position.x,Global.waterLevel-16)
 			splash.play("Splash")
 			splash.z_index = sprite.z_index+10
 			get_parent().add_child(splash)
-			
+	
+	# Crusher test
+	#var maskMemory = collision_mask
+	var shapeMemory = $HitBox.shape.extents
+	
+	# Shrink hitbox to test collissions
+	$HitBox.shape.extents = Vector2(1,4)
+	
+	#collision_mask = 0
+	#set_collision_mask_bit(13,true)
+	
+	# do a test move, if a collision was found then kill the player
+	if test_move(global_transform,Vector2.ZERO):
+		kill()
+	#else:
+		# Restore hitbox
+	#	collision_mask = maskMemory
+	$HitBox.shape.extents = shapeMemory
 
 # Input buttons
 func set_inputs():
@@ -704,6 +737,10 @@ func set_state(newState, forceMask = Vector2.ZERO):
 # set shields
 func set_shield(shieldID):
 	magnetShape.disabled = true
+	# verify not in water and shield compatible
+	if water and (shieldID == SHIELDS.FIRE or shieldID == SHIELDS.ELEC):
+		return false
+	
 	shield = shieldID
 	shieldSprite.visible = !super
 	match (shield):
@@ -732,7 +769,10 @@ func action_jump(animation = "roll", airJumpControl = true):
 	set_state(STATES.JUMP)
 
 
+# see Global for damage types, 0 = none, 1 = Fire, 2 = Elec, 3 = Water
 func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
+	if damageType != 0 and shield == damageType+1:
+		return false
 	if (currentState != STATES.HIT and invTime <= 0 and supTime <= 0 and (shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled or character != CHARACTERS.SONIC)):
 		movement.x = sign(global_position.x-damagePoint.x)*2*60
 		movement.y = -4*60
@@ -740,7 +780,7 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 			movement.x = 2*60
 
 		disconect_from_floor()
-		ground = false
+		#ground = false
 		set_state(STATES.HIT)
 		invTime = 120
 		# Ring loss
@@ -786,6 +826,7 @@ func get_ring():
 		sfx[7+ringChannel].play()
 		sfx[7].play()
 		ringChannel = int(!ringChannel)
+		
 	elif partner != null:
 		partner.get_ring()
 	

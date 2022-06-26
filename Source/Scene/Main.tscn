@@ -92,23 +92,22 @@ pause_mode = 1
 
 [node name="TitleScreen" parent="SceneLoader" instance=ExtResource( 4 )]
 
-[node name="Music" type="AudioStreamPlayer" parent="."]
-pause_mode = 2
+[node name="Music" type="Node" parent="."]
+pause_mode = 1
+
+[node name="Music" type="AudioStreamPlayer" parent="Music"]
 autoplay = true
 bus = "Music"
 
-[node name="EffectTheme" type="AudioStreamPlayer" parent="."]
-pause_mode = 2
+[node name="EffectTheme" type="AudioStreamPlayer" parent="Music"]
 stream = ExtResource( 1 )
 bus = "Music"
 
-[node name="Downing" type="AudioStreamPlayer" parent="."]
-pause_mode = 2
+[node name="Downing" type="AudioStreamPlayer" parent="Music"]
 stream = ExtResource( 5 )
 bus = "Music"
 
-[node name="Life" type="AudioStreamPlayer" parent="."]
-pause_mode = 2
+[node name="Life" type="AudioStreamPlayer" parent="Music"]
 stream = ExtResource( 3 )
 bus = "Music"
 
@@ -128,4 +127,4 @@ anims/RESET = SubResource( 3 )
 anims/SetAdd = SubResource( 4 )
 anims/SetSub = SubResource( 5 )
 
-[connection signal="finished" from="Life" to="." method="_on_Life_finished"]
+[connection signal="finished" from="Music/Life" to="." method="_on_Life_finished"]

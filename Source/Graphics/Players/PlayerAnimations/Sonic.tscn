@@ -69,6 +69,7 @@ tracks/4/keys = {
 
 [sub_resource type="Animation" id=108]
 resource_name = "air"
+length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite/Sprite:frame")
 tracks/0/interp = 1
@@ -114,30 +115,6 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 54, 53, 52, 51, 50, 49, 48, 59, 58, 57, 56, 55, 54 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("Sprite/Sprite:offset")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 0, 4 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Sprite/Sprite:flip_v")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ true ]
 }
 
 [sub_resource type="Animation" id=77]

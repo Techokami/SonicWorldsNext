@@ -4,19 +4,18 @@ func _process(delta):
 	if parent.inputs[parent.INPUTS.ACTION] == 1:
 		parent.action_jump()
 		parent.set_state(parent.STATES.JUMP)
+	
+	if parent.animator.current_animation == "corkScrewOffset":
+		parent.sprite.flip_v = true
+		parent.sprite.offset.y = 4
+	
 
 func _physics_process(delta):
 	# gravity
 	parent.movement.y += parent.grv/delta
 	
 	parent.sprite.flip_h = (parent.direction < 0)
-		
-	#var calcAngle = rad2deg(parent.angle.angle())+90
-	var calcAngle = wrapf(rad2deg(parent.angle),0,360)
-	if (calcAngle < 0):
-		calcAngle += 360
 	
-		
 	if (parent.inputs[parent.INPUTS.XINPUT] != 0):
 		if (parent.movement.x*parent.inputs[parent.INPUTS.XINPUT] < parent.top):
 			if (sign(parent.movement.x) == parent.inputs[parent.INPUTS.XINPUT]):

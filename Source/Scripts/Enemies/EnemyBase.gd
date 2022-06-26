@@ -1,54 +1,70 @@
 class_name EnemyBase extends KinematicBody2D
 
-export var damageType = 0
+export (int, "Normal", "Fire", "Elec", "Water") var damageType = 0
 var playerHit = []
 
 var velocity = Vector2.ZERO
 var Explosion = preload("res://Entities/Misc/BadnickSmoke.tscn")
 var Animal = preload("res://Entities/Misc/Animal.tscn")
-
+var forceDamage = false
 
 func _process(delta):
+	# checks if player hit has players inside
 	if (playerHit.size() > 0):
+		# loop through players as i
 		for i in playerHit:
-			if (i.get_collision_layer_bit(19) || i.supTime > 0):
-				if (i.movement.y < 0 || i.global_position.y > global_position.y):
+			# check if damage entity is on or supertime is bigger then 0
+			if (i.get_collision_layer_bit(19) or i.supTime > 0 or forceDamage):
+				# subtract from velocity if velocity is less then 0 or below enemy
+				if (i.movement.y < 0 or i.global_position.y > global_position.y):
 					i.movement.y -= 60*sign(i.velocity.y)
 				else:
+				# reverse vertical velocity
 					i.movement.y = -i.velocity.y
+				# destroy
 				Global.score(global_position,Global.SCORE_COMBO[min(Global.SCORE_COMBO.size()-1,i.enemyCounter)])
 				i.enemyCounter += 1
 				destroy()
+				# cut the script short
 				return false
+			# if destroying the enemy fails and hit player exists then hit player
 			if (i.has_method("hit_player")):
 				i.hit_player(global_position,damageType)
+	# move
 	translate(velocity*delta)
 
 func _on_body_entered(body):
+	# add to player list
 	if (!playerHit.has(body)):
 		playerHit.append(body)
 
 
 func _on_body_exited(body):
+	# remove from player list
 	if (playerHit.has(body)):
 		playerHit.erase(body)
 
 func _on_DamageArea_area_entered(area):
+	# damage checking
 	if area.get("parent") != null and area.get_collision_layer_bit(19):
 		if !playerHit.has(area.parent):
+			forceDamage = true
 			playerHit.append(area.parent)
 
 func destroy():
+	# create explosion
 	var explosion = Explosion.instance()
 	get_parent().add_child(explosion)
 	explosion.global_position = global_position
+	# create animal
 	var animal = Animal.instance()
 	get_parent().add_child(animal)
 	animal.global_position = global_position
+	# free node
 	queue_free()
 
-func _on_InstaArea_area_entered(area):
-	Global.score(global_position,Global.SCORE_COMBO[0])
-	destroy()
+#func _on_InstaArea_area_entered(area):
+#	Global.score(global_position,Global.SCORE_COMBO[0])
+#	destroy()
 
 

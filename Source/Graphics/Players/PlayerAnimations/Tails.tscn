@@ -83,6 +83,7 @@ tracks/5/keys = {
 
 [sub_resource type="Animation" id=121]
 resource_name = "air"
+length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite/Sprite:frame")
 tracks/0/interp = 1
@@ -467,8 +468,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id=84]
 resource_name = "spring"
-length = 0.2
-loop = true
+length = 0.783
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite/Sprite:frame")
 tracks/0/interp = 1
@@ -476,10 +476,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 73, 74 ]
+"values": [ 73, 74, 73, 74, 73, 74, 73, 74 ]
 }
 
 [sub_resource type="Animation" id=97]
@@ -985,13 +985,12 @@ texture = ExtResource( 2 )
 offset = Vector2( 0, -4 )
 hframes = 16
 vframes = 16
-frame = 66
 script = ExtResource( 5 )
 
 [node name="DashDust" type="AnimatedSprite" parent="Sprite"]
 visible = false
 frames = SubResource( 96 )
-frame = 6
+frame = 4
 playing = true
 offset = Vector2( -9, -4 )
 

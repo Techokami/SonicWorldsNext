@@ -13,23 +13,25 @@ var sceneCanPause = false
 
 func _ready():
 	Global.main = self
-	Global.music = $Music
-	Global.effectTheme = $EffectTheme
-	Global.drowning = $Downing
-	Global.life = $Life
+	Global.musicParent = $Music
+	Global.music = $Music/Music
+	Global.effectTheme = $Music/EffectTheme
+	Global.drowning = $Music/Downing
+	Global.life = $Music/Life
 	Global.reset_values()
 	# give game a frame wait time to ensure the game loads first
 	yield(get_tree(),"idle_frame")
 
 func _process(delta):
-	Global.music.stream_paused = Global.effectTheme.playing or Global.drowning.playing
-	Global.effectTheme.stream_paused = Global.drowning.playing
+	if !get_tree().paused:
+		Global.music.stream_paused = Global.effectTheme.playing or Global.drowning.playing
+		Global.effectTheme.stream_paused = Global.drowning.playing
 	
-	if volumeLerp < 1:
-		volumeLerp = clamp(volumeLerp+delta,0,1)
-		Global.music.volume_db = lerp(startVolumeLevel,setVolumeLevel,volumeLerp)
-		Global.effectTheme.volume_db = Global.music.volume_db
-		Global.drowning.volume_db = Global.music.volume_db
+		if volumeLerp < 1:
+			volumeLerp = clamp(volumeLerp+delta,0,1)
+			Global.music.volume_db = lerp(startVolumeLevel,setVolumeLevel,volumeLerp)
+			Global.effectTheme.volume_db = Global.music.volume_db
+			Global.drowning.volume_db = Global.music.volume_db
 
 func _input(event):
 	# Pausing
@@ -38,9 +40,12 @@ func _input(event):
 			wasPaused = false
 		
 		if !wasPaused and !get_tree().paused:
+			# Do the pause
 			wasPaused = true
 			get_tree().paused = true
+			
 		elif wasPaused and get_tree().paused:
+			# Do the unpause
 			get_tree().paused = false
 
 
@@ -60,11 +65,13 @@ func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", l
 		i.queue_free()
 	# Error prevention
 	emit_signal("scene_faded")
+	yield(get_tree(),"idle_frame")
 	Global.players = []
 	Global.checkPoints = []
 	if Global.stageClearPhase != 0:
 		Global.currentCheckPoint = -1
 		Global.levelTime = 0
+	Global.globalTimer = 0
 	Global.stageClearPhase = 0
 	Global.waterLevel = null
 	Global.gameOver = false

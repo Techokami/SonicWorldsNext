@@ -17,6 +17,7 @@ var stageClearPhase = 0
 var gameOver = false
 
 # Music
+var musicParent = null
 var music = null
 var effectTheme = null
 var drowning = null
@@ -31,10 +32,13 @@ var soundChannel = AudioStreamPlayer.new()
 var score = 0
 var lives = 3
 var continues = 0
-var levelTime = 0
+var levelTime = 0 # the timer that counts down while the level isn't completed
+var globalTimer = 0 # global timer, used as reference for animations
 var maxTime = 60*10
 
 var waterLevel = null
+var setWaterLevel = 0 # used by other nodes
+var waterScrollSpeed = 64 # used by other nodes
 
 enum CHARACTERS {NONE,SONIC,TAILS}
 var PlayerChar1 = CHARACTERS.SONIC
@@ -56,9 +60,11 @@ func _ready():
 	soundChannel.bus = "SFX"
 
 func _process(delta):
-	originalFPS = 60*Engine.time_scale
+	originalFPS = 60#*Engine.time_scale
 	if stageClearPhase == 0 && !gameOver && !get_tree().paused:
 		levelTime += delta
+	if !get_tree().paused:
+		globalTimer += delta
 	
 
 func reset_values():
@@ -84,3 +90,4 @@ func stage_clear():
 	if stageClearPhase == 0:
 		music.stream = themes[2]
 		music.play()
+		effectTheme.stop()

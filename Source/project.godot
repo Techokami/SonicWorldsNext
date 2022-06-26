@@ -15,12 +15,18 @@ _global_script_classes=[ {
 "path": "res://Scripts/Enemies/EnemyBase.gd"
 }, {
 "base": "KinematicBody2D",
+"class": "EnemyProjectileBase",
+"language": "GDScript",
+"path": "res://Scripts/Enemies/EnemyProjectileBase.gd"
+}, {
+"base": "KinematicBody2D",
 "class": "PhysicsObject",
 "language": "GDScript",
 "path": "res://Scripts/Objects/PhysicsObject.gd"
 } ]
 _global_script_class_icons={
 "EnemyBase": "",
+"EnemyProjectileBase": "",
 "PhysicsObject": ""
 }
 

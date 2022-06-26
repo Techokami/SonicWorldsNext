@@ -37,7 +37,7 @@ func _process(delta):
 func _physics_process(delta):
 	if(!Engine.editor_hint): # Do all of the platform code if not in the editor
 		# Calculate direction for the platform
-		var direction = Vector2.DOWN.rotated(-deg2rad(sin(deg2rad(fmod(Global.levelTime * 60 * speed * dir,360))) * rotate_amount))
+		var direction = Vector2.DOWN.rotated(-deg2rad(sin(deg2rad(fmod(Global.globalTimer * 60 * speed * dir,360))) * rotate_amount))
 		# Calculate the position of the platform, using the variable we got from the chains.
 		var distance = chains * chain_size + (chain_size / 2)
 		platform.position = (direction * distance).round()

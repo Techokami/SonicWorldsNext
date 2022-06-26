@@ -1,17 +1,13 @@
 needed changes
-- corkscrewloops funky collisions
-- game reset on game over
 - fix pipe shooting offset
-- add force angle clip entity
 - make partner ai go right on stage clear too
 - proper timer reset on checkpoints
 - fix respawn clipping on partner respawn
-- shield protection element types (bounce projectiles off shields, regular doesn't protect)
-- element immunity (fire resistance, electric resistance)
 - code panic mode for ai
-- fix invincibility stars on level clear
-- fix music looping on level clear
 - stop animations on pause
+- make jumping, rotate the hitbox immediately
+- fix chomper activation range
+- fix edge wobble on slope ramps
 
 minor changes
 - tails carry
@@ -23,6 +19,29 @@ minor changes
 - fix pipe travel offsets
 - delete unused and redundant code
 - rebindable controls
+- make water electrify when elec shield goes under water
+- fix bridges dropping when player not on floor
+- make screen clear when elec shield enters water
 
 probably needs more testing
 - tails flying sounds not stopping (tends to happen when a state change happens)
+
+Completed
+
+- collission objects, bug fixes and tweaks
+- fix music looping on level clear
+- shield protection element types (bounce projectiles off shields, regular doesn't protect)
+- fix invincibility stars on level clear
+- fixed offsets on gimmicks nodes (for some reason source node was rotated and caused gimmicks to be slightly offset on a tilt)
+- fixed a soft lock where super would cause you to fly off
+- fix bubble grab stuff
+- fixed tails animation loops for spring and bubble grab
+- make insta shield reflect projectiles
+- crush mechanics
+- corkscrewloops funky collisions
+- 1up for 100 rings
+- fixed camera on checkpoints
+- made water level area only affect player
+- fix camera panning looking up and down
+- fix game reset on game over
+- add force angle clip entity

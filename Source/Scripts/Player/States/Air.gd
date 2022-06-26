@@ -13,7 +13,7 @@ var dropTimer = 0
 func _process(delta):
 	if parent.playerControl != 0 or (parent.inputs[parent.INPUTS.YINPUT] < 0 and parent.character == parent.CHARACTERS.TAILS):
 		# Super
-		if parent.inputs[parent.INPUTS.SUPER] == 1:
+		if parent.inputs[parent.INPUTS.SUPER] == 1 and !parent.super and isJump:
 			if parent.rings >= 50:
 				parent.set_state(parent.STATES.SUPER)
 		# Shield actions
@@ -94,19 +94,21 @@ func _physics_process(delta):
 		# Cut vertical movement if jump released
 		if !parent.inputs[parent.INPUTS.ACTION] and parent.movement.y < -4*60:
 			parent.movement.y = -4*60
-		# Drop dash
-		if parent.inputs[parent.INPUTS.ACTION] and parent.abilityUsed and (parent.shield == parent.SHIELDS.NONE or parent.shield == parent.SHIELDS.NORMAL or parent.super):
-			if dropTimer < 1:
-				dropTimer += (delta/20)*60 # should be ready in the equivelent of 20 frames at 60FPS
-			else:
-				if parent.animator.current_animation != "dropDash":
-					parent.sfx[20].play()
-					parent.animator.play("dropDash")
-		# Drop dash reset
-		elif !parent.inputs[parent.INPUTS.ACTION] and dropTimer > 0:
-			dropTimer = 0
-			if parent.animator.current_animation == "dropDash":
-				parent.animator.play("roll")
+		# Drop dash (for sonic)
+		if parent.character == parent.CHARACTERS.SONIC:
+			
+			if parent.inputs[parent.INPUTS.ACTION] and parent.abilityUsed and (parent.shield <= parent.SHIELDS.NORMAL or parent.super):
+				if dropTimer < 1:
+					dropTimer += (delta/20)*60 # should be ready in the equivelent of 20 frames at 60FPS
+				else:
+					if parent.animator.current_animation != "dropDash":
+						parent.sfx[20].play()
+						parent.animator.play("dropDash")
+			# Drop dash reset
+			elif !parent.inputs[parent.INPUTS.ACTION] and dropTimer > 0:
+				dropTimer = 0
+				if parent.animator.current_animation == "dropDash":
+					parent.animator.play("roll")
 	
 		
 	# Change parent direction
@@ -134,9 +136,13 @@ func _physics_process(delta):
 				if getTimer != null:
 					getTimer.start(0.15)
 		else:
+			# reset animations (this is for shared animations like the corkscrews)
+			parent.animator.play("RESET")
+			# return to normal state
 			parent.set_state(parent.STATES.NORMAL)
-			# Drop dash release
-			if dropTimer >= 1:
+			
+			# Drop dash release (for sonic)
+			if dropTimer >= 1 and parent.character == parent.CHARACTERS.SONIC:
 				# Check if moving forward or back
 				# Forward landing
 				if sign(parent.movement.x) == sign(parent.direction) or parent.movement.x == 0:

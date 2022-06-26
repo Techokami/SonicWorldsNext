@@ -16,8 +16,10 @@ func _ready():
 	update_graphics()
 
 func _process(delta):
-	if(Engine.editor_hint):
+	if Engine.editor_hint:
 		update_graphics()
+	else:
+		$LavaTile.region_rect.position.x = cos(Global.globalTimer/2)*128
 	
 	# Animation
 	var frameUpdate = (floor(frame+delta*animSpeed) != floor(frame))
@@ -31,9 +33,9 @@ func _process(delta):
 func update_graphics():
 	size.x = max(size.x,1)
 	size.y = max(size.y,8)
-	$LavaTile.region_rect.size = size+Vector2(0,-8)
+	$Collision/CollisionShape2D.shape.extents = Vector2(size.x-1,size.y-1)/2
+	$LavaTile.region_rect.size = size
 	$LavaTop.region_rect.size.x = size.x
 	$LavaTop.position.y = -round(size.y/2)
 	$CollisionShape2D.scale = size/32
-	$Collision/CollisionShape2D.scale = $CollisionShape2D.scale
-	
+	#$Collision/CollisionShape2D.scale = $CollisionShape2D.scale

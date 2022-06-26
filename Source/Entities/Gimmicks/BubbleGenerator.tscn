@@ -35,3 +35,5 @@ playing = true
 [node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
 position = Vector2( 0, -51 )
 scale = Vector2( 1, 6.1 )
+process_parent = true
+physics_process_parent = true
