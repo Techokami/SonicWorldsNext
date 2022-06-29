@@ -1,17 +1,10 @@
 needed changes
-- fix pipe shooting offset
-- make partner ai go right on stage clear too
-- proper timer reset on checkpoints
-- fix respawn clipping on partner respawn
 - code panic mode for ai
 - stop animations on pause
-- make jumping, rotate the hitbox immediately
-- fix chomper activation range
-- fix edge wobble on slope ramps
 
 minor changes
 - tails carry
-- idle animations
+- complete idle animations
 - edge wobble on objects
 - knuckles
 - spindash on top of breakable objects
@@ -28,6 +21,27 @@ probably needs more testing
 
 Completed
 
+29-06 - fixes
+- swapped ring animations to animated sprites instead of a texture (this stops it animating on pause)
+- made zoom tubes not play sound if already zooming (intersections)
+- fixed spindash and peelout having no gravity
+- fix pipe shooting offset
+- fix spindashing on top of monitors
+- stop rings being magnetized if player isn't elec shielded
+- fix edge wobble on slope ramps
+- fix camera not stopping on spin dash, drop dash and fire shield
+- fix respawn clipping on partner respawn
+- added classic toggle for orbinaut, now you can switch it to the launch base version
+- put the sonic origins sonic 3 drop dash sprites in
+- fix chomper activation range
+- proper timer reset on checkpoints
+- make jumping, rotate the hitbox immediately
+- added shutters
+- make partner ai go right on stage clear too
+- made corkscrew easier to get on
+
+
+- polish push -
 - collission objects, bug fixes and tweaks
 - fix music looping on level clear
 - shield protection element types (bounce projectiles off shields, regular doesn't protect)

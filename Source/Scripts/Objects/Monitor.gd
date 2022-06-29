@@ -68,15 +68,16 @@ func destroy():
 			Global.music.volume_db = -100
 
 func _physics_process(delta):
-	if (!Engine.is_editor_hint()):
-		if (physics):
+	if !Engine.is_editor_hint():
+		if physics:
 			var collide = move_and_collide(Vector2(0,yspeed)*delta)
 			yspeed += grv/delta
-			if (collide and yspeed > 0):
+			if collide and yspeed > 0:
 				physics = false
 
 func physics_collision(body, hitVector):
-	if (body.get_collision_layer_bit(19)):
+	if body.get_collision_layer_bit(19) and body.currentState != body.STATES.SPINDASH:
+		# Bounce from below
 		if hitVector.y < 0:
 			body.movement.y *= -1
 			yspeed = -1.5*60
@@ -88,7 +89,7 @@ func physics_collision(body, hitVector):
 			else:
 				# Stop horizontal movement
 				body.movement.x = 0
-		# check player has vertical momentum
+		# check player is moving verticaly
 		elif body.playerControl == 1:
 			body.movement.y = -abs(body.movement.y)
 			body.ground = false

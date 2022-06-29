@@ -28,7 +28,7 @@ shape = SubResource( 1 )
 texture = ExtResource( 2 )
 hframes = 2
 
-[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="Chomper"]
+[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
 position = Vector2( -1.90735e-06, -132 )
 scale = Vector2( 3.2, 15.6 )
 process_parent = true
@@ -37,3 +37,5 @@ physics_process_parent = true
 [connection signal="area_entered" from="Chomper/DamageArea" to="Chomper" method="_on_DamageArea_area_entered"]
 [connection signal="body_entered" from="Chomper/DamageArea" to="Chomper" method="_on_body_entered"]
 [connection signal="body_exited" from="Chomper/DamageArea" to="Chomper" method="_on_body_exited"]
+[connection signal="screen_entered" from="VisibilityEnabler2D" to="Chomper" method="_on_VisibilityEnabler2D_screen_entered"]
+[connection signal="screen_exited" from="VisibilityEnabler2D" to="Chomper" method="_on_VisibilityEnabler2D_screen_exited"]

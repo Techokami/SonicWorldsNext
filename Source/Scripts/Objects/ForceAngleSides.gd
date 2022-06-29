@@ -6,6 +6,7 @@ export(float, -90, 90) var rightAngle
 export var stickUntilExit = true
 
 export(float, -90, 90) var maxAngleDifference = 15
+export var speedRange = 2
 var dropOff = 24
 
 var players = []
@@ -21,7 +22,7 @@ func _physics_process(delta):
 		for i in players:
 			var getIndex = players.find(i)
 			
-			if i.ground:
+			if i.ground and contactPoint[getIndex] != null and abs(i.movement.x) >= speedRange*60:
 				var PrevAngle = i.angle
 				
 				if contactPoint[getIndex] < 0:
@@ -33,9 +34,12 @@ func _physics_process(delta):
 				if abs(i.angle-PrevAngle) >= deg2rad(maxAngleDifference) and abs(i.global_position.x-global_position.x) < dropOff:
 					i.disconect_from_floor()
 			else:
-				# set contact point to player position
-				contactPoint[getIndex] = i.global_position.x - global_position.x
-			
+				# set contact point to player floor sensor position
+				var getVert = i.get_nearest_vertical_sensor()
+				if getVert != null:
+					contactPoint[getIndex] = getVert.get_collision_point().x - global_position.x
+				else:
+					contactPoint[getIndex] = null
 			
 			
 
@@ -51,7 +55,12 @@ func _on_ForceAngleSides_body_entered(body):
 	if !players.has(body):
 		players.append(body)
 		contactPoint.resize(players.size())
-		contactPoint[players.size()-1] = body.global_position.x - global_position.x
+		# set contact point to player floor sensor position
+		var getVert = body.get_nearest_vertical_sensor()
+		if getVert != null:
+			contactPoint[players.size()-1] = getVert.get_collision_point().x - global_position.x
+		else:
+			contactPoint[players.size()-1] = null
 
 
 func _on_ForceAngleSides_body_exited(body):

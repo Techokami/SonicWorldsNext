@@ -34,7 +34,7 @@ var gravityAngle = 0
 # the collission layer, 0 for low, 1 for high
 var collissionLayer = 0
 
-# translate, ignore physics
+# translate, (ignores physics)
 var translate = false
 
 # Vertical sensor reference
@@ -284,7 +284,6 @@ func _physics_process(delta):
 		
 		# move in place to make sure the player doesn't clip into objects
 		set_collision_mask_bit(16,true)
-		#move_and_slide(Vector2.ZERO,Vector2.UP.rotated(gravityAngle))
 		move_and_collide(Vector2.ZERO)
 		
 		var dirList = [Vector2.DOWN,Vector2.LEFT,Vector2.RIGHT,Vector2.UP]

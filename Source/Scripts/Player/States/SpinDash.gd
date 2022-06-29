@@ -53,3 +53,8 @@ func _process(delta):
 		parent.animator.play("roll")
 	parent.spindashPower -= ((parent.spindashPower / 0.125) / (256))*60*delta
 		
+
+func _physics_process(delta):
+	# Gravity
+	if !parent.ground:
+		parent.movement.y += parent.grv/delta

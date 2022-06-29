@@ -6,6 +6,7 @@ var main = null
 var hud = null
 var checkPoints = []
 var currentCheckPoint = -1
+var checkPointTime = 0
 
 var startScene = preload("res://Scene/Title.tscn")
 var nextZone = preload("res://Scene/Zones/BaseZone.tscn")
@@ -73,6 +74,7 @@ func reset_values():
 	continues = 0
 	levelTime = 0
 	checkPoints = []
+	checkPointTime = 0
 	nextZone = load("res://Scene/Zones/BaseZone.tscn")
 
 func play_sound(sound = null):

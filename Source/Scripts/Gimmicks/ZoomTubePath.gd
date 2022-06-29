@@ -51,6 +51,8 @@ func _on_hitbox_enter(body):
 		var rng = rand_range(0,100)
 		# run a random chance of a path split, or just continue if it is not a split
 		if (rng <= splitChance || !split):
+			if body.currentState != body.STATES.ANIMATION:
+				body.sfx[1].play()
 			body.set_state(body.STATES.ANIMATION,Vector2(2,2))
 			var animatorNode = body.stateList[body.STATES.ANIMATION]
 			animatorNode.pipe = self
@@ -60,4 +62,3 @@ func _on_hitbox_enter(body):
 			body.groundSpeed = 60*4
 			body.global_position = global_position+get_point_position(0)
 			body.movement = Vector2.ZERO
-			body.sfx[1].play()

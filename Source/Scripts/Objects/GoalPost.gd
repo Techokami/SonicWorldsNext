@@ -24,6 +24,10 @@ func _physics_process(delta):
 		player.playerControl = -1
 		player.inputs[player.INPUTS.XINPUT] = 1
 		player.inputs[player.INPUTS.YINPUT] = 0
+		# make partner move too
+		if player.get("partner") != null:
+			player.partner.inputs[player.INPUTS.XINPUT] = 1
+			player.partner.inputs[player.INPUTS.YINPUT] = 0
 		
 	if Global.stageClearPhase != 0:
 		if getCam:

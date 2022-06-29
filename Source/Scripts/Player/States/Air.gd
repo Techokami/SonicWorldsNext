@@ -168,7 +168,7 @@ func _physics_process(delta):
 				# drop dash dust
 				var dust = parent.Particle.instance()
 				dust.play("DropDash")
-				dust.global_position = parent.global_position
+				dust.global_position = parent.global_position+Vector2(0,2).rotated(parent.rotation)
 				dust.scale.x = parent.direction
 				parent.get_parent().add_child(dust)
 					

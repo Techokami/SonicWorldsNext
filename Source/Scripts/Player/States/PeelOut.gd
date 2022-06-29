@@ -12,11 +12,8 @@ func _process(delta):
 	
 	
 	parent.spindashPower = min(parent.spindashPower+delta*24,dashPower)
-	
-	# Lock camera
-	parent.lock_camera((parent.spindashPower+4)/60.0)
-	
 	parent.groundSpeed = speedCalc
+	
 	
 	if(speedCalc < 6*60):
 		parent.animator.play("walk")
@@ -26,16 +23,23 @@ func _process(delta):
 		parent.animator.play("peelOut")
 	
 	var duration = floor(max(0,8.0-abs(parent.groundSpeed/60)))
+		
 	
-#	match(parent.animator.current_animation):
-#		"walk":
-#			duration = floor(max(0,10.0-abs(parent.groundSpeed/60)))
 	
 	parent.animator.playback_speed = (1.0/(duration+1))*(60/10)
 
 	# release
 	if (parent.inputs[parent.INPUTS.YINPUT] >= 0):
+		# Lock camera
+		parent.lock_camera((parent.spindashPower+4)/60.0)
+		
+		# Release
 		parent.movement.x = speedCalc*parent.direction
 		parent.sfx[3].play()
 		parent.sfx[2].stop()
 		parent.set_state(parent.STATES.NORMAL)
+
+func _physics_process(delta):
+	# Gravity
+	if !parent.ground:
+		parent.movement.y += parent.grv/delta

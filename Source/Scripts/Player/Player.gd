@@ -247,6 +247,7 @@ func _ready():
 		if Global.currentCheckPoint == i.checkPointID:
 			global_position = i.global_position+Vector2(0,8)
 			camera.global_position = i.global_position+Vector2(0,8)
+			Global.levelTime = Global.checkPointTime
 	
 	
 	# Character settings
@@ -393,7 +394,8 @@ func _process(delta):
 				#Global.music.stream_paused = false
 				Global.music.play()
 				Global.effectTheme.stop()
-
+	
+	# Invulnerability timer
 	if (invTime > 0 and currentState != STATES.HIT and currentState != STATES.DIE):
 		visible = !visible
 		invTime -= delta*60
@@ -636,22 +638,18 @@ func _physics_process(delta):
 			get_parent().add_child(splash)
 	
 	# Crusher test
-	#var maskMemory = collision_mask
-	var shapeMemory = $HitBox.shape.extents
-	
-	# Shrink hitbox to test collissions
-	$HitBox.shape.extents = Vector2(1,4)
-	
-	#collision_mask = 0
-	#set_collision_mask_bit(13,true)
-	
-	# do a test move, if a collision was found then kill the player
-	if test_move(global_transform,Vector2.ZERO):
-		kill()
-	#else:
-		# Restore hitbox
-	#	collision_mask = maskMemory
-	$HitBox.shape.extents = shapeMemory
+	# if in translate mode, ignore crush mechanics
+	if !translate:
+		var shapeMemory = $HitBox.shape.extents
+		
+		# Shrink hitbox to test collissions
+		$HitBox.shape.extents = Vector2(1,4)
+		
+		# Do a test move, if a collision was found then kill the player
+		if test_move(global_transform,Vector2.ZERO):
+			kill()
+		# Reset shape hitbox
+		$HitBox.shape.extents = shapeMemory
 
 # Input buttons
 func set_inputs():
@@ -721,18 +719,8 @@ func set_state(newState, forceMask = Vector2.ZERO):
 		$HitBox.shape.extents = forceMask
 	
 	position += forcePoseChange
-
-	
-	#cam_update()
-	
 	
 	sprite.get_node("DashDust").visible = false
-	#update_sensors()
-	# snap to floor if old shape is smaller then new shape
-#	if (shapeChangeCheck.y < $HitBox.shape.extents.y):
-#		var getFloor = get_closest_sensor(floorCastLeft,floorCastRight)
-#		if (getFloor):
-#			position += getFloor.get_collision_point()-getFloor.global_position-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation)
 
 # set shields
 func set_shield(shieldID):
@@ -762,10 +750,12 @@ func set_shield(shieldID):
 
 func action_jump(animation = "roll", airJumpControl = true):
 	animator.play(animation)
+	animator.advance(0)
 	movement.y = -jmp
 	sfx[0].play()
 	airControl = airJumpControl
 	cameraDragLerp = 1
+	disconect_from_floor()
 	set_state(STATES.JUMP)
 
 
@@ -786,7 +776,7 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 		# Ring loss
 		if (shield == SHIELDS.NONE and rings > 0 and playerControl == 1):
 			sfx[9].play()
-			ringDisTime = 64/Global.originalFPS
+			ringDisTime = 64/60 # ignore rings for 64 frames
 			var ringCount = 0
 			var ringAngle = 101.25
 			var ringAlt = false
@@ -796,8 +786,8 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 				var ring = Ring.instance()
 				ring.global_position = global_position
 				ring.scattered = true
-				ring.velocity.y = -sin(deg2rad(ringAngle))*ringSpeed*Global.originalFPS
-				ring.velocity.x = cos(deg2rad(ringAngle))*ringSpeed*Global.originalFPS
+				ring.velocity.y = -sin(deg2rad(ringAngle))*ringSpeed*60
+				ring.velocity.x = cos(deg2rad(ringAngle))*ringSpeed*60
 
 				if (ringAlt):
 					ring.velocity.x *= -1
@@ -971,7 +961,7 @@ func cam_update(forceMove = false):
 	# Camera lock
 	# remove round() if you are not making a pixel perfect game
 	var getPos = (global_position+Vector2(0,camLookOff)+camAdjust).round()
-	if camLockTime <= 0 and forceMove or camera.global_position.distance_to(getPos) <= 16:
+	if camLockTime <= 0 and (forceMove or camera.global_position.distance_to(getPos) <= 16):
 		# clamped speed camera
 		camera.global_position.x = move_toward(camera.global_position.x,getPos.x,16*60*get_physics_process_delta_time())
 		camera.global_position.y = move_toward(camera.global_position.y,getPos.y,16*60*get_physics_process_delta_time())
@@ -998,7 +988,7 @@ func _on_BubbleTimer_timeout():
 			$BubbleTimer.start(max(randf()*3,0.5))
 		else:
 			bub.global_position = global_position+Vector2(0,-8)
-			# pick either 0 or 1 for the bubble type
+			# pick either 0 or 1 for the bubble type (cosmetic)
 			bub.bubbleType = int(round(randf()))
 			$BubbleTimer.start(0.05)
 		bub.z_index = z_index+3

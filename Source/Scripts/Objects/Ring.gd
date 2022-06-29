@@ -4,6 +4,7 @@ var lifetime = 256/Global.originalFPS
 var velocity = Vector2.ZERO
 var player
 var magnet = null
+var magnetShape = null
 var ringacceleration = [0.75,0.1875]
 var Particle = preload("res://Entities/Misc/GenericParticle.tscn")
 
@@ -17,7 +18,7 @@ func _process(delta):
 		else:
 			queue_free()
 	if (player):
-		if (player.ringDisTime <= 0 && (player.invTime*Global.originalFPS <= 90 || !scattered)):
+		if (player.ringDisTime <= 0 && (player.invTime*60 <= 90 || scattered)):
 			z_index = 1
 			player.get_ring()
 			var part = Particle.instance()
@@ -46,6 +47,8 @@ func _physics_process(delta):
 		velocity.x += (ringacceleration[tx] * sx)/delta
 		velocity.y += (ringacceleration[ty] * sy)/delta
 		translate(velocity*delta)
+		if magnetShape.disabled:
+			scattered = true
 		#"ringacceleration" would be an array, where: [0] = 0.75 [1] = 0.1875
 		
 		
@@ -63,3 +66,4 @@ func _on_Hitbox_body_exited(body):
 func _on_Hitbox_area_shape_entered(area_id, area, area_shape, local_shape):
 	if (magnet == null):
 		magnet = area
+		magnetShape = area.get_child(0)

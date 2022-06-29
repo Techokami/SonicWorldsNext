@@ -29,12 +29,12 @@ func _physics_process(delta):
 	if !Engine.is_editor_hint():
 		# Check for player encounters
 		for i in playerListL: # left side
-			if (i.global_position.x > $EnteranceL.global_position.x) and i.movement.x >= i.top/2 and i.ground:
+			if (i.global_position.x > $EnteranceL.global_position.x-8) and i.movement.x >= i.top/2 and round(i.movement.y) == 0:
 				if (!playerList.has(i)):
 					playerList.append(i)
 		
 		for i in playerListR: # right side
-			if (i.global_position.x < $EnteranceR.global_position.x) and i.movement.x <= -i.top/2 and i.ground:
+			if (i.global_position.x < $EnteranceR.global_position.x+8) and i.movement.x <= -i.top/2 and round(i.movement.y) == 0:
 				if (!playerList.has(i)):
 					playerList.append(i)
 		
@@ -66,8 +66,15 @@ func _physics_process(delta):
 				i.animator.advance(-i.animator.current_animation_position+animSize-(global_position.x-i.global_position.x+(192*scale.x))/((192*scale.x)*2)*animSize)
 			
 			# Check to see if to remove player
-			if (i.global_position.x < $EnteranceL.global_position.x or i.global_position.x > $EnteranceR.global_position.x or abs(i.movement.x) < i.top/2 or i.currentState == i.STATES.JUMP):
+			if (i.global_position.x < $EnteranceL.global_position.x-8 or i.global_position.x > $EnteranceR.global_position.x+8 or abs(i.movement.x) < i.top/2 or i.currentState == i.STATES.JUMP):
 				if (playerList.has(i)):
+					if i.currentState == i.STATES.CORKSCREW:
+						i.set_state(i.STATES.AIR)
+					else:
+						# otherwise reset animation settings
+						var animMem = i.animator.current_animation
+						i.animator.play("RESET")
+						i.animator.queue(animMem)
 					playerList.erase(i)
 
 

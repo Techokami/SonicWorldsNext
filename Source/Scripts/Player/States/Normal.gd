@@ -61,7 +61,7 @@ func _process(delta):
 				if parent.direction < 0:
 					getL = getR
 					getR = parent.verticalSensorLeft.is_colliding()
-				if getM || !parent.ground:
+				if getM || !parent.ground || parent.angle != parent.gravityAngle:
 					# Play default idle animation
 					if parent.super and parent.animator.has_animation("idle_super"):
 						parent.animator.play("idle_super")
@@ -146,7 +146,6 @@ func _physics_process(delta):
 	if (abs(parent.movement.x) < parent.fall and calcAngle >= 45 and calcAngle <= 315):
 		if (round(calcAngle) >= 90 and round(calcAngle) <= 270):
 			parent.disconect_from_floor()
-			#parent.ground = false
 		else:
 			parent.horizontalLockTimer = 30.0/60.0
 		

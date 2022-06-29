@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/orbinaut.png-2ea9a5ac5f34809ba5249b2539ee180a.stex"
+path="res://.import/shutter2.png-70e95ddb9e8d9f4b682b0ed6ae63035f.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Graphics/Enemies/orbinaut.png"
-dest_files=[ "res://.import/orbinaut.png-2ea9a5ac5f34809ba5249b2539ee180a.stex" ]
+source_file="res://Graphics/Obstacles/Walls/shutter2.png"
+dest_files=[ "res://.import/shutter2.png-70e95ddb9e8d9f4b682b0ed6ae63035f.stex" ]
 
 [params]
 

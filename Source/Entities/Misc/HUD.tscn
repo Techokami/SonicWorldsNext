@@ -554,7 +554,7 @@ tracks/13/keys = {
 "times": PoolRealArray( 0, 0.5, 1.5 ),
 "transitions": PoolRealArray( 0.5, 0.5, 1 ),
 "update": 0,
-"values": [ Vector2( 32, 3 ), Vector2( 32, 3 ), Vector2( 32, 108 ) ]
+"values": [ Vector2( -128, 3 ), Vector2( -128, 3 ), Vector2( 32, 108 ) ]
 }
 tracks/14/type = "value"
 tracks/14/path = NodePath("Banner/LevelName:position")
@@ -566,7 +566,7 @@ tracks/14/keys = {
 "times": PoolRealArray( 0, 0.7, 1.7 ),
 "transitions": PoolRealArray( 0.5, 0.5, 1 ),
 "update": 0,
-"values": [ Vector2( 32, -45 ), Vector2( 32, -45 ), Vector2( 32, 64 ) ]
+"values": [ Vector2( -128, -45 ), Vector2( -128, -45 ), Vector2( 32, 64 ) ]
 }
 
 [sub_resource type="Animation" id=7]
@@ -891,9 +891,6 @@ margin_top = -203.0
 margin_bottom = 203.0
 size_flags_stretch_ratio = 0.0
 texture = ExtResource( 7 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="LevelName" type="Sprite" parent="LevelCard/Banner"]
 position = Vector2( 32, 64 )
@@ -960,7 +957,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 32.0
-margin_right = 15584.0
+margin_right = 15680.0
 margin_bottom = 64.0
 texture = ExtResource( 8 )
 stretch_mode = 2

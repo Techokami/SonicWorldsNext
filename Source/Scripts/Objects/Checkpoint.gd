@@ -13,6 +13,8 @@ func activate():
 	$Spinner.queue("flash")
 	active = true
 	Global.currentCheckPoint = checkPointID
+	Global.checkPointTime = Global.levelTime
+	
 	for i in Global.checkPoints:
 		if i.get("checkPointID") != null:
 			if i.checkPointID < checkPointID:

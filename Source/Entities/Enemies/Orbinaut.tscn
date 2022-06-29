@@ -36,11 +36,14 @@ shape = SubResource( 1 )
 [node name="orb" type="Sprite" parent="Orb"]
 texture = ExtResource( 2 )
 hframes = 2
-frame = 1
+vframes = 2
+frame = 3
 
 [node name="orbinaut" type="Sprite" parent="."]
 texture = ExtResource( 2 )
 hframes = 2
+vframes = 2
+frame = 2
 
 [node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
 visible = false

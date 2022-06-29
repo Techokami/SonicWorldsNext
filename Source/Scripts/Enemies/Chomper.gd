@@ -5,6 +5,9 @@ var animFrame = 0.0
 
 func _ready():
 	velocity.y = -7
+	set_physics_process(false)
+	set_process(false)
+
 
 func _physics_process(delta):
 	velocity.y += 0.09375/delta
@@ -12,7 +15,6 @@ func _physics_process(delta):
 	
 	if position.y >= 0:
 		velocity.y = -7*60
-	$VisibilityEnabler2D.position = -position
 
 func _process(delta):
 	if position.y > -192:
@@ -27,3 +29,13 @@ func _process(delta):
 		animFrame += (60.0/4.0)*delta
 	animFrame = fmod(animFrame,($Chomper.hframes*$Chomper.vframes))
 	$Chomper.frame = floor(animFrame)
+
+
+func _on_VisibilityEnabler2D_screen_entered():
+	set_physics_process(true)
+	set_process(true)
+
+
+func _on_VisibilityEnabler2D_screen_exited():
+	set_physics_process(false)
+	set_process(false)
