@@ -10,7 +10,7 @@ export var lavaGraphic = [preload("res://Graphics/Hazards/LavaTiles1.png"),prelo
 preload("res://Graphics/Hazards/LavaTiles3.png"),preload("res://Graphics/Hazards/LavaTiles4.png")]
 
 var frame = 0
-var animSpeed = 8
+export var animSpeed = 8
 
 func _ready():
 	update_graphics()

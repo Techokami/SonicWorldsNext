@@ -76,7 +76,7 @@ func _physics_process(delta):
 				physics = false
 
 func physics_collision(body, hitVector):
-	if body.get_collision_layer_bit(19) and body.currentState != body.STATES.SPINDASH:
+	if body.get_collision_layer_bit(19):
 		# Bounce from below
 		if hitVector.y < 0:
 			body.movement.y *= -1
@@ -89,8 +89,8 @@ func physics_collision(body, hitVector):
 			else:
 				# Stop horizontal movement
 				body.movement.x = 0
-		# check player is moving verticaly
-		elif body.playerControl == 1:
+		# check if player is not an ai or spindashing
+		elif body.playerControl == 1 and body.currentState != body.STATES.SPINDASH:
 			body.movement.y = -abs(body.movement.y)
 			body.ground = false
 			playerTouch = body

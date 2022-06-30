@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=2]
+[gd_scene load_steps=40 format=2]
 
 [ext_resource path="res://Shaders/PlayerPalette.tres" type="Material" id=1]
 [ext_resource path="res://Graphics/Players/Sonic.png" type="Texture" id=2]
@@ -29,6 +29,18 @@ tracks/1/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ false ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Sprite/Sprite:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 87 ]
 }
 
 [sub_resource type="Animation" id=108]
@@ -212,6 +224,22 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 43, 44, 45, 46 ]
+}
+
+[sub_resource type="Animation" id=112]
+resource_name = "hang"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 86, 87 ]
 }
 
 [sub_resource type="Animation" id=78]
@@ -515,6 +543,7 @@ anims/edge1 = SubResource( 104 )
 anims/edge2 = SubResource( 105 )
 anims/edge3 = SubResource( 106 )
 anims/edge_super = SubResource( 110 )
+anims/hang = SubResource( 112 )
 anims/hurt = SubResource( 78 )
 anims/idle = SubResource( 79 )
 anims/idle_super = SubResource( 109 )
@@ -537,12 +566,12 @@ texture = ExtResource( 2 )
 offset = Vector2( 0, -4 )
 hframes = 16
 vframes = 16
-frame = 136
+frame = 87
 
 [node name="DashDust" type="AnimatedSprite" parent="Sprite"]
 visible = false
 frames = SubResource( 96 )
-frame = 1
+frame = 5
 playing = true
 offset = Vector2( -9, -4 )
 

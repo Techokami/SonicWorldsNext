@@ -11,7 +11,6 @@ extents = Vector2( 8, 32 )
 collision_layer = 8207
 collision_mask = 0
 script = ExtResource( 2 )
-side = 1
 
 [node name="Shutter" type="Sprite" parent="."]
 texture = ExtResource( 1 )

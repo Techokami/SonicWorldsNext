@@ -108,7 +108,7 @@ var spriteRotation = 0
 var airControl = true
 
 # States
-enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, ANIMATION, HIT, DIE, CORKSCREW, JUMPCANCEL, SUPER, FLY, RESPAWN}
+enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, ANIMATION, HIT, DIE, CORKSCREW, JUMPCANCEL, SUPER, FLY, RESPAWN, HANG}
 var currentState = STATES.NORMAL
 var crouchBox = null
 
@@ -126,7 +126,6 @@ onready var animator = $Sprite/PlayerAnimation
 onready var sprite = $Sprite/Sprite
 onready var spriteControler = $Sprite
 var lastActiveAnimation = ""
-
 
 # Camera
 # onready var camera = get_node_or_null("Camera")
@@ -162,6 +161,7 @@ var inputActions = INPUTACTIONS_P1
 # 0 = ai, 1 = player 1, 2 = player 2
 var playerControl = 1
 var partner = null
+var partnerPanic = 0
 const RESPAWN_DEFAULT_TIME = 5
 var respawnTime = RESPAWN_DEFAULT_TIME
 const DEFAULT_PLAYER2_CONTROL_TIME = 10
@@ -299,21 +299,38 @@ func _process(delta):
 		
 		#partner ai
 		if partner != null:
-			if partner.playerControl == 0:
-				partner.inputs = inputMemory[INPUT_MEMORY_LENGTH-1]
-			# x distance difference check, if greater then 48 try to go to the partner
-			if partner.inputs[INPUTS.XINPUT] == 0 and global_position.distance_to(partner.global_position) > 48 and partner.inputs[INPUTS.YINPUT] == 0 and abs(global_position.x-partner.global_position.x) >= 8 :
-				partner.inputs[INPUTS.XINPUT] = sign(global_position.x - partner.global_position.x)
-			# jump if pushing a wall, slower then half speed, on a flat surface and is either normal or jumping
-			if (partner.currentState == STATES.NORMAL or partner.currentState == STATES.JUMP) and abs(partner.movement.x) < top/2 and snap_angle(partner.angle) == 0 or (partner.pushingWall and !pushingWall):
-				if global_position.y+32 < partner.global_position.y and partner.inputs[INPUTS.ACTION] == 0 and partner.ground and ground:
-					partner.inputs[INPUTS.ACTION] = 1
-				elif global_position.y < partner.global_position.y and ground and !partner.ground:
-					partner.inputs[INPUTS.ACTION] = 2
+			# Check if partner panic
+			if partnerPanic <= 0:
+				if partner.playerControl == 0:
+					partner.inputs = inputMemory[INPUT_MEMORY_LENGTH-1]
+				# x distance difference check, if greater then 48 try to go to the partner
+				if partner.inputs[INPUTS.XINPUT] == 0 and global_position.distance_to(partner.global_position) > 48 and partner.inputs[INPUTS.YINPUT] == 0 and abs(global_position.x-partner.global_position.x) >= 8 :
+					partner.inputs[INPUTS.XINPUT] = sign(global_position.x - partner.global_position.x)
+				# jump if pushing a wall, slower then half speed, on a flat surface and is either normal or jumping
+				if (partner.currentState == STATES.NORMAL or partner.currentState == STATES.JUMP) and abs(partner.movement.x) < top/2 and snap_angle(partner.angle) == 0 or (partner.pushingWall and !pushingWall):
+					if global_position.y+32 < partner.global_position.y and partner.inputs[INPUTS.ACTION] == 0 and partner.ground and ground:
+						partner.inputs[INPUTS.ACTION] = 1
+					elif global_position.y < partner.global_position.y and ground and !partner.ground:
+						partner.inputs[INPUTS.ACTION] = 2
+			# panic
+			else:
+				if global_position.distance_to(partner.global_position) <= 48 or partner.direction != sign(global_position.x - partner.global_position.x):
+					partnerPanic = 0
+				partner.inputs[INPUTS.XINPUT] = 0
+				if round(partner.movement.x) == 0:
+					partnerPanic -= delta
+					partner.inputs[INPUTS.YINPUT] = 1
+					# press action every 0.4 ticks
+					if fmod(partnerPanic,0.4)+delta > 0.4:
+						partner.inputs[INPUTS.ACTION] = 1
+					
 			
 			# Panic
 			# if partner is locked, and stopped then do a spindash
 			# panic for 128 frames before letting go of spindash
+			if partner.horizontalLockTimer > 0 and partner.currentState == STATES.NORMAL and global_position.distance_to(partner.global_position) > 48:
+				partnerPanic = 128/60
+				
 	# respawn mechanics
 	else:
 		if $ScreenCheck.is_on_screen():

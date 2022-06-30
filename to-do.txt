@@ -1,18 +1,14 @@
 needed changes
-- code panic mode for ai
-- stop animations on pause
 
 minor changes
+- make partner not jump immediately when landing on floor
 - tails carry
 - complete idle animations
 - edge wobble on objects
 - knuckles
 - spindash on top of breakable objects
-- tails helicopter sounds on landing frame
-- fix pipe travel offsets
 - delete unused and redundant code
 - rebindable controls
-- make water electrify when elec shield goes under water
 - fix bridges dropping when player not on floor
 - make screen clear when elec shield enters water
 
@@ -20,6 +16,8 @@ probably needs more testing
 - tails flying sounds not stopping (tends to happen when a state change happens)
 
 Completed
+- stop animations on pause
+- code panic mode for ai
 
 29-06 - fixes
 - swapped ring animations to animated sprites instead of a texture (this stops it animating on pause)

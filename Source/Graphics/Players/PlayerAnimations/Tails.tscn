@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=2]
+[gd_scene load_steps=52 format=2]
 
 [ext_resource path="res://Shaders/PlayerPalette.tres" type="Material" id=1]
 [ext_resource path="res://Graphics/Players/Tails.png" type="Texture" id=2]
@@ -43,6 +43,18 @@ tracks/2/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ Vector2( 0, -4 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Sprite/Sprite:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 88 ]
 }
 
 [sub_resource type="Animation" id=121]
@@ -277,6 +289,22 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 1,
 "values": [ 69 ]
+}
+
+[sub_resource type="Animation" id=123]
+resource_name = "hang"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 87, 88 ]
 }
 
 [sub_resource type="Animation" id=78]
@@ -924,6 +952,7 @@ anims/edge3 = SubResource( 106 )
 anims/fly = SubResource( 113 )
 anims/flyCarry = SubResource( 114 )
 anims/flyCarryUP = SubResource( 115 )
+anims/hang = SubResource( 123 )
 anims/hurt = SubResource( 78 )
 anims/idle = SubResource( 79 )
 anims/lookUp = SubResource( 80 )
@@ -949,12 +978,13 @@ texture = ExtResource( 2 )
 offset = Vector2( 0, -4 )
 hframes = 16
 vframes = 16
+frame = 87
 script = ExtResource( 5 )
 
 [node name="DashDust" type="AnimatedSprite" parent="Sprite"]
 visible = false
 frames = SubResource( 96 )
-frame = 2
+frame = 6
 playing = true
 offset = Vector2( -9, -4 )
 
