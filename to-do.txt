@@ -1,19 +1,24 @@
 needed changes
 
 minor changes
-- make partner not jump immediately when landing on floor
-- tails carry
 - complete idle animations
 - edge wobble on objects
 - knuckles
-- spindash on top of breakable objects
 - delete unused and redundant code
 - rebindable controls
-- fix bridges dropping when player not on floor
 - make screen clear when elec shield enters water
 
 probably needs more testing
 - tails flying sounds not stopping (tends to happen when a state change happens)
+
+
+More progress
+- tails carry
+- spindash on top of breakable objects
+- more fixes to the corkscrew
+- make partner not jump immediately when landing on floor
+- fix bridges dropping when player not on floor
+
 
 Completed
 - stop animations on pause

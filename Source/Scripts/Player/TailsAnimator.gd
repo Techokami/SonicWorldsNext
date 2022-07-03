@@ -39,13 +39,17 @@ func _on_PlayerAnimation_animation_started(anim_name):
 			tailsAnimator.playback_speed = 1
 			tailsAnimator.play("roll")
 			currentHandle = HANDLE.ROTATE
-		"fly", "flyCarry", "flyCarryUp":
+		"fly", "flyCarry", "flyCarryUP":
 			tailsAnimator.playback_speed = 1
 			tailsAnimator.play("fly")
 			currentHandle = HANDLE.DEFAULT
 		"tired":
 			tailsAnimator.playback_speed = .2
 			tailsAnimator.play("fly")
+			currentHandle = HANDLE.DEFAULT
+		"hang":
+			tailsAnimator.playback_speed = .5
+			tailsAnimator.play("hang")
 			currentHandle = HANDLE.DEFAULT
 		_:
 			tailsAnimator.play("stop")

@@ -118,10 +118,11 @@ var shield = SHIELDS.NONE
 onready var magnetShape = $RingMagnet/CollisionShape2D
 onready var shieldSprite = $Shields
 
-# state array
+# State array
 onready var stateList = $States.get_children()
 
-# animation related
+
+# Animation related
 onready var animator = $Sprite/PlayerAnimation
 onready var sprite = $Sprite/Sprite
 onready var spriteControler = $Sprite
@@ -160,10 +161,13 @@ const INPUTACTIONS_P2 = [["gm_left_P2","gm_right_P2"],["gm_up_P2","gm_down_P2"],
 var inputActions = INPUTACTIONS_P1
 # 0 = ai, 1 = player 1, 2 = player 2
 var playerControl = 1
+
 var partner = null
 var partnerPanic = 0
+
 const RESPAWN_DEFAULT_TIME = 5
 var respawnTime = RESPAWN_DEFAULT_TIME
+
 const DEFAULT_PLAYER2_CONTROL_TIME = 10
 var partnerControlTime = DEFAULT_PLAYER2_CONTROL_TIME
 
@@ -171,7 +175,8 @@ var partnerControlTime = DEFAULT_PLAYER2_CONTROL_TIME
 onready var defaultLayer = collision_layer
 onready var defaultMask = collision_mask
 onready var defaultZIndex = z_index
-
+# Input memory has 2 arrays, first is the timer, second is the input index
+# inputMemory[5][INPUT.XINPUT]
 var inputMemory = []
 const INPUT_MEMORY_LENGTH = 20
 
@@ -188,6 +193,9 @@ var ring1upCounter = 100
 
 # How far in can the player can be towards the screen edge before they're clamped
 var cameraMargin = 16
+
+# Gimmick related
+var poleGrabID = null
 
 func _ready():
 	# Disable and enable states
@@ -208,6 +216,10 @@ func _ready():
 	camera.drag_margin_v_enabled = true
 	connect("positionChanged",self,"on_position_changed")
 	camera.global_position = global_position
+	
+	# Tails carry stuff
+	$TailsCarryBox/HitBox.disabled = true
+	
 	
 	# verify that we're not an ai
 	if playerControl == 1:
@@ -250,6 +262,7 @@ func _ready():
 			Global.levelTime = Global.checkPointTime
 	
 	
+	
 	# Character settings
 	match (character):
 		CHARACTERS.TAILS:
@@ -290,25 +303,31 @@ func _process(delta):
 	
 	# Player 1 input settings and partner AI
 	if playerControl == 1:
-		#input memory
+		# Input memory
 		for i in range(INPUT_MEMORY_LENGTH-1):
 			for j in range(inputs.size()):
 				inputMemory[INPUT_MEMORY_LENGTH-1-i][j] = inputMemory[INPUT_MEMORY_LENGTH-i-2][j]
+		# set immediate inputs
 		for i in range(inputs.size()):
 			inputMemory[0][i] = inputs[i]
 		
-		#partner ai
+		# Partner ai logic
 		if partner != null:
 			# Check if partner panic
 			if partnerPanic <= 0:
 				if partner.playerControl == 0:
 					partner.inputs = inputMemory[INPUT_MEMORY_LENGTH-1]
-				# x distance difference check, if greater then 48 try to go to the partner
-				if partner.inputs[INPUTS.XINPUT] == 0 and global_position.distance_to(partner.global_position) > 48 and partner.inputs[INPUTS.YINPUT] == 0 and abs(global_position.x-partner.global_position.x) >= 8 :
+				
+				# x distance difference check, try to go to the partner
+				if (partner.inputs[INPUTS.XINPUT] == 0 and partner.inputs[INPUTS.YINPUT] == 0
+					or global_position.distance_to(partner.global_position) > 48 and round(movement.x/300) == 0
+					) and abs(global_position.x-partner.global_position.x) >= 32:
 					partner.inputs[INPUTS.XINPUT] = sign(global_position.x - partner.global_position.x)
-				# jump if pushing a wall, slower then half speed, on a flat surface and is either normal or jumping
+				
+				# Jump if pushing a wall, slower then half speed, on a flat surface and is either normal or jumping
 				if (partner.currentState == STATES.NORMAL or partner.currentState == STATES.JUMP) and abs(partner.movement.x) < top/2 and snap_angle(partner.angle) == 0 or (partner.pushingWall and !pushingWall):
-					if global_position.y+32 < partner.global_position.y and partner.inputs[INPUTS.ACTION] == 0 and partner.ground and ground:
+					# check partners position, only jump ever 0.25 seconds (prevent jump spam)
+					if global_position.y+32 < partner.global_position.y and partner.inputs[INPUTS.ACTION] == 0 and partner.ground and ground and (fmod(Global.globalTimer,0.25)+delta > 0.25):
 						partner.inputs[INPUTS.ACTION] = 1
 					elif global_position.y < partner.global_position.y and ground and !partner.ground:
 						partner.inputs[INPUTS.ACTION] = 2
@@ -355,6 +374,7 @@ func _process(delta):
 	# set the sprite to match the sprite rotation variable if it's in the rotatable Sprites list
 	if (rotatableSprites.has(animator.current_animation)):
 		sprite.rotation = deg2rad(stepify(spriteRotation,45)-90)-rotation
+		# uncomment this next line out for smooth rotation (you should remove the above line too)
 		#sprite.rotation = deg2rad(spriteRotation-90)-rotation
 	else:
 		sprite.rotation = -rotation
@@ -863,6 +883,7 @@ func respawn():
 	respawnTime = RESPAWN_DEFAULT_TIME
 	movement = Vector2.ZERO
 	global_position = partner.global_position+Vector2(0,-get_viewport_rect().size.y)
+	get_node("TailsCarryBox/HitBox").disabled = true
 	set_state(STATES.RESPAWN)
 
 
@@ -988,6 +1009,7 @@ func cam_update(forceMove = false):
 
 func lock_camera(time = 1):
 	camLockTime = max(time,camLockTime)
+	
 
 func snap_camera_to_limits():
 	camera.limit_left = max(limitLeft,Global.hardBorderLeft)

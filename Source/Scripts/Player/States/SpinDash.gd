@@ -57,4 +57,4 @@ func _process(delta):
 func _physics_process(delta):
 	# Gravity
 	if !parent.ground:
-		parent.movement.y += parent.grv/delta
+		parent.set_state(parent.STATES.AIR)

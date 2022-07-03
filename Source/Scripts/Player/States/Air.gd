@@ -9,6 +9,8 @@ var dropSpeed = [8,12] #the base speed for a drop dash, second is super
 var dropMax = [12,13]   #the top speed for a drop dash, second is super
 var dropTimer = 0
 
+var lockDir = false
+
 # Jump actions
 func _process(delta):
 	if parent.playerControl != 0 or (parent.inputs[parent.INPUTS.YINPUT] < 0 and parent.character == parent.CHARACTERS.TAILS):
@@ -112,8 +114,9 @@ func _physics_process(delta):
 	
 		
 	# Change parent direction
-	if (parent.inputs[parent.INPUTS.XINPUT] != 0):
-		parent.direction = parent.inputs[parent.INPUTS.XINPUT]
+	# Check that lock direction isn't on
+	if !lockDir and parent.inputs[parent.INPUTS.XINPUT] != 0:
+			parent.direction = parent.inputs[parent.INPUTS.XINPUT]
 	
 	# set facing direction
 	parent.sprite.flip_h = (parent.direction < 0)
@@ -189,11 +192,14 @@ func _on_ShieldTimer_timeout():
 
 func state_activated():
 	dropTimer = 0
+	parent.poleGrabID = null
 	
 func state_exit():
 	# deactivate insta shield
 	if (parent.shield == parent.SHIELDS.NONE):
 		parent.shieldSprite.visible = false
 		parent.shieldSprite.stop()
+	parent.poleGrabID = null
 	parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = true
 	parent.enemyCounter = 0
+	lockDir = false

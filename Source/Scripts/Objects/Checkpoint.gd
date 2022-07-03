@@ -23,6 +23,7 @@ func activate():
 
 func _on_Checkpoint_body_entered(body):
 	if !active:
-		$Spinner.play("spin")
-		$Checkpoint.play()
-		activate()
+		if body.playerControl == 1:
+			$Spinner.play("spin")
+			$Checkpoint.play()
+			activate()

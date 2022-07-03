@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=2]
+[gd_scene load_steps=53 format=2]
 
 [ext_resource path="res://Shaders/PlayerPalette.tres" type="Material" id=1]
 [ext_resource path="res://Graphics/Players/Tails.png" type="Texture" id=2]
@@ -43,18 +43,6 @@ tracks/2/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ Vector2( 0, -4 ) ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("Sprite/Sprite:frame")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 88 ]
 }
 
 [sub_resource type="Animation" id=121]
@@ -782,6 +770,60 @@ tracks/3/keys = {
 "values": [ Vector2( 0, 4 ) ]
 }
 
+[sub_resource type="Animation" id=124]
+resource_name = "hang"
+length = 0.2
+loop = true
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Tails:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.05, 0.1, 0.15 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 38, 39, 40, 41 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite/Tails:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( -4.549, -8 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Sprite/Tails:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Sprite/Tails:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, 4 ) ]
+}
+
 [sub_resource type="Animation" id=110]
 resource_name = "roll"
 length = 0.2
@@ -934,6 +976,9 @@ tracks/2/keys = {
 extents = Vector2( 9, 9.5 )
 
 [node name="Sprite" type="Node2D"]
+__meta__ = {
+"_edit_horizontal_guides_": [  ]
+}
 
 [node name="PlayerAnimation" type="AnimationPlayer" parent="."]
 root_node = NodePath("../..")
@@ -978,13 +1023,13 @@ texture = ExtResource( 2 )
 offset = Vector2( 0, -4 )
 hframes = 16
 vframes = 16
-frame = 87
+frame = 92
 script = ExtResource( 5 )
 
 [node name="DashDust" type="AnimatedSprite" parent="Sprite"]
 visible = false
 frames = SubResource( 96 )
-frame = 6
+frame = 1
 playing = true
 offset = Vector2( -9, -4 )
 
@@ -1006,6 +1051,7 @@ autoplay = "default"
 anims/RESET = SubResource( 108 )
 anims/default = SubResource( 109 )
 anims/fly = SubResource( 120 )
+anims/hang = SubResource( 124 )
 anims/roll = SubResource( 110 )
 anims/spinDash = SubResource( 111 )
 anims/stop = SubResource( 112 )

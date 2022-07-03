@@ -74,12 +74,15 @@ func physics_collision(body, hitVector):
 			body.animator.play("spring")
 			body.animator.queue(curAnim)
 			body.movement.y = setMove.y
+			body.set_state(body.STATES.AIR)
 		else:
 			body.movement.x = setMove.x
 			body.horizontalLockTimer = (15.0/60.0) # lock for 15 frames
 			body.direction = sign(setMove.x)
 		$SpringAnimator.play(animList[animID])
 		$sfxSpring.play()
+		# Disable pole grabs
+		body.poleGrabID = self
 		return true
 	
 
@@ -90,3 +93,7 @@ func _on_Diagonal_body_entered(body):
 		body.set_state(body.STATES.AIR)
 		body.animator.play("corkScrew")
 	$sfxSpring.play()
+	# Disable pole grabs
+	#if body.poleGrabID == null:
+	body.poleGrabID = self
+	#body.set_state(body.STATES.AIR)

@@ -49,6 +49,7 @@ func _physics_process(delta):
 						i.animator.play("corkScrew")
 					else:
 						i.animator.play("corkScrewOffset")
+			
 			# Set vertical movement to 0 so player doesn't fall off
 			elif (i.currentState == i.STATES.CORKSCREW):
 				i.movement.y = 0
@@ -69,7 +70,10 @@ func _physics_process(delta):
 			if (i.global_position.x < $EnteranceL.global_position.x-8 or i.global_position.x > $EnteranceR.global_position.x+8 or abs(i.movement.x) < i.top/2 or i.currentState == i.STATES.JUMP):
 				if (playerList.has(i)):
 					if i.currentState == i.STATES.CORKSCREW:
-						i.set_state(i.STATES.AIR)
+						if i.animator.current_animation != "roll":
+							i.set_state(i.STATES.AIR)
+						else:
+							i.set_state(i.STATES.ROLL)
 					else:
 						# otherwise reset animation settings
 						var animMem = i.animator.current_animation
@@ -81,7 +85,7 @@ func _physics_process(delta):
 
 
 func _on_EnteranceL_body_entered(body):
-	if (!playerListL.has(body) and body.get("ground")):
+	if !playerListL.has(body):
 		playerListL.append(body)
 
 
@@ -93,7 +97,7 @@ func _on_EnteranceL_body_exited(body):
 
 
 func _on_EnteranceR_body_entered(body):
-	if (!playerListR.has(body) and body.get("ground")):
+	if !playerListR.has(body):
 		playerListR.append(body)
 
 

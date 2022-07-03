@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=2]
+[gd_scene load_steps=55 format=2]
 
 [ext_resource path="res://Tileset/Worlds/TestTilesGreen.tres" type="TileSet" id=1]
 [ext_resource path="res://Scripts/Level/Level.gd" type="Script" id=2]
@@ -47,7 +47,7 @@
 [ext_resource path="res://Entities/Obstacles/InvisibleBarrier.tscn" type="PackedScene" id=45]
 [ext_resource path="res://Entities/Obstacles/ForceAngleSides.tscn" type="PackedScene" id=46]
 [ext_resource path="res://Entities/Gimmicks/Shutter.tscn" type="PackedScene" id=47]
-[ext_resource path="res://Entities/Gimmicks/Hanger.tscn" type="PackedScene" id=48]
+[ext_resource path="res://Entities/Gimmicks/HangingBar.tscn" type="PackedScene" id=48]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Glow"
@@ -80,6 +80,22 @@ tracks/0/keys = {
 "update": 0,
 "values": [ Color( 0.364706, 0, 0, 1 ) ]
 }
+
+[sub_resource type="RectangleShape2D" id=6]
+resource_local_to_scene = true
+extents = Vector2( 40, 2 )
+
+[sub_resource type="RectangleShape2D" id=4]
+resource_local_to_scene = true
+extents = Vector2( 40, 2 )
+
+[sub_resource type="RectangleShape2D" id=3]
+resource_local_to_scene = true
+extents = Vector2( 40, 2 )
+
+[sub_resource type="RectangleShape2D" id=5]
+resource_local_to_scene = true
+extents = Vector2( 40, 2 )
 
 [node name="TestScene" type="Node2D"]
 script = ExtResource( 2 )
@@ -200,12 +216,20 @@ __meta__ = {
 [node name="Platform" parent="Platforms" instance=ExtResource( 38 )]
 position = Vector2( 752, 368 )
 
+[node name="Shape" parent="Platforms/Platform/Platform" index="0"]
+shape = SubResource( 6 )
+
+[node name="Monitor" parent="Platforms/Platform/Platform" index="2" instance=ExtResource( 17 )]
+position = Vector2( 24, -32 )
+
 [node name="Platform13" parent="Platforms" instance=ExtResource( 38 )]
 position = Vector2( 2840, 912 )
 endPosition = Vector2( 0, 0 )
-dropSlightly = false
 
-[node name="Monitor3" parent="Platforms/Platform13" instance=ExtResource( 17 )]
+[node name="Shape" parent="Platforms/Platform13/Platform" index="0"]
+shape = SubResource( 4 )
+
+[node name="Monitor3" parent="Platforms/Platform13/Platform" index="2" instance=ExtResource( 17 )]
 position = Vector2( -24, -32 )
 
 [node name="Platform9" parent="Platforms" instance=ExtResource( 38 )]
@@ -234,14 +258,36 @@ position = Vector2( 584, 336 )
 endPosition = Vector2( 0, 0 )
 fallTimer = 1.0
 
-[node name="FallingPlatform4" parent="Platforms" instance=ExtResource( 38 )]
+[node name="MovingPlatform" parent="Platforms" instance=ExtResource( 38 )]
 position = Vector2( 8088, 368 )
 endPosition = Vector2( 0, 256 )
+
+[node name="Shape" parent="Platforms/MovingPlatform/Platform" index="0"]
+shape = SubResource( 3 )
+
+[node name="Hanger2" parent="Platforms/MovingPlatform/Platform" index="2" instance=ExtResource( 48 )]
+position = Vector2( 0, 48 )
+
+[node name="MovingPlatform2" parent="Platforms" instance=ExtResource( 38 )]
+position = Vector2( 6080, 936 )
+endPosition = Vector2( 256, 64 )
+
+[node name="Shape" parent="Platforms/MovingPlatform2/Platform" index="0"]
+shape = SubResource( 3 )
+
+[node name="Hanger2" parent="Platforms/MovingPlatform2/Platform" index="2" instance=ExtResource( 48 )]
+position = Vector2( 0, 48 )
 
 [node name="FallingPlatform5" parent="Platforms" instance=ExtResource( 38 )]
 position = Vector2( 8888, 320 )
 endPosition = Vector2( 0, 0 )
-dropSlightly = false
+
+[node name="Shape" parent="Platforms/FallingPlatform5/Platform" index="0"]
+shape = SubResource( 5 )
+
+[node name="Monitor17" parent="Platforms/FallingPlatform5/Platform" index="2" instance=ExtResource( 17 )]
+position = Vector2( -24, -32 )
+item = 10
 
 [node name="Platform5" parent="Platforms" instance=ExtResource( 38 )]
 position = Vector2( 432, 336 )
@@ -735,7 +781,7 @@ rightAngle = 50.0
 position = Vector2( 5304, 640 )
 
 [node name="Hanger" parent="Entity" instance=ExtResource( 48 )]
-position = Vector2( 128, 704 )
+position = Vector2( 8984, 256 )
 
 [node name="Rings" type="Node2D" parent="."]
 
@@ -1235,10 +1281,6 @@ item = 2
 position = Vector2( 8368, 304 )
 item = 2
 
-[node name="Monitor17" parent="Monitors" instance=ExtResource( 17 )]
-position = Vector2( 8864, 288 )
-item = 10
-
 [node name="Monitor21" parent="Monitors" instance=ExtResource( 17 )]
 position = Vector2( 5440, 480 )
 item = 10
@@ -1313,6 +1355,10 @@ position = Vector2( 5216, 480 )
 position = Vector2( 5296, 384 )
 scale = Vector2( 4, 1 )
 
+[node name="InvisibleBarrier5" parent="Hazards" instance=ExtResource( 45 )]
+position = Vector2( 8144, 448 )
+scale = Vector2( 1, 4 )
+
 [node name="Enemies" type="Node2D" parent="."]
 
 [node name="Orbinaut" parent="Enemies" instance=ExtResource( 20 )]
@@ -1337,3 +1383,9 @@ position = Vector2( 4864, 880 )
 constant_linear_velocity = Vector2( -60, 0 )
 speed = -60
 length = 7
+
+[editable path="Platforms/Platform"]
+[editable path="Platforms/Platform13"]
+[editable path="Platforms/MovingPlatform"]
+[editable path="Platforms/MovingPlatform2"]
+[editable path="Platforms/FallingPlatform5"]

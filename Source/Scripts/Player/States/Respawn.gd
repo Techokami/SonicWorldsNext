@@ -33,7 +33,7 @@ func _physics_process(delta):
 	parent.set_collision_layer_bit(2,true)
 	parent.set_collision_layer_bit(3,true)
 	
-	# do a test move to make sure we aren't inside an object
+	# Do a test move to make sure we aren't inside an object, if not in a free location then just do fly logic
 	if !goToNormal or parent.test_move(parent.global_transform,Vector2.ZERO):
 		# restore layer
 		parent.collision_layer = layerMemory
@@ -56,7 +56,7 @@ func _physics_process(delta):
 		if distance != 0:
 			parent.direction = sign(distance)
 		parent.sprite.flip_h = (parent.direction < 0)
-	else:
+	else: # Go back to normal
 		# restore layer
 		parent.collision_layer = layerMemory
 		
@@ -69,6 +69,7 @@ func _physics_process(delta):
 				parent.collision_mask = parent.defaultMask
 				parent.set_state(parent.STATES.AIR)
 				parent.movement = Vector2.ZERO
+				parent.collissionLayer = parent.partner.collissionLayer
 				# copy limits to avoid out of bounds errors
 				parent.limitLeft = parent.partner.limitLeft
 				parent.limitRight = parent.partner.limitRight

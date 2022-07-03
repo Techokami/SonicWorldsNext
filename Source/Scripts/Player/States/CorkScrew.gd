@@ -3,7 +3,6 @@ extends "res://Scripts/Player/State.gd"
 func _process(delta):
 	if parent.inputs[parent.INPUTS.ACTION] == 1:
 		parent.action_jump()
-		parent.set_state(parent.STATES.JUMP)
 	
 	if parent.animator.current_animation == "corkScrewOffset":
 		parent.sprite.flip_v = true
@@ -29,7 +28,6 @@ func _physics_process(delta):
 					parent.movement.x = 0.5*60*sign(parent.movement.x)
 	else:
 		if (parent.movement.x != 0):
-			# needs better code
 			if (sign(parent.movement.x - (parent.frc/delta)*sign(parent.movement.x)) == sign(parent.movement.x)):
 				parent.movement.x -= (parent.frc/delta)*sign(parent.movement.x)
 			else:
