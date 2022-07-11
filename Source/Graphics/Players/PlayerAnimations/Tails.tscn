@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=2]
+[gd_scene load_steps=54 format=2]
 
 [ext_resource path="res://Shaders/PlayerPalette.tres" type="Material" id=1]
 [ext_resource path="res://Graphics/Players/Tails.png" type="Texture" id=2]
@@ -43,6 +43,18 @@ tracks/2/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ Vector2( 0, -4 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Sprite/Sprite:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 4 ]
 }
 
 [sub_resource type="Animation" id=121]
@@ -313,8 +325,8 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id=79]
 resource_name = "idle"
-length = 2.0
-loop = true
+length = 4.0
+step = 0.0166667
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite/Sprite:frame")
 tracks/0/interp = 1
@@ -322,10 +334,28 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.6, 0.7, 0.8 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 2.3, 2.4, 2.5, 3.3, 3.4, 3.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 0, 1, 2, 0 ]
+"values": [ 0, 1, 2, 0, 1, 2, 0 ]
+}
+
+[sub_resource type="Animation" id=125]
+resource_name = "idle1"
+length = 2.6
+loop = true
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 3, 4, 5, 6, 5, 6, 5, 6, 5, 6, 5, 7, 3 ]
 }
 
 [sub_resource type="Animation" id=80]
@@ -1000,6 +1030,7 @@ anims/flyCarryUP = SubResource( 115 )
 anims/hang = SubResource( 123 )
 anims/hurt = SubResource( 78 )
 anims/idle = SubResource( 79 )
+anims/idle1 = SubResource( 125 )
 anims/lookUp = SubResource( 80 )
 anims/peelOut = SubResource( 87 )
 anims/push = SubResource( 103 )
@@ -1023,13 +1054,13 @@ texture = ExtResource( 2 )
 offset = Vector2( 0, -4 )
 hframes = 16
 vframes = 16
-frame = 92
+frame = 4
 script = ExtResource( 5 )
 
 [node name="DashDust" type="AnimatedSprite" parent="Sprite"]
 visible = false
 frames = SubResource( 96 )
-frame = 1
+frame = 2
 playing = true
 offset = Vector2( -9, -4 )
 

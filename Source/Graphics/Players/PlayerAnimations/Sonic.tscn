@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=45 format=2]
 
 [ext_resource path="res://Shaders/PlayerPalette.tres" type="Material" id=1]
 [ext_resource path="res://Graphics/Players/Sonic.png" type="Texture" id=2]
@@ -29,6 +29,18 @@ tracks/1/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ false ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Sprite/Sprite:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1 ]
 }
 
 [sub_resource type="Animation" id=108]
@@ -248,8 +260,8 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id=79]
 resource_name = "idle"
-length = 2.0
-loop = true
+length = 3.0
+step = 0.0166667
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite/Sprite:frame")
 tracks/0/interp = 1
@@ -257,10 +269,95 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.6, 0.7, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.9 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
 "update": 1,
-"values": [ 0, 1, 6, 7, 8, 7, 8, 7, 8, 7, 8, 1 ]
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=113]
+resource_name = "idle1"
+length = 0.6
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 1, 6 ]
+}
+
+[sub_resource type="Animation" id=114]
+resource_name = "idle2"
+length = 2.8
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6, 0.9, 1.2, 1.5, 1.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 7, 8, 7, 8, 7, 8, 9 ]
+}
+
+[sub_resource type="Animation" id=116]
+resource_name = "idle3"
+length = 0.1
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 2 ]
+}
+
+[sub_resource type="Animation" id=117]
+resource_name = "idle4"
+length = 0.6
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 3, 4 ]
+}
+
+[sub_resource type="Animation" id=118]
+resource_name = "idle5"
+length = 0.133333
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 5 ]
 }
 
 [sub_resource type="Animation" id=109]
@@ -534,6 +631,11 @@ anims/edge_super = SubResource( 110 )
 anims/hang = SubResource( 112 )
 anims/hurt = SubResource( 78 )
 anims/idle = SubResource( 79 )
+anims/idle1 = SubResource( 113 )
+anims/idle2 = SubResource( 114 )
+anims/idle3 = SubResource( 116 )
+anims/idle4 = SubResource( 117 )
+anims/idle5 = SubResource( 118 )
 anims/idle_super = SubResource( 109 )
 anims/lookUp = SubResource( 80 )
 anims/peelOut = SubResource( 87 )
@@ -554,11 +656,12 @@ texture = ExtResource( 2 )
 offset = Vector2( 0, -4 )
 hframes = 16
 vframes = 16
+frame = 5
 
 [node name="DashDust" type="AnimatedSprite" parent="Sprite"]
 visible = false
 frames = SubResource( 96 )
-frame = 2
+frame = 6
 playing = true
 offset = Vector2( -9, -4 )
 

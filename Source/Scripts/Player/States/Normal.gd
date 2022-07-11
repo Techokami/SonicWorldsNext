@@ -6,6 +6,20 @@ var skid = false
 var lookTimer = 0
 var actionPressed = false
 
+# player idle animation array
+# first array is player ID (Sonic, Tails, Knuckles), second array is the idle number
+# note: idle is always played first
+# you'll want to increase this for the number of playable characters
+var playerIdles = [
+# SONIC
+["idle1","idle2","idle2","idle2","idle2","idle3",
+"idle4","idle4","idle4","idle4","idle4","idle4","idle4","idle4","idle4","idle4",
+"idle4","idle4","idle4","idle4","idle4","idle4","idle4","idle4","idle4","idle4",
+"idle5"],
+# TAILS
+["idle1"] # Note: tails idle loops on idle one, to add more idles make sure to disable his idle1 loop
+]
+
 func state_exit():
 	skid = false
 	if parent.crouchBox:
@@ -66,7 +80,19 @@ func _process(delta):
 					if parent.super and parent.animator.has_animation("idle_super"):
 						parent.animator.play("idle_super")
 					else:
-						parent.animator.play("idle")
+						
+						# loop through idle animations to see if there is an idle match
+						var matchIdleCheck = false
+						for i in playerIdles[parent.character]:
+							if parent.lastActiveAnimation == i:
+								matchIdleCheck = true
+						
+						if parent.lastActiveAnimation != "idle" and !matchIdleCheck or !parent.animator.is_playing():
+							parent.animator.play("idle")
+							# queue player specific idle animations
+							for i in playerIdles[parent.character]:
+								parent.animator.queue(i)
+							
 				# super edge
 				elif parent.super and parent.animator.has_animation("edge_super"):
 					parent.animator.play("edge_super")

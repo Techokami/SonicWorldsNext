@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=2]
+[gd_scene load_steps=56 format=2]
 
 [ext_resource path="res://Tileset/Worlds/TestTilesGreen.tres" type="TileSet" id=1]
 [ext_resource path="res://Scripts/Level/Level.gd" type="Script" id=2]
@@ -48,6 +48,7 @@
 [ext_resource path="res://Entities/Obstacles/ForceAngleSides.tscn" type="PackedScene" id=46]
 [ext_resource path="res://Entities/Gimmicks/Shutter.tscn" type="PackedScene" id=47]
 [ext_resource path="res://Entities/Gimmicks/HangingBar.tscn" type="PackedScene" id=48]
+[ext_resource path="res://Entities/Enemies/MotoBug.tscn" type="PackedScene" id=49]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Glow"
@@ -1262,10 +1263,6 @@ position = Vector2( 7448, 1712 )
 position = Vector2( 9136, 1264 )
 item = 7
 
-[node name="Monitor20" parent="Monitors" instance=ExtResource( 17 )]
-position = Vector2( 2192, 688 )
-item = 7
-
 [node name="Monitor13" parent="Monitors" instance=ExtResource( 17 )]
 position = Vector2( 9752, 1896 )
 
@@ -1363,6 +1360,7 @@ scale = Vector2( 1, 4 )
 
 [node name="Orbinaut" parent="Enemies" instance=ExtResource( 20 )]
 position = Vector2( 5848, 168 )
+distance = 20
 
 [node name="Orbinaut3" parent="Enemies" instance=ExtResource( 20 )]
 position = Vector2( 5072, 1064 )
@@ -1377,6 +1375,9 @@ position = Vector2( 1224, 936 )
 
 [node name="BuzzBomber" parent="Enemies" instance=ExtResource( 42 )]
 position = Vector2( 984, 280 )
+
+[node name="Motobug" parent="Enemies" instance=ExtResource( 49 )]
+position = Vector2( 1064, 688 )
 
 [node name="ConveyorBelt" parent="." instance=ExtResource( 36 )]
 position = Vector2( 4864, 880 )

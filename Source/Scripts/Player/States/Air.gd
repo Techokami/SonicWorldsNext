@@ -16,7 +16,7 @@ func _process(delta):
 	if parent.playerControl != 0 or (parent.inputs[parent.INPUTS.YINPUT] < 0 and parent.character == parent.CHARACTERS.TAILS):
 		# Super
 		if parent.inputs[parent.INPUTS.SUPER] == 1 and !parent.super and isJump:
-			if parent.rings >= 50:
+			if parent.rings >= 50 and Global.emeralds >= 7:
 				parent.set_state(parent.STATES.SUPER)
 		# Shield actions
 		if (parent.inputs[parent.INPUTS.ACTION] == 1 and !parent.abilityUsed and isJump):

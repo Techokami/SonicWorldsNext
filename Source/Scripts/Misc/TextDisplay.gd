@@ -77,24 +77,41 @@ export var smallHasNumber = true
 export var smallHframes = 10
 export var smallVframes = 4
 
-export (int, "Top", "Middle", "Bottom") var align = 0
+export (int, "Top", "Middle", "Bottom") var vAlign = 0
+export (int, "Left", "Middle", "Right") var hAlign = 0
 
 func _ready():
-	region_enabled = true
+	region_enabled = true;
 
 func _process(delta):
 	if (stringMem != string):
-		stringMem = string
+		stringMem = string;
 		update()
 
 
 func _draw():
 	var getRes = Vector2(texture.get_width()/hframes,texture.get_height()/vframes)
+	# used for string position
 	var getX = 0
-	var vAlign = ((texture.get_height()/vframes)-(smallStringTexture.get_height()/smallVframes))*(align/2)
+	# calculate vertical alignment
+	var getVAlign = ((texture.get_height()/vframes)-(smallStringTexture.get_height()/smallVframes))*(vAlign/2)
+	
+	# width calculation (based on string length)
+	var getXWidth = 0
+	# check if h align isn't on the left
+	if hAlign > 0:
+		# calculate the width of the string based on the texture sizes of each character
+		for i in string.length():
+			if (stringLookup.has(string[i]) || smallStringLookup.has(string[i])):
+				if (smallStringLookup.has(string[i])):
+					getXWidth += smallStringTexture.get_width()/smallHframes
+				else:
+					getXWidth += texture.get_width()/hframes
+			
+		
 	for i in string.length():
 		if (stringLookup.has(string[i]) || smallStringLookup.has(string[i])):
-			var charID = 0
+			var charID = 0;
 			var gethFrames = hframes
 			var getvFrames = vframes
 			var getTexture = texture
@@ -104,13 +121,17 @@ func _draw():
 				getvFrames = smallVframes
 				charID = smallStringLookup[string[i]]
 				getTexture = smallStringTexture
-				yOff = vAlign
+				yOff = getVAlign
 			else:
-				charID = stringLookup[string[i]]
+				if hasNumbers:
+					charID = smallStringLookup[string.to_lower()[i]]
+				else:
+					charID = stringLookup[string[i]]
 			
 			getRes = Vector2(getTexture.get_width()/gethFrames,getTexture.get_height()/getvFrames)
 				
 			draw_texture_rect_region(getTexture,
-			Rect2(Vector2(getX,yOff),getRes),
+			Rect2(Vector2(getX-(getXWidth*(hAlign/2.0)),yOff),getRes),
 			Rect2(Vector2(fmod(charID,gethFrames)*getRes.x,floor(charID/gethFrames)*getRes.y),getRes))
 		getX += getRes.x
+

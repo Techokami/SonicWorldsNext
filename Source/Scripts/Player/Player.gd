@@ -232,7 +232,7 @@ func _ready():
 			partner.playerControl = 0
 			partner.z_index = z_index-1
 			get_parent().call_deferred("add_child", (partner))
-			partner.global_position = global_position+Vector2(-32,0)
+			partner.global_position = global_position+Vector2(-24,0)
 			partner.partner = self
 			partner.character = Global.PlayerChar2-1
 			partner.inputActions = INPUTACTIONS_P2

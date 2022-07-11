@@ -3,13 +3,14 @@ extends Node2D
 export var music = preload("res://Audio/Soundtrack/10. SWD_CharacterSelect.ogg")
 var selected = false
 
-var characterLabels = ["Sonic & Tails", "Sonic", "Tails"]
+var characterLabels = ["Sonic and Tails", "Sonic", "Tails"]
 # character id lines up with characterLabels
 var characterID = 0
 
 func _ready():
 	Global.music.stream = music
 	Global.music.play()
+	$UI/Labels/Control/Character.string = characterLabels[characterID]
 
 func _input(event):
 	if !selected:
@@ -18,17 +19,17 @@ func _input(event):
 		if Input.is_action_just_pressed("gm_right"):
 			characterID = wrapi(characterID+1,0,characterLabels.size())
 		
-		$UI/Labels/Character.text = characterLabels[characterID]
+		$UI/Labels/Control/Character.string = characterLabels[characterID]
 		match(characterID):
 			0: # Sonic and Tails
-				$UI/Labels/Character/CharacterOrigin/Sonic.visible = true
-				$UI/Labels/Character/CharacterOrigin/Tails.visible = true
+				$UI/Labels/CharacterOrigin/Sonic.visible = true
+				$UI/Labels/CharacterOrigin/Tails.visible = true
 			1: # Sonic
-				$UI/Labels/Character/CharacterOrigin/Sonic.visible = true
-				$UI/Labels/Character/CharacterOrigin/Tails.visible = false
+				$UI/Labels/CharacterOrigin/Sonic.visible = true
+				$UI/Labels/CharacterOrigin/Tails.visible = false
 			2: # Tails
-				$UI/Labels/Character/CharacterOrigin/Sonic.visible = false
-				$UI/Labels/Character/CharacterOrigin/Tails.visible = true
+				$UI/Labels/CharacterOrigin/Sonic.visible = false
+				$UI/Labels/CharacterOrigin/Tails.visible = true
 		
 		# end menu
 		if event.is_action_pressed("gm_pause"):

@@ -28,6 +28,7 @@ func _process(delta):
 	if Engine.is_editor_hint():
 		$orbinaut.frame = int(classicOrbi)*2
 		$Orb/orb.frame = 1+int(classicOrbi)*2
+		$Orb.position.y = -distance
 
 func _physics_process(delta):
 	if !Engine.is_editor_hint():

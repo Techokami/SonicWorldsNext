@@ -27,7 +27,7 @@ func _on_PlayerAnimation_animation_started(anim_name):
 	if tailsAnimator == null:
 		return null
 	match(anim_name):
-		"idle", "crouch", "lookUp":
+		"idle", "idle1", "crouch", "lookUp":
 			tailsAnimator.playback_speed = 1
 			tailsAnimator.play("default")
 			currentHandle = HANDLE.DEFAULT

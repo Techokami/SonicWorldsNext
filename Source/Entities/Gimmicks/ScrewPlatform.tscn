@@ -53,7 +53,8 @@ frame = 1
 position = Vector2( 0, -4 )
 z_index = 5
 collision_layer = 8207
-collision_mask = 8207
+collision_mask = 0
+motion/sync_to_physics = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Screw"]
 shape = SubResource( 1 )
@@ -67,6 +68,7 @@ collision_layer = 0
 collision_mask = 4096
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Screw/playerChecker"]
+modulate = Color( 0.258824, 0.6, 1, 1 )
 shape = SubResource( 7 )
 
 [node name="FloorCheck" type="RayCast2D" parent="Screw"]

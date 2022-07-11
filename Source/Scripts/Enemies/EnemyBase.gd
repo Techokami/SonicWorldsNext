@@ -7,6 +7,7 @@ var velocity = Vector2.ZERO
 var Explosion = preload("res://Entities/Misc/BadnickSmoke.tscn")
 var Animal = preload("res://Entities/Misc/Animal.tscn")
 var forceDamage = false
+var defaultMovement = true
 
 func _process(delta):
 	# checks if player hit has players inside
@@ -31,7 +32,8 @@ func _process(delta):
 			if (i.has_method("hit_player")):
 				i.hit_player(global_position,damageType)
 	# move
-	translate(velocity*delta)
+	if defaultMovement:
+		translate(velocity*delta)
 
 func _on_body_entered(body):
 	# add to player list

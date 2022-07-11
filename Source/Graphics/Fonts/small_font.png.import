@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/mid_font.png-ac433a2aa85d068b989b86ee0fa866a3.stex"
+path="res://.import/small_font.png-62d5a8b2d86f2c466425e37aa153cb4e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Graphics/Fonts/mid_font.png"
-dest_files=[ "res://.import/mid_font.png-ac433a2aa85d068b989b86ee0fa866a3.stex" ]
+source_file="res://Graphics/Fonts/small_font.png"
+dest_files=[ "res://.import/small_font.png-62d5a8b2d86f2c466425e37aa153cb4e.stex" ]
 
 [params]
 

@@ -33,6 +33,7 @@ var soundChannel = AudioStreamPlayer.new()
 var score = 0
 var lives = 3
 var continues = 0
+var emeralds = 0
 var levelTime = 0 # the timer that counts down while the level isn't completed
 var globalTimer = 0 # global timer, used as reference for animations
 var maxTime = 60*10
@@ -73,6 +74,7 @@ func reset_values():
 	score = 0
 	continues = 0
 	levelTime = 0
+	emeralds = 7
 	checkPoints = []
 	checkPointTime = 0
 	nextZone = load("res://Scene/Zones/BaseZone.tscn")

@@ -899,7 +899,7 @@ centered = false
 hframes = 11
 vframes = 3
 script = ExtResource( 9 )
-align = 2
+vAlign = 2
 
 [node name="Zone" type="Sprite" parent="LevelCard/Banner"]
 position = Vector2( 32, 108 )
@@ -918,7 +918,7 @@ vframes = 2
 
 [node name="PatternLeft" type="Control" parent="LevelCard"]
 anchor_bottom = 1.0
-margin_bottom = 4512.0
+margin_bottom = 4960.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -927,7 +927,7 @@ __meta__ = {
 anchor_bottom = 1.0
 margin_left = -32.0
 margin_right = 32.0
-margin_bottom = 51968.0
+margin_bottom = 61664.0
 texture = ExtResource( 8 )
 stretch_mode = 2
 __meta__ = {
@@ -947,7 +947,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_top = -32.0
-margin_bottom = 4224.0
+margin_bottom = 4672.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -957,7 +957,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 32.0
-margin_right = 15712.0
+margin_right = 16640.0
 margin_bottom = 64.0
 texture = ExtResource( 8 )
 stretch_mode = 2
@@ -994,7 +994,6 @@ vframes = 4
 script = ExtResource( 9 )
 string = "sonic got"
 smallStringTexture = ExtResource( 14 )
-align = 2
 
 [node name="Through" type="Sprite" parent="LevelClear"]
 position = Vector2( -256, 80 )

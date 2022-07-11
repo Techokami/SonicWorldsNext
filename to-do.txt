@@ -1,7 +1,6 @@
 needed changes
 
 minor changes
-- complete idle animations
 - edge wobble on objects
 - knuckles
 - delete unused and redundant code
@@ -10,6 +9,19 @@ minor changes
 
 probably needs more testing
 - tails flying sounds not stopping (tends to happen when a state change happens)
+
+
+
+
+04/07
+- added motobug
+- complete idle animations
+- moved partner over so they don't move at the start of the stage
+- fixed screw platforms
+- added small font text
+- added horizontal alignment option for text string
+
+
 
 
 More progress

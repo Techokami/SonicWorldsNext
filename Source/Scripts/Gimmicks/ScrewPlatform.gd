@@ -28,34 +28,42 @@ func _physics_process(delta):
 	if !Engine.editor_hint:
 		# falling
 		if fall:
-			fallSpeed += 300*delta
+			fallSpeed += 900*delta
 			$Screw.position.y += fallSpeed*delta
 			# stop processing
 			return null
 		
+		# check if to lock player
 		for i in players:
-			if sign(global_position.x-i.global_position.x) != sign(global_position.x-i.global_position.x+(i.movement.x*delta)):
+			# check if player position crossed the middle
+			if sign(global_position.x-i.global_position.x) != sign(global_position.x-i.global_position.x+(i.movement.x*delta)) or sign(global_position.x-i.global_position.x) == 0:
 				if !activePlayers.has(i):
 					activePlayers.append(i)
+		
+		# variable to calculate length of movement
+		var moveOffset = 0
+		
 		for i in activePlayers:
 			# movement power
 			var goDirection = i.movement.x*delta/4
 			
-			if ((!$Screw/FloorCheck.is_colliding() || goDirection > 0) && (!$Screw/CeilingCheck.is_colliding() || goDirection < 0)
-			&& $Screw.position.y-goDirection > (-top*8)+12 && !fall): #&& i.ground):
-				i.position.y -= goDirection
+			if ((!$Screw/FloorCheck.is_colliding() or goDirection > 0) and (!$Screw/CeilingCheck.is_colliding() or goDirection < 0)
+			and $Screw.position.y-goDirection > (-top*8)+12 and !fall): #and i.ground):
+				#i.position.y -= goDirection
 				i.ground = true
 				i.global_position.x = global_position.x
 				$Screw/Screw.frame = posmod(floor(-$Screw.position.y/4),4)
 			else:
 				activePlayers.erase(i)
 			
-			$Screw.position.y -= goDirection
-			$Screw.position.y = max($Screw.position.y,(-top*8)+12)
+			# increase move offset by how fast hte player is moving
+			moveOffset += -goDirection
 			
 			if $Screw.position.y > bottom*8:
 				fall = true
-				$Screw/DeathTimer.start(1)
+				$Screw/DeathTimer.start(5)
+		
+		$Screw.position.y = max($Screw.position.y+moveOffset,(-top*8)+12)
 
 func _on_playerChecker_body_entered(body):
 	if !players.has(body):
@@ -72,4 +80,5 @@ func _on_playerChecker_body_exited(body):
 # prevent unnecessary run time processing for object
 func _on_DeathTimer_timeout():
 	fall = false
+	set_physics_process(false)
 	$Screw.queue_free()
