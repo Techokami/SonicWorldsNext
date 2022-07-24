@@ -8,8 +8,8 @@ var checkPoints = []
 var currentCheckPoint = -1
 var checkPointTime = 0
 
-var startScene = preload("res://Scene/Title.tscn")
-var nextZone = preload("res://Scene/Zones/BaseZone.tscn")
+var startScene = preload("res://Scene/Presentation/Title.tscn")
+var nextZone = preload("res://Scene/Zones/BaseZone.tscn") # change this to the first level in the game (also set in "reset_values")
 
 var Score = preload("res://Entities/Misc/Score.tscn")
 const SCORE_COMBO = [1,2,3,4,4,4,4,4,4,4,4,4,4,4,4,5]
@@ -52,10 +52,12 @@ var hardBorderRight  =  100000000
 var hardBorderTop    = -100000000
 var hardBorderBottom =  100000000
 
-# Hazards
-enum HAZARDS {NORMAL, FIRE, ELEC, WATER}
+var animals = [0,1]
 
 signal stage_started
+
+# Hazards
+enum HAZARDS {NORMAL, FIRE, ELEC, WATER}
 
 func _ready():
 	add_child(soundChannel)
@@ -74,9 +76,10 @@ func reset_values():
 	score = 0
 	continues = 0
 	levelTime = 0
-	emeralds = 7
+	emeralds = 0
 	checkPoints = []
 	checkPointTime = 0
+	animals = [0,1]
 	nextZone = load("res://Scene/Zones/BaseZone.tscn")
 
 func play_sound(sound = null):
@@ -84,7 +87,7 @@ func play_sound(sound = null):
 		soundChannel.stream = sound
 		soundChannel.play()
 
-func score(position = Vector2.ZERO,value = 0):
+func add_score(position = Vector2.ZERO,value = 0):
 	var scoreObj = Score.instance()
 	scoreObj.scoreID = value
 	scoreObj.global_position = position

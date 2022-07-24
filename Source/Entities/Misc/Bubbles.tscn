@@ -19,14 +19,6 @@ region = Rect2( 8, 0, 8, 8 )
 atlas = ExtResource( 1 )
 region = Rect2( 16, 0, 8, 8 )
 
-[sub_resource type="AtlasTexture" id=12]
-atlas = ExtResource( 1 )
-region = Rect2( 32, 24, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=13]
-atlas = ExtResource( 1 )
-region = Rect2( 64, 24, 32, 32 )
-
 [sub_resource type="AtlasTexture" id=5]
 atlas = ExtResource( 1 )
 region = Rect2( 0, 0, 8, 8 )
@@ -54,6 +46,14 @@ region = Rect2( 56, 0, 24, 24 )
 [sub_resource type="AtlasTexture" id=11]
 atlas = ExtResource( 1 )
 region = Rect2( 0, 24, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 1 )
+region = Rect2( 32, 24, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 1 )
+region = Rect2( 64, 24, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=14]
 atlas = ExtResource( 1 )
@@ -130,15 +130,15 @@ animations = [ {
 "name": "default",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 12 ), SubResource( 13 ) ],
-"loop": false,
-"name": "bigPop",
-"speed": 10.0
-}, {
 "frames": [ SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ) ],
 "loop": false,
 "name": "air",
 "speed": 5.0
+}, {
+"frames": [ SubResource( 12 ), SubResource( 13 ) ],
+"loop": false,
+"name": "bigPop",
+"speed": 10.0
 }, {
 "frames": [ SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ) ],
 "loop": false,
@@ -193,5 +193,9 @@ frames = SubResource( 19 )
 frame = 2
 playing = true
 
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+scale = Vector2( 1.6, 12.8 )
+
 [connection signal="body_entered" from="BubbleCollect" to="." method="_on_BubbleCollect_body_entered"]
 [connection signal="animation_finished" from="Bubble" to="." method="_on_Bubble_animation_finished"]
+[connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]

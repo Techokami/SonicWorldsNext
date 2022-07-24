@@ -7,16 +7,19 @@ var hitDirection = Vector2.UP
 var animList = ["SpringUp","SpringRight","SpringUpLeft","SpringUpRight"]
 var animID = 0
 var dirMemory = springDirection
-var springTextures = [preload("res://graphics/gimmicks/springs_yellow.png"),preload("res://graphics/gimmicks/springs_red.png")]
+var typeMemory = type
 var speed = [10,16]
+
+var springTextures = [preload("res://Graphics/Gimmicks/springs_yellow.png"),preload("res://Graphics/Gimmicks/springs_red.png")]
 
 func _ready():
 	set_spring()
 
 func _process(delta):
 	if Engine.is_editor_hint():
-		if (springDirection != dirMemory):
+		if (springDirection != dirMemory or typeMemory != type):
 			dirMemory = springDirection
+			typeMemory = type
 			set_spring()
 
 
@@ -53,7 +56,7 @@ func set_spring():
 			
 	$SpringAnimator.play(animList[animID])
 	$SpringAnimator.advance($SpringAnimator.get_animation(animList[animID]).length)
-	if ($Spring.texture != springTextures[type]):
+	if $Spring.texture != springTextures[type]:
 		$Spring.texture = springTextures[type]
 
 # Collision check

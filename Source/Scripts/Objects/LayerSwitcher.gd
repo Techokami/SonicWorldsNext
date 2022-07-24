@@ -1,7 +1,7 @@
 tool
 extends Area2D
 
-var texture = preload("res://graphics/editorUI/LayerSwitchers.png")
+var texture = load("res://Graphics/EditorUI/layer_switchers.png")
 export var size = Vector2(1,3)
 export (int, "Horizontal", "Vertical") var orientation = 0
 export (int, "Low", "High") var rightLayer = 0

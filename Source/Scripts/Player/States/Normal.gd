@@ -67,10 +67,22 @@ func _process(delta):
 				lookTimer = 0
 				
 				# edge checking
+				# set vertical sensors to check for objects
+				
+				var maskMemory = [parent.verticalSensorLeft.collision_mask,parent.verticalSensorRight.collision_mask]
+				parent.verticalSensorLeft.set_collision_mask_bit(13,true)
+				parent.verticalSensorRight.set_collision_mask_bit(13,true)
+				parent.verticalSensorLeft.force_raycast_update()
+				parent.verticalSensorRight.force_raycast_update()
+				
 				var getL = parent.verticalSensorLeft.is_colliding()
 				var getR = parent.verticalSensorRight.is_colliding()
 				var getM = parent.verticalSensorMiddle.is_colliding()
 				var getMEdge = parent.verticalSensorMiddleEdge.is_colliding()
+				
+				parent.verticalSensorLeft.collision_mask = maskMemory[0]
+				parent.verticalSensorRight.collision_mask = maskMemory[1]
+				
 				# flip sensors
 				if parent.direction < 0:
 					getL = getR

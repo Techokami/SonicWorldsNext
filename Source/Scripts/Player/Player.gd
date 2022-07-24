@@ -97,7 +97,7 @@ var Bubble = preload("res://Entities/Misc/Bubbles.tscn")
 var CountDown = preload("res://Entities/Misc/CountDownTimer.tscn")
 var RotatingParticle = preload("res://Entities/Misc/RotatingParticle.tscn")
 
-var superSprite = preload("res://Graphics/Players/SuperSonic.png")
+var superSprite = load("res://Graphics/Players/SuperSonic.png")
 onready var normalSprite = $Sprite/Sprite.texture
 var playerPal = preload("res://Shaders/PlayerPalette.tres")
 
@@ -151,13 +151,13 @@ var direction = scale.x
 # Ground speed is mostly used for timing and animations, there isn't any functionality to it.
 var groundSpeed = 0
 
-enum INPUTS {XINPUT, YINPUT, ACTION, ACTION2, ACTION3, SUPER, PAUSE}
+enum INPUTS {XINPUT, YINPUT, ACTION, ACTION2, ACTION3, PAUSE}
 # Input control, 0 = 0ff, 1 = pressed, 2 = held
 # (for held it's best to use inputs[INPUTS.ACTION] > 0)
 # XInput and YInput are directions and are either -1, 0 or 1.
 var inputs = [0,0,0,0,0,0,0]
-const INPUTACTIONS_P1 = [["gm_left","gm_right"],["gm_up","gm_down"],"gm_action","gm_action","gm_action","gm_super","gm_pause"]
-const INPUTACTIONS_P2 = [["gm_left_P2","gm_right_P2"],["gm_up_P2","gm_down_P2"],"gm_action_P2","gm_action_P2","gm_action_P2","gm_super_P2","gm_pause_P2"]
+const INPUTACTIONS_P1 = [["gm_left","gm_right"],["gm_up","gm_down"],"gm_action","gm_action2","gm_action3","gm_pause"]
+const INPUTACTIONS_P2 = [["gm_left_P2","gm_right_P2"],["gm_up_P2","gm_down_P2"],"gm_action_P2","gm_action2_P2","gm_action3_P2","gm_pause_P2"]
 var inputActions = INPUTACTIONS_P1
 # 0 = ai, 1 = player 1, 2 = player 2
 var playerControl = 1
@@ -651,16 +651,16 @@ func _physics_process(delta):
 			switch_physics(true)
 			movement.x *= 0.5
 			movement.y *= 0.25
-			sfx[17].play()
-			var splash = Particle.instance()
-			splash.behaviour = splash.TYPE.FOLLOW_WATER_SURFACE
-			splash.global_position = Vector2(global_position.x,Global.waterLevel-16)
-			splash.play("Splash")
-			splash.z_index = sprite.z_index+10
-			get_parent().add_child(splash)
-			match (shield):
-				SHIELDS.ELEC, SHIELDS.FIRE:
-					set_shield(SHIELDS.NONE)
+			if currentState != STATES.RESPAWN:
+				sfx[17].play()
+				var splash = Particle.instance()
+				splash.behaviour = splash.TYPE.FOLLOW_WATER_SURFACE
+				splash.global_position = Vector2(global_position.x,Global.waterLevel-16)
+				splash.play("Splash")
+				splash.z_index = sprite.z_index+10
+				get_parent().add_child(splash)
+			
+			# Elec shield/Fire shield logic is in HUD script
 		# Exit water
 		if global_position.y < Global.waterLevel and water:
 			water = false
@@ -710,7 +710,7 @@ func set_inputs():
 	
 	if playerControl > 0:
 		inputs[INPUTS.ACTION] = (int(Input.is_action_pressed(inputActions[INPUTS.ACTION]))*2)-int(Input.is_action_just_pressed(inputActions[INPUTS.ACTION]))
-		inputs[INPUTS.SUPER] =  (int(Input.is_action_pressed(inputActions[INPUTS.SUPER]))*2)-int(Input.is_action_just_pressed(inputActions[INPUTS.SUPER]))
+		inputs[INPUTS.ACTION3] =  (int(Input.is_action_pressed(inputActions[INPUTS.ACTION3]))*2)-int(Input.is_action_just_pressed(inputActions[INPUTS.ACTION3]))
 	
 	if (playerControl > 0 and horizontalLockTimer <= 0):
 		inputs[INPUTS.XINPUT] = -int(Input.is_action_pressed(inputActions[INPUTS.XINPUT][0]))+int(Input.is_action_pressed(inputActions[INPUTS.XINPUT][1]))
@@ -882,6 +882,7 @@ func respawn():
 	z_index = defaultZIndex
 	respawnTime = RESPAWN_DEFAULT_TIME
 	movement = Vector2.ZERO
+	water = false
 	global_position = partner.global_position+Vector2(0,-get_viewport_rect().size.y)
 	get_node("TailsCarryBox/HitBox").disabled = true
 	set_state(STATES.RESPAWN)
@@ -1003,6 +1004,9 @@ func cam_update(forceMove = false):
 		# clamped speed camera
 		camera.global_position.x = move_toward(camera.global_position.x,getPos.x,16*60*get_physics_process_delta_time())
 		camera.global_position.y = move_toward(camera.global_position.y,getPos.y,16*60*get_physics_process_delta_time())
+		# clamp to region
+		camera.global_position.x = clamp(camera.global_position.x,limitLeft,limitRight)
+		camera.global_position.y = clamp(camera.global_position.y,limitTop,limitBottom)
 		#camera.global_position = camera.global_position.move_toward(getPos,16*60*get_physics_process_delta_time())
 		# uncomment below for immediate camera
 		#camera.global_position = getPos
@@ -1022,14 +1026,19 @@ func _on_BubbleTimer_timeout():
 	if water:
 		# Generate Bubble
 		var bub = Bubble.instance()
+		bub.z_index = z_index+3
+		if playerControl == 0:
+			print(movement.y)
 		if airTimer > 0:
 			bub.global_position = global_position+Vector2(8*direction,0)
 			$BubbleTimer.start(max(randf()*3,0.5))
-		else:
+		elif movement.y < 250:
 			bub.global_position = global_position+Vector2(0,-8)
 			# pick either 0 or 1 for the bubble type (cosmetic)
 			bub.bubbleType = int(round(randf()))
-			$BubbleTimer.start(0.05)
-		bub.z_index = z_index+3
+			$BubbleTimer.start(0.1)
+		else:
+			bub.queue_free()
+			$BubbleTimer.start(max(randf()*3,0.5))
 		get_parent().add_child(bub)
 

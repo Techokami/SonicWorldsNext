@@ -918,7 +918,7 @@ vframes = 2
 
 [node name="PatternLeft" type="Control" parent="LevelCard"]
 anchor_bottom = 1.0
-margin_bottom = 4960.0
+margin_bottom = 5184.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -927,7 +927,7 @@ __meta__ = {
 anchor_bottom = 1.0
 margin_left = -32.0
 margin_right = 32.0
-margin_bottom = 61664.0
+margin_bottom = 66848.0
 texture = ExtResource( 8 )
 stretch_mode = 2
 __meta__ = {
@@ -947,7 +947,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_top = -32.0
-margin_bottom = 4672.0
+margin_bottom = 4896.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -957,7 +957,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 32.0
-margin_right = 16640.0
+margin_right = 16992.0
 margin_bottom = 64.0
 texture = ExtResource( 8 )
 stretch_mode = 2
@@ -1109,5 +1109,10 @@ margin_left = -160.0
 margin_top = -112.0
 margin_right = 160.0
 margin_bottom = 112.0
+
+[node name="ElecFlash" type="ColorRect" parent="Water/WaterOverlay"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
 
 [connection signal="timeout" from="LevelClear/CounterCount" to="." method="_on_CounterCount_timeout"]

@@ -803,7 +803,7 @@ var tileMap = {
 	255:[255,0,0],
 }
 
-var pointerDir = preload("res://Graphics/EditorUI/AnglePointer.png")
+var pointerDir = load("res://Graphics/EditorUI/AnglePointer.png")
 
 func _ready():
 	update()

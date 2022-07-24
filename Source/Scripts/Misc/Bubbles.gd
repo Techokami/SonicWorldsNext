@@ -37,7 +37,7 @@ func _physics_process(delta):
 
 # player collect bubble
 func _on_BubbleCollect_body_entered(body):
-	if !body.ground and $Bubble.frame >= 6:
+	if !body.ground and $Bubble.frame >= 6 and body.shield != body.SHIELDS.BUBBLE:
 		body.airTimer = body.defaultAirTime
 		body.sfx[23].play()
 		
@@ -48,3 +48,7 @@ func _on_BubbleCollect_body_entered(body):
 		$Bubble.play("bigPop")
 		$BubbleCollect/CollisionShape2D.disabled = true
 		set_physics_process(false)
+
+
+func _on_VisibilityNotifier2D_screen_exited():
+	queue_free()

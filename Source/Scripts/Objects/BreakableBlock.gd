@@ -13,7 +13,7 @@ func physics_collision(body, hitVector):
 		body.ground = false
 		body.movement.y = -3*Global.originalFPS
 		if score:
-			Global.score(global_position,Global.SCORE_COMBO[min(Global.SCORE_COMBO.size()-1,body.enemyCounter)])
+			Global.add_score(global_position,Global.SCORE_COMBO[min(Global.SCORE_COMBO.size()-1,body.enemyCounter)])
 		body.enemyCounter += 1
 		
 		for i in range(pieces.x):

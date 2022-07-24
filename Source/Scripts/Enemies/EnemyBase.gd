@@ -23,7 +23,7 @@ func _process(delta):
 				# reverse vertical velocity
 					i.movement.y = -i.velocity.y
 				# destroy
-				Global.score(global_position,Global.SCORE_COMBO[min(Global.SCORE_COMBO.size()-1,i.enemyCounter)])
+				Global.add_score(global_position,Global.SCORE_COMBO[min(Global.SCORE_COMBO.size()-1,i.enemyCounter)])
 				i.enemyCounter += 1
 				destroy()
 				# cut the script short
@@ -60,13 +60,11 @@ func destroy():
 	explosion.global_position = global_position
 	# create animal
 	var animal = Animal.instance()
+	animal.animal = Global.animals[round(randf())]
 	get_parent().add_child(animal)
 	animal.global_position = global_position
 	# free node
 	queue_free()
 
-#func _on_InstaArea_area_entered(area):
-#	Global.score(global_position,Global.SCORE_COMBO[0])
-#	destroy()
 
 

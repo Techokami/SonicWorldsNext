@@ -12,11 +12,11 @@ var dropOff = 24
 var players = []
 var contactPoint = []
 
-func _process(delta):
+func _process(_delta):
 	if Engine.is_editor_hint():
 		update()
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if players.size() > 0:
 		contactPoint.resize(players.size())
 		for i in players:

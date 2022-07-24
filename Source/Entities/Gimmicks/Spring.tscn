@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://graphics/gimmicks/springs_yellow.png" type="Texture" id=1]
+[ext_resource path="res://Graphics/Gimmicks/springs_yellow.png" type="Texture" id=1]
 [ext_resource path="res://Scripts/Gimmicks/Spring.gd" type="Script" id=2]
 [ext_resource path="res://Audio/SFX/Gimmicks/Springs.wav" type="AudioStream" id=3]
 

@@ -44,18 +44,6 @@ tracks/2/keys = {
 "update": 0,
 "values": [ Vector2( 0, -4 ) ]
 }
-tracks/3/type = "value"
-tracks/3/path = NodePath("Sprite/Sprite:frame")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 4 ]
-}
 
 [sub_resource type="Animation" id=121]
 resource_name = "air"
@@ -1060,7 +1048,7 @@ script = ExtResource( 5 )
 [node name="DashDust" type="AnimatedSprite" parent="Sprite"]
 visible = false
 frames = SubResource( 96 )
-frame = 2
+frame = 1
 playing = true
 offset = Vector2( -9, -4 )
 

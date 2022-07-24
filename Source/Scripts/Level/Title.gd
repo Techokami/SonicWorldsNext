@@ -2,11 +2,10 @@ extends Node2D
 
 export var music = preload("res://Audio/Soundtrack/9. SWD_TitleScreen.ogg")
 export var speed = 0
-var nextScene = preload("res://Scene/CharacterSelect.tscn")
+export var nextScene = preload("res://Scene/Presentation/CharacterSelect.tscn")
 var titleEnd = false
 
 func _ready():
-	yield(get_tree(),"idle_frame")
 	Global.music.stream = music
 	Global.music.play()
 

@@ -6,7 +6,7 @@ export var endFrame = 59
 export var animLoops = 1
 onready var path = $Path
 
-var player = preload("res://Graphics/Players/Sonic.png")
+var player = load("res://Graphics/Players/Sonic.png")
 
 
 func _process(delta):

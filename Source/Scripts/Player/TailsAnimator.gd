@@ -51,6 +51,8 @@ func _on_PlayerAnimation_animation_started(anim_name):
 			tailsAnimator.playback_speed = .5
 			tailsAnimator.play("hang")
 			currentHandle = HANDLE.DEFAULT
+		"RESET":
+			currentHandle = HANDLE.DEFAULT
 		_:
 			tailsAnimator.play("stop")
 			currentHandle = HANDLE.DEFAULT

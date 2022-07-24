@@ -15,7 +15,7 @@ var lockDir = false
 func _process(delta):
 	if parent.playerControl != 0 or (parent.inputs[parent.INPUTS.YINPUT] < 0 and parent.character == parent.CHARACTERS.TAILS):
 		# Super
-		if parent.inputs[parent.INPUTS.SUPER] == 1 and !parent.super and isJump:
+		if parent.inputs[parent.INPUTS.ACTION3] == 1 and !parent.super and isJump:
 			if parent.rings >= 50 and Global.emeralds >= 7:
 				parent.set_state(parent.STATES.SUPER)
 		# Shield actions
@@ -200,6 +200,6 @@ func state_exit():
 		parent.shieldSprite.visible = false
 		parent.shieldSprite.stop()
 	parent.poleGrabID = null
-	parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = true
+	parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").set_deferred("disabled",true)
 	parent.enemyCounter = 0
 	lockDir = false

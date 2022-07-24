@@ -10,5 +10,5 @@ func physics_collision(body, hitVector):
 	$Bumper.frame = 0
 	Global.play_sound($BumperSFX.stream)
 	if bumperCount < 10:
-		Global.score(global_position,0)
+		Global.add_score(global_position,0)
 		bumperCount += 1

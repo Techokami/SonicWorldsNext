@@ -3,7 +3,6 @@ tool
 
 export (int, "left", "right") var boostDirection = 0
 var dirMemory = boostDirection
-var springTextures = [preload("res://Graphics/Gimmicks/springs_yellow.png"),preload("res://Graphics/Gimmicks/springs_red.png")]
 export var speed = 16
 
 func _ready():

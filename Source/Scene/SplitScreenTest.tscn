@@ -23,7 +23,6 @@ usage = 0
 render_target_update_mode = 3
 
 [node name="Camera2D" type="Camera2D" parent="VBoxContainer/Container1/Viewport"]
-current = true
 
 [node name="TestScene" parent="VBoxContainer/Container1/Viewport" instance=ExtResource( 1 )]
 

@@ -83,7 +83,7 @@ export (int, "Left", "Middle", "Right") var hAlign = 0
 func _ready():
 	region_enabled = true;
 
-func _process(delta):
+func _process(_delta):
 	if (stringMem != string):
 		stringMem = string;
 		update()

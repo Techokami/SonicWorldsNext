@@ -47,7 +47,7 @@ animations = [ {
 [sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 40, 96 )
 
-[node name="BuzzBomber" type="KinematicBody2D"]
+[node name="BuzzBomber" type="KinematicBody2D" groups=["Enemy"]]
 collision_layer = 16384
 collision_mask = 0
 script = ExtResource( 2 )
@@ -71,6 +71,7 @@ shape = SubResource( 1 )
 [node name="Wings" type="AnimatedSprite" parent="Sprite"]
 frames = SubResource( 7 )
 animation = "wing"
+frame = 1
 playing = true
 
 [node name="BuzzBomber" type="Sprite" parent="Sprite"]

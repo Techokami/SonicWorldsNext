@@ -6,7 +6,7 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8, 16 )
 
-[node name="Chomper" type="Node2D"]
+[node name="Chomper" type="Node2D" groups=["Enemy"]]
 
 [node name="Chomper" type="KinematicBody2D" parent="."]
 collision_layer = 16384

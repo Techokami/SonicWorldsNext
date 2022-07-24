@@ -88,7 +88,7 @@ func _draw():
 		,Color(1,1,1,0.5))
 
 
-func _on_PlayerCheck_body_entered(body):
+func _on_PlayerCheck_body_entered(_body):
 	if !isFiring and coolDown <= 0:
 		isFiring = true
 		$Sprite/Fire.visible = false

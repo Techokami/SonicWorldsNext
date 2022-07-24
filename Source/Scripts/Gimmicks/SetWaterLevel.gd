@@ -4,7 +4,7 @@ tool
 export var setWaterLevel = 0
 export var setSpeed = 512
 
-func _process(delta):
+func _process(_delta):
 	if Engine.editor_hint:
 		update()
 

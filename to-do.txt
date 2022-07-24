@@ -1,19 +1,21 @@
 needed changes
 
 minor changes
-- edge wobble on objects
 - knuckles
 - delete unused and redundant code
+
+11/07
 - rebindable controls
+- added flicky options
+- added "powered by" screen
+- fixed camera going out of bounds causing weird scrolling at high speeds
+- fixed partner respawning making water splash
+- fixed partner drowning/indefinite bubbles
 - make screen clear when elec shield enters water
-
-probably needs more testing
-- tails flying sounds not stopping (tends to happen when a state change happens)
-
-
 
 
 04/07
+- added better edge wobble on objects
 - added motobug
 - complete idle animations
 - moved partner over so they don't move at the start of the stage

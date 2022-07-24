@@ -1,6 +1,8 @@
 extends Node2D
 
+
 export var music = preload("res://Audio/Soundtrack/10. SWD_CharacterSelect.ogg")
+onready var nextZone = load("res://Scene/Zones/BaseZone.tscn")
 var selected = false
 
 var characterLabels = ["Sonic and Tails", "Sonic", "Tails"]
@@ -11,6 +13,8 @@ func _ready():
 	Global.music.stream = music
 	Global.music.play()
 	$UI/Labels/Control/Character.string = characterLabels[characterID]
+	if nextZone != null:
+		Global.nextZone = nextZone
 
 func _input(event):
 	if !selected:

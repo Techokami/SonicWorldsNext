@@ -72,8 +72,29 @@ func _process(delta):
 		$Water/WaterOverlay.rect_scale.y = clamp(Global.waterLevel-$Water/WaterOverlay.rect_position.y,0,get_viewport().size.y)
 		$Water/WaterOverlay.visible = true
 		#$Water/WaterOverlay/TextureRect.rect_position.y = Global.waterLevel-GlobalFunctions.getCurrentCamera2D().global_position.y-$Water/WaterOverlay/TextureRect.rect_position.y
+		# Water Overlay Elec flash
+		if (Global.players.size() > 0):
+			for i in Global.players:
+				if i.water:
+					match (i.shield):
+						i.SHIELDS.ELEC:
+							i.set_shield(i.SHIELDS.NONE)
+							$Water/WaterOverlay/ElecFlash.visible = true
+							# destroy all enemies in near player and below water
+							for j in get_tree().get_nodes_in_group("Enemy"):
+								if j.global_position.y >= Global.waterLevel and i.global_position.distance_to(j.global_position) <= 256:
+									if j.has_method("destroy"):
+										Global.add_score(j.global_position,Global.SCORE_COMBO[0])
+										j.destroy()
+										print(j)
+							yield(get_tree(),"idle_frame")
+							$Water/WaterOverlay/ElecFlash.visible = false
+						i.SHIELDS.FIRE:
+							i.set_shield(i.SHIELDS.NONE)
 	else:
 		$Water/WaterOverlay.visible = false
+	
+	
 	
 	if flashTimer < 0:
 		flashTimer = 0.1
