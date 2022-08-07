@@ -62,7 +62,7 @@ func _ready():
 	parent = get_parent()
 	active = false # prevent your tiles from being placed when you open a room
 
-func _process(delta):
+func _process(_delta):
 	# recheck connections if update is true
 	if (update):
 		parent = get_parent()
@@ -84,7 +84,6 @@ func _process(delta):
 	# code to copy to clipboard the current tilemap to clipboard
 	if (copyLayoutToClipboard):
 		var tileLayout = []
-		var rect = parent.get_used_rect()
 		for cell in parent.get_used_cells():
 			# generate the cell string, if this is changed it'll mess with the STAMPS so be careful
 			tileLayout.append(cell.x) # 0

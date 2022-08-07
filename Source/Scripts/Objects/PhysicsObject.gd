@@ -84,7 +84,8 @@ func update_sensors():
 	if ground and shape.y <= maxCharGroundHeight:
 		yGroundDiff = abs((shape.y)-(maxCharGroundHeight))
 	
-	verticalSensorLeft.position = Vector2(-shape.x,-yGroundDiff)
+	# note: the 0.01 is to help just a little bit on priority for wall sensors
+	verticalSensorLeft.position = Vector2(-(shape.x-0.01),-yGroundDiff)
 	
 	# calculate how far down to look if on the floor, the sensor extends more if the objects is moving, if the objects moving up then it's ignored,
 	# if you want behaviour similar to sonic 1, replace "min(abs(movement.x/60)+4,groundLookDistance)" with "groundLookDistance"

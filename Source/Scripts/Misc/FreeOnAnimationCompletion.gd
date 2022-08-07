@@ -8,7 +8,7 @@ func _ready():
 	if behaviour == 0:
 		set_process(false)
 
-func _process(delta):
+func _process(_delta):
 	match(behaviour):
 		TYPE.FOLLOW_WATER_SURFACE:
 			if Global.waterLevel != null:

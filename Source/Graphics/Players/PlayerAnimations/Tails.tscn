@@ -1048,7 +1048,6 @@ script = ExtResource( 5 )
 [node name="DashDust" type="AnimatedSprite" parent="Sprite"]
 visible = false
 frames = SubResource( 96 )
-frame = 1
 playing = true
 offset = Vector2( -9, -4 )
 

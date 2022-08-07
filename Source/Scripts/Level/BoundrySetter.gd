@@ -32,7 +32,7 @@ func _on_BoundrySetter_body_entered(body):
 				body.limitBottom = min(bottomBoundry,Global.hardBorderBottom)
 
 
-func _process(delta):
+func _process(_delta):
 	if (Engine.editor_hint):
 		update()
 		rightBoundry = max(leftBoundry+screenSize.x,rightBoundry)

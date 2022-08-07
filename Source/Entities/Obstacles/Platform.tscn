@@ -10,6 +10,7 @@ extents = Vector2( 40, 2 )
 [node name="Platform" type="Node2D"]
 process_priority = 10
 script = ExtResource( 1 )
+offset = 0
 
 [node name="Platform" type="KinematicBody2D" parent="."]
 process_priority = 10

@@ -15,6 +15,8 @@ func _physics_process(delta):
 		match player.character:
 			1:
 				$Animator.queue("Tails")
+			2:
+				$Animator.queue("Knuckles")
 			_:
 				$Animator.queue("Sonic")
 		$GoalPost.play()

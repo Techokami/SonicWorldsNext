@@ -15,7 +15,7 @@ var springTextures = [preload("res://Graphics/Gimmicks/springs_yellow.png"),prel
 func _ready():
 	set_spring()
 
-func _process(delta):
+func _process(_delta):
 	if Engine.is_editor_hint():
 		if (springDirection != dirMemory or typeMemory != type):
 			dirMemory = springDirection
@@ -79,6 +79,12 @@ func physics_collision(body, hitVector):
 			body.movement.y = setMove.y
 			body.set_state(body.STATES.AIR)
 		else:
+			# exit out of state on certain states
+			match(body.currentState):
+				body.STATES.GLIDE:
+					if !body.ground:
+						body.animator.play("run")
+						body.set_state(body.STATES.AIR)
 			body.movement.x = setMove.x
 			body.horizontalLockTimer = (15.0/60.0) # lock for 15 frames
 			body.direction = sign(setMove.x)

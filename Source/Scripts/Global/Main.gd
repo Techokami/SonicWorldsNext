@@ -47,6 +47,12 @@ func _input(event):
 		elif wasPaused and get_tree().paused:
 			# Do the unpause
 			get_tree().paused = false
+	# reset game
+	if event.is_action_pressed("ui_reset"):
+		wasPaused = false
+		Global.reset_values()
+		get_tree().paused = false
+		get_tree().reload_current_scene()
 
 
 
@@ -97,3 +103,5 @@ func set_volume(volume = 0):
 	startVolumeLevel = Global.music.volume_db
 	setVolumeLevel = volume
 	volumeLerp = 0
+
+

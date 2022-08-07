@@ -15,7 +15,7 @@ func _ready():
 	if not Engine.is_editor_hint():
 		visible = false
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if playerList.size() > 0:
 		for i in playerList:
 			if "collissionLayer" in i and "movement" in i and "ground" in i:
@@ -32,7 +32,7 @@ func _physics_process(delta):
 							else:
 								i.collissionLayer = leftLayer
 
-func _process(delta):
+func _process(_delta):
 	if Engine.is_editor_hint():
 		$Mask.scale = size
 		update()

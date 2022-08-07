@@ -9,6 +9,8 @@ var scoreID = 0
 var yspeed = -3
 
 func _ready():
+	Global.check_score_life(SCORE[scoreID])
+	
 	Global.score += SCORE[scoreID]
 	$Sprite.region_rect = RECTS[scoreID]
 	

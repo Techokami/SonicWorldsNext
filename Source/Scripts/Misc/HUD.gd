@@ -166,9 +166,11 @@ func _on_CounterCount_timeout():
 	$LevelClear/Counter.play()
 	
 	if timeBonus > 0:
+		Global.check_score_life(100)
 		timeBonus -= 100
 		Global.score += 100
 	elif ringBonus > 0:
+		Global.check_score_life(100)
 		ringBonus -= 100
 		Global.score += 100
 	else:

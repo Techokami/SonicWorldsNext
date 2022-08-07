@@ -17,7 +17,9 @@ var playerIdles = [
 "idle4","idle4","idle4","idle4","idle4","idle4","idle4","idle4","idle4","idle4",
 "idle5"],
 # TAILS
-["idle1"] # Note: tails idle loops on idle one, to add more idles make sure to disable his idle1 loop
+["idle1"], # Note: tails idle loops on idle one, to add more idles make sure to disable his idle1 loop
+# Knuckles
+["idle1"]
 ]
 
 func state_exit():
@@ -152,7 +154,7 @@ func _physics_process(delta):
 		skid = true
 		parent.sfx[19].play()
 		parent.animator.play("skid")
-		$SkidDustTimer.start(0.1)
+		$"../../SkidDustTimer".start(0.1)
 	
 	elif skid:
 		var inputX = parent.inputs[parent.INPUTS.XINPUT]
@@ -188,31 +190,15 @@ func _physics_process(delta):
 			parent.horizontalLockTimer = 30.0/60.0
 		
 	# movement
-	if (parent.inputs[parent.INPUTS.XINPUT] != 0):
-		if (parent.movement.x*parent.inputs[parent.INPUTS.XINPUT] < parent.top):
-			if (sign(parent.movement.x) == parent.inputs[parent.INPUTS.XINPUT]):
-				if (abs(parent.movement.x) < parent.top):
-					parent.movement.x = clamp(parent.movement.x+parent.acc/delta*parent.inputs[parent.INPUTS.XINPUT],-parent.top,parent.top)
-			else:
-				# reverse direction
-				parent.movement.x += parent.dec/delta*parent.inputs[parent.INPUTS.XINPUT]
-				# implament weird turning quirk
-				if (sign(parent.movement.x) != sign(parent.movement.x-parent.dec/delta*parent.inputs[parent.INPUTS.XINPUT])):
-					parent.movement.x = 0.5*60*sign(parent.movement.x)
-	else:
-		if (parent.movement.x != 0):
-			# check that decreasing movement won't go too far
-			if (sign(parent.movement.x - (parent.frc/delta)*sign(parent.movement.x)) == sign(parent.movement.x)):
-				parent.movement.x -= (parent.frc/delta)*sign(parent.movement.x)
-			else:
-				parent.movement.x -= parent.movement.x
+	parent.action_move(delta)
 
 
 func _on_SkidDustTimer_timeout():
-	if !skid:
-		$SkidDustTimer.stop()
-	else:
-		var dust = parent.Particle.instance()
-		dust.play("SkidDust")
-		dust.global_position = parent.global_position+(Vector2.DOWN*16).rotated(deg2rad(parent.spriteRotation-90))
-		parent.get_parent().add_child(dust)
+	if parent.currentState == parent.STATES.NORMAL:
+		if !skid:
+			$"../../SkidDustTimer".stop()
+		else:
+			var dust = parent.Particle.instance()
+			dust.play("SkidDust")
+			dust.global_position = parent.global_position+(Vector2.DOWN*16).rotated(deg2rad(parent.spriteRotation-90))
+			parent.get_parent().add_child(dust)

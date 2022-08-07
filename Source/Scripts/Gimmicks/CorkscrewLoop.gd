@@ -20,12 +20,12 @@ func _ready():
 				corkBG.position.x += corkBG.texture.get_width()*i
 				corkFG.position.x += corkFG.texture.get_width()*i
 
-func _process(delta):
+func _process(_delta):
 	if Engine.is_editor_hint():
 		$EnteranceR.position.x = $Corkscrew.texture.get_width()*(length-1)+($Corkscrew.texture.get_width()/2)
 		update()
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if !Engine.is_editor_hint():
 		# Check for player encounters
 		for i in playerListL: # left side

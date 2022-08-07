@@ -1,9 +1,25 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Graphics/Items/goal_signs.png" type="Texture" id=1]
 [ext_resource path="res://Scripts/Objects/GoalPost.gd" type="Script" id=2]
 [ext_resource path="res://Audio/SFX/Objects/SignPost.wav" type="AudioStream" id=3]
 [ext_resource path="res://Shaders/PlayerPalette.tres" type="Material" id=4]
+
+[sub_resource type="Animation" id=5]
+resource_name = "Knuckles"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Rect2( 216, 0, 48, 48 ) ]
+}
 
 [sub_resource type="Animation" id=2]
 length = 0.001
@@ -78,6 +94,7 @@ region_rect = Rect2( 0, 0, 48, 48 )
 script = ExtResource( 2 )
 
 [node name="Animator" type="AnimationPlayer" parent="."]
+anims/Knuckles = SubResource( 5 )
 anims/RESET = SubResource( 2 )
 anims/Sonic = SubResource( 3 )
 anims/Spinner = SubResource( 1 )

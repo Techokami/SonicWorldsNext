@@ -6,8 +6,14 @@ export var sound = preload("res://Audio/SFX/Gimmicks/Collapse.wav")
 
 func physics_collision(body, hitVector):
 	if hitVector.x != 0:
-		if body.animator.current_animation == "roll" && body.currentState == body.STATES.ROLL && abs(body.movement.x) > 4.5*60:
+		# verify if rolling or knuckles
+		if body.animator.current_animation == "roll" and body.currentState == body.STATES.ROLL and abs(body.movement.x) > 4.5*60 and !get_collision_layer_bit(18) or body.character == body.CHARACTERS.KNUCKLES:
 			# frame lag to replicate sonic 3
+			var playerPhysicsMemory = body.movement
+			# disable physics altering masks
+			set_collision_layer_bit(15,false)
+			set_collision_mask_bit(13,false)
+			
 			yield(get_tree(),"idle_frame")
 			$CollisionShape2D.disabled = true
 			$Sprite.visible = false

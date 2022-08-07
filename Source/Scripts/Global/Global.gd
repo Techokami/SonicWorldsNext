@@ -42,7 +42,7 @@ var waterLevel = null
 var setWaterLevel = 0 # used by other nodes
 var waterScrollSpeed = 64 # used by other nodes
 
-enum CHARACTERS {NONE,SONIC,TAILS}
+enum CHARACTERS {NONE,SONIC,TAILS,KNUCKLES}
 var PlayerChar1 = CHARACTERS.SONIC
 var PlayerChar2 = CHARACTERS.TAILS
 
@@ -79,6 +79,7 @@ func reset_values():
 	emeralds = 0
 	checkPoints = []
 	checkPointTime = 0
+	currentCheckPoint = -1
 	animals = [0,1]
 	nextZone = load("res://Scene/Zones/BaseZone.tscn")
 
@@ -92,6 +93,14 @@ func add_score(position = Vector2.ZERO,value = 0):
 	scoreObj.scoreID = value
 	scoreObj.global_position = position
 	add_child(scoreObj)
+
+# give life if more score will go above 50,000
+func check_score_life(scoreAdd = 0):
+	if fmod(score,50000) > fmod(score+scoreAdd,50000):
+		life.play()
+		lives += 1
+		effectTheme.volume_db = -100
+		music.volume_db = -100
 
 func stage_clear():
 	if stageClearPhase == 0:

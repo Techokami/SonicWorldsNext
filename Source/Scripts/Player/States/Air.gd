@@ -77,6 +77,9 @@ func _process(delta):
 									parent.abilityUsed = false
 					parent.CHARACTERS.TAILS:
 						parent.set_state(parent.STATES.FLY)
+					parent.CHARACTERS.KNUCKLES:
+						parent.movement = Vector2(parent.direction*4*60,max(parent.movement.y,0))
+						parent.set_state(parent.STATES.GLIDE,parent.currentHitbox.GLIDE)
 
 
 func _physics_process(delta):

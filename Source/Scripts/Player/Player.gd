@@ -1,6 +1,7 @@
 extends PhysicsObject
-const HITBOXESSONIC = {NORMAL = Vector2(9,19), ROLL = Vector2(7,14)}
-const HITBOXESTAILS = {NORMAL = Vector2(9,15), ROLL = Vector2(7,14)}
+const HITBOXESSONIC = {NORMAL = Vector2(9,19), ROLL = Vector2(7,14), GLIDE = Vector2(10,10)}
+const HITBOXESTAILS = {NORMAL = Vector2(9,15), ROLL = Vector2(7,14), GLIDE = Vector2(10,10)}
+const HITBOXESKNUCKLES = {NORMAL = Vector2(9,19), ROLL = Vector2(7,14), GLIDE = Vector2(10,10)}
 var currentHitbox = HITBOXESSONIC
 
 #Sonic's Speed constants
@@ -56,7 +57,7 @@ var enemyCounter = 0
 # 8 Jump
 # 9 Jump release velocity
 
-enum CHARACTERS {SONIC, TAILS}
+enum CHARACTERS {SONIC, TAILS, KNUCKLES}
 var character = CHARACTERS.SONIC
 
 # 0 = Sonic, 1 = Tails, 2 = Knuckles, 3 = Shoes, 4 = Super Sonic
@@ -108,7 +109,7 @@ var spriteRotation = 0
 var airControl = true
 
 # States
-enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, ANIMATION, HIT, DIE, CORKSCREW, JUMPCANCEL, SUPER, FLY, RESPAWN, HANG}
+enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, ANIMATION, HIT, DIE, CORKSCREW, JUMPCANCEL, SUPER, FLY, RESPAWN, HANG, GLIDE, WALLCLIMB}
 var currentState = STATES.NORMAL
 var crouchBox = null
 
@@ -117,6 +118,7 @@ enum SHIELDS {NONE, NORMAL, FIRE, ELEC, BUBBLE}
 var shield = SHIELDS.NONE
 onready var magnetShape = $RingMagnet/CollisionShape2D
 onready var shieldSprite = $Shields
+var reflective = false # used for reflecting projectiles
 
 # State array
 onready var stateList = $States.get_children()
@@ -127,6 +129,7 @@ onready var animator = $Sprite/PlayerAnimation
 onready var sprite = $Sprite/Sprite
 onready var spriteControler = $Sprite
 var lastActiveAnimation = ""
+var defaultSpriteOffset = Vector2.ZERO
 
 # Camera
 # onready var camera = get_node_or_null("Camera")
@@ -182,6 +185,7 @@ const INPUT_MEMORY_LENGTH = 20
 
 var Player = load("res://Entities/MainObjects/Player.tscn")
 var tailsAnimations = preload("res://Graphics/Players/PlayerAnimations/Tails.tscn")
+var knucklesAnimations = preload("res://Graphics/Players/PlayerAnimations/Knuckles.tscn")
 
 # Get sfx list
 onready var sfx = $SFX.get_children()
@@ -251,6 +255,11 @@ func _ready():
 				playerPal.set_shader_param("amount",6)
 				playerPal.set_shader_param("palRows",10)
 				playerPal.set_shader_param("paletteTexture",load("res://Graphics/Palettes/SuperTails.png"))
+		
+			CHARACTERS.KNUCKLES:
+				playerPal.set_shader_param("amount",3)
+				playerPal.set_shader_param("palRows",11)
+				playerPal.set_shader_param("paletteTexture",load("res://Graphics/Palettes/SuperKnuckles.png"))
 	
 	
 	# Checkpoints
@@ -275,9 +284,27 @@ func _ready():
 			sprite = tails.get_node("Sprite")
 			animator = tails.get_node("PlayerAnimation")
 			spriteControler = tails
+		CHARACTERS.KNUCKLES:
+			# Set sprites
+			currentHitbox = HITBOXESKNUCKLES
+			get_node("Sprite").queue_free()
+			yield(get_tree(),"idle_frame")
+			var knuckles = knucklesAnimations.instance()
+			add_child(knuckles)
+			sprite = knuckles.get_node("Sprite")
+			animator = knuckles.get_node("PlayerAnimation")
+			spriteControler = knuckles
+	
+	# run switch physics to ensure character specific physics
+	switch_physics()
 	
 	# Set hitbox
 	$HitBox.shape.extents = currentHitbox.NORMAL
+	
+	# connect animator
+	animator.connect("animation_started",self,"_on_PlayerAnimation_animation_started")
+	defaultSpriteOffset = sprite.offset
+	
 	
 	crouchBox = get_node_or_null("Sprite/CrouchBox")
 	if crouchBox != null:
@@ -397,6 +424,8 @@ func _process(delta):
 					playerPal.set_shader_param("row",wrapf(playerPal.get_shader_param("row")+delta*5,playerPal.get_shader_param("palRows")-3,playerPal.get_shader_param("palRows")))
 				CHARACTERS.TAILS:
 					playerPal.set_shader_param("row",wrapf(playerPal.get_shader_param("row")+delta*5,playerPal.get_shader_param("palRows")-4,playerPal.get_shader_param("palRows")))
+				CHARACTERS.KNUCKLES:
+					playerPal.set_shader_param("row",wrapf(playerPal.get_shader_param("row")+delta*5,playerPal.get_shader_param("palRows")-9,playerPal.get_shader_param("palRows")))
 			# check if ring count is greater then 0
 			# deactivate if stage cleared
 			if rings > 0 and Global.stageClearPhase == 0:
@@ -455,7 +484,7 @@ func _process(delta):
 	if ($InvincibilityBarrier.visible):
 		var stars = $InvincibilityBarrier.get_children()
 		for i in stars:
-			i.position = i.position.rotated(deg2rad(360*delta*2))
+			i.position = i.position.rotated(deg2rad(360*delta*4))
 		if (fmod(Global.globalTimer,0.1)+delta > 0.1):
 			var star = RotatingParticle.instance()
 			var starPart = star.get_node("GenericParticle")
@@ -464,7 +493,8 @@ func _process(delta):
 			get_parent().add_child(star)
 			var options = ["StarSingle","StarSinglePat2","default"]
 			starPart.play(options[round(randf()*2)])
-			starPart.frame = rand_range(0,6)
+			starPart.frame = rand_range(0,2)
+			starPart.velocity = velocity
 
 	# Animator
 	match(animator.current_animation):
@@ -481,6 +511,8 @@ func _process(delta):
 			animator.playback_speed = 60/10
 		"dropDash":
 			animator.playback_speed = 20/10
+		"climb":
+			animator.playback_speed = -movement.y/40.0
 		_:
 			animator.playback_speed = 1
 	
@@ -528,11 +560,15 @@ func _process(delta):
 func _physics_process(delta):
 	
 	# Attacking is for rolling type animations
-	var attacking = (animator.current_animation == "roll" or animator.current_animation == "dropDash" or animator.current_animation == "spinDash" )
+	var attacking = (animator.current_animation == "roll" or animator.current_animation == "dropDash" or animator.current_animation == "spinDash" or lastActiveAnimation == "glide" or animator.current_animation == "glide" or lastActiveAnimation == "glideSlide" )
 	
 	# physics sets
 	# collid with solids if not rolling layer
 	set_collision_mask_bit(15,!attacking)
+	# collid with solids if not knuckles layer
+	set_collision_mask_bit(18,!character == CHARACTERS.KNUCKLES)
+	# collid with solids if not rolling or not knuckles layer
+	set_collision_mask_bit(20,(character != CHARACTERS.KNUCKLES and !attacking))
 	# damage mask bit
 	set_collision_layer_bit(19,attacking)
 	
@@ -660,7 +696,7 @@ func _physics_process(delta):
 				splash.z_index = sprite.z_index+10
 				get_parent().add_child(splash)
 			
-			# Elec shield/Fire shield logic is in HUD script
+			# Elec shield/Fire shield logic is in HUD script (related to screen flashing)
 		# Exit water
 		if global_position.y < Global.waterLevel and water:
 			water = false
@@ -718,10 +754,6 @@ func set_inputs():
 	
 
 func set_state(newState, forceMask = Vector2.ZERO):
-	for i in stateList:
-		i.set_process(i == stateList[newState])
-		i.set_physics_process(i == stateList[newState])
-		i.set_process_input(i == stateList[newState])
 	
 	if currentState != newState:
 		var lastState = currentState
@@ -731,6 +763,11 @@ func set_state(newState, forceMask = Vector2.ZERO):
 		
 		if stateList[newState].has_method("state_activated"):
 			stateList[newState].state_activated()
+	
+	for i in stateList:
+		i.set_process(i == stateList[newState])
+		i.set_physics_process(i == stateList[newState])
+		i.set_process_input(i == stateList[newState])
 	
 	var shapeChangeCheck = $HitBox.shape.extents
 	var forcePoseChange = Vector2.ZERO
@@ -759,6 +796,14 @@ func set_state(newState, forceMask = Vector2.ZERO):
 	
 	sprite.get_node("DashDust").visible = false
 
+# sets the hitbox mask shape, referenced in other states
+func set_hitbox(mask = Vector2.ZERO, forcePoseChange = false):
+	# adjust position if on floor or force pose change
+	if ground or forcePoseChange:
+		position += ((mask-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)
+	
+	$HitBox.shape.extents = mask
+
 # set shields
 func set_shield(shieldID):
 	magnetShape.disabled = true
@@ -785,15 +830,6 @@ func set_shield(shieldID):
 		_: # disable
 			shieldSprite.visible = false
 
-func action_jump(animation = "roll", airJumpControl = true):
-	animator.play(animation)
-	animator.advance(0)
-	movement.y = -jmp
-	sfx[0].play()
-	airControl = airJumpControl
-	cameraDragLerp = 1
-	disconect_from_floor()
-	set_state(STATES.JUMP)
 
 
 # see Global for damage types, 0 = none, 1 = Fire, 2 = Elec, 3 = Water
@@ -922,7 +958,9 @@ func land_floor():
 func _on_PlayerAnimation_animation_started(anim_name):
 	if (sprite != null):
 		sprite.flip_v = false
-		sprite.offset = Vector2(0,-4)
+		sprite.offset = defaultSpriteOffset#Vector2(0,-4)
+		if animator.playback_speed < 0:
+			animator.playback_speed = abs(animator.playback_speed)
 		animator.advance(0)
 
 # return the physics id variable, see physicsList array for reference
@@ -941,6 +979,12 @@ func determine_physics():
 			elif shoeTime > 0:
 				return 3 # Shoes
 			return 1 # Tails
+		CHARACTERS.KNUCKLES:
+			if super:
+				return 4 # Super Sonic
+			elif shoeTime > 0:
+				return 3 # Shoes
+			return 2 # Knuckles
 	
 	return -1
 
@@ -1042,3 +1086,35 @@ func _on_BubbleTimer_timeout():
 			$BubbleTimer.start(max(randf()*3,0.5))
 		get_parent().add_child(bub)
 
+# player actions
+
+# player movements
+func action_move(delta):
+	if (inputs[INPUTS.XINPUT] != 0):
+		if (movement.x*inputs[INPUTS.XINPUT] < top):
+			if (sign(movement.x) == inputs[INPUTS.XINPUT]):
+				if (abs(movement.x) < top):
+					movement.x = clamp(movement.x+acc/delta*inputs[INPUTS.XINPUT],-top,top)
+			else:
+				# reverse direction
+				movement.x += dec/delta*inputs[INPUTS.XINPUT]
+				# implament weird turning quirk
+				if (sign(movement.x) != sign(movement.x-dec/delta*inputs[INPUTS.XINPUT])):
+					movement.x = 0.5*60*sign(movement.x)
+	else:
+		if (movement.x != 0):
+			# check that decreasing movement won't go too far
+			if (sign(movement.x - (frc/delta)*sign(movement.x)) == sign(movement.x)):
+				movement.x -= (frc/delta)*sign(movement.x)
+			else:
+				movement.x -= movement.x
+
+func action_jump(animation = "roll", airJumpControl = true):
+	animator.play(animation)
+	animator.advance(0)
+	movement.y = -jmp
+	sfx[0].play()
+	airControl = airJumpControl
+	cameraDragLerp = 1
+	disconect_from_floor()
+	set_state(STATES.JUMP)

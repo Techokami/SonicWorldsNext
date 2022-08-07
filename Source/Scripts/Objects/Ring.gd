@@ -63,7 +63,7 @@ func _on_Hitbox_body_exited(body):
 		player = null
 
 
-func _on_Hitbox_area_shape_entered(area_id, area, area_shape, local_shape):
+func _on_Hitbox_area_shape_entered(_area_id, area, _area_shape, _local_shape):
 	if (magnet == null):
 		magnet = area
 		magnetShape = area.get_child(0)

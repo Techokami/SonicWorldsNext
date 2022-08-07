@@ -1,11 +1,18 @@
 needed changes
 
 minor changes
-- knuckles
+- verify physics on characters like tails and knuckles (super tails)
 - delete unused and redundant code
+- stop title card animating on pauses
+- fix knuckles animations
+
+7/08
+- knuckles
+- fixed bridges
+- made breakable walls function with knuckles
 
 11/07
-- rebindable controls
+- added rebindable controls
 - added flicky options
 - added "powered by" screen
 - fixed camera going out of bounds causing weird scrolling at high speeds

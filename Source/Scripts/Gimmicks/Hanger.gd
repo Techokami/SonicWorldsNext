@@ -20,7 +20,7 @@ func _physics_process(delta):
 	for i in players:
 		var playID = players.find(i)
 		# verify state is valid for grabbing and not on floor
-		if !i.ground and (i.currentState == i.STATES.AIR or i.currentState == i.STATES.JUMP):
+		if !i.ground and (i.currentState == i.STATES.AIR or i.currentState == i.STATES.JUMP or i.currentState == i.STATES.GLIDE):
 			# check settings if to connect with hanger (mainly vertical momentum being downard)
 			if check_grab(i,playID):
 				playerContacts += 1

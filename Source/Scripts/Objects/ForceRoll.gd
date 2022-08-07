@@ -3,7 +3,7 @@ extends Area2D
 var players = []
 export (int, "left", "right") var forceDirection = 1
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if players.size() > 0:
 		for i in players:
 			if i.ground:

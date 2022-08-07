@@ -5,7 +5,7 @@ export var music = preload("res://Audio/Soundtrack/10. SWD_CharacterSelect.ogg")
 onready var nextZone = load("res://Scene/Zones/BaseZone.tscn")
 var selected = false
 
-var characterLabels = ["Sonic and Tails", "Sonic", "Tails"]
+var characterLabels = ["Sonic and Tails", "Sonic", "Tails", "Knuckles"]
 # character id lines up with characterLabels
 var characterID = 0
 
@@ -28,12 +28,19 @@ func _input(event):
 			0: # Sonic and Tails
 				$UI/Labels/CharacterOrigin/Sonic.visible = true
 				$UI/Labels/CharacterOrigin/Tails.visible = true
+				$UI/Labels/CharacterOrigin/Knuckles.visible = false
 			1: # Sonic
 				$UI/Labels/CharacterOrigin/Sonic.visible = true
 				$UI/Labels/CharacterOrigin/Tails.visible = false
+				$UI/Labels/CharacterOrigin/Knuckles.visible = false
 			2: # Tails
 				$UI/Labels/CharacterOrigin/Sonic.visible = false
 				$UI/Labels/CharacterOrigin/Tails.visible = true
+				$UI/Labels/CharacterOrigin/Knuckles.visible = false
+			3: # Knuckles
+				$UI/Labels/CharacterOrigin/Sonic.visible = false
+				$UI/Labels/CharacterOrigin/Tails.visible = false
+				$UI/Labels/CharacterOrigin/Knuckles.visible = true
 		
 		# end menu
 		if event.is_action_pressed("gm_pause"):
@@ -50,5 +57,7 @@ func _input(event):
 					Global.PlayerChar1 = Global.CHARACTERS.SONIC
 				2: # Tails
 					Global.PlayerChar1 = Global.CHARACTERS.TAILS
+				3: # Knuckles
+					Global.PlayerChar1 = Global.CHARACTERS.KNUCKLES
 			
 			Global.main.change_scene(Global.nextZone,"FadeOut","FadeOut","SetSub",1)
