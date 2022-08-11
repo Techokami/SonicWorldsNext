@@ -113,9 +113,11 @@ func _on_SaveInputs_pressed():
 				file.set_value("controls","K"+str(actionCount)+i,j.get_scancode_with_modifiers());
 			elif j is InputEventJoypadButton:
 				file.set_value("controls","B"+str(actionCount)+i,j.button_index);
+				file.set_value("controls","B"+str(actionCount)+i+"Device",j.device);
 			elif j is InputEventJoypadMotion:
 				file.set_value("controls","A"+str(actionCount)+i,j.axis);
 				file.set_value("controls","V"+str(actionCount)+i,j.axis_value);
+				file.set_value("controls","A"+str(actionCount)+i+"Device",j.device);
 			# incease counters (prevents conflicts)
 			actionCount += 1;
 	# save config and close
@@ -131,7 +133,6 @@ func load_data():
 	# load inputs
 	var actionCount = 0;
 	for i in InputMap.get_actions(): # loop through input names
-		
 		# prefix keys: K = Key, B = joypad Button, A = Axis, V = AxisValue
 		
 		# check for any inputs, if any are found then remove binding
@@ -161,6 +162,9 @@ func load_data():
 				var getInput = InputEventJoypadButton.new();
 				# grab button index
 				getInput.button_index = file.get_value("controls","B"+str(actionCount)+i);
+				# set device
+				if (file.has_section_key("controls","B"+str(actionCount)+i+"Device")):
+					getInput.device = file.get_value("controls","B"+str(actionCount)+i+"Device")
 				# set new input
 				InputMap.action_add_event(i,getInput);
 			# joypad Axis check
@@ -171,6 +175,9 @@ func load_data():
 				# grab axis
 				getInput.axis = file.get_value("controls","A"+str(actionCount)+i);
 				getInput.axis_value = file.get_value("controls","V"+str(actionCount)+i);
+				# set device
+				if (file.has_section_key("controls","A"+str(actionCount)+i+"Device")):
+					getInput.device = file.get_value("controls","A"+str(actionCount)+i+"Device")
 				# set new input
 				InputMap.action_add_event(i,getInput);
 			

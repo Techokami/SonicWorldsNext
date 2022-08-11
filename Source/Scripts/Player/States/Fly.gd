@@ -78,10 +78,11 @@ func _physics_process(delta):
 			carryPlayer.direction = parent.direction
 			carryPlayer.sprite.flip_h = (parent.direction < 0)
 		
-		# set immediate inputs
-		for i in range(parent.inputs.size()):
-			carryBox.players[0].inputMemory[parent.INPUT_MEMORY_LENGTH-1][i] = carryBox.players[0].inputs[i]
-			parent.inputs[i] = carryBox.players[0].inputs[i]
+		# set immediate inputs if ai
+		if parent.playerControl == 0:
+			for i in range(parent.inputs.size()):
+				carryBox.players[0].inputMemory[parent.INPUT_MEMORY_LENGTH-1][i] = carryBox.players[0].inputs[i]
+				parent.inputs[i] = carryBox.players[0].inputs[i]
 	
 	# air movement
 	if (parent.inputs[parent.INPUTS.XINPUT] != 0):

@@ -761,16 +761,18 @@ func set_inputs():
 			playerControl = 0
 		
 		for i in inputActions.size():
+			var player2Active = false
 			# 0 and 1 in inputActions are arrays
 			if i <= 1:
-				if !Input.is_action_just_pressed(inputActions[i][0]) and !Input.is_action_just_pressed(inputActions[i][1]):
-					break
+				if Input.is_action_pressed(inputActions[i][0]) or Input.is_action_pressed(inputActions[i][1]):
+					player2Active = true
 			# rest are inputs
-			elif !Input.is_action_just_pressed(inputActions[i]):
-				break
-			# if none of the button checks fail, give the player control
-			playerControl = 2
-			partnerControlTime = DEFAULT_PLAYER2_CONTROL_TIME
+			elif Input.is_action_pressed(inputActions[i]):
+				player2Active = true
+			if player2Active:
+				# if none of the button checks fail, give the player control
+				playerControl = 2
+				partnerControlTime = DEFAULT_PLAYER2_CONTROL_TIME
 		
 	
 	if playerControl > 0:
