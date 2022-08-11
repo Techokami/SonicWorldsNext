@@ -76,6 +76,7 @@ func _process(delta):
 				parent.verticalSensorRight.set_collision_mask_bit(13,true)
 				parent.verticalSensorLeft.force_raycast_update()
 				parent.verticalSensorRight.force_raycast_update()
+				parent.verticalSensorMiddle.force_raycast_update()
 				
 				var getL = parent.verticalSensorLeft.is_colliding()
 				var getR = parent.verticalSensorRight.is_colliding()
@@ -89,6 +90,7 @@ func _process(delta):
 				if parent.direction < 0:
 					getL = getR
 					getR = parent.verticalSensorLeft.is_colliding()
+				# No edge detected
 				if getM || !parent.ground || parent.angle != parent.gravityAngle:
 					# Play default idle animation
 					if parent.super and parent.animator.has_animation("idle_super"):
@@ -106,16 +108,35 @@ func _process(delta):
 							# queue player specific idle animations
 							for i in playerIdles[parent.character]:
 								parent.animator.queue(i)
-							
-				# super edge
-				elif parent.super and parent.animator.has_animation("edge_super"):
-					parent.animator.play("edge_super")
-				elif !getL and getR: # reverse edge
-					parent.animator.play("edge3")
-				elif !getMEdge: # far edge
-					parent.animator.play("edge2")
-				else: # normal edge
-					parent.animator.play("edge1")
+				
+				else:
+					match (parent.character):
+						
+						parent.CHARACTERS.TAILS:
+							if getR: # keep flipping until right sensor (relevent) isn't colliding
+								parent.direction = -parent.direction
+							parent.animator.play("edge1")
+						
+						parent.CHARACTERS.KNUCKLES:
+							if getR: # keep flipping until right sensor (relevent) isn't colliding
+								parent.direction = -parent.direction
+							if parent.animator.current_animation != "edge1" and parent.animator.current_animation != "edge2":
+								parent.animator.play("edge1")
+								parent.animator.queue("edge2")
+						
+						_: #default
+							# super edge
+							if parent.super and parent.animator.has_animation("edge_super"):
+								parent.animator.play("edge_super")
+							# reverse edge
+							elif !getL and getR:
+								parent.animator.play("edge3")
+							# far edge
+							elif !getMEdge:
+								parent.animator.play("edge2")
+							# normal edge
+							else:
+								parent.animator.play("edge1")
 					
 		elif parent.pushingWall:
 			parent.animator.play("push")
@@ -176,9 +197,9 @@ func _physics_process(delta):
 	
 	# Apply slope factor
 	# ignore this if not moving for sonic 1 style slopes
-	parent.movement.x += (parent.slp*sin(parent.angle))/delta
+	parent.movement.x += (parent.slp*sin(parent.angle-parent.gravityAngle))/delta
 	
-	var calcAngle = rad2deg(parent.angle)
+	var calcAngle = rad2deg(parent.angle-parent.gravityAngle)
 	if (calcAngle < 0):
 		calcAngle += 360
 	

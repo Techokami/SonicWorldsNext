@@ -15,25 +15,24 @@ func _physics_process(delta):
 	if !climbUp:
 		
 		# climbing
-		parent.movement.y = parent.inputs[parent.INPUTS.YINPUT]*60
+		parent.movement.y = (parent.inputs[parent.INPUTS.YINPUT]+int(parent.super)*sign(parent.inputs[parent.INPUTS.YINPUT]))*60
 		
 		# go to normal if on floor
 		if parent.ground:
-			parent.animator.play("run")
+			parent.animator.play("walk")
+			parent.groundSpeed = 1
 			parent.disconect_from_floor()
 			parent.set_state(parent.STATES.AIR,parent.currentHitbox.NORMAL)
 			return false
 		
-		# check for wall using wall sensor
-		parent.horizontalSensor.force_raycast_update()
-		parent.horizontalSensor.position.y = parent.get_node("HitBox").shape.extents.y
-		parent.horizontalSensor.cast_to = Vector2((parent.pushRadius+1)*parent.direction,0)
-		parent.horizontalSensor.set_collision_mask_bit(1,true)
-		parent.horizontalSensor.set_collision_mask_bit(2,true)
-		parent.horizontalSensor.set_collision_mask_bit(1+((parent.collissionLayer+1)*4),true)
-		parent.horizontalSensor.set_collision_mask_bit(2+((parent.collissionLayer+1)*4),true)
-		parent.horizontalSensor.force_raycast_update()
+		# check for wall using the wall sensors
+
+		var velMem = parent.velocity
+		parent.velocity = Vector2(parent.direction,-1)
+		parent.update_sensors()
+		parent.velocity = velMem
 		
+		# check to climb
 		if !parent.horizontalSensor.is_colliding():
 			parent.movement = Vector2.ZERO
 			parent.animator.playback_speed = 1
@@ -41,10 +40,13 @@ func _physics_process(delta):
 			return false
 		
 		# climbing edge
+		# move sensor to the top
 		parent.horizontalSensor.position.y = -parent.get_node("HitBox").shape.extents.y
+		parent.horizontalSensor.cast_to += parent.horizontalSensor.cast_to.normalized()*4
 		parent.horizontalSensor.force_raycast_update()
 		
-		if !parent.horizontalSensor.is_colliding():
+		# check if the player can climb on top of the platform
+		if !parent.horizontalSensor.is_colliding() and !parent.verticalSensorLeft.is_colliding() and !parent.verticalSensorRight.is_colliding():
 			climbPosition = parent.global_position.ceil()+Vector2(0,5)
 			parent.movement = Vector2.ZERO
 			parent.animator.play("climbUp")

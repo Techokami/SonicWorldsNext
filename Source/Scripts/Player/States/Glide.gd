@@ -1,6 +1,7 @@
 extends "res://Scripts/Player/State.gd"
 
-var glideAccel = 0.015625
+# first is normal, second is super speed
+var glideAccel = [0.015625,0.046875]
 var glideGrav = 0.125
 var friction = 0.125
 var speedClamp = 24*60
@@ -16,6 +17,7 @@ var sliding = false
 var groundBuffer = 0
 
 func state_activated():
+	groundBuffer = 0
 	# if no movement on the x axis then go into a fall immediately
 	if parent.movement.x == 0:
 		isFall = true
@@ -31,6 +33,8 @@ func state_activated():
 			turnTimer = 180
 		speedPreservation = abs(parent.movement.x)
 		parent.animator.play("glide")
+		# work around for animation (needed for attacking flag)
+		parent.lastActiveAnimation = "glide"
 		isFall = false
 		landed = false
 		sliding = false
@@ -39,14 +43,46 @@ func state_activated():
 func state_exit():
 	parent.reflective = false
 
+# process mostly used for inputs (see player)
+func _process(delta):
+	# Jump and Spindash cancel
+	if parent.inputs[parent.INPUTS.ACTION] == 1 and parent.ground and (sliding or isFall):
+		parent.movement.x = 0
+		if (parent.inputs[parent.INPUTS.YINPUT] > 0):
+			parent.animator.play("spinDash")
+			parent.sfx[2].play()
+			parent.sfx[2].pitch_scale = 1
+			parent.spindashPower = 0
+			parent.animator.play("spinDash")
+			parent.set_state(parent.STATES.SPINDASH)
+			parent.cameraDragLerp = 1
+		else:
+			# reset animations
+			parent.action_jump()
+			parent.set_state(parent.STATES.JUMP)
+		
+	# check if not falling, if not then do glide routine
+	if !isFall and !sliding:
+		# Go into falling if action not held
+		if parent.inputs[parent.INPUTS.ACTION] == 0:
+			parent.movement.x *= 0.25
+			parent.animator.play("glideFall")
+			parent.sprite.flip_h = (parent.direction < 0)
+			# reset hitbox
+			parent.set_hitbox(parent.currentHitbox.NORMAL)
+			isFall = true
+			parent.reflective = false
+
 func _physics_process(delta):
 	# Change parent direction
 	if parent.inputs[parent.INPUTS.XINPUT] != 0 and !sliding:
 		parent.direction = parent.inputs[parent.INPUTS.XINPUT]
 	
+	
+	
+	
 	# check if not falling, if not then do glide routine
 	if !isFall and !sliding:
-		
 		# Turning
 		# left
 		if parent.direction > 0:
@@ -77,7 +113,7 @@ func _physics_process(delta):
 		
 		# air movement
 		if !parent.pushingWall:
-			parent.movement.x = clamp(parent.movement.x+(glideAccel/delta*parent.direction),-speedClamp,speedClamp)
+			parent.movement.x = clamp(parent.movement.x+(glideAccel[int(parent.super)]/delta*parent.direction),-speedClamp,speedClamp)
 		
 		# Limit vertical movement
 		if parent.movement.y < 0.5*60:
@@ -85,22 +121,16 @@ func _physics_process(delta):
 		elif parent.movement.y > 0.5*60:
 			parent.movement.y -= glideGrav/delta
 		
-		# Go into falling if action not held
-		if !parent.inputs[parent.INPUTS.ACTION]:
-			parent.movement.x *= 0.25
-			parent.animator.play("glideFall")
-			parent.sprite.flip_h = (parent.direction < 0)
-			# reset hitbox
-			parent.set_hitbox(parent.currentHitbox.NORMAL)
-			isFall = true
-			parent.reflective = false
-		
 		# Go into sliding if on ground
 		if parent.ground and !sliding and groundBuffer >= 1:
 			parent.animator.play("glideSlide")
+			if parent.movement.x != 0:
+				parent.direction = sign(parent.movement.x)
+			parent.sprite.flip_h = (parent.direction < 0)
 			sliding = true
 			parent.reflective = false
 			$"../../SkidDustTimer".start(0.1)
+			groundBuffer = 0
 		
 		# apply ground buffer
 		elif parent.ground:
@@ -109,9 +139,8 @@ func _physics_process(delta):
 			groundBuffer = 0
 		
 		# Go into wall cling if on wall
-		parent.horizontalSensor.position.y = parent.get_node("HitBox").shape.extents.y-1
 		parent.horizontalSensor.force_raycast_update()
-		if parent.horizontalSensor.is_colliding():
+		if parent.horizontalSensor.is_colliding() and !parent.ground:
 			# set direction
 			if parent.movement.x != 0:
 				parent.direction = sign(parent.movement.x)
@@ -122,9 +151,16 @@ func _physics_process(delta):
 			parent.sfx[26].play()
 			parent.animator.play("climb")
 			parent.movement = Vector2.ZERO
+		
+		# prevent getting stuck on corners
+		parent.horizontalSensor.position.y = parent.get_node("HitBox").shape.extents.y-1
+		parent.horizontalSensor.force_raycast_update()
+		if parent.horizontalSensor.is_colliding() and !parent.ground:
+			parent.movement.x = 0
 	
 	# if sliding then do sliding routine
 	elif sliding:
+		
 		if parent.movement.x != 0:
 			parent.direction = sign(parent.movement.x)
 		parent.movement.x = move_toward(parent.movement.x,0,friction/delta)
@@ -137,10 +173,15 @@ func _physics_process(delta):
 			parent.animator.play("glideGetUp")
 			# wait for animation to finish and check that the state is still the same
 			yield(parent.animator,"animation_finished")
-			if parent.currentState == parent.STATES.GLIDE:
+			if parent.currentState == parent.STATES.GLIDE and sliding:
 				parent.set_state(parent.STATES.NORMAL)
-		# ground check, if not on ground go into falling
-		if !parent.ground:
+		
+		# check if angle is default, if not then set movement to 0
+		if !is_equal_approx(parent.snap_angle(parent.gravityAngle),parent.snap_angle(parent.global_rotation)):
+			parent.movement.x = 0
+		
+		# check for ground, if not on ground go into falling
+		if !parent.ground and groundBuffer >= 1:
 			sliding = false
 			parent.animator.play("glideFall")
 			parent.sprite.flip_h = (parent.direction < 0)
@@ -148,11 +189,12 @@ func _physics_process(delta):
 			parent.set_hitbox(parent.currentHitbox.NORMAL)
 			isFall = true
 		else:
+			# ground buffer's needed to prevent the player immediately disconecting
+			groundBuffer = 1
 			parent.movement.y = 0
-			
+	
 	# Do falling routine
 	else:
-		
 		# regular movement
 		if !parent.ground:
 			# gravity
@@ -174,7 +216,7 @@ func _physics_process(delta):
 			parent.animator.play("land")
 			# wait for landing animation to finish and check that the state is still the same
 			yield(parent.animator,"animation_finished")
-			if parent.currentState == parent.STATES.GLIDE:
+			if parent.currentState == parent.STATES.GLIDE and isFall:
 				parent.set_state(parent.STATES.NORMAL)
 
 

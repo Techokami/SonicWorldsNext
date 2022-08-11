@@ -2,7 +2,7 @@ extends Node2D
 
 
 export var music = preload("res://Audio/Soundtrack/10. SWD_CharacterSelect.ogg")
-onready var nextZone = load("res://Scene/Zones/BaseZone.tscn")
+export (PackedScene) var nextZone = load("res://Scene/Zones/BaseZone.tscn")
 var selected = false
 
 var characterLabels = ["Sonic and Tails", "Sonic", "Tails", "Knuckles"]

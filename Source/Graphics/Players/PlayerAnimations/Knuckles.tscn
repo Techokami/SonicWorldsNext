@@ -30,18 +30,6 @@ tracks/1/keys = {
 "update": 0,
 "values": [ false ]
 }
-tracks/2/type = "value"
-tracks/2/path = NodePath("Sprite/Sprite:frame")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ 81 ]
-}
 
 [sub_resource type="Animation" id=108]
 resource_name = "air"
@@ -174,7 +162,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id=104]
 resource_name = "edge1"
-loop = true
+length = 2.0
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite/Sprite:frame")
 tracks/0/interp = 1
@@ -182,10 +170,22 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.8, 0.9 ),
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 1.8, 1.9 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 112, 113, 114, 115, 116, 117, 118, 119 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite/Sprite:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 0, -8 ), Vector2( 0, -6 ), Vector2( 0, -8 ) ]
 }
 
 [sub_resource type="Animation" id=105]
@@ -644,7 +644,6 @@ vframes = 16
 [node name="DashDust" type="AnimatedSprite" parent="Sprite"]
 visible = false
 frames = SubResource( 96 )
-frame = 2
 playing = true
 offset = Vector2( -9, -4 )
 

@@ -24,12 +24,12 @@ func _physics_process(delta):
 	parent.movement.y = min(parent.movement.y,0)
 	
 	# Apply slope factor
-	if (sign(parent.movement.x) != sign(sin(parent.angle))):
-		parent.movement.x += (parent.slprollup*sin(parent.angle))/delta
+	if (sign(parent.movement.x) != sign(sin(parent.angle-parent.gravityAngle))):
+		parent.movement.x += (parent.slprollup*sin(parent.angle-parent.gravityAngle))/delta
 	else:
-		parent.movement.x += (parent.slprolldown*sin(parent.angle))/delta
+		parent.movement.x += (parent.slprolldown*sin(parent.angle-parent.gravityAngle))/delta
 	
-	var calcAngle = rad2deg(parent.angle)
+	var calcAngle = rad2deg(parent.angle-parent.gravityAngle)
 	if (calcAngle < 0):
 		calcAngle += 360
 	

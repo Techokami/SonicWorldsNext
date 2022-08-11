@@ -153,6 +153,18 @@ tracks/5/keys = {
 "update": 0,
 "values": [ 0.0, 0.0, -203 ]
 }
+tracks/6/type = "value"
+tracks/6/path = NodePath("CardMover:pause_mode")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 1 ]
+}
 
 [sub_resource type="Animation" id=2]
 length = 0.001
@@ -568,6 +580,18 @@ tracks/14/keys = {
 "update": 0,
 "values": [ Vector2( 128, -45 ), Vector2( 128, -45 ), Vector2( 32, 64 ) ]
 }
+tracks/15/type = "value"
+tracks/15/path = NodePath("CardMover:pause_mode")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
 
 [sub_resource type="Animation" id=7]
 resource_name = "LevelClear"
@@ -870,9 +894,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Cover" type="ColorRect" parent="LevelCard"]
 material = SubResource( 4 )
@@ -918,7 +939,7 @@ vframes = 2
 
 [node name="PatternLeft" type="Control" parent="LevelCard"]
 anchor_bottom = 1.0
-margin_bottom = 5184.0
+margin_bottom = 5408.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -927,7 +948,7 @@ __meta__ = {
 anchor_bottom = 1.0
 margin_left = -32.0
 margin_right = 32.0
-margin_bottom = 66848.0
+margin_bottom = 72256.0
 texture = ExtResource( 8 )
 stretch_mode = 2
 __meta__ = {
@@ -947,7 +968,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_top = -32.0
-margin_bottom = 4896.0
+margin_bottom = 5120.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -957,7 +978,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 32.0
-margin_right = 16992.0
+margin_right = 18176.0
 margin_bottom = 64.0
 texture = ExtResource( 8 )
 stretch_mode = 2

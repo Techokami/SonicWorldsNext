@@ -27,54 +27,55 @@ func _process(delta):
 			else:
 				match (parent.character):
 					parent.CHARACTERS.SONIC:
-						parent.abilityUsed = true
-						match (parent.shield):
-							parent.SHIELDS.NONE:
-								parent.sfx[16].play()
-								parent.shieldSprite.play("Insta")
-								parent.shieldSprite.frame = 0
-								parent.shieldSprite.visible = true
-								parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = false
-								yield(parent.shieldSprite,"animation_finished")
-								# check shields hasn't changed
-								if (parent.shield == parent.SHIELDS.NONE):
-									parent.shieldSprite.visible = false
-									parent.shieldSprite.stop()
-								parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = true
-							
-							parent.SHIELDS.ELEC:
-								parent.sfx[13].play()
-								parent.movement.y = -5.5*Global.originalFPS
-								for i in range(4):
-									var part = elecPart.instance()
-									part.global_position = parent.global_position
-									part.direction = Vector2(1,1).rotated(deg2rad(90*i))
-									parent.get_parent().add_child(part)
-							
-							parent.SHIELDS.FIRE:
-								parent.sfx[14].play()
-								parent.movement = Vector2(8*Global.originalFPS*parent.direction,0)
-								parent.shieldSprite.play("FireAction")
-								var getTimer = parent.shieldSprite.get_node_or_null("ShieldTimer")
-								# Start fire dash timer
-								if getTimer != null:
-									getTimer.start(0.5)
-								parent.shieldSprite.flip_h = (parent.direction < 0)
-								parent.lock_camera(16.0/60.0)
-							
-							parent.SHIELDS.BUBBLE:
-								# check animation isn't bouncing
-								if parent.shieldSprite.animation != "BubbleBounce":
-									parent.sfx[15].play()
-									parent.movement = Vector2(0,8*Global.originalFPS)
-									parent.bounceReaction = 7.5
-									parent.shieldSprite.play("BubbleAction")
+						if !$"../../InvincibilityBarrier".visible:
+							parent.abilityUsed = true
+							match (parent.shield):
+								parent.SHIELDS.NONE:
+									parent.sfx[16].play()
+									parent.shieldSprite.play("Insta")
+									parent.shieldSprite.frame = 0
+									parent.shieldSprite.visible = true
+									parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = false
+									yield(parent.shieldSprite,"animation_finished")
+									# check shields hasn't changed
+									if (parent.shield == parent.SHIELDS.NONE):
+										parent.shieldSprite.visible = false
+										parent.shieldSprite.stop()
+									parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = true
+								
+								parent.SHIELDS.ELEC:
+									parent.sfx[13].play()
+									parent.movement.y = -5.5*Global.originalFPS
+									for i in range(4):
+										var part = elecPart.instance()
+										part.global_position = parent.global_position
+										part.direction = Vector2(1,1).rotated(deg2rad(90*i))
+										parent.get_parent().add_child(part)
+								
+								parent.SHIELDS.FIRE:
+									parent.sfx[14].play()
+									parent.movement = Vector2(8*Global.originalFPS*parent.direction,0)
+									parent.shieldSprite.play("FireAction")
 									var getTimer = parent.shieldSprite.get_node_or_null("ShieldTimer")
-									# Start bubble timer
+									# Start fire dash timer
 									if getTimer != null:
-										getTimer.start(0.25)
-								else:
-									parent.abilityUsed = false
+										getTimer.start(0.5)
+									parent.shieldSprite.flip_h = (parent.direction < 0)
+									parent.lock_camera(16.0/60.0)
+								
+								parent.SHIELDS.BUBBLE:
+									# check animation isn't bouncing
+									if parent.shieldSprite.animation != "BubbleBounce":
+										parent.sfx[15].play()
+										parent.movement = Vector2(0,8*Global.originalFPS)
+										parent.bounceReaction = 7.5
+										parent.shieldSprite.play("BubbleAction")
+										var getTimer = parent.shieldSprite.get_node_or_null("ShieldTimer")
+										# Start bubble timer
+										if getTimer != null:
+											getTimer.start(0.25)
+									else:
+										parent.abilityUsed = false
 					parent.CHARACTERS.TAILS:
 						parent.set_state(parent.STATES.FLY)
 					parent.CHARACTERS.KNUCKLES:

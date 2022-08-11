@@ -73,6 +73,12 @@ var physicsList = [
 [0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875, 0.125, 0.21875, 6.5*60, 4],
 # 4 Super Sonic
 [0.1875, 1, 0.046875, 10*60, 0.375, 0.0234375, 0.125, 0.21875, 8*60, 4],
+# 5 Super Tails
+[0.09375, 0.75, 0.046875, 8*60, 0.1875, 0.0234375, 0.125, 0.21875, 6.5*60, 4],
+# 6 Super Knuckles
+[0.09375, 0.75, 0.046875, 8*60, 0.1875, 0.0234375, 0.125, 0.21875, 6*60, 4],
+# 7 Shoes Knuckles (small jump)
+[0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875, 0.125, 0.21875, 6*60, 4],
 ]
 
 var waterPhysicsList = [
@@ -86,6 +92,12 @@ var waterPhysicsList = [
 [0.046875/2, 0.5/2, 0.046875/2, 6*60/2, 0.09375/2, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
 # 4 Super Sonic
 [0.09375, 0.5, 0.046875, 5*60, 0.1875, 0.046875, 0.125, 0.0625, 3.5*60, 2],
+# 5 Super Tails
+[0.046875, 0.375, 0.046875, 4*60, 0.09375, 0.0234375, 0.125, 0.0625, 3.5*60, 2],
+# 6 Super Knuckles
+[0.046875, 0.375, 0.046875, 4*60, 0.09375, 0.0234375, 0.125, 0.0625, 3*60, 2],
+# 7 Shoes Knuckles (small jump)
+[0.046875/2, 0.5/2, 0.046875/2, 6*60/2, 0.09375/2, 0.046875*0.5, 0.125, 0.0625, 3*60, 2],
 ]
 
 # ================
@@ -391,7 +403,7 @@ func _process(delta):
 	
 	# Sprite rotation handling
 	if (ground):
-		spriteRotation = rad2deg(angle)+90
+		spriteRotation = rad2deg(angle)+rad2deg(gravityAngle)+90
 	else:
 		if (spriteRotation+90 >= 180):
 			spriteRotation = max(90,spriteRotation-(168.75*delta))
@@ -400,11 +412,11 @@ func _process(delta):
 	
 	# set the sprite to match the sprite rotation variable if it's in the rotatable Sprites list
 	if (rotatableSprites.has(animator.current_animation)):
-		sprite.rotation = deg2rad(stepify(spriteRotation,45)-90)-rotation
+		sprite.rotation = deg2rad(stepify(spriteRotation,45)-90)-rotation-gravityAngle
 		# uncomment this next line out for smooth rotation (you should remove the above line too)
 		#sprite.rotation = deg2rad(spriteRotation-90)-rotation
 	else:
-		sprite.rotation = -rotation
+		sprite.rotation = -rotation+gravityAngle
 
 	spriteControler.global_position = global_position.round()
 
@@ -418,6 +430,7 @@ func _process(delta):
 		if !super:
 			supTime -= delta
 		else:
+			$InvincibilityBarrier.visible = false
 			# Animate Palette
 			match character:
 				CHARACTERS.SONIC:
@@ -512,7 +525,7 @@ func _process(delta):
 		"dropDash":
 			animator.playback_speed = 20/10
 		"climb":
-			animator.playback_speed = -movement.y/40.0
+			animator.playback_speed = -movement.y/(40.0*(1+int(super)))
 		_:
 			animator.playback_speed = 1
 	
@@ -560,7 +573,22 @@ func _process(delta):
 func _physics_process(delta):
 	
 	# Attacking is for rolling type animations
-	var attacking = (animator.current_animation == "roll" or animator.current_animation == "dropDash" or animator.current_animation == "spinDash" or lastActiveAnimation == "glide" or animator.current_animation == "glide" or lastActiveAnimation == "glideSlide" )
+	var attacking = false
+	# lists to check through for attack animations
+	var currentAnimChecks = [
+	"roll","dropDash","spinDash","glide"
+	]
+	var lastActiveAnimCheck = [
+	"glide","glideSlide"
+	]
+	# if any animations match up turn on attacking flag
+	for i in currentAnimChecks:
+		if animator.current_animation == i:
+			attacking = true
+	
+	for i in lastActiveAnimCheck:
+		if lastActiveAnimation == i:
+			attacking = true
 	
 	# physics sets
 	# collid with solids if not rolling layer
@@ -571,6 +599,7 @@ func _physics_process(delta):
 	set_collision_mask_bit(20,(character != CHARACTERS.KNUCKLES and !attacking))
 	# damage mask bit
 	set_collision_layer_bit(19,attacking)
+	
 	
 	if (ground):
 		groundSpeed = movement.x
@@ -942,16 +971,16 @@ func land_floor():
 	# landing movement calculation
 	
 	# recalculate ground angle
-	var calcAngle = wrapf(rad2deg(angle),0,360)
+	var calcAngle = wrapf(rad2deg(angle)-rad2deg(gravityAngle),0,360)
 	
 	# check not shallow
 	if (calcAngle >= 22.5 and calcAngle <= 337.5 and abs(movement.x) < movement.y):
 		# check half steep
 		if (calcAngle < 45 or calcAngle > 315):
-			movement.x = movement.y*0.5*sign(sin(angle))
+			movement.x = movement.y*0.5*sign(sin(angle-gravityAngle))
 		# else do full steep
 		else:
-			movement.x = movement.y*sign(sin(angle))
+			movement.x = movement.y*sign(sin(angle-gravityAngle))
 
 
 # clean animation
@@ -975,15 +1004,15 @@ func determine_physics():
 			return 0 # Sonic
 		CHARACTERS.TAILS:
 			if super:
-				return 4 # Super Sonic
+				return 5 # Super Tails
 			elif shoeTime > 0:
 				return 3 # Shoes
 			return 1 # Tails
 		CHARACTERS.KNUCKLES:
 			if super:
-				return 4 # Super Sonic
+				return 6 # Super Knuckles
 			elif shoeTime > 0:
-				return 3 # Shoes
+				return 7 # Shoes
 			return 2 # Knuckles
 	
 	return -1

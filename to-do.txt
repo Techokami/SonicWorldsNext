@@ -1,15 +1,22 @@
 needed changes
 
 minor changes
-- verify physics on characters like tails and knuckles (super tails)
 - delete unused and redundant code
-- stop title card animating on pauses
-- fix knuckles animations
+
+9/08
+- added an extra check to object collissions in physics object
+- fixed knuckles animations
+- fixed physics on tails and knuckles
+- more fixes to knuckles
+- made invincibility stars stop sonic using shields while it's on
+- stoped title card animating on pauses
+- Added better support for graviy angles
 
 7/08
 - knuckles
 - fixed bridges
 - made breakable walls function with knuckles
+- added more functionality to switches
 
 11/07
 - added rebindable controls

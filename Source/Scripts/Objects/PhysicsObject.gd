@@ -309,7 +309,7 @@ func _physics_process(delta):
 			objectCheck.force_raycast_update()
 			
 			while objectCheck.is_colliding():
-				if objectCheck.get_collider().has_method("physics_collision"):
+				if objectCheck.get_collider().has_method("physics_collision") and test_move(global_transform,i.rotated(angle).round()):
 					objectCheck.get_collider().physics_collision(self,i.rotated(angle).round())
 				# add exclusion, this loop will continue until there isn't any objects
 				objectCheck.add_exception(objectCheck.get_collider())
@@ -358,8 +358,8 @@ func get_nearest_vertical_sensor():
 func disconect_from_floor(force = false):
 	if ground or force:
 		# convert velocity
-		movement = movement.rotated(angle)
+		movement = movement.rotated(angle-gravityAngle)
 		angle = gravityAngle
 		ground = false
-		if (rotation != 0):
-			rotation = 0
+		if (snap_angle(rotation) != snap_angle(gravityAngle)):
+			rotation = snap_angle(gravityAngle)

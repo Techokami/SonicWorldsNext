@@ -751,9 +751,6 @@ points = PoolVector2Array( 0, 192, 16, 192, 64, 200, 96, 200, 152, 192, 176, 192
 0/z_index = 0
 
 [node name="TestScene" type="Node2D"]
-__meta__ = {
-"_edit_horizontal_guides_": [ 1520.0, 1208.0 ]
-}
 
 [node name="HUD" parent="." instance=ExtResource( 9 )]
 zoneName = "Green Hill"
