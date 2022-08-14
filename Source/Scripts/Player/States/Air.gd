@@ -11,8 +11,12 @@ var dropTimer = 0
 
 var lockDir = false
 
+func _ready():
+	if isJump: # we only want to connect it once so only apply this to the jump variation
+		parent.connect("enemy_bounced",self,"bounce")
+
 # Jump actions
-func _process(delta):
+func _process(_delta):
 	if parent.playerControl != 0 or (parent.inputs[parent.INPUTS.YINPUT] < 0 and parent.character == parent.CHARACTERS.TAILS):
 		# Super
 		if parent.inputs[parent.INPUTS.ACTION3] == 1 and !parent.super and isJump:
@@ -27,8 +31,8 @@ func _process(delta):
 			else:
 				match (parent.character):
 					parent.CHARACTERS.SONIC:
+						parent.abilityUsed = true
 						if !$"../../InvincibilityBarrier".visible:
-							parent.abilityUsed = true
 							match (parent.shield):
 								parent.SHIELDS.NONE:
 									parent.sfx[16].play()
@@ -53,15 +57,16 @@ func _process(delta):
 										parent.get_parent().add_child(part)
 								
 								parent.SHIELDS.FIRE:
-									parent.sfx[14].play()
-									parent.movement = Vector2(8*Global.originalFPS*parent.direction,0)
-									parent.shieldSprite.play("FireAction")
-									var getTimer = parent.shieldSprite.get_node_or_null("ShieldTimer")
-									# Start fire dash timer
-									if getTimer != null:
-										getTimer.start(0.5)
-									parent.shieldSprite.flip_h = (parent.direction < 0)
-									parent.lock_camera(16.0/60.0)
+									if !(parent.inputs[parent.INPUTS.YINPUT] < 0 and parent.partner != null):
+										parent.sfx[14].play()
+										parent.movement = Vector2(8*Global.originalFPS*parent.direction,0)
+										parent.shieldSprite.play("FireAction")
+										var getTimer = parent.shieldSprite.get_node_or_null("ShieldTimer")
+										# Start fire dash timer
+										if getTimer != null:
+											getTimer.start(0.5)
+										parent.shieldSprite.flip_h = (parent.direction < 0)
+										parent.lock_camera(16.0/60.0)
 								
 								parent.SHIELDS.BUBBLE:
 									# check animation isn't bouncing
@@ -89,7 +94,7 @@ func _physics_process(delta):
 		
 		if (parent.movement.x*parent.inputs[parent.INPUTS.XINPUT] < parent.top):
 			if (abs(parent.movement.x) < parent.top):
-				parent.movement.x = clamp(parent.movement.x+parent.air/delta*parent.inputs[parent.INPUTS.XINPUT],-parent.top,parent.top)
+				parent.movement.x = clamp(parent.movement.x+parent.air/GlobalFunctions.div_by_delta(delta)*parent.inputs[parent.INPUTS.XINPUT],-parent.top,parent.top)
 				
 	# Air drag
 	if (parent.movement.y < 0 and parent.movement.y > -parent.releaseJmp*60):
@@ -103,7 +108,7 @@ func _physics_process(delta):
 		# Drop dash (for sonic)
 		if parent.character == parent.CHARACTERS.SONIC:
 			
-			if parent.inputs[parent.INPUTS.ACTION] and parent.abilityUsed and (parent.shield <= parent.SHIELDS.NORMAL or parent.super):
+			if parent.inputs[parent.INPUTS.ACTION] and parent.abilityUsed and (parent.shield <= parent.SHIELDS.NORMAL or parent.super or $"../../InvincibilityBarrier".visible):
 				if dropTimer < 1:
 					dropTimer += (delta/20)*60 # should be ready in the equivelent of 20 frames at 60FPS
 				else:
@@ -126,23 +131,12 @@ func _physics_process(delta):
 	parent.sprite.flip_h = (parent.direction < 0)
 	
 	# Gravity
-	parent.movement.y += parent.grv/delta
+	parent.movement.y += parent.grv/GlobalFunctions.div_by_delta(delta)
 	
 	# Reset state if on ground
 	if (parent.ground):
 		# Check bounce reaction first
-		if parent.bounceReaction != 0:
-			parent.movement.y = -parent.bounceReaction*60
-			parent.bounceReaction = 0
-			# bubble shield actions
-			if parent.shieldSprite.animation == "BubbleAction" or parent.shieldSprite.animation == "Bubble":
-				parent.shieldSprite.play("BubbleBounce")
-				parent.sfx[15].play()
-				var getTimer = parent.shieldSprite.get_node_or_null("ShieldTimer")
-				# Start bubble timer
-				if getTimer != null:
-					getTimer.start(0.15)
-		else:
+		if !bounce():
 			# reset animations (this is for shared animations like the corkscrews)
 			parent.animator.play("RESET")
 			# return to normal state
@@ -207,3 +201,20 @@ func state_exit():
 	parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").set_deferred("disabled",true)
 	parent.enemyCounter = 0
 	lockDir = false
+
+func bounce():
+	if parent.bounceReaction != 0:
+		parent.movement.y = -parent.bounceReaction*60
+		parent.bounceReaction = 0
+		# bubble shield actions
+		if parent.shieldSprite.animation == "BubbleAction" or parent.shieldSprite.animation == "Bubble":
+			parent.shieldSprite.play("BubbleBounce")
+			parent.sfx[15].play()
+			var getTimer = parent.shieldSprite.get_node_or_null("ShieldTimer")
+			# Start bubble timer
+			if getTimer != null:
+				getTimer.start(0.15)
+		parent.abilityUsed = false
+		return true
+	# if no bounce then return false to continue with landing routine
+	return false

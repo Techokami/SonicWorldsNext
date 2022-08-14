@@ -20,7 +20,6 @@ func _process(delta):
 	$Water.region_rect.position.x = $Water.global_position.x
 	
 	# Animation
-	var frameUpdate = (floor(frame+delta*animSpeed) != floor(frame))
 	frame += delta*animSpeed
 	frame = wrapf(frame,0,waterSurface.size())
 	

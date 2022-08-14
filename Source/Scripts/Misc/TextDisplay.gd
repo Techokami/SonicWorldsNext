@@ -90,11 +90,11 @@ func _process(_delta):
 
 
 func _draw():
-	var getRes = Vector2(texture.get_width()/hframes,texture.get_height()/vframes)
+	var getRes = Vector2(texture.get_width()/float(hframes),texture.get_height()/float(vframes))
 	# used for string position
 	var getX = 0
 	# calculate vertical alignment
-	var getVAlign = ((texture.get_height()/vframes)-(smallStringTexture.get_height()/smallVframes))*(vAlign/2)
+	var getVAlign = ((texture.get_height()/float(vframes))-(smallStringTexture.get_height()/smallVframes))*(vAlign/2)
 	
 	# width calculation (based on string length)
 	var getXWidth = 0
@@ -106,7 +106,7 @@ func _draw():
 				if (smallStringLookup.has(string[i])):
 					getXWidth += smallStringTexture.get_width()/smallHframes
 				else:
-					getXWidth += texture.get_width()/hframes
+					getXWidth += texture.get_width()/float(hframes)
 			
 		
 	for i in string.length():

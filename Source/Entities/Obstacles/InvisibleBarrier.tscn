@@ -8,7 +8,7 @@ extents = Vector2( 16, 16 )
 
 [node name="InvisibleBarrier" type="StaticBody2D"]
 z_index = 20
-collision_layer = 8192
+collision_layer = 2105344
 collision_mask = 0
 script = ExtResource( 2 )
 

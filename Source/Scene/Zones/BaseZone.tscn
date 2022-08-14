@@ -332,7 +332,6 @@ endPosition = Vector2( 0, 128 )
 
 [node name="Platform3" parent="Platforms" instance=ExtResource( 40 )]
 position = Vector2( 5296, 1032 )
-rotate_amount = 90
 
 [node name="Entity" type="Node2D" parent="."]
 
@@ -1403,11 +1402,9 @@ position = Vector2( 1224, 936 )
 
 [node name="BuzzBomber" parent="Enemies" instance=ExtResource( 42 )]
 position = Vector2( 984, 280 )
-flyDirection = 0
 
 [node name="BuzzBomber3" parent="Enemies" instance=ExtResource( 42 )]
 position = Vector2( 2120, 600 )
-flyDirection = 0
 
 [node name="Motobug" parent="Enemies" instance=ExtResource( 49 )]
 position = Vector2( 1064, 688 )

@@ -230,6 +230,7 @@ ui_reset={
 2d_physics/layer_19="Solid if not Knuckles"
 2d_physics/layer_20="Damage Entities"
 2d_physics/layer_21="Solid if not Rolling or not Knuckles"
+2d_physics/layer_22="Crusher"
 
 [rendering]
 

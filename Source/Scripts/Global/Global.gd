@@ -14,6 +14,7 @@ var nextZone = preload("res://Scene/Zones/BaseZone.tscn") # change this to the f
 var Score = preload("res://Entities/Misc/Score.tscn")
 const SCORE_COMBO = [1,2,3,4,4,4,4,4,4,4,4,4,4,4,4,5]
 
+var timerActive = false
 var stageClearPhase = 0
 var gameOver = false
 
@@ -65,7 +66,7 @@ func _ready():
 
 func _process(delta):
 	originalFPS = 60#*Engine.time_scale
-	if stageClearPhase == 0 && !gameOver && !get_tree().paused:
+	if stageClearPhase == 0 and !gameOver and !get_tree().paused and timerActive:
 		levelTime += delta
 	if !get_tree().paused:
 		globalTimer += delta
@@ -104,6 +105,10 @@ func check_score_life(scoreAdd = 0):
 
 func stage_clear():
 	if stageClearPhase == 0:
-		music.stream = themes[2]
+		currentTheme = 2
+		music.stream = themes[currentTheme]
 		music.play()
 		effectTheme.stop()
+
+func emit_stage_start():
+	emit_signal("stage_started")

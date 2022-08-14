@@ -15,7 +15,7 @@ export var grabSound = preload("res://Audio/SFX/Player/Grab.wav")
 func _ready():
 	$Grab.stream = grabSound
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	playerContacts = 0
 	for i in players:
 		var playID = players.find(i)
@@ -55,7 +55,7 @@ func _physics_process(delta):
 			if lockPlayerDirection:
 				i.stateList[i.STATES.AIR].lockDir = false
 
-func _process(delta):
+func _process(_delta):
 	# check for player inputs
 	for i in players:
 		# verify state is valid for grabbing and not on floor

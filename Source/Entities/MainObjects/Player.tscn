@@ -776,14 +776,14 @@ z_index = 7
 position = Vector2( 0, -16 )
 frames = SubResource( 157 )
 animation = "Invincibility"
-frame = 3
+frame = 2
 playing = true
 
 [node name="StarGenerator2" type="AnimatedSprite" parent="InvincibilityBarrier"]
 position = Vector2( 0, 16 )
 frames = SubResource( 157 )
 animation = "Invincibility"
-frame = 3
+frame = 2
 playing = true
 
 [node name="SFX" type="Node" parent="."]
@@ -820,10 +820,12 @@ bus = "SFX"
 
 [node name="RingStereo" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource( 23 )
+volume_db = -5.0
 bus = "SFX"
 
 [node name="RingRight" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource( 24 )
+volume_db = -5.0
 bus = "SFX"
 
 [node name="RingLoss" type="AudioStreamPlayer" parent="SFX"]

@@ -14,7 +14,7 @@ signal pressed_with_body(body)
 signal pressed
 signal released
 
-func _process(delta):
+func _process(_delta):
 	if active:
 		# set frame to pressed frame
 		$Sprite.frame = 1
@@ -22,7 +22,7 @@ func _process(delta):
 		# set frame to unpressed frame
 		$Sprite.frame = 0
 	
-func _physics_process(delta):
+func _physics_process(_delta):
 	# active gets set every physics process frame so we use collision check as a buffer, when col check isn't set then we deactivate
 	# note: only turn off if reactivate is off
 	if colCheck:

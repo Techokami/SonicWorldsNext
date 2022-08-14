@@ -187,7 +187,7 @@ func _physics_process(delta):
 		var moveCalc = moveRemaining.normalized()*min(moveStepLength,moveRemaining.length())
 				
 		velocity = moveCalc.rotated(angle)
-		move_and_slide_with_snap(velocity,(Vector2.DOWN*3).rotated(gravityAngle),Vector2.UP.rotated(gravityAngle))
+		var _move = move_and_slide_with_snap(velocity,(Vector2.DOWN*3).rotated(gravityAngle),Vector2.UP.rotated(gravityAngle))
 		update_sensors()
 		var groundMemory = ground
 		var roofMemory = roof
@@ -223,7 +223,7 @@ func _physics_process(delta):
 			# Snap the Vector and normalize it
 			var normHitVec = -Vector2.LEFT.rotated(snap_angle(rayHitVec.normalized().angle()))
 			if move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.extents.y))-Vector2(0,yGroundDiff).rotated(rotation),true,true,true):
-				move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.extents.y))-Vector2(0,yGroundDiff).rotated(rotation))
+				var _col = move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.extents.y))-Vector2(0,yGroundDiff).rotated(rotation))
 			else:
 				translate(rayHitVec-(normHitVec*($HitBox.shape.extents.y+0.25))-Vector2(0,yGroundDiff).rotated(rotation))
 		
@@ -285,7 +285,7 @@ func _physics_process(delta):
 		
 		# move in place to make sure the player doesn't clip into objects
 		set_collision_mask_bit(16,true)
-		move_and_collide(Vector2.ZERO)
+		var _col = move_and_collide(Vector2.ZERO)
 		
 		var dirList = [Vector2.DOWN,Vector2.LEFT,Vector2.RIGHT,Vector2.UP]
 		# loop through directions for collisions

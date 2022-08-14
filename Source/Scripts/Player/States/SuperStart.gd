@@ -2,7 +2,7 @@ extends "res://Scripts/Player/State.gd"
 
 var activated = true
 
-func _process(delta):
+func _process(_delta):
 	if activated && !parent.super:
 		var remVel = parent.movement
 		var lastAnim = parent.animator.current_animation

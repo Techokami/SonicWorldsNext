@@ -8,7 +8,7 @@ func _ready():
 	# check that playerControlIndex is in parent. if it isn't get the second parent
 	if control.get("playerControlIndex") == null:
 		control = get_parent().get_parent()
-	connect("pressed",self,"lock_in_button")
+	var _con = connect("pressed",self,"lock_in_button")
 
 # input remaping
 func _unhandled_input(event):
@@ -30,7 +30,7 @@ func _unhandled_input(event):
 			control.update_display()
 	
 
-func _input(event):
+func _input(_event):
 	# check if hovering
 	if is_hovered():
 		# check if not blank (blank so that we can disable confusing the controller checker

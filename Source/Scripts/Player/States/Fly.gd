@@ -29,7 +29,7 @@ func state_exit():
 	parent.sfx[21].stop()
 	parent.sfx[22].stop()
 
-func _process(delta):
+func _process(_delta):
 	# Animation
 	if parent.water:
 		if carryBox.playerContacts != 0:
@@ -89,7 +89,7 @@ func _physics_process(delta):
 		
 		if (parent.movement.x*parent.inputs[parent.INPUTS.XINPUT] < parent.top):
 			if (abs(parent.movement.x) < parent.top):
-				parent.movement.x = clamp(parent.movement.x+parent.air/delta*parent.inputs[parent.INPUTS.XINPUT],-parent.top,parent.top)
+				parent.movement.x = clamp(parent.movement.x+parent.air/GlobalFunctions.div_by_delta(delta)*parent.inputs[parent.INPUTS.XINPUT],-parent.top,parent.top)
 				
 	# Air drag
 	if (parent.movement.y < 0 and parent.movement.y > -parent.releaseJmp*60):
@@ -106,7 +106,7 @@ func _physics_process(delta):
 	parent.sprite.flip_h = (parent.direction < 0)
 	
 	# Flight logic
-	parent.movement.y += flyGrav/delta
+	parent.movement.y += flyGrav/GlobalFunctions.div_by_delta(delta)
 	
 	flightTime -= delta
 	# Button press

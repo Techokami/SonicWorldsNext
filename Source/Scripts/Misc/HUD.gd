@@ -26,6 +26,7 @@ signal tally_clear
 var characterNames = ["sonic","tails","knuckles"]
 
 func _ready():
+	Global.timerActive = false
 	Global.hud = self
 	# Set character Icon
 	$LifeCounter/Icon.frame = Global.PlayerChar1-1
@@ -46,12 +47,12 @@ func _ready():
 		get_tree().paused = false
 		Global.musicParent.pause_mode = PAUSE_MODE_STOP
 		$LevelCard/CardPlayer.pause_mode = PAUSE_MODE_STOP
-		Global.emit_signal("stage_started")
+		Global.emit_stage_start()
 		yield($LevelCard/CardPlayer,"animation_finished")
 	else:
-		Global.emit_signal("stage_started")
+		Global.emit_stage_start()
 	$LevelCard.queue_free()
-	
+	Global.timerActive = true
 	$LevelClear/Passed.string = $LevelClear/Passed.string.replace("sonic",characterNames[Global.PlayerChar1-1])
 
 func _process(delta):

@@ -4,7 +4,7 @@
 [ext_resource path="res://Scripts/Enemies/BuzzBomber.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 20, 8.5 )
+extents = Vector2( 24, 12 )
 
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 1 )
@@ -14,15 +14,15 @@ region = Rect2( 0, 70, 48, 35 )
 atlas = ExtResource( 1 )
 region = Rect2( 48, 70, 48, 35 )
 
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 1 )
+region = Rect2( 48, 35, 48, 35 )
+
 [sub_resource type="AtlasTexture" id=4]
 atlas = ExtResource( 1 )
 region = Rect2( 0, 35, 48, 35 )
 
 [sub_resource type="AtlasTexture" id=5]
-atlas = ExtResource( 1 )
-region = Rect2( 48, 35, 48, 35 )
-
-[sub_resource type="AtlasTexture" id=6]
 atlas = ExtResource( 1 )
 region = Rect2( 48, 35, 48, 35 )
 
@@ -33,14 +33,14 @@ animations = [ {
 "name": "default",
 "speed": 30.0
 }, {
-"frames": [ SubResource( 4 ), SubResource( 5 ) ],
-"loop": true,
-"name": "wing",
-"speed": 60.0
-}, {
 "frames": [ SubResource( 6 ), null ],
 "loop": true,
 "name": "fireWings",
+"speed": 60.0
+}, {
+"frames": [ SubResource( 4 ), SubResource( 5 ) ],
+"loop": true,
+"name": "wing",
 "speed": 60.0
 } ]
 
@@ -51,6 +51,7 @@ extents = Vector2( 40, 96 )
 collision_layer = 16384
 collision_mask = 0
 script = ExtResource( 2 )
+flyDirection = 0
 speed = 192
 
 [node name="CollissionMask" type="CollisionShape2D" parent="."]
@@ -81,7 +82,6 @@ vframes = 3
 
 [node name="Fire" type="AnimatedSprite" parent="Sprite"]
 frames = SubResource( 7 )
-frame = 1
 playing = true
 
 [node name="PlayerCheck" type="Area2D" parent="Sprite"]

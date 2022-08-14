@@ -25,14 +25,14 @@ func _ready():
 		$PlayerCheck/mask.scale.x = (length)
 		
 		# duplicate log sprites until it matches the length
-		for i in range(length-1):
+		for _i in range(length-1):
 			var newLog = $log.duplicate()
 			add_child(newLog)
 			bridges.append(newLog)
 			$log.position.x += 16
 		bridges.append($log)
 
-func _process(delta):
+func _process(_delta):
 	if Engine.is_editor_hint():
 		update()
 

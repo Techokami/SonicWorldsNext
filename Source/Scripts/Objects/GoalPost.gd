@@ -2,7 +2,7 @@ extends Sprite
 var getCam = null
 var player = null
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if Global.players[0].global_position.x > global_position.x && Global.players[0].global_position.y <= global_position.y && Global.stageClearPhase == 0:
 		player = Global.players[0]
 		

@@ -16,3 +16,6 @@ func getCurrentCamera2D():
 		if camera is Camera2D and camera.current:
 			return camera
 	return null
+
+func div_by_delta(delta):
+	return 0.016667*(0.016667/delta)

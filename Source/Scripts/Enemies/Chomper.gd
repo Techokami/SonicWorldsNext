@@ -10,7 +10,7 @@ func _ready():
 
 
 func _physics_process(delta):
-	velocity.y += 0.09375/delta
+	velocity.y += 0.09375/GlobalFunctions.div_by_delta(delta)
 	position.y = min(position.y,0)
 	
 	if position.y >= 0:

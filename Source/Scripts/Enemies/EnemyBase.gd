@@ -9,6 +9,8 @@ var Animal = preload("res://Entities/Misc/Animal.tscn")
 var forceDamage = false
 var defaultMovement = true
 
+signal destroyed
+
 func _process(delta):
 	# checks if player hit has players inside
 	if (playerHit.size() > 0):
@@ -16,12 +18,16 @@ func _process(delta):
 		for i in playerHit:
 			# check if damage entity is on or supertime is bigger then 0
 			if (i.get_collision_layer_bit(19) or i.supTime > 0 or forceDamage):
-				# subtract from velocity if velocity is less then 0 or below enemy
-				if (i.movement.y < 0 or i.global_position.y > global_position.y):
-					i.movement.y -= 60*sign(i.velocity.y)
-				else:
-				# reverse vertical velocity
-					i.movement.y = -i.velocity.y
+				# check player is not on floor
+				if !i.ground:
+					# subtract from velocity if velocity is less then 0 or below enemy (use current velocity to avoid clipping issues)
+					if (i.movement.y < 0 or i.global_position.y-(i.velocity.y*delta) > global_position.y):
+						i.movement.y -= 60*sign(i.velocity.y)
+					else:
+					# reverse vertical velocity
+						i.movement.y = -i.velocity.y
+						if i.shield == i.SHIELDS.BUBBLE:
+							i.emit_enemy_bounce()
 				# destroy
 				Global.add_score(global_position,Global.SCORE_COMBO[min(Global.SCORE_COMBO.size()-1,i.enemyCounter)])
 				i.enemyCounter += 1
@@ -54,6 +60,7 @@ func _on_DamageArea_area_entered(area):
 			playerHit.append(area.parent)
 
 func destroy():
+	emit_signal("destroyed")
 	# create explosion
 	var explosion = Explosion.instance()
 	get_parent().add_child(explosion)

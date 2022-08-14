@@ -11,13 +11,13 @@ func _process(delta):
 		# get next pipe point
 		var point = pipe.global_position+pipe.get_point_position(pipePoint)
 		# set movement
-		parent.movement = ((point-parent.global_position).clamped(pipe.speed))/delta
+		parent.movement = parent.global_position.direction_to(point)
+		parent.global_position = parent.global_position.move_toward(point,pipe.speed*60*delta)
 		parent.translate = true
 		
 		if parent.global_position.distance_to(point) < pipe.speed:
 			if pipePoint < pipe.get_point_count()-1:
 				parent.global_position = point
-				parent.movement = Vector2.ZERO
 				pipePoint += 1
 				point = pipe.global_position+pipe.get_point_position(pipePoint)
 			else:

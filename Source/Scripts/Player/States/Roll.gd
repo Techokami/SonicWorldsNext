@@ -2,7 +2,7 @@ extends "res://Scripts/Player/State.gd"
 
 
 
-func _process(delta):
+func _process(_delta):
 	if parent.inputs[parent.INPUTS.ACTION] == 1:
 		# use parent.action_jump("roll",false) to have jump lock similar to sonic 1-3
 		# true replicates CD and Mania
@@ -25,9 +25,9 @@ func _physics_process(delta):
 	
 	# Apply slope factor
 	if (sign(parent.movement.x) != sign(sin(parent.angle-parent.gravityAngle))):
-		parent.movement.x += (parent.slprollup*sin(parent.angle-parent.gravityAngle))/delta
+		parent.movement.x += (parent.slprollup*sin(parent.angle-parent.gravityAngle))/GlobalFunctions.div_by_delta(delta)
 	else:
-		parent.movement.x += (parent.slprolldown*sin(parent.angle-parent.gravityAngle))/delta
+		parent.movement.x += (parent.slprolldown*sin(parent.angle-parent.gravityAngle))/GlobalFunctions.div_by_delta(delta)
 	
 	var calcAngle = rad2deg(parent.angle-parent.gravityAngle)
 	if (calcAngle < 0):
@@ -46,9 +46,9 @@ func _physics_process(delta):
 	if (parent.movement.x != 0):
 		var checkX = sign(parent.movement.x)
 		if (parent.inputs[parent.INPUTS.XINPUT] != 0 && sign(parent.movement.x) != parent.inputs[parent.INPUTS.XINPUT]):
-			parent.movement.x += parent.rolldec/delta*parent.inputs[parent.INPUTS.XINPUT]
+			parent.movement.x += parent.rolldec/GlobalFunctions.div_by_delta(delta)*parent.inputs[parent.INPUTS.XINPUT]
 		
-		parent.movement.x -= (parent.rollfrc/delta)*sign(parent.movement.x)
+		parent.movement.x -= (parent.rollfrc/GlobalFunctions.div_by_delta(delta))*sign(parent.movement.x)
 
 		if (sign(parent.movement.x) != checkX):
 			parent.movement.x -= parent.movement.x

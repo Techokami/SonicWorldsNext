@@ -181,7 +181,8 @@ func _physics_process(delta):
 		var inputX = parent.inputs[parent.INPUTS.XINPUT]
 		
 		if round(parent.movement.x/200) == 0 and sign(inputX) != sign(parent.movement.x):
-			parent.animator.play("skidTurn")
+			if parent.animator.has_animation("skidTurn"):
+				parent.animator.play("skidTurn")
 		
 		if !parent.animator.is_playing() || inputX == sign(parent.movement.x):
 			skid = (round(parent.movement.x) != 0 and inputX != sign(parent.movement.x) and inputX != 0)
@@ -197,7 +198,7 @@ func _physics_process(delta):
 	
 	# Apply slope factor
 	# ignore this if not moving for sonic 1 style slopes
-	parent.movement.x += (parent.slp*sin(parent.angle-parent.gravityAngle))/delta
+	parent.movement.x += (parent.slp*sin(parent.angle-parent.gravityAngle))/GlobalFunctions.div_by_delta(delta)
 	
 	var calcAngle = rad2deg(parent.angle-parent.gravityAngle)
 	if (calcAngle < 0):

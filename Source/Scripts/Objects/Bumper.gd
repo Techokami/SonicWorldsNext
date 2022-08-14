@@ -3,7 +3,7 @@ extends StaticBody2D
 var bumperCount = 0
 
 
-func physics_collision(body, hitVector):
+func physics_collision(body, _hitVector):
 	body.movement = (body.global_position-global_position).normalized()*7*Global.originalFPS
 	if body.currentState == body.STATES.JUMP:
 		body.set_state(body.STATES.AIR)

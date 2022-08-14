@@ -3,7 +3,7 @@ extends Area2D
 export (int, "Normal", "Fire", "Elec", "Water") var damageType = 0
 var playerHit = []
 
-func _process(delta):
+func _process(_delta):
 	if (playerHit.size() > 0):
 		for i in playerHit:
 			if (i.has_method("hit_player")):

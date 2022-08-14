@@ -4,7 +4,7 @@ extends EnemyBase
 
 var Projectile = preload("res://Entities/Enemies/Projectiles/BuzzBomberProjectile.tscn")
 
-export(float,-180,180) var flyDirection = 0
+export(float,-180.0,180.0) var flyDirection = 0.0
 export var travelDistance = 512
 export var speed = 240
 onready var origin = global_position
@@ -15,6 +15,12 @@ var editorOffset = 1
 var isFiring = false
 var fireTime = 0
 var coolDown = 0
+
+var fire = null
+
+func _ready():
+	# clear fire if destroyed before shooting
+	var _con = connect("destroyed",self,"clear_fire")
 
 func _process(delta):
 	if Engine.is_editor_hint():
@@ -107,7 +113,7 @@ func _on_PlayerCheck_body_entered(_body):
 		yield($Timer,"timeout")
 		
 		# fire projectile
-		var fire = Projectile.instance()
+		fire = Projectile.instance()
 		get_parent().add_child(fire)
 		
 		# set position with offset
@@ -125,6 +131,8 @@ func _on_PlayerCheck_body_entered(_body):
 			fire.get_node("projectile").play("fire")
 			fire.velocity = Vector2(120*side,120)
 		
+		# remove fire variable
+		fire = null
 		# last timer before returning to normal
 		# account for how long the firing timer took
 		$Timer.start(0.5-(16.0/60.0))
@@ -135,3 +143,7 @@ func _on_PlayerCheck_body_entered(_body):
 		isFiring = false
 		$Sprite/Fire.visible = true
 		coolDown = 1 # add cooldown to prevent rapid fire
+
+func clear_fire():
+	if fire != null:
+		fire.queue_free()

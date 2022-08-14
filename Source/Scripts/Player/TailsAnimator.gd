@@ -6,7 +6,7 @@ onready var animator = get_parent().get_parent().get_node("PlayerAnimation")
 enum HANDLE {DEFAULT, ROTATE, SPEED}
 var currentHandle = HANDLE.DEFAULT
 
-func _process(delta):
+func _process(_delta):
 	match(currentHandle):
 		HANDLE.DEFAULT:
 			rotation = 0

@@ -5,7 +5,7 @@ export(float, -90, 90) var leftAngle
 export(float, -90, 90) var rightAngle
 export var stickUntilExit = true
 
-export(float, -90, 90) var maxAngleDifference = 15
+export(float, -90, 90) var maxAngleDifference = 15.0
 export var speedRange = 2
 var dropOff = 24
 

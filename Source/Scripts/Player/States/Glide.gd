@@ -44,7 +44,7 @@ func state_exit():
 	parent.reflective = false
 
 # process mostly used for inputs (see player)
-func _process(delta):
+func _process(_delta):
 	# Jump and Spindash cancel
 	if parent.inputs[parent.INPUTS.ACTION] == 1 and parent.ground and (sliding or isFall):
 		parent.movement.x = 0
@@ -113,13 +113,13 @@ func _physics_process(delta):
 		
 		# air movement
 		if !parent.pushingWall:
-			parent.movement.x = clamp(parent.movement.x+(glideAccel[int(parent.super)]/delta*parent.direction),-speedClamp,speedClamp)
+			parent.movement.x = clamp(parent.movement.x+(glideAccel[int(parent.super)]/GlobalFunctions.div_by_delta(delta)*parent.direction),-speedClamp,speedClamp)
 		
 		# Limit vertical movement
 		if parent.movement.y < 0.5*60:
-			parent.movement.y += glideGrav/delta
+			parent.movement.y += glideGrav/GlobalFunctions.div_by_delta(delta)
 		elif parent.movement.y > 0.5*60:
-			parent.movement.y -= glideGrav/delta
+			parent.movement.y -= glideGrav/GlobalFunctions.div_by_delta(delta)
 		
 		# Go into sliding if on ground
 		if parent.ground and !sliding and groundBuffer >= 1:
@@ -163,7 +163,7 @@ func _physics_process(delta):
 		
 		if parent.movement.x != 0:
 			parent.direction = sign(parent.movement.x)
-		parent.movement.x = move_toward(parent.movement.x,0,friction/delta)
+		parent.movement.x = move_toward(parent.movement.x,0,friction/GlobalFunctions.div_by_delta(delta))
 		
 		# set direction
 		parent.sprite.flip_h = (parent.direction < 0)
@@ -198,11 +198,11 @@ func _physics_process(delta):
 		# regular movement
 		if !parent.ground:
 			# gravity
-			parent.movement.y += parent.grv/delta
+			parent.movement.y += parent.grv/GlobalFunctions.div_by_delta(delta)
 			# movement (copied from air state)
 			if (parent.movement.x*parent.inputs[parent.INPUTS.XINPUT] < parent.top):
 				if (abs(parent.movement.x) < parent.top):
-					parent.movement.x = clamp(parent.movement.x+parent.air/delta*parent.inputs[parent.INPUTS.XINPUT],-parent.top,parent.top)
+					parent.movement.x = clamp(parent.movement.x+parent.air/GlobalFunctions.div_by_delta(delta)*parent.inputs[parent.INPUTS.XINPUT],-parent.top,parent.top)
 			# set direction
 			parent.sprite.flip_h = (parent.direction < 0)
 			

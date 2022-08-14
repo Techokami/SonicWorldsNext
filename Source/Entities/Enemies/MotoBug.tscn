@@ -4,10 +4,10 @@
 [ext_resource path="res://Scripts/Enemies/MotoBug.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 5, 13 )
+extents = Vector2( 8, 14 )
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 16, 13 )
+extents = Vector2( 20, 16 )
 
 [node name="Motobug" type="KinematicBody2D" groups=["Enemy"]]
 collision_layer = 16384
@@ -29,6 +29,7 @@ modulate = Color( 1, 0, 0, 1 )
 shape = SubResource( 2 )
 
 [node name="Motobug" type="Sprite" parent="."]
+position = Vector2( 0, 1 )
 texture = ExtResource( 1 )
 hframes = 2
 vframes = 2
@@ -41,9 +42,9 @@ process_parent = true
 physics_process_parent = true
 
 [node name="FloorCheck" type="RayCast2D" parent="."]
-position = Vector2( -13, 0 )
+position = Vector2( -8, 14 )
 enabled = true
-cast_to = Vector2( 0, 40 )
+cast_to = Vector2( 0, 14 )
 
 [connection signal="area_entered" from="DamageArea" to="." method="_on_DamageArea_area_entered"]
 [connection signal="body_entered" from="DamageArea" to="." method="_on_body_entered"]

@@ -8,6 +8,7 @@ var playerTouch = null
 var isActive = true
 export (int, "Ring", "Speed Shoes", "Invincibility", "Shield", "Elec Shield", "Fire Shield",
 "Bubble Shield", "Super", "Blue Ring", "Boost", "1up") var item = 0
+var Explosion = preload("res://Entities/Misc/BadnickSmoke.tscn")
 
 
 func _ready():
@@ -16,13 +17,17 @@ func _ready():
 	if item == 10:
 		$Item.frame = item+1+Global.PlayerChar1
 
-func _process(delta):
+func _process(_delta):
 	if (Engine.is_editor_hint()):
 		$Item.frame = item+2
 
 func destroy():
 	if !isActive:
 		return false
+	# create explosion
+	var explosion = Explosion.instance()
+	get_parent().add_child(explosion)
+	explosion.global_position = global_position
 	isActive = false
 	$Item.z_index += 1000
 	$Animator.play("DestroyMonitor")
@@ -71,7 +76,7 @@ func _physics_process(delta):
 	if !Engine.is_editor_hint():
 		if physics:
 			var collide = move_and_collide(Vector2(0,yspeed)*delta)
-			yspeed += grv/delta
+			yspeed += grv/GlobalFunctions.div_by_delta(delta)
 			if collide and yspeed > 0:
 				physics = false
 
@@ -92,6 +97,9 @@ func physics_collision(body, hitVector):
 		# check if player is not an ai or spindashing
 		elif body.playerControl == 1 and body.currentState != body.STATES.SPINDASH:
 			body.movement.y = -abs(body.movement.y)
+			
+			if body.currentState == body.STATES.ROLL:
+				body.movement.y = 0
 			body.ground = false
 			playerTouch = body
 			destroy()

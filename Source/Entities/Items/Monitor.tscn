@@ -10,6 +10,10 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 15, 15 )
 
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 2 )
+region = Rect2( 32, 32, 32, 32 )
+
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 32, 32 )
@@ -22,21 +26,17 @@ region = Rect2( 0, 32, 32, 32 )
 atlas = ExtResource( 2 )
 region = Rect2( 32, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=5]
-atlas = ExtResource( 2 )
-region = Rect2( 32, 32, 32, 32 )
-
 [sub_resource type="SpriteFrames" id=6]
 animations = [ {
-"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 3 ), SubResource( 4 ), SubResource( 3 ), SubResource( 3 ) ],
-"loop": true,
-"name": "default",
-"speed": 30.0
-}, {
 "frames": [ SubResource( 5 ) ],
 "loop": true,
 "name": "Busted",
 "speed": 5.0
+}, {
+"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 3 ), SubResource( 4 ), SubResource( 3 ), SubResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 30.0
 } ]
 
 [sub_resource type="Animation" id=7]
@@ -175,6 +175,7 @@ frame = 3
 playing = true
 
 [node name="Animator" type="AnimationPlayer" parent="."]
+playback_speed = 2.0
 anims/DestroyMonitor = SubResource( 7 )
 anims/Init = SubResource( 8 )
 
@@ -186,6 +187,7 @@ bus = "SFX"
 
 [node name="Ring" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource( 5 )
+volume_db = -5.0
 bus = "SFX"
 
 [node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]

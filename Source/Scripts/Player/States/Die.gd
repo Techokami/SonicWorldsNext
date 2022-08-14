@@ -1,7 +1,7 @@
 extends "res://Scripts/Player/State.gd"
 
 func _physics_process(delta):
-	parent.movement.y += parent.grv/delta
+	parent.movement.y += parent.grv/GlobalFunctions.div_by_delta(delta)
 	parent.translate = true
 	
 	if parent.playerControl == 1:

@@ -939,7 +939,7 @@ vframes = 2
 
 [node name="PatternLeft" type="Control" parent="LevelCard"]
 anchor_bottom = 1.0
-margin_bottom = 5408.0
+margin_bottom = 5856.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -948,7 +948,7 @@ __meta__ = {
 anchor_bottom = 1.0
 margin_left = -32.0
 margin_right = 32.0
-margin_bottom = 72256.0
+margin_bottom = 83744.0
 texture = ExtResource( 8 )
 stretch_mode = 2
 __meta__ = {
@@ -968,7 +968,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_top = -32.0
-margin_bottom = 5120.0
+margin_bottom = 5568.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -978,7 +978,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 32.0
-margin_right = 18176.0
+margin_right = 19936.0
 margin_bottom = 64.0
 texture = ExtResource( 8 )
 stretch_mode = 2

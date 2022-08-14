@@ -52,7 +52,7 @@ func _input(event):
 		wasPaused = false
 		Global.reset_values()
 		get_tree().paused = false
-		get_tree().reload_current_scene()
+		var _con = get_tree().reload_current_scene()
 
 
 
@@ -74,13 +74,15 @@ func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", l
 	yield(get_tree(),"idle_frame")
 	Global.players = []
 	Global.checkPoints = []
+	Global.waterLevel = null
+	Global.gameOver = false
 	if Global.stageClearPhase != 0:
 		Global.currentCheckPoint = -1
 		Global.levelTime = 0
+		Global.timerActive = false
 	Global.globalTimer = 0
 	Global.stageClearPhase = 0
-	Global.waterLevel = null
-	Global.gameOver = false
+	
 	sceneCanPause = false
 	
 	if scene == null:
@@ -94,6 +96,7 @@ func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", l
 		$GUI/Fader.play_backwards(fadeIn)
 	elif fadeOut != "":
 		$GUI/Fader.play("RESET")
+	# wait for scene to load
 
 
 func _on_Life_finished():

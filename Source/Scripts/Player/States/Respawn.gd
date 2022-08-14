@@ -8,7 +8,7 @@ var spawnTicker = (1.0/64.0)*60.0
 func state_activated():
 	targetPoint = parent.partner.global_position
 
-func _process(delta):
+func _process(_delta):
 	# Animation
 	if parent.water:
 		parent.animator.play("swim")

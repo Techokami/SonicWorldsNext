@@ -64,7 +64,7 @@ func _physics_process(delta):
 			climbUp = false
 			parent.global_position = climbPosition+(shiftPoses[shiftPoses.size()-1]*Vector2(parent.direction,1))
 
-func _process(delta):
+func _process(_delta):
 	if parent.inputs[parent.INPUTS.ACTION] == 1 and !climbUp:
 		parent.movement = Vector2(-4*60*parent.direction,-4*60)
 		parent.direction *= -1

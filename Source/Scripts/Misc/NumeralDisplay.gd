@@ -27,7 +27,7 @@ func _process(_delta):
 
 
 func _draw():
-	var getRes = Vector2(texture.get_width()/hframes,texture.get_height()/vframes)
+	var getRes = Vector2(texture.get_width()/float(hframes),texture.get_height()/float(vframes))
 	for i in string.length():
 		if (stringLookup.has(string[i])):
 			var charID = stringLookup[string[i]]

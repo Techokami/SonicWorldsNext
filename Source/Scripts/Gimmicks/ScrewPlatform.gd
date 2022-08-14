@@ -17,7 +17,7 @@ func _ready():
 	$ScrewBottom.position.y = (bottom*8)+4
 
 
-func _process(delta):
+func _process(_delta):
 	if Engine.editor_hint:
 		scale.x = sign(1-(rightMovement*2))*abs(scale.x)
 		$ScrewPipe.region_rect = Rect2($ScrewPipe.region_rect.position,Vector2($ScrewPipe.region_rect.size.x,(top*8)+(bottom*8)))
@@ -52,7 +52,7 @@ func _physics_process(delta):
 				#i.position.y -= goDirection
 				i.ground = true
 				i.global_position.x = global_position.x
-				$Screw/Screw.frame = posmod(floor(-$Screw.position.y/4),4)
+				$Screw/Screw.frame = posmod(int(floor(-$Screw.position.y/4)),4)
 			else:
 				activePlayers.erase(i)
 			

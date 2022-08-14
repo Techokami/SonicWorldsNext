@@ -4,7 +4,7 @@ extends Node2D
 export var platformSprite = preload("res://Graphics/Tiles/WorldsTiles/Platform.png")
 export var endPosition = Vector2(256,0) # End travel point for platform
 export var speed = 1.0 # How fast to move
-export(float, 0, 3.1415) var offset = 0 # Initial offset, this can be used to offset the movements between other platforms
+export(float, 0.0, 3.1415) var offset = 0.0 # Initial offset, this can be used to offset the movements between other platforms
 
 export var dropSlightly = true # Drop slightly when a player stands on top
 export var fallTimer = 0.0 # does the platform fall? 0 sets it to not fall

@@ -24,7 +24,7 @@ func _physics_process(delta):
 	
 	# Movement
 	if state == 0:
-		velocity.x = direction*50
+		velocity.x = direction*60
 		animTime = fmod(animTime+delta*2,1)
 		stateTimer = 0
 	else: # Stationary

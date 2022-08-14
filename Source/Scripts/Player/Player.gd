@@ -69,16 +69,16 @@ var physicsList = [
 [0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125, 0.21875, 6.5*60, 4],
 # 2 Knuckles
 [0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125, 0.21875, 6*60, 4],
-# 3 Shoes
-[0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875, 0.125, 0.21875, 6.5*60, 4],
+# 3 Shoes (remove *0.5 for original rolling friction)
+[0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875*0.5, 0.125, 0.21875, 6.5*60, 4],
 # 4 Super Sonic
 [0.1875, 1, 0.046875, 10*60, 0.375, 0.0234375, 0.125, 0.21875, 8*60, 4],
 # 5 Super Tails
 [0.09375, 0.75, 0.046875, 8*60, 0.1875, 0.0234375, 0.125, 0.21875, 6.5*60, 4],
 # 6 Super Knuckles
 [0.09375, 0.75, 0.046875, 8*60, 0.1875, 0.0234375, 0.125, 0.21875, 6*60, 4],
-# 7 Shoes Knuckles (small jump)
-[0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875, 0.125, 0.21875, 6*60, 4],
+# 7 Shoes Knuckles (small jump) (remove *0.5 for original rolling friction)
+[0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875*0.5, 0.125, 0.21875, 6*60, 4],
 ]
 
 var waterPhysicsList = [
@@ -203,7 +203,6 @@ var knucklesAnimations = preload("res://Graphics/Players/PlayerAnimations/Knuckl
 onready var sfx = $SFX.get_children()
 
 # Player values
-var shieldID = 0
 var rings = 0
 var ring1upCounter = 100
 
@@ -213,12 +212,15 @@ var cameraMargin = 16
 # Gimmick related
 var poleGrabID = null
 
+# Enemy related
+signal enemy_bounced
+
 func _ready():
 	# Disable and enable states
 	set_state(currentState)
 	Global.players.append(self)
-	connect("connectFloor",self,"land_floor")
-	connect("connectCeiling",self,"touch_ceiling")
+	var _con = connect("connectFloor",self,"land_floor")
+	_con = connect("connectCeiling",self,"touch_ceiling")
 	
 	# Camera settings
 	get_parent().call_deferred("add_child", (camera))
@@ -230,7 +232,7 @@ func _ready():
 	camera.drag_margin_bottom = camDist.y/viewSize.y
 	camera.drag_margin_h_enabled = true
 	camera.drag_margin_v_enabled = true
-	connect("positionChanged",self,"on_position_changed")
+	_con = connect("positionChanged",self,"on_position_changed")
 	camera.global_position = global_position
 	
 	# Tails carry stuff
@@ -240,7 +242,7 @@ func _ready():
 	# verify that we're not an ai
 	if playerControl == 1:
 		# input memory
-		for i in range(INPUT_MEMORY_LENGTH):
+		for _i in range(INPUT_MEMORY_LENGTH):
 			inputMemory.append(inputs.duplicate(true))
 		# Partner (if player character 2 isn't none)
 		if Global.PlayerChar2 != Global.CHARACTERS.NONE:
@@ -281,6 +283,8 @@ func _ready():
 			global_position = i.global_position+Vector2(0,8)
 			camera.global_position = i.global_position+Vector2(0,8)
 			Global.levelTime = Global.checkPointTime
+		else:
+			Global.levelTime = 0
 	
 	
 	
@@ -748,7 +752,8 @@ func _physics_process(delta):
 		$HitBox.shape.extents = Vector2(1,4)
 		
 		# Do a test move, if a collision was found then kill the player
-		if test_move(global_transform,Vector2.ZERO):
+		var col = move_and_collide(Vector2.ZERO)
+		if col and col.collider.get_collision_layer_bit(21):#test_move(global_transform,Vector2.ZERO):
 			kill()
 		# Reset shape hitbox
 		$HitBox.shape.extents = shapeMemory
@@ -800,7 +805,6 @@ func set_state(newState, forceMask = Vector2.ZERO):
 		i.set_physics_process(i == stateList[newState])
 		i.set_process_input(i == stateList[newState])
 	
-	var shapeChangeCheck = $HitBox.shape.extents
 	var forcePoseChange = Vector2.ZERO
 	
 	if (forceMask == Vector2.ZERO):
@@ -836,13 +840,13 @@ func set_hitbox(mask = Vector2.ZERO, forcePoseChange = false):
 	$HitBox.shape.extents = mask
 
 # set shields
-func set_shield(shieldID):
+func set_shield(setShieldID):
 	magnetShape.disabled = true
 	# verify not in water and shield compatible
-	if water and (shieldID == SHIELDS.FIRE or shieldID == SHIELDS.ELEC):
+	if water and (setShieldID == SHIELDS.FIRE or setShieldID == SHIELDS.ELEC):
 		return false
 	
-	shield = shieldID
+	shield = setShieldID
 	shieldSprite.visible = !super
 	match (shield):
 		SHIELDS.NORMAL:
@@ -901,9 +905,8 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 				# if we're on the second circle, decrease the speed
 				if (ringCount == 16):
 					ringSpeed = 2
-					ringAngle == 101.25 # Reset angle
+					ringAngle = 101.25 # Reset angle
 				get_parent().add_child(ring)
-
 			rings = 0
 		elif shield == SHIELDS.NONE and playerControl == 1:
 			kill()
@@ -929,6 +932,11 @@ func kill():
 		disconect_from_floor()
 		super = false
 		supTime = 0
+		shoeTime = 0
+		if Global.currentTheme == 1:
+			#Global.music.stream_paused = false
+			Global.music.play()
+			Global.effectTheme.stop()
 		collision_layer = 0
 		collision_mask = 0
 		z_index = 100
@@ -951,6 +959,10 @@ func respawn():
 	movement = Vector2.ZERO
 	water = false
 	global_position = partner.global_position+Vector2(0,-get_viewport_rect().size.y)
+	limitLeft = partner.limitLeft
+	limitRight = partner.limitRight
+	limitTop = partner.limitTop
+	limitBottom = partner.limitBottom
 	get_node("TailsCarryBox/HitBox").disabled = true
 	set_state(STATES.RESPAWN)
 
@@ -986,10 +998,10 @@ func land_floor():
 
 
 # clean animation
-func _on_PlayerAnimation_animation_started(anim_name):
+func _on_PlayerAnimation_animation_started(_anim_name):
 	if (sprite != null):
 		sprite.flip_v = false
-		sprite.offset = defaultSpriteOffset#Vector2(0,-4)
+		sprite.offset = defaultSpriteOffset
 		if animator.playback_speed < 0:
 			animator.playback_speed = abs(animator.playback_speed)
 		animator.advance(0)
@@ -1121,22 +1133,23 @@ func _on_BubbleTimer_timeout():
 
 # player movements
 func action_move(delta):
+	#0.016667*(delta*60)
 	if (inputs[INPUTS.XINPUT] != 0):
 		if (movement.x*inputs[INPUTS.XINPUT] < top):
 			if (sign(movement.x) == inputs[INPUTS.XINPUT]):
 				if (abs(movement.x) < top):
-					movement.x = clamp(movement.x+acc/delta*inputs[INPUTS.XINPUT],-top,top)
+					movement.x = clamp(movement.x+acc/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT],-top,top)
 			else:
 				# reverse direction
-				movement.x += dec/delta*inputs[INPUTS.XINPUT]
+				movement.x += dec/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT]
 				# implament weird turning quirk
-				if (sign(movement.x) != sign(movement.x-dec/delta*inputs[INPUTS.XINPUT])):
+				if (sign(movement.x) != sign(movement.x-dec/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT])):
 					movement.x = 0.5*60*sign(movement.x)
 	else:
 		if (movement.x != 0):
 			# check that decreasing movement won't go too far
-			if (sign(movement.x - (frc/delta)*sign(movement.x)) == sign(movement.x)):
-				movement.x -= (frc/delta)*sign(movement.x)
+			if (sign(movement.x - (frc/GlobalFunctions.div_by_delta(delta))*sign(movement.x)) == sign(movement.x)):
+				movement.x -= (frc/GlobalFunctions.div_by_delta(delta))*sign(movement.x)
 			else:
 				movement.x -= movement.x
 
@@ -1149,3 +1162,6 @@ func action_jump(animation = "roll", airJumpControl = true):
 	cameraDragLerp = 1
 	disconect_from_floor()
 	set_state(STATES.JUMP)
+
+func emit_enemy_bounce():
+	emit_signal("enemy_bounced")

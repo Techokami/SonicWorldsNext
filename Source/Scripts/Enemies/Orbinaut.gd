@@ -19,12 +19,12 @@ func _ready():
 		if moveSpeed != 0:
 			scale.x = sign(-velocity.x)*abs(scale.x)
 		
-		for i in range(orbs-1):
+		for _i in range(orbs-1):
 			var newOrb = $Orb.duplicate()
 			add_child(newOrb)
 			orbList.append(newOrb)
 
-func _process(delta):
+func _process(_delta):
 	if Engine.is_editor_hint():
 		$orbinaut.frame = int(classicOrbi)*2
 		$Orb/orb.frame = 1+int(classicOrbi)*2

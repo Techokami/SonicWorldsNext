@@ -2,7 +2,7 @@ tool
 extends AnimatedSprite
 
 
-func _process(delta):
+func _process(_delta):
 	# prevent rotation
 	if (!Engine.is_editor_hint()):
 		global_rotation = 0

@@ -44,8 +44,8 @@ func _physics_process(delta):
 		var ty = int(sign(velocity.y) == sy)
 		
 		#add to speed
-		velocity.x += (ringacceleration[tx] * sx)/delta
-		velocity.y += (ringacceleration[ty] * sy)/delta
+		velocity.x += (ringacceleration[tx] * sx)/GlobalFunctions.div_by_delta(delta)
+		velocity.y += (ringacceleration[ty] * sy)/GlobalFunctions.div_by_delta(delta)
 		translate(velocity*delta)
 		if magnetShape.disabled:
 			scattered = true

@@ -12,7 +12,7 @@ func _physics_process(delta):
 	if screenOffset == null:
 		translate(Vector2(0,-32*delta))
 		forceFrame += delta*30
-		frame = floor(forceFrame)
+		frame = int(floor(forceFrame))
 	else:
 		global_position = Global.players[0].camera.get_camera_screen_center()+screenOffset
 
