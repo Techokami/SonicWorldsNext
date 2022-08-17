@@ -18,7 +18,10 @@ func _process(_delta):
 		# wait for aniamtion to finish before activating super completely
 		yield(parent.animator,"animation_finished")
 		
-		parent.animator.play(lastAnim)
+		if parent.ground:
+			parent.animator.play(lastAnim)
+		else:
+			parent.animator.play("walk")
 		parent.set_state(parent.STATES.AIR)
 		activated = true
 		

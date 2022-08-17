@@ -16,7 +16,12 @@ export var defaultRightBoundry = 100000000
 export var setDefaultBottom = true
 export var defaultBottomBoundry = 100000000
 
+var wasLoaded = false
+
 func _ready():
+	if wasLoaded:
+		return false
+	
 	if setDefaultLeft:
 		Global.hardBorderLeft  = defaultLeftBoundry
 	if setDefaultRight:
@@ -29,6 +34,7 @@ func _ready():
 	if music != null:
 		Global.music.stream = music
 		Global.music.play()
+		Global.music.stream_paused = false
 	else:
 		Global.music.stop()
 		Global.music.stream = null
@@ -38,3 +44,5 @@ func _ready():
 	Global.main.sceneCanPause = true
 	
 	Global.animals = [animal1,animal2]
+	
+	wasLoaded = true

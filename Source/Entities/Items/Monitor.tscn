@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Graphics/Items/MonitorIcons.png" type="Texture" id=1]
 [ext_resource path="res://Graphics/Items/monitors.png" type="Texture" id=2]
@@ -41,6 +41,8 @@ animations = [ {
 
 [sub_resource type="Animation" id=7]
 resource_name = "DestroyMonitor"
+length = 0.533333
+step = 0.0166667
 tracks/0/type = "value"
 tracks/0/path = NodePath("Monitor:animation")
 tracks/0/interp = 1
@@ -72,26 +74,14 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0, 0.5 ),
+"times": PoolRealArray( 0, 0.466667 ),
 "transitions": PoolRealArray( 0.5, 1 ),
 "update": 0,
 "values": [ Vector2( 0, -2 ), Vector2( 0, -34 ) ]
 }
-tracks/3/type = "value"
-tracks/3/path = NodePath("Item:modulate")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0, 0.8, 1 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
-}
 
 [sub_resource type="Animation" id=8]
-resource_name = "Init"
+resource_name = "RESET"
 length = 0.1
 tracks/0/type = "value"
 tracks/0/path = NodePath("Monitor:animation")
@@ -154,6 +144,58 @@ tracks/4/keys = {
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
 
+[sub_resource type="Animation" id=9]
+resource_name = "fadeIcon"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("Monitor:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ "Busted" ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("CollisionShape2D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Item:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, -34 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Item:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
 [node name="Monitor" type="KinematicBody2D"]
 collision_layer = 98304
 script = ExtResource( 3 )
@@ -171,13 +213,14 @@ frame = 2
 
 [node name="Monitor" type="AnimatedSprite" parent="."]
 frames = SubResource( 6 )
-frame = 3
+frame = 1
 playing = true
 
 [node name="Animator" type="AnimationPlayer" parent="."]
-playback_speed = 2.0
 anims/DestroyMonitor = SubResource( 7 )
-anims/Init = SubResource( 8 )
+anims/RESET = SubResource( 8 )
+anims/fadeIcon = SubResource( 9 )
+next/DestroyMonitor = "fadeIcon"
 
 [node name="SFX" type="Node" parent="."]
 

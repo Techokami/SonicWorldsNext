@@ -101,37 +101,37 @@ func check_deletion():
 
 # save configuration data
 func _on_SaveInputs_pressed():
-	var file = ConfigFile.new();
+	var file = ConfigFile.new()
 	# save inputs
-	var actionCount = 0;
+	var actionCount = 0
 	for i in InputMap.get_actions(): # input names
-		actionCount = 0;
+		actionCount = 0
 		for j in InputMap.get_action_list(i): # the keys
 			# key storage is complex, here we keep a record of keys, gamepad buttons and gamepad axis's
 			# prefix keys: K = Key, B = joypad Button, A = Axis, V = AxisValue
 			if j is InputEventKey:
-				file.set_value("controls","K"+str(actionCount)+i,j.get_scancode_with_modifiers());
+				file.set_value("controls","K"+str(actionCount)+i,j.get_scancode_with_modifiers())
 			elif j is InputEventJoypadButton:
-				file.set_value("controls","B"+str(actionCount)+i,j.button_index);
-				file.set_value("controls","B"+str(actionCount)+i+"Device",j.device);
+				file.set_value("controls","B"+str(actionCount)+i,j.button_index)
+				file.set_value("controls","B"+str(actionCount)+i+"Device",j.device)
 			elif j is InputEventJoypadMotion:
-				file.set_value("controls","A"+str(actionCount)+i,j.axis);
-				file.set_value("controls","V"+str(actionCount)+i,j.axis_value);
-				file.set_value("controls","A"+str(actionCount)+i+"Device",j.device);
+				file.set_value("controls","A"+str(actionCount)+i,j.axis)
+				file.set_value("controls","V"+str(actionCount)+i,j.axis_value)
+				file.set_value("controls","A"+str(actionCount)+i+"Device",j.device)
 			# incease counters (prevents conflicts)
-			actionCount += 1;
+			actionCount += 1
 	# save config and close
-	file.save("user://Config.cfg");
+	file.save("user://Config.cfg")
 
 # load config data
 func load_data():
-	var file = ConfigFile.new();
-	var err = file.load("user://Config.cfg");
+	var file = ConfigFile.new()
+	var err = file.load("user://Config.cfg")
 	if err != OK:
-		return false; # Return false as an error
+		return false # Return false as an error
 	
 	# load inputs
-	var actionCount = 0;
+	var actionCount = 0
 	for i in InputMap.get_actions(): # loop through input names
 		# prefix keys: K = Key, B = joypad Button, A = Axis, V = AxisValue
 		
@@ -141,7 +141,7 @@ func load_data():
 		file.has_section_key("controls","A0"+i) || 
 		file.has_section_key("controls","V0"+i)):
 			# clear input
-			InputMap.action_erase_events(i);
+			InputMap.action_erase_events(i)
 		# check prefixes
 		while (file.has_section_key("controls","K"+str(actionCount)+i) || 
 		file.has_section_key("controls","B"+str(actionCount)+i) ||
@@ -151,39 +151,39 @@ func load_data():
 			# keyboard check
 			if (file.has_section_key("controls","K"+str(actionCount)+i)):
 				# define new key
-				var getInput = InputEventKey.new();
+				var getInput = InputEventKey.new()
 				# grab scancode
-				getInput.scancode = file.get_value("controls","K"+str(actionCount)+i);
+				getInput.scancode = file.get_value("controls","K"+str(actionCount)+i)
 				# set new input
-				InputMap.action_add_event(i,getInput);
+				InputMap.action_add_event(i,getInput)
 			# joypad button check
 			if (file.has_section_key("controls","B"+str(actionCount)+i)):
 				# define new key
-				var getInput = InputEventJoypadButton.new();
+				var getInput = InputEventJoypadButton.new()
 				# grab button index
-				getInput.button_index = file.get_value("controls","B"+str(actionCount)+i);
+				getInput.button_index = file.get_value("controls","B"+str(actionCount)+i)
 				# set device
 				if (file.has_section_key("controls","B"+str(actionCount)+i+"Device")):
 					getInput.device = file.get_value("controls","B"+str(actionCount)+i+"Device")
 				# set new input
-				InputMap.action_add_event(i,getInput);
+				InputMap.action_add_event(i,getInput)
 			# joypad Axis check
 			if (file.has_section_key("controls","A"+str(actionCount)+i) &&
 			file.has_section_key("controls","V"+str(actionCount)+i)):
 				# define new key
-				var getInput = InputEventJoypadMotion.new();
+				var getInput = InputEventJoypadMotion.new()
 				# grab axis
-				getInput.axis = file.get_value("controls","A"+str(actionCount)+i);
-				getInput.axis_value = file.get_value("controls","V"+str(actionCount)+i);
+				getInput.axis = file.get_value("controls","A"+str(actionCount)+i)
+				getInput.axis_value = file.get_value("controls","V"+str(actionCount)+i)
 				# set device
 				if (file.has_section_key("controls","A"+str(actionCount)+i+"Device")):
 					getInput.device = file.get_value("controls","A"+str(actionCount)+i+"Device")
 				# set new input
-				InputMap.action_add_event(i,getInput);
+				InputMap.action_add_event(i,getInput)
 			
-			actionCount += 1;
+			actionCount += 1
 		# reset action counter
-		actionCount = 0;
+		actionCount = 0
 
 # reset to defaults
 func _on_Defaults_pressed():

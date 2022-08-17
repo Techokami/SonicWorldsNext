@@ -14,7 +14,7 @@ var Explosion = preload("res://Entities/Misc/BadnickSmoke.tscn")
 func _ready():
 	$Item.frame = item+2
 	# Life Icon
-	if item == 10:
+	if item == 10 and !Engine.is_editor_hint():
 		$Item.frame = item+1+Global.PlayerChar1
 
 func _process(_delta):
@@ -34,7 +34,7 @@ func destroy():
 	$SFX/Destroy.play()
 	# remove visibility enabler to prevent items from not being activated
 	$VisibilityEnabler2D.queue_free()
-	yield($Animator,"animation_finished")
+	yield($Animator,"animation_changed")
 	# enable effect
 	match (item):
 		0: # Rings
@@ -65,7 +65,8 @@ func destroy():
 			playerTouch.set_shield(playerTouch.SHIELDS.BUBBLE)
 		7: # Super
 			playerTouch.rings += 50
-			playerTouch.set_state(playerTouch.STATES.SUPER)
+			if !playerTouch.super:
+				playerTouch.set_state(playerTouch.STATES.SUPER)
 		10: # 1up
 			Global.life.play()
 			Global.lives += 1

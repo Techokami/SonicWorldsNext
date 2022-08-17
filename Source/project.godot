@@ -34,6 +34,7 @@ _global_script_class_icons={
 
 config/name="SonicWorldsNext"
 run/main_scene="res://Scene/Main.tscn"
+boot_splash/image="res://icon.png"
 config/icon="res://icon.png"
 
 [autoload]
@@ -49,8 +50,6 @@ shapes/collision/shape_color=Color( 1, 1, 1, 0.501961 )
 
 window/size/width=320
 window/size/height=224
-window/size/test_width=320
-window/size/test_height=224
 window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 

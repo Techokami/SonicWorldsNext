@@ -78,7 +78,7 @@ func _ready():
 func _physics_process(delta):
 	velocity.y += gravity*60
 	translate(velocity*delta)
-	if ($FloorCheck.is_colliding() && velocity.y > 0):
+	if ($FloorCheck.is_colliding() and velocity.y > 0):
 		speed = animalPhysics[animal].x*60
 		bouncePower = animalPhysics[animal].y*60
 		match(animal):

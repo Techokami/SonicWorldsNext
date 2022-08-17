@@ -72,7 +72,6 @@ func _process(delta):
 			$Water/WaterOverlay.rect_position.y = clamp(Global.waterLevel-GlobalFunctions.getCurrentCamera2D().get_camera_screen_center().y+(get_viewport().get_visible_rect().size.y/2),0,get_viewport().get_visible_rect().size.y)
 		$Water/WaterOverlay.rect_scale.y = clamp(Global.waterLevel-$Water/WaterOverlay.rect_position.y,0,get_viewport().size.y)
 		$Water/WaterOverlay.visible = true
-		#$Water/WaterOverlay/TextureRect.rect_position.y = Global.waterLevel-GlobalFunctions.getCurrentCamera2D().global_position.y-$Water/WaterOverlay/TextureRect.rect_position.y
 		# Water Overlay Elec flash
 		if (Global.players.size() > 0):
 			for i in Global.players:
@@ -108,7 +107,7 @@ func _process(delta):
 			$Counters/Text/Time.visible = !$Counters/Text/Time.visible
 		else:
 			$Counters/Text/Time.visible = false
-	else:
+	elif !get_tree().paused:
 		flashTimer -= delta
 	
 	if Global.stageClearPhase > 2:
@@ -142,7 +141,7 @@ func _process(delta):
 			$LevelClear/CounterWait.start(2)
 			yield($LevelClear/CounterWait,"timeout")
 			Global.main.change_scene(Global.nextZone,"FadeOut","FadeOut","SetSub",1)
-	elif Global.gameOver && !gameOver:
+	elif Global.gameOver and !gameOver:
 		gameOver = true
 		if Global.levelTime >= Global.maxTime:
 			$GameOver/Game.frame = 1

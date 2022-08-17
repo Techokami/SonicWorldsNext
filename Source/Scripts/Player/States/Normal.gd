@@ -25,7 +25,7 @@ var playerIdles = [
 func state_exit():
 	skid = false
 	if parent.crouchBox:
-		parent.crouchBox.disabled = true
+		parent.crouchBox.set_deferred("disabled",true)
 	parent.get_node("HitBox").disabled = false
 	lookTimer = 0
 

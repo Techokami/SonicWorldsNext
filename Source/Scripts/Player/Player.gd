@@ -949,6 +949,9 @@ func kill():
 			animator.play("drown")
 			sfx[25].play()
 		set_state(STATES.DIE,currentHitbox.NORMAL)
+		
+		if playerControl == 1:
+			Global.main.sceneCanPause = false # stop the ability to pause
 
 func respawn():
 	airTimer = 1

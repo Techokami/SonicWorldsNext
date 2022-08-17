@@ -43,21 +43,29 @@ func _input(event):
 			# Do the pause
 			wasPaused = true
 			get_tree().paused = true
+			$GUI/Pause.visible = true
 			
-		elif wasPaused and get_tree().paused:
+		elif wasPaused and get_tree().paused and !$GUI/Pause.visible:
 			# Do the unpause
 			get_tree().paused = false
+		
+		
+	
 	# reset game
 	if event.is_action_pressed("ui_reset"):
-		wasPaused = false
-		Global.reset_values()
-		get_tree().paused = false
-		var _con = get_tree().reload_current_scene()
+		reset_game()
 
+
+func reset_game():
+	wasPaused = false
+	Global.reset_values()
+	get_tree().paused = false
+	var _con = get_tree().reload_current_scene()
 
 
 func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", length = 1):
 	
+	sceneCanPause = false
 	$GUI/Fader.playback_speed = 1/length
 	
 	$GUI/Fader.play(setType)
@@ -83,7 +91,6 @@ func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", l
 	Global.globalTimer = 0
 	Global.stageClearPhase = 0
 	
-	sceneCanPause = false
 	
 	if scene == null:
 		if lastScene != null:
@@ -91,7 +98,7 @@ func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", l
 	else:
 		$SceneLoader.add_child(scene.instance())
 		lastScene = scene
-
+	
 	if fadeIn != "":
 		$GUI/Fader.play_backwards(fadeIn)
 	elif fadeOut != "":

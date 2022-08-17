@@ -18,6 +18,7 @@ var timerActive = false
 var stageClearPhase = 0
 var gameOver = false
 
+var zoomSize = 1
 # Music
 var musicParent = null
 var music = null
@@ -63,6 +64,7 @@ enum HAZARDS {NORMAL, FIRE, ELEC, WATER}
 func _ready():
 	add_child(soundChannel)
 	soundChannel.bus = "SFX"
+	load_settings()
 
 func _process(delta):
 	originalFPS = 60#*Engine.time_scale
@@ -112,3 +114,34 @@ func stage_clear():
 
 func emit_stage_start():
 	emit_signal("stage_started")
+
+func save_settings():
+	var file = ConfigFile.new()
+	# save settings
+	file.set_value("Volume","SFX",AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX")))
+	file.set_value("Volume","Music",AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Music")))
+	
+	file.set_value("Resolution","Zoom",zoomSize)
+	file.set_value("Resolution","FullScreen",OS.window_fullscreen)
+	# save config and close
+	file.save("user://Settings.cfg")
+
+func load_settings():
+	var file = ConfigFile.new()
+	var err = file.load("user://Settings.cfg")
+	if err != OK:
+		return false # Return false as an error
+	
+	if file.has_section_key("Volume","SFX"):
+		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"),file.get_value("Volume","SFX"))
+	
+	if file.has_section_key("Volume","Music"):
+		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"),file.get_value("Volume","Music"))
+	
+	if file.has_section_key("Resolution","Zoom"):
+		zoomSize = file.get_value("Resolution","Zoom")
+		OS.set_window_size(get_viewport().get_visible_rect().size*zoomSize)
+	
+	if file.has_section_key("Resolution","FullScreen"):
+		OS.window_fullscreen = file.get_value("Resolution","FullScreen")
+	
