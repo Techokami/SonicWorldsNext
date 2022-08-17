@@ -131,7 +131,7 @@ func _process(_delta):
 			templateGrid.cell_size = parent.cell_size
 			
 			# make the new tilemap use the current stamps (if stamps isn't null)
-			if (STAMPS[set] != null && set < STAMPS.size()):
+			if (STAMPS[set] != null and set < STAMPS.size()):
 				for i in (STAMPS[set].size()):
 					var off = (i*7)
 					templateGrid.set_cell(
@@ -222,9 +222,9 @@ func _process(_delta):
 									xOff += parent.tile_set.tile_get_region(count).size.x
 									count += 1
 								# if mouse is inside tileset region, copy patterns
-								if (minOff.x-position.x+(i*cellSize.x) >= xOff &&
-								minOff.x-position.x+(i*cellSize.x) < xOff+parent.tile_set.tile_get_region(count).size.x &&
-								minOff.y-position.y+(j*cellSize.y) >= 0 &&
+								if (minOff.x-position.x+(i*cellSize.x) >= xOff and
+								minOff.x-position.x+(i*cellSize.x) < xOff+parent.tile_set.tile_get_region(count).size.x and
+								minOff.y-position.y+(j*cellSize.y) >= 0 and
 								minOff.y-position.y+(j*cellSize.y) < parent.tile_set.tile_get_region(count).size.y):
 									pattern[i][j] = [
 									id,
@@ -232,7 +232,7 @@ func _process(_delta):
 									Vector2.ZERO]
 			
 			# copy mode or template mode, copys the tile range (uses getTile)
-			elif (mode == COPY || template == 2):
+			elif (mode == COPY or template == 2):
 				pattern.resize((squareSize/cellSize).x)
 				for i in pattern.size():
 					pattern[i] = []
@@ -245,7 +245,7 @@ func _process(_delta):
 			
 			# paste mode
 			else:
-				if (mode == EDIT && pattern.size() > 0):
+				if (mode == EDIT and pattern.size() > 0):
 					for i in (squareSize.x/cellSize.x):
 						for j in (squareSize.y/cellSize.y):
 							
@@ -268,7 +268,7 @@ func _process(_delta):
 		offset = (getTile.get_local_mouse_position()/cellSize).floor()*cellSize
 	
 	# press left mouse
-	if (Input.is_mouse_button_pressed(BUTTON_LEFT) && !lmbPress):
+	if (Input.is_mouse_button_pressed(BUTTON_LEFT) and !lmbPress):
 		lmbPress = true
 	
 	# set square size if clicking
@@ -278,7 +278,7 @@ func _process(_delta):
 	
 	# Right mouse button press
 	# this section mostly just switches between copy and paste
-	if (Input.is_mouse_button_pressed(BUTTON_RIGHT) && !rmbPress):
+	if (Input.is_mouse_button_pressed(BUTTON_RIGHT) and !rmbPress):
 		# originally I was going to include more modes but found out I couldn't
 		# do keyboard input and just condensed it down to copy and paste
 		if (mode < 1):

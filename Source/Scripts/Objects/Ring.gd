@@ -18,7 +18,7 @@ func _process(delta):
 		else:
 			queue_free()
 	if (player):
-		if (player.ringDisTime <= 0 && (player.invTime*60 <= 90 || scattered)):
+		if (player.ringDisTime <= 0 and (player.invTime*60 <= 90 or scattered)):
 			z_index = 1
 			player.get_ring()
 			var part = Particle.instance()
@@ -32,7 +32,7 @@ func _physics_process(delta):
 	if (scattered):
 		velocity.y += 0.09375*Global.originalFPS
 		translate(velocity*delta)
-		if ($FloorCheck.is_colliding() && velocity.y > 0):
+		if ($FloorCheck.is_colliding() and velocity.y > 0):
 			velocity.y *= -0.75
 	elif (magnet):
 		#relative positions

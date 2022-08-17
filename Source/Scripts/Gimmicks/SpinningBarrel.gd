@@ -20,7 +20,7 @@ func _physics_process(delta):
 	if (bouncer):
 		translate(shift)
 		
-		if (round(stepify(position.y,4)) != round(stepify(startOff,4)) || abs(selfVelocity) > 100):
+		if (round(stepify(position.y,4)) != round(stepify(startOff,4)) or abs(selfVelocity) > 100):
 			if (sign(startOff-position.y) == sign(selfVelocity)):
 				selfVelocity += 600*delta*sign(startOff-position.y)
 			else:
@@ -29,7 +29,7 @@ func _physics_process(delta):
 			position.y = startOff
 			selfVelocity = 0
 		
-#		if (abs(selfVelocity) < 100 && abs(startOff-position.y) < 8):
+#		if (abs(selfVelocity) < 100 and abs(startOff-position.y) < 8):
 #			selfVelocity = lerp(selfVelocity,0,delta*200)
 			
 	if playerOffset.size() < playerList.size():

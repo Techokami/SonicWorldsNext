@@ -5,11 +5,11 @@ func _physics_process(delta):
 	parent.translate = true
 	
 	if parent.playerControl == 1:
-		if parent.movement.y > 1000 && Global.lives > 0 && !Global.gameOver:
+		if parent.movement.y > 1000 and Global.lives > 0 and !Global.gameOver:
 			parent.movement = Vector2.ZERO
 			Global.lives -= 1
 			# check if lives are remaining or death was a time over
-			if Global.lives > 0 && Global.levelTime < Global.maxTime:
+			if Global.lives > 0 and Global.levelTime < Global.maxTime:
 				Global.main.change_scene(null,"FadeOut")
 				parent.pause_mode = PAUSE_MODE_STOP
 			else:

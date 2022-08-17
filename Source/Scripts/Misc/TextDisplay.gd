@@ -102,7 +102,7 @@ func _draw():
 	if hAlign > 0:
 		# calculate the width of the string based on the texture sizes of each character
 		for i in string.length():
-			if (stringLookup.has(string[i]) || smallStringLookup.has(string[i])):
+			if (stringLookup.has(string[i]) or smallStringLookup.has(string[i])):
 				if (smallStringLookup.has(string[i])):
 					getXWidth += smallStringTexture.get_width()/smallHframes
 				else:
@@ -110,7 +110,7 @@ func _draw():
 			
 		
 	for i in string.length():
-		if (stringLookup.has(string[i]) || smallStringLookup.has(string[i])):
+		if (stringLookup.has(string[i]) or smallStringLookup.has(string[i])):
 			var charID = 0;
 			var gethFrames = hframes
 			var getvFrames = vframes

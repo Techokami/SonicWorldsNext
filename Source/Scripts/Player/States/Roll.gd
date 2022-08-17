@@ -34,8 +34,8 @@ func _physics_process(delta):
 		calcAngle += 360
 	
 	# drop, if speed below fall speed
-	if (abs(parent.movement.x) < parent.fall && calcAngle >= 45 && calcAngle <= 315):
-		if (round(calcAngle) >= 90 && round(calcAngle) <= 270):
+	if (abs(parent.movement.x) < parent.fall and calcAngle >= 45 and calcAngle <= 315):
+		if (round(calcAngle) >= 90 and round(calcAngle) <= 270):
 			parent.disconect_from_floor()
 		
 		parent.horizontalLockTimer = 30.0/60.0
@@ -45,7 +45,7 @@ func _physics_process(delta):
 	
 	if (parent.movement.x != 0):
 		var checkX = sign(parent.movement.x)
-		if (parent.inputs[parent.INPUTS.XINPUT] != 0 && sign(parent.movement.x) != parent.inputs[parent.INPUTS.XINPUT]):
+		if (parent.inputs[parent.INPUTS.XINPUT] != 0 and sign(parent.movement.x) != parent.inputs[parent.INPUTS.XINPUT]):
 			parent.movement.x += parent.rolldec/GlobalFunctions.div_by_delta(delta)*parent.inputs[parent.INPUTS.XINPUT]
 		
 		parent.movement.x -= (parent.rollfrc/GlobalFunctions.div_by_delta(delta))*sign(parent.movement.x)

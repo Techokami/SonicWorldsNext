@@ -1,7 +1,7 @@
 extends PhysicsObject
-const HITBOXESSONIC = {NORMAL = Vector2(9,19), ROLL = Vector2(7,14), GLIDE = Vector2(10,10)}
-const HITBOXESTAILS = {NORMAL = Vector2(9,15), ROLL = Vector2(7,14), GLIDE = Vector2(10,10)}
-const HITBOXESKNUCKLES = {NORMAL = Vector2(9,19), ROLL = Vector2(7,14), GLIDE = Vector2(10,10)}
+const HITBOXESSONIC = {NORMAL = Vector2(9,19), ROLL = Vector2(7,14), CROUCH = Vector2(9,11), GLIDE = Vector2(10,10)}
+const HITBOXESTAILS = {NORMAL = Vector2(9,15), ROLL = Vector2(7,14), CROUCH = Vector2(9,9.5), GLIDE = Vector2(10,10)}
+const HITBOXESKNUCKLES = {NORMAL = Vector2(9,19), ROLL = Vector2(7,14), CROUCH = Vector2(9,11), GLIDE = Vector2(10,10)}
 var currentHitbox = HITBOXESSONIC
 
 #Sonic's Speed constants
@@ -123,6 +123,7 @@ var airControl = true
 # States
 enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, ANIMATION, HIT, DIE, CORKSCREW, JUMPCANCEL, SUPER, FLY, RESPAWN, HANG, GLIDE, WALLCLIMB}
 var currentState = STATES.NORMAL
+onready var hitBoxOffset = {normal = $HitBox.position, crouch = $HitBox.position}
 var crouchBox = null
 
 # Shield variables
@@ -327,6 +328,7 @@ func _ready():
 		crouchBox.get_parent().remove_child(crouchBox)
 		add_child(crouchBox)
 		crouchBox.disabled = true
+		hitBoxOffset.crouch = crouchBox.position
 	
 	# reset camera limits
 	limitLeft = Global.hardBorderLeft
@@ -791,6 +793,8 @@ func set_inputs():
 
 func set_state(newState, forceMask = Vector2.ZERO):
 	
+	$HitBox.position = hitBoxOffset.normal
+	
 	if currentState != newState:
 		var lastState = currentState
 		currentState = newState
@@ -815,6 +819,10 @@ func set_state(newState, forceMask = Vector2.ZERO):
 				
 				# change hitbox size
 				$HitBox.shape.extents = currentHitbox.ROLL
+			STATES.SPINDASH:
+				# change hitbox size
+				$HitBox.shape.extents = currentHitbox.CROUCH
+				
 			_:
 				# adjust y position
 				forcePoseChange = ((currentHitbox.NORMAL-$HitBox.shape.extents)*Vector2.UP).rotated(rotation)

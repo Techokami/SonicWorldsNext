@@ -152,7 +152,7 @@ func _process(delta):
 		Global.life.stop()
 		yield($GameOver/GameOver,"animation_finished")
 		# reset game
-		if Global.levelTime < Global.maxTime || Global.lives <= 0:
+		if Global.levelTime < Global.maxTime or Global.lives <= 0:
 			Global.main.change_scene(Global.startScene,"FadeOut")
 			yield(Global.main,"scene_faded")
 			Global.reset_values()

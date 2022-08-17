@@ -6,6 +6,7 @@ export var bottom = 2
 export (int, "up", "down") var rightMovement = 0
 
 var players = []
+var playerPosX = []
 var activePlayers = []
 var fall = false
 var fallSpeed = 100
@@ -36,7 +37,7 @@ func _physics_process(delta):
 		# check if to lock player
 		for i in players:
 			# check if player position crossed the middle
-			if sign(global_position.x-i.global_position.x) != sign(global_position.x-i.global_position.x+(i.movement.x*delta)) or sign(global_position.x-i.global_position.x) == 0:
+			if sign(global_position.x-i.global_position.x) != sign(global_position.x-i.global_position.x+(i.movement.x*delta)) or (round(global_position.x-i.global_position.x)/4) == 0:
 				if !activePlayers.has(i):
 					activePlayers.append(i)
 		
@@ -48,9 +49,7 @@ func _physics_process(delta):
 			var goDirection = i.movement.x*delta/4
 			
 			if ((!$Screw/FloorCheck.is_colliding() or goDirection > 0) and (!$Screw/CeilingCheck.is_colliding() or goDirection < 0)
-			and $Screw.position.y-goDirection > (-top*8)+12 and !fall): #and i.ground):
-				#i.position.y -= goDirection
-				i.ground = true
+			and $Screw.position.y-goDirection > (-top*8)+12 and !fall and i.ground):
 				i.global_position.x = global_position.x
 				$Screw/Screw.frame = posmod(int(floor(-$Screw.position.y/4)),4)
 			else:
@@ -73,8 +72,6 @@ func _on_playerChecker_body_entered(body):
 func _on_playerChecker_body_exited(body):
 	if players.has(body):
 		players.erase(body)
-	if activePlayers.has(body):
-		activePlayers.erase(body)
 
 
 # prevent unnecessary run time processing for object

@@ -1,26 +1,11 @@
 extends "res://Scripts/Player/State.gd"
 
 
-#func _input(event):
-#	if (parent.playerControl != 0):
-#		if (event.is_action_pressed("gm_action")):
-#			# reset animation
-#			parent.animator.stop()
-#			parent.animator.play("spinDash")
-#			parent.sprite.frame = 0
-#			# play rev sound
-#			parent.sfx[2].play()
-#			if (parent.spindashPower < 8):
-#				parent.spindashPower = min(parent.spindashPower+2,8)
-#			parent.sfx[2].pitch_scale = 1.0+((float(parent.spindashPower)/8.0)*0.5)
-
 func state_exit():
-	parent.crouchBox.disabled = true
-	parent.get_node("HitBox").disabled = false
+	parent.get_node("HitBox").shape.extents = parent.currentHitbox.NORMAL
 	
 func state_activated():
-	parent.crouchBox.disabled = false
-	parent.get_node("HitBox").disabled = true
+	parent.get_node("HitBox").position = parent.hitBoxOffset.crouch
 	
 func _process(delta):
 	

@@ -21,21 +21,21 @@ func _on_Shields_frame_changed():
 			offset = Vector2.ZERO
 			scale.x = 1
 			# flip vertically if frame is odd and greater then 30
-			if (fmod(frame,2) == 1 && frame > 30):
+			if (fmod(frame,2) == 1 and frame > 30):
 				scale.y = -1
 			else:
 				scale.y = 1
 			if (material.blend_mode != BLEND_MODE_DISABLED):
 				material.blend_mode = BLEND_MODE_DISABLED
 		"Elec":
-			if (frame >= 13 && frame < 23):
+			if (frame >= 13 and frame < 23):
 				z_index = 4
 			else:
 				z_index = 6
 			offset = Vector2.ZERO
 			# if frames greater then 5 or 13 and less then 10 and 18, flip horizontaly
-			if (frame >= 5 && frame < 10 ||
-			frame >= 13 && frame < 18):
+			if (frame >= 5 and frame < 10 or
+			frame >= 13 and frame < 18):
 				scale.x = -1
 			else:
 				scale.x = 1

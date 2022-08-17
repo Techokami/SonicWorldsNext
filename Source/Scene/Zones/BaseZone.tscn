@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=2]
+[gd_scene load_steps=57 format=2]
 
 [ext_resource path="res://Tileset/Worlds/TestTilesGreen.tres" type="TileSet" id=1]
 [ext_resource path="res://Scripts/Level/Level.gd" type="Script" id=2]
@@ -23,7 +23,6 @@
 [ext_resource path="res://Tileset/Worlds/TestTilesRed.tres" type="TileSet" id=21]
 [ext_resource path="res://Tileset/Worlds/TestTilesPurple.tres" type="TileSet" id=22]
 [ext_resource path="res://Tileset/Worlds/TestTilesBlue.tres" type="TileSet" id=23]
-[ext_resource path="res://Graphics/TestZoneMap.png" type="Texture" id=24]
 [ext_resource path="res://Graphics/Backgrounds/WorldsBackground.png" type="Texture" id=25]
 [ext_resource path="res://Scripts/Gimmicks/ZoomTubePath.gd" type="Script" id=26]
 [ext_resource path="res://Graphics/Gimmicks/Tube.png" type="Texture" id=27]
@@ -103,7 +102,7 @@ extents = Vector2( 40, 2 )
 [node name="TestScene" type="Node2D"]
 script = ExtResource( 2 )
 __meta__ = {
-"_edit_horizontal_guides_": [ 2048.0, 0.0, 1600.0 ],
+"_edit_horizontal_guides_": [ 1600.0 ],
 "_edit_vertical_guides_": [ 10400.0 ]
 }
 nextZone = ExtResource( 50 )
@@ -154,6 +153,15 @@ tile_data = PoolIntArray( -1114172, 1610612737, 196613, -1114171, 1610612737, 19
 position = Vector2( -424, -32 )
 script = ExtResource( 3 )
 update = false
+
+[node name="Note (feel free to delete)" type="Label" parent="Default/TileHelper"]
+margin_top = -168.0
+margin_right = 419.0
+margin_bottom = -120.0
+text = "Note: Tile helper doesn't support undo commands.
+clicking in the area even in other screens may cause it to activate
+so make sure to have this offscreen and deactivated when not
+in use"
 
 [node name="Background" type="TileMap" parent="."]
 z_index = 6
@@ -206,16 +214,6 @@ position = Vector2( 9176, 64 )
 rotation = -0.000153267
 scale = Vector2( 0.746364, 0.746364 )
 texture = ExtResource( 31 )
-
-[node name="TestZoneMap" type="Sprite" parent="."]
-visible = false
-modulate = Color( 0.882353, 0.690196, 0.921569, 0.368627 )
-position = Vector2( 0.6, 0 )
-texture = ExtResource( 24 )
-centered = false
-__meta__ = {
-"_edit_lock_": true
-}
 
 [node name="Platforms" type="Node2D" parent="."]
 
@@ -1075,14 +1073,6 @@ position = Vector2( 8720, 1584 )
 [node name="Ring81" parent="Rings" instance=ExtResource( 11 )]
 position = Vector2( 8744, 1584 )
 
-[node name="Ring141" parent="Rings" instance=ExtResource( 11 )]
-position = Vector2( 7296, 1216 )
-scale = Vector2( 6, 6 )
-
-[node name="Ring142" parent="Rings" instance=ExtResource( 11 )]
-position = Vector2( 9176, 64 )
-scale = Vector2( 6, 6 )
-
 [node name="Ring82" parent="Rings" instance=ExtResource( 11 )]
 position = Vector2( 8768, 1584 )
 
@@ -1283,11 +1273,11 @@ position = Vector2( 9136, 1264 )
 item = 7
 
 [node name="Monitor17" parent="Monitors" instance=ExtResource( 17 )]
-position = Vector2( 7344, 1264 )
+position = Vector2( 7296, 1264 )
 item = 7
 
 [node name="Monitor20" parent="Monitors" instance=ExtResource( 17 )]
-position = Vector2( 9088, 112 )
+position = Vector2( 9176, 112 )
 item = 7
 
 [node name="Monitor13" parent="Monitors" instance=ExtResource( 17 )]

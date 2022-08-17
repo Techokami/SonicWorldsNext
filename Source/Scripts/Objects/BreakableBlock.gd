@@ -5,7 +5,7 @@ export var sound = preload("res://Audio/SFX/Gimmicks/Collapse.wav")
 export var score = true
 
 func physics_collision(body, hitVector):
-	if hitVector == Vector2.DOWN && body.get_collision_layer_bit(19):
+	if hitVector == Vector2.DOWN and body.get_collision_layer_bit(19):
 		$CollisionShape2D.disabled = true
 		$Sprite.visible = false
 		Global.play_sound(sound)

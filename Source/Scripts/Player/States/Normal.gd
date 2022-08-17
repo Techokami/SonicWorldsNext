@@ -24,9 +24,9 @@ var playerIdles = [
 
 func state_exit():
 	skid = false
-	if parent.crouchBox:
-		parent.crouchBox.set_deferred("disabled",true)
-	parent.get_node("HitBox").disabled = false
+	parent.get_node("HitBox").position = parent.hitBoxOffset.normal
+	parent.get_node("HitBox").shape.extents = parent.currentHitbox.NORMAL
+	
 	lookTimer = 0
 
 func _process(delta):
@@ -91,7 +91,7 @@ func _process(delta):
 					getL = getR
 					getR = parent.verticalSensorLeft.is_colliding()
 				# No edge detected
-				if getM || !parent.ground || parent.angle != parent.gravityAngle:
+				if getM or !parent.ground or parent.angle != parent.gravityAngle:
 					# Play default idle animation
 					if parent.super and parent.animator.has_animation("idle_super"):
 						parent.animator.play("idle_super")
@@ -146,9 +146,13 @@ func _process(delta):
 			parent.animator.play("run")
 		else:
 			parent.animator.play("peelOut")
-		
-	parent.crouchBox.disabled = (parent.lastActiveAnimation != "crouch")
-	parent.get_node("HitBox").disabled = !parent.crouchBox.disabled
+	
+	if parent.lastActiveAnimation == "crouch":
+		parent.get_node("HitBox").shape.extents = parent.currentHitbox.CROUCH
+		parent.get_node("HitBox").position = parent.hitBoxOffset.crouch
+	else:
+		parent.get_node("HitBox").position = parent.hitBoxOffset.normal
+		parent.get_node("HitBox").shape.extents = parent.currentHitbox.NORMAL
 	
 	if parent.inputs[parent.INPUTS.XINPUT] != 0 and !skid:
 		parent.direction = parent.inputs[parent.INPUTS.XINPUT]
@@ -184,7 +188,7 @@ func _physics_process(delta):
 			if parent.animator.has_animation("skidTurn"):
 				parent.animator.play("skidTurn")
 		
-		if !parent.animator.is_playing() || inputX == sign(parent.movement.x):
+		if !parent.animator.is_playing() or inputX == sign(parent.movement.x):
 			skid = (round(parent.movement.x) != 0 and inputX != sign(parent.movement.x) and inputX != 0)
 		
 	

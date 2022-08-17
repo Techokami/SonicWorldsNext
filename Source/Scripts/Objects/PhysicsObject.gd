@@ -48,14 +48,14 @@ signal positionChanged
 
 func _ready():
 	slopeCheck.modulate = Color.blueviolet
-	add_child(verticalSensorLeft)
-	add_child(verticalSensorMiddle)
-	add_child(verticalSensorMiddleEdge)
-	add_child(verticalSensorRight)
-	add_child(verticalObjectCheck)
-	add_child(horizontalSensor)
-	add_child(slopeCheck)
-	add_child(objectCheck)
+	$HitBox.add_child(verticalSensorLeft)
+	$HitBox.add_child(verticalSensorMiddle)
+	$HitBox.add_child(verticalSensorMiddleEdge)
+	$HitBox.add_child(verticalSensorRight)
+	$HitBox.add_child(verticalObjectCheck)
+	$HitBox.add_child(horizontalSensor)
+	$HitBox.add_child(slopeCheck)
+	$HitBox.add_child(objectCheck)
 	for i in sensorList:
 		i.enabled = true
 	update_sensors()
@@ -98,7 +98,7 @@ func update_sensors():
 	verticalSensorRight.cast_to.y = verticalSensorLeft.cast_to.y
 	verticalSensorMiddle.cast_to.y = verticalSensorLeft.cast_to.y*1.1
 	if movement.x != 0:
-		verticalSensorMiddleEdge.position = verticalSensorLeft.position*0.5*sign(movement.x)
+		verticalSensorMiddleEdge.position = (verticalSensorLeft.position*0.5*sign(movement.x))
 	verticalSensorMiddleEdge.cast_to.y = verticalSensorLeft.cast_to.y*1.1
 	
 	
@@ -136,7 +136,7 @@ func update_sensors():
 	# wall sensor
 	horizontalSensor.cast_to = Vector2(pushRadius*sign(velocity.rotated(-rotationSnap).x),0)
 	# if the player is on a completely flat surface then move the sensor down 8 pixels
-	horizontalSensor.position.y = 8*int(round(rad2deg(angle)) == round(rad2deg(gravityAngle)) && ground)
+	horizontalSensor.position.y = 8*int(round(rad2deg(angle)) == round(rad2deg(gravityAngle)) and ground)
 	
 	# slop sensor
 	slopeCheck.position.y = shape.x
@@ -182,7 +182,7 @@ func _physics_process(delta):
 	#movement += Vector2(-int(Input.is_action_pressed("gm_left"))+int(Input.is_action_pressed("gm_right")),-int(Input.is_action_pressed("gm_up"))+int(Input.is_action_pressed("gm_down")))*_delta*100
 	var moveRemaining = movement # copy of the movement variable to cut down on until it hits 0
 	var checkOverride = true
-	while (!moveRemaining.is_equal_approx(Vector2.ZERO) || checkOverride) && !translate:
+	while (!moveRemaining.is_equal_approx(Vector2.ZERO) or checkOverride) and !translate:
 		checkOverride = false
 		var moveCalc = moveRemaining.normalized()*min(moveStepLength,moveRemaining.length())
 				

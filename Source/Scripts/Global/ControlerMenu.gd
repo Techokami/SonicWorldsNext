@@ -136,16 +136,16 @@ func load_data():
 		# prefix keys: K = Key, B = joypad Button, A = Axis, V = AxisValue
 		
 		# check for any inputs, if any are found then remove binding
-		if (file.has_section_key("controls","K0"+i) || 
-		file.has_section_key("controls","B0"+i) ||
-		file.has_section_key("controls","A0"+i) || 
+		if (file.has_section_key("controls","K0"+i) or 
+		file.has_section_key("controls","B0"+i) or
+		file.has_section_key("controls","A0"+i) or 
 		file.has_section_key("controls","V0"+i)):
 			# clear input
 			InputMap.action_erase_events(i)
 		# check prefixes
-		while (file.has_section_key("controls","K"+str(actionCount)+i) || 
-		file.has_section_key("controls","B"+str(actionCount)+i) ||
-		file.has_section_key("controls","A"+str(actionCount)+i) || 
+		while (file.has_section_key("controls","K"+str(actionCount)+i) or 
+		file.has_section_key("controls","B"+str(actionCount)+i) or
+		file.has_section_key("controls","A"+str(actionCount)+i) or 
 		file.has_section_key("controls","V"+str(actionCount)+i)):
 			
 			# keyboard check
@@ -168,7 +168,7 @@ func load_data():
 				# set new input
 				InputMap.action_add_event(i,getInput)
 			# joypad Axis check
-			if (file.has_section_key("controls","A"+str(actionCount)+i) &&
+			if (file.has_section_key("controls","A"+str(actionCount)+i) and
 			file.has_section_key("controls","V"+str(actionCount)+i)):
 				# define new key
 				var getInput = InputEventJoypadMotion.new()
