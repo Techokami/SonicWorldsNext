@@ -1,8 +1,12 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Audio/Soundtrack/2. SWD_SpeedUp.ogg" type="AudioStream" id=1]
 [ext_resource path="res://Scripts/Global/Main.gd" type="Script" id=2]
 [ext_resource path="res://Audio/Soundtrack/3. SWD_1Up.ogg" type="AudioStream" id=3]
+[ext_resource path="res://Scene/Presentation/PoweredByWorlds.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Audio/Soundtrack/7. SWD_Drowning.ogg" type="AudioStream" id=5]
+[ext_resource path="res://Entities/Misc/ControllerMenu.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Entities/Misc/PauseMenu.tscn" type="PackedScene" id=7]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 2
@@ -82,22 +86,30 @@ tracks/0/keys = {
 }
 
 [node name="Main" type="Node2D"]
+pause_mode = 2
 script = ExtResource( 2 )
 
 [node name="SceneLoader" type="Node" parent="."]
+pause_mode = 1
 
-[node name="Music" type="AudioStreamPlayer" parent="."]
-pause_mode = 2
+[node name="PoweredByWorlds" parent="SceneLoader" instance=ExtResource( 4 )]
+
+[node name="Music" type="Node" parent="."]
+pause_mode = 1
+
+[node name="Music" type="AudioStreamPlayer" parent="Music"]
 autoplay = true
 bus = "Music"
 
-[node name="EffectTheme" type="AudioStreamPlayer" parent="."]
-pause_mode = 2
+[node name="EffectTheme" type="AudioStreamPlayer" parent="Music"]
 stream = ExtResource( 1 )
 bus = "Music"
 
-[node name="Life" type="AudioStreamPlayer" parent="."]
-pause_mode = 2
+[node name="Downing" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource( 5 )
+bus = "Music"
+
+[node name="Life" type="AudioStreamPlayer" parent="Music"]
 stream = ExtResource( 3 )
 bus = "Music"
 
@@ -116,3 +128,9 @@ anims/FadeOut = SubResource( 2 )
 anims/RESET = SubResource( 3 )
 anims/SetAdd = SubResource( 4 )
 anims/SetSub = SubResource( 5 )
+
+[node name="ControllerMenu" parent="GUI" instance=ExtResource( 6 )]
+
+[node name="Pause" parent="GUI" instance=ExtResource( 7 )]
+
+[connection signal="finished" from="Music/Life" to="." method="_on_Life_finished"]

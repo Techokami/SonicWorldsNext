@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Scripts/Gimmicks/WaterLevel.gd" type="Script" id=1]
-[ext_resource path="res://Graphics/Gimmicks/WaterSurface.tres" type="Texture" id=2]
+[ext_resource path="res://Graphics/Gimmicks/WaterSurface1.png" type="Texture" id=2]
 
 [node name="WaterLevel" type="Node2D"]
 script = ExtResource( 1 )

@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Scripts/Objects/SwingingPlatform.gd" type="Script" id=1]
+[ext_resource path="res://Graphics/Obstacles/SwingChain.png" type="Texture" id=2]
+[ext_resource path="res://Graphics/Obstacles/platform_64_2.png" type="Texture" id=3]
+[ext_resource path="res://Graphics/Obstacles/SwingPole.png" type="Texture" id=4]
+
+[sub_resource type="RectangleShape2D" id=1]
+resource_local_to_scene = true
+extents = Vector2( 40, 0.5 )
+
+[node name="Platform" type="Node2D"]
+script = ExtResource( 1 )
+rotate_amount = 90
+plat_img = ExtResource( 3 )
+chain_img = ExtResource( 2 )
+
+[node name="SwingBase" type="KinematicBody2D" parent="."]
+visible = false
+collision_layer = 8193
+collision_mask = 8192
+motion/sync_to_physics = true
+
+[node name="Shape" type="CollisionShape2D" parent="SwingBase"]
+modulate = Color( 1, 1, 1, 0.0980392 )
+position = Vector2( 0, -7.5 )
+shape = SubResource( 1 )
+one_way_collision = true
+
+[node name="Sprite" type="Sprite" parent="SwingBase"]
+
+[node name="SwingPole" type="Sprite" parent="."]
+texture = ExtResource( 4 )

@@ -1,6 +1,6 @@
 extends StaticBody2D
 export (int, "floor", "ceiling", "left wall", "right wall")var direction = 0
-var angleException = Vector2.RIGHT;
+var angleException = Vector2.RIGHT
 
 func _ready():
 	match(direction):

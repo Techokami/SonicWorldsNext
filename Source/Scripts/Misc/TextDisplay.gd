@@ -27,7 +27,7 @@ var stringLookup = {
 'X': 23,
 'Y': 24,
 'Z': 25,
-};
+}
 var smallStringLookup = {
 '0': 0,
 '1': 1,
@@ -65,10 +65,10 @@ var smallStringLookup = {
 'x': 33,
 'y': 34,
 'z': 35,
-};
+}
 
-export var string = "123XYZ";
-onready var stringMem = string;
+export var string = "123XYZ"
+onready var stringMem = string
 
 export (Texture) var smallStringTexture = preload("res://Graphics/HUD/LevelCards/font/smallfont3.png")
 export var hasNumbers = false
@@ -77,23 +77,40 @@ export var smallHasNumber = true
 export var smallHframes = 10
 export var smallVframes = 4
 
-export (int, "Top", "Middle", "Bottom") var align = 0
+export (int, "Top", "Middle", "Bottom") var vAlign = 0
+export (int, "Left", "Middle", "Right") var hAlign = 0
 
 func _ready():
 	region_enabled = true;
 
-func _process(delta):
+func _process(_delta):
 	if (stringMem != string):
 		stringMem = string;
-		update();
+		update()
 
 
 func _draw():
-	var getRes = Vector2(texture.get_width()/hframes,texture.get_height()/vframes);
+	var getRes = Vector2(texture.get_width()/float(hframes),texture.get_height()/float(vframes))
+	# used for string position
 	var getX = 0
-	var vAlign = ((texture.get_height()/vframes)-(smallStringTexture.get_height()/smallVframes))*(align/2)
+	# calculate vertical alignment
+	var getVAlign = ((texture.get_height()/float(vframes))-(smallStringTexture.get_height()/smallVframes))*(vAlign/2)
+	
+	# width calculation (based on string length)
+	var getXWidth = 0
+	# check if h align isn't on the left
+	if hAlign > 0:
+		# calculate the width of the string based on the texture sizes of each character
+		for i in string.length():
+			if (stringLookup.has(string[i]) or smallStringLookup.has(string[i])):
+				if (smallStringLookup.has(string[i])):
+					getXWidth += smallStringTexture.get_width()/smallHframes
+				else:
+					getXWidth += texture.get_width()/float(hframes)
+			
+		
 	for i in string.length():
-		if (stringLookup.has(string[i]) || smallStringLookup.has(string[i])):
+		if (stringLookup.has(string[i]) or smallStringLookup.has(string[i])):
 			var charID = 0;
 			var gethFrames = hframes
 			var getvFrames = vframes
@@ -104,13 +121,17 @@ func _draw():
 				getvFrames = smallVframes
 				charID = smallStringLookup[string[i]]
 				getTexture = smallStringTexture
-				yOff = vAlign
+				yOff = getVAlign
 			else:
-				charID = stringLookup[string[i]]
+				if hasNumbers:
+					charID = smallStringLookup[string.to_lower()[i]]
+				else:
+					charID = stringLookup[string[i]]
 			
-			getRes = Vector2(getTexture.get_width()/gethFrames,getTexture.get_height()/getvFrames);
+			getRes = Vector2(getTexture.get_width()/gethFrames,getTexture.get_height()/getvFrames)
 				
 			draw_texture_rect_region(getTexture,
-			Rect2(Vector2(getX,yOff),getRes),
-			Rect2(Vector2(fmod(charID,gethFrames)*getRes.x,floor(charID/gethFrames)*getRes.y),getRes));
+			Rect2(Vector2(getX-(getXWidth*(hAlign/2.0)),yOff),getRes),
+			Rect2(Vector2(fmod(charID,gethFrames)*getRes.x,floor(charID/gethFrames)*getRes.y),getRes))
 		getX += getRes.x
+

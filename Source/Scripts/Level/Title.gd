@@ -2,8 +2,8 @@ extends Node2D
 
 export var music = preload("res://Audio/Soundtrack/9. SWD_TitleScreen.ogg")
 export var speed = 0
+export var nextScene = preload("res://Scene/Presentation/CharacterSelect.tscn")
 var titleEnd = false
-var startRoom = preload("res://Scene/Zones/BaseZone.tscn")
 
 func _ready():
 	Global.music.stream = music
@@ -17,9 +17,9 @@ func _process(delta):
 	
 
 func _input(event):
-	if event.is_action_pressed("gm_pause") && !titleEnd:
+	if event.is_action_pressed("gm_pause") and !titleEnd:
 		titleEnd = true
 		if Global.music.get_playback_position() < 14.0:
 			Global.music.seek(14.0)
-		Global.main.change_scene(startRoom,"FadeOut","FadeOut","SetSub",1)
+		Global.main.change_scene(nextScene,"FadeOut","FadeOut","SetSub",1)
 		$Celebrations.emitting = true

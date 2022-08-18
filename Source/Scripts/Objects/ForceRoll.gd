@@ -3,7 +3,7 @@ extends Area2D
 var players = []
 export (int, "left", "right") var forceDirection = 1
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if players.size() > 0:
 		for i in players:
 			if i.ground:
@@ -11,8 +11,8 @@ func _physics_process(delta):
 					i.movement.x = 2*sign(-1+(forceDirection*2))*Global.originalFPS
 				if i.currentState != i.STATES.ROLL:
 					i.set_state(i.STATES.ROLL)
-					i.animator.play("roll");
-					i.sfx[1].play();
+					i.animator.play("roll")
+					i.sfx[1].play()
 
 func _on_ForceRoll_body_entered(body):
 	if !players.has(body):

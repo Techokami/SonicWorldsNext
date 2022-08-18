@@ -1,11 +1,11 @@
 extends Node2D
 
-var speed = 3;
-var direction = Vector2.RIGHT;
+var speed = 3
+var direction = Vector2.RIGHT
 
 func _process(delta):
-	translate(direction*speed);
+	translate(direction*speed)
 	if (speed > 0):
-		speed -= delta*10;
+		speed -= delta*10
 	else:
-		queue_free();
+		queue_free()

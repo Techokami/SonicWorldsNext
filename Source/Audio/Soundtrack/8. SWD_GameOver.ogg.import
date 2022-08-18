@@ -11,5 +11,5 @@ dest_files=[ "res://.import/8. SWD_GameOver.ogg-b94881d7bd930d7769bcbfcee955555d
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0

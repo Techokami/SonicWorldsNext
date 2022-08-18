@@ -6,7 +6,7 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8, 8 )
 
-[node name="EnemyBase" type="KinematicBody2D"]
+[node name="EnemyBase" type="KinematicBody2D" groups=["Enemy"]]
 collision_layer = 16384
 collision_mask = 0
 script = ExtResource( 1 )
@@ -15,8 +15,8 @@ script = ExtResource( 1 )
 shape = SubResource( 1 )
 
 [node name="DamageArea" type="Area2D" parent="."]
-collision_layer = 4096
-collision_mask = 0
+collision_layer = 0
+collision_mask = 528384
 
 [node name="HitBox" type="CollisionShape2D" parent="DamageArea"]
 modulate = Color( 1, 0, 0, 1 )
@@ -25,6 +25,7 @@ shape = SubResource( 1 )
 [node name="orbinaut" type="Sprite" parent="."]
 texture = ExtResource( 2 )
 hframes = 2
+vframes = 2
 
 [node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
 position = Vector2( 1.90735e-06, -1.90735e-06 )
@@ -32,5 +33,6 @@ scale = Vector2( 6.4, 6.4 )
 process_parent = true
 physics_process_parent = true
 
+[connection signal="area_entered" from="DamageArea" to="." method="_on_DamageArea_area_entered"]
 [connection signal="body_entered" from="DamageArea" to="." method="_on_body_entered"]
 [connection signal="body_exited" from="DamageArea" to="." method="_on_body_exited"]

@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Scripts/Objects/Platform.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/Objects/PlatformChild.gd" type="Script" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+resource_local_to_scene = true
+extents = Vector2( 40, 2 )
+
+[node name="Platform" type="Node2D"]
+process_priority = 10
+script = ExtResource( 1 )
+offset = 0
+
+[node name="Platform" type="KinematicBody2D" parent="."]
+process_priority = 10
+collision_layer = 8193
+collision_mask = 0
+motion/sync_to_physics = true
+script = ExtResource( 2 )
+
+[node name="Shape" type="CollisionShape2D" parent="Platform"]
+modulate = Color( 1, 1, 1, 0.0980392 )
+position = Vector2( 0, -14 )
+shape = SubResource( 1 )
+one_way_collision = true
+
+[node name="Sprite" type="Sprite" parent="Platform"]

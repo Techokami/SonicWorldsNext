@@ -6,6 +6,6 @@
 
 [resource]
 shader = ExtResource( 3 )
-shader_param/amount = 32.0
+shader_param/amount = 36.0
 shader_param/originalPalette = ExtResource( 2 )
 shader_param/swapPalette = ExtResource( 1 )
