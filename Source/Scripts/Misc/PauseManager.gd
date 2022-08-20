@@ -53,7 +53,7 @@ func _input(event):
 	elif event.is_action_pressed("gm_up"):
 		choose_option(option-1)
 	# switch toggles for options menu settings
-	elif event.is_action("gm_left") or event.is_action("gm_right") and menu == 1:
+	elif (event.is_action("gm_left") or event.is_action("gm_right")) and menu == 1:
 		var inputDir = -1+int(event.is_action("gm_right"))*2
 		
 		# set audio busses

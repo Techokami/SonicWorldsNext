@@ -90,6 +90,8 @@ func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", l
 		Global.timerActive = false
 	Global.globalTimer = 0
 	Global.stageClearPhase = 0
+	Global.effectTheme.stop()
+	Global.drowning.stop()
 	
 	
 	if scene == null:

@@ -2,7 +2,7 @@ extends Node2D
 
 export var music = preload("res://Audio/Soundtrack/9. SWD_TitleScreen.ogg")
 export var speed = 0
-export var nextScene = preload("res://Scene/Presentation/CharacterSelect.tscn")
+export (PackedScene) var nextScene = load("res://Scene/Presentation/CharacterSelect.tscn")
 var titleEnd = false
 
 func _ready():

@@ -102,3 +102,4 @@ anims/Tails = SubResource( 4 )
 
 [node name="GoalPost" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 3 )
+bus = "SFX"

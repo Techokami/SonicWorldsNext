@@ -46,7 +46,7 @@ func _on_BubbleCollect_body_entered(body):
 		body.animator.queue("walk")
 		body.movement = Vector2.ZERO
 		$Bubble.play("bigPop")
-		$BubbleCollect/CollisionShape2D.disabled = true
+		$BubbleCollect/CollisionShape2D.call_deferred("set","disabled",true)
 		set_physics_process(false)
 
 
