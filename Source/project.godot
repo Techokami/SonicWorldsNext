@@ -32,7 +32,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="SonicWorldsNext"
+config/name="Sonic Worlds Next"
 run/main_scene="res://Scene/Main.tscn"
 boot_splash/image="res://icon.png"
 config/icon="res://icon.png"

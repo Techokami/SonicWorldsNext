@@ -950,6 +950,8 @@ func kill():
 		collision_mask = 0
 		z_index = 100
 		if airTimer > 0:
+			water = false
+			switch_physics(false)
 			movement = Vector2(0,-7*60)
 			animator.play("die")
 			sfx[6].play()
@@ -957,7 +959,6 @@ func kill():
 			if playerControl == 1:
 				Global.music.stop()
 				Global.effectTheme.stop()
-				print("A")
 			movement = Vector2(0,0)
 			animator.play("drown")
 			sfx[25].play()
