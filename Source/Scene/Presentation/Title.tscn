@@ -272,7 +272,7 @@ anchor_top = 1.0
 anchor_bottom = 1.0
 margin_top = -14.0
 margin_right = 65.0
-text = "v1.0.1"
+text = "v1.0.2"
 
 [node name="Date" type="Label" parent="CanvasLayer/Labels"]
 modulate = Color( 0, 0, 0, 1 )

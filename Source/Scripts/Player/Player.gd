@@ -1150,11 +1150,14 @@ func _on_BubbleTimer_timeout():
 
 # player movements
 func action_move(delta):
-	if (inputs[INPUTS.XINPUT] != 0):
-		if (movement.x*inputs[INPUTS.XINPUT] < top):
-			if (sign(movement.x) == inputs[INPUTS.XINPUT]):
-				if (abs(movement.x) < top):
-					movement.x = clamp(movement.x+acc/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT],-top,top)
+	# moving left and right, check if left or right is being pressed
+	if inputs[INPUTS.XINPUT] != 0:
+		# check if movement is less then the top speed
+		if movement.x*inputs[INPUTS.XINPUT] < top:
+			# check if the player is pressing the direction they're moving
+			if sign(movement.x) == inputs[INPUTS.XINPUT] or sign(movement.x) == 0:
+				if abs(movement.x) < top:
+					movement.x = move_toward(movement.x,top*inputs[INPUTS.XINPUT],acc/GlobalFunctions.div_by_delta(delta))
 			else:
 				# reverse direction
 				movement.x += dec/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT]
@@ -1162,6 +1165,7 @@ func action_move(delta):
 				if (sign(movement.x) != sign(movement.x-dec/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT])):
 					movement.x = 0.5*60*sign(movement.x)
 	else:
+		# come to a stop if neither left or right is pressed
 		if (movement.x != 0):
 			# check that decreasing movement won't go too far
 			if (sign(movement.x - (frc/GlobalFunctions.div_by_delta(delta))*sign(movement.x)) == sign(movement.x)):
