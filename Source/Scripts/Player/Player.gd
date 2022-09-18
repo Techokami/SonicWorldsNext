@@ -264,16 +264,19 @@ func _ready():
 			CHARACTERS.SONIC:
 				playerPal.set_shader_param("amount",3)
 				playerPal.set_shader_param("palRows",9)
+				playerPal.set_shader_param("row",0)
 				playerPal.set_shader_param("paletteTexture",load("res://Graphics/Palettes/SuperSonicPal.png"))
 		
 			CHARACTERS.TAILS:
 				playerPal.set_shader_param("amount",6)
 				playerPal.set_shader_param("palRows",10)
+				playerPal.set_shader_param("row",0)
 				playerPal.set_shader_param("paletteTexture",load("res://Graphics/Palettes/SuperTails.png"))
 		
 			CHARACTERS.KNUCKLES:
 				playerPal.set_shader_param("amount",3)
 				playerPal.set_shader_param("palRows",11)
+				playerPal.set_shader_param("row",0)
 				playerPal.set_shader_param("paletteTexture",load("res://Graphics/Palettes/SuperKnuckles.png"))
 	
 	
@@ -468,7 +471,6 @@ func _process(delta):
 				shieldSprite.visible = true
 			$InvincibilityBarrier.visible = false
 			if Global.currentTheme == 0:
-				#Global.music.stream_paused = false
 				Global.music.play()
 				Global.effectTheme.stop()
 	else:
@@ -481,7 +483,6 @@ func _process(delta):
 		if (shoeTime <= 0):
 			switch_physics()
 			if Global.currentTheme == 1:
-				#Global.music.stream_paused = false
 				Global.music.play()
 				Global.effectTheme.stop()
 	
@@ -569,9 +570,9 @@ func _process(delta):
 	
 	# drowning theme related
 	if playerControl == 1:
-		if !Global.drowning.playing and airTimer <= panicTime:
+		if !Global.drowning.playing and airTimer <= panicTime and airTimer > 0:
 			Global.drowning.play()
-		elif Global.drowning.playing and airTimer > panicTime:
+		elif Global.drowning.playing and airTimer > panicTime or airTimer <= 0:
 			Global.drowning.stop()
 	
 	# partner control timer for player 2
@@ -954,10 +955,15 @@ func kill():
 		collision_mask = 0
 		z_index = 100
 		if airTimer > 0:
+			water = false
+			switch_physics(false)
 			movement = Vector2(0,-7*60)
 			animator.play("die")
 			sfx[6].play()
 		else:
+			if playerControl == 1:
+				Global.music.stop()
+				Global.effectTheme.stop()
 			movement = Vector2(0,0)
 			animator.play("drown")
 			sfx[25].play()
@@ -1020,6 +1026,8 @@ func _on_PlayerAnimation_animation_started(_anim_name):
 		sprite.offset = defaultSpriteOffset
 		if animator.playback_speed < 0:
 			animator.playback_speed = abs(animator.playback_speed)
+		elif animator.playback_speed == 0:
+			animator.playback_speed = 1
 		animator.advance(0)
 
 # return the physics id variable, see physicsList array for reference
@@ -1130,8 +1138,6 @@ func _on_BubbleTimer_timeout():
 		# Generate Bubble
 		var bub = Bubble.instance()
 		bub.z_index = z_index+3
-		if playerControl == 0:
-			print(movement.y)
 		if airTimer > 0:
 			bub.global_position = global_position+Vector2(8*direction,0)
 			$BubbleTimer.start(max(randf()*3,0.5))
@@ -1149,12 +1155,14 @@ func _on_BubbleTimer_timeout():
 
 # player movements
 func action_move(delta):
-	#0.016667*(delta*60)
-	if (inputs[INPUTS.XINPUT] != 0):
-		if (movement.x*inputs[INPUTS.XINPUT] < top):
-			if (sign(movement.x) == inputs[INPUTS.XINPUT]):
-				if (abs(movement.x) < top):
-					movement.x = clamp(movement.x+acc/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT],-top,top)
+	# moving left and right, check if left or right is being pressed
+	if inputs[INPUTS.XINPUT] != 0:
+		# check if movement is less then the top speed
+		if movement.x*inputs[INPUTS.XINPUT] < top:
+			# check if the player is pressing the direction they're moving
+			if sign(movement.x) == inputs[INPUTS.XINPUT] or sign(movement.x) == 0:
+				if abs(movement.x) < top:
+					movement.x = move_toward(movement.x,top*inputs[INPUTS.XINPUT],acc/GlobalFunctions.div_by_delta(delta))
 			else:
 				# reverse direction
 				movement.x += dec/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT]
@@ -1162,6 +1170,7 @@ func action_move(delta):
 				if (sign(movement.x) != sign(movement.x-dec/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT])):
 					movement.x = 0.5*60*sign(movement.x)
 	else:
+		# come to a stop if neither left or right is pressed
 		if (movement.x != 0):
 			# check that decreasing movement won't go too far
 			if (sign(movement.x - (frc/GlobalFunctions.div_by_delta(delta))*sign(movement.x)) == sign(movement.x)):

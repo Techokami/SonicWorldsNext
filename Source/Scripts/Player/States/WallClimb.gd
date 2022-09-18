@@ -17,6 +17,16 @@ func _physics_process(delta):
 		# climbing
 		parent.movement.y = (parent.inputs[parent.INPUTS.YINPUT]+int(parent.super)*sign(parent.inputs[parent.INPUTS.YINPUT]))*60
 		
+		# check vertically (sometimes clinging can cause clipping)
+		if parent.movement.y == 0:
+			parent.movement.y = -1
+			parent.update_sensors()
+			parent.verticalSensorLeft.force_raycast_update()
+			parent.verticalSensorRight.force_raycast_update()
+			if !parent.verticalSensorLeft.is_colliding() and !parent.verticalSensorRight.is_colliding():
+				parent.movement.y = 0
+		
+			
 		# go to normal if on floor
 		if parent.ground:
 			parent.animator.play("walk")
