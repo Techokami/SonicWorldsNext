@@ -30,7 +30,13 @@ func _ready():
 		Global.hardBorderTop    = defaultTopBoundry
 	if setDefaultBottom:
 		Global.hardBorderBottom  = defaultBottomBoundry
+	
+	level_reset_data(false)
+	
+	wasLoaded = true
 
+# mostly used for returning from special stages
+func level_reset_data(playCard = true):
 	if music != null:
 		Global.music.stream = music
 		Global.music.play()
@@ -41,8 +47,9 @@ func _ready():
 	
 	if nextZone != null:
 		Global.nextZone = nextZone
+	
 	Global.main.sceneCanPause = true
-	
 	Global.animals = [animal1,animal2]
-	
-	wasLoaded = true
+	# if global hud and play card, run hud ready script
+	if playCard and is_instance_valid(Global.hud):
+		$HUD._ready()

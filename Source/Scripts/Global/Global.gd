@@ -10,6 +10,9 @@ var checkPointTime = 0
 
 var startScene = preload("res://Scene/Presentation/Title.tscn")
 var nextZone = preload("res://Scene/Zones/BaseZone.tscn") # change this to the first level in the game (also set in "reset_values")
+# use this to store the current state of the room, changing scene will clear everythin
+var stageInstanceMemory = null
+var stageLoadMemory = null
 
 var Score = preload("res://Entities/Misc/Score.tscn")
 const SCORE_COMBO = [1,2,3,4,4,4,4,4,4,4,4,4,4,4,4,5]
@@ -35,8 +38,12 @@ var soundChannel = AudioStreamPlayer.new()
 var score = 0
 var lives = 3
 var continues = 0
+# emeralds use bitwise flag operations, the equivelent for 7 emeralds would be 128
 var emeralds = 0
-var levelTime = 0 # the timer that counts down while the level isn't completed
+# emerald bit flags
+enum EMERALD {RED = 1, BLUE = 2, GREEN = 4, YELLOW = 8, CYAN = 16, SILVER = 32, PURPLE = 64}
+var specialStageID = 0
+var levelTime = 0 # the timer that counts down while the level isn't completed or in a special ring
 var globalTimer = 0 # global timer, used as reference for animations
 var maxTime = 60*10
 
@@ -57,6 +64,13 @@ var hardBorderBottom =  100000000
 var animals = [0,1]
 
 signal stage_started
+
+# Level memory
+# this value contains node paths and can be used for nodes to know if it's been collected from previous playthroughs
+# the only way to reset permanent memory is to reset the game, this is used primarily for special stage rings
+# Note: make sure you're not naming your level nodes the same thing, it's good practice but if the node's
+# share the same paths there can be some overlap and some nodes may not spawn when they're meant to
+var nodeMemory = []
 
 # Hazards
 enum HAZARDS {NORMAL, FIRE, ELEC, WATER}
@@ -80,10 +94,12 @@ func reset_values():
 	continues = 0
 	levelTime = 0
 	emeralds = 0
+	specialStageID = 0
 	checkPoints = []
 	checkPointTime = 0
 	currentCheckPoint = -1
 	animals = [0,1]
+	nodeMemory = []
 	nextZone = load("res://Scene/Zones/BaseZone.tscn")
 
 func play_sound(sound = null):

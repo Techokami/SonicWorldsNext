@@ -16,6 +16,7 @@ func _ready():
 	# Life Icon
 	if item == 10 and !Engine.is_editor_hint():
 		$Item.frame = item+1+Global.PlayerChar1
+	
 
 func _process(_delta):
 	if (Engine.is_editor_hint()):

@@ -1,0 +1,23 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/RingR.wav-20b5db7a5e103fc4ad2cbd86c79a22a4.sample"
+
+[deps]
+
+source_file="res://Audio/SFX/Objects/RingR.wav"
+dest_files=[ "res://.import/RingR.wav-20b5db7a5e103fc4ad2cbd86c79a22a4.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

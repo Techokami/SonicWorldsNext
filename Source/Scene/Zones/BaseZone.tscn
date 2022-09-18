@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=2]
+[gd_scene load_steps=58 format=2]
 
 [ext_resource path="res://Tileset/Worlds/TestTilesGreen.tres" type="TileSet" id=1]
 [ext_resource path="res://Scripts/Level/Level.gd" type="Script" id=2]
@@ -23,13 +23,14 @@
 [ext_resource path="res://Tileset/Worlds/TestTilesRed.tres" type="TileSet" id=21]
 [ext_resource path="res://Tileset/Worlds/TestTilesPurple.tres" type="TileSet" id=22]
 [ext_resource path="res://Tileset/Worlds/TestTilesBlue.tres" type="TileSet" id=23]
+[ext_resource path="res://Scripts/Misc/AltSpawn.gd" type="Script" id=24]
 [ext_resource path="res://Graphics/Backgrounds/WorldsBackground.png" type="Texture" id=25]
 [ext_resource path="res://Scripts/Gimmicks/ZoomTubePath.gd" type="Script" id=26]
 [ext_resource path="res://Graphics/Gimmicks/Tube.png" type="Texture" id=27]
 [ext_resource path="res://Graphics/Gimmicks/TubeEnd.png" type="Texture" id=28]
 [ext_resource path="res://Graphics/Gimmicks/TubeConnector.png" type="Texture" id=29]
 [ext_resource path="res://Entities/Items/Checkpoint.tscn" type="PackedScene" id=30]
-[ext_resource path="res://Graphics/Misc/SpecialStage.png" type="Texture" id=31]
+[ext_resource path="res://Entities/Items/SpecialStageRing.tscn" type="PackedScene" id=31]
 [ext_resource path="res://Entities/Hazards/Spikes.tscn" type="PackedScene" id=32]
 [ext_resource path="res://Entities/Obstacles/BreakableWall.tscn" type="PackedScene" id=33]
 [ext_resource path="res://Entities/MainObjects/GoalPost.tscn" type="PackedScene" id=34]
@@ -202,18 +203,6 @@ tileMapLink = NodePath("../Default")
 modulate = Color( 0.929412, 0.431373, 1, 1 )
 tile_data = PoolIntArray( 2294316, 0, 2, 2294317, 0, 2, 2294318, 0, 2, 2294319, 0, 2, 2294320, 0, 2, 2294321, 0, 2, 2294322, 0, 2, 2294323, 0, 2, 2883604, 0, 2, 2883605, 0, 2, 2883606, 0, 2, 2883607, 0, 2, 2883608, 0, 2, 2883609, 0, 2, 2883610, 0, 2, 2883611, 0, 2, 2883612, 0, 2, 2883613, 0, 2, 2883614, 0, 2, 2883617, 0, 2, 2883618, 0, 2, 2883619, 0, 2, 2883620, 0, 2, 2883621, 0, 2, 2883622, 0, 2, 2883623, 0, 2, 2949140, 0, 2, 2949141, 0, 2, 2949142, 0, 2, 2949143, 0, 2, 2949144, 0, 2, 2949145, 0, 2, 2949146, 0, 2, 2949147, 0, 2, 2949148, 0, 2, 2949149, 0, 2, 2949150, 0, 2, 2949151, 0, 2, 2949152, 0, 2, 2949153, 0, 2, 2949154, 0, 2, 2949155, 0, 2, 2949156, 0, 2, 2949157, 0, 2, 2949158, 0, 2, 2949159, 0, 2, 3014676, 0, 2, 3014677, 0, 2, 3014678, 0, 2, 3014679, 0, 2, 3014680, 0, 2, 3014681, 0, 2, 3014682, 0, 2, 3014683, 0, 2, 3014684, 0, 2, 3014685, 0, 2, 3014686, 0, 2, 3014687, 0, 2, 3014688, 0, 2, 3014689, 0, 2, 3014690, 0, 2, 3014691, 0, 2, 3014692, 0, 2, 3014693, 0, 2, 3014694, 0, 2, 3014695, 0, 2, 3080212, 0, 2, 3080213, 0, 2, 3080214, 0, 2, 3080215, 0, 2, 3080216, 0, 2, 3080217, 0, 2, 3080218, 0, 2, 3080219, 0, 2, 3080220, 0, 2, 3080221, 0, 2, 3080222, 0, 2, 3080223, 0, 2, 3080224, 0, 2, 3080225, 0, 2, 3080226, 0, 2, 3080227, 0, 2, 3080228, 0, 2, 3080229, 0, 2, 3080230, 0, 2, 3080231, 0, 2, 3145748, 0, 2, 3145749, 0, 2 )
 tileMapLink = NodePath("../Platform")
-
-[node name="SpecialStage" type="Sprite" parent="."]
-position = Vector2( 7295.25, 1215.63 )
-rotation = -0.000153267
-scale = Vector2( 0.510336, 0.510336 )
-texture = ExtResource( 31 )
-
-[node name="SpecialStage2" type="Sprite" parent="."]
-position = Vector2( 9176, 64 )
-rotation = -0.000153267
-scale = Vector2( 0.746364, 0.746364 )
-texture = ExtResource( 31 )
 
 [node name="Platforms" type="Node2D" parent="."]
 
@@ -801,6 +790,11 @@ position = Vector2( 6160, 568 )
 position = Vector2( 40, -24 )
 side = 2
 
+[node name="AltSpawn" type="Node2D" parent="Entity"]
+position = Vector2( 1536, 944 )
+script = ExtResource( 24 )
+currentCharacter = 2
+
 [node name="Rings" type="Node2D" parent="."]
 
 [node name="Ring" parent="Rings" instance=ExtResource( 11 )]
@@ -1223,6 +1217,15 @@ position = Vector2( 3824, 776 )
 [node name="Ring36" parent="Rings" instance=ExtResource( 11 )]
 position = Vector2( 3920, 816 )
 
+[node name="GiantRing" parent="Rings" instance=ExtResource( 31 )]
+position = Vector2( 7296, 1216 )
+
+[node name="GiantRing2" parent="Rings" instance=ExtResource( 31 )]
+position = Vector2( 9176, 64 )
+
+[node name="GiantRing3" parent="Rings" instance=ExtResource( 31 )]
+position = Vector2( 1984, 384 )
+
 [node name="Monitors" type="Node2D" parent="."]
 
 [node name="Monitor" parent="Monitors" instance=ExtResource( 17 )]
@@ -1270,14 +1273,6 @@ position = Vector2( 7448, 1712 )
 
 [node name="Monitor12" parent="Monitors" instance=ExtResource( 17 )]
 position = Vector2( 9136, 1264 )
-item = 7
-
-[node name="Monitor17" parent="Monitors" instance=ExtResource( 17 )]
-position = Vector2( 7296, 1264 )
-item = 7
-
-[node name="Monitor20" parent="Monitors" instance=ExtResource( 17 )]
-position = Vector2( 9176, 112 )
 item = 7
 
 [node name="Monitor13" parent="Monitors" instance=ExtResource( 17 )]

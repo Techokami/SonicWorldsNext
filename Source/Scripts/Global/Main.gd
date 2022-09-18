@@ -36,9 +36,6 @@ func _process(delta):
 func _input(event):
 	# Pausing
 	if event.is_action_pressed("gm_pause") and sceneCanPause:
-		if !get_tree().paused:
-			wasPaused = false
-		
 		if !wasPaused and !get_tree().paused:
 			# Do the pause
 			wasPaused = true
@@ -47,6 +44,7 @@ func _input(event):
 			
 		elif wasPaused and get_tree().paused and !$GUI/Pause.visible:
 			# Do the unpause
+			wasPaused = false
 			get_tree().paused = false
 		
 		
@@ -63,7 +61,7 @@ func reset_game():
 	var _con = get_tree().reload_current_scene()
 
 
-func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", length = 1):
+func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", length = 1, storeScene = false, resetData = true):
 	
 	sceneCanPause = false
 	$GUI/Fader.playback_speed = 1/length
@@ -74,30 +72,57 @@ func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", l
 		$GUI/Fader.queue(fadeOut)
 		yield($GUI/Fader,"animation_finished")
 	
+	var restoreScene = false
+	# storeScene will only remember the first child of scene loader
+	if storeScene:
+		# clear memory if it's already occupied
+		if is_instance_valid(Global.stageInstanceMemory):
+			restoreScene = true
+		# if stage memory is empty, add current scene
+		else:
+			Global.stageInstanceMemory = $SceneLoader.get_child(0)
+			$SceneLoader.remove_child(Global.stageInstanceMemory)
 	
+	# clear scene
 	for i in $SceneLoader.get_children():
 		i.queue_free()
+	
 	# Error prevention
 	emit_signal("scene_faded")
 	yield(get_tree(),"idle_frame")
-	Global.players = []
-	Global.checkPoints = []
-	Global.waterLevel = null
-	Global.gameOver = false
-	if Global.stageClearPhase != 0:
-		Global.currentCheckPoint = -1
-		Global.levelTime = 0
-		Global.timerActive = false
-	Global.globalTimer = 0
-	Global.stageClearPhase = 0
+	# reset data if true
+	if resetData:
+		Global.players = []
+		Global.checkPoints = []
+		Global.waterLevel = null
+		Global.gameOver = false
+		if Global.stageClearPhase != 0:
+			Global.currentCheckPoint = -1
+			Global.levelTime = 0
+			Global.timerActive = false
+		Global.globalTimer = 0
+		Global.stageClearPhase = 0
 	
-	
-	if scene == null:
-		if lastScene != null:
-			$SceneLoader.add_child(lastScene.instance())
+	# check for restore scene
+	if restoreScene:
+		$SceneLoader.add_child(Global.stageInstanceMemory)
+		if Global.stageInstanceMemory.has_method("level_reset_data"):
+			Global.stageInstanceMemory.level_reset_data()
+		lastScene = Global.stageLoadMemory
+		# reset stageInstanceMemory
+		Global.stageInstanceMemory = null
 	else:
-		$SceneLoader.add_child(scene.instance())
-		lastScene = scene
+	# create new scene
+		if scene == null:
+			if lastScene != null:
+				$SceneLoader.add_child(lastScene.instance())
+		else:
+			$SceneLoader.add_child(scene.instance())
+			lastScene = scene
+			# don't know if the current scene is gonna be stored in memory so store last scene to global state load memory
+			# if the current instance memory is invalid
+			if !is_instance_valid(Global.stageInstanceMemory):
+				Global.stageLoadMemory = lastScene
 	
 	if fadeIn != "":
 		$GUI/Fader.play_backwards(fadeIn)
@@ -113,5 +138,4 @@ func set_volume(volume = 0):
 	startVolumeLevel = Global.music.volume_db
 	setVolumeLevel = volume
 	volumeLerp = 0
-
 

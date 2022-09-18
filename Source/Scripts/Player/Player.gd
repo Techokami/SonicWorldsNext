@@ -294,23 +294,24 @@ func _ready():
 		CHARACTERS.TAILS:
 			# Set sprites
 			currentHitbox = HITBOXESTAILS
-			get_node("Sprite").queue_free()
+			get_node("Sprite").name = "OldSprite"
 			yield(get_tree(),"idle_frame")
 			var tails = tailsAnimations.instance()
 			add_child(tails)
 			sprite = tails.get_node("Sprite")
 			animator = tails.get_node("PlayerAnimation")
 			spriteControler = tails
+			get_node("OldSprite").queue_free()
 		CHARACTERS.KNUCKLES:
 			# Set sprites
 			currentHitbox = HITBOXESKNUCKLES
-			get_node("Sprite").queue_free()
-			yield(get_tree(),"idle_frame")
+			get_node("Sprite").name = "OldSprite"
 			var knuckles = knucklesAnimations.instance()
 			add_child(knuckles)
 			sprite = knuckles.get_node("Sprite")
 			animator = knuckles.get_node("PlayerAnimation")
 			spriteControler = knuckles
+			get_node("OldSprite").queue_free()
 	
 	# run switch physics to ensure character specific physics
 	switch_physics()
@@ -336,6 +337,10 @@ func _ready():
 	limitTop = Global.hardBorderTop
 	limitBottom = Global.hardBorderBottom
 	snap_camera_to_limits()
+	
+	# set partner sounds to share players (prevents sound overlap)
+	if playerControl == 0:
+		partner.sfx = sfx
 
 
 

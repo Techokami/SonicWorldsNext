@@ -51,7 +51,6 @@ func _ready():
 		yield($LevelCard/CardPlayer,"animation_finished")
 	else:
 		Global.emit_stage_start()
-	$LevelCard.queue_free()
 	Global.timerActive = true
 	$LevelClear/Passed.string = $LevelClear/Passed.string.replace("sonic",characterNames[Global.PlayerChar1-1])
 

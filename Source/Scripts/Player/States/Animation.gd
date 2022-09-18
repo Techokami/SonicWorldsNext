@@ -27,3 +27,4 @@ func _process(delta):
 				parent.global_position = point
 				parent.translate = false
 				parent.sfx[3].play()
+				pipe = null
