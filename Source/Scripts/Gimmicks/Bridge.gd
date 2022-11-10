@@ -91,14 +91,15 @@ func _physics_process(delta):
 		
 
 
+# add players to array when entering or exiting area
 func _on_PlayerCheck_body_entered(body):
 	player.append(body)
-
 
 func _on_PlayerCheck_body_exited(body):
 	if (player.has(body)):
 		player.erase(body)
 
+# draw logs
 func _draw():
 	if Engine.is_editor_hint():
 		for i in length:

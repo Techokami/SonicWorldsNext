@@ -5,6 +5,7 @@ export var music = preload("res://Audio/Soundtrack/10. SWD_CharacterSelect.ogg")
 export (PackedScene) var nextZone = load("res://Scene/Zones/BaseZone.tscn")
 var selected = false
 
+# character labels, the amount of labels in here determines the total amount of options, see the set character option at the end for settings
 var characterLabels = ["Sonic and Tails", "Sonic", "Tails", "Knuckles"]
 # character id lines up with characterLabels
 var characterID = 0
@@ -18,12 +19,15 @@ func _ready():
 
 func _input(event):
 	if !selected:
+		# select character rotation
 		if Input.is_action_just_pressed("gm_left"):
 			characterID = wrapi(characterID-1,0,characterLabels.size())
 		if Input.is_action_just_pressed("gm_right"):
 			characterID = wrapi(characterID+1,0,characterLabels.size())
 		
 		$UI/Labels/Control/Character.string = characterLabels[characterID]
+		
+		# turn on and off visibility of the characters based on the current selection
 		match(characterID):
 			0: # Sonic and Tails
 				$UI/Labels/CharacterOrigin/Sonic.visible = true
@@ -42,7 +46,7 @@ func _input(event):
 				$UI/Labels/CharacterOrigin/Tails.visible = false
 				$UI/Labels/CharacterOrigin/Knuckles.visible = true
 		
-		# end menu
+		# finish character select if start is pressed
 		if event.is_action_pressed("gm_pause"):
 			selected = true
 			# set player 2 to none to prevent redundant code

@@ -437,7 +437,6 @@ func _process(delta):
 	if (horizontalLockTimer > 0):
 		horizontalLockTimer -= delta
 		inputs[INPUTS.XINPUT] = 0
-		#inputs[INPUTS.YINPUT] = 0
 
 	# super / invincibility handling
 	if (supTime > 0):
@@ -769,10 +768,13 @@ func _physics_process(delta):
 # Input buttons
 func set_inputs():
 	# player control inputs
+	# check if ai or player 2
 	if playerControl == 0 or playerControl == 2:
+		# player 2 active time check, if below 0 return to ai state
 		if partnerControlTime <= 0 and playerControl == 2:
 			playerControl = 0
 		
+		# player 2 control active check
 		for i in inputActions.size():
 			var player2Active = false
 			# 0 and 1 in inputActions are arrays
@@ -861,7 +863,8 @@ func set_shield(setShieldID):
 		return false
 	
 	shield = setShieldID
-	shieldSprite.visible = !super
+	# make shield visible if not super and the invincibility barrier isn't going
+	shieldSprite.visible = !super and !$InvincibilityBarrier.visible
 	match (shield):
 		SHIELDS.NORMAL:
 			shieldSprite.play("Default")

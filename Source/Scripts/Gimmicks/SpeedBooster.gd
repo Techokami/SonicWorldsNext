@@ -15,7 +15,7 @@ func _process(_delta):
 			dirMemory = boostDirection
 
 func _on_SpeedBooster_body_entered(body):
-	body.movement.x = speed*(-1+(boostDirection*2))*Global.originalFPS
+	body.movement.x = speed*(-1+(boostDirection*2))*60
 	$sfxSpring.play()
 	# exit out of state on certain states
 	match(body.currentState):

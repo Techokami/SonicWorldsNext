@@ -17,17 +17,20 @@ func _ready():
 			$Bubble.play("air")
 			$BubbleCollect/CollisionShape2D.disabled = false
 
+# queue if popped
 func _on_Bubble_animation_finished():
 	if $Bubble.animation == "bigPop":
 		queue_free()
 
 func _physics_process(delta):
+	# check if below water level and rise
 	if Global.waterLevel != null:
 		if global_position.y > Global.waterLevel:
 			translate(velocity*delta)
 			offsetTime += delta
 			velocity.x = cos(offsetTime*4)*8
 		else:
+			# if big bubble then play popping animation
 			if $Bubble.animation == "air":
 				$Bubble.play("bigPop")
 				set_physics_process(false)
@@ -37,6 +40,7 @@ func _physics_process(delta):
 
 # player collect bubble
 func _on_BubbleCollect_body_entered(body):
+	# player get air, ignore if they're already in a bubble
 	if !body.ground and $Bubble.frame >= 6 and body.shield != body.SHIELDS.BUBBLE:
 		body.airTimer = body.defaultAirTime
 		body.sfx[23].play()
@@ -49,6 +53,6 @@ func _on_BubbleCollect_body_entered(body):
 		$BubbleCollect/CollisionShape2D.call_deferred("set","disabled",true)
 		set_physics_process(false)
 
-
+# clear if off screen
 func _on_VisibilityNotifier2D_screen_exited():
 	queue_free()

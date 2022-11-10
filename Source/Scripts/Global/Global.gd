@@ -1,37 +1,52 @@
 extends Node
 
-var originalFPS = 60
+# player pointers (0 is usually player 1)
 var players = []
+# main object reference
 var main = null
+# hud object reference
 var hud = null
+# checkpoint memory
 var checkPoints = []
+# reference for the current checkpoint
 var currentCheckPoint = -1
+# the current level time from when the checkpoint got hit
 var checkPointTime = 0
 
+# the starting room, this is loaded on game resets, you may want to change this
 var startScene = preload("res://Scene/Presentation/Title.tscn")
 var nextZone = preload("res://Scene/Zones/BaseZone.tscn") # change this to the first level in the game (also set in "reset_values")
 # use this to store the current state of the room, changing scene will clear everythin
 var stageInstanceMemory = null
 var stageLoadMemory = null
 
+# score instace for add_score()
 var Score = preload("res://Entities/Misc/Score.tscn")
+# order for score combo
 const SCORE_COMBO = [1,2,3,4,4,4,4,4,4,4,4,4,4,4,4,5]
 
+# timerActive sets if the stage timer should be going
 var timerActive = false
-var stageClearPhase = 0
 var gameOver = false
 
-var zoomSize = 1
+# stage clear is used to identify the current state of the stage clear sequence
+# this is reference in
+# res://Scripts/Misc/HUD.gd
+# res://Scripts/Objects/GoalPost.gd
+var stageClearPhase = 0
+
 # Music
 var musicParent = null
 var music = null
 var effectTheme = null
 var drowning = null
 var life = null
+# song themes to play for things like invincibility and speed shoes
 var themes = [preload("res://Audio/Soundtrack/1. SWD_Invincible.ogg"),preload("res://Audio/Soundtrack/2. SWD_SpeedUp.ogg"),preload("res://Audio/Soundtrack/4. SWD_StageClear.ogg")]
+# index for current theme
 var currentTheme = 0
 
-# Sound
+# Sound, used for play_sound (used for a global sound, use this if multiple nodes use the same sound)
 var soundChannel = AudioStreamPlayer.new()
 
 # Gameplay values
@@ -47,10 +62,12 @@ var levelTime = 0 # the timer that counts down while the level isn't completed o
 var globalTimer = 0 # global timer, used as reference for animations
 var maxTime = 60*10
 
+# water level of the current level, setting this to null will disable the water
 var waterLevel = null
-var setWaterLevel = 0 # used by other nodes
-var waterScrollSpeed = 64 # used by other nodes
+var setWaterLevel = 0 # used by other nodes to change the water level
+var waterScrollSpeed = 64 # used by other nodes for how fast to move the water to different levels
 
+# characters (if you want more you should add one here, see the player script too for more settings)
 enum CHARACTERS {NONE,SONIC,TAILS,KNUCKLES}
 var PlayerChar1 = CHARACTERS.SONIC
 var PlayerChar2 = CHARACTERS.TAILS
@@ -61,8 +78,10 @@ var hardBorderRight  =  100000000
 var hardBorderTop    = -100000000
 var hardBorderBottom =  100000000
 
+# Animal spawn type reference, see the level script for more information on the types
 var animals = [0,1]
 
+# emited when a stage gets started
 signal stage_started
 
 # Level memory
@@ -72,22 +91,28 @@ signal stage_started
 # share the same paths there can be some overlap and some nodes may not spawn when they're meant to
 var nodeMemory = []
 
-# Hazards
+# Game settings
+var zoomSize = 1
+
+# Hazard type references
 enum HAZARDS {NORMAL, FIRE, ELEC, WATER}
 
 func _ready():
+	# set sound settings
 	add_child(soundChannel)
 	soundChannel.bus = "SFX"
+	# load game data
 	load_settings()
 
 func _process(delta):
-	originalFPS = 60#*Engine.time_scale
+	# do a check for certain variables, if it's all clear then count the level timer up
 	if stageClearPhase == 0 and !gameOver and !get_tree().paused and timerActive:
 		levelTime += delta
+	# count global timer if game isn't paused
 	if !get_tree().paused:
 		globalTimer += delta
 	
-
+# reset values, self explanatory, put any variables to their defaults in here
 func reset_values():
 	lives = 3
 	score = 0
@@ -102,18 +127,20 @@ func reset_values():
 	nodeMemory = []
 	nextZone = load("res://Scene/Zones/BaseZone.tscn")
 
+# use this to play a sound globally, use load("res:..") or a preloaded sound
 func play_sound(sound = null):
 	if sound != null:
 		soundChannel.stream = sound
 		soundChannel.play()
 
+# add a score object, see res://Scripts/Misc/Score.gd for reference
 func add_score(position = Vector2.ZERO,value = 0):
 	var scoreObj = Score.instance()
 	scoreObj.scoreID = value
 	scoreObj.global_position = position
 	add_child(scoreObj)
 
-# give life if more score will go above 50,000
+# use a check function to see if a score increase would go above 50,000
 func check_score_life(scoreAdd = 0):
 	if fmod(score,50000) > fmod(score+scoreAdd,50000):
 		life.play()
@@ -121,6 +148,7 @@ func check_score_life(scoreAdd = 0):
 		effectTheme.volume_db = -100
 		music.volume_db = -100
 
+# use this to set the stage clear theme, only runs if stageClearPhase isn't 0
 func stage_clear():
 	if stageClearPhase == 0:
 		currentTheme = 2
@@ -128,9 +156,11 @@ func stage_clear():
 		music.play()
 		effectTheme.stop()
 
+# Godot doesn't like not having emit signal only done in other nodes so we're using a function to call it
 func emit_stage_start():
 	emit_signal("stage_started")
 
+# save data settings
 func save_settings():
 	var file = ConfigFile.new()
 	# save settings
@@ -142,6 +172,7 @@ func save_settings():
 	# save config and close
 	file.save("user://Settings.cfg")
 
+# load settings
 func load_settings():
 	var file = ConfigFile.new()
 	var err = file.load("user://Settings.cfg")

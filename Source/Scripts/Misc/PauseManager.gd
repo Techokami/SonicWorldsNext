@@ -11,7 +11,7 @@ var menusText = [
 "options",
 "restart",
 "quit",],
-# menu 1 (starting menu)
+# menu 1 (options menu)
 [
 "options",
 "sound 100",
@@ -32,12 +32,17 @@ var menusText = [
 "ok",],
 ]
 
+# on or off strings
 var onOff = ["off","on"]
+# clamp for minimum and maximum sound volume (muted when audio is at lowest)
 var clampSounds = [-40,6]
+# how much to iterate through
 var soundStep = (1.0/4.0)
+# screen size limit
 var zoomClamp = [1,6]
 
-var menu = 0
+var menu = 0 # current menu option
+enum MENUS {MAIN, OPTIONS, RESTART, QUIT}
 var option = 0
 
 func _ready():
@@ -48,12 +53,14 @@ func _input(event):
 	if !get_tree().paused or !visible:
 		return null
 	
+	# change menu options
 	if event.is_action_pressed("gm_down"):
 		choose_option(option+1)
 	elif event.is_action_pressed("gm_up"):
 		choose_option(option-1)
-	# switch toggles for options menu settings
-	elif (event.is_action("gm_left") or event.is_action("gm_right")) and menu == 1:
+	
+	# Volume controls
+	elif (event.is_action("gm_left") or event.is_action("gm_right")) and menu == MENUS.OPTIONS:
 		var inputDir = -1+int(event.is_action("gm_right"))*2
 		
 		# set audio busses
@@ -77,7 +84,7 @@ func _input(event):
 	# menu button activate
 	elif event.is_action_pressed("gm_pause") or event.is_action_pressed("gm_action"):
 		match(menu): # menu handles
-			0: # main menu
+			MENUS.MAIN: # main menu
 				match(option): # Options
 					0: # continue
 						if Global.main.wasPaused:
@@ -88,7 +95,7 @@ func _input(event):
 							visible = false
 					_: # Set menu to option
 						set_menu(option)
-			1: # options menu
+			MENUS.OPTIONS: # options menu
 				match(option): # Options
 					3: # full screen
 						OS.window_fullscreen = !OS.window_fullscreen
@@ -103,7 +110,7 @@ func _input(event):
 					5: # back
 						Global.save_settings()
 						set_menu(0)
-			2: # reset level
+			MENUS.RESTART: # reset level
 				match(option): # Options
 					0: # cancel
 						set_menu(0)
@@ -114,7 +121,7 @@ func _input(event):
 						Global.currentCheckPoint = -1
 						Global.effectTheme.stop()
 						Global.main.change_scene(null,"FadeOut")
-			3: # quit option
+			MENUS.QUIT: # quit option
 				match(option): # Options
 					0: # cancel
 						set_menu(0)
@@ -125,7 +132,9 @@ func _input(event):
 	
 
 func choose_option(optionSet = option+1, playSound = true):
+	# reset curren option colour to white
 	$PauseMenu/VBoxContainer.get_child(option+1).modulate = Color.white
+	# change to new option, set the new option colour to yellow
 	option = wrapi(optionSet,0,menusText[menu].size()-1)
 	$PauseMenu/VBoxContainer.get_child(option+1).modulate = Color(1,1,0)
 	
@@ -133,10 +142,13 @@ func choose_option(optionSet = option+1, playSound = true):
 		$MenuVert.play()
 
 func set_menu(menuID = 0):
+	# clear all current text nodes
 	for i in $PauseMenu/VBoxContainer.get_children():
 		i.queue_free()
+	# set new menu
 	menu = menuID
 	
+	# loop through menu lists and create a text node for each option
 	for i in menusText[menuID].size():
 		var text = Text.instance()
 		$PauseMenu/VBoxContainer.add_child(text)
@@ -149,9 +161,11 @@ func set_menu(menuID = 0):
 			text.modulate = Color(1,0,0)
 		if i == 1: # set default option to yellow
 			text.modulate = Color(1,1,0)
+	# reset option (prevents going beyond the current option list)
 	choose_option(0,false)
 
 
+# updates for the option menu texts
 func update_text(textRow = 0):
 	match(textRow):
 		1: # Sound

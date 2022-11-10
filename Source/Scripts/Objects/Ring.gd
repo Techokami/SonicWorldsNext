@@ -1,6 +1,6 @@
 extends Node2D
 var scattered = false
-var lifetime = 256/Global.originalFPS
+var lifetime = 256.0/60.0
 var velocity = Vector2.ZERO
 var player
 var magnet = null
@@ -30,7 +30,7 @@ func _process(delta):
 func _physics_process(delta):
 	# scattered physics logic
 	if (scattered):
-		velocity.y += 0.09375*Global.originalFPS
+		velocity.y += 0.09375*60.0
 		translate(velocity*delta)
 		if ($FloorCheck.is_colliding() and velocity.y > 0):
 			velocity.y *= -0.75

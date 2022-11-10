@@ -817,7 +817,7 @@ centered = false
 vframes = 7
 
 [node name="LifeText" type="Sprite" parent="LifeCounter/Icon"]
-position = Vector2( 28, 8 )
+position = Vector2( 32, 8 )
 texture = ExtResource( 4 )
 centered = false
 hframes = 10
@@ -978,7 +978,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 32.0
-margin_right = 21536.0
+margin_right = 21600.0
 margin_bottom = 64.0
 texture = ExtResource( 8 )
 stretch_mode = 2

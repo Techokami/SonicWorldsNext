@@ -1,8 +1,8 @@
 extends Control
 
-var playerControlIndex = 0
-var clearEventStep = 0
-var bindButton = null
+var playerControlIndex = 0 # current selected gamepad
+var clearEventStep = 0 # used for iterating through canceled inputs
+var bindButton = null # current button bind
 
 var joyAxisNameList = [
 "L Stick X axis",

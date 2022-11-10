@@ -8,7 +8,8 @@ var forceFrame = 0.0
 func _ready():
 	frame = 0
 
-func _physics_process(delta):
+func _process(delta):
+	# screen offset is used to try and track the screen, if it's not assigned then drift up
 	if screenOffset == null:
 		translate(Vector2(0,-32*delta))
 		forceFrame += delta*30
@@ -18,6 +19,8 @@ func _physics_process(delta):
 
 
 func _on_BubbleCountDown_animation_finished():
+	# on first animation finish, set screen offset to current position, then play the bubble count
+	# if already screen locked then free
 	if screenOffset == null:
 		play("count"+str(countTime))
 		screenOffset = global_position-Global.players[0].camera.get_camera_screen_center()

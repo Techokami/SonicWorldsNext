@@ -6,6 +6,7 @@ func _physics_process(delta):
 	# gravity
 	parent.movement.y += 0.1875/GlobalFunctions.div_by_delta(delta)
 	
+	# exit if on floor
 	if (parent.ground):
 		parent.movement.x = 0
 		parent.set_state(parent.STATES.NORMAL)
