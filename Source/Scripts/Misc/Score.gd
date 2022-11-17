@@ -9,13 +9,17 @@ var scoreID = 0
 var yspeed = -3
 
 func _ready():
+	# check if adding score would hit the life bonus
 	Global.check_score_life(SCORE[scoreID])
 	
+	# add score
 	Global.score += SCORE[scoreID]
+	# set sprite region to match (see RECTS for texture regions
 	$Sprite.region_rect = RECTS[scoreID]
 	
 
 func _physics_process(delta):
+	# move score
 	yspeed += 0.09375*60*delta
 	translate(Vector2(0,yspeed*60*delta))
 	if yspeed >= 0:
