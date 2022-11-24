@@ -7,7 +7,7 @@ func _process(_delta):
 	if (!Engine.is_editor_hint()):
 		global_rotation = 0
 
-
+# Shields have different effects so this is where you'll want to code your animations
 func _on_Shields_frame_changed():
 	match (animation):
 		"Default": # regular shield

@@ -22,9 +22,11 @@ func _process(_delta):
 			parent.animator.play(lastAnim)
 		else:
 			parent.animator.play("walk")
+		# enable control again
 		parent.set_state(parent.STATES.AIR)
 		activated = true
 		
+		# start super theme
 		Global.currentTheme = 0
 		Global.effectTheme.stream = Global.themes[Global.currentTheme]
 		Global.effectTheme.play()

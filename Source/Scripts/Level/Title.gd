@@ -10,6 +10,7 @@ func _ready():
 	Global.music.play()
 
 func _process(delta):
+	# animate cogs
 	$BackCog.rotate(delta*speed)
 	$BigCog.rotate(-delta*2*speed)
 	$BigCog/CogCircle.rotate(delta*2*speed)
@@ -17,6 +18,7 @@ func _process(delta):
 	
 
 func _input(event):
+	# end title on start press
 	if event.is_action_pressed("gm_pause") and !titleEnd:
 		titleEnd = true
 		if Global.music.get_playback_position() < 14.0:

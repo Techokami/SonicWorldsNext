@@ -6,6 +6,7 @@ var dirMemory = boostDirection
 export var speed = 16
 
 func _ready():
+	# set direction
 	$Booster.flip_h = bool(boostDirection)
 
 func _process(_delta):
@@ -15,6 +16,7 @@ func _process(_delta):
 			dirMemory = boostDirection
 
 func _on_SpeedBooster_body_entered(body):
+	# DO THE BOOST, WHOOOOOSH!!!!!!!
 	body.movement.x = speed*(-1+(boostDirection*2))*60
 	$sfxSpring.play()
 	# exit out of state on certain states

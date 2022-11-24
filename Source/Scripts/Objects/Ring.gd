@@ -18,8 +18,10 @@ func _process(delta):
 		else:
 			queue_free()
 	if (player):
+		# collect ring
 		if (player.ringDisTime <= 0 and (player.invTime*60 <= 90 or scattered)):
 			z_index = 1
+			# get ring to player
 			player.get_ring()
 			var part = Particle.instance()
 			get_parent().add_child(part)

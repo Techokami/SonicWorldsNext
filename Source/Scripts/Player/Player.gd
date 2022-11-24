@@ -976,20 +976,23 @@ func kill():
 			Global.main.sceneCanPause = false # stop the ability to pause
 
 func respawn():
-	airTimer = 1
-	collision_layer = 0
-	collision_mask = 0
-	z_index = defaultZIndex
-	respawnTime = RESPAWN_DEFAULT_TIME
-	movement = Vector2.ZERO
-	water = false
-	global_position = partner.global_position+Vector2(0,-get_viewport_rect().size.y)
-	limitLeft = partner.limitLeft
-	limitRight = partner.limitRight
-	limitTop = partner.limitTop
-	limitBottom = partner.limitBottom
-	get_node("TailsCarryBox/HitBox").disabled = true
-	set_state(STATES.RESPAWN)
+	if partner != null:
+		airTimer = 1
+		collision_layer = 0
+		collision_mask = 0
+		z_index = defaultZIndex
+		respawnTime = RESPAWN_DEFAULT_TIME
+		movement = Vector2.ZERO
+		water = false
+		# update physics (prevents player having water physics on respawn)
+		switch_physics()
+		global_position = partner.global_position+Vector2(0,-get_viewport_rect().size.y)
+		limitLeft = partner.limitLeft
+		limitRight = partner.limitRight
+		limitTop = partner.limitTop
+		limitBottom = partner.limitBottom
+		get_node("TailsCarryBox/HitBox").disabled = true
+		set_state(STATES.RESPAWN)
 
 
 func touch_ceiling():

@@ -2,6 +2,8 @@ extends Sprite
 var getCam = null
 var player = null
 
+onready var screenXSize = get_viewport_rect().size.x
+
 func _physics_process(_delta):
 	# check if player.x position is greater then the post
 	if Global.players[0].global_position.x > global_position.x and Global.players[0].global_position.y <= global_position.y and Global.stageClearPhase == 0:
@@ -9,8 +11,8 @@ func _physics_process(_delta):
 		player = Global.players[0]
 		
 		# Camera limit set
-		player.limitLeft = global_position.x -320/2
-		player.limitRight = global_position.x +(320/2)+48
+		player.limitLeft = global_position.x -screenXSize/2
+		player.limitRight = global_position.x +(screenXSize/2)+48
 		getCam = player.camera
 		
 		# play spinner
@@ -54,7 +56,7 @@ func _physics_process(_delta):
 			getCam.global_position.x = global_position.x
 		# if player greater then screen and stage clear phase is 2 then activate the stage clear sequence
 		if player:
-			if player.global_position.x > global_position.x+(320/2) and player.movement.x > 0 and Global.stageClearPhase == 2:
+			if player.global_position.x > global_position.x+(screenXSize/2) and player.movement.x > 0 and Global.stageClearPhase == 2:
 				# stage clear won't work is stage clear phase isn't 0
 				Global.stageClearPhase = 0
 				Global.stage_clear()

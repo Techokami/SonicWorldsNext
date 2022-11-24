@@ -31,7 +31,8 @@ func _process(delta):
 			# add ring to node memory so you can't farm the ring
 			Global.nodeMemory.append(get_path())
 			
-			Global.main.change_scene(load("res://Scene/SpecialStage/SpecialStageResult.tscn"),"FadeOut","FadeOut","SetAdd",1.5,true,false)
+			# fade to new scene
+			Global.main.change_scene(load("res://Scene/SpecialStage/SpecialStageResult.tscn"),"FadeOut","FadeOut","SetAdd",1,true,false)
 			# wait for scene to fade
 			yield(Global.main,"scene_faded")
 			if player != null:
@@ -77,9 +78,12 @@ func _on_Hitbox_body_entered(body):
 		else:
 			body.rings += 50
 		
+		# play sound
 		$RingEnter.play()
+		# play animation
 		$Ring.play("enter")
 		yield($Ring,"animation_finished")
+		# set visible to false after animation's complete
 		visible = false
 		$Hitbox/CollisionShape2D.disabled = true
 
