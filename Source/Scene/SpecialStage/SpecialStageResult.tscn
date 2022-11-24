@@ -1,0 +1,272 @@
+[gd_scene load_steps=33 format=2]
+
+[ext_resource path="res://Graphics/Items/ChaosEmeralds.png" type="Texture" id=1]
+[ext_resource path="res://Audio/SFX/Misc/Emerald.wav" type="AudioStream" id=2]
+[ext_resource path="res://Scripts/Misc/SpecialStageResult.gd" type="Script" id=3]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 13, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 1 )
+region = Rect2( 16, 13, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 1 )
+region = Rect2( 32, 13, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 1 )
+region = Rect2( 48, 13, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 52, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 1 )
+region = Rect2( 16, 52, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 1 )
+region = Rect2( 32, 52, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 1 )
+region = Rect2( 48, 52, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 26, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 1 )
+region = Rect2( 16, 26, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 1 )
+region = Rect2( 32, 26, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 1 )
+region = Rect2( 48, 26, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 78, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 1 )
+region = Rect2( 16, 78, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 1 )
+region = Rect2( 32, 78, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=16]
+atlas = ExtResource( 1 )
+region = Rect2( 48, 78, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=17]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=18]
+atlas = ExtResource( 1 )
+region = Rect2( 16, 0, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=19]
+atlas = ExtResource( 1 )
+region = Rect2( 32, 0, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=20]
+atlas = ExtResource( 1 )
+region = Rect2( 48, 0, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=21]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 65, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=22]
+atlas = ExtResource( 1 )
+region = Rect2( 16, 65, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 1 )
+region = Rect2( 32, 65, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 1 )
+region = Rect2( 48, 65, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=25]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 39, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=26]
+atlas = ExtResource( 1 )
+region = Rect2( 16, 39, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=27]
+atlas = ExtResource( 1 )
+region = Rect2( 32, 39, 16, 13 )
+
+[sub_resource type="AtlasTexture" id=28]
+atlas = ExtResource( 1 )
+region = Rect2( 48, 39, 16, 13 )
+
+[sub_resource type="SpriteFrames" id=29]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ) ],
+"loop": true,
+"name": "blue",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ) ],
+"loop": true,
+"name": "cyan",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ) ],
+"loop": true,
+"name": "green",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ) ],
+"loop": true,
+"name": "purple",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ) ],
+"loop": true,
+"name": "red",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ) ],
+"loop": true,
+"name": "silver",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ) ],
+"loop": true,
+"name": "yellow",
+"speed": 10.0
+} ]
+
+[node name="SpecialStageResults" type="Node2D"]
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_vertical_guides_": [ 10400.0 ]
+}
+
+[node name="HUD" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="Back" type="ColorRect" parent="HUD"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Label" type="Label" parent="HUD"]
+modulate = Color( 0, 0, 0, 1 )
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -79.5
+margin_top = 16.0
+margin_right = 79.5
+margin_bottom = 47.0
+text = "Special Stage
+
+Press Action 1(Z) to Win
+Press Action 2(C) to Lose"
+align = 1
+
+[node name="Stage" type="Label" parent="HUD"]
+modulate = Color( 0, 0, 0, 1 )
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -79.5
+margin_top = -31.0
+margin_right = 79.5
+text = "Stage 1"
+align = 1
+
+[node name="ColorRect" type="ColorRect" parent="HUD"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -56.0
+margin_top = -8.0
+margin_right = 56.0
+margin_bottom = 9.0
+color = Color( 0.768627, 0.768627, 0.768627, 1 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/ColorRect"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+custom_constants/separation = 16
+alignment = 1
+
+[node name="Red" type="Control" parent="HUD/ColorRect/HBoxContainer"]
+margin_left = 8.0
+margin_right = 8.0
+
+[node name="RedEmerald" type="AnimatedSprite" parent="HUD/ColorRect/HBoxContainer/Red"]
+frames = SubResource( 29 )
+animation = "red"
+
+[node name="Blue" type="Control" parent="HUD/ColorRect/HBoxContainer"]
+margin_left = 24.0
+margin_right = 24.0
+
+[node name="BlueEmerald" type="AnimatedSprite" parent="HUD/ColorRect/HBoxContainer/Blue"]
+frames = SubResource( 29 )
+animation = "blue"
+
+[node name="Green" type="Control" parent="HUD/ColorRect/HBoxContainer"]
+margin_left = 40.0
+margin_right = 40.0
+
+[node name="GreenEmerald" type="AnimatedSprite" parent="HUD/ColorRect/HBoxContainer/Green"]
+frames = SubResource( 29 )
+animation = "green"
+
+[node name="Yellow" type="Control" parent="HUD/ColorRect/HBoxContainer"]
+margin_left = 56.0
+margin_right = 56.0
+
+[node name="YellowEmerald" type="AnimatedSprite" parent="HUD/ColorRect/HBoxContainer/Yellow"]
+frames = SubResource( 29 )
+animation = "yellow"
+
+[node name="Cyan" type="Control" parent="HUD/ColorRect/HBoxContainer"]
+margin_left = 72.0
+margin_right = 72.0
+
+[node name="CyanEmerald" type="AnimatedSprite" parent="HUD/ColorRect/HBoxContainer/Cyan"]
+frames = SubResource( 29 )
+animation = "cyan"
+
+[node name="Silver" type="Control" parent="HUD/ColorRect/HBoxContainer"]
+margin_left = 88.0
+margin_right = 88.0
+
+[node name="SilverEmerald" type="AnimatedSprite" parent="HUD/ColorRect/HBoxContainer/Silver"]
+frames = SubResource( 29 )
+animation = "silver"
+
+[node name="Purple" type="Control" parent="HUD/ColorRect/HBoxContainer"]
+margin_left = 104.0
+margin_right = 104.0
+
+[node name="PurpleEmerald" type="AnimatedSprite" parent="HUD/ColorRect/HBoxContainer/Purple"]
+frames = SubResource( 29 )
+animation = "purple"
+
+[node name="Emerald" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 2 )
+bus = "SFX"

@@ -62,19 +62,26 @@ func _physics_process(delta):
 			parent.animator.play("climbUp")
 			climbUp = true
 	else:
+		# climb up
+		# give camera time to follow so it doesn't snap
 		parent.cameraDragLerp = 1
 		climbTimer += delta
+		# stop current animations and play climb up
 		parent.animator.stop()
 		parent.animator.play("climbUp")
+		# use offset based on the current animations and how many poses there are in shiftPoses (shiftPoses should match how many frames you're using)
 		var offset = (climbTimer/parent.animator.current_animation_length)*shiftPoses.size()
+		
 		parent.animator.advance(floor(offset)*0.1)
 		parent.global_position = climbPosition+(shiftPoses[min(floor(offset),shiftPoses.size()-1)]*Vector2(parent.direction,1))
+		# if timer greater then animator then exit climb
 		if climbTimer > parent.animator.current_animation_length:
 			parent.set_state(parent.STATES.NORMAL,parent.currentHitbox.NORMAL)
 			climbUp = false
 			parent.global_position = climbPosition+(shiftPoses[shiftPoses.size()-1]*Vector2(parent.direction,1))
 
 func _process(_delta):
+	# jumping off
 	if parent.inputs[parent.INPUTS.ACTION] == 1 and !climbUp:
 		parent.movement = Vector2(-4*60*parent.direction,-4*60)
 		parent.direction *= -1

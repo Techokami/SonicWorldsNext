@@ -4,19 +4,23 @@ extends EnemyBase
 var animFrame = 0.0
 
 func _ready():
+	# initial velocity
 	velocity.y = -7
 	set_physics_process(false)
 	set_process(false)
 
 
 func _physics_process(delta):
+	# gravity
 	velocity.y += 0.09375/GlobalFunctions.div_by_delta(delta)
 	position.y = min(position.y,0)
 	
+	# reset velocity
 	if position.y >= 0:
 		velocity.y = -7*60
 
 func _process(delta):
+	# animation states
 	if position.y > -192:
 		if velocity.y > 0:
 			# stationary
@@ -27,6 +31,7 @@ func _process(delta):
 	else:
 		# fast animation
 		animFrame += (60.0/4.0)*delta
+	
 	animFrame = fmod(animFrame,($Chomper.hframes*$Chomper.vframes))
 	$Chomper.frame = floor(animFrame)
 

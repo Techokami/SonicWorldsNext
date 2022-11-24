@@ -213,7 +213,7 @@ frame = 2
 
 [node name="Monitor" type="AnimatedSprite" parent="."]
 frames = SubResource( 6 )
-frame = 1
+frame = 5
 playing = true
 
 [node name="Animator" type="AnimationPlayer" parent="."]

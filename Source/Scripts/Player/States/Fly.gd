@@ -1,5 +1,6 @@
 extends "res://Scripts/Player/State.gd"
 
+# tails flight
 var flightTime = 8*60
 var flyGrav = 0.03125
 var actionPressed = true

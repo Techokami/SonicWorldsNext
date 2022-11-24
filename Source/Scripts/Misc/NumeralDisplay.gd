@@ -1,5 +1,5 @@
 extends Sprite
-
+# string look up, put a character in here and the frame index for the texture it represents
 var stringLookup = {
 '0': 0,
 '1': 1,
@@ -27,6 +27,7 @@ func _process(_delta):
 
 
 func _draw():
+	# calculate the resolution of the sprite text
 	var getRes = Vector2(texture.get_width()/float(hframes),texture.get_height()/float(vframes))
 	for i in string.length():
 		if (stringLookup.has(string[i])):

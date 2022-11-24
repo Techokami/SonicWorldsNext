@@ -297,23 +297,24 @@ func _ready():
 		CHARACTERS.TAILS:
 			# Set sprites
 			currentHitbox = HITBOXESTAILS
-			get_node("Sprite").queue_free()
+			get_node("Sprite").name = "OldSprite"
 			yield(get_tree(),"idle_frame")
 			var tails = tailsAnimations.instance()
 			add_child(tails)
 			sprite = tails.get_node("Sprite")
 			animator = tails.get_node("PlayerAnimation")
 			spriteControler = tails
+			get_node("OldSprite").queue_free()
 		CHARACTERS.KNUCKLES:
 			# Set sprites
 			currentHitbox = HITBOXESKNUCKLES
-			get_node("Sprite").queue_free()
-			yield(get_tree(),"idle_frame")
+			get_node("Sprite").name = "OldSprite"
 			var knuckles = knucklesAnimations.instance()
 			add_child(knuckles)
 			sprite = knuckles.get_node("Sprite")
 			animator = knuckles.get_node("PlayerAnimation")
 			spriteControler = knuckles
+			get_node("OldSprite").queue_free()
 	
 	# run switch physics to ensure character specific physics
 	switch_physics()
@@ -339,6 +340,10 @@ func _ready():
 	limitTop = Global.hardBorderTop
 	limitBottom = Global.hardBorderBottom
 	snap_camera_to_limits()
+	
+	# set partner sounds to share players (prevents sound overlap)
+	if playerControl == 0:
+		partner.sfx = sfx
 
 
 
@@ -432,7 +437,6 @@ func _process(delta):
 	if (horizontalLockTimer > 0):
 		horizontalLockTimer -= delta
 		inputs[INPUTS.XINPUT] = 0
-		#inputs[INPUTS.YINPUT] = 0
 
 	# super / invincibility handling
 	if (supTime > 0):
@@ -764,10 +768,13 @@ func _physics_process(delta):
 # Input buttons
 func set_inputs():
 	# player control inputs
+	# check if ai or player 2
 	if playerControl == 0 or playerControl == 2:
+		# player 2 active time check, if below 0 return to ai state
 		if partnerControlTime <= 0 and playerControl == 2:
 			playerControl = 0
 		
+		# player 2 control active check
 		for i in inputActions.size():
 			var player2Active = false
 			# 0 and 1 in inputActions are arrays
@@ -856,7 +863,8 @@ func set_shield(setShieldID):
 		return false
 	
 	shield = setShieldID
-	shieldSprite.visible = !super
+	# make shield visible if not super and the invincibility barrier isn't going
+	shieldSprite.visible = !super and !$InvincibilityBarrier.visible
 	match (shield):
 		SHIELDS.NORMAL:
 			shieldSprite.play("Default")
@@ -968,20 +976,23 @@ func kill():
 			Global.main.sceneCanPause = false # stop the ability to pause
 
 func respawn():
-	airTimer = 1
-	collision_layer = 0
-	collision_mask = 0
-	z_index = defaultZIndex
-	respawnTime = RESPAWN_DEFAULT_TIME
-	movement = Vector2.ZERO
-	water = false
-	global_position = partner.global_position+Vector2(0,-get_viewport_rect().size.y)
-	limitLeft = partner.limitLeft
-	limitRight = partner.limitRight
-	limitTop = partner.limitTop
-	limitBottom = partner.limitBottom
-	get_node("TailsCarryBox/HitBox").disabled = true
-	set_state(STATES.RESPAWN)
+	if partner != null:
+		airTimer = 1
+		collision_layer = 0
+		collision_mask = 0
+		z_index = defaultZIndex
+		respawnTime = RESPAWN_DEFAULT_TIME
+		movement = Vector2.ZERO
+		water = false
+		# update physics (prevents player having water physics on respawn)
+		switch_physics()
+		global_position = partner.global_position+Vector2(0,-get_viewport_rect().size.y)
+		limitLeft = partner.limitLeft
+		limitRight = partner.limitRight
+		limitTop = partner.limitTop
+		limitBottom = partner.limitBottom
+		get_node("TailsCarryBox/HitBox").disabled = true
+		set_state(STATES.RESPAWN)
 
 
 func touch_ceiling():

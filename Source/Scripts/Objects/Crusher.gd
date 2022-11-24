@@ -1,12 +1,14 @@
 extends Node2D
 tool
 
+# this moves back and forth based on a timer and speed, direction is angle based
 export var distance = 64
 export var wait = 1.0
 var timer = wait
 var extend = false
 
 func _process(delta):
+	# timer
 	if !Engine.is_editor_hint():
 		if timer > 0:
 			timer -= delta

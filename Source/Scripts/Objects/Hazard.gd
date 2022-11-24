@@ -4,6 +4,7 @@ export (int, "Normal", "Fire", "Elec", "Water") var damageType = 0
 var playerHit = []
 
 func _process(_delta):
+	# do hit if player array isn't empty
 	if (playerHit.size() > 0):
 		for i in playerHit:
 			if (i.has_method("hit_player")):
