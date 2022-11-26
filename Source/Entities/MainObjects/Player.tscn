@@ -22,8 +22,8 @@
 [ext_resource path="res://Graphics/Items/shield_insta.png" type="Texture" id=20]
 [ext_resource path="res://Audio/SFX/Player/Shield.wav" type="AudioStream" id=21]
 [ext_resource path="res://Audio/SFX/Player/Death.wav" type="AudioStream" id=22]
-[ext_resource path="res://Audio/SFX/Objects/RingStereo.wav" type="AudioStream" id=23]
-[ext_resource path="res://Audio/SFX/Objects/RingRight.wav" type="AudioStream" id=24]
+[ext_resource path="res://Audio/SFX/Objects/RingL.wav" type="AudioStream" id=23]
+[ext_resource path="res://Audio/SFX/Objects/RingR.wav" type="AudioStream" id=24]
 [ext_resource path="res://Audio/SFX/Player/RingLoss.wav" type="AudioStream" id=25]
 [ext_resource path="res://Audio/SFX/Player/ElecShield.wav" type="AudioStream" id=26]
 [ext_resource path="res://Audio/SFX/Player/BubbleUse.wav" type="AudioStream" id=27]
@@ -776,14 +776,14 @@ z_index = 7
 position = Vector2( 0, -16 )
 frames = SubResource( 157 )
 animation = "Invincibility"
-frame = 5
+frame = 2
 playing = true
 
 [node name="StarGenerator2" type="AnimatedSprite" parent="InvincibilityBarrier"]
 position = Vector2( 0, 16 )
 frames = SubResource( 157 )
 animation = "Invincibility"
-frame = 5
+frame = 2
 playing = true
 
 [node name="SFX" type="Node" parent="."]
@@ -818,14 +818,12 @@ bus = "SFX"
 stream = ExtResource( 22 )
 bus = "SFX"
 
-[node name="RingStereo" type="AudioStreamPlayer" parent="SFX"]
+[node name="RingLeft" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource( 23 )
-volume_db = -5.0
 bus = "SFX"
 
 [node name="RingRight" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource( 24 )
-volume_db = -5.0
 bus = "SFX"
 
 [node name="RingLoss" type="AudioStreamPlayer" parent="SFX"]

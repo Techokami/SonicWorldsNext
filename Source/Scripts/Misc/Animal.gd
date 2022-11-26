@@ -41,7 +41,7 @@ func _ready():
 		scale.x = -scale.x
 	else:
 		scale.x = sign(scale.x)*(1-(round(randf())*2))
-	# set animal properties
+	# set animal properties (animType is 0 by default)
 	match(animal):
 		1: # Squirrel
 			$animals.region_rect.position.x = 72
@@ -76,11 +76,17 @@ func _ready():
 			animType = 1
 
 func _physics_process(delta):
+	# gravity
 	velocity.y += gravity*60
+	
+	# move, ignore collission since we're only checking floors
 	translate(velocity*delta)
+	
+	# if on floor and falling then bounce
 	if ($FloorCheck.is_colliding() and velocity.y > 0):
 		speed = animalPhysics[animal].x*60
 		bouncePower = animalPhysics[animal].y*60
+		
 		match(animal):
 			0, 3, 7: # gravity bird types
 				gravity = 0.09375
@@ -91,6 +97,7 @@ func _physics_process(delta):
 
 
 func _process(delta):
+	# animation code
 	if (velocity.x != 0):
 		match (animType):
 			0: # flap

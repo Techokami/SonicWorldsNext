@@ -7,6 +7,7 @@ var open = false
 
 func _ready():
 	if !Engine.editor_hint:
+		# set areas
 		$Mask.shape.extents = Vector2(texture.get_width()/2,texture.get_height()/2)
 		$OpenShutter/Mask.shape = $Mask.shape
 		$CloseShutter/Mask.shape = $Mask.shape
@@ -28,6 +29,7 @@ func _process(delta):
 	if !Engine.editor_hint:
 		# move shutter
 		$Shutter.position = $Shutter.position.move_toward(Vector2(0,-texture.get_height()*int(open)),delta*512)
+		# disable mask if opened
 		$Mask.disabled = open
 	else:
 		$Mask.shape.extents = Vector2(texture.get_width()/2,texture.get_height()/2)
@@ -45,15 +47,18 @@ func _process(delta):
 		$CloseShutter.position.x = abs($CloseShutter.position.x)*(-1+(min(1,side)*2))
 		$CloseShutter2.position.x = abs($CloseShutter2.position.x)*(1-(min(1,side)*2))
 
+# open on body touch (and player 1)
 func _on_OpenShutter_body_entered(body):
 	if body.playerControl == 1:
 		open = true
 
 
+# close on body leave (and player 1)
 func _on_CloseShutter_body_entered(body):
 	if body.playerControl == 1:
 		open = false
 
+# force open and force close is used for switches
 func force_open():
 	open = true
 

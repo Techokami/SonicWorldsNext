@@ -12,28 +12,38 @@ var Explosion = preload("res://Entities/Misc/BadnickSmoke.tscn")
 
 
 func _ready():
+	# set frame
 	$Item.frame = item+2
-	# Life Icon
+	# Life Icon (life icons are a special case)
 	if item == 10 and !Engine.is_editor_hint():
 		$Item.frame = item+1+Global.PlayerChar1
+	
 
 func _process(_delta):
+	# update for editor
 	if (Engine.is_editor_hint()):
 		$Item.frame = item+2
 
 func destroy():
+	# skip if not activated
 	if !isActive:
 		return false
 	# create explosion
 	var explosion = Explosion.instance()
 	get_parent().add_child(explosion)
 	explosion.global_position = global_position
+	
+	# deactivate
 	isActive = false
+	
+	# set item to have a high Z index so it overlays a lot
 	$Item.z_index += 1000
+	# play destruction animation
 	$Animator.play("DestroyMonitor")
 	$SFX/Destroy.play()
 	# remove visibility enabler to prevent items from not being activated
 	$VisibilityEnabler2D.queue_free()
+	# wait for animation to finish
 	yield($Animator,"animation_changed")
 	# enable effect
 	match (item):
@@ -50,7 +60,7 @@ func destroy():
 		2: # Invincibility
 			if !playerTouch.super:
 				playerTouch.supTime = 30
-				playerTouch.shieldSprite.visible = false
+				playerTouch.shieldSprite.visible = false # turn off barrier for stars
 				playerTouch.get_node("InvincibilityBarrier").visible = true
 				Global.currentTheme = 0
 				Global.effectTheme.stream = Global.themes[Global.currentTheme]
@@ -75,12 +85,14 @@ func destroy():
 
 func _physics_process(delta):
 	if !Engine.is_editor_hint():
+		# if physics are on make em fall
 		if physics:
 			var collide = move_and_collide(Vector2(0,yspeed)*delta)
 			yspeed += grv/GlobalFunctions.div_by_delta(delta)
 			if collide and yspeed > 0:
 				physics = false
 
+# physics collision check, see physics object
 func physics_collision(body, hitVector):
 	if body.get_collision_layer_bit(19):
 		# Bounce from below
@@ -96,6 +108,7 @@ func physics_collision(body, hitVector):
 				# Stop horizontal movement
 				body.movement.x = 0
 		# check if player is not an ai or spindashing
+		# if they are then destroy
 		elif body.playerControl == 1 and body.currentState != body.STATES.SPINDASH:
 			body.movement.y = -abs(body.movement.y)
 			
@@ -109,7 +122,7 @@ func physics_collision(body, hitVector):
 			body.movement.y = 0
 	return true
 
-
+# insta shield should break instantly
 func _on_InstaArea_area_entered(area):
 	if area.get("parent") != null and isActive:
 		playerTouch = area.parent

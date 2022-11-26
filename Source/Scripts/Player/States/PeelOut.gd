@@ -3,30 +3,31 @@ extends "res://Scripts/Player/State.gd"
 var dashPower = 12
 
 func _process(delta):
+	# dust sprite
 	var dash = parent.sprite.get_node("DashDust")
 	dash.visible = !parent.water
 	dash.flip_h = parent.sprite.flip_h
 	dash.offset.x = abs(dash.offset.x)*sign(-1+int(dash.flip_h)*2)
 	
+	# how much power the player has from the peelout
 	var speedCalc = parent.spindashPower*60
 	
-	
+	# increase spindashPower gradually
 	parent.spindashPower = min(parent.spindashPower+delta*24,dashPower)
 	parent.groundSpeed = speedCalc
 	
-	
+	# animation based on speed
 	if(speedCalc < 6*60):
 		parent.animator.play("walk")
 	elif(parent.spindashPower < dashPower):
 		parent.animator.play("run")
 	else:
 		parent.animator.play("peelOut")
-	
+	# how fast the animation plays
 	var duration = floor(max(0,8.0-abs(parent.groundSpeed/60)))
-		
-	
 	
 	parent.animator.playback_speed = (1.0/(duration+1))*(60/10)
+
 
 	# release
 	if (parent.inputs[parent.INPUTS.YINPUT] >= 0):

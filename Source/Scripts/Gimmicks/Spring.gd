@@ -61,23 +61,31 @@ func set_spring():
 
 # Collision check
 func physics_collision(body, hitVector):
+	# check that the players hit direction matches the direction we're facing (ignored for diagonal)
 	if hitVector == -hitDirection:
-		#body.ground = false
+		# do a Rock launch HAUGH!!!
 		var setMove = hitDirection.rotated(rotation).rotated(-body.rotation).round()*speed[type]*60
+		# vertical movement
 		if setMove.y != 0:
+			# disable ground
 			body.ground = false
 			body.set_state(body.STATES.AIR)
+			# figure out the animation based on the players current animation
 			var curAnim = "walk"
 			match(body.animator.current_animation):
 				"walk", "run", "peelOut":
 					curAnim = body.animator.current_animation
+				# if none of the animations match and speed is equal beyond the players top speed, set it to run (default is walk)
 				_:
 					if(abs(body.groundSpeed) >= min(6*60,body.top)):
 						curAnim = "run"
+			# play player animation
 			body.animator.play("spring")
 			body.animator.queue(curAnim)
+			# set vertical speed
 			body.movement.y = setMove.y
 			body.set_state(body.STATES.AIR)
+		# horizontal movement
 		else:
 			# exit out of state on certain states
 			match(body.currentState):
@@ -85,6 +93,7 @@ func physics_collision(body, hitVector):
 					if !body.ground:
 						body.animator.play("run")
 						body.set_state(body.STATES.AIR)
+			# set horizontal speed
 			body.movement.x = setMove.x
 			body.horizontalLockTimer = (15.0/60.0) # lock for 15 frames
 			body.direction = sign(setMove.x)
@@ -96,6 +105,7 @@ func physics_collision(body, hitVector):
 	
 
 func _on_Diagonal_body_entered(body):
+	# diagonal springs are pretty straightforward
 	body.movement = hitDirection.rotated(rotation).rotated(-body.rotation)*speed[type]*60
 	$SpringAnimator.play(animList[animID])
 	if (hitDirection.y < 0):
@@ -103,6 +113,4 @@ func _on_Diagonal_body_entered(body):
 		body.animator.play("corkScrew")
 	$sfxSpring.play()
 	# Disable pole grabs
-	#if body.poleGrabID == null:
 	body.poleGrabID = self
-	#body.set_state(body.STATES.AIR)

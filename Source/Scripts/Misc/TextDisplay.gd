@@ -129,7 +129,8 @@ func _draw():
 					charID = stringLookup[string[i]]
 			
 			getRes = Vector2(getTexture.get_width()/gethFrames,getTexture.get_height()/getvFrames)
-				
+			
+			# after all this we can FINALLY draw the texture string
 			draw_texture_rect_region(getTexture,
 			Rect2(Vector2(getX-(getXWidth*(hAlign/2.0)),yOff),getRes),
 			Rect2(Vector2(fmod(charID,gethFrames)*getRes.x,floor(charID/gethFrames)*getRes.y),getRes))

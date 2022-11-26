@@ -6,10 +6,12 @@ var frame = 0
 export var length = 1
 
 func _ready():
+	# sprite related animations
 	$MiddlePiece.region_rect.size.x = length*32
 	$LeftCog.position.x = -length*16
 	$RightCog.position.x = length*16
 	$CollisionShape2D.scale.x = length+1
+	# constant linear velocity is a constant speed set in godot's physics
 	constant_linear_velocity.x = speed
 
 func _process(delta):

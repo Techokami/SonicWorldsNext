@@ -1,5 +1,6 @@
 extends AnimatedSprite
 
+# animation behaviours, if you want some specific behaviours you can program them with this
 var behaviour = 0
 enum TYPE {NORMAL, FOLLOW_WATER_SURFACE}
 

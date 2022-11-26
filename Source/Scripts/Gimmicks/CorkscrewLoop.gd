@@ -1,14 +1,16 @@
 extends Node2D
 tool
 
+# player tracking arrays
 var playerListL = []
 var playerListR = []
-
 var playerList = []
 
+# length of the corkscrew
 export var length = 1
 
 func _ready():
+	# set initial positions for arrays
 	$EnteranceR.position.x += $Corkscrew.texture.get_width()*(length-1)
 	if !Engine.is_editor_hint():
 		for i in length:
@@ -84,7 +86,7 @@ func _physics_process(_delta):
 
 
 
-
+# player checks
 func _on_EnteranceL_body_entered(body):
 	if !playerListL.has(body):
 		playerListL.append(body)
@@ -93,9 +95,6 @@ func _on_EnteranceL_body_entered(body):
 func _on_EnteranceL_body_exited(body):
 	if (playerListL.has(body)):
 		playerListL.erase(body)
-
-
-
 
 func _on_EnteranceR_body_entered(body):
 	if !playerListR.has(body):
@@ -106,6 +105,7 @@ func _on_EnteranceR_body_exited(body):
 	if (playerListR.has(body)):
 		playerListR.erase(body)
 
+# draw self several times based on length
 func _draw():
 	if Engine.is_editor_hint():
 		if length > 0:

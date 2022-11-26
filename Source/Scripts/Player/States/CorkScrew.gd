@@ -1,9 +1,11 @@
 extends "res://Scripts/Player/State.gd"
 
 func _process(_delta):
+	# jumping off
 	if parent.inputs[parent.INPUTS.ACTION] == 1:
 		parent.action_jump()
 	
+	# if offset, flip around
 	if parent.animator.current_animation == "corkScrewOffset":
 		parent.sprite.flip_v = true
 		parent.sprite.offset.y = 4
@@ -13,8 +15,10 @@ func _physics_process(delta):
 	# gravity
 	parent.movement.y += parent.grv/GlobalFunctions.div_by_delta(delta)
 	
+	# determine flip based on the direction
 	parent.sprite.flip_h = (parent.direction < 0)
 	
+	# movement
 	if (parent.inputs[parent.INPUTS.XINPUT] != 0):
 		if (parent.movement.x*parent.inputs[parent.INPUTS.XINPUT] < parent.top):
 			if (sign(parent.movement.x) == parent.inputs[parent.INPUTS.XINPUT]):

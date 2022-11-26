@@ -3,6 +3,7 @@ extends "res://Scripts/Objects/Hazard.gd"
 
 export var size = Vector2(32,32)
 
+# graphic pointers
 export var lavaGraphicTop = [preload("res://Graphics/Hazards/LavaTop1.png"),preload("res://Graphics/Hazards/LavaTop2.png"),
 preload("res://Graphics/Hazards/LavaTop3.png"),preload("res://Graphics/Hazards/LavaTop4.png")]
 
@@ -19,6 +20,7 @@ func _process(delta):
 	if Engine.editor_hint:
 		update_graphics()
 	else:
+		# do that thing where the graphics move from side to side
 		$LavaTile.region_rect.position.x = cos(Global.globalTimer/2)*128
 	
 	# Animation
@@ -31,11 +33,12 @@ func _process(delta):
 		$LavaTile.texture = lavaGraphic[floor(frame)]
 
 func update_graphics():
+	# clamp size
 	size.x = max(size.x,1)
 	size.y = max(size.y,8)
+	# set the collission shape and graphics scaling
 	$Collision/CollisionShape2D.shape.extents = Vector2(size.x-1,size.y-1)/2
 	$LavaTile.region_rect.size = size
 	$LavaTop.region_rect.size.x = size.x
 	$LavaTop.position.y = -round(size.y/2)
 	$CollisionShape2D.scale = size/32
-	#$Collision/CollisionShape2D.scale = $CollisionShape2D.scale

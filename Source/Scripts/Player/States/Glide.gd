@@ -220,6 +220,7 @@ func _physics_process(delta):
 				parent.set_state(parent.STATES.NORMAL)
 
 
+# create skid dust
 func _on_SkidDustTimer_timeout():
 	if parent.currentState == parent.STATES.GLIDE:
 		if !sliding or (parent.movement.x == 0 and parent.ground):

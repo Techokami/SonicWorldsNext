@@ -9,16 +9,19 @@ func state_activated():
 	
 func _process(delta):
 	
+	# Charging up
 	if parent.inputs[parent.INPUTS.ACTION] == 1:
 		# reset animation
 		parent.animator.stop()
 		parent.animator.play("spinDash")
 		# play rev sound
 		parent.sfx[2].play()
+		# increase dash power
 		if (parent.spindashPower < 8):
 			parent.spindashPower = min(parent.spindashPower+2,8)
 		parent.sfx[2].pitch_scale = 1.0+((float(parent.spindashPower)/8.0)*0.5)
-		
+	
+	# dust sprite
 	var dash = parent.sprite.get_node("DashDust")
 	dash.visible = !parent.water
 	dash.flip_h = parent.sprite.flip_h
@@ -36,8 +39,9 @@ func _process(delta):
 		parent.lock_camera((parent.spindashPower+8)/60.0)
 		
 		parent.animator.play("roll")
+	
+	# decrease the dash power for next frame
 	parent.spindashPower -= ((parent.spindashPower / 0.125) / (256))*60*delta
-		
 
 func _physics_process(_delta):
 	# Gravity
