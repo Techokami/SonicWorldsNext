@@ -1,5 +1,6 @@
 # Sonic Worlds Next
 ![Logo](SageLogo.png)
+
 This is the official development repository for the successor to Sonic Worlds Delta.
 
 This uses [Godot](https://godotengine.org/) to implement a 2D Sonic the Hedgehog-like framework, intended for use in creating fangame projects and original game projects. Like Godot, the code within this repository is provided under the MIT License.
