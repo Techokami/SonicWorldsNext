@@ -97,12 +97,30 @@ var zoomSize = 1
 # Hazard type references
 enum HAZARDS {NORMAL, FIRE, ELEC, WATER}
 
+# Debugging
+var is_main_loaded = false
+
 func _ready():
 	# set sound settings
 	add_child(soundChannel)
 	soundChannel.bus = "SFX"
 	# load game data
 	load_settings()
+	
+	# check if main scene is root (prevents crashing if you started from another scene)
+	if !(get_tree().current_scene is MainGameScene):
+		get_tree().paused = true
+		# change scene root to main scene, keep current scene in memory
+		var loadNode = get_tree().current_scene.filename
+		var mainScene = load("res://Scene/Main.tscn").instance()
+		get_tree().root.call_deferred("remove_child",get_tree().current_scene)
+		#get_tree().root.current_scene.call_deferred("queue_free")
+		get_tree().root.call_deferred("add_child",mainScene)
+		mainScene.get_node("SceneLoader").get_child(0).nextScene = load(loadNode)
+		yield(get_tree(),"idle_frame")
+		get_tree().paused = false
+		#mainScene.change_scene(load(loadNode))
+	is_main_loaded = true
 
 func _process(delta):
 	# do a check for certain variables, if it's all clear then count the level timer up

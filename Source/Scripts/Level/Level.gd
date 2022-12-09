@@ -21,6 +21,9 @@ export var defaultBottomBoundry = 100000000
 var wasLoaded = false
 
 func _ready():
+	# debuging
+	if !Global.is_main_loaded:
+		return false
 	# skip if scene was loaded
 	if wasLoaded:
 		return false
@@ -41,19 +44,21 @@ func _ready():
 # used for stage starts, also used for returning from special stages
 func level_reset_data(playCard = true):
 	# music handling
-	if music != null:
-		Global.music.stream = music
-		Global.music.play()
-		Global.music.stream_paused = false
-	else:
-		Global.music.stop()
-		Global.music.stream = null
+	if Global.music != null:
+		if music != null:
+			Global.music.stream = music
+			Global.music.play()
+			Global.music.stream_paused = false
+		else:
+			Global.music.stop()
+			Global.music.stream = null
 	# set next zone
 	if nextZone != null:
 		Global.nextZone = nextZone
 	
 	# set pausing to true
-	Global.main.sceneCanPause = true
+	if Global.main != null:
+		Global.main.sceneCanPause = true
 	# set animals
 	Global.animals = [animal1,animal2]
 	# if global hud and play card, run hud ready script

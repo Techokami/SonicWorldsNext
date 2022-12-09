@@ -110,7 +110,18 @@ func _on_Diagonal_body_entered(body):
 	$SpringAnimator.play(animList[animID])
 	if (hitDirection.y < 0):
 		body.set_state(body.STATES.AIR)
-		body.animator.play("corkScrew")
+		# figure out the animation based on the players current animation
+		var curAnim = "walk"
+		match(body.animator.current_animation):
+			"walk", "run", "peelOut":
+				curAnim = body.animator.current_animation
+			# if none of the animations match and speed is equal beyond the players top speed, set it to run (default is walk)
+			_:
+				if(abs(body.groundSpeed) >= min(6*60,body.top)):
+					curAnim = "run"
+		# play player animation
+		body.animator.play("springScrew")
+		body.animator.queue(curAnim)
 	$sfxSpring.play()
 	# Disable pole grabs
 	body.poleGrabID = self

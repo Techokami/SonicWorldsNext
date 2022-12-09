@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=2]
+[gd_scene load_steps=55 format=2]
 
 [ext_resource path="res://Shaders/PlayerPalette.tres" type="Material" id=1]
 [ext_resource path="res://Graphics/Players/Tails.png" type="Texture" id=2]
@@ -478,6 +478,23 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 73, 74, 73, 74, 73, 74, 73, 74 ]
+}
+
+[sub_resource type="Animation" id=126]
+resource_name = "springScrew"
+length = 0.783
+step = 0.0649984
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.0649984, 0.129997, 0.194995, 0.259993, 0.324992, 0.38999, 0.454989, 0.519987, 0.584985, 0.649984, 0.714982 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59 ]
 }
 
 [sub_resource type="Animation" id=97]
@@ -1027,6 +1044,7 @@ anims/run = SubResource( 82 )
 anims/skid = SubResource( 100 )
 anims/spinDash = SubResource( 83 )
 anims/spring = SubResource( 84 )
+anims/springScrew = SubResource( 126 )
 anims/super = SubResource( 97 )
 anims/swim = SubResource( 116 )
 anims/swimCarry = SubResource( 117 )
@@ -1042,13 +1060,12 @@ texture = ExtResource( 2 )
 offset = Vector2( 0, -4 )
 hframes = 16
 vframes = 16
-frame = 4
 script = ExtResource( 5 )
 
 [node name="DashDust" type="AnimatedSprite" parent="Sprite"]
 visible = false
 frames = SubResource( 96 )
-frame = 5
+frame = 2
 playing = true
 offset = Vector2( -9, -4 )
 

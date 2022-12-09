@@ -94,13 +94,17 @@ func _physics_process(delta):
 
 # physics collision check, see physics object
 func physics_collision(body, hitVector):
-	if body.get_collision_layer_bit(19):
-		# Bounce from below
-		if hitVector.y < 0:
+	# Monitor head bouncing
+	if hitVector.y < 0:
+		yspeed = -1.5*60
+		physics = true
+		if body.movement.y < 0:
 			body.movement.y *= -1
-			yspeed = -1.5*60
-			physics = true
-		elif hitVector.x != 0:
+	# check that player has the rolling layer bit set
+	elif body.get_collision_layer_bit(19):
+		# Bounce from below
+		if hitVector.x != 0:
+			# check conditions for interaction (and the player is the first player)
 			if body.movement.y >= 0 and body.movement.x != 0 and body.playerControl == 1:
 				playerTouch = body
 				destroy()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=2]
+[gd_scene load_steps=45 format=2]
 
 [ext_resource path="res://Shaders/PlayerPalette.tres" type="Material" id=1]
 [ext_resource path="res://Graphics/Players/Knuckles.png" type="Texture" id=2]
@@ -510,6 +510,23 @@ tracks/0/keys = {
 "values": [ 73 ]
 }
 
+[sub_resource type="Animation" id=122]
+resource_name = "springScrew"
+length = 0.783
+step = 0.065
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.065, 0.13, 0.195, 0.26, 0.325, 0.39, 0.455, 0.52, 0.585, 0.65, 0.715 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59 ]
+}
+
 [sub_resource type="Animation" id=97]
 resource_name = "super"
 length = 0.5
@@ -629,6 +646,7 @@ anims/skid = SubResource( 100 )
 anims/skidTurn = SubResource( 118 )
 anims/spinDash = SubResource( 83 )
 anims/spring = SubResource( 84 )
+anims/springScrew = SubResource( 122 )
 anims/super = SubResource( 97 )
 anims/walk = SubResource( 85 )
 next/edge1 = "edge2"
@@ -644,6 +662,7 @@ vframes = 16
 [node name="DashDust" type="AnimatedSprite" parent="Sprite"]
 visible = false
 frames = SubResource( 96 )
+frame = 4
 playing = true
 offset = Vector2( -9, -4 )
 
