@@ -24,11 +24,8 @@ func state_exit():
 	parent.sfx[21].stop()
 	parent.sfx[22].stop()
 	# delay sound stop, for some reason it bugs out sometimes
-	yield(get_tree(),"idle_frame")
-	yield(get_tree(),"idle_frame")
-	yield(get_tree(),"idle_frame")
-	parent.sfx[21].stop()
-	parent.sfx[22].stop()
+	if $FlyBugStop.is_inside_tree():
+		$FlyBugStop.start(0.1)
 
 func _process(_delta):
 	# Animation
@@ -126,3 +123,8 @@ func _physics_process(delta):
 	# Reset state if on ground
 	if (parent.ground):
 		parent.set_state(parent.STATES.NORMAL)
+
+
+func _on_FlyBugStop_timeout():
+	parent.sfx[21].stop()
+	parent.sfx[22].stop()

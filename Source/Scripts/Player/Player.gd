@@ -428,7 +428,7 @@ func _process(delta):
 	if (rotatableSprites.has(animator.current_animation)):
 		sprite.rotation = deg2rad(stepify(spriteRotation,45)-90)-rotation-gravityAngle
 		# uncomment this next line out for smooth rotation (you should remove the above line too)
-		#sprite.rotation = deg2rad(spriteRotation-90)-rotation
+		#sprite.rotation = deg2rad(spriteRotation-90)-rotation-gravityAngle
 	else:
 		sprite.rotation = -rotation+gravityAngle
 
@@ -945,6 +945,8 @@ func get_ring():
 		partner.get_ring()
 	
 func kill():
+	if !(get_tree().current_scene is MainGameScene):
+		return false
 	if currentState != STATES.DIE:
 		disconect_from_floor()
 		super = false

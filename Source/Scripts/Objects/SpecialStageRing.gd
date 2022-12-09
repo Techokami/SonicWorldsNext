@@ -35,23 +35,38 @@ func _process(delta):
 			Global.main.change_scene(load("res://Scene/SpecialStage/SpecialStageResult.tscn"),"FadeOut","FadeOut","SetAdd",1,true,false)
 			# wait for scene to fade
 			yield(Global.main,"scene_faded")
+			
 			if player != null:
 				# set player's position to rings (and player 2)
 				# helps sell the illusion that we reset the room
 				player.global_position = global_position
 				player.direction = 1
+				
+				# check for partner
 				if player.partner:
 					player.partner.global_position = global_position+Vector2(-32,0)
 					player.partner.direction = 1
 					player.partner.movement = Vector2.ZERO
+					player.partner.velocity = Vector2.ZERO
+					# reset state
+					player.partner.set_state(player.partner.STATES.NORMAL)
+					# play idle
+					player.partner.animator.play("idle")
+				
 				# reset invincibility and shoes
 				player.supTime = 0
 				player.shoeTime = 0
+				# reset super sonic texture
 				if player.character == player.CHARACTERS.SONIC:
 					player.sprite.texture = player.normalSprite
+				# reset physics
 				player.switch_physics()
 				player.visible = true
+				# reset state
 				player.set_state(player.STATES.NORMAL)
+				# play idle
+				player.animator.play("idle")
+				
 				if maskMemory.size() > 0:
 					player.collision_layer = maskMemory[0]
 					player.collision_mask = maskMemory[1]
@@ -88,7 +103,7 @@ func _on_Hitbox_body_entered(body):
 		$Hitbox/CollisionShape2D.disabled = true
 
 # play spawning animation when the ring enters the screen
-func _on_VisibilityNotifier2D_viewport_entered(viewport):
+func _on_VisibilityNotifier2D_viewport_entered(_viewport):
 	$Ring.play("spawn")
 	$Ring.frame = 0
 	yield($Ring,"animation_finished")

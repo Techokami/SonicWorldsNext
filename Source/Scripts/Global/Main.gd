@@ -1,3 +1,4 @@
+class_name MainGameScene
 extends Node2D
 
 # last scene is used for referencing the current scene (this is used for stage restarting)
@@ -19,17 +20,17 @@ var sceneCanPause = false
 func _ready():
 	# global object references
 	Global.main = self
-	Global.musicParent = $Music
-	Global.music = $Music/Music
-	Global.effectTheme = $Music/EffectTheme
-	Global.drowning = $Music/Downing
-	Global.life = $Music/Life
+	Global.musicParent = get_node_or_null("Music")
+	Global.music = get_node_or_null("Music/Music")
+	Global.effectTheme = get_node_or_null("Music/EffectTheme")
+	Global.drowning = get_node_or_null("Music/Downing")
+	Global.life = get_node_or_null("Music/Life")
 	# initialize game data using global reset (it's better then assigning variables twice)
 	Global.reset_values()
 
 func _process(delta):
 	# verify scene isn't paused
-	if !get_tree().paused:
+	if !get_tree().paused and Global.music != null:
 		# pause main music if effect theme or drowning songs are playing
 		Global.music.stream_paused = Global.effectTheme.playing or Global.drowning.playing
 		# pause effect music if drowning
@@ -100,6 +101,9 @@ func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", l
 		$GUI/Fader.queue(fadeOut)
 		yield($GUI/Fader,"animation_finished")
 	
+	# error prevention
+	emit_signal("scene_faded")
+	
 	# use restoreScene to tell if we're restoring a scene
 	var restoreScene = false
 	# storeScene will only remember the first child of scene loader, this will be referenced later
@@ -117,8 +121,6 @@ func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", l
 	for i in $SceneLoader.get_children():
 		i.queue_free()
 	
-	# error prevention
-	emit_signal("scene_faded")
 	yield(get_tree(),"idle_frame")
 	# reset data level data, if reset data is true
 	if resetData:
@@ -165,6 +167,15 @@ func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", l
 	# if fadeOut wasn't set either then just reset the fader
 	elif fadeOut != "":
 		$GUI/Fader.play("RESET")
+	
+	# stop life sound (if it's still playing)
+	if Global.life.is_playing():
+		Global.life.stop()
+		# set volume level to default
+		Global.music.volume_db = 0
+		# copy the volume to other songs (you'll want to add yours here if you add more)
+		Global.effectTheme.volume_db = Global.music.volume_db
+		Global.drowning.volume_db = Global.music.volume_db
 
 # executed when life sound has finished
 func _on_Life_finished():

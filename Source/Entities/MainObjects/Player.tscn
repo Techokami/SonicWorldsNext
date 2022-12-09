@@ -679,6 +679,9 @@ script = ExtResource( 39 )
 process_priority = 1
 script = ExtResource( 37 )
 
+[node name="FlyBugStop" type="Timer" parent="States/Fly"]
+one_shot = true
+
 [node name="Respawn" type="Node" parent="States"]
 process_priority = 1
 script = ExtResource( 54 )
@@ -776,14 +779,14 @@ z_index = 7
 position = Vector2( 0, -16 )
 frames = SubResource( 157 )
 animation = "Invincibility"
-frame = 2
+frame = 6
 playing = true
 
 [node name="StarGenerator2" type="AnimatedSprite" parent="InvincibilityBarrier"]
 position = Vector2( 0, 16 )
 frames = SubResource( 157 )
 animation = "Invincibility"
-frame = 2
+frame = 6
 playing = true
 
 [node name="SFX" type="Node" parent="."]
@@ -906,6 +909,7 @@ bus = "SFX"
 stream = ExtResource( 61 )
 bus = "SFX"
 
+[connection signal="timeout" from="States/Fly/FlyBugStop" to="States/Fly" method="_on_FlyBugStop_timeout"]
 [connection signal="timeout" from="SkidDustTimer" to="States/Normal" method="_on_SkidDustTimer_timeout"]
 [connection signal="timeout" from="SkidDustTimer" to="States/Glide" method="_on_SkidDustTimer_timeout"]
 [connection signal="timeout" from="SparkleTimer" to="." method="_on_SparkleTimer_timeout"]

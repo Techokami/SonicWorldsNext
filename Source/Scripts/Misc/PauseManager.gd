@@ -35,9 +35,12 @@ var menusText = [
 # on or off strings
 var onOff = ["off","on"]
 # clamp for minimum and maximum sound volume (muted when audio is at lowest)
-var clampSounds = [-40,6]
-# how much to iterate through
-var soundStep = (1.0/4.0)
+var clampSounds = [-40.0,6.0]
+# how much to iterate through (take the total sum then divide it by how many steps we want)
+onready var soundStep = (abs(clampSounds[0])+abs(clampSounds[1]))/100.0
+# button delay
+var soundStepDelay = 0
+var subSoundStep = 0.2
 # screen size limit
 var zoomClamp = [1,6]
 
@@ -52,6 +55,10 @@ func _input(event):
 	# check if paused and visible, otherwise cancel it out
 	if !get_tree().paused or !visible:
 		return null
+	
+	if event.is_action_released("gm_left") or event.is_action_released("gm_right"):
+		subSoundStep = 0.2
+		soundStepDelay = 0
 	
 	# change menu options
 	if event.is_action_pressed("gm_down"):
@@ -71,9 +78,15 @@ func _input(event):
 		
 		match(option):
 			0, 1: # Volume
-				soundExample[option].play()
-				AudioServer.set_bus_volume_db(AudioServer.get_bus_index(getBus),clamp(AudioServer.get_bus_volume_db(AudioServer.get_bus_index(getBus))+inputDir*soundStep,clampSounds[0],clampSounds[1]))
-				AudioServer.set_bus_mute(AudioServer.get_bus_index(getBus),AudioServer.get_bus_volume_db(AudioServer.get_bus_index(getBus)) <= clampSounds[0])
+				if soundStepDelay <= 0:
+					soundExample[option].play()
+					AudioServer.set_bus_volume_db(AudioServer.get_bus_index(getBus),clamp(AudioServer.get_bus_volume_db(AudioServer.get_bus_index(getBus))+inputDir*soundStep,clampSounds[0],clampSounds[1]))
+					AudioServer.set_bus_mute(AudioServer.get_bus_index(getBus),AudioServer.get_bus_volume_db(AudioServer.get_bus_index(getBus)) <= clampSounds[0])
+					soundStepDelay = subSoundStep
+					if subSoundStep > 0:
+						soundStepDelay -= 0.1
+				else:
+					soundStepDelay -= 0.1
 			2: # Scale
 				if event.is_action_pressed("gm_left") or event.is_action_pressed("gm_right"):
 					Global.zoomSize = clamp(Global.zoomSize+inputDir,zoomClamp[0],zoomClamp[1])
@@ -116,6 +129,8 @@ func _input(event):
 						set_menu(0)
 					1: # ok
 						set_menu(0)
+						Global.main.wasPaused = false
+						get_tree().paused = false
 						visible = false
 						Global.checkPointTime = 0
 						Global.currentCheckPoint = -1
@@ -169,9 +184,9 @@ func set_menu(menuID = 0):
 func update_text(textRow = 0):
 	match(textRow):
 		1: # Sound
-			return "sound "+str(round(((AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX"))-clampSounds[0])/(-clampSounds[0]+clampSounds[1]))*100))
+			return "sound "+str(round(((AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX"))-clampSounds[0])/(abs(clampSounds[0])+abs(clampSounds[1])))*100))
 		2: # Music
-			return "music "+str(round(((AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Music"))-clampSounds[0])/(-clampSounds[0]+clampSounds[1]))*100))
+			return "music "+str(round(((AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Music"))-clampSounds[0])/(abs(clampSounds[0])+abs(clampSounds[1])))*100))
 		3: # Scale
 			return "scale x"+str(Global.zoomSize)
 		4: # Full screen

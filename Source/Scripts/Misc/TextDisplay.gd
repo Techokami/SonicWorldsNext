@@ -65,6 +65,8 @@ var smallStringLookup = {
 'x': 33,
 'y': 34,
 'z': 35,
+'*': 36,
+'.': 37,
 }
 
 export var string = "123XYZ"

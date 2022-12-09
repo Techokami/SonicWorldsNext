@@ -36,6 +36,10 @@ signal tally_clear
 var characterNames = ["sonic","tails","knuckles"]
 
 func _ready():
+	# error prevention
+	if !Global.is_main_loaded:
+		return false
+	
 	# stop timer from counting during stage start up and set global hud to self
 	Global.timerActive = false
 	Global.hud = self
@@ -43,7 +47,7 @@ func _ready():
 	$LifeCounter/Icon.frame = Global.PlayerChar1-1
 	
 	# play level card routine if level card is true
-	if (playLevelCard):
+	if playLevelCard:
 		# set level card
 		$LevelCard.visible = true
 		# set level name strings
@@ -56,7 +60,8 @@ func _ready():
 		# make sure level card isn't paused so it can keep playing
 		$LevelCard/CardPlayer.pause_mode = PAUSE_MODE_PROCESS
 		# temporarily let music play during pauses
-		Global.musicParent.pause_mode = PAUSE_MODE_PROCESS
+		if Global.musicParent != null:
+			Global.musicParent.pause_mode = PAUSE_MODE_PROCESS
 		# pause game while card is playing
 		get_tree().paused = true
 		# play card animations
