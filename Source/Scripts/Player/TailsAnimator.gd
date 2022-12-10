@@ -34,29 +34,36 @@ func _on_PlayerAnimation_animation_started(anim_name):
 		"idle", "idle1", "crouch", "lookUp":
 			tailsAnimator.playback_speed = 1
 			tailsAnimator.play("default")
+			tailsAnimator.advance(0)
 			currentHandle = HANDLE.DEFAULT
 		"spinDash", "push", "skid", "edge1", "edge2", "edge3":
 			tailsAnimator.playback_speed = .5
 			tailsAnimator.play("spinDash")
+			tailsAnimator.advance(0)
 			currentHandle = HANDLE.DEFAULT
 		"roll":
 			tailsAnimator.playback_speed = 1
 			tailsAnimator.play("roll")
+			tailsAnimator.advance(0)
 			currentHandle = HANDLE.ROTATE
 		"fly", "flyCarry", "flyCarryUP":
 			tailsAnimator.playback_speed = 1
 			tailsAnimator.play("fly")
+			tailsAnimator.advance(0)
 			currentHandle = HANDLE.DEFAULT
 		"tired":
 			tailsAnimator.playback_speed = .2
 			tailsAnimator.play("fly")
+			tailsAnimator.advance(0)
 			currentHandle = HANDLE.DEFAULT
 		"hang":
 			tailsAnimator.playback_speed = .5
 			tailsAnimator.play("hang")
+			tailsAnimator.advance(0)
 			currentHandle = HANDLE.DEFAULT
 		"RESET":
 			currentHandle = HANDLE.DEFAULT
 		_:
 			tailsAnimator.play("stop")
+			tailsAnimator.advance(0)
 			currentHandle = HANDLE.DEFAULT

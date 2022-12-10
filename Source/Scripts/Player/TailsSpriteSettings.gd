@@ -1,9 +1,11 @@
 extends Sprite
 
+var defaultPosition = position
+
 func _on_PlayerAnimation_animation_started(anim_name):
 	# handle tails positions based on parents animation
 	match (anim_name):
 		"roll":
-			position = Vector2(0,0)
+			position = defaultPosition+Vector2(0,4)
 		_:
-			position = Vector2(0,-4)
+			position = defaultPosition
