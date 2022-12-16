@@ -93,6 +93,8 @@ func _process(delta):
 	var timeClamp = min(Global.levelTime,Global.maxTime-1)
 	# set time text, format it to have a leadin 0 so that it's always 2 digits
 	timeText.string = "%2d" % floor(timeClamp/60) + ":" + str(fmod(floor(timeClamp),60)).pad_zeros(2)
+	# uncomment below (and remove above line) for mili seconds
+	#timeText.string = "%2d" % floor(timeClamp/60) + ":" + str(fmod(floor(timeClamp),60)).pad_zeros(2) + ":" + str(fmod(floor(timeClamp*100),100)).pad_zeros(2)
 	
 	# cehck that there's player, if there is then track the focus players ring count
 	if (Global.players.size() > 0):

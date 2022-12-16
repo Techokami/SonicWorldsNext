@@ -13,6 +13,7 @@ func _process(delta):
 	# scattered logic
 	if (scattered):
 		z_index = 7
+		$RingSprite.speed_scale = lifetime+1
 		if (lifetime > 0):
 			lifetime -= delta
 		else:
