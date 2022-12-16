@@ -2,7 +2,7 @@ extends "res://Scripts/Player/State.gd"
 
 func _process(_delta):
 	# jumping off
-	if parent.inputs[parent.INPUTS.ACTION] == 1:
+	if parent.inputs[parent.INPUTS.ACTION] == 1 or parent.inputs[parent.INPUTS.ACTION2] == 1 or parent.inputs[parent.INPUTS.ACTION3] == 1:
 		parent.action_jump()
 	
 	# if offset, flip around

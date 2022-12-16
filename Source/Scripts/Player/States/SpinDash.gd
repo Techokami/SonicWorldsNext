@@ -9,8 +9,8 @@ func state_activated():
 	
 func _process(delta):
 	
-	# Charging up
-	if parent.inputs[parent.INPUTS.ACTION] == 1:
+	# Charging up (if your character does something different for button 2 or 3 you'll want to adjust this)
+	if parent.inputs[parent.INPUTS.ACTION] == 1 or parent.inputs[parent.INPUTS.ACTION2] == 1 or parent.inputs[parent.INPUTS.ACTION3] == 1:
 		# reset animation
 		parent.animator.stop()
 		parent.animator.play("spinDash")

@@ -792,6 +792,7 @@ func set_inputs():
 	
 	if playerControl > 0:
 		inputs[INPUTS.ACTION] = (int(Input.is_action_pressed(inputActions[INPUTS.ACTION]))*2)-int(Input.is_action_just_pressed(inputActions[INPUTS.ACTION]))
+		inputs[INPUTS.ACTION2] = (int(Input.is_action_pressed(inputActions[INPUTS.ACTION2]))*2)-int(Input.is_action_just_pressed(inputActions[INPUTS.ACTION2]))
 		inputs[INPUTS.ACTION3] =  (int(Input.is_action_pressed(inputActions[INPUTS.ACTION3]))*2)-int(Input.is_action_just_pressed(inputActions[INPUTS.ACTION3]))
 	
 	if (playerControl > 0 and horizontalLockTimer <= 0):
@@ -895,7 +896,6 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 			movement.x = 2*60
 
 		disconect_from_floor()
-		#ground = false
 		set_state(STATES.HIT)
 		invTime = 120
 		# Ring loss

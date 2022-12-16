@@ -46,7 +46,7 @@ func state_exit():
 # process mostly used for inputs (see player)
 func _process(_delta):
 	# Jump and Spindash cancel
-	if parent.inputs[parent.INPUTS.ACTION] == 1 and parent.ground and (sliding or isFall):
+	if (parent.inputs[parent.INPUTS.ACTION] == 1 or parent.inputs[parent.INPUTS.ACTION2] == 1 or parent.inputs[parent.INPUTS.ACTION3] == 1) and parent.ground and (sliding or isFall):
 		parent.movement.x = 0
 		if (parent.inputs[parent.INPUTS.YINPUT] > 0):
 			parent.animator.play("spinDash")
@@ -64,7 +64,7 @@ func _process(_delta):
 	# check if not falling, if not then do glide routine
 	if !isFall and !sliding:
 		# Go into falling if action not held
-		if parent.inputs[parent.INPUTS.ACTION] == 0:
+		if !parent.inputs[parent.INPUTS.ACTION] and !parent.inputs[parent.INPUTS.ACTION2] and !parent.inputs[parent.INPUTS.ACTION3]:
 			parent.movement.x *= 0.25
 			parent.animator.play("glideFall")
 			parent.sprite.flip_h = (parent.direction < 0)

@@ -3,7 +3,7 @@ extends "res://Scripts/Player/State.gd"
 
 
 func _process(_delta):
-	if parent.inputs[parent.INPUTS.ACTION] == 1:
+	if parent.inputs[parent.INPUTS.ACTION] == 1 or parent.inputs[parent.INPUTS.ACTION2] == 1 or parent.inputs[parent.INPUTS.ACTION3] == 1:
 		# use parent.action_jump("roll",false) to have jump lock similar to sonic 1-3
 		# true replicates CD and Mania
 		parent.action_jump("roll",true)

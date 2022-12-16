@@ -24,7 +24,7 @@ func _process(_delta):
 			if parent.rings >= 50 and Global.emeralds >= 127:
 				parent.set_state(parent.STATES.SUPER)
 		# Shield actions
-		if (parent.inputs[parent.INPUTS.ACTION] == 1 and !parent.abilityUsed and isJump):
+		if ((parent.inputs[parent.INPUTS.ACTION] == 1 or parent.inputs[parent.INPUTS.ACTION2] == 1 or parent.inputs[parent.INPUTS.ACTION3] == 1) and !parent.abilityUsed and isJump):
 			# Super actions
 			if parent.super and parent.character == parent.CHARACTERS.SONIC:
 				parent.abilityUsed = true # has to be set to true for drop dash (Sonic only)
@@ -124,12 +124,12 @@ func _physics_process(delta):
 	# Mechanics if jumping
 	if (isJump):
 		# Cut vertical movement if jump released
-		if !parent.inputs[parent.INPUTS.ACTION] and parent.movement.y < -4*60:
+		if !(parent.inputs[parent.INPUTS.ACTION] or parent.inputs[parent.INPUTS.ACTION2] or parent.inputs[parent.INPUTS.ACTION3]) and parent.movement.y < -4*60:
 			parent.movement.y = -4*60
 		# Drop dash (for sonic)
 		if parent.character == parent.CHARACTERS.SONIC:
 			
-			if parent.inputs[parent.INPUTS.ACTION] and parent.abilityUsed and (parent.shield <= parent.SHIELDS.NORMAL or parent.super or $"../../InvincibilityBarrier".visible):
+			if (parent.inputs[parent.INPUTS.ACTION] or parent.inputs[parent.INPUTS.ACTION2] or parent.inputs[parent.INPUTS.ACTION3]) and parent.abilityUsed and (parent.shield <= parent.SHIELDS.NORMAL or parent.super or $"../../InvincibilityBarrier".visible):
 				if dropTimer < 1:
 					dropTimer += (delta/20)*60 # should be ready in the equivelent of 20 frames at 60FPS
 				else:
@@ -137,7 +137,7 @@ func _physics_process(delta):
 						parent.sfx[20].play()
 						parent.animator.play("dropDash")
 			# Drop dash reset
-			elif !parent.inputs[parent.INPUTS.ACTION] and dropTimer > 0:
+			elif !(parent.inputs[parent.INPUTS.ACTION] or parent.inputs[parent.INPUTS.ACTION2] or parent.inputs[parent.INPUTS.ACTION3]) and dropTimer > 0:
 				dropTimer = 0
 				if parent.animator.current_animation == "dropDash":
 					parent.animator.play("roll")

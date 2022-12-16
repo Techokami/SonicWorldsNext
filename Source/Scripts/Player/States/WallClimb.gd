@@ -82,7 +82,7 @@ func _physics_process(delta):
 
 func _process(_delta):
 	# jumping off
-	if parent.inputs[parent.INPUTS.ACTION] == 1 and !climbUp:
+	if (parent.inputs[parent.INPUTS.ACTION] == 1 or parent.inputs[parent.INPUTS.ACTION2] == 1 or parent.inputs[parent.INPUTS.ACTION3] == 1) and !climbUp:
 		parent.movement = Vector2(-4*60*parent.direction,-4*60)
 		parent.direction *= -1
 		parent.animator.play("roll")

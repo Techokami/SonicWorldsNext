@@ -109,7 +109,7 @@ func _physics_process(delta):
 	flightTime -= delta
 	# Button press
 	if parent.movement.y >= -1*60 and flightTime > 0 and !parent.roof and parent.position.y >= parent.limitTop+16:
-		if parent.inputs[parent.INPUTS.ACTION] and !actionPressed and (carryBox.playerContacts == 0 or !parent.water):
+		if (parent.inputs[parent.INPUTS.ACTION] or parent.inputs[parent.INPUTS.ACTION2] or parent.inputs[parent.INPUTS.ACTION3]) and !actionPressed and (carryBox.playerContacts == 0 or !parent.water):
 			flyGrav = -0.125
 	# return gravity to normal after velocity is less then -1
 	else:
@@ -119,7 +119,7 @@ func _physics_process(delta):
 		parent.movement.y = max(0,parent.movement.y)
 	
 	# set actionPressed to prevent input repeats
-	actionPressed = parent.inputs[parent.INPUTS.ACTION]
+	actionPressed = (parent.inputs[parent.INPUTS.ACTION] or parent.inputs[parent.INPUTS.ACTION2] or parent.inputs[parent.INPUTS.ACTION3])
 	# Reset state if on ground
 	if (parent.ground):
 		parent.set_state(parent.STATES.NORMAL)
