@@ -19,7 +19,7 @@ func _ready():
 func _process(_delta):
 	if parent.playerControl != 0 or (parent.inputs[parent.INPUTS.YINPUT] < 0 and parent.character == parent.CHARACTERS.TAILS):
 		# Super
-		if parent.inputs[parent.INPUTS.ACTION3] == 1 and !parent.super and isJump:
+		if Input.is_action_just_pressed("gm_super") and !parent.super and isJump:
 			# Global emeralds use a bit flag, 127 would mean all 7 are 1, see bitwise operations for more info
 			if parent.rings >= 50 and Global.emeralds >= 127:
 				parent.set_state(parent.STATES.SUPER)

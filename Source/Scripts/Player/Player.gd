@@ -607,7 +607,7 @@ func _physics_process(delta):
 	# collid with solids if not knuckles layer
 	set_collision_mask_bit(18,!character == CHARACTERS.KNUCKLES)
 	# collid with solids if not rolling or not knuckles layer
-	set_collision_mask_bit(20,(character != CHARACTERS.KNUCKLES and !attacking))
+	set_collision_mask_bit(20,(character != CHARACTERS.KNUCKLES and !attacking and (!super and not character != CHARACTERS.SONIC or not character != CHARACTERS.TAILS)))
 	# damage mask bit
 	set_collision_layer_bit(19,attacking)
 	

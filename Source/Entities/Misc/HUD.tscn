@@ -978,7 +978,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 32.0
-margin_right = 21600.0
+margin_right = 21632.0
 margin_bottom = 64.0
 texture = ExtResource( 8 )
 stretch_mode = 2
@@ -1126,9 +1126,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -160.0
+margin_left = -213.0
 margin_top = -112.0
-margin_right = 160.0
+margin_right = 213.0
 margin_bottom = 112.0
 
 [node name="ElecFlash" type="ColorRect" parent="Water/WaterOverlay"]
