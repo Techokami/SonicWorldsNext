@@ -123,7 +123,7 @@ func _physics_process(delta):
 	# Reset state if on ground
 	if (parent.ground):
 		parent.set_state(parent.STATES.NORMAL)
-		# cancel flight
+		# flight cancel
 	if parent.inputs[parent.INPUTS.ACTION] == 1 and parent.inputs[parent.INPUTS.YINPUT] == 1 and not Global.PlayerChar2 == Global.CHARACTERS.TAILS:
 		parent.animator.play("roll")
 		parent.set_state(parent.STATES.SPINDASH)
