@@ -24,7 +24,7 @@ func _process(_delta):
 			if parent.rings >= 50 and Global.emeralds >= 127:
 				parent.set_state(parent.STATES.SUPER)
 		# Shield actions
-		if ((parent.inputs[parent.INPUTS.ACTION] == 1 or parent.inputs[parent.INPUTS.ACTION2] == 1 or parent.inputs[parent.INPUTS.ACTION3] == 1) and !parent.abilityUsed and isJump):
+		elif ((parent.inputs[parent.INPUTS.ACTION] == 1 or parent.inputs[parent.INPUTS.ACTION2] == 1 or parent.inputs[parent.INPUTS.ACTION3] == 1) and !parent.abilityUsed and isJump):
 			# Super actions
 			if parent.super and parent.character == parent.CHARACTERS.SONIC:
 				parent.abilityUsed = true # has to be set to true for drop dash (Sonic only)
