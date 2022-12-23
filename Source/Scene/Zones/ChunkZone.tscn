@@ -1,0 +1,84 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Entities/Tiles/ChunkSetup.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scripts/Level/Level.gd" type="Script" id=2]
+[ext_resource path="res://Entities/Misc/HUD.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Entities/MainObjects/Player.tscn" type="PackedScene" id=18]
+[ext_resource path="res://Graphics/Backgrounds/WorldsBackground.png" type="Texture" id=25]
+[ext_resource path="res://Scene/Presentation/Title.tscn" type="PackedScene" id=50]
+
+[sub_resource type="Animation" id=1]
+resource_name = "Glow"
+length = 5.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 2, 5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 0.364706, 0, 0, 1 ), Color( 0.14902, 0, 0, 1 ), Color( 0.364706, 0, 0, 1 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 0.364706, 0, 0, 1 ) ]
+}
+
+[node name="TestScene" type="Node2D"]
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_horizontal_guides_": [ 1600.0 ],
+"_edit_vertical_guides_": [ 10400.0 ]
+}
+nextZone = ExtResource( 50 )
+animal1 = 2
+animal2 = 3
+defaultLeftBoundry = 0
+defaultTopBoundry = 0
+defaultRightBoundry = 10400
+setDefaultBottom = false
+defaultBottomBoundry = 2048
+
+[node name="HUD" parent="." instance=ExtResource( 4 )]
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="Animate" type="AnimationPlayer" parent="ParallaxBackground"]
+autoplay = "Glow"
+anims/Glow = SubResource( 1 )
+anims/RESET = SubResource( 2 )
+
+[node name="ColorRect" type="ColorRect" parent="ParallaxBackground"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.364706, 0, 0, 1 )
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.5, 0.5 )
+motion_mirroring = Vector2( 512, 512 )
+
+[node name="TextureRect" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
+texture = ExtResource( 25 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 512, 512 )
+
+[node name="Player" parent="." instance=ExtResource( 18 )]
+position = Vector2( 16, 2280 )
+
+[node name="Node2D" parent="." instance=ExtResource( 1 )]

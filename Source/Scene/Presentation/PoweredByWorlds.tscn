@@ -71,6 +71,7 @@ position = Vector2( 0, -8 )
 texture = ExtResource( 1 )
 hframes = 10
 vframes = 4
+region_enabled = true
 script = ExtResource( 2 )
 string = "POWERED BY"
 smallStringTexture = ExtResource( 1 )

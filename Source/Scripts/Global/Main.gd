@@ -191,4 +191,3 @@ func set_volume(volume = 0):
 	# set volume transition
 	volumeLerp = 0
 	# this is continued in _process() as it needs to run during gameplay
-

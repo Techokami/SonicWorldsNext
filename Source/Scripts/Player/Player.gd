@@ -509,16 +509,19 @@ func _process(delta):
 		var stars = $InvincibilityBarrier.get_children()
 		for i in stars:
 			i.position = i.position.rotated(deg2rad(360*delta*4))
+
 		if (fmod(Global.globalTimer,0.1)+delta > 0.1):
 			var star = RotatingParticle.instance()
 			var starPart = star.get_node("GenericParticle")
 			star.global_position = global_position
-			starPart.direction = direction
+			starPart.getTarget = self
+			starPart.direction = -direction
 			get_parent().add_child(star)
 			var options = ["StarSingle","StarSinglePat2","default"]
 			starPart.play(options[round(randf()*2)])
 			starPart.frame = rand_range(0,2)
 			starPart.velocity = velocity
+			starPart.position = stars[0].global_position-global_position
 
 	# Animator
 	match(animator.current_animation):

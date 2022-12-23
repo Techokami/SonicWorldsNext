@@ -1362,6 +1362,10 @@ item = 2
 position = Vector2( 8368, 304 )
 item = 2
 
+[node name="Monitor17" parent="Monitors" instance=ExtResource( 17 )]
+position = Vector2( 192, 752 )
+item = 2
+
 [node name="Monitor21" parent="Monitors" instance=ExtResource( 17 )]
 position = Vector2( 5440, 480 )
 item = 10
