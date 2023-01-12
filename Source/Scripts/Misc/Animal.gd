@@ -35,6 +35,7 @@ var velocity = Vector2(0,-4*60)
 var speed = 180
 var gravity = 0.21875
 var forceDirection = true # set this to false for capsule logic
+var active = true
 
 func _ready():
 	if forceDirection:
@@ -76,6 +77,9 @@ func _ready():
 			animType = 1
 
 func _physics_process(delta):
+	# check if active, if not then stop processing physics
+	if !active:
+		return false
 	# gravity
 	velocity.y += gravity*60
 	
@@ -114,3 +118,7 @@ func _process(delta):
 
 func _on_VisibilityNotifier2D_screen_exited():
 	queue_free()
+
+# set active on time out (some spawning scenerios like a capsule sets a delay)
+func _on_ActivationTimer_timeout():
+	active = true

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Audio/Soundtrack/2. SWD_SpeedUp.ogg" type="AudioStream" id=1]
 [ext_resource path="res://Scripts/Global/Main.gd" type="Script" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Audio/Soundtrack/7. SWD_Drowning.ogg" type="AudioStream" id=5]
 [ext_resource path="res://Entities/Misc/ControllerMenu.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Entities/Misc/PauseMenu.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Audio/Soundtrack/5. SWD_Boss.ogg" type="AudioStream" id=8]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 2
@@ -99,6 +100,10 @@ pause_mode = 1
 
 [node name="Music" type="AudioStreamPlayer" parent="Music"]
 autoplay = true
+bus = "Music"
+
+[node name="BossTheme" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource( 8 )
 bus = "Music"
 
 [node name="EffectTheme" type="AudioStreamPlayer" parent="Music"]

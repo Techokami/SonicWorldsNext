@@ -84,6 +84,8 @@ func _ready():
 	Global.timerActive = true
 	# replace "sonic" in stage clear to match the player clear string
 	$LevelClear/Passed.string = $LevelClear/Passed.string.replace("sonic",characterNames[Global.PlayerChar1-1])
+	# set the act clear frame
+	$LevelClear/Act.frame = act-1
 
 func _process(delta):
 	# set score string to match global score with leading 0s
@@ -219,6 +221,7 @@ func _process(delta):
 		# stop normal music tracks
 		Global.music.stop()
 		Global.effectTheme.stop()
+		Global.bossMusic.stop()
 		Global.life.stop()
 		# wait for animation to finish
 		yield($GameOver/GameOver,"animation_finished")

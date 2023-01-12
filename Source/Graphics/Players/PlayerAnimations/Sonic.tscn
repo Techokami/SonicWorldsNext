@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=2]
+[gd_scene load_steps=47 format=2]
 
 [ext_resource path="res://Shaders/PlayerPalette.tres" type="Material" id=1]
 [ext_resource path="res://Graphics/Players/Sonic.png" type="Texture" id=2]
@@ -481,6 +481,23 @@ tracks/0/keys = {
 "values": [ 67 ]
 }
 
+[sub_resource type="Animation" id=120]
+resource_name = "slide"
+length = 0.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 75, 76 ]
+}
+
 [sub_resource type="Animation" id=83]
 resource_name = "spinDash"
 loop = true
@@ -649,6 +666,7 @@ anims/roll = SubResource( 81 )
 anims/run = SubResource( 82 )
 anims/skid = SubResource( 100 )
 anims/skidTurn = SubResource( 101 )
+anims/slide = SubResource( 120 )
 anims/spinDash = SubResource( 83 )
 anims/spring = SubResource( 84 )
 anims/springScrew = SubResource( 119 )
@@ -666,7 +684,7 @@ vframes = 16
 [node name="DashDust" type="AnimatedSprite" parent="Sprite"]
 visible = false
 frames = SubResource( 96 )
-frame = 3
+frame = 4
 playing = true
 offset = Vector2( -9, -4 )
 

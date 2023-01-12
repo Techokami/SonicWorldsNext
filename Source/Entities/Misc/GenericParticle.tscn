@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=2]
+[gd_scene load_steps=88 format=2]
 
 [ext_resource path="res://Graphics/Items/invincible_stars.png" type="Texture" id=1]
 [ext_resource path="res://Scripts/Misc/FreeOnAnimationCompletion.gd" type="Script" id=2]
@@ -8,6 +8,31 @@
 [ext_resource path="res://Graphics/Misc/SuperSparkles.png" type="Texture" id=6]
 [ext_resource path="res://Graphics/Items/Rings/RingSparkle.png" type="Texture" id=7]
 [ext_resource path="res://Graphics/Enemies/MotobugSmoke.png" type="Texture" id=8]
+[ext_resource path="res://Graphics/Misc/explosion3.png" type="Texture" id=9]
+
+[sub_resource type="AtlasTexture" id=189]
+atlas = ExtResource( 9 )
+region = Rect2( 0, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=190]
+atlas = ExtResource( 9 )
+region = Rect2( 24, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=191]
+atlas = ExtResource( 9 )
+region = Rect2( 48, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=192]
+atlas = ExtResource( 9 )
+region = Rect2( 72, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=193]
+atlas = ExtResource( 9 )
+region = Rect2( 96, 0, 24, 24 )
+
+[sub_resource type="AtlasTexture" id=194]
+atlas = ExtResource( 9 )
+region = Rect2( 120, 0, 24, 24 )
 
 [sub_resource type="AtlasTexture" id=170]
 atlas = ExtResource( 5 )
@@ -295,6 +320,11 @@ region = Rect2( 217, 0, 31, 31 )
 
 [sub_resource type="SpriteFrames" id=157]
 animations = [ {
+"frames": [ SubResource( 189 ), SubResource( 190 ), SubResource( 191 ), SubResource( 192 ), SubResource( 193 ), SubResource( 194 ) ],
+"loop": false,
+"name": "BossExplosion",
+"speed": 15.0
+}, {
 "frames": [ SubResource( 170 ), SubResource( 171 ), SubResource( 172 ), SubResource( 173 ), SubResource( 174 ), SubResource( 175 ), SubResource( 176 ), SubResource( 177 ), SubResource( 178 ), SubResource( 179 ), SubResource( 180 ), SubResource( 181 ), SubResource( 182 ), SubResource( 183 ), SubResource( 184 ), SubResource( 185 ) ],
 "loop": false,
 "name": "DropDash",

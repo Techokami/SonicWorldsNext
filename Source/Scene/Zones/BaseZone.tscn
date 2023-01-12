@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=2]
+[gd_scene load_steps=62 format=2]
 
 [ext_resource path="res://Tileset/Worlds/TestTilesGreen.tres" type="TileSet" id=1]
 [ext_resource path="res://Scripts/Level/Level.gd" type="Script" id=2]
@@ -49,8 +49,12 @@
 [ext_resource path="res://Entities/Gimmicks/Shutter.tscn" type="PackedScene" id=47]
 [ext_resource path="res://Entities/Gimmicks/HangingBar.tscn" type="PackedScene" id=48]
 [ext_resource path="res://Entities/Enemies/MotoBug.tscn" type="PackedScene" id=49]
-[ext_resource path="res://Scene/Presentation/Title.tscn" type="PackedScene" id=50]
+[ext_resource path="res://Scene/Zones/ChunkZone.tscn" type="PackedScene" id=50]
 [ext_resource path="res://Entities/Gimmicks/Switch.tscn" type="PackedScene" id=51]
+[ext_resource path="res://Entities/Boss/BossBoundrySetter.tscn" type="PackedScene" id=52]
+[ext_resource path="res://Entities/Boss/RobotnikTemplate.tscn" type="PackedScene" id=53]
+[ext_resource path="res://Entities/MainObjects/Capsule.tscn" type="PackedScene" id=54]
+[ext_resource path="res://Entities/Gimmicks/WaterSlide.tscn" type="PackedScene" id=55]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Glow"
@@ -104,7 +108,7 @@ extents = Vector2( 40, 2 )
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_horizontal_guides_": [ 1600.0 ],
-"_edit_vertical_guides_": [ 10400.0 ]
+"_edit_vertical_guides_": [ 10400.0, 9712.0, 10032.0 ]
 }
 nextZone = ExtResource( 50 )
 animal1 = 2
@@ -226,6 +230,14 @@ offset = 3.1415
 [node name="Platform11" parent="Platforms" instance=ExtResource( 38 )]
 position = Vector2( 4376, 336 )
 endPosition = Vector2( 0, 160 )
+
+[node name="BossPlatform" parent="Platforms" instance=ExtResource( 38 )]
+position = Vector2( 9992, 136 )
+endPosition = Vector2( 0, 0 )
+
+[node name="BossPlatform2" parent="Platforms" instance=ExtResource( 38 )]
+position = Vector2( 9752, 136 )
+endPosition = Vector2( 0, 0 )
 
 [node name="FallingPlatform" parent="Platforms" instance=ExtResource( 38 )]
 position = Vector2( 664, 464 )
@@ -535,7 +547,7 @@ position = Vector2( 6800, 1328 )
 position = Vector2( 6848, 1416 )
 
 [node name="BoundrySetter2" parent="Entity" instance=ExtResource( 7 )]
-position = Vector2( 9568, 64 )
+position = Vector2( 9552, 64 )
 leftBoundry = 9024
 rightBoundry = 10400.0
 bottomBoundry = 224.0
@@ -740,7 +752,10 @@ position = Vector2( 1320, 928 )
 position = Vector2( 1336, 928 )
 
 [node name="GoalPost" parent="Entity" instance=ExtResource( 34 )]
-position = Vector2( 10096, 192 )
+position = Vector2( 10656, 192 )
+
+[node name="Capsule" parent="Entity" instance=ExtResource( 54 )]
+position = Vector2( 10240, 160 )
 
 [node name="BubbleGenerator2" parent="Entity" instance=ExtResource( 37 )]
 position = Vector2( 4400, 888 )
@@ -815,6 +830,22 @@ side = 2
 position = Vector2( 896, 1488 )
 script = ExtResource( 24 )
 currentCharacter = 2
+
+[node name="ConveyorBelt" parent="Entity" instance=ExtResource( 36 )]
+position = Vector2( 4864, 880 )
+constant_linear_velocity = Vector2( -60, 0 )
+speed = -60
+length = 7
+
+[node name="WaterSlide" parent="Entity" instance=ExtResource( 55 )]
+position = Vector2( 1296, 256 )
+rotation = 0.785397
+scale = Vector2( 11.3, 1 )
+
+[node name="WaterSlide2" parent="Entity" instance=ExtResource( 55 )]
+position = Vector2( 1552, 384 )
+rotation = 2.35619
+scale = Vector2( 11.3, 1 )
 
 [node name="Rings" type="Node2D" parent="."]
 
@@ -1362,10 +1393,6 @@ item = 2
 position = Vector2( 8368, 304 )
 item = 2
 
-[node name="Monitor17" parent="Monitors" instance=ExtResource( 17 )]
-position = Vector2( 192, 752 )
-item = 2
-
 [node name="Monitor21" parent="Monitors" instance=ExtResource( 17 )]
 position = Vector2( 5440, 480 )
 item = 10
@@ -1486,11 +1513,16 @@ position = Vector2( 7088, 944 )
 [node name="Motobug3" parent="Enemies" instance=ExtResource( 49 )]
 position = Vector2( 9328, 496 )
 
-[node name="ConveyorBelt" parent="." instance=ExtResource( 36 )]
-position = Vector2( 4864, 880 )
-constant_linear_velocity = Vector2( -60, 0 )
-speed = -60
-length = 7
+[node name="BossBoundrySetter" parent="Enemies" instance=ExtResource( 52 )]
+position = Vector2( 9872, 80 )
+bossPath = NodePath("../Robotnik")
+keepRightLocked = false
+lockTop = false
+lockBottom = false
+ratchetScrollLeft = true
+
+[node name="Robotnik" parent="Enemies" instance=ExtResource( 53 )]
+position = Vector2( 9872, 40 )
 
 [connection signal="pressed" from="Entity/Switch" to="Entity/Switch/Shutter2" method="force_open"]
 

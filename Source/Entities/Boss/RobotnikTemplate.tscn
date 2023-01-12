@@ -1,0 +1,134 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://Scripts/Boss/RobotnikTemplate.gd" type="Script" id=1]
+[ext_resource path="res://Audio/SFX/Boss/Hit.wav" type="AudioStream" id=2]
+[ext_resource path="res://Graphics/Boss/Eggmobile.png" type="Texture" id=3]
+[ext_resource path="res://Audio/SFX/Boss/Explode.wav" type="AudioStream" id=4]
+[ext_resource path="res://Graphics/Boss/Robotnik.png" type="Texture" id=5]
+[ext_resource path="res://Graphics/Boss/Jet.png" type="Texture" id=6]
+[ext_resource path="res://Graphics/Boss/EggmobileFlash.png" type="Texture" id=7]
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 5 )
+region = Rect2( 36, 0, 36, 16 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 5 )
+region = Rect2( 0, 16, 36, 16 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 5 )
+region = Rect2( 72, 0, 36, 16 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 5 )
+region = Rect2( 36, 16, 36, 16 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 5 )
+region = Rect2( 72, 16, 36, 16 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 36, 16 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 5 )
+region = Rect2( 36, 0, 36, 16 )
+
+[sub_resource type="SpriteFrames" id=13]
+animations = [ {
+"frames": [ SubResource( 6 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 7 ) ],
+"loop": true,
+"name": "exploded",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 8 ) ],
+"loop": true,
+"name": "hit",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 9 ), SubResource( 10 ) ],
+"loop": true,
+"name": "laugh",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 11 ), SubResource( 12 ) ],
+"loop": true,
+"name": "move",
+"speed": 15.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 24, 24 )
+
+[node name="Robotnik" type="KinematicBody2D"]
+z_index = 1
+collision_layer = 16384
+collision_mask = 0
+script = ExtResource( 1 )
+
+[node name="EggMobile" type="Sprite" parent="."]
+texture = ExtResource( 3 )
+offset = Vector2( 0, -8 )
+hframes = 2
+
+[node name="EggmobileFlame" type="Sprite" parent="EggMobile"]
+visible = false
+position = Vector2( 34, 2 )
+texture = ExtResource( 6 )
+
+[node name="Robotnik" type="AnimatedSprite" parent="EggMobile"]
+position = Vector2( 0, -26 )
+z_index = -1
+frames = SubResource( 13 )
+playing = true
+
+[node name="EggFlash" type="Sprite" parent="EggMobile"]
+visible = false
+texture = ExtResource( 7 )
+offset = Vector2( 0, -8 )
+hframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 5 )
+
+[node name="Hit" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 2 )
+bus = "SFX"
+
+[node name="Explode" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+bus = "SFX"
+
+[node name="HitBox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 528384
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
+modulate = Color( 1, 0, 0, 1 )
+shape = SubResource( 5 )
+
+[node name="LeftPoint" type="Node2D" parent="."]
+position = Vector2( -72, 0 )
+
+[node name="RightPoint" type="Node2D" parent="."]
+position = Vector2( 72, 0 )
+
+[node name="SmokeTimer" type="Timer" parent="."]
+wait_time = 0.1
+
+[node name="AnimationTime" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="defeated" from="." to="." method="_on_boss_defeated"]
+[connection signal="area_entered" from="HitBox" to="." method="_on_DamageArea_area_entered"]
+[connection signal="area_exited" from="HitBox" to="." method="_on_HitBox_area_exited"]
+[connection signal="body_entered" from="HitBox" to="." method="_on_body_entered"]
+[connection signal="body_exited" from="HitBox" to="." method="_on_body_exited"]
+[connection signal="timeout" from="SmokeTimer" to="." method="_on_SmokeTimer_timeout"]

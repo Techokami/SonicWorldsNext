@@ -596,7 +596,7 @@ tracks/15/keys = {
 [sub_resource type="Animation" id=7]
 resource_name = "LevelClear"
 tracks/0/type = "value"
-tracks/0/path = NodePath("../LevelClear/Passed:position")
+tracks/0/path = NodePath("Passed:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -647,7 +647,7 @@ tracks/3/keys = {
 [sub_resource type="Animation" id=8]
 length = 0.001
 tracks/0/type = "value"
-tracks/0/path = NodePath("../LevelClear/Passed:position")
+tracks/0/path = NodePath("Passed:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -919,6 +919,7 @@ texture = ExtResource( 10 )
 centered = false
 hframes = 11
 vframes = 3
+region_enabled = true
 script = ExtResource( 9 )
 vAlign = 2
 
@@ -928,6 +929,7 @@ texture = ExtResource( 10 )
 centered = false
 hframes = 11
 vframes = 3
+region_enabled = true
 script = ExtResource( 9 )
 
 [node name="Act" type="Sprite" parent="LevelCard/Banner"]
@@ -939,7 +941,7 @@ vframes = 2
 
 [node name="PatternLeft" type="Control" parent="LevelCard"]
 anchor_bottom = 1.0
-margin_bottom = 7424.0
+margin_bottom = 7648.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -948,7 +950,7 @@ __meta__ = {
 anchor_bottom = 1.0
 margin_left = -32.0
 margin_right = 32.0
-margin_bottom = 131008.0
+margin_bottom = 138656.0
 texture = ExtResource( 8 )
 stretch_mode = 2
 __meta__ = {
@@ -968,7 +970,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_top = -32.0
-margin_bottom = 7136.0
+margin_bottom = 7360.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -978,7 +980,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 32.0
-margin_right = 21792.0
+margin_right = 21856.0
 margin_bottom = 64.0
 texture = ExtResource( 8 )
 stretch_mode = 2
@@ -1012,6 +1014,7 @@ texture = ExtResource( 14 )
 centered = false
 hframes = 10
 vframes = 4
+region_enabled = true
 script = ExtResource( 9 )
 string = "sonic got"
 smallStringTexture = ExtResource( 14 )
@@ -1022,6 +1025,7 @@ texture = ExtResource( 14 )
 centered = false
 hframes = 11
 vframes = 4
+region_enabled = true
 script = ExtResource( 9 )
 string = "through"
 smallStringTexture = ExtResource( 14 )

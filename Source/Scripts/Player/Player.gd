@@ -161,6 +161,12 @@ var limitRight = 0
 var limitTop = 0
 var limitBottom = 0
 
+# screen scroll locking as the camera scrolls
+var rachetScrollLeft = false
+var rachetScrollRight = false
+var rachetScrollTop = false
+var rachetScrollBottom = false
+
 var rotatableSprites = ["walk", "run", "peelOut"]
 var direction = scale.x
 
@@ -502,6 +508,7 @@ func _process(delta):
 		Global.life.play()
 		Global.lives += 1
 		Global.effectTheme.volume_db = -100
+		Global.bossMusic.volume_db = -100
 		Global.music.volume_db = -100
 
 	#Rotating stars
@@ -549,6 +556,7 @@ func _process(delta):
 	# Time over
 	if Global.levelTime >= Global.maxTime:
 		kill()
+		
 	
 	# Water timer
 	if water and shield != SHIELDS.BUBBLE:
@@ -982,6 +990,10 @@ func kill():
 
 func respawn():
 	if partner != null:
+		# cancel function if partner is dead
+		if partner.currentState == STATES.DIE:
+			return false
+		
 		airTimer = 1
 		collision_layer = 0
 		collision_mask = 0
@@ -1132,6 +1144,17 @@ func cam_update(forceMove = false):
 		#camera.global_position = camera.global_position.move_toward(getPos,16*60*get_physics_process_delta_time())
 		# uncomment below for immediate camera
 		#camera.global_position = getPos
+	
+	# Ratchet camera scrolling (locks the camera behind the player)
+	if rachetScrollLeft:
+		limitLeft = max(limitLeft,camera.get_camera_screen_center().x-viewSize.x/2)
+	if rachetScrollRight:
+		limitRight = max(limitRight,camera.get_camera_screen_center().x+viewSize.x/2)
+	
+	if rachetScrollTop:
+		limitTop = max(limitTop,camera.get_camera_screen_center().y-viewSize.y/2)
+	if rachetScrollBottom:
+		limitBottom = max(limitBottom,camera.get_camera_screen_center().y+viewSize.y/2)
 
 func lock_camera(time = 1):
 	camLockTime = max(time,camLockTime)
