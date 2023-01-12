@@ -38,6 +38,15 @@ func _physics_process(delta):
 						flashTimer = hitTime
 						emit_signal("got_hit")
 						hp -= 1
+						# check if gliding, if they are force them to fall
+						if i.get("currentState") != null:
+							if i.currentState == i.STATES.GLIDE:
+								i.animator.play("glideFall")
+								# reset player hitbox
+								i.set_hitbox(i.currentHitbox.NORMAL)
+								i.reflective = false
+								if i.get_node_or_null("States/Glide") != null:
+									i.get_node("States/Glide").isFall = true
 					# check if dead
 					if hp <= 0:
 						emit_signal("defeated")
