@@ -38,6 +38,7 @@ var stageClearPhase = 0
 # Music
 var musicParent = null
 var music = null
+var bossMusic = null
 var effectTheme = null
 var drowning = null
 var life = null
@@ -165,6 +166,7 @@ func check_score_life(scoreAdd = 0):
 		lives += 1
 		effectTheme.volume_db = -100
 		music.volume_db = -100
+		bossMusic.volume_db = -100
 
 # use this to set the stage clear theme, only runs if stageClearPhase isn't 0
 func stage_clear():
@@ -173,6 +175,7 @@ func stage_clear():
 		music.stream = themes[currentTheme]
 		music.play()
 		effectTheme.stop()
+		bossMusic.stop()
 
 # Godot doesn't like not having emit signal only done in other nodes so we're using a function to call it
 func emit_stage_start():

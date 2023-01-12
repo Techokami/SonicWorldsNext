@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=2]
+[gd_scene load_steps=46 format=2]
 
 [ext_resource path="res://Shaders/PlayerPalette.tres" type="Material" id=1]
 [ext_resource path="res://Graphics/Players/Knuckles.png" type="Texture" id=2]
@@ -477,6 +477,23 @@ tracks/0/keys = {
 "values": [ 66 ]
 }
 
+[sub_resource type="Animation" id=123]
+resource_name = "slide"
+length = 0.1
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 76 ]
+}
+
 [sub_resource type="Animation" id=83]
 resource_name = "spinDash"
 loop = true
@@ -644,6 +661,7 @@ anims/roll = SubResource( 81 )
 anims/run = SubResource( 82 )
 anims/skid = SubResource( 100 )
 anims/skidTurn = SubResource( 118 )
+anims/slide = SubResource( 123 )
 anims/spinDash = SubResource( 83 )
 anims/spring = SubResource( 84 )
 anims/springScrew = SubResource( 122 )
@@ -658,11 +676,12 @@ texture = ExtResource( 2 )
 offset = Vector2( 0, -8 )
 hframes = 16
 vframes = 16
+frame = 76
 
 [node name="DashDust" type="AnimatedSprite" parent="Sprite"]
 visible = false
 frames = SubResource( 96 )
-frame = 6
+frame = 3
 playing = true
 offset = Vector2( -9, -4 )
 

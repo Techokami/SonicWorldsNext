@@ -21,4 +21,8 @@ hframes = 3
 region_enabled = true
 region_rect = Rect2( 0, 32, 72, 32 )
 
+[node name="ActivationTimer" type="Timer" parent="."]
+one_shot = true
+
 [connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]
+[connection signal="timeout" from="ActivationTimer" to="." method="_on_ActivationTimer_timeout"]

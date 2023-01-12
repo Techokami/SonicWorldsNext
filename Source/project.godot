@@ -10,6 +10,11 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "KinematicBody2D",
+"class": "BossBase",
+"language": "GDScript",
+"path": "res://Scripts/Boss/BossBase.gd"
+}, {
+"base": "KinematicBody2D",
 "class": "EnemyBase",
 "language": "GDScript",
 "path": "res://Scripts/Enemies/EnemyBase.gd"
@@ -30,6 +35,7 @@ _global_script_classes=[ {
 "path": "res://Scripts/Objects/PhysicsObject.gd"
 } ]
 _global_script_class_icons={
+"BossBase": "",
 "EnemyBase": "",
 "EnemyProjectileBase": "",
 "MainGameScene": "",

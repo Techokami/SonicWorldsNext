@@ -186,6 +186,7 @@ position = Vector2( 0, 8 )
 texture = ExtResource( 3 )
 hframes = 10
 vframes = 4
+region_enabled = true
 script = ExtResource( 6 )
 string = "Sonic and Tails"
 smallStringTexture = ExtResource( 3 )

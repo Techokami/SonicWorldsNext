@@ -84,6 +84,8 @@ func _ready():
 	Global.timerActive = true
 	# replace "sonic" in stage clear to match the player clear string
 	$LevelClear/Passed.string = $LevelClear/Passed.string.replace("sonic",characterNames[Global.PlayerChar1-1])
+	# set the act clear frame
+	$LevelClear/Act.frame = act-1
 
 func _process(delta):
 	# set score string to match global score with leading 0s
@@ -93,6 +95,8 @@ func _process(delta):
 	var timeClamp = min(Global.levelTime,Global.maxTime-1)
 	# set time text, format it to have a leadin 0 so that it's always 2 digits
 	timeText.string = "%2d" % floor(timeClamp/60) + ":" + str(fmod(floor(timeClamp),60)).pad_zeros(2)
+	# uncomment below (and remove above line) for mili seconds
+	#timeText.string = "%2d" % floor(timeClamp/60) + ":" + str(fmod(floor(timeClamp),60)).pad_zeros(2) + ":" + str(fmod(floor(timeClamp*100),100)).pad_zeros(2)
 	
 	# cehck that there's player, if there is then track the focus players ring count
 	if (Global.players.size() > 0):
@@ -217,6 +221,7 @@ func _process(delta):
 		# stop normal music tracks
 		Global.music.stop()
 		Global.effectTheme.stop()
+		Global.bossMusic.stop()
 		Global.life.stop()
 		# wait for animation to finish
 		yield($GameOver/GameOver,"animation_finished")

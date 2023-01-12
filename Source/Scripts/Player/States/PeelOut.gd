@@ -5,7 +5,7 @@ var dashPower = 12
 func _process(delta):
 	# dust sprite
 	var dash = parent.sprite.get_node("DashDust")
-	dash.visible = !parent.water
+	dash.visible = true
 	dash.flip_h = parent.sprite.flip_h
 	dash.offset.x = abs(dash.offset.x)*sign(-1+int(dash.flip_h)*2)
 	
