@@ -578,7 +578,7 @@ tracks/1/keys = {
 }
 
 [sub_resource type="Animation" id=121]
-resource_name = "swing_vertical_bar"
+resource_name = "swingVerticalBar"
 length = 0.6
 loop = true
 tracks/0/type = "value"
@@ -700,7 +700,7 @@ anims/spinDash = SubResource( 83 )
 anims/spring = SubResource( 84 )
 anims/springScrew = SubResource( 119 )
 anims/super = SubResource( 97 )
-anims/swing_vertical_bar = SubResource( 121 )
+anims/swingVerticalBar = SubResource( 121 )
 anims/walk = SubResource( 85 )
 
 [node name="Sprite" type="Sprite" parent="."]

@@ -583,7 +583,7 @@ tracks/0/keys = {
 }
 
 [sub_resource type="Animation" id=128]
-resource_name = "swing_vertical_bar"
+resource_name = "swingVerticalBar"
 length = 0.6
 loop = true
 tracks/0/type = "value"
@@ -1000,7 +1000,7 @@ anims/super = SubResource( 97 )
 anims/swim = SubResource( 116 )
 anims/swimCarry = SubResource( 117 )
 anims/swimTired = SubResource( 118 )
-anims/swing_vertical_bar = SubResource( 128 )
+anims/swingVerticalBar = SubResource( 128 )
 anims/tired = SubResource( 119 )
 anims/walk = SubResource( 85 )
 
