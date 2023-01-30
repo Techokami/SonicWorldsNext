@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=2]
+[gd_scene load_steps=48 format=2]
 
 [ext_resource path="res://Shaders/PlayerPalette.tres" type="Material" id=1]
 [ext_resource path="res://Graphics/Players/Knuckles.png" type="Texture" id=2]
@@ -602,6 +602,35 @@ tracks/1/keys = {
 "values": [ Vector2( 13, -8 ), Vector2( 19, -8 ), Vector2( 13, -8 ), Vector2( -13, -8 ), Vector2( -19, -8 ), Vector2( -13, -8 ) ]
 }
 
+[sub_resource type="Animation" id=125]
+resource_name = "swingVerticalBarOffset"
+length = 0.6
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 245, 240, 241, 242, 243, 244 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite/Sprite:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( -13, -8 ), Vector2( -19, -8 ), Vector2( -13, -8 ), Vector2( 13, -8 ), Vector2( 19, -8 ), Vector2( 13, -8 ) ]
+}
+
 [sub_resource type="Animation" id=85]
 resource_name = "walk"
 length = 0.8
@@ -696,6 +725,7 @@ anims/spring = SubResource( 84 )
 anims/springScrew = SubResource( 122 )
 anims/super = SubResource( 97 )
 anims/swingVerticalBar = SubResource( 124 )
+anims/swingVerticalBarOffset = SubResource( 125 )
 anims/walk = SubResource( 85 )
 next/edge1 = "edge2"
 

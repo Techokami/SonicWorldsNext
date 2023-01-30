@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=2]
+[gd_scene load_steps=63 format=2]
 
 [ext_resource path="res://Tileset/Worlds/TestTilesGreen.tres" type="TileSet" id=1]
 [ext_resource path="res://Scripts/Level/Level.gd" type="Script" id=2]
@@ -55,6 +55,7 @@
 [ext_resource path="res://Entities/Boss/RobotnikTemplate.tscn" type="PackedScene" id=53]
 [ext_resource path="res://Entities/MainObjects/Capsule.tscn" type="PackedScene" id=54]
 [ext_resource path="res://Entities/Gimmicks/WaterSlide.tscn" type="PackedScene" id=55]
+[ext_resource path="res://Entities/Gimmicks/VerticalBar.tscn" type="PackedScene" id=56]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Glow"
@@ -143,7 +144,7 @@ region_enabled = true
 region_rect = Rect2( 0, 0, 512, 512 )
 
 [node name="Player" parent="." instance=ExtResource( 18 )]
-position = Vector2( 128, 749 )
+position = Vector2( 3142, 822 )
 
 [node name="Default" type="TileMap" parent="."]
 z_index = 11
@@ -827,7 +828,7 @@ position = Vector2( 40, -24 )
 side = 2
 
 [node name="AltSpawn" type="Node2D" parent="Entity"]
-position = Vector2( 896, 1488 )
+position = Vector2( 3128, 766 )
 script = ExtResource( 24 )
 currentCharacter = 2
 
@@ -1523,6 +1524,9 @@ ratchetScrollLeft = true
 
 [node name="Robotnik" parent="Enemies" instance=ExtResource( 53 )]
 position = Vector2( 9872, 40 )
+
+[node name="VerticalBar" parent="." instance=ExtResource( 56 )]
+position = Vector2( 3205, 830 )
 
 [connection signal="pressed" from="Entity/Switch" to="Entity/Switch/Shutter2" method="force_open"]
 

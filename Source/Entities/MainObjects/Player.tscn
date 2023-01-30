@@ -695,6 +695,8 @@ script = ExtResource( 59 )
 [node name="WallClimb" type="Node" parent="States"]
 script = ExtResource( 62 )
 
+[node name="SwingVerticalBar" type="Node" parent="States"]
+
 [node name="PhysicsLookUp" type="Node" parent="."]
 script = ExtResource( 4 )
 
