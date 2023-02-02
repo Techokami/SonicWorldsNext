@@ -32,9 +32,6 @@ var players_speed = [] # Tracks the player's speed on entering the loop (used fo
 var players_cur_loops = [] # Tracks how many loops the player has been throught eh animation
 var players_pass_hit = [] # Tracks whether the player has hit the release point of the animation
 
-# Once cur_loops reaches the number of rotations defined for the object, release
-
-var last_frame = 0
 var pass_hit = false
 
 # Called when the node enters the scene tree for the first time.
@@ -51,7 +48,6 @@ func _physics_process(_delta):
 			continue
 			
 		if players_speed[playerIndex] == null:
-
 				
 			# Stores the player's speed when hitting the bar so we can unleash it later.
 			players_speed[playerIndex] = i.groundSpeed
@@ -74,7 +70,6 @@ func _physics_process(_delta):
 				i.animator.play("grabVerticalBarOffset")
 			
 			i.set_state(i.STATES.SWINGVERTICALBAR)
-
 			
 			# Drop all the speed values to 0 to prevent issues.
 			i.groundSpeed = 0
@@ -82,11 +77,9 @@ func _physics_process(_delta):
 			i.movement.y = 0
 			i.cam_update()
 	
-	var number = 0
 	for i in players:
 		if i.currentState == i.STATES.SWINGVERTICALBAR:
 			i.global_position.x = get_parent().get_global_position().x
-			number += 1
 		
 		pass
 
@@ -112,18 +105,14 @@ func _process(delta):
 				players_cur_loops[playerIndex] += 1
 				if (players_cur_loops[playerIndex] >= rotations):
 					if launchMode == MULTIPLY:
-						print("launch mode multiply")
 						i.movement.x = min(launchMultiMaxSpeed, max(-launchMultiMaxSpeed, players_speed[playerIndex] * launchMultiplier))
 					else:
-						print("launch mode constant")
 						i.movement.x = launchSpeed * i.direction
 					i.set_state(i.STATES.NORMAL)
 					i.movement.y = 0
 		else:
 			if (i.animator.get_current_animation_position() < i.animator.get_current_animation_length() * 0.25):
 				players_pass_hit[playerIndex] = false
-			
-	pass
 
 func check_grab(body):
 	# Only grab the bar if the player is in a ground state (rolling or running) and speed is above value
@@ -158,7 +147,7 @@ func remove_player(player):
 		if (player.currentState == player.STATES.SWINGVERTICALBAR):
 			return
 			
-		# remove player from contact point
+		# Clean out the player from all player-linked arrays.
 		var getIndex = players.find(player)
 		players.erase(player)
 		players_speed.remove(getIndex)
