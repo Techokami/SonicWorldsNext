@@ -144,7 +144,7 @@ region_enabled = true
 region_rect = Rect2( 0, 0, 512, 512 )
 
 [node name="Player" parent="." instance=ExtResource( 18 )]
-position = Vector2( 4502, 870 )
+position = Vector2( 128, 749 )
 
 [node name="Default" type="TileMap" parent="."]
 z_index = 11
@@ -767,6 +767,9 @@ position = Vector2( 5072, 856 )
 [node name="BubbleGenerator4" parent="Entity" instance=ExtResource( 37 )]
 position = Vector2( 4864, 1112 )
 
+[node name="VerticalBar" parent="." instance=ExtResource( 56 )]
+position = Vector2( 4608, 1342 )
+
 [node name="SetWaterLevel" parent="Entity" instance=ExtResource( 43 )]
 position = Vector2( 3296, 448 )
 scale = Vector2( 4, 3.4 )
@@ -828,7 +831,7 @@ position = Vector2( 40, -24 )
 side = 2
 
 [node name="AltSpawn" type="Node2D" parent="Entity"]
-position = Vector2( 3128, 766 )
+position = Vector2( 896, 1488 )
 script = ExtResource( 24 )
 currentCharacter = 2
 
@@ -1524,9 +1527,6 @@ ratchetScrollLeft = true
 
 [node name="Robotnik" parent="Enemies" instance=ExtResource( 53 )]
 position = Vector2( 9872, 40 )
-
-[node name="VerticalBar" parent="." instance=ExtResource( 56 )]
-position = Vector2( 4608, 1341 )
 
 [connection signal="pressed" from="Entity/Switch" to="Entity/Switch/Shutter2" method="force_open"]
 
