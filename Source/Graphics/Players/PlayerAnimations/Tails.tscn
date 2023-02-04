@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=2]
+[gd_scene load_steps=61 format=2]
 
 [ext_resource path="res://Shaders/PlayerPalette.tres" type="Material" id=1]
 [ext_resource path="res://Graphics/Players/Tails.png" type="Texture" id=2]
@@ -700,6 +700,35 @@ tracks/1/keys = {
 "values": [ Vector2( 14, -5 ), Vector2( 14, -5 ), Vector2( -15, -5 ), Vector2( -15, -5 ), Vector2( -15, -4 ), Vector2( -3, -5 ) ]
 }
 
+[sub_resource type="Animation" id=132]
+resource_name = "swingVerticalBarManaged"
+loop = true
+step = 0.03125
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1875, 0.3125, 0.5, 0.6875, 0.8125 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 245, 240, 241, 242, 243, 244 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite/Sprite:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1875, 0.3125, 0.5, 0.6875, 0.8125 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( -3, -5 ), Vector2( 14, -5 ), Vector2( 14, -5 ), Vector2( -15, -5 ), Vector2( -15, -5 ), Vector2( -15, -4 ) ]
+}
+
 [sub_resource type="Animation" id=129]
 resource_name = "swingVerticalBarOffset"
 length = 0.5
@@ -1122,6 +1151,7 @@ anims/swim = SubResource( 116 )
 anims/swimCarry = SubResource( 117 )
 anims/swimTired = SubResource( 118 )
 anims/swingVerticalBar = SubResource( 128 )
+anims/swingVerticalBarManaged = SubResource( 132 )
 anims/swingVerticalBarOffset = SubResource( 129 )
 anims/tired = SubResource( 119 )
 anims/walk = SubResource( 85 )
