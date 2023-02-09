@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=2]
+[gd_scene load_steps=63 format=2]
 
 [ext_resource path="res://Tileset/Worlds/TestTilesGreen.tres" type="TileSet" id=1]
 [ext_resource path="res://Scripts/Level/Level.gd" type="Script" id=2]
@@ -55,6 +55,7 @@
 [ext_resource path="res://Entities/Boss/RobotnikTemplate.tscn" type="PackedScene" id=53]
 [ext_resource path="res://Entities/MainObjects/Capsule.tscn" type="PackedScene" id=54]
 [ext_resource path="res://Entities/Gimmicks/WaterSlide.tscn" type="PackedScene" id=55]
+[ext_resource path="res://Entities/Gimmicks/Trampoline.tscn" type="PackedScene" id=56]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Glow"
@@ -143,7 +144,7 @@ region_enabled = true
 region_rect = Rect2( 0, 0, 512, 512 )
 
 [node name="Player" parent="." instance=ExtResource( 18 )]
-position = Vector2( 128, 749 )
+position = Vector2( 6615, 966 )
 
 [node name="Default" type="TileMap" parent="."]
 z_index = 11
@@ -846,6 +847,9 @@ scale = Vector2( 11.3, 1 )
 position = Vector2( 1552, 384 )
 rotation = 2.35619
 scale = Vector2( 11.3, 1 )
+
+[node name="Trampoline" parent="Entity" instance=ExtResource( 56 )]
+position = Vector2( 6848, 1089 )
 
 [node name="Rings" type="Node2D" parent="."]
 
