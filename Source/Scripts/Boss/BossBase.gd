@@ -77,5 +77,6 @@ func _on_DamageArea_area_entered(area):
 
 func _on_HitBox_area_exited(area):
 	# remove from damage area
-	if playerHit.has(area.parent):
-		playerHit.erase(area.parent)
+	if area.get("parent") != null:
+		if playerHit.has(area.parent):
+			playerHit.erase(area.parent)
