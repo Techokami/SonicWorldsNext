@@ -532,12 +532,6 @@ scale = Vector2( -1, 1 )
 type = 1
 springDirection = 3
 
-[node name="Bumper" parent="Entity" instance=ExtResource( 13 )]
-position = Vector2( 6800, 1088 )
-
-[node name="Bumper2" parent="Entity" instance=ExtResource( 13 )]
-position = Vector2( 6896, 1088 )
-
 [node name="Bumper3" parent="Entity" instance=ExtResource( 13 )]
 position = Vector2( 6896, 1328 )
 
@@ -850,6 +844,12 @@ scale = Vector2( 11.3, 1 )
 
 [node name="Trampoline" parent="Entity" instance=ExtResource( 56 )]
 position = Vector2( 6848, 1089 )
+
+[node name="Bumper" parent="Entity" instance=ExtResource( 13 )]
+position = Vector2( 6794, 1089 )
+
+[node name="Bumper2" parent="Entity" instance=ExtResource( 13 )]
+position = Vector2( 6902, 1089 )
 
 [node name="Rings" type="Node2D" parent="."]
 

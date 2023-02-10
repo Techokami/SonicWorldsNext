@@ -1,9 +1,12 @@
 extends Node2D
+tool
+
 
 var weight = 0
 var trampolineYVelocity = 0
 var trampolineYPosition = 0
 
+export var platformSprite = preload("res://Graphics/Gimmicks/ICZTrampoline.png")
 export var ringsSprite = preload("res://Graphics/Gimmicks/ICZTrampolineRing.png")
 export var ringsPerSide = 3 # How many rings to draw on each side of the platform
 export var ringsMargin = 30 # Pixels away from the center of the platform to start drawing rings
@@ -15,6 +18,7 @@ export var dampingFactorWeighted = 0.98 # Lower values make the trampoline slow 
 export var maxVelocity = 700 # The maximum velocity the trampoline can move at once -- acts as a limiter for how high the gimmick can launch you
 export var minVelocityForLaunch = 150 # Minimum upward velocity the trampoline must has as it is coming to the pivot in order to launch the player
 export var bounceFactor = 1.75 # Multiplier against yVelocity for setting the player's upward launch speed
+export var baseWeight = 0 # Use this to make the trampoline itself have weight
 
 var trampolineRealY
 var launchEnabled
@@ -29,7 +33,7 @@ var skipGroundCheck = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	trampolineRealY = body.position.y * 1.0
+	trampolineRealY = body.position.y * 1.0 + baseWeight * weightFactor * 1.0
 	pass # Replace with function body.
 
 func _process(_delta):
@@ -49,10 +53,8 @@ func add_player(player):
 	launchEnabled = true
 	player.movement.y = 0
 	skipGroundCheck = true
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _physics_process(delta):
-	# process_temp(delta)
+	
+func physics_process_game(delta):
 	var pivot = weight * weightFactor
 	var accelerationFactor = (pivot - trampolineRealY) * springConstant
 	
@@ -60,7 +62,7 @@ func _physics_process(delta):
 	trampolineRealY += yVelocity * delta
 	body.position.y = floor(trampolineRealY)
 	# Damping - The trampoline should have a tendency to return to rest
-	if weight == 0:
+	if weight == baseWeight:
 		yVelocity *= dampingFactorWeightless
 	else:
 		yVelocity *= dampingFactorWeighted
@@ -86,7 +88,7 @@ func _physics_process(delta):
 		players.clear()
 		launchEnabled = false
 		yVelocity /= 5
-		weight = 0
+		weight = baseWeight
 		return
 
 		# if launch is still enabled, we didn't launch, but we need to make do something if a player
@@ -100,13 +102,33 @@ func _physics_process(delta):
 	pass
 	
 	# Reset player count, weight and launch to zero for next pass
-	weight = 0
+	weight = baseWeight
 	launchEnabled = false
 	playersOld = players.duplicate(false)
 	players.clear()
 	skipGroundCheck = false
+	
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _physics_process(delta):
+	if Engine.is_editor_hint():
+		return
+		
+	physics_process_game(delta)
+		
+
+func draw_tool():
+	for n in ringsPerSide:
+		draw_texture(ringsSprite, Vector2(-ringsMargin - (n * ringsBetween) - ringsSprite.get_width() / 2, 0 - (ringsSprite.get_height() / 2) + (ringsPerSide - n - 1) * (weightFactor * baseWeight) / (ringsPerSide - 1)))
+		draw_texture(ringsSprite, Vector2(ringsMargin + (n * ringsBetween)  - ringsSprite.get_width() / 2, 0 - (ringsSprite.get_height() / 2) + (ringsPerSide - n - 1) * (weightFactor * baseWeight) / (ringsPerSide - 1)))
+	draw_texture(platformSprite, Vector2(0 - platformSprite.get_width() / 2 , 0 - (platformSprite.get_height() / 2) + (weightFactor * baseWeight)))
+			
+	return
 
 func _draw():
+	if Engine.is_editor_hint():
+		return draw_tool()
+		
 	for n in ringsPerSide:
 		draw_texture(ringsSprite, Vector2(-ringsMargin - (n * ringsBetween) - ringsSprite.get_width() / 2, 0 - (ringsSprite.get_height() / 2) + (ringsPerSide - n - 1) * body.position.y / (ringsPerSide - 1)))
 		draw_texture(ringsSprite, Vector2(ringsMargin + (n * ringsBetween)  - ringsSprite.get_width() / 2, 0 - (ringsSprite.get_height() / 2) + (ringsPerSide - n - 1) * body.position.y / (ringsPerSide - 1)))
+	draw_texture(platformSprite, Vector2(0 - platformSprite.get_width() / 2 , 0 - (platformSprite.get_height() / 2) + body.position.y))
