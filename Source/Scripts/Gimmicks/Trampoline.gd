@@ -9,10 +9,10 @@ export var ringsPerSide = 3 # How many rings to draw on each side of the platfor
 export var ringsMargin = 30 # Pixels away from the center of the platform to start drawing rings
 export var ringsBetween = 12 # Pixels between each ring drawn
 export var weightFactor = 10 # How many pixels the weight of one character moves the pivot point
-export var springConstant = 20.0 # No idea on what this should be just yet.
-export var dampingFactorWeightless = 0.95 # Lower values make the trampoline slow down more quickly while no players are on it
+export var springConstant = 30.0 # No idea on what this should be just yet.
+export var dampingFactorWeightless = 0.97 # Lower values make the trampoline slow down more quickly while no players are on it
 export var dampingFactorWeighted = 0.98 # Lower values make the trampoline slow down more quickly while one or more players are on it
-export var maxVelocity = 800 # The maximum velocity the trampoline can move at once -- acts as a limiter for how high the gimmick can launch you
+export var maxVelocity = 700 # The maximum velocity the trampoline can move at once -- acts as a limiter for how high the gimmick can launch you
 export var minVelocityForLaunch = 150 # Minimum upward velocity the trampoline must has as it is coming to the pivot in order to launch the player
 export var bounceFactor = 1.75 # Multiplier against yVelocity for setting the player's upward launch speed
 
@@ -75,7 +75,10 @@ func _physics_process(delta):
 			i.set_state(i.STATES.AIR)
 			i.movement.y += yVelocity * bounceFactor
 			i.animator.play("spring")
-			i.animator.queue("walk")
+			if(abs(i.groundSpeed) >= min(6*60,i.top)):
+				i.animator.queue("run")
+			else:
+				i.animator.queue("walk")
 
 		# Clear everything and return for the next pass
 		playersOld.clear()
@@ -92,7 +95,7 @@ func _physics_process(delta):
 			var curVel = i.movement.y
 			i.movement.y += yVelocity
 			if (curVel < 50):
-				yVelocity += 150 # bounce downwards on jump
+				impart_force(150) # bounce downwards on jump
 	pass
 	
 	# Reset player count, weight and launch to zero for next pass
@@ -104,5 +107,5 @@ func _physics_process(delta):
 
 func _draw():
 	for n in ringsPerSide:
-		draw_texture(ringsSprite, Vector2(-ringsMargin - (n * ringsBetween) - ringsSprite.get_width() / 2, 0 - (ringsSprite.get_height() / 2) + (ringsPerSide - n) * body.position.y / ringsPerSide))
-		draw_texture(ringsSprite, Vector2(ringsMargin + (n * ringsBetween)  - ringsSprite.get_width() / 2, 0 - (ringsSprite.get_height() / 2) + (ringsPerSide - n) * body.position.y / ringsPerSide))
+		draw_texture(ringsSprite, Vector2(-ringsMargin - (n * ringsBetween) - ringsSprite.get_width() / 2, 0 - (ringsSprite.get_height() / 2) + (ringsPerSide - n - 1) * body.position.y / (ringsPerSide - 1)))
+		draw_texture(ringsSprite, Vector2(ringsMargin + (n * ringsBetween)  - ringsSprite.get_width() / 2, 0 - (ringsSprite.get_height() / 2) + (ringsPerSide - n - 1) * body.position.y / (ringsPerSide - 1)))
