@@ -16,6 +16,7 @@ export var maxVelocity = 700 # The maximum velocity the trampoline can move at o
 export var minVelocityForLaunch = 150 # Minimum upward velocity the trampoline must has as it is coming to the pivot in order to launch the player
 export var bounceFactor = 1.75 # Multiplier against yVelocity for setting the player's upward launch speed
 
+var trampolineRealY
 var launchEnabled
 
 var temp = 0
@@ -28,9 +29,10 @@ var skipGroundCheck = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	trampolineRealY = body.position.y * 1.0
 	pass # Replace with function body.
 
-func _process(delta):
+func _process(_delta):
 	update()
 	
 func impart_force(velocityChange):
@@ -52,10 +54,11 @@ func add_player(player):
 func _physics_process(delta):
 	# process_temp(delta)
 	var pivot = weight * weightFactor
-	var accelerationFactor = (pivot - body.position.y) * springConstant
+	var accelerationFactor = (pivot - trampolineRealY) * springConstant
 	
 	yVelocity += accelerationFactor * delta
-	body.position.y += yVelocity * delta
+	trampolineRealY += yVelocity * delta
+	body.position.y = floor(trampolineRealY)
 	# Damping - The trampoline should have a tendency to return to rest
 	if weight == 0:
 		yVelocity *= dampingFactorWeightless
@@ -64,11 +67,9 @@ func _physics_process(delta):
 	pass
 	
 	var passedMidpoint = false
-	if (body.position.y < (0.66 * pivot) and yVelocity < -minVelocityForLaunch):
+	if (trampolineRealY < (0.66 * pivot) and yVelocity < -minVelocityForLaunch):
 		#print("yVelocity = ", yVelocity)
 		passedMidpoint = true
-		
-	var removedFlag = 0
 	
 	if (launchEnabled and passedMidpoint):
 		for i in players:
