@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=2]
+[gd_scene load_steps=65 format=2]
 
 [ext_resource path="res://Tileset/Worlds/TestTilesGreen.tres" type="TileSet" id=1]
 [ext_resource path="res://Scripts/Level/Level.gd" type="Script" id=2]
@@ -56,6 +56,8 @@
 [ext_resource path="res://Entities/MainObjects/Capsule.tscn" type="PackedScene" id=54]
 [ext_resource path="res://Entities/Gimmicks/WaterSlide.tscn" type="PackedScene" id=55]
 [ext_resource path="res://Entities/Gimmicks/Trampoline.tscn" type="PackedScene" id=56]
+[ext_resource path="res://Entities/Gimmicks/VerticalBar.tscn" type="PackedScene" id=57]
+[ext_resource path="res://Entities/Gimmicks/VerticalPylon.tscn" type="PackedScene" id=58]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Glow"
@@ -144,7 +146,7 @@ region_enabled = true
 region_rect = Rect2( 0, 0, 512, 512 )
 
 [node name="Player" parent="." instance=ExtResource( 18 )]
-position = Vector2( 6615, 966 )
+position = Vector2( 83, 748 )
 
 [node name="Default" type="TileMap" parent="."]
 z_index = 11
@@ -850,6 +852,17 @@ position = Vector2( 6794, 1089 )
 
 [node name="Bumper2" parent="Entity" instance=ExtResource( 13 )]
 position = Vector2( 6902, 1089 )
+
+[node name="FBZ_Pylon_Controller" parent="Entity" instance=ExtResource( 58 )]
+position = Vector2( 6608, 480 )
+vert_size = 143
+
+[node name="FBZ_Pylon_Controller2" parent="Entity" instance=ExtResource( 58 )]
+position = Vector2( 5888, 160 )
+vert_size = 60
+
+[node name="VerticalBar" parent="Entity" instance=ExtResource( 57 )]
+position = Vector2( 4608, 1342 )
 
 [node name="Rings" type="Node2D" parent="."]
 

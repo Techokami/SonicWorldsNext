@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=2]
+[gd_scene load_steps=61 format=2]
 
 [ext_resource path="res://Shaders/PlayerPalette.tres" type="Material" id=1]
 [ext_resource path="res://Graphics/Players/Tails.png" type="Texture" id=2]
@@ -265,6 +265,94 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 1,
 "values": [ 69 ]
+}
+
+[sub_resource type="Animation" id=130]
+resource_name = "grabVerticalBar"
+length = 0.166667
+loop = true
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 246 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite/Sprite:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( 14, -5 ) ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath("Sprite/PlayerAnimation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.1 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ "swingVerticalBar", -1, 1.0, false ],
+"method": "play"
+} ]
+}
+
+[sub_resource type="Animation" id=131]
+resource_name = "grabVerticalBarOffset"
+length = 0.166667
+loop = true
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 246 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite/Sprite:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( -14, -5 ) ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath("Sprite/PlayerAnimation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.1 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ "swingVerticalBarOffset", -1, 1.0, false ],
+"method": "play"
+} ]
 }
 
 [sub_resource type="Animation" id=123]
@@ -580,6 +668,95 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 1,
 "values": [ 89, 90, 91 ]
+}
+
+[sub_resource type="Animation" id=128]
+resource_name = "swingVerticalBar"
+length = 0.5
+loop = true
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.0333333, 0.133333, 0.233333, 0.3, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 240, 241, 242, 243, 244, 245 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite/Sprite:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.0333333, 0.133333, 0.233333, 0.3, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 14, -5 ), Vector2( 14, -5 ), Vector2( -15, -5 ), Vector2( -15, -5 ), Vector2( -15, -4 ), Vector2( -3, -5 ) ]
+}
+
+[sub_resource type="Animation" id=132]
+resource_name = "swingVerticalBarManaged"
+loop = true
+step = 0.03125
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1875, 0.3125, 0.5, 0.6875, 0.8125 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 245, 240, 241, 242, 243, 244 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite/Sprite:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1875, 0.3125, 0.5, 0.6875, 0.8125 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( -3, -5 ), Vector2( 14, -5 ), Vector2( 14, -5 ), Vector2( -15, -5 ), Vector2( -15, -5 ), Vector2( -15, -4 ) ]
+}
+
+[sub_resource type="Animation" id=129]
+resource_name = "swingVerticalBarOffset"
+length = 0.5
+loop = true
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.0333333, 0.133333, 0.2, 0.3, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 240, 241, 242, 243, 244, 245 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite/Sprite:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.0333333, 0.133333, 0.2, 0.3, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( -14, -5 ), Vector2( -14, -5 ), Vector2( 15, -5 ), Vector2( 15, -5 ), Vector2( 15, -4 ), Vector2( 3, -5 ) ]
 }
 
 [sub_resource type="Animation" id=119]
@@ -953,6 +1130,8 @@ anims/edge3 = SubResource( 106 )
 anims/fly = SubResource( 113 )
 anims/flyCarry = SubResource( 114 )
 anims/flyCarryUP = SubResource( 115 )
+anims/grabVerticalBar = SubResource( 130 )
+anims/grabVerticalBarOffset = SubResource( 131 )
 anims/hang = SubResource( 123 )
 anims/hurt = SubResource( 78 )
 anims/idle = SubResource( 79 )
@@ -971,6 +1150,9 @@ anims/super = SubResource( 97 )
 anims/swim = SubResource( 116 )
 anims/swimCarry = SubResource( 117 )
 anims/swimTired = SubResource( 118 )
+anims/swingVerticalBar = SubResource( 128 )
+anims/swingVerticalBarManaged = SubResource( 132 )
+anims/swingVerticalBarOffset = SubResource( 129 )
 anims/tired = SubResource( 119 )
 anims/walk = SubResource( 85 )
 
@@ -987,7 +1169,7 @@ script = ExtResource( 5 )
 [node name="DashDust" type="AnimatedSprite" parent="Sprite"]
 visible = false
 frames = SubResource( 96 )
-frame = 4
+frame = 5
 playing = true
 offset = Vector2( -9, -4 )
 
