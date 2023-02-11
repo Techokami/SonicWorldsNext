@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=2]
+[gd_scene load_steps=64 format=2]
 
 [ext_resource path="res://Tileset/Worlds/TestTilesGreen.tres" type="TileSet" id=1]
 [ext_resource path="res://Scripts/Level/Level.gd" type="Script" id=2]
@@ -55,6 +55,8 @@
 [ext_resource path="res://Entities/Boss/RobotnikTemplate.tscn" type="PackedScene" id=53]
 [ext_resource path="res://Entities/MainObjects/Capsule.tscn" type="PackedScene" id=54]
 [ext_resource path="res://Entities/Gimmicks/WaterSlide.tscn" type="PackedScene" id=55]
+[ext_resource path="res://Entities/Gimmicks/VerticalBar.tscn" type="PackedScene" id=56]
+[ext_resource path="res://Entities/Gimmicks/VerticalPylon.tscn" type="PackedScene" id=57]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Glow"
@@ -846,6 +848,16 @@ scale = Vector2( 11.3, 1 )
 position = Vector2( 1552, 384 )
 rotation = 2.35619
 scale = Vector2( 11.3, 1 )
+
+[node name="VerticalBar" parent="." instance=ExtResource( 56 )]
+position = Vector2( 4608, 1342 )
+
+[node name="FBZ_Pylon_Controller2" parent="." instance=ExtResource( 57 )]
+position = Vector2( 6713, 448 )
+vert_size = 64
+
+[node name="FBZ_Pylon_Controller" parent="." instance=ExtResource( 57 )]
+position = Vector2( 6604, 480 )
 
 [node name="Rings" type="Node2D" parent="."]
 
