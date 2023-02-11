@@ -79,8 +79,12 @@ func _ready():
 		# wait for title card animator to finish ending before starting the level timer
 		yield($LevelCard/CardPlayer,"animation_finished")
 	else:
-		# just emit the stage start signal and start the stage
+		get_tree().paused = true
+		yield(get_tree(),"idle_frame") # delay unpausing for one frame so the player doesn't die immediately
+		yield(get_tree(),"idle_frame") # second one needed for player 2
+		# emit the stage start signal and start the stage
 		Global.emit_stage_start()
+		get_tree().paused = false
 	Global.timerActive = true
 	# replace "sonic" in stage clear to match the player clear string
 	$LevelClear/Passed.string = $LevelClear/Passed.string.replace("sonic",characterNames[Global.PlayerChar1-1])

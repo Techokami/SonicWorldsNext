@@ -272,7 +272,7 @@ anchor_top = 1.0
 anchor_bottom = 1.0
 margin_top = -14.0
 margin_right = 65.0
-text = "v1.1.1"
+text = "v1.1.2"
 
 [node name="Date" type="Label" parent="CanvasLayer/Labels"]
 modulate = Color( 0, 0, 0, 1 )
@@ -282,7 +282,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -69.0
 margin_top = -14.0
-text = "2021-2022"
+text = "2021-2023"
 
 [node name="PressStart" type="Control" parent="CanvasLayer/Labels"]
 modulate = Color( 1, 0.831373, 0, 1 )
