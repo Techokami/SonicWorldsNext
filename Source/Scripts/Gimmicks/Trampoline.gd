@@ -1,13 +1,14 @@
-extends Node2D
-tool
+# Ice Cap Zone Trampolines
+# by DimensionWarped (February 2023)
 
+extends "res://Tools/Graphics/AnimatedTextureDrawer.gd"
+tool
 
 var weight = 0
 var trampolineYVelocity = 0
 var trampolineYPosition = 0
 
 export var platformSprite = preload("res://Graphics/Gimmicks/ICZTrampoline.png")
-export var ringsSprite = preload("res://Graphics/Gimmicks/ICZTrampolineRing.png")
 export var ringsPerSide = 3 # How many rings to draw on each side of the platform - set to two or less to just get rid of them.
 export var ringsMargin = 30 # Pixels away from the center of the platform to start drawing rings
 export var ringsBetween = 12 # Pixels between each ring drawn
@@ -41,11 +42,12 @@ var skipGroundCheck = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	._ready()
 	trampolineRealY = body.position.y * 1.0 + baseWeight * weightFactor * 1.0
 	pass # Replace with function body.
 
 func _process(_delta):
-	update()
+	._process(_delta)
 	
 func impart_force(velocityChange):
 	yVelocity += velocityChange
@@ -131,21 +133,23 @@ func draw_tool():
 	var platformOffset = weightFactor * baseWeight
 	for n in ringsPerSide:
 		var yOffset = 0
-		var spriteOffset = -(ringsSprite.get_height() / 2)
 		if interpolationMode == INTERPOLATION_MODE.linear:
-			yOffset = spriteOffset + (ringsPerSide - n - 1) * (platformOffset) / (ringsPerSide - 1)
+			yOffset = (ringsPerSide - n - 1) * (platformOffset) / (ringsPerSide - 1)
 			pass
 		elif interpolationMode == INTERPOLATION_MODE.center_parabolic:
 			# vertex is at the platform
-			# y = a(x)^2 + k (k = platformOffset + spriteOffset)
-			yOffset = spriteOffset + platformOffset - platformOffset * pow(1.0 * n / (ringsPerSide - 1), 2)
+			# y = a(x)^2 + k (k = platformOffset)
+			yOffset = platformOffset - platformOffset * pow(1.0 * n / (ringsPerSide - 1), 2)
 			pass
 		else:
 			# Sorry, it's broken.
 			pass
 			
-		draw_texture(ringsSprite, Vector2(-ringsMargin - (n * ringsBetween) - ringsSprite.get_width() / 2, yOffset))
-		draw_texture(ringsSprite, Vector2( ringsMargin + (n * ringsBetween) - ringsSprite.get_width() / 2, yOffset))
+		# draw_texture(ringsSprite, Vector2(-ringsMargin - (n * ringsBetween) - ringsSprite.get_width() / 2, yOffset))
+		# draw_texture(ringsSprite, Vector2( ringsMargin + (n * ringsBetween) - ringsSprite.get_width() / 2, yOffset))
+		
+		draw_at_pos_internal(Vector2(-ringsMargin - (n * ringsBetween), yOffset))
+		draw_at_pos_internal(Vector2(ringsMargin + (n * ringsBetween), yOffset))
 		
 	draw_texture(platformSprite, Vector2(0 - platformSprite.get_width() / 2 , 0 - (platformSprite.get_height() / 2) + platformOffset))
 			
@@ -154,7 +158,7 @@ func draw_tool():
 func _draw():
 	if Engine.is_editor_hint():
 		return draw_tool()
-		
+
 	# Can't draw rings if there aren't enough for the anchors
 	if (ringsPerSide < 2):
 		return
@@ -163,20 +167,20 @@ func _draw():
 		
 	for n in ringsPerSide:
 		var yOffset = 0
-		var spriteOffset = -(ringsSprite.get_height() / 2)
+		
 		if interpolationMode == INTERPOLATION_MODE.linear:
-			yOffset = spriteOffset + (ringsPerSide - n - 1) * (platformOffset) / (ringsPerSide - 1)
+			yOffset = (ringsPerSide - n - 1) * (platformOffset) / (ringsPerSide - 1)
 			pass
 		elif interpolationMode == INTERPOLATION_MODE.center_parabolic:
 			# vertex is at the platform
-			# y = a(x)^2 + k (k = platformOffset + spriteOffset)
-			yOffset = spriteOffset + platformOffset - platformOffset * pow(1.0 * n / (ringsPerSide - 1), 2)
+			# y = a(x)^2 + k (k = platformOffset)
+			yOffset = platformOffset - platformOffset * pow(1.0 * n / (ringsPerSide - 1), 2)
 			pass
 		else:
 			# Sorry, it's broken.
 			pass
 			
-		draw_texture(ringsSprite, Vector2(-ringsMargin - (n * ringsBetween) - ringsSprite.get_width() / 2, yOffset))
-		draw_texture(ringsSprite, Vector2( ringsMargin + (n * ringsBetween) - ringsSprite.get_width() / 2, yOffset))
+		draw_at_pos_internal(Vector2(-ringsMargin - (n * ringsBetween), yOffset))
+		draw_at_pos_internal(Vector2( ringsMargin + (n * ringsBetween), yOffset))
 		
 	draw_texture(platformSprite, Vector2(0 - platformSprite.get_width() / 2 , 0 - (platformSprite.get_height() / 2) + body.position.y))
