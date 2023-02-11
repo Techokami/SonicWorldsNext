@@ -2659,7 +2659,7 @@ defaultRightBoundry = 6144
 defaultBottomBoundry = 1664
 
 [node name="HUD" parent="." instance=ExtResource( 4 )]
-act = 2
+zoneName = "Chunk"
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 
