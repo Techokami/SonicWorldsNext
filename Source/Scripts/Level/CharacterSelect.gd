@@ -77,12 +77,9 @@ func _input(event):
 			match(levelID):
 				0: # Base Zone Act 1
 					Global.nextZone = load("res://Scene/Zones/BaseZone.tscn") # unnecessary since it's arleady set
-					print("option 0")
 				1: # Base Zone Act 2
 					Global.nextZone = load("res://Scene/Zones/BaseZone.tscn") # Replace me! I don't exist yet!
-					print("option 1")
 				2: # Chunk Zone Act 1
 					Global.nextZone = load("res://Scene/Zones/ChunkZone.tscn")
-					print("option 2")
 			
 			Global.main.change_scene(Global.nextZone,"FadeOut","FadeOut","SetSub",1)
