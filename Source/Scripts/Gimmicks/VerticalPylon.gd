@@ -97,8 +97,6 @@ func process_game(delta):
 			i.set_state(i.STATES.JUMP)
 			# set animation to roll
 			i.movement.y = -launch_vertical_speed
-			print(i.jmp/2)
-			print(i.movement.y)
 			if (i.inputs[i.INPUTS.XINPUT] < 0):
 				i.movement.x = -launch_speed
 			else:
