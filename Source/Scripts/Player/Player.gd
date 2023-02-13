@@ -766,8 +766,9 @@ func _physics_process(delta):
 	if !translate:
 		var shapeMemory = $HitBox.shape.extents
 		
-		# Shrink hitbox to test collissions
-		$HitBox.shape.extents = Vector2(1,4)
+		# Shrink hitbox to test collisions
+		$HitBox.shape.extents.x -= 2
+		$HitBox.shape.extents.y -= 2
 		
 		# Do a test move, if a collision was found then kill the player
 		var col = move_and_collide(Vector2.ZERO)
