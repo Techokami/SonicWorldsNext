@@ -20,7 +20,7 @@ func _ready():
 	curve = path.get_curve()
 	
 	if position != Vector2(0, 0):
-		printerr("StateMoverPathFollower objects and their Path2D child should be at position (0,0)! Expect misaligned pathing.")
+		printerr("StateMoverPathFollower object should be at position (0,0) within the StateMoverMaster. Expect misaligned pathing.")
 		
 	pass
 	

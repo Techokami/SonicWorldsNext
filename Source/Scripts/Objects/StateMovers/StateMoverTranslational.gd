@@ -20,19 +20,22 @@ func _ready():
 func enterState():
 	startPos = Vector2(parent.realPosition)
 	endPos = Vector2(parent.realPosition) + translation
+	print("startPos = ", startPos)
+	print("endPos = ", endPos)
 	curTime = 0.0
 	pass
 
 func stateProcess(delta):
 	curTime += delta
-	
+		
+func statePhysicsProcess(_delta):
 	if interpolationMode == INTERPOLATION.COS:
-		parent.position = 0.5 * (endPos + startPos) + 0.5 * (endPos - startPos) * (-cos(curTime * PI / moveTime))
+		parent.realPosition = 0.5 * (endPos + startPos) + 0.5 * (endPos - startPos) * (-cos(curTime * PI / moveTime))
 	else:
-		parent.position = startPos + (endPos - startPos) * (curTime / moveTime)
+		parent.realPosition = startPos + (endPos - startPos) * (curTime / moveTime)
 
 	if curTime >= moveTime:
-		parent.position = endPos
+		parent.realPosition = endPos
 		parent.setState(nextState)
 		
 	pass

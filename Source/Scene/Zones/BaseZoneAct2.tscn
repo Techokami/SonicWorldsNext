@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Tileset/Worlds/TestTilesGreen.tres" type="TileSet" id=1]
 [ext_resource path="res://Scripts/Level/Level.gd" type="Script" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://Entities/Misc/HUD.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Scripts/Objects/StateMovers/StateMoverMaster.gd" type="Script" id=5]
 [ext_resource path="res://Scripts/Objects/StateMovers/StateMoverPathFollower.gd" type="Script" id=6]
+[ext_resource path="res://Entities/Gimmicks/CNZBarrel.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Scripts/Objects/StateMovers/StateMoverTranslational.gd" type="Script" id=8]
 [ext_resource path="res://Entities/MainObjects/Player.tscn" type="PackedScene" id=18]
 [ext_resource path="res://Graphics/Backgrounds/WorldsBackground.png" type="Texture" id=25]
 [ext_resource path="res://Entities/MainObjects/GoalPost.tscn" type="PackedScene" id=34]
@@ -134,3 +136,21 @@ nextState = 0
 [node name="Path2D" type="Path2D" parent="Entities/PlatformStatefulMover/PathFollowerState_2"]
 scale = Vector2( 1, 0.999644 )
 curve = SubResource( 3 )
+
+[node name="PlatformStatefulMover2" type="Node2D" parent="Entities"]
+position = Vector2( 844, 1419 )
+script = ExtResource( 5 )
+
+[node name="CNZBarrel" parent="Entities/PlatformStatefulMover2" instance=ExtResource( 7 )]
+position = Vector2( -271, -683 )
+
+[node name="TranslationalState_0" type="Node2D" parent="Entities/PlatformStatefulMover2"]
+position = Vector2( 200, 0 )
+script = ExtResource( 8 )
+translation = Vector2( 400, 0 )
+
+[node name="TranslationalState_1" type="Node2D" parent="Entities/PlatformStatefulMover2"]
+position = Vector2( 200, 0 )
+script = ExtResource( 8 )
+translation = Vector2( -400, 0 )
+nextState = 0
