@@ -33,6 +33,10 @@ extents = Vector2( 32, 32 )
 
 [node name="CNZBarrel" type="Node2D"]
 script = ExtResource( 3 )
+__meta__ = {
+"_edit_horizontal_guides_": [ -32.0 ],
+"_edit_vertical_guides_": [ -124.0 ]
+}
 
 [node name="KinematicBody2D" type="KinematicBody2D" parent="."]
 collision_layer = 2105344
@@ -42,7 +46,6 @@ script = ExtResource( 2 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="KinematicBody2D"]
 frames = SubResource( 5 )
-frame = 2
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
