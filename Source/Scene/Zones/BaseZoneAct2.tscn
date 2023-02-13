@@ -191,8 +191,8 @@ translation = Vector2( -128, 128 )
 nextState = 0
 
 [node name="InvisibleBarrier" parent="Entities" instance=ExtResource( 9 )]
-position = Vector2( 576, 784 )
-scale = Vector2( 2, 1 )
+position = Vector2( 608, 784 )
+scale = Vector2( 4, 1 )
 collision_mask = 8192
 
 [node name="InvisibleBarrier2" parent="Entities" instance=ExtResource( 9 )]
