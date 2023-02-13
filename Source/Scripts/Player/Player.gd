@@ -763,19 +763,19 @@ func _physics_process(delta):
 	
 	# Crusher test
 	# if in translate mode, ignore crush mechanics
-	if !translate:
-		var shapeMemory = $HitBox.shape.extents
+	#if !translate:
+	var shapeMemory = $HitBox.shape.extents
 		
 		# Shrink hitbox to test collisions
-		$HitBox.shape.extents.x -= 2
-		$HitBox.shape.extents.y -= 2
+	$HitBox.shape.extents.x -= 2
+	$HitBox.shape.extents.y -= 2
 		
-		# Do a test move, if a collision was found then kill the player
-		var col = move_and_collide(Vector2.ZERO)
-		if col and col.collider.get_collision_layer_bit(21):#test_move(global_transform,Vector2.ZERO):
-			kill()
-		# Reset shape hitbox
-		$HitBox.shape.extents = shapeMemory
+	# Do a test move, if a collision was found then kill the player
+	var col = move_and_collide(Vector2.ZERO)
+	if col and col.collider.get_collision_layer_bit(21):#test_move(global_transform,Vector2.ZERO):
+		kill()
+	# Reset shape hitbox
+	$HitBox.shape.extents = shapeMemory
 
 # Input buttons
 func set_inputs():

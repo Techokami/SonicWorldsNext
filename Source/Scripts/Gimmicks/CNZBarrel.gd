@@ -63,7 +63,7 @@ func attach_player(player):
 	
 	# XXX Need to find a way to prevent the player from getting pushed up when
 	# clipping against walls while on this thing
-	#player.translate = true
+	player.translate = true
 	
 	pass
 func detachPlayer(player, index):
@@ -73,8 +73,8 @@ func detachPlayer(player, index):
 	players_y_offset.remove(index)
 	# XXX Need to find a way to prevent the player from getting pushed up when
 	# clipping against walls while on this thing
-	#if player.currentState != player.STATES.DIE:
-		#player.translate = false
+	if player.currentState != player.STATES.DIE:
+		player.translate = false
 
 func _process(delta):
 	for player in players:
