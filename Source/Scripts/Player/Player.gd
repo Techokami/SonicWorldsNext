@@ -1212,11 +1212,12 @@ func action_move(delta):
 			else:
 				movement.x -= movement.x
 
-func action_jump(animation = "roll", airJumpControl = true):
+func action_jump(animation = "roll", airJumpControl = true, playSound=true):
 	animator.play(animation)
 	animator.advance(0)
 	movement.y = -jmp
-	sfx[0].play()
+	if playSound:
+		sfx[0].play()
 	airControl = airJumpControl
 	cameraDragLerp = 1
 	disconect_from_floor()
