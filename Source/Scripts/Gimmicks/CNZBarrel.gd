@@ -46,6 +46,7 @@ func attach_player(player):
 	player.set_state(player.STATES.ANIMATION)	
 	players.append(player)
 	players_y_offset.append(player.global_position.y - global_position.y)
+	players_z_level.append(player.get_z_index())
 
 	var player_radius = player.global_position.x - global_position.x
 	if (player_radius < 0):
@@ -66,27 +67,36 @@ func attach_player(player):
 	player.translate = true
 
 	pass
-func detachPlayer(player, index):
+func detach_player(player, index):
 	
 	players.remove(index)
 	players_phase.remove(index)
 	players_radius.remove(index)
 	players_y_offset.remove(index)
+	player.set_z_index(players_z_level[index])
+	players_z_level.remove(index)
+	
+	# XXX Need to do something about wall overlap possibility on detach
+	
 	if player.currentState != player.STATES.DIE:
 		player.translate = false
 
 func _process(delta):
 	for player in players:
 		var index = players.find(player)
+		
+		# Ok, this is clever.
+		# If the player is closer to the center, the influence of their phase is diminished.
+		player.set_z_index(get_z_index() + 2 * players_radius[index] * -sin(players_phase[index]))
 			
 		if player.inputs[player.INPUTS.ACTION] == 1:
-			detachPlayer(player, index)
+			detach_player(player, index)
 			# Whoa, jump!
 			player.action_jump("roll", true, false)
 			continue
 			
 		if player.currentState != player.STATES.ANIMATION:
-			detachPlayer(player, index)
+			detach_player(player, index)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 var skipFrames = 0
