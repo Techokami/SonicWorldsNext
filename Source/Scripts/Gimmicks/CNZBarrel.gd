@@ -5,6 +5,7 @@ extends Node2D
 # var a = 2
 # var b = "text"
 
+# XXX Combine all players arrays into one to improve efficiency of attach/detach
 # contains currently attached players.
 var players = []
 # contains the phase (their movement around the barrel) - accumulated with relation to
@@ -76,7 +77,8 @@ func detach_player(player, index):
 	player.set_z_index(players_z_level[index])
 	players_z_level.remove(index)
 	
-	# XXX Need to do something about wall overlap possibility on detach
+	# Clamp position on exit to prevent zips on exit
+	player.global_position.x = clamp(player.global_position.x, global_position.x - 24, global_position.x + 24)
 	
 	if player.currentState != player.STATES.DIE:
 		player.translate = false
