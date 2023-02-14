@@ -375,7 +375,8 @@ func _process(delta):
 			# Check if partner panic
 			if partnerPanic <= 0:
 				if partner.playerControl == 0:
-					partner.inputs = inputMemory[INPUT_MEMORY_LENGTH-1]
+					for i in partner.inputs.size():
+						partner.inputs[i] = inputMemory[INPUT_MEMORY_LENGTH-1][i]
 				
 				# x distance difference check, try to go to the partner
 				if (partner.inputs[INPUTS.XINPUT] == 0 and partner.inputs[INPUTS.YINPUT] == 0
@@ -767,8 +768,8 @@ func _physics_process(delta):
 	var shapeMemory = $HitBox.shape.extents
 		
 		# Shrink hitbox to test collisions
-	$HitBox.shape.extents.x -= 2
-	$HitBox.shape.extents.y -= 2
+	$HitBox.shape.extents.x -= 4
+	$HitBox.shape.extents.y -= 4
 		
 	# Do a test move, if a collision was found then kill the player
 	var col = move_and_collide(Vector2.ZERO)

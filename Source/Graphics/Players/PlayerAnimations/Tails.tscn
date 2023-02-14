@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=2]
+[gd_scene load_steps=62 format=2]
 
 [ext_resource path="res://Shaders/PlayerPalette.tres" type="Material" id=1]
 [ext_resource path="res://Graphics/Players/Tails.png" type="Texture" id=2]
@@ -793,6 +793,36 @@ tracks/0/keys = {
 "values": [ 16, 17, 18, 19, 20, 21, 22, 23 ]
 }
 
+[sub_resource type="Animation" id=133]
+resource_name = "yRotation"
+length = 2.13333
+loop = true
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.166667, 0.35, 0.533333, 0.7, 0.883333, 1.06667, 1.23333, 1.41667, 1.6, 1.76667, 1.96667 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 115, 126, 125, 124, 123, 122, 121, 120, 119, 118, 117, 116 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite/Sprite:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.166667, 0.35, 0.533333, 0.7, 0.883333, 1.06667, 1.23333, 1.41667, 1.6, 1.76667, 1.96667 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 2, -4 ), Vector2( -2, -4 ), Vector2( -2, -4 ), Vector2( 0, -4 ), Vector2( 2, -4 ), Vector2( 2, -4 ), Vector2( -2, -4 ), Vector2( -2, -4 ), Vector2( -2, -4 ), Vector2( 0, -4 ), Vector2( 2, -4 ), Vector2( 2, -4 ) ]
+}
+
 [sub_resource type="AtlasTexture" id=89]
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 48, 48 )
@@ -1155,6 +1185,7 @@ anims/swingVerticalBarManaged = SubResource( 132 )
 anims/swingVerticalBarOffset = SubResource( 129 )
 anims/tired = SubResource( 119 )
 anims/walk = SubResource( 85 )
+anims/yRotation = SubResource( 133 )
 
 [node name="Sprite" type="Sprite" parent="."]
 material = ExtResource( 1 )
@@ -1164,12 +1195,12 @@ texture = ExtResource( 2 )
 offset = Vector2( 0, -4 )
 hframes = 16
 vframes = 16
+frame = 115
 script = ExtResource( 5 )
 
 [node name="DashDust" type="AnimatedSprite" parent="Sprite"]
 visible = false
 frames = SubResource( 96 )
-frame = 5
 playing = true
 offset = Vector2( -9, -4 )
 

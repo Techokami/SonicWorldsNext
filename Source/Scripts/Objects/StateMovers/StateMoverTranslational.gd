@@ -20,8 +20,6 @@ func _ready():
 func enterState():
 	startPos = Vector2(parent.realPosition)
 	endPos = Vector2(parent.realPosition) + translation
-	print("startPos = ", startPos)
-	print("endPos = ", endPos)
 	curTime = 0.0
 	pass
 
