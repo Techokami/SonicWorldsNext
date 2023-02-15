@@ -36,6 +36,14 @@ var animation_offset = -0.02
 # this will mean throwing off a bunch of stuff.
 var spinning_period = 128.0 / 60.0
 
+# Enable the trampoline mode. Needs to be combined with a maxVel to limit the maximum distance traveled.
+# MaxVel affects the maximum velocity that can be held at any time which effectively limits the maximum
+# distance the gimmick can travel. The closer the current velocity is to the maxVel (absolute), the less impact
+# jumping on will have on the velocity.
+export var trampoline_mode = false
+export var maxVel = 480
+export var jumpImpartBaseMultiplier = 0.15
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -82,8 +90,29 @@ func detach_player(player, index):
 	
 	if player.currentState != player.STATES.DIE:
 		player.translate = false
+		
+func process_trampoline_mode(delta, upHeld, downHeld):
+	#print("pasta", upHeld, downHeld)
+	pass
 
 func _process(delta):
+	var upHeld = false
+	var downHeld = false
+	
+	# Determine inputs, once it's available change player animations
+	# Note that we only care if one player is holding a direction even if they
+	# are fighting eachother and only the direction of current travel matters.
+	for player in players:
+		if player.inputs[player.INPUTS.YINPUT] < 0:
+			upHeld = true
+			# XXX Set Up Current Animation once we have look up yRotation
+		elif player.inputs[player.INPUTS.YINPUT] > 0:
+			downHeld = true
+			# XXX Set Up Current Animation once we have look down yRotation
+	
+	if trampoline_mode:
+		process_trampoline_mode(delta, upHeld, downHeld)
+		
 	for player in players:
 		var index = players.find(player)
 		
@@ -91,7 +120,7 @@ func _process(delta):
 		# If the player is closer to the center, the influence of their phase is diminished.
 		player.set_z_index(get_z_index() + 2 * players_radius[index] * -sin(players_phase[index]))
 			
-		if player.inputs[player.INPUTS.ACTION] == 1:
+		if player.any_action_pressed():
 			detach_player(player, index)
 			# Whoa, jump!
 			player.action_jump("roll", true, false)

@@ -811,7 +811,33 @@ func set_inputs():
 	if (playerControl > 0 and horizontalLockTimer <= 0):
 		inputs[INPUTS.XINPUT] = -int(Input.is_action_pressed(inputActions[INPUTS.XINPUT][0]))+int(Input.is_action_pressed(inputActions[INPUTS.XINPUT][1]))
 		inputs[INPUTS.YINPUT] = -int(Input.is_action_pressed(inputActions[INPUTS.YINPUT][0]))+int(Input.is_action_pressed(inputActions[INPUTS.YINPUT][1]))
-	
+
+func any_action_pressed():
+	if inputs[INPUTS.ACTION] == 1:
+		return true
+	if inputs[INPUTS.ACTION2] == 1:
+		return true
+	if inputs[INPUTS.ACTION3] == 1:
+		return true
+	return false
+		
+func any_action_held():
+	if inputs[INPUTS.ACTION] == 2:
+		return true
+	if inputs[INPUTS.ACTION2] == 2:
+		return true
+	if inputs[INPUTS.ACTION3] == 2:
+		return true
+	return false
+		
+func any_action_held_or_pressed():
+	if inputs[INPUTS.ACTION] > 0:
+		return true
+	if inputs[INPUTS.ACTION2] > 0:
+		return true
+	if inputs[INPUTS.ACTION3] > 0:
+		return true
+	return false
 
 func set_state(newState, forceMask = Vector2.ZERO):
 	

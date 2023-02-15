@@ -40,10 +40,11 @@ __meta__ = {
 "_edit_horizontal_guides_": [ -32.0 ],
 "_edit_vertical_guides_": [ -124.0 ]
 }
+trampoline_mode = true
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 5 )
-frame = 1
+frame = 3
 playing = true
 
 [node name="CNZBarrelTopBody" type="KinematicBody2D" parent="."]

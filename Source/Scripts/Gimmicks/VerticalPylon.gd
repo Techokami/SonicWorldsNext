@@ -92,7 +92,7 @@ func process_game(delta):
 		else:
 			i.set_z_index(get_z_index() + 100)
 			
-		if (i.inputs[i.INPUTS.ACTION] == 1):
+		if (i.any_action_pressed()):
 			i.set_z_index(players_z_level[getIndex])
 			i.set_state(i.STATES.JUMP)
 			# set animation to roll
