@@ -125,7 +125,7 @@ func attach_player(player):
 	if (player_radius < 0):
 		player_radius = player_radius * -1.0
 		player_phase = PI
-		player.animator.seek(animation_offset)
+		player.animator.advance(animation_offset)
 
 	players.append([player, player_phase, player_radius, player_z_level])
 
@@ -148,6 +148,22 @@ func detach_player(player, index):
 
 	if player.currentState != player.STATES.DIE:
 		player.translate = false
+		
+func set_anim(player, lookUp, lookDown):
+	var curAnim = player.animator.get_assigned_animation()
+	var targetAnim
+	
+	if lookUp and !lookDown:
+		targetAnim = "yRotationLookUp"
+	elif lookDown and !lookUp:
+		targetAnim = "yRotationLookDown"
+	else:
+		targetAnim = "yRotation"
+		
+	if targetAnim != curAnim:
+		var seekTime = player.animator.get_current_animation_position()
+		player.animator.play(targetAnim)
+		player.animator.advance(seekTime)
 
 func _process(delta):
 	upHeld = false
@@ -159,12 +175,16 @@ func _process(delta):
 		# Note that we only care if one player is holding a direction even if they
 		# are fighting eachother and only the direction of current travel matters.
 		var player = get_player(index)
+		var playerHeldUp = false
+		var playerHeldDown = false
 		if player.inputs[player.INPUTS.YINPUT] < 0:
 			upHeld = true
-			# XXX Set Up Current Animation once we have look up yRotation
+			playerHeldUp = true
 		elif player.inputs[player.INPUTS.YINPUT] > 0:
 			downHeld = true
-			# XXX Set Up Current Animation once we have look down yRotation
+			playerHeldDown = true
+		
+		set_anim(player, playerHeldUp, playerHeldDown)
 
 		# If the player is closer to the center, the influence of their phase is diminished.
 		player.set_z_index(get_z_index() + 2 * get_player_radius(index) * -sin(get_player_phase(index)))
