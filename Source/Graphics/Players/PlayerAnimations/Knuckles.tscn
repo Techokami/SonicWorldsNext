@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=2]
+[gd_scene load_steps=54 format=2]
 
 [ext_resource path="res://Shaders/PlayerPalette.tres" type="Material" id=1]
 [ext_resource path="res://Graphics/Players/Knuckles.png" type="Texture" id=2]
@@ -784,7 +784,43 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.166667, 0.35, 0.533333, 0.7, 0.883333, 1.06667, 1.23333, 1.41667, 1.6, 1.76667, 1.95 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 175, 174, 173, 172, 171, 170, 169, 168, 167, 166, 165, 164 ]
+"values": [ 164, 174, 173, 172, 171, 170, 169, 168, 167, 166, 165, 164 ]
+}
+
+[sub_resource type="Animation" id=131]
+resource_name = "yRotationLookDown"
+length = 2.13333
+loop = true
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.17, 0.35, 0.527, 0.7, 0.884, 1.06667, 1.23333, 1.41667, 1.6, 1.768, 1.955 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 283, 282, 281, 280, 279, 278, 277, 276, 275, 274, 273, 272 ]
+}
+
+[sub_resource type="Animation" id=130]
+resource_name = "yRotationLookUp"
+length = 2.13333
+loop = true
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.17, 0.35, 0.527, 0.7, 0.883333, 1.06667, 1.23333, 1.41667, 1.6, 1.76667, 1.955 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 267, 266, 265, 264, 263, 262, 261, 260, 259, 258, 257, 256 ]
 }
 
 [sub_resource type="AtlasTexture" id=89]
@@ -870,6 +906,8 @@ anims/swingVerticalBarManaged = SubResource( 128 )
 anims/swingVerticalBarOffset = SubResource( 125 )
 anims/walk = SubResource( 85 )
 anims/yRotation = SubResource( 129 )
+anims/yRotationLookDown = SubResource( 131 )
+anims/yRotationLookUp = SubResource( 130 )
 next/edge1 = "edge2"
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -883,7 +921,7 @@ vframes = 18
 [node name="DashDust" type="AnimatedSprite" parent="Sprite"]
 visible = false
 frames = SubResource( 96 )
-frame = 1
+frame = 2
 playing = true
 offset = Vector2( -9, -4 )
 

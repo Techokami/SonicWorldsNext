@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=2]
+[gd_scene load_steps=64 format=2]
 
 [ext_resource path="res://Shaders/PlayerPalette.tres" type="Material" id=1]
 [ext_resource path="res://Graphics/Players/Tails.png" type="Texture" id=2]
@@ -823,6 +823,66 @@ tracks/1/keys = {
 "values": [ Vector2( 2, -4 ), Vector2( -2, -4 ), Vector2( -2, -4 ), Vector2( 0, -4 ), Vector2( 2, -4 ), Vector2( 2, -4 ), Vector2( -2, -4 ), Vector2( -2, -4 ), Vector2( -2, -4 ), Vector2( 0, -4 ), Vector2( 2, -4 ), Vector2( 2, -4 ) ]
 }
 
+[sub_resource type="Animation" id=134]
+resource_name = "yRotationLookDown"
+length = 2.13333
+loop = true
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.166667, 0.35, 0.533333, 0.7, 0.883333, 1.06667, 1.23333, 1.41667, 1.6, 1.768, 1.96667 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 272, 283, 282, 281, 280, 279, 278, 277, 276, 275, 274, 273 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite/Sprite:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.166667, 0.35, 0.533333, 0.7, 0.883333, 1.06667, 1.23333, 1.41667, 1.6, 1.76667, 1.96667 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 2, -4 ), Vector2( -2, -4 ), Vector2( -2, -4 ), Vector2( 0, -4 ), Vector2( 2, -4 ), Vector2( 2, -4 ), Vector2( -2, -4 ), Vector2( -2, -4 ), Vector2( -2, -4 ), Vector2( 0, -4 ), Vector2( 2, -4 ), Vector2( 2, -4 ) ]
+}
+
+[sub_resource type="Animation" id=135]
+resource_name = "yRotationLookUp"
+length = 2.13333
+loop = true
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.166667, 0.35, 0.533333, 0.7, 0.883333, 1.06667, 1.23333, 1.41667, 1.6, 1.76667, 1.96667 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 256, 267, 266, 265, 264, 263, 262, 261, 260, 259, 258, 257 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite/Sprite:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.166667, 0.35, 0.533333, 0.7, 0.883333, 1.06667, 1.23333, 1.41667, 1.6, 1.76667, 1.96667 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 2, -4 ), Vector2( -2, -4 ), Vector2( -2, -4 ), Vector2( 0, -4 ), Vector2( 2, -4 ), Vector2( 2, -4 ), Vector2( -2, -4 ), Vector2( -2, -4 ), Vector2( -2, -4 ), Vector2( 0, -4 ), Vector2( 2, -4 ), Vector2( 2, -4 ) ]
+}
+
 [sub_resource type="AtlasTexture" id=89]
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 48, 48 )
@@ -1186,6 +1246,8 @@ anims/swingVerticalBarOffset = SubResource( 129 )
 anims/tired = SubResource( 119 )
 anims/walk = SubResource( 85 )
 anims/yRotation = SubResource( 133 )
+anims/yRotationLookDown = SubResource( 134 )
+anims/yRotationLookUp = SubResource( 135 )
 
 [node name="Sprite" type="Sprite" parent="."]
 material = ExtResource( 1 )
@@ -1195,13 +1257,12 @@ texture = ExtResource( 2 )
 offset = Vector2( 0, -4 )
 hframes = 16
 vframes = 18
-frame = 115
 script = ExtResource( 5 )
 
 [node name="DashDust" type="AnimatedSprite" parent="Sprite"]
 visible = false
 frames = SubResource( 96 )
-frame = 5
+frame = 4
 playing = true
 offset = Vector2( -9, -4 )
 
