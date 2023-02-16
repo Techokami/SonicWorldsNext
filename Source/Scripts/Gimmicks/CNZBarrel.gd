@@ -1,18 +1,55 @@
 extends Node2D
 
-# XXX Combine all players arrays into one to improve efficiency of attach/detach
-# contains currently attached players.
+# Array of Arrays for each player interacting with the gimmick...
+# Please don't access/mutate this array directly, use the relevant functions
+# or add new ones where needed.
+#
+# [n][0] - player's object id
+#
+# [n][1] - player's phase - This is their current angle spinning around the top of the barrel
+#
+# [n][2] - player's radius - The radius of their spinning - if they jump on the barrel closer to the
+#          edge, their radius will be larger. If they jump on the barrel dead center, their radius
+#          will be zero.
+#
+# [n][3] - player's z level - the z level index that the player originally entered the gimmick on.
+#          Needs to be restored after disconnecting from the gimmick. While on the gimmick, the
+#          player's z level index will be shifted every frame according to their radius and phase.
+#
+# XXX - consider a statically sized array that knows the count of players at the start (possibly stored in globals?)
+# for optimal efficiency.
 var players = []
-# contains the phase (their movement around the barrel) - accumulated with relation to
-# spinning_period during the physics_process.
-var players_phase = []
-# Depending on where you initially connect to the gimmick, your radius is set based
-# on how far you were from the center of the barrel.
-var players_radius = []
-# array of players z levels upon interacting with the gimmick. The Z level is offset
-# by the player's phase while on the gimmick, this is so we can restore it when they
-# detach
-var players_z_level = []
+
+# Use to find the index of the player using the player's object ID
+# Return values are the Same as Array.find(obj), but this function takes into
+# account the specific nesting of the array and treats players[n][0] as the key
+func find_player(player):
+	for i in players.size():
+		if players[i][0] == player:
+			return i
+	return -1
+
+# Use to get the player at the index of the array.
+# Returns the player if the index isn't out of bounds, otherwise returns null.
+func get_player(index):
+	if players.size() >= index + 1:
+		return players[index][0]
+	return null
+	
+#func append_player(player, phase, radius, z_level):
+#	players.append([player, phase, radius, z_level])
+	
+func get_player_phase(index):
+	return players[index][1]
+
+func set_player_phase(index, value):
+	players[index][1] = value
+	
+func get_player_radius(index):
+	return players[index][2]
+	
+func get_player_z_level(index):
+	return players[index][3]
 
 # We want to bring the player back in a little if they are on the extreme overhang of the radius
 var max_radius = 30
@@ -70,31 +107,28 @@ onready var body = $CNZBarrelActiveBody
 func _ready():
 	pass # Replace with function body.
 	loadEnergy = 0.25 * maxVel * maxVel
-	
+
 func impart_force(velocityChange):
 	_yVel += velocityChange
 	_yVel = clamp(_yVel, -maxVel, maxVel)
-	
+
 func attach_player(player):
-	if players.has(player):
+	# If the player is already in the array, reject the attachment attempt
+	if find_player(player) >= 0:
 		return
 
 	player.set_state(player.STATES.ANIMATION)	
-	players.append(player)
-	players_z_level.append(player.get_z_index())
-
-	var player_radius = player.global_position.x - global_position.x
+	var player_z_level = player.get_z_index()
+	var player_radius = clamp(player.global_position.x - global_position.x, -max_radius, max_radius)
+	var player_phase = 0
+	player.animator.play("yRotation")
 	if (player_radius < 0):
-		players_phase.append(PI)
-		players_radius.append(min(max_radius, abs(player_radius)))
-		player.animator.play("yRotation")
-		player.animator.seek(0.5 * spinning_period + animation_offset)
-	else:
-		players_phase.append(0)
-		players_radius.append(min(max_radius, player_radius))
-		player.animator.play("yRotation")
+		player_radius = player_radius * -1.0
+		player_phase = PI
 		player.animator.seek(animation_offset)
-		
+
+	players.append([player, player_phase, player_radius, player_z_level])
+
 	if trampolineMode:
 		# Believe it or not, it really is this simple.
 		impart_force(80.0)
@@ -105,43 +139,36 @@ func attach_player(player):
 	# Prevents player from clipping on walls while they are on the fringes of the gimmick
 	player.translate = true
 
-	pass
 func detach_player(player, index):
-	
+	player.set_z_index(get_player_phase(index))
 	players.remove(index)
-	players_phase.remove(index)
-	players_radius.remove(index)
-	player.set_z_index(players_z_level[index])
-	players_z_level.remove(index)
-	
+
 	# Clamp position on exit to prevent zips on exit -- probably shouldn't use magic numbers.
 	player.global_position.x = clamp(player.global_position.x, global_position.x - 22, global_position.x + 22)
-	
+
 	if player.currentState != player.STATES.DIE:
 		player.translate = false
-		
+
 func _process(delta):
 	upHeld = false
 	downHeld = false
-	
-	# Determine inputs, once it's available change player animations
-	# Note that we only care if one player is holding a direction even if they
-	# are fighting eachother and only the direction of current travel matters.
-	for player in players:
+
+	# We loop backwards so that if we detach a player, they won't affect the index of the next player	
+	for index in range(players.size() - 1, -1, -1):
+		# Determine inputs, once it's available change player animations
+		# Note that we only care if one player is holding a direction even if they
+		# are fighting eachother and only the direction of current travel matters.
+		var player = get_player(index)
 		if player.inputs[player.INPUTS.YINPUT] < 0:
 			upHeld = true
 			# XXX Set Up Current Animation once we have look up yRotation
 		elif player.inputs[player.INPUTS.YINPUT] > 0:
 			downHeld = true
 			# XXX Set Up Current Animation once we have look down yRotation
-	
-	for player in players:
-		var index = players.find(player)
-		
-		# Ok, this is clever.
+
 		# If the player is closer to the center, the influence of their phase is diminished.
-		player.set_z_index(get_z_index() + 2 * players_radius[index] * -sin(players_phase[index]))
-			
+		player.set_z_index(get_z_index() + 2 * get_player_radius(index) * -sin(get_player_phase(index)))
+
 		if player.any_action_pressed():
 			detach_player(player, index)
 			# Whoa, jump!
@@ -154,7 +181,6 @@ func _process(delta):
 			if _yVel > 0:
 				player.position.y -= _yVel * delta + 10
 			player.update()
-			
 			continue
 			
 		if player.currentState != player.STATES.ANIMATION:
@@ -163,22 +189,27 @@ func _process(delta):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 var skipFrames = 0
 
+# Invoked if this gimmick operates as a trampoline.
 func physics_process_trampoline_mode(delta, upHeld, downHeld):
+	# Energy is the velocity energy plus the spring potential energy
 	var energy = 0.25 * (_yVel * _yVel) + _realY * _realY
 	var pivot = 0
 	var accelerationFactor
-	var loadFactor
-	
-	# Once we are at the loadEnergy level, we are fully loaded
-	loadFactor = min(energy / loadEnergy, 1.0)
-	
+	# in a zero energy system, the unloaded values are used
+	# in a max energy system, the loaded values are used
+	# anywhere in the middle, we use the weighted average
+	var loadFactor = min(energy / loadEnergy, 1.0)
 	var springConstant = springConstantLoaded * loadFactor + springConstantUnloaded * (1.0 - loadFactor)
 	var decay = decayLoaded * loadFactor + decayUnloaded * (1.0 - loadFactor)
-	
+
+	# The further away from the pivot we are, the stronger the acceleration from the spring force
 	accelerationFactor = (pivot - _realY) * springConstant
-		
+
+	# We don't apply decay if player influence was applied
 	var influenced = false
-	
+
+	# The players only have influence while acceleration and velocity are working together
+	# Also, holding against the direction of travel has no effect
 	if _realY > 0 and _yVel < 0 and upHeld:
 		_yVel = clamp(_yVel - (180.0 * delta), -maxVel, maxVel)
 		influenced = true
@@ -191,11 +222,12 @@ func physics_process_trampoline_mode(delta, upHeld, downHeld):
 
 	_yVel += accelerationFactor * delta
 	_realY += _yVel * delta
-	
+
 	if !influenced:
 		_yVel = _yVel * (1 - (decay * delta))
 		pass
 
+	# We move the body rather than the node. The body has all the physical components of the gimmick,
 	body.position.y = floor(_realY)
 
 	pass
@@ -203,12 +235,14 @@ func physics_process_trampoline_mode(delta, upHeld, downHeld):
 func _physics_process(delta):
 	if trampolineMode:
 		physics_process_trampoline_mode(delta, upHeld, downHeld)
-	for player in players:
-		var index = players.find(player)
+
+	for index in range(players.size()):
+		var player = get_player(index)
 		player.direction = 1
-		players_phase[index] += (delta / spinning_period) * 2.0 * PI
-		player.global_position.x = floor(body.global_position.x + players_radius[index] * cos(players_phase[index]))
+		set_player_phase(index, get_player_phase(index) + (delta / spinning_period) * 2.0 * PI)
+		player.global_position.x = floor(body.global_position.x + get_player_radius(index) * cos(get_player_phase(index)))
 		player.global_position.y = floor(body.global_position.y - player.currentHitbox.NORMAL.y - 2)
 		player.movement.x = 0
 		player.movement.y = 0
+		# XXX need to figure out why player 2 is mispositioned while this gimmick is moving quickly
 		player.cam_update()
