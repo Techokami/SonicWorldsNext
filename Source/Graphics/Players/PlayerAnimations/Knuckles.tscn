@@ -878,13 +878,12 @@ z_index = 5
 texture = ExtResource( 2 )
 offset = Vector2( 0, -8 )
 hframes = 16
-vframes = 16
-frame = 167
+vframes = 18
 
 [node name="DashDust" type="AnimatedSprite" parent="Sprite"]
 visible = false
 frames = SubResource( 96 )
-frame = 2
+frame = 1
 playing = true
 offset = Vector2( -9, -4 )
 
