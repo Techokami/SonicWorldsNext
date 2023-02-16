@@ -140,7 +140,7 @@ func attach_player(player):
 	player.translate = true
 
 func detach_player(player, index):
-	player.set_z_index(get_player_phase(index))
+	player.set_z_index(get_player_z_level(index))
 	players.remove(index)
 
 	# Clamp position on exit to prevent zips on exit -- probably shouldn't use magic numbers.
