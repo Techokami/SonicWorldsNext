@@ -40,27 +40,29 @@ __meta__ = {
 "_edit_horizontal_guides_": [ -32.0 ],
 "_edit_vertical_guides_": [ -124.0 ]
 }
-trampoline_mode = true
+trampolineMode = true
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-frames = SubResource( 5 )
-frame = 3
-playing = true
-
-[node name="CNZBarrelTopBody" type="KinematicBody2D" parent="."]
-collision_layer = 2105344
+[node name="CNZBarrelActiveBody" type="KinematicBody2D" parent="."]
+collision_layer = 8192
 collision_mask = 0
 moving_platform_apply_velocity_on_leave = 2
 script = ExtResource( 2 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CNZBarrelTopBody"]
-position = Vector2( 0, -30 )
+[node name="AnimatedSprite" type="AnimatedSprite" parent="CNZBarrelActiveBody"]
+position = Vector2( 0, 31 )
+frames = SubResource( 5 )
+frame = 3
+playing = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CNZBarrelActiveBody"]
+position = Vector2( 0, 1 )
 shape = SubResource( 6 )
 
-[node name="CNZBarrelInactiveBody" type="KinematicBody2D" parent="."]
+[node name="CNZBarrelInactiveBody" type="KinematicBody2D" parent="CNZBarrelActiveBody"]
+position = Vector2( 0, 31 )
 collision_layer = 15
 collision_mask = 15
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CNZBarrelInactiveBody"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CNZBarrelActiveBody/CNZBarrelInactiveBody"]
 position = Vector2( 0, 2 )
 shape = SubResource( 7 )

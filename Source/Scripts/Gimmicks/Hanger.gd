@@ -23,14 +23,11 @@ var players = []
 # How many players are currently connected. private, please use accessor to read.
 var _playerContacts = 0
 
-# Prevents immediate regrab in certain conditions
+# Sets the distance from the center of the hitbox (vertically) at which the contact may occur
 const _CONTACT_DISTANCE = 17
 
 # Twelve frames must pass between regrabs
 const _CONTACT_TIME_LIMIT = ceil(12.0 * (1000.0 / 60.0))
-
-# Six frames must pass between pickup and dropoff from ground
-const _GROUND_CONTACT_TIME_LIMIT = ceil(6.0 * (1000.0 / 60.0))
 
 # If true, the player can drop through by holding down, bypassing the grab.
 export var holdDownToDrop = false
@@ -118,43 +115,19 @@ func is_player_disconnect_time_elapsed(index):
 		return true
 	return false
 
-func set_player_connect_time(index):
-	if players.size() >= index + 1:
-		players[index][3] = Time.get_ticks_msec()
-		print("players[index][3] = ", players[index][3])
-		return
-	printerr("Attempted to set player disconnect time on invalid index")
-	
-func is_player_connect_time_elapsed(index):
-	if players.size() < index + 1:
-		printerr("Attempted to access player disconnect on invalid index")
-		# returning false just so there is something to consume
-		return false
-	if players[index][3] == null:
-		return true
-		
-	var curTime = Time.get_ticks_msec()
-	var elapsedTime = curTime - players[index][3]
-	if elapsedTime > _CONTACT_TIME_LIMIT:
-		print ("elapsed time checked - ", elapsedTime)
-		return true
-	return false
-
 # Returns the count of players contacting with the hanger. Used by external scripts.
 func get_player_contacting_count():
 	return _playerContacts
 	
 func physics_process_connected(_delta, player, index):
-	_playerContacts += 1
-	
-	if player.ground and is_player_connect_time_elapsed(index):
+	if player.ground:
 		disconnect_grab(player, index, false)
 		return
 
 	# XXX In the future, we should make the states themselves have properties for whether or not
 	# they allow interaction with gimmicks that use the player's hands so that we don't have to
 	# make up a list of states for stuff like this every time.
-	if player.currentState != player.STATES.AIR and player.currentState != player.STATES.JUMP and player.currentState != player.STATES.GLIDE:
+	if player.currentState != player.STATES.AIR and player.currentState != player.STATES.JUMP and player.currentState != player.STATES.GLIDE and player.currentState != player.STATES.FLY:
 		disconnect_grab(player, index, false)
 		return
 
@@ -208,6 +181,7 @@ func _physics_process(delta):
 		var player = get_player(index)
 		
 		if get_player_contact(index) != null:
+			_playerContacts += 1
 			physics_process_connected(delta, player, index)
 			continue
 		else:
@@ -224,10 +198,6 @@ func connect_grab(player, index):
 	# Iterate player contacts by one. Only really used by Tails fly-carry right now, but who knows,
 	# maybe it could be part of a weight mechanic for some gimmick later.
 	_playerContacts += 1
-	
-	# Prevent player from being dropped for a few frames on ground grab
-	if player.ground:
-		set_player_connect_time(index)
 	
 	# set contact point (start grab)
 	if get_player_contact(index) == null:
@@ -251,7 +221,6 @@ func connect_grab(player, index):
 	# lock player direction if that toggle is set.
 	if lockPlayerDirection:
 		player.stateList[player.STATES.AIR].lockDir = true	
-
 
 func disconnect_grab(player, index, deliberate, jumpUpwards=false):
 	# Don't bother disconnecting if they aren't already connected.
@@ -280,6 +249,7 @@ func disconnect_grab(player, index, deliberate, jumpUpwards=false):
 	player.poleGrabID = null
 	# unset the contact point for the player XXX want to switch to mutator function later
 	set_player_contact(index, null)
+	
 	# lower playerContacts value one... I guess in case anything else accesses this in the same process pass.
 	_playerContacts -= 1
 	pass
