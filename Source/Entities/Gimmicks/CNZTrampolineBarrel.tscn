@@ -29,10 +29,10 @@ animations = [ {
 } ]
 
 [sub_resource type="RectangleShape2D" id=6]
-extents = Vector2( 32, 2 )
+extents = Vector2( 32, 8 )
 
 [sub_resource type="RectangleShape2D" id=7]
-extents = Vector2( 32, 30 )
+extents = Vector2( 32, 24 )
 
 [node name="CNZTrampolineBarrel" type="Node2D"]
 script = ExtResource( 3 )
@@ -51,11 +51,11 @@ script = ExtResource( 2 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="CNZBarrelActiveBody"]
 position = Vector2( 0, 31 )
 frames = SubResource( 5 )
-frame = 3
+frame = 1
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CNZBarrelActiveBody"]
-position = Vector2( 0, 1 )
+position = Vector2( 0, 7 )
 shape = SubResource( 6 )
 
 [node name="CNZBarrelInactiveBody" type="KinematicBody2D" parent="CNZBarrelActiveBody"]
@@ -64,5 +64,5 @@ collision_layer = 15
 collision_mask = 15
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CNZBarrelActiveBody/CNZBarrelInactiveBody"]
-position = Vector2( 0, 2 )
+position = Vector2( 0, 8 )
 shape = SubResource( 7 )
