@@ -168,9 +168,13 @@ func set_anim(player, lookUp, lookDown):
 		player.animator.play(targetAnim)
 		player.animator.advance(seekTime)
 		if targetAnim == "yRotationLookDown":
-			player.set_hitbox(player.currentHitbox.CROUCH)
+			#player.set_hitbox(player.currentHitbox.CROUCH, true)
+			player.get_node("HitBox").shape.extents = player.currentHitbox.CROUCH
+			player.get_node("HitBox").position = player.hitBoxOffset.crouch
 		else:
-			player.set_hitbox(player.currentHitbox.NORMAL)	
+			#player.set_hitbox(player.currentHitbox.NORMAL, true)	
+			player.get_node("HitBox").position = player.hitBoxOffset.normal
+			player.get_node("HitBox").shape.extents = player.currentHitbox.NORMAL
 
 func _process(delta):
 	upHeld = false
