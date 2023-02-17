@@ -142,6 +142,9 @@ func attach_player(player):
 func detach_player(player, index):
 	player.set_z_index(get_player_z_level(index))
 	players.remove(index)
+	
+	if player.currentState == player.STATES.DIE:
+		player.animator.play("die")
 
 	# Clamp position on exit to prevent zips on exit -- probably shouldn't use magic numbers.
 	player.global_position.x = clamp(player.global_position.x, global_position.x - 22, global_position.x + 22)
@@ -164,6 +167,10 @@ func set_anim(player, lookUp, lookDown):
 		var seekTime = player.animator.get_current_animation_position()
 		player.animator.play(targetAnim)
 		player.animator.advance(seekTime)
+		if targetAnim == "yRotationLookDown":
+			player.set_hitbox(player.currentHitbox.CROUCH)
+		else:
+			player.set_hitbox(player.currentHitbox.NORMAL)	
 
 func _process(delta):
 	upHeld = false
