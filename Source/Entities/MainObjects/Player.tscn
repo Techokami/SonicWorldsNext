@@ -1,4 +1,4 @@
-[gd_scene load_steps=183 format=2]
+[gd_scene load_steps=185 format=2]
 
 [ext_resource path="res://Scripts/Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Graphics/Players/PlayerAnimations/Sonic.tscn" type="PackedScene" id=2]
@@ -336,7 +336,7 @@ radius = 25.0
 extents = Vector2( 9, 4 )
 
 [sub_resource type="RectangleShape2D" id=167]
-extents = Vector2( 3, 3 )
+extents = Vector2( 8, 11.5 )
 
 [sub_resource type="CircleShape2D" id=58]
 radius = 64.0
@@ -616,6 +616,12 @@ animations = [ {
 "speed": 30.0
 } ]
 
+[sub_resource type="RectangleShape2D" id=168]
+extents = Vector2( 1, 2 )
+
+[sub_resource type="RectangleShape2D" id=169]
+extents = Vector2( 2, 1 )
+
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 4096
 collision_mask = 8192
@@ -695,8 +701,6 @@ script = ExtResource( 59 )
 [node name="WallClimb" type="Node" parent="States"]
 script = ExtResource( 62 )
 
-[node name="SwingVerticalBar" type="Node" parent="States"]
-
 [node name="PhysicsLookUp" type="Node" parent="."]
 script = ExtResource( 4 )
 
@@ -734,6 +738,7 @@ shape = SubResource( 102 )
 disabled = true
 
 [node name="TailsFlightHitArea" type="Area2D" parent="."]
+visible = false
 position = Vector2( 0, -19 )
 collision_layer = 524288
 collision_mask = 524288
@@ -745,6 +750,7 @@ disabled = true
 
 [node name="TailsCarryBox" type="Area2D" parent="."]
 process_priority = 10
+visible = false
 position = Vector2( 0, 8 )
 collision_layer = 0
 collision_mask = 4096
@@ -752,8 +758,10 @@ script = ExtResource( 57 )
 holdDownToDrop = true
 setCenter = true
 onlyActiveMovingDown = false
+groundPickup = true
 
 [node name="HitBox" type="CollisionShape2D" parent="TailsCarryBox"]
+position = Vector2( 0, -3.5 )
 shape = SubResource( 167 )
 
 [node name="Grab" type="AudioStreamPlayer" parent="TailsCarryBox"]
@@ -781,14 +789,12 @@ z_index = 7
 position = Vector2( 0, -16 )
 frames = SubResource( 157 )
 animation = "Invincibility"
-frame = 6
 playing = true
 
 [node name="StarGenerator2" type="AnimatedSprite" parent="InvincibilityBarrier"]
 position = Vector2( 0, 16 )
 frames = SubResource( 157 )
 animation = "Invincibility"
-frame = 6
 playing = true
 
 [node name="SFX" type="Node" parent="."]
@@ -910,6 +916,39 @@ bus = "SFX"
 [node name="Slide" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource( 61 )
 bus = "SFX"
+
+[node name="CrushSensorLeft" type="Area2D" parent="."]
+position = Vector2( -8, 0 )
+collision_layer = 0
+collision_mask = 2097152
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CrushSensorLeft"]
+shape = SubResource( 168 )
+
+[node name="CrushSensorRight" type="Area2D" parent="."]
+position = Vector2( 8, 0 )
+collision_layer = 0
+collision_mask = 2097152
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CrushSensorRight"]
+shape = SubResource( 168 )
+
+[node name="CrushSensorUp" type="Area2D" parent="."]
+position = Vector2( 0, -18 )
+collision_layer = 0
+collision_mask = 2097152
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CrushSensorUp"]
+shape = SubResource( 169 )
+
+[node name="CrushSensorDown" type="Area2D" parent="."]
+position = Vector2( 0, 19 )
+collision_layer = 0
+collision_mask = 2097152
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CrushSensorDown"]
+position = Vector2( 0, 2 )
+shape = SubResource( 169 )
 
 [connection signal="timeout" from="States/Fly/FlyBugStop" to="States/Fly" method="_on_FlyBugStop_timeout"]
 [connection signal="timeout" from="SkidDustTimer" to="States/Normal" method="_on_SkidDustTimer_timeout"]

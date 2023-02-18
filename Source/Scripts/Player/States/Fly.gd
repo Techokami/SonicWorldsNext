@@ -13,9 +13,9 @@ onready var carryBox = parent.get_node("TailsCarryBox")
 func state_activated():
 	flightTime = 8
 	flyGrav = 0.03125
-	actionPressed = true
 	flyHitBox.disabled = false
 	carryHitBox.disabled = false
+	actionPressed = true
 	
 func state_exit():
 	flyHitBox.call_deferred("set","disabled",true)
@@ -30,7 +30,7 @@ func state_exit():
 func _process(_delta):
 	# Animation
 	if parent.water:
-		if carryBox.playerContacts != 0:
+		if carryBox.get_player_contacting_count() != 0:
 			parent.animator.play("swimCarry")
 		elif flightTime > 0:
 			parent.animator.play("swim")
@@ -38,7 +38,7 @@ func _process(_delta):
 			parent.animator.play("swimTired")
 	else:
 		if flightTime > 0:
-			if carryBox.playerContacts == 0:
+			if carryBox.get_player_contacting_count() == 0:
 				parent.animator.play("fly")
 			else:
 				if parent.movement.y >= 0:
@@ -64,41 +64,49 @@ func _process(_delta):
 
 func _physics_process(delta):
 	
-	# Carrying other palyer
-	var carryPlayer = null
+	# If carrying another player, 
+	var carriedPlayer = null
 	
-	if carryBox.playerContacts > 0:
-		carryPlayer = carryBox.players[0]
-		if carryPlayer.poleGrabID == carryBox:
-			carryPlayer.movement = parent.movement
-			carryPlayer.stateList[parent.STATES.AIR].lockDir = true
+	if carryBox.get_player_contacting_count() > 0:
+		carriedPlayer = carryBox.get_player(0)
+
+	# Set carried player attributes when there *is* a carried player
+	if carriedPlayer != null:
+		if carriedPlayer.poleGrabID == carryBox:
+			carriedPlayer.movement = parent.movement
+			carriedPlayer.stateList[parent.STATES.AIR].lockDir = true
 			# set carried player direction
-			carryPlayer.direction = parent.direction
-			carryPlayer.sprite.flip_h = (parent.direction < 0)
+			carriedPlayer.direction = parent.direction
+			carriedPlayer.sprite.flip_h = (parent.direction < 0)
 		
 		# set immediate inputs if ai
 		if parent.playerControl == 0:
 			for i in range(parent.inputs.size()):
-				carryBox.players[0].inputMemory[parent.INPUT_MEMORY_LENGTH-1][i] = carryBox.players[0].inputs[i]
-				parent.inputs[i] = carryBox.players[0].inputs[i]
+				carriedPlayer.inputMemory[parent.INPUT_MEMORY_LENGTH-1][i] = carriedPlayer.inputs[i]
+				parent.inputs[i] = carriedPlayer.inputs[i]
+			# Sonic 3 A.I.R. Hybrid Style - convert holding up into continual A presses while in AI mode
+			if parent.is_up_held():
+				parent.inputs[parent.INPUTS.ACTION] = 1
+			carryBox.playerCarryAI = 1
+		else:
+			carryBox.playerCarryAI = 0
 	
 	# air movement
-	if (parent.inputs[parent.INPUTS.XINPUT] != 0):
+	if (parent.get_x_input() != 0):
 		
-		if (parent.movement.x*parent.inputs[parent.INPUTS.XINPUT] < parent.top):
+		if (parent.movement.x*parent.get_x_input() < parent.top):
 			if (abs(parent.movement.x) < parent.top):
-				parent.movement.x = clamp(parent.movement.x+parent.air/GlobalFunctions.div_by_delta(delta)*parent.inputs[parent.INPUTS.XINPUT],-parent.top,parent.top)
+				parent.movement.x = clamp(parent.movement.x+parent.air/GlobalFunctions.div_by_delta(delta)*parent.get_x_input(),-parent.top,parent.top)
 				
 	# Air drag
 	if (parent.movement.y < 0 and parent.movement.y > -parent.releaseJmp*60):
 		parent.movement.x -= ((parent.movement.x / 0.125) / 256)*60*delta
 	
 	# Change parent direction
-	if (parent.inputs[parent.INPUTS.XINPUT] != 0):
-		parent.direction = parent.inputs[parent.INPUTS.XINPUT]
-		if carryPlayer != null:
-			carryPlayer.direction = parent.direction
-	
+	if (parent.get_x_input() != 0):
+		parent.direction = parent.get_x_input()
+		if carriedPlayer != null:
+			carriedPlayer.direction = parent.direction
 	
 	# set facing direction
 	parent.sprite.flip_h = (parent.direction < 0)
@@ -109,7 +117,7 @@ func _physics_process(delta):
 	flightTime -= delta
 	# Button press
 	if parent.movement.y >= -1*60 and flightTime > 0 and !parent.roof and parent.position.y >= parent.limitTop+16:
-		if (parent.inputs[parent.INPUTS.ACTION] or parent.inputs[parent.INPUTS.ACTION2] or parent.inputs[parent.INPUTS.ACTION3]) and !actionPressed and (carryBox.playerContacts == 0 or !parent.water):
+		if parent.any_action_held_or_pressed() and (!actionPressed or parent.get_y_input() < 0) and (carryBox.get_player_contacting_count() == 0 or !parent.water):
 			flyGrav = -0.125
 	# return gravity to normal after velocity is less then -1
 	else:
@@ -119,7 +127,8 @@ func _physics_process(delta):
 		parent.movement.y = max(0,parent.movement.y)
 	
 	# set actionPressed to prevent input repeats
-	actionPressed = (parent.inputs[parent.INPUTS.ACTION] or parent.inputs[parent.INPUTS.ACTION2] or parent.inputs[parent.INPUTS.ACTION3])
+	actionPressed = parent.any_action_held_or_pressed()
+	
 	# Reset state if on ground
 	if (parent.ground):
 		parent.set_state(parent.STATES.NORMAL)

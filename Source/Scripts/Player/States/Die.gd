@@ -1,5 +1,8 @@
 extends "res://Scripts/Player/State.gd"
 
+func _ready():
+	invulnerability = true # ironic
+
 func _physics_process(delta):
 	# gravity
 	parent.movement.y += parent.grv/GlobalFunctions.div_by_delta(delta)
