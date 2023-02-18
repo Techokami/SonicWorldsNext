@@ -60,7 +60,7 @@ func process_game(delta):
 		var getIndex = players.find(i)
 
 		# If the player isn't on the bar, skip it.
-		if i.currentState != i.STATES.SWINGVERTICALBAR:
+		if i.currentState != i.STATES.ANIMATION:
 			continue
 		
 		# Increment the rotation timer for the player
@@ -149,7 +149,7 @@ func _on_FBZ_Pylon_Area_body_entered(body):
 	# Play the swinging animation at 0 speed so we can control it manually.
 	body.animator.play("swingVerticalBarManaged", -1, 0, false)
 	
-	body.set_state(body.STATES.SWINGVERTICALBAR)
+	body.set_state(body.STATES.ANIMATION)
 
 func _on_FBZ_Pylon_Area_body_exited(body):
 	remove_player(body)
@@ -159,7 +159,7 @@ func remove_player(player):
 		# Don't allow removal of someone who is still on the vertical bar. This can occur with
 		# high speeds. Preventing this should be fine since the player will be brought back into
 		# collision overlap range by virtue of being on the bar.
-		if (player.currentState == player.STATES.SWINGVERTICALBAR):
+		if (player.currentState == player.STATES.ANIMATION):
 			return
 		player.animator.play("roll")
 		# Clean out the player from all player-linked arrays.
