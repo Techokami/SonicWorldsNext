@@ -336,7 +336,7 @@ radius = 25.0
 extents = Vector2( 9, 4 )
 
 [sub_resource type="RectangleShape2D" id=167]
-extents = Vector2( 3, 3 )
+extents = Vector2( 8, 11.5 )
 
 [sub_resource type="CircleShape2D" id=58]
 radius = 64.0
@@ -752,8 +752,10 @@ script = ExtResource( 57 )
 holdDownToDrop = true
 setCenter = true
 onlyActiveMovingDown = false
+groundPickup = true
 
 [node name="HitBox" type="CollisionShape2D" parent="TailsCarryBox"]
+position = Vector2( 0, -3.5 )
 shape = SubResource( 167 )
 
 [node name="Grab" type="AudioStreamPlayer" parent="TailsCarryBox"]
@@ -781,14 +783,14 @@ z_index = 7
 position = Vector2( 0, -16 )
 frames = SubResource( 157 )
 animation = "Invincibility"
-frame = 6
+frame = 1
 playing = true
 
 [node name="StarGenerator2" type="AnimatedSprite" parent="InvincibilityBarrier"]
 position = Vector2( 0, 16 )
 frames = SubResource( 157 )
 animation = "Invincibility"
-frame = 6
+frame = 1
 playing = true
 
 [node name="SFX" type="Node" parent="."]
