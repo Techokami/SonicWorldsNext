@@ -49,7 +49,9 @@ export var lockPlayerDirection = true
 # Can pick up from ground
 export var groundPickup = false
 
-var groundPickupTimer = 0
+# Changes some behaviors of how the controls work. Only gets set by parent object
+# if the hanger is owned by a player.
+var playerCarryAI = false
 
 # Optionally set sound to play when making contact
 export var grabSound = preload("res://Audio/SFX/Player/Grab.wav")
@@ -253,28 +255,41 @@ func disconnect_grab(player, index, deliberate, jumpUpwards=false):
 	# lower playerContacts value one... I guess in case anything else accesses this in the same process pass.
 	_playerContacts -= 1
 	pass
+	
+func checkPlayerDisconnectByAction(player):
+	if playerCarryAI:
+		if player.inputs[player.INPUTS.YINPUT] > 0 and player.any_action_pressed():
+			return 1 # a retval of 1 is a jump up
+	elif player.any_action_pressed():
+		if player.inputs[player.INPUTS.YINPUT] > 0:
+			return 2 # a retval of 2 is a jump down
+		return 1
+	return 0 # a retval of 0 is a no disconnect
 
 func _process(_delta):
 	# All this process does is disconnects a grab if the player who owns it makes a deliberate action
 	# to jump off of the hanger.
 
 	for index in players.size():
+		var jumpUp
 		var player = players[index][0]
 		
 		# verify state is valid for grabbing and not on floor
 		if player.ground or player.currentState != player.STATES.AIR:
 			continue
 
-		# We don't need to do anything if the player isn't pressing any buttons
-		if !player.any_action_pressed():
+		# We don't need to do anything if the player isn't jumping off
+		jumpUp = checkPlayerDisconnectByAction(player)
+		if jumpUp == 0:
 			continue
 
 		# We don't need to do anything if the player isn't grabbing anything
 		if !check_grab(player,index):
 			continue
 
-		# Depending on the player's Y Input, we either want to jump or drop.
-		disconnect_grab(player, index, true, player.inputs[player.INPUTS.YINPUT] <= 0)
+		# Disconnect grab can either jump up or go down depending on player input and whether they
+		# were being carried by AI when they made that input.
+		disconnect_grab(player, index, true, jumpUp == 1)
 
 func check_grab(player, index):
 	# We always return a grab if the player's contact point is already set.

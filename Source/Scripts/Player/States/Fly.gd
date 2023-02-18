@@ -13,9 +13,9 @@ onready var carryBox = parent.get_node("TailsCarryBox")
 func state_activated():
 	flightTime = 8
 	flyGrav = 0.03125
-	actionPressed = true
 	flyHitBox.disabled = false
 	carryHitBox.disabled = false
+	actionPressed = true
 	
 func state_exit():
 	flyHitBox.call_deferred("set","disabled",true)
@@ -84,6 +84,11 @@ func _physics_process(delta):
 			for i in range(parent.inputs.size()):
 				carriedPlayer.inputMemory[parent.INPUT_MEMORY_LENGTH-1][i] = carriedPlayer.inputs[i]
 				parent.inputs[i] = carriedPlayer.inputs[i]
+			if parent.inputs[parent.INPUTS.YINPUT] < 0:
+				parent.inputs[parent.INPUTS.ACTION] = 1
+			carryBox.playerCarryAI = 1
+		else:
+			carryBox.playerCarryAI = 0
 	
 	# air movement
 	if (parent.inputs[parent.INPUTS.XINPUT] != 0):
@@ -111,7 +116,7 @@ func _physics_process(delta):
 	flightTime -= delta
 	# Button press
 	if parent.movement.y >= -1*60 and flightTime > 0 and !parent.roof and parent.position.y >= parent.limitTop+16:
-		if (parent.inputs[parent.INPUTS.ACTION] or parent.inputs[parent.INPUTS.ACTION2] or parent.inputs[parent.INPUTS.ACTION3]) and !actionPressed and (carryBox.get_player_contacting_count() == 0 or !parent.water):
+		if parent.any_action_held_or_pressed() and (!actionPressed or parent.inputs[parent.INPUTS.YINPUT] < 0) and (carryBox.get_player_contacting_count() == 0 or !parent.water):
 			flyGrav = -0.125
 	# return gravity to normal after velocity is less then -1
 	else:
@@ -121,7 +126,8 @@ func _physics_process(delta):
 		parent.movement.y = max(0,parent.movement.y)
 	
 	# set actionPressed to prevent input repeats
-	actionPressed = (parent.inputs[parent.INPUTS.ACTION] or parent.inputs[parent.INPUTS.ACTION2] or parent.inputs[parent.INPUTS.ACTION3])
+	actionPressed = parent.any_action_held_or_pressed()
+	
 	# Reset state if on ground
 	if (parent.ground):
 		parent.set_state(parent.STATES.NORMAL)
