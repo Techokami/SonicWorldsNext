@@ -258,10 +258,10 @@ func disconnect_grab(player, index, deliberate, jumpUpwards=false):
 	
 func checkPlayerDisconnectByAction(player):
 	if playerCarryAI:
-		if player.inputs[player.INPUTS.YINPUT] > 0 and player.any_action_pressed():
+		if player.is_down_held() and player.any_action_pressed():
 			return 1 # a retval of 1 is a jump up
 	elif player.any_action_pressed():
-		if player.inputs[player.INPUTS.YINPUT] > 0:
+		if player.is_down_held():
 			return 2 # a retval of 2 is a jump down
 		return 1
 	return 0 # a retval of 0 is a no disconnect
@@ -309,7 +309,7 @@ func check_grab(player, index):
 		return false
 		
 	# We don't grab when holdDownToDrop is active and down is held
-	if holdDownToDrop and player.inputs[player.INPUTS.YINPUT] > 0:
+	if holdDownToDrop and player.is_down_held():
 		return false
 
 	# There haven't been enough ticks since the last grab ended, so we aren't regrabbing

@@ -58,6 +58,7 @@ func _ready():
 func process_game(delta):
 	for i in players:
 		var getIndex = players.find(i)
+		var yInput = i.get_y_input()
 
 		# If the player isn't on the bar, skip it.
 		if i.currentState != i.STATES.ANIMATION:
@@ -66,9 +67,9 @@ func process_game(delta):
 		# Increment the rotation timer for the player
 		players_rotation_timer[getIndex] += delta
 		
-		if (i.inputs[i.INPUTS.YINPUT] == 0):
+		if (yInput == 0):
 			i.movement.y = 0
-		elif (i.inputs[i.INPUTS.YINPUT] > 0):
+		elif (yInput > 0):
 			i.movement.y = climb_speed
 		else:
 			i.movement.y = -climb_speed
@@ -97,7 +98,7 @@ func process_game(delta):
 			i.set_state(i.STATES.JUMP)
 			# set animation to roll
 			i.movement.y = -launch_vertical_speed
-			if (i.inputs[i.INPUTS.XINPUT] < 0):
+			if (i.is_left_held()):
 				i.movement.x = -launch_speed
 			else:
 				i.movement.x = launch_speed
