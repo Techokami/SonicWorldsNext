@@ -701,8 +701,6 @@ script = ExtResource( 59 )
 [node name="WallClimb" type="Node" parent="States"]
 script = ExtResource( 62 )
 
-[node name="SwingVerticalBar" type="Node" parent="States"]
-
 [node name="PhysicsLookUp" type="Node" parent="."]
 script = ExtResource( 4 )
 
@@ -791,14 +789,12 @@ z_index = 7
 position = Vector2( 0, -16 )
 frames = SubResource( 157 )
 animation = "Invincibility"
-frame = 7
 playing = true
 
 [node name="StarGenerator2" type="AnimatedSprite" parent="InvincibilityBarrier"]
 position = Vector2( 0, 16 )
 frames = SubResource( 157 )
 animation = "Invincibility"
-frame = 7
 playing = true
 
 [node name="SFX" type="Node" parent="."]
