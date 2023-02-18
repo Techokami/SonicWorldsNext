@@ -762,21 +762,26 @@ func _physics_process(delta):
 			splash.z_index = sprite.z_index+10
 			get_parent().add_child(splash)
 	
-	# Crusher test
-	# if in translate mode, ignore crush mechanics
-	#if !translate:
-	var shapeMemory = $HitBox.shape.extents
+	# We don't check for crushing if the player is in an invulnerable state (note that invulernable means immune to crushing/death by falling)
+	if !stateList[currentState].get_state_invulnerable():
+		var crushSensorLeft = $CrushSensorLeft
+		var crushSensorRight = $CrushSensorRight
+		var crushSensorUp = $CrushSensorUp
+		var crushSensorDown = $CrushSensorDown
 		
-		# Shrink hitbox to test collisions
-	$HitBox.shape.extents.x -= 4
-	$HitBox.shape.extents.y -= 4
+		crushSensorLeft.position.x = -($HitBox.shape.extents.x - 1)
+		crushSensorRight.position.x = ($HitBox.shape.extents.x - 1)
+		crushSensorUp.position.y = -($HitBox.shape.extents.y -1)
+		# note that the bottom crush sensor actually goes *below* the feet so that it can contact the floor
+		crushSensorDown.position.y = ($HitBox.shape.extents.y +1)
 		
-	# Do a test move, if a collision was found then kill the player
-	var col = move_and_collide(Vector2.ZERO)
-	if col and col.collider.get_collision_layer_bit(21):#test_move(global_transform,Vector2.ZERO):
-		kill()
-	# Reset shape hitbox
-	$HitBox.shape.extents = shapeMemory
+		if (crushSensorLeft.get_overlapping_areas() + crushSensorLeft.get_overlapping_bodies()).size() > 0 and \
+			(crushSensorRight.get_overlapping_areas() + crushSensorRight.get_overlapping_bodies()).size() > 0:
+			kill()
+
+		if (crushSensorUp.get_overlapping_areas() + crushSensorUp.get_overlapping_bodies()).size() > 0 and \
+			(crushSensorDown.get_overlapping_areas() + crushSensorDown.get_overlapping_bodies()).size() > 0:
+			kill()
 
 # Input buttons
 func set_inputs():
@@ -846,11 +851,8 @@ func set_state(newState, forceMask = Vector2.ZERO):
 	if currentState != newState:
 		var lastState = currentState
 		currentState = newState
-		if stateList[lastState].has_method("state_exit"):
-			stateList[lastState].state_exit()
-		
-		if stateList[newState].has_method("state_activated"):
-			stateList[newState].state_activated()
+		stateList[lastState].state_exit()
+		stateList[newState].state_activated()
 	
 	for i in stateList:
 		i.set_process(i == stateList[newState])

@@ -134,6 +134,44 @@ tile_data = PoolIntArray( 1835085, 0, 65538, 1835086, 0, 65538, 1835088, 0, 6553
 [node name="GoalPost" parent="Entities" instance=ExtResource( 34 )]
 position = Vector2( 1934, 864 )
 
+[node name="Rings" type="Node" parent="Entities"]
+
+[node name="Ring" parent="Entities/Rings" instance=ExtResource( 10 )]
+position = Vector2( 428, 554 )
+
+[node name="Ring2" parent="Entities/Rings" instance=ExtResource( 10 )]
+position = Vector2( 396, 557 )
+
+[node name="Ring3" parent="Entities/Rings" instance=ExtResource( 10 )]
+position = Vector2( 367, 563 )
+
+[node name="Ring4" parent="Entities/Rings" instance=ExtResource( 10 )]
+position = Vector2( 361, 735 )
+
+[node name="Ring5" parent="Entities/Rings" instance=ExtResource( 10 )]
+position = Vector2( 397, 714 )
+
+[node name="Ring6" parent="Entities/Rings" instance=ExtResource( 10 )]
+position = Vector2( 432, 696 )
+
+[node name="Ring7" parent="Entities/Rings" instance=ExtResource( 10 )]
+position = Vector2( 1345, 889 )
+
+[node name="Ring8" parent="Entities/Rings" instance=ExtResource( 10 )]
+position = Vector2( 1371, 881 )
+
+[node name="Ring9" parent="Entities/Rings" instance=ExtResource( 10 )]
+position = Vector2( 1397, 873 )
+
+[node name="Ring10" parent="Entities/Rings" instance=ExtResource( 10 )]
+position = Vector2( 1424, 869 )
+
+[node name="Ring11" parent="Entities/Rings" instance=ExtResource( 10 )]
+position = Vector2( 1448, 861 )
+
+[node name="Ring12" parent="Entities/Rings" instance=ExtResource( 10 )]
+position = Vector2( 1471, 854 )
+
 [node name="PlatformStatefulMover" type="Node2D" parent="Entities"]
 position = Vector2( 241, 716 )
 script = ExtResource( 5 )
@@ -217,7 +255,7 @@ position = Vector2( 592, 576 )
 script = ExtResource( 5 )
 
 [node name="Saw" parent="Entities/StatefulMover3" instance=ExtResource( 11 )]
-position = Vector2( 0, -4 )
+position = Vector2( 0, -2 )
 z_index = -40
 
 [node name="TranslationalState_0" type="Node2D" parent="Entities/StatefulMover3"]
@@ -249,24 +287,6 @@ collision_mask = 8192
 position = Vector2( 528, 736 )
 scale = Vector2( 1, 2 )
 collision_mask = 8192
-
-[node name="Ring" parent="Entities" instance=ExtResource( 10 )]
-position = Vector2( 428, 554 )
-
-[node name="Ring2" parent="Entities" instance=ExtResource( 10 )]
-position = Vector2( 396, 557 )
-
-[node name="Ring3" parent="Entities" instance=ExtResource( 10 )]
-position = Vector2( 367, 563 )
-
-[node name="Ring4" parent="Entities" instance=ExtResource( 10 )]
-position = Vector2( 361, 735 )
-
-[node name="Ring5" parent="Entities" instance=ExtResource( 10 )]
-position = Vector2( 397, 714 )
-
-[node name="Ring6" parent="Entities" instance=ExtResource( 10 )]
-position = Vector2( 432, 696 )
 
 [node name="Shutter" parent="Entities" instance=ExtResource( 12 )]
 position = Vector2( 920, 608 )
