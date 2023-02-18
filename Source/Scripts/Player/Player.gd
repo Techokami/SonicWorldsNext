@@ -817,6 +817,7 @@ func set_inputs():
 		inputs[INPUTS.XINPUT] = -int(Input.is_action_pressed(inputActions[INPUTS.XINPUT][0]))+int(Input.is_action_pressed(inputActions[INPUTS.XINPUT][1]))
 		inputs[INPUTS.YINPUT] = -int(Input.is_action_pressed(inputActions[INPUTS.YINPUT][0]))+int(Input.is_action_pressed(inputActions[INPUTS.YINPUT][1]))
 
+# Controller scan functions -- so you don't have to dig into the inputs to check controller state
 func any_action_pressed():
 	if inputs[INPUTS.ACTION] == 1:
 		return true
@@ -843,6 +844,25 @@ func any_action_held_or_pressed():
 	if inputs[INPUTS.ACTION3] > 0:
 		return true
 	return false
+
+# Note that there is no way to check the 'pressed' vs 'held' status of X/Y inputs.
+func get_y_input():
+	return inputs[INPUTS.YINPUT]
+	
+func is_up_held():
+	return inputs[INPUTS.YINPUT] < 0
+	
+func is_down_held():
+	return inputs[INPUTS.YINPUT] > 0
+	
+func get_x_input():
+	return inputs[INPUTS.XINPUT]
+	
+func is_left_held():
+	return inputs[INPUTS.XINPUT] < 0
+	
+func is_right_held():
+	return inputs[INPUTS.XINPUT] > 0
 
 func set_state(newState, forceMask = Vector2.ZERO):
 	
