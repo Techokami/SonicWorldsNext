@@ -69,7 +69,7 @@ func _physics_process(_delta):
 			else:
 				i.animator.play("grabVerticalBarOffset")
 			
-			i.set_state(i.STATES.SWINGVERTICALBAR)
+			i.set_state(i.STATES.ANIMATION)
 			
 			# Drop all the speed values to 0 to prevent issues.
 			i.groundSpeed = 0
@@ -78,7 +78,7 @@ func _physics_process(_delta):
 			i.cam_update()
 	
 	for i in players:
-		if i.currentState == i.STATES.SWINGVERTICALBAR:
+		if i.currentState == i.STATES.ANIMATION:
 			i.global_position.x = get_parent().get_global_position().x
 		
 		pass
@@ -87,7 +87,7 @@ func _physics_process(_delta):
 func _process(delta):
 	for i in players:
 		# If the player isn't on the bar, skip it.
-		if i.currentState != i.STATES.SWINGVERTICALBAR:
+		if i.currentState != i.STATES.ANIMATION:
 			continue
 			
 		var playerIndex = players.find(i)
@@ -120,7 +120,7 @@ func check_grab(body):
 		return false
 		
 	# Skip if already on the vertical bar or player is jumping
-	if (body.currentState == body.STATES.SWINGVERTICALBAR or body.currentState == body.STATES.JUMP):
+	if (body.currentState == body.STATES.ANIMATION or body.currentState == body.STATES.JUMP):
 		return false
 		
 	if abs(body.groundSpeed) > grabSpeed:
@@ -144,7 +144,7 @@ func remove_player(player):
 		# Don't allow removal of someone who is still on the vertical bar. This can occur with
 		# high speeds. Preventing this should be fine since the player will be brought back into
 		# collision overlap range by virtue of being on the bar.
-		if (player.currentState == player.STATES.SWINGVERTICALBAR):
+		if (player.currentState == player.STATES.ANIMATION):
 			return
 			
 		# Clean out the player from all player-linked arrays.

@@ -121,7 +121,7 @@ var spriteRotation = 0
 var airControl = true
 
 # States
-enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, ANIMATION, HIT, DIE, CORKSCREW, JUMPCANCEL, SUPER, FLY, RESPAWN, HANG, GLIDE, WALLCLIMB, SWINGVERTICALBAR}
+enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, ANIMATION, HIT, DIE, CORKSCREW, JUMPCANCEL, SUPER, FLY, RESPAWN, HANG, GLIDE, WALLCLIMB}
 var currentState = STATES.NORMAL
 onready var hitBoxOffset = {normal = $HitBox.position, crouch = $HitBox.position}
 var crouchBox = null
@@ -375,7 +375,8 @@ func _process(delta):
 			# Check if partner panic
 			if partnerPanic <= 0:
 				if partner.playerControl == 0:
-					partner.inputs = inputMemory[INPUT_MEMORY_LENGTH-1]
+					for i in partner.inputs.size():
+						partner.inputs[i] = inputMemory[INPUT_MEMORY_LENGTH-1][i]
 				
 				# x distance difference check, try to go to the partner
 				if (partner.inputs[INPUTS.XINPUT] == 0 and partner.inputs[INPUTS.YINPUT] == 0
@@ -761,20 +762,26 @@ func _physics_process(delta):
 			splash.z_index = sprite.z_index+10
 			get_parent().add_child(splash)
 	
-	# Crusher test
-	# if in translate mode, ignore crush mechanics
-	if !translate:
-		var shapeMemory = $HitBox.shape.extents
+	# We don't check for crushing if the player is in an invulnerable state (note that invulernable means immune to crushing/death by falling)
+	if !stateList[currentState].get_state_invulnerable():
+		var crushSensorLeft = $CrushSensorLeft
+		var crushSensorRight = $CrushSensorRight
+		var crushSensorUp = $CrushSensorUp
+		var crushSensorDown = $CrushSensorDown
 		
-		# Shrink hitbox to test collissions
-		$HitBox.shape.extents = Vector2(1,4)
+		crushSensorLeft.position.x = -($HitBox.shape.extents.x - 1)
+		crushSensorRight.position.x = ($HitBox.shape.extents.x - 1)
+		crushSensorUp.position.y = -($HitBox.shape.extents.y -1)
+		# note that the bottom crush sensor actually goes *below* the feet so that it can contact the floor
+		crushSensorDown.position.y = ($HitBox.shape.extents.y +1)
 		
-		# Do a test move, if a collision was found then kill the player
-		var col = move_and_collide(Vector2.ZERO)
-		if col and col.collider.get_collision_layer_bit(21):#test_move(global_transform,Vector2.ZERO):
+		if (crushSensorLeft.get_overlapping_areas() + crushSensorLeft.get_overlapping_bodies()).size() > 0 and \
+			(crushSensorRight.get_overlapping_areas() + crushSensorRight.get_overlapping_bodies()).size() > 0:
 			kill()
-		# Reset shape hitbox
-		$HitBox.shape.extents = shapeMemory
+
+		if (crushSensorUp.get_overlapping_areas() + crushSensorUp.get_overlapping_bodies()).size() > 0 and \
+			(crushSensorDown.get_overlapping_areas() + crushSensorDown.get_overlapping_bodies()).size() > 0:
+			kill()
 
 # Input buttons
 func set_inputs():
@@ -809,7 +816,53 @@ func set_inputs():
 	if (playerControl > 0 and horizontalLockTimer <= 0):
 		inputs[INPUTS.XINPUT] = -int(Input.is_action_pressed(inputActions[INPUTS.XINPUT][0]))+int(Input.is_action_pressed(inputActions[INPUTS.XINPUT][1]))
 		inputs[INPUTS.YINPUT] = -int(Input.is_action_pressed(inputActions[INPUTS.YINPUT][0]))+int(Input.is_action_pressed(inputActions[INPUTS.YINPUT][1]))
+
+# Controller scan functions -- so you don't have to dig into the inputs to check controller state
+func any_action_pressed():
+	if inputs[INPUTS.ACTION] == 1:
+		return true
+	if inputs[INPUTS.ACTION2] == 1:
+		return true
+	if inputs[INPUTS.ACTION3] == 1:
+		return true
+	return false
+		
+func any_action_held():
+	if inputs[INPUTS.ACTION] == 2:
+		return true
+	if inputs[INPUTS.ACTION2] == 2:
+		return true
+	if inputs[INPUTS.ACTION3] == 2:
+		return true
+	return false
+		
+func any_action_held_or_pressed():
+	if inputs[INPUTS.ACTION] > 0:
+		return true
+	if inputs[INPUTS.ACTION2] > 0:
+		return true
+	if inputs[INPUTS.ACTION3] > 0:
+		return true
+	return false
+
+# Note that there is no way to check the 'pressed' vs 'held' status of X/Y inputs.
+func get_y_input():
+	return inputs[INPUTS.YINPUT]
 	
+func is_up_held():
+	return inputs[INPUTS.YINPUT] < 0
+	
+func is_down_held():
+	return inputs[INPUTS.YINPUT] > 0
+	
+func get_x_input():
+	return inputs[INPUTS.XINPUT]
+	
+func is_left_held():
+	return inputs[INPUTS.XINPUT] < 0
+	
+func is_right_held():
+	return inputs[INPUTS.XINPUT] > 0
 
 func set_state(newState, forceMask = Vector2.ZERO):
 	
@@ -818,11 +871,8 @@ func set_state(newState, forceMask = Vector2.ZERO):
 	if currentState != newState:
 		var lastState = currentState
 		currentState = newState
-		if stateList[lastState].has_method("state_exit"):
-			stateList[lastState].state_exit()
-		
-		if stateList[newState].has_method("state_activated"):
-			stateList[newState].state_activated()
+		stateList[lastState].state_exit()
+		stateList[newState].state_activated()
 	
 	for i in stateList:
 		i.set_process(i == stateList[newState])
@@ -1212,11 +1262,12 @@ func action_move(delta):
 			else:
 				movement.x -= movement.x
 
-func action_jump(animation = "roll", airJumpControl = true):
+func action_jump(animation = "roll", airJumpControl = true, playSound=true):
 	animator.play(animation)
 	animator.advance(0)
 	movement.y = -jmp
-	sfx[0].play()
+	if playSound:
+		sfx[0].play()
 	airControl = airJumpControl
 	cameraDragLerp = 1
 	disconect_from_floor()
