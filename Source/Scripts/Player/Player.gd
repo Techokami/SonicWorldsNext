@@ -197,9 +197,22 @@ var partnerControlTime = DEFAULT_PLAYER2_CONTROL_TIME
 onready var defaultLayer = collision_layer
 onready var defaultMask = collision_mask
 onready var defaultZIndex = z_index
-# Input memory has 2 arrays, first is the timer, second is the input index
-# inputMemory[5][INPUT.XINPUT]
+
+# Input Memory is a circular queue backed by a 2D array. Player 2 draws from memoryPosition + 1
+# while the player inserts at memoryPosition. In effect, Player 2 is always drawing control memory
+# from the memory that was written memoryPosition frames ago.
+#
+# The first indice of the inputMemory queue is the queue position.
+# The Second indice refers to the particular input.
+#
+# Example: inputMemory[5][INPUT.XINPUT] is controller memory that was written while memoryPosition was equal to 5
+# and the specific input tracked is INPUT.XINPUT
+#
+# Note: Unless you are specifically writing something that manipulates player 2's AI control, you
+# should never need to worry about any of these details.
 var inputMemory = []
+# Used to track current position in the queue - this is where the player inserts into memory
+var memoryPosition = 0
 const INPUT_MEMORY_LENGTH = 20
 
 var Player = load("res://Entities/MainObjects/Player.tscn")
@@ -362,21 +375,19 @@ func _process(delta):
 	
 	# Player 1 input settings and partner AI
 	if playerControl == 1:
-		# Input memory
-		for i in range(INPUT_MEMORY_LENGTH-1):
-			for j in range(inputs.size()):
-				inputMemory[INPUT_MEMORY_LENGTH-1-i][j] = inputMemory[INPUT_MEMORY_LENGTH-i-2][j]
-		# set immediate inputs
+		# Input memory - write the player's input to the inputMemory queue at the current queue position
 		for i in range(inputs.size()):
-			inputMemory[0][i] = inputs[i]
-		
+			inputMemory[memoryPosition][i] = inputs[i]
+
 		# Partner ai logic
 		if partner != null:
 			# Check if partner panic
 			if partnerPanic <= 0:
 				if partner.playerControl == 0:
 					for i in partner.inputs.size():
-						partner.inputs[i] = inputMemory[INPUT_MEMORY_LENGTH-1][i]
+						# Grab the input at the position of memory minus length of the array minus one wrapping around.
+						# This should result in always grabbing memory written INPUT_MEMORY_LENGTH frames ago.
+						partner.inputs[i] = inputMemory[fposmod(memoryPosition - INPUT_MEMORY_LENGTH + 1, INPUT_MEMORY_LENGTH)][i]
 				
 				# x distance difference check, try to go to the partner
 				if (partner.inputs[INPUTS.XINPUT] == 0 and partner.inputs[INPUTS.YINPUT] == 0
@@ -402,14 +413,16 @@ func _process(delta):
 					# press action every 0.4 ticks
 					if fmod(partnerPanic,0.4)+delta > 0.4:
 						partner.inputs[INPUTS.ACTION] = 1
-					
-			
+
 			# Panic
 			# if partner is locked, and stopped then do a spindash
 			# panic for 128 frames before letting go of spindash
 			if partner.horizontalLockTimer > 0 and partner.currentState == STATES.NORMAL and global_position.distance_to(partner.global_position) > 48:
 				partnerPanic = 128/60
-				
+		
+		# Increment the memory position. Wrap back to 0 if we get to length.
+		memoryPosition = (memoryPosition + 1) % INPUT_MEMORY_LENGTH
+		
 	# respawn mechanics
 	else:
 		if $ScreenCheck.is_on_screen():
