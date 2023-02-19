@@ -1,3 +1,5 @@
+***PLEASE PLEASE PLEASE! Before you submit a Pull Request to this repository, post about what you want to submit in [Discussions](https://github.com/Techokami/SonicWorldsNext/discussions) first! PLEASE!***
+
 # Sonic Worlds Next
 ![Logo](SageLogo.png)
 
@@ -7,4 +9,4 @@ This uses [Godot 3](https://godotengine.org/) to implement a 2D Sonic the Hedgeh
 
 Found a problem with the code? Please use the Issues tab! But see if it hasn't been reported yet to prevent duplicate reports.
 
-Want to discuss the project and ask questions? Please use the Discussions tab, or ask in the official threads on SFGHQ or Sonic Retro.
+Want to discuss the project and ask questions? Please use the [Discussions](https://github.com/Techokami/SonicWorldsNext/discussions) tab, or ask in the official threads on SFGHQ or Sonic Retro.
