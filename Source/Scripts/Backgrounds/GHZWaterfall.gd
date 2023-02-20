@@ -7,13 +7,13 @@ tool
 # Basically a tool for adding tilable animated graphics.
 
 # How many units
-export(float) var width = 4 # How many units wide the water fall is (32x pixels each)
+export(float) var width = 4.0 # How many units wide the water fall is (32x pixels each)
 
 # How many units tall the body of the waterfall is. Note that the top of the
 # waterfall is an additional item that rests on top of this one.
 # 1 unit is 16 pixels of added height, 0 = 16px tall total (just the top of the waterfall)
 # 9 = 160px tall (16 * 9 for the base, +16 more for the top
-export(float) var height = 4
+export(float) var height = 4.0
 
 # Set this to false to disable drawing of the top of the waterfall
 export(bool) var drawTop = true
@@ -40,7 +40,8 @@ var lastDrawTop = drawTop
 
 # Used to track which frame the waterfall animation is currently on
 var curFrame = 0
-var lastUpdateTime = 0
+var lastUpdateTime = 0.0
+var elapsedTime = 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -87,17 +88,17 @@ func _process(delta):
 	if Engine.is_editor_hint():
 		process_editor(delta)
 
-	var curTime = Time.get_ticks_msec() / 1000.0
+	elapsedTime += delta
 	
 	# No need to do anything yet if we haven't reached the frame advancement time
-	if curTime - lastUpdateTime < framePeriod:
+	if elapsedTime - lastUpdateTime < framePeriod:
 		return
-		
+
+	# Advance the frame.
 	curFrame += 1
 
-	lastUpdateTime = curTime
+	lastUpdateTime = lastUpdateTime + framePeriod
 	# Do animation -- this step happens regardless of whether we are in editor or in game.
-
 	if drawTop:
 		advance_frame_top()
 		
