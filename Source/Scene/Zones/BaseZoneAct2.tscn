@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://Tileset/Worlds/TestTilesGreen.tres" type="TileSet" id=1]
 [ext_resource path="res://Scripts/Level/Level.gd" type="Script" id=2]
@@ -15,6 +15,7 @@
 [ext_resource path="res://Entities/Gimmicks/CNZTrampolineBarrel.tscn" type="PackedScene" id=13]
 [ext_resource path="res://Graphics/Obstacles/Walls/shutterCNZ.png" type="Texture" id=14]
 [ext_resource path="res://Entities/Items/Monitor.tscn" type="PackedScene" id=15]
+[ext_resource path="res://Entities/Backgrounds/GHZWaterfall.tscn" type="PackedScene" id=16]
 [ext_resource path="res://Entities/MainObjects/Player.tscn" type="PackedScene" id=18]
 [ext_resource path="res://Graphics/Backgrounds/WorldsBackground.png" type="Texture" id=25]
 [ext_resource path="res://Entities/MainObjects/GoalPost.tscn" type="PackedScene" id=34]
@@ -299,3 +300,9 @@ position = Vector2( 1056, 641 )
 [node name="Monitor" parent="Entities" instance=ExtResource( 15 )]
 position = Vector2( 656, 464 )
 item = 4
+
+[node name="GHZWaterfall" parent="Entities" instance=ExtResource( 16 )]
+position = Vector2( 1024, 656 )
+z_index = -98
+width = 6
+height = 21
