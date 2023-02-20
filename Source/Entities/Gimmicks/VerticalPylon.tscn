@@ -47,7 +47,7 @@ tracks/2/keys = {
 }
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 6, 48 )
+extents = Vector2( 3, 48 )
 
 [node name="FBZ_Pylon_Controller" type="Node2D"]
 script = ExtResource( 2 )
@@ -56,7 +56,6 @@ script = ExtResource( 2 )
 position = Vector2( 0, -65 )
 texture = ExtResource( 1 )
 hframes = 3
-frame = 1
 region_enabled = true
 region_rect = Rect2( 0, 0, 48, 96 )
 
@@ -65,14 +64,13 @@ position = Vector2( 0, -8 )
 texture = ExtResource( 3 )
 hframes = 3
 vframes = 2
-frame = 4
+frame = 3
 
 [node name="FBZ_Pylon_Top" type="Sprite" parent="."]
 position = Vector2( 0, -121 )
 texture = ExtResource( 3 )
 hframes = 3
 vframes = 2
-frame = 1
 
 [node name="FBZ_Pylon_Animator" type="AnimationPlayer" parent="."]
 method_call_mode = 1
