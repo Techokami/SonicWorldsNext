@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=2]
+[gd_scene load_steps=68 format=2]
 
 [ext_resource path="res://Tileset/Worlds/TestTilesGreen.tres" type="TileSet" id=1]
 [ext_resource path="res://Scripts/Level/Level.gd" type="Script" id=2]
@@ -60,6 +60,7 @@
 [ext_resource path="res://Entities/Gimmicks/VerticalPylon.tscn" type="PackedScene" id=58]
 [ext_resource path="res://Entities/Backgrounds/GHZWaterfall.tscn" type="PackedScene" id=59]
 [ext_resource path="res://Audio/SFX/Ambiance/waterfall.wav" type="AudioStream" id=60]
+[ext_resource path="res://Audio/SFX/Ambiance/lava.wav" type="AudioStream" id=61]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Glow"
@@ -1475,6 +1476,13 @@ position = Vector2( 5424, 1296 )
 [node name="Lava" parent="Hazards" instance=ExtResource( 41 )]
 position = Vector2( 9408, 604 )
 size = Vector2( 128, 72 )
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Hazards/Lava"]
+stream = ExtResource( 61 )
+volume_db = -5.0
+autoplay = true
+max_distance = 600.0
+attenuation = 0.6
 
 [node name="Crusher" parent="Hazards" instance=ExtResource( 44 )]
 position = Vector2( 5264, 464 )
