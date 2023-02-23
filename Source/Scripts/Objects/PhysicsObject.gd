@@ -225,7 +225,13 @@ func _physics_process(delta):
 			if move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.extents.y))-Vector2(0,yGroundDiff).rotated(rotation),true,true,true):
 				var _col = move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.extents.y))-Vector2(0,yGroundDiff).rotated(rotation))
 			else:
-				translate(rayHitVec-(normHitVec*($HitBox.shape.extents.y+0.25))-Vector2(0,yGroundDiff).rotated(rotation))
+				# Do a check that we're not in the middle of a rotation, otherwise the player can get caught on outter curves (more noticable on higher physics frame rates)
+				if snap_angle(angle) == snap_angle(rotation):
+					translate(rayHitVec-(normHitVec*($HitBox.shape.extents.y+0.25))-Vector2(0,yGroundDiff).rotated(rotation))
+				else:
+					# if the angle doesn't match the current rotation, move toward the slope angle unsnapped instead of following the raycast
+					normHitVec = -Vector2.LEFT.rotated(rayHitVec.normalized().angle())
+					translate(normHitVec-Vector2(0,yGroundDiff).rotated(rotation))
 		
 		# set rotation
 		
@@ -248,7 +254,7 @@ func _physics_process(delta):
 		if ground:
 			getVert = get_nearest_vertical_sensor()
 			if getVert:
-				angle = deg2rad(stepify(rad2deg(getVert.get_collision_normal().rotated(deg2rad(90)).angle()),0.001))
+				angle = getVert.get_collision_normal().rotated(deg2rad(90)).angle()
 		
 		# Emit Signals
 		if groundMemory != ground:
