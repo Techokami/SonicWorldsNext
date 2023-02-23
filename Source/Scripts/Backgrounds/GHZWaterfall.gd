@@ -50,6 +50,8 @@ func _ready():
 	lastDrawTop = drawTop
 	pass # Replace with function body.
 	
+	$WaterfallTop.set_texture(topTexture)
+	
 	$WaterfallTop.set_region_rect(Rect2(0, 0, topTexture.get_width() * width, topTexture.get_height() / topFrames))
 	$WaterfallBody.set_region_rect(Rect2(0, 0, topTexture.get_width() * width, bodyTextures[0].get_height() * height))
 	

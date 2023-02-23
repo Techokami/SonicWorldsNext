@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=2]
+[gd_scene load_steps=71 format=2]
 
 [ext_resource path="res://Tileset/Worlds/TestTilesGreen.tres" type="TileSet" id=1]
 [ext_resource path="res://Scripts/Level/Level.gd" type="Script" id=2]
@@ -59,6 +59,11 @@
 [ext_resource path="res://Entities/Gimmicks/VerticalBar.tscn" type="PackedScene" id=57]
 [ext_resource path="res://Entities/Gimmicks/VerticalPylon.tscn" type="PackedScene" id=58]
 [ext_resource path="res://Entities/Backgrounds/GHZWaterfall.tscn" type="PackedScene" id=59]
+[ext_resource path="res://Graphics/Backgrounds/GHZWaterfall/waterfall_base_alt_f3.png" type="Texture" id=60]
+[ext_resource path="res://Graphics/Backgrounds/GHZWaterfall/waterfall_top_alt.png" type="Texture" id=61]
+[ext_resource path="res://Graphics/Backgrounds/GHZWaterfall/waterfall_base_alt_f4.png" type="Texture" id=62]
+[ext_resource path="res://Graphics/Backgrounds/GHZWaterfall/waterfall_base_alt_f2.png" type="Texture" id=63]
+[ext_resource path="res://Graphics/Backgrounds/GHZWaterfall/waterfall_base_alt_f1.png" type="Texture" id=64]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Glow"
@@ -1544,9 +1549,11 @@ position = Vector2( 9872, 40 )
 
 [node name="GHZWaterfall" parent="." instance=ExtResource( 59 )]
 position = Vector2( 1088, 752 )
-z_index = -50
+z_index = 10
 width = 6.0
 height = 13.0
+bodyTextures = [ ExtResource( 64 ), ExtResource( 63 ), ExtResource( 60 ), ExtResource( 62 ) ]
+topTexture = ExtResource( 61 )
 
 [connection signal="pressed" from="Entity/Switch" to="Entity/Switch/Shutter2" method="force_open"]
 

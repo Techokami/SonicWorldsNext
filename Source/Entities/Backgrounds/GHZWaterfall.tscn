@@ -17,7 +17,7 @@ position = Vector2( 0, -16 )
 texture = ExtResource( 1 )
 centered = false
 region_enabled = true
-region_rect = Rect2( 0, 272, 128, 16 )
+region_rect = Rect2( 0, 912, 128, 16 )
 
 [node name="WaterfallBody" type="Sprite" parent="."]
 texture = ExtResource( 6 )
