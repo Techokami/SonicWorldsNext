@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=2]
+[gd_scene load_steps=68 format=2]
 
 [ext_resource path="res://Tileset/Worlds/TestTilesGreen.tres" type="TileSet" id=1]
 [ext_resource path="res://Scripts/Level/Level.gd" type="Script" id=2]
@@ -59,11 +59,8 @@
 [ext_resource path="res://Entities/Gimmicks/VerticalBar.tscn" type="PackedScene" id=57]
 [ext_resource path="res://Entities/Gimmicks/VerticalPylon.tscn" type="PackedScene" id=58]
 [ext_resource path="res://Entities/Backgrounds/GHZWaterfall.tscn" type="PackedScene" id=59]
-[ext_resource path="res://Graphics/Backgrounds/GHZWaterfall/waterfall_base_alt_f3.png" type="Texture" id=60]
-[ext_resource path="res://Graphics/Backgrounds/GHZWaterfall/waterfall_top_alt.png" type="Texture" id=61]
-[ext_resource path="res://Graphics/Backgrounds/GHZWaterfall/waterfall_base_alt_f4.png" type="Texture" id=62]
-[ext_resource path="res://Graphics/Backgrounds/GHZWaterfall/waterfall_base_alt_f2.png" type="Texture" id=63]
-[ext_resource path="res://Graphics/Backgrounds/GHZWaterfall/waterfall_base_alt_f1.png" type="Texture" id=64]
+[ext_resource path="res://Audio/SFX/Ambiance/waterfall.wav" type="AudioStream" id=60]
+[ext_resource path="res://Audio/SFX/Ambiance/lava.wav" type="AudioStream" id=61]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Glow"
@@ -1480,6 +1477,13 @@ position = Vector2( 5424, 1296 )
 position = Vector2( 9408, 604 )
 size = Vector2( 128, 72 )
 
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Hazards/Lava"]
+stream = ExtResource( 61 )
+volume_db = -5.0
+autoplay = true
+max_distance = 600.0
+attenuation = 0.6
+
 [node name="Crusher" parent="Hazards" instance=ExtResource( 44 )]
 position = Vector2( 5264, 464 )
 
@@ -1552,8 +1556,13 @@ position = Vector2( 1088, 752 )
 z_index = 10
 width = 6.0
 height = 13.0
-bodyTextures = [ ExtResource( 64 ), ExtResource( 63 ), ExtResource( 60 ), ExtResource( 62 ) ]
-topTexture = ExtResource( 61 )
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="GHZWaterfall"]
+position = Vector2( 95, 0 )
+stream = ExtResource( 60 )
+volume_db = -10.0
+autoplay = true
+max_distance = 1000.0
 
 [connection signal="pressed" from="Entity/Switch" to="Entity/Switch/Shutter2" method="force_open"]
 
