@@ -212,6 +212,11 @@ onready var defaultZIndex = z_index
 # should never need to worry about any of these details.
 var inputMemory = []
 # Used to track current position in the queue - this is where the player inserts into memory
+#
+# XXX TODO; Note that since we're doing this on process and not physics_process, the speed that we
+# exhaust the memoryPosition is going to vary based on monitor refresh rate. Once we migrate to
+# Godot 4, we can check the refresh rate of the user's monitor and adjust the buffer size
+# accordingly.
 var memoryPosition = 0
 const INPUT_MEMORY_LENGTH = 20
 
@@ -379,15 +384,19 @@ func _process(delta):
 		for i in range(inputs.size()):
 			inputMemory[memoryPosition][i] = inputs[i]
 
+		# Go ahead and advance the position to the one we wrote INPUT_MEMORY_LENGTH frames ago... it's the
+		# next one we want to read anyway *and* the next one we want to write after that.
+		memoryPosition = (memoryPosition + 1) % INPUT_MEMORY_LENGTH
+
 		# Partner ai logic
 		if partner != null:
 			# Check if partner panic
 			if partnerPanic <= 0:
 				if partner.playerControl == 0:
 					for i in partner.inputs.size():
-						# Grab the input at the position of memory minus length of the array minus one wrapping around.
-						# This should result in always grabbing memory written INPUT_MEMORY_LENGTH frames ago.
-						partner.inputs[i] = inputMemory[fposmod(memoryPosition - INPUT_MEMORY_LENGTH + 1, INPUT_MEMORY_LENGTH)][i]
+						# Copy the frame of input from the oldest written portion of the inputMemory
+						# Array into the partner's input for the current frame
+						partner.inputs[i] = inputMemory[memoryPosition][i]
 				
 				# x distance difference check, try to go to the partner
 				if (partner.inputs[INPUTS.XINPUT] == 0 and partner.inputs[INPUTS.YINPUT] == 0
@@ -419,9 +428,6 @@ func _process(delta):
 			# panic for 128 frames before letting go of spindash
 			if partner.horizontalLockTimer > 0 and partner.currentState == STATES.NORMAL and global_position.distance_to(partner.global_position) > 48:
 				partnerPanic = 128/60
-		
-		# Increment the memory position. Wrap back to 0 if we get to length.
-		memoryPosition = (memoryPosition + 1) % INPUT_MEMORY_LENGTH
 		
 	# respawn mechanics
 	else:
