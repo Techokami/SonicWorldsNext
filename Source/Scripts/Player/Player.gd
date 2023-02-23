@@ -428,7 +428,7 @@ func _process(delta):
 			# panic for 128 frames before letting go of spindash
 			if partner.horizontalLockTimer > 0 and partner.currentState == STATES.NORMAL and global_position.distance_to(partner.global_position) > 48:
 				partnerPanic = 128/60
-		
+
 	# respawn mechanics
 	else:
 		if $ScreenCheck.is_on_screen():
