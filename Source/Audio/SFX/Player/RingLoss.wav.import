@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/RingLoss.wav-5f80343bc8434081631339e751947eb9.sample"
+type="AudioStreamWAV"
+uid="uid://b657n73e1mhne"
+path="res://.godot/imported/RingLoss.wav-5f80343bc8434081631339e751947eb9.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Player/RingLoss.wav"
-dest_files=[ "res://.import/RingLoss.wav-5f80343bc8434081631339e751947eb9.sample" ]
+dest_files=["res://.godot/imported/RingLoss.wav-5f80343bc8434081631339e751947eb9.sample"]
 
 [params]
 

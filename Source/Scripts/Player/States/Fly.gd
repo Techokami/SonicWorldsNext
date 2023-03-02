@@ -1,14 +1,18 @@
-extends "res://Scripts/Player/State.gd"
+extends PlayerState
 
 # tails flight
 var flightTime = 8*60
 var flyGrav = 0.03125
 var actionPressed = true
 
-onready var flyHitBox = parent.get_node("TailsFlightHitArea/HitBox")
-onready var carryHitBox = parent.get_node("TailsCarryBox/HitBox")
-onready var carryBox = parent.get_node("TailsCarryBox")
+var flyHitBox
+var carryHitBox
+var carryBox
 
+func _ready():
+	flyHitBox = parent.get_node("TailsFlightHitArea/HitBox")
+	carryHitBox = parent.get_node("TailsCarryBox/HitBox")
+	carryBox = parent.get_node("TailsCarryBox")
 
 func state_activated():
 	flightTime = 8

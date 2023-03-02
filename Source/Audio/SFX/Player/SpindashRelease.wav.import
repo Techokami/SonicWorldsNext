@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/SpindashRelease.wav-138faaec111ae53ec0cebc1206acb2f9.sample"
+type="AudioStreamWAV"
+uid="uid://r5rwjr88mqvn"
+path="res://.godot/imported/SpindashRelease.wav-138faaec111ae53ec0cebc1206acb2f9.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Player/SpindashRelease.wav"
-dest_files=[ "res://.import/SpindashRelease.wav-138faaec111ae53ec0cebc1206acb2f9.sample" ]
+dest_files=["res://.godot/imported/SpindashRelease.wav-138faaec111ae53ec0cebc1206acb2f9.sample"]
 
 [params]
 

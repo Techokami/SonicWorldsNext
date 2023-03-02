@@ -1,6 +1,6 @@
 [gd_scene load_steps=33 format=2]
 
-[ext_resource path="res://Graphics/Items/ChaosEmeralds.png" type="Texture" id=1]
+[ext_resource path="res://Graphics/Items/ChaosEmeralds.png" type="Texture2D" id=1]
 [ext_resource path="res://Audio/SFX/Misc/Emerald.wav" type="AudioStream" id=2]
 [ext_resource path="res://Scripts/Misc/SpecialStageResult.gd" type="Script" id=3]
 
@@ -171,10 +171,10 @@ anchor_bottom = 1.0
 modulate = Color( 0, 0, 0, 1 )
 anchor_left = 0.5
 anchor_right = 0.5
-margin_left = -79.5
-margin_top = 16.0
-margin_right = 79.5
-margin_bottom = 47.0
+offset_left = -79.5
+offset_top = 16.0
+offset_right = 79.5
+offset_bottom = 47.0
 text = "Special Stage
 
 Press Action 1(Z) to Win
@@ -187,9 +187,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = -79.5
-margin_top = -31.0
-margin_right = 79.5
+offset_left = -79.5
+offset_top = -31.0
+offset_right = 79.5
 text = "Stage 1"
 align = 1
 
@@ -198,10 +198,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -56.0
-margin_top = -8.0
-margin_right = 56.0
-margin_bottom = 9.0
+offset_left = -56.0
+offset_top = -8.0
+offset_right = 56.0
+offset_bottom = 9.0
 color = Color( 0.768627, 0.768627, 0.768627, 1 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HUD/ColorRect"]
@@ -212,58 +212,58 @@ custom_constants/separation = 16
 alignment = 1
 
 [node name="Red" type="Control" parent="HUD/ColorRect/HBoxContainer"]
-margin_left = 8.0
-margin_right = 8.0
+offset_left = 8.0
+offset_right = 8.0
 
-[node name="RedEmerald" type="AnimatedSprite" parent="HUD/ColorRect/HBoxContainer/Red"]
+[node name="RedEmerald" type="AnimatedSprite2D" parent="HUD/ColorRect/HBoxContainer/Red"]
 frames = SubResource( 29 )
 animation = "red"
 
 [node name="Blue" type="Control" parent="HUD/ColorRect/HBoxContainer"]
-margin_left = 24.0
-margin_right = 24.0
+offset_left = 24.0
+offset_right = 24.0
 
-[node name="BlueEmerald" type="AnimatedSprite" parent="HUD/ColorRect/HBoxContainer/Blue"]
+[node name="BlueEmerald" type="AnimatedSprite2D" parent="HUD/ColorRect/HBoxContainer/Blue"]
 frames = SubResource( 29 )
 animation = "blue"
 
 [node name="Green" type="Control" parent="HUD/ColorRect/HBoxContainer"]
-margin_left = 40.0
-margin_right = 40.0
+offset_left = 40.0
+offset_right = 40.0
 
-[node name="GreenEmerald" type="AnimatedSprite" parent="HUD/ColorRect/HBoxContainer/Green"]
+[node name="GreenEmerald" type="AnimatedSprite2D" parent="HUD/ColorRect/HBoxContainer/Green"]
 frames = SubResource( 29 )
 animation = "green"
 
 [node name="Yellow" type="Control" parent="HUD/ColorRect/HBoxContainer"]
-margin_left = 56.0
-margin_right = 56.0
+offset_left = 56.0
+offset_right = 56.0
 
-[node name="YellowEmerald" type="AnimatedSprite" parent="HUD/ColorRect/HBoxContainer/Yellow"]
+[node name="YellowEmerald" type="AnimatedSprite2D" parent="HUD/ColorRect/HBoxContainer/Yellow"]
 frames = SubResource( 29 )
 animation = "yellow"
 
 [node name="Cyan" type="Control" parent="HUD/ColorRect/HBoxContainer"]
-margin_left = 72.0
-margin_right = 72.0
+offset_left = 72.0
+offset_right = 72.0
 
-[node name="CyanEmerald" type="AnimatedSprite" parent="HUD/ColorRect/HBoxContainer/Cyan"]
+[node name="CyanEmerald" type="AnimatedSprite2D" parent="HUD/ColorRect/HBoxContainer/Cyan"]
 frames = SubResource( 29 )
 animation = "cyan"
 
 [node name="Silver" type="Control" parent="HUD/ColorRect/HBoxContainer"]
-margin_left = 88.0
-margin_right = 88.0
+offset_left = 88.0
+offset_right = 88.0
 
-[node name="SilverEmerald" type="AnimatedSprite" parent="HUD/ColorRect/HBoxContainer/Silver"]
+[node name="SilverEmerald" type="AnimatedSprite2D" parent="HUD/ColorRect/HBoxContainer/Silver"]
 frames = SubResource( 29 )
 animation = "silver"
 
 [node name="Purple" type="Control" parent="HUD/ColorRect/HBoxContainer"]
-margin_left = 104.0
-margin_right = 104.0
+offset_left = 104.0
+offset_right = 104.0
 
-[node name="PurpleEmerald" type="AnimatedSprite" parent="HUD/ColorRect/HBoxContainer/Purple"]
+[node name="PurpleEmerald" type="AnimatedSprite2D" parent="HUD/ColorRect/HBoxContainer/Purple"]
 frames = SubResource( 29 )
 animation = "purple"
 

@@ -1,15 +1,15 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scripts/Objects/Lava.gd" type="Script" id=2]
-[ext_resource path="res://Graphics/Hazards/LavaTiles3.png" type="Texture" id=7]
-[ext_resource path="res://Graphics/Hazards/LavaTop3.png" type="Texture" id=9]
+[ext_resource path="res://Graphics/Hazards/LavaTiles3.png" type="Texture2D" id=7]
+[ext_resource path="res://Graphics/Hazards/LavaTop3.png" type="Texture2D" id=9]
 
 [sub_resource type="RectangleShape2D" id=2]
 resource_local_to_scene = true
-extents = Vector2( 15.5, 15.5 )
+size = Vector2( 15.5, 15.5 )
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 16, 16 )
+size = Vector2( 16, 16 )
 
 [node name="Lava" type="Area2D"]
 collision_layer = 0
@@ -25,14 +25,14 @@ collision_mask = 15
 modulate = Color( 1, 0, 0, 0.584314 )
 shape = SubResource( 2 )
 
-[node name="LavaTile" type="Sprite" parent="."]
+[node name="LavaTile" type="Sprite2D" parent="."]
 position = Vector2( 0, 4 )
 z_index = 10
 texture = ExtResource( 7 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 32, 32 )
 
-[node name="LavaTop" type="Sprite" parent="."]
+[node name="LavaTop" type="Sprite2D" parent="."]
 position = Vector2( 0, -16 )
 z_index = 10
 texture = ExtResource( 9 )

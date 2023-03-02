@@ -1,3 +1,3 @@
 extends Area2D
 
-onready var parent = get_parent()
+@onready var parent = get_parent()

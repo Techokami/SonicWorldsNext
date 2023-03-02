@@ -1,14 +1,14 @@
 extends EnemyBase
-tool
+@tool
 
-export var orbs = 4
-export var speed = -100
-export var moveSpeed = -10
-export var distance = 16
+@export var orbs = 4
+@export var speed = -100
+@export var moveSpeed = -10
+@export var distance = 16
 var spinOffset = 0
-export var classicOrbi = true
+@export var classicOrbi = true
 
-onready var orbList = [get_node("Orb")]
+@onready var orbList = [get_node("Orb")]
 
 func _ready():
 	if !Engine.is_editor_hint():
@@ -42,7 +42,7 @@ func _physics_process(delta):
 			# rotate the orbs based on spinOffset
 			for i in range(orbList.size()):
 				var getOrb = orbList[i]
-				getOrb.position = (Vector2.RIGHT*distance).rotated(deg2rad(spinOffset+((360/orbs)*i)))
+				getOrb.position = (Vector2.RIGHT*distance).rotated(deg_to_rad(spinOffset+((360/orbs)*i)))
 		# Launch base behaviour
 		else:
 			# check player exists
@@ -59,4 +59,4 @@ func _physics_process(delta):
 				spinOffset += speed*5*delta*sign(abs(velocity.x))*$orbinaut.scale.x
 				for i in range(orbList.size()):
 					var getOrb = orbList[i]
-					getOrb.position = (Vector2.RIGHT*distance).rotated(deg2rad(spinOffset+((360/orbs)*i)))
+					getOrb.position = (Vector2.RIGHT*distance).rotated(deg_to_rad(spinOffset+((360/orbs)*i)))

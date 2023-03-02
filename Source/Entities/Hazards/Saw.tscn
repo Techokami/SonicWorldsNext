@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://Graphics/Hazards/sawblade.png" type="Texture" id=1]
+[ext_resource path="res://Graphics/Hazards/sawblade.png" type="Texture2D" id=1]
 [ext_resource path="res://Scripts/Objects/Hazard.gd" type="Script" id=2]
 [ext_resource path="res://Audio/SFX/Objects/BuzzSaw.wav" type="AudioStream" id=3]
 
@@ -32,7 +32,7 @@ script = ExtResource( 2 )
 modulate = Color( 1, 0, 0, 1 )
 shape = SubResource( 1 )
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 frames = SubResource( 4 )
 frame = 1
 playing = true

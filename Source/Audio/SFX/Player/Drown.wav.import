@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/Drown.wav-97d55249809433802adb6587726957d6.sample"
+type="AudioStreamWAV"
+uid="uid://tgvfl6qbs7ec"
+path="res://.godot/imported/Drown.wav-97d55249809433802adb6587726957d6.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Player/Drown.wav"
-dest_files=[ "res://.import/Drown.wav-97d55249809433802adb6587726957d6.sample" ]
+dest_files=["res://.godot/imported/Drown.wav-97d55249809433802adb6587726957d6.sample"]
 
 [params]
 

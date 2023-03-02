@@ -1,14 +1,14 @@
-extends KinematicBody2D
-tool
+extends CharacterBody2D
+@tool
 
-export var texture = preload("res://Graphics/Obstacles/Walls/shutter.png")
-export (int,"left","right","switch")var side = 0
+@export var texture = preload("res://Graphics/Obstacles/Walls/shutter.png")
+@export (int,"left","right","switch")var side = 0
 var open = false
 
 func _ready():
-	if !Engine.editor_hint:
+	if !Engine.is_editor_hint():
 		# set areas
-		$Mask.shape.extents = Vector2(texture.get_width()/2,texture.get_height()/2)
+		$Mask.shape.size = Vector2(texture.get_width()/2,texture.get_height()/2)
 		$OpenShutter/Mask.shape = $Mask.shape
 		$CloseShutter/Mask.shape = $Mask.shape
 		$CloseShutter2/Mask.shape = $Mask.shape
@@ -26,13 +26,13 @@ func _ready():
 		
 
 func _process(delta):
-	if !Engine.editor_hint:
+	if !Engine.is_editor_hint():
 		# move shutter
 		$Shutter.position = $Shutter.position.move_toward(Vector2(0,-texture.get_height()*int(open)),delta*512)
 		# disable mask if opened
 		$Mask.disabled = open
 	else:
-		$Mask.shape.extents = Vector2(texture.get_width()/2,texture.get_height()/2)
+		$Mask.shape.size = Vector2(texture.get_width()/2,texture.get_height()/2)
 		$OpenShutter/Mask.shape = $Mask.shape
 		$CloseShutter/Mask.shape = $Mask.shape
 		$CloseShutter2/Mask.shape = $Mask.shape

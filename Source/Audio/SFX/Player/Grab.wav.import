@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/Grab.wav-d882ea0ce22e6e5b747865d8bea4d473.sample"
+type="AudioStreamWAV"
+uid="uid://bfba871gfmv0s"
+path="res://.godot/imported/Grab.wav-d882ea0ce22e6e5b747865d8bea4d473.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Player/Grab.wav"
-dest_files=[ "res://.import/Grab.wav-d882ea0ce22e6e5b747865d8bea4d473.sample" ]
+dest_files=["res://.godot/imported/Grab.wav-d882ea0ce22e6e5b747865d8bea4d473.sample"]
 
 [params]
 

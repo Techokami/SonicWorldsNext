@@ -3,7 +3,7 @@
 [ext_resource path="res://Scripts/Boss/BossBoundrySetter.gd" type="Script" id=1]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 16, 112 )
+size = Vector2( 16, 112 )
 
 [node name="BossBoundrySetter" type="Area2D"]
 collision_layer = 0

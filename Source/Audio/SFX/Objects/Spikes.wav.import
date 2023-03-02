@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/Spikes.wav-9c72eac1060d3ae0ec383abea15caeb4.sample"
+type="AudioStreamWAV"
+uid="uid://cnbx8aqif7hdw"
+path="res://.godot/imported/Spikes.wav-9c72eac1060d3ae0ec383abea15caeb4.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Objects/Spikes.wav"
-dest_files=[ "res://.import/Spikes.wav-9c72eac1060d3ae0ec383abea15caeb4.sample" ]
+dest_files=["res://.godot/imported/Spikes.wav-9c72eac1060d3ae0ec383abea15caeb4.sample"]
 
 [params]
 

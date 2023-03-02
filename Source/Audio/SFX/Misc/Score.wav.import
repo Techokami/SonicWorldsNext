@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/Score.wav-3b6ba0f2d9b3a760195dc91ea7657de7.sample"
+type="AudioStreamWAV"
+uid="uid://clgobastngtvy"
+path="res://.godot/imported/Score.wav-3b6ba0f2d9b3a760195dc91ea7657de7.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Misc/Score.wav"
-dest_files=[ "res://.import/Score.wav-3b6ba0f2d9b3a760195dc91ea7657de7.sample" ]
+dest_files=["res://.godot/imported/Score.wav-3b6ba0f2d9b3a760195dc91ea7657de7.sample"]
 
 [params]
 

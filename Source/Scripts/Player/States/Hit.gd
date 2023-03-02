@@ -1,4 +1,4 @@
-extends "res://Scripts/Player/State.gd"
+extends PlayerState
 
 
 func _physics_process(delta):

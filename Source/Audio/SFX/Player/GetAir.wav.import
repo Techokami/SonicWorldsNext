@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/GetAir.wav-c012e104f1adf90668f4bec87f9f37c9.sample"
+type="AudioStreamWAV"
+uid="uid://yaj2i3r0n34h"
+path="res://.godot/imported/GetAir.wav-c012e104f1adf90668f4bec87f9f37c9.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Player/GetAir.wav"
-dest_files=[ "res://.import/GetAir.wav-c012e104f1adf90668f4bec87f9f37c9.sample" ]
+dest_files=["res://.godot/imported/GetAir.wav-c012e104f1adf90668f4bec87f9f37c9.sample"]
 
 [params]
 

@@ -1,7 +1,7 @@
 [gd_resource type="ShaderMaterial" load_steps=4 format=2]
 
-[ext_resource path="res://Graphics/Palettes/WetPal.png" type="Texture" id=1]
-[ext_resource path="res://Graphics/Palettes/BasePal.png" type="Texture" id=2]
+[ext_resource path="res://Graphics/Palettes/WetPal.png" type="Texture2D" id=1]
+[ext_resource path="res://Graphics/Palettes/BasePal.png" type="Texture2D" id=2]
 [ext_resource path="res://Shaders/PaletteSwap.gdshader" type="Shader" id=3]
 
 [resource]

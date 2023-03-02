@@ -4,9 +4,9 @@
 [ext_resource path="res://Scripts/PropertiesLookup.gd" type="Script" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 9, 19 )
+size = Vector2( 9, 19 )
 
-[node name="PhysicsObject" type="KinematicBody2D"]
+[node name="PhysicsObject" type="CharacterBody2D"]
 collision_layer = 0
 collision_mask = 32
 script = ExtResource( 1 )

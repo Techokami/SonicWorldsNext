@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/FireUse.wav-49f2a5896caed82b3b8b4c2f5a661631.sample"
+type="AudioStreamWAV"
+uid="uid://jceiiu00puui"
+path="res://.godot/imported/FireUse.wav-49f2a5896caed82b3b8b4c2f5a661631.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Player/FireUse.wav"
-dest_files=[ "res://.import/FireUse.wav-49f2a5896caed82b3b8b4c2f5a661631.sample" ]
+dest_files=["res://.godot/imported/FireUse.wav-49f2a5896caed82b3b8b4c2f5a661631.sample"]
 
 [params]
 

@@ -33,9 +33,9 @@ func _process(delta):
 			Global.nodeMemory.append(get_path())
 			
 			# fade to new scene
-			Global.main.change_scene(load("res://Scene/SpecialStage/SpecialStageResult.tscn"),"FadeOut","FadeOut","SetAdd",1,true,false)
+			Global.main.change_scene_to_file(load("res://Scene/SpecialStage/SpecialStageResult.tscn"),"FadeOut","FadeOut","SetAdd",1,true,false)
 			# wait for scene to fade
-			yield(Global.main,"scene_faded")
+			await Global.main.scene_faded
 			
 			if player != null:
 				# set player's position to rings (and player 2)
@@ -98,7 +98,7 @@ func _on_Hitbox_body_entered(body):
 		$RingEnter.play()
 		# play animation
 		$Ring.play("enter")
-		yield($Ring,"animation_finished")
+		await $Ring.animation_finished
 		# set visible to false after animation's complete
 		visible = false
 		$Hitbox/CollisionShape2D.disabled = true
@@ -107,5 +107,5 @@ func _on_Hitbox_body_entered(body):
 func _on_VisibilityNotifier2D_viewport_entered(_viewport):
 	$Ring.play("spawn")
 	$Ring.frame = 0
-	yield($Ring,"animation_finished")
+	await $Ring.animation_finished
 	$Ring.play("default")

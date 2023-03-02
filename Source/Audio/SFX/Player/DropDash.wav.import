@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/DropDash.wav-2f9b17d6e21485905b935f22e7fa2f4f.sample"
+type="AudioStreamWAV"
+uid="uid://wpufbfspev00"
+path="res://.godot/imported/DropDash.wav-2f9b17d6e21485905b935f22e7fa2f4f.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Player/DropDash.wav"
-dest_files=[ "res://.import/DropDash.wav-2f9b17d6e21485905b935f22e7fa2f4f.sample" ]
+dest_files=["res://.godot/imported/DropDash.wav-2f9b17d6e21485905b935f22e7fa2f4f.sample"]
 
 [params]
 

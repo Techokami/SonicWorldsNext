@@ -1,13 +1,13 @@
-tool
+@tool
 extends Area2D
 
 var texture = load("res://Graphics/EditorUI/layer_switchers.png")
 # layer settings, should be self explanatory
-export var size = Vector2(1,3)
-export (int, "Horizontal", "Vertical") var orientation = 0
-export (int, "Low", "High") var rightLayer = 0
-export (int, "Low", "High") var leftLayer = 1
-export var onlyOnFloor = false
+@export var size = Vector2(1,3)
+@export_enum("Horizontal", "Vertical") var orientation = 0
+@export_enum("Low", "High") var rightLayer = 0
+@export_enum("Low", "High") var leftLayer = 1
+@export var onlyOnFloor = false
 
 # list of player contacts
 var playerList = []
@@ -43,7 +43,7 @@ func _process(_delta):
 	# update for editor
 	if Engine.is_editor_hint():
 		$Mask.scale = size
-		update()
+		queue_redraw()
 
 func _draw():
 	# draw texture based on size, note this is purely for the editor

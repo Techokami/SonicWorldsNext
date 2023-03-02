@@ -1,23 +1,23 @@
 # Script to use for drawing a whole bunch of the same thing at different places
 # Written by DimensionWarped for use with trampolines... might be good for other stuff too
 
-tool
+@tool
 extends Node2D
 
 # The texture to draw your animated rings from - frames must be arranged horizontally and spaced evenly
-export var spriteTexture = preload("res://Graphics/Gimmicks/ICZTrampolineRingAnim.png")
+@export var spriteTexture = preload("res://Graphics/Gimmicks/ICZTrampolineRingAnim.png")
 
 # The total number of frames in your texture animation
-export var spriteFrameCount = 17
+@export var spriteFrameCount = 17
 
 # How to animate the rings
 # pingpong - the animation will bounce back and forth from start to finish
 # loop - the animation will go from start to finish and then start over
 enum ANIMATION_MODE {pingpong, loop}
-export(ANIMATION_MODE) var animationMode = ANIMATION_MODE.pingpong
+@export var animationMode: ANIMATION_MODE = ANIMATION_MODE.pingpong
 
 # How long each frame of animation should last in seconds
-export var time_per_frame = 0.10
+@export var time_per_frame = 0.10
 
 # how far into the current animation we are in time
 var _anim_timer = 0.0
@@ -58,7 +58,7 @@ func _process(delta):
 				_cur_frame = 0
 
 	frameToDraw = abs(_cur_frame)
-	update()
+	queue_redraw()
 
 # If you need this object to draw from another class, use this function (as opposed to draw_at_pos_internal)
 # This will add positions to the drawAtPosQueue. Which this object goes through its draw cycle, it will then

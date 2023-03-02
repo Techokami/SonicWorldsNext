@@ -39,7 +39,11 @@ func _physics_process(delta):
 			direction = -direction
 	
 	# Velocity movement
-	velocity = move_and_slide_with_snap(velocity,Vector2.DOWN,Vector2.UP)
+	set_velocity(velocity)
+	# TODOConverter40 looks that snap in Godot 4.0 is float, not vector like in Godot 3 - previous value `Vector2.DOWN`
+	set_up_direction(Vector2.UP)
+	move_and_slide()
+	velocity = velocity
 	
 	# Gravity
 	if !is_on_floor():
@@ -50,7 +54,7 @@ func _physics_process(delta):
 	
 	# Moto bug smoke
 	if fmod(animTime+delta*2,1) < animTime:
-		var part = Particle.instance()
+		var part = Particle.instantiate()
 		get_parent().add_child(part)
 		part.global_position = global_position-(Vector2(24,-2)*direction)
 		part.play("MotoBugSmoke")

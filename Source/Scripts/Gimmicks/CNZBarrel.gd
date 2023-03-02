@@ -69,23 +69,23 @@ var spinning_period = 128.0 / 60.0
 # MaxVel affects the maximum velocity that can be held at any time which effectively limits the maximum
 # distance the gimmick can travel. The closer the current velocity is to the maxVel (absolute), the less impact
 # jumping on will have on the velocity.
-export var trampolineMode = false
+@export var trampolineMode = false
 # Play with this to determine the maximum distance the barrel can travel. It's going to take trial and error, sorry.
-export var maxVel = 480.0
+@export var maxVel = 480.0
 
 # Don't mess with the spring constants and/or decay values unless you're preparred to spend a long time tinkering.
 # springConstantLoaded determines the force at which the spring bounces back when the energy in the spring is at its maximum.
-export var springConstantLoaded = 2.0
+@export var springConstantLoaded = 2.0
 # springConstantUnloaded determines the force at which the spring bounces back when the energy in the spring is at 0
-export var springConstantUnloaded = 5.0
+@export var springConstantUnloaded = 5.0
 # decayLoaded determines how quickly the spring loses energy when the energy in the spring is at its maximum.
-export var decayLoaded = 0.3
+@export var decayLoaded = 0.3
 # decayUnloaded determines how quickly the spring loses energy when the energy in the spring is at 0
-export var decayUnloaded = 1.0
+@export var decayUnloaded = 1.0
 # influence determines how much energy the player's directional influence imparts
-export var influence = 1.0
+@export var influence = 1.0
 # impartFactor determines how much the motion of the platform impacts the player when they jump off
-export var impartFactor = 0.8
+@export var impartFactor = 0.8
 
 # Calcuated based on max velocity, load energy is the amount of energy at which the Loaded constants have full influence
 var loadEnergy
@@ -101,7 +101,7 @@ var _yVel = 0
 # where the platform is in relation to its origin as a float value. Maybe unnecessary? Either way I'm using it.
 var _realY = 0.0
 # The physical parts of the body that move separate from the main node
-onready var body = $CNZBarrelActiveBody
+@onready var body = $CNZBarrelActiveBody
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -169,12 +169,12 @@ func set_anim(player, lookUp, lookDown):
 		player.animator.advance(seekTime)
 		if targetAnim == "yRotationLookDown":
 			#player.set_hitbox(player.currentHitbox.CROUCH, true)
-			player.get_node("HitBox").shape.extents = player.currentHitbox.CROUCH
+			player.get_node("HitBox").shape.size = player.currentHitbox.CROUCH
 			player.get_node("HitBox").position = player.hitBoxOffset.crouch
 		else:
 			#player.set_hitbox(player.currentHitbox.NORMAL, true)	
 			player.get_node("HitBox").position = player.hitBoxOffset.normal
-			player.get_node("HitBox").shape.extents = player.currentHitbox.NORMAL
+			player.get_node("HitBox").shape.size = player.currentHitbox.NORMAL
 
 func _process(delta):
 	upHeld = false
@@ -211,7 +211,7 @@ func _process(delta):
 			# pop the player up a bit to make sure they don't make immediate contact again.
 			if _yVel > 0:
 				player.position.y -= _yVel * delta + 10
-			player.update()
+			player.queue_redraw()
 			continue
 			
 		if player.currentState != player.STATES.ANIMATION:

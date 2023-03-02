@@ -1,11 +1,11 @@
 [gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Scripts/Objects/Bumper.gd" type="Script" id=1]
-[ext_resource path="res://Graphics/Obstacles/bumpers.png" type="Texture" id=2]
+[ext_resource path="res://Graphics/Obstacles/bumpers.png" type="Texture2D" id=2]
 [ext_resource path="res://Audio/SFX/Objects/Bumper.wav" type="AudioStream" id=3]
 
 [sub_resource type="RectangleShape2D" id=5]
-extents = Vector2( 8.5, 8.5 )
+size = Vector2( 8.5, 8.5 )
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 2 )
@@ -36,7 +36,7 @@ script = ExtResource( 1 )
 modulate = Color( 0.968627, 0, 1, 1 )
 shape = SubResource( 5 )
 
-[node name="Bumper" type="AnimatedSprite" parent="."]
+[node name="Bumper" type="AnimatedSprite2D" parent="."]
 frames = SubResource( 4 )
 frame = 2
 playing = true

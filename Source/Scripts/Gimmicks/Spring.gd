@@ -1,8 +1,8 @@
-tool
+@tool
 extends StaticBody2D
 
-export (int, "Yellow", "Red") var type = 0
-export (int, "Up", "Down", "Right", "Left", "Diagonal Up Right", "Diagonal Up Left", "Diagonal Down Right", "Diagonal Down Left") var springDirection = 0
+@export_enum("Yellow", "Red") var type = 0
+@export_enum("Up", "Down", "Right", "Left", "Diagonal Up Right", "Diagonal Up Left", "Diagonal Down Right", "Diagonal Down Left") var springDirection = 0
 var hitDirection = Vector2.UP
 var animList = ["SpringUp","SpringRight","SpringUpLeft","SpringUpRight"]
 var animID = 0
@@ -29,14 +29,14 @@ func set_spring():
 			$HitBox.disabled = false
 			$DiagonalHitBox/AreaShape.disabled = true
 			animID = 0
-			$HitBox.rotation = deg2rad(0)
+			$HitBox.rotation = deg_to_rad(0)
 			scale = Vector2(1,1-(springDirection*2))
 			hitDirection = Vector2(0,-1+(springDirection*2))
 		2, 3: # right, left
 			$HitBox.disabled = false
 			$DiagonalHitBox/AreaShape.disabled = true
 			animID = 1
-			$HitBox.rotation = deg2rad(90)
+			$HitBox.rotation = deg_to_rad(90)
 			scale = Vector2(1-((springDirection-2)*2),1)
 			hitDirection = Vector2(1-((springDirection-2)*2),0)
 		4, 6: #diagonal right
@@ -44,14 +44,14 @@ func set_spring():
 			$DiagonalHitBox/AreaShape.disabled = false
 			animID = 3
 			scale = Vector2(1,1-(springDirection-4))
-			# place .normalized() at the end for CD physics
+			# place super.normalized() at the end for CD physics
 			hitDirection = scale*Vector2(1,-1)
 		5, 7: #diagonal left
 			$HitBox.disabled = true
 			$DiagonalHitBox/AreaShape.disabled = false
 			animID = 2
 			scale = Vector2(1,1-(springDirection-5))
-			# place .normalized() at the end for CD physics
+			# place super.normalized() at the end for CD physics
 			hitDirection = -scale
 			
 	$SpringAnimator.play(animList[animID])

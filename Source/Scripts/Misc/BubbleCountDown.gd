@@ -1,4 +1,4 @@
-extends AnimatedSprite
+extends AnimatedSprite2D
 
 var screenOffset = null
 var myPlayer = null
@@ -15,7 +15,7 @@ func _process(delta):
 		forceFrame += delta*30
 		frame = int(floor(forceFrame))
 	else:
-		global_position = Global.players[0].camera.get_camera_screen_center()+screenOffset
+		global_position = Global.players[0].camera.get_screen_center_position()+screenOffset
 
 
 func _on_BubbleCountDown_animation_finished():
@@ -23,7 +23,7 @@ func _on_BubbleCountDown_animation_finished():
 	# if already screen locked then free
 	if screenOffset == null:
 		play("count"+str(countTime))
-		screenOffset = global_position-Global.players[0].camera.get_camera_screen_center()
+		screenOffset = global_position-Global.players[0].camera.get_screen_center_position()
 		get_parent().remove_child(self)
 		Global.players[0].camera.add_child(self)
 	else:

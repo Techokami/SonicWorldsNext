@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/Emerald.wav-728a18b39541c91bf211d5d1e57b2840.sample"
+type="AudioStreamWAV"
+uid="uid://cy0i0dbqpb5eu"
+path="res://.godot/imported/Emerald.wav-728a18b39541c91bf211d5d1e57b2840.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Misc/Emerald.wav"
-dest_files=[ "res://.import/Emerald.wav-728a18b39541c91bf211d5d1e57b2840.sample" ]
+dest_files=["res://.godot/imported/Emerald.wav-728a18b39541c91bf211d5d1e57b2840.sample"]
 
 [params]
 

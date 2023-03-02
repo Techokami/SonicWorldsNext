@@ -1,11 +1,11 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scripts/Gimmicks/SpeedBooster.gd" type="Script" id=1]
-[ext_resource path="res://Graphics/Gimmicks/speed_booster.png" type="Texture" id=2]
+[ext_resource path="res://Graphics/Gimmicks/speed_booster.png" type="Texture2D" id=2]
 [ext_resource path="res://Audio/SFX/Gimmicks/Springs.wav" type="AudioStream" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 8, 8 )
+size = Vector2( 8, 8 )
 
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 2 )
@@ -27,13 +27,13 @@ script = ExtResource( 1 )
 [node name="HitBox" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
 
-[node name="Booster" type="Sprite" parent="."]
+[node name="Booster" type="Sprite2D" parent="."]
 position = Vector2( 0, -4 )
 z_index = 10
 texture = ExtResource( 2 )
 vframes = 2
 
-[node name="ShineAnimator" type="AnimatedSprite" parent="Booster"]
+[node name="ShineAnimator" type="AnimatedSprite2D" parent="Booster"]
 frames = SubResource( 3 )
 frame = 1
 playing = true

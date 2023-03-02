@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/ElecUse.wav-cbd956e21e48bfffb53813f1d9e4b49e.sample"
+type="AudioStreamWAV"
+uid="uid://7u7x1vfk4let"
+path="res://.godot/imported/ElecUse.wav-cbd956e21e48bfffb53813f1d9e4b49e.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Player/ElecUse.wav"
-dest_files=[ "res://.import/ElecUse.wav-cbd956e21e48bfffb53813f1d9e4b49e.sample" ]
+dest_files=["res://.godot/imported/ElecUse.wav-cbd956e21e48bfffb53813f1d9e4b49e.sample"]
 
 [params]
 

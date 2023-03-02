@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/conveyor.wav-63ca7e24754384e3beaedb3d559a487f.sample"
+type="AudioStreamWAV"
+uid="uid://bkbl2b78aww0y"
+path="res://.godot/imported/conveyor.wav-63ca7e24754384e3beaedb3d559a487f.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Ambiance/conveyor.wav"
-dest_files=[ "res://.import/conveyor.wav-63ca7e24754384e3beaedb3d559a487f.sample" ]
+dest_files=["res://.godot/imported/conveyor.wav-63ca7e24754384e3beaedb3d559a487f.sample"]
 
 [params]
 

@@ -97,18 +97,18 @@ func reset_game():
 # storeScene = should the current scene be storred? (not the new one being loaded)
 # NOTE: if there's already a scene saved then the next time storeScene is called then the stored scene will be loaded instead before it gets removed
 # resetData = should the level data be reset between scenes (this is needed for storeScene if you're storing a level so that level times and object references don't get reset)
-func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", length = 1, storeScene = false, resetData = true):
+func change_scene_to_file(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", length = 1, storeScene = false, resetData = true):
 	# stop pausing
 	sceneCanPause = false
 	# set fader speed
-	$GUI/Fader.playback_speed = 1/length
+	$GUI/Fader.speed_scale = 1.0/float(length)
 	# play the set type animation
 	$GUI/Fader.play(setType)
 	
 	# if fadeOut isn't blank, play the fade out animation and then wait, otherwise skip this
 	if fadeOut != "":
 		$GUI/Fader.queue(fadeOut)
-		yield($GUI/Fader,"animation_finished")
+		await $GUI/Fader.animation_finished
 	
 	# error prevention
 	emit_signal("scene_faded")
@@ -130,7 +130,7 @@ func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", l
 	for i in $SceneLoader.get_children():
 		i.queue_free()
 	
-	yield(get_tree(),"idle_frame")
+	await get_tree().process_frame
 	# reset data level data, if reset data is true
 	if resetData:
 		Global.players = []
@@ -161,9 +161,9 @@ func change_scene(scene = null, fadeOut = "", fadeIn = "", setType = "SetSub", l
 	# create new scene
 		if scene == null:
 			if lastScene != null:
-				$SceneLoader.add_child(lastScene.instance())
+				$SceneLoader.add_child(lastScene.instantiate())
 		else:
-			$SceneLoader.add_child(scene.instance())
+			$SceneLoader.add_child(scene.instantiate())
 			lastScene = scene
 			# don't know if the current scene is gonna be stored in memory so store last scene to global state load memory
 			# check there's not a stored scene first

@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/Splash.wav-f2049b57300b2a6f52b216d4e91d52f6.sample"
+type="AudioStreamWAV"
+uid="uid://dmwqv4rtqnk0n"
+path="res://.godot/imported/Splash.wav-f2049b57300b2a6f52b216d4e91d52f6.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Gimmicks/Splash.wav"
-dest_files=[ "res://.import/Splash.wav-f2049b57300b2a6f52b216d4e91d52f6.sample" ]
+dest_files=["res://.godot/imported/Splash.wav-f2049b57300b2a6f52b216d4e91d52f6.sample"]
 
 [params]
 

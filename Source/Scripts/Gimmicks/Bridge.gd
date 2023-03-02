@@ -1,9 +1,9 @@
-tool
+@tool
 extends Node2D
 
-export var length = 12
-export var smoothDrop = true #Turn to false to match sonic 1 bridges
-export (Texture)var texture = null
+@export var length = 12
+@export var smoothDrop = true #Turn to false to match sonic 1 bridges
+@export (Texture2D)var texture = null
 var dropIndex = 1
 var maxDepression = 0
 
@@ -34,7 +34,7 @@ func _ready():
 
 func _process(_delta):
 	if Engine.is_editor_hint():
-		update()
+		queue_redraw()
 
 func _physics_process(delta):
 	if !Engine.is_editor_hint():
@@ -58,7 +58,7 @@ func _physics_process(delta):
 					elif abs(averagePlayerOffset-(global_position.x+(length/2*16))) > abs(i.global_position.x-(global_position.x+(length/2*16))):
 						averagePlayerOffset = lerp(averagePlayerOffset,i.global_position.x,0.5)
 			
-			$Bridge.position.y = max(floor(length/2)*2-stepify(abs(global_position.x+(length*8)-averagePlayerOffset)/8,2-int(smoothDrop)),0)
+			$Bridge.position.y = max(floor(length/2)*2-snapped(abs(global_position.x+(length*8)-averagePlayerOffset)/8,2-int(smoothDrop)),0)
 			dropIndex = max(1,floor((averagePlayerOffset-global_position.x)/16)+1)
 			if (dropIndex <= length/2):
 				maxDepression = dropIndex*2 #Working from the left
@@ -87,7 +87,7 @@ func _physics_process(delta):
 			else:
 				logDistance = 1-(difference/((length-dropIndex)+1)) # Working from the right
 			
-			bridges[i].position.y = lerp(bridges[i].position.y,floor(maxDepression * sin(90 * deg2rad(logDistance))),delta*10)
+			bridges[i].position.y = lerp(bridges[i].position.y,floor(maxDepression * sin(90 * deg_to_rad(logDistance))),delta*10)
 		
 
 

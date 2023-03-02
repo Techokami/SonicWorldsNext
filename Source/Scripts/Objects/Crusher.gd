@@ -1,9 +1,9 @@
 extends Node2D
-tool
+@tool
 
 # this moves back and forth based on a timer and speed, direction is angle based
-export var distance = 64
-export var wait = 1.0
+@export var distance = 64
+@export var wait = 1.0
 var timer = wait
 var extend = false
 
@@ -16,7 +16,7 @@ func _process(delta):
 			timer = wait
 			extend = !extend
 	else:
-		update()
+		queue_redraw()
 
 func _physics_process(delta):
 	if !Engine.is_editor_hint():

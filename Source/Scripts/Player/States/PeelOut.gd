@@ -1,4 +1,4 @@
-extends "res://Scripts/Player/State.gd"
+extends PlayerState
 
 var dashPower = 12
 
@@ -26,7 +26,7 @@ func _process(delta):
 	# how fast the animation plays
 	var duration = floor(max(0,8.0-abs(parent.groundSpeed/60)))
 	
-	parent.animator.playback_speed = (1.0/(duration+1))*(60/10)
+	parent.animator.speed_scale = (1.0/(duration+1))*(60/10)
 
 
 	# release

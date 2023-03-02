@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Graphics/Gimmicks/HangingBar.png" type="Texture" id=1]
+[ext_resource path="res://Graphics/Gimmicks/HangingBar.png" type="Texture2D" id=1]
 [ext_resource path="res://Entities/Gimmicks/Hanger.tscn" type="PackedScene" id=2]
 
 [node name="Hanger" type="Node2D"]
@@ -9,7 +9,7 @@
 position = Vector2( 0, -3 )
 scale = Vector2( 3, 1 )
 
-[node name="HangingBar" type="Sprite" parent="."]
+[node name="HangingBar" type="Sprite2D" parent="."]
 z_index = 10
 texture = ExtResource( 1 )
 offset = Vector2( 0, -17 )

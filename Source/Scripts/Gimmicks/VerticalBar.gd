@@ -4,28 +4,28 @@ extends Node
 # Author: DimensionWarped
 
 # Sound to play when the bar is grabbed
-export var grabSound = preload("res://Audio/SFX/Player/Grab.wav")
+@export var grabSound = preload("res://Audio/SFX/Player/Grab.wav")
 
 # How many times to spin around the bar before launching
-export var rotations = 1
+@export var rotations = 1
 
 # How fast the player needs to be going to catch the bar
-export var grabSpeed = 300
+@export var grabSpeed = 300
 
 # How fast to launch the player if the mode is constant
-export var launchSpeed = 720
+@export var launchSpeed = 720
 
 # How fast to launch the player if the mode is multiply
-export var launchMultiplier = 1.5
+@export var launchMultiplier = 1.5
 
 # Maximum speed to allow the player to launch when in multiply
-export var launchMultiMaxSpeed = 900
+@export var launchMultiMaxSpeed = 900
 
 # The CONSTANT launch mode will always launch the player with a set speed based on launchSpeed
-# The MULTIPLY launch mode will launch the player at a multiple of their incoming velocity clamped
+# The MULTIPLY launch mode will launch the player at a multiple of their incoming velocity limit_length
 #              to a given max value.
 enum {CONSTANT, MULTIPLY}
-export(int, "constant", "multiply") var launchMode # Keep these in the same order as the above enum
+@export_enum("constant","multiply") var launchMode # Keep these in the same order as the above enum # (int, "constant", "multiply")
 
 var players = [] # Tracks the players that are active within the gimmick
 var players_speed = [] # Tracks the player's speed on entering the loop (used for multiply mode)

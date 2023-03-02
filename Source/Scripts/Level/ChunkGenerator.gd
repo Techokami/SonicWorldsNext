@@ -1,18 +1,18 @@
 extends TileMap
-tool
+@tool
 
 # if to generate
-export var scanTilemap = false
+@export var scanTilemap = false
 
 # tile dictionary
 # key is the position, divided by the chunkmap cell size
 # the tiles pull from any tilemaps under a source tiles layer (this gets deleted when the game runs)
 # the tiles are made of an array, the order starts the tile layer ID, the offset coordinantes, the autotile / atlas coord, the x flip, the y flip, and the transpose
-export var tiles = {}
-export (NodePath)var sourceTiles
-export (NodePath)var destinationTileMaps
+@export var tiles = {}
+@export (NodePath)var sourceTiles
+@export (NodePath)var destinationTileMaps
 
-export var placeTiles = false
+@export var placeTiles = false
 
 
 func _process(delta):
@@ -72,7 +72,7 @@ func _process(delta):
 						var getPose = (j[1]-gridSize/2)
 						
 						if is_cell_transposed(i.x,i.y):
-							getPose = getPose.rotated(deg2rad(-90))*Vector2(1,-1)
+							getPose = getPose.rotated(deg_to_rad(-90))*Vector2(1,-1)
 						
 						# do some movement calculations, shifting back by half to rotate
 						getPose = getPose*getFlipsVec-Vector2(int(getFlipsVec.x <= 0),int(getFlipsVec.y <= 0))

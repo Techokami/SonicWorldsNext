@@ -1,4 +1,4 @@
-extends "res://Scripts/Player/State.gd"
+extends PlayerState
 
 var skid = false
 # timer for looking up and down
@@ -25,7 +25,7 @@ var playerIdles = [
 func state_exit():
 	skid = false
 	parent.get_node("HitBox").position = parent.hitBoxOffset.normal
-	parent.get_node("HitBox").shape.extents = parent.currentHitbox.NORMAL
+	parent.get_node("HitBox").shape.size = parent.currentHitbox.NORMAL
 	
 	lookTimer = 0
 
@@ -73,8 +73,8 @@ func _process(delta):
 				# set vertical sensors to check for objects
 				
 				var maskMemory = [parent.verticalSensorLeft.collision_mask,parent.verticalSensorRight.collision_mask]
-				parent.verticalSensorLeft.set_collision_mask_bit(13,true)
-				parent.verticalSensorRight.set_collision_mask_bit(13,true)
+				parent.verticalSensorLeft.set_collision_mask_value(13,true)
+				parent.verticalSensorRight.set_collision_mask_value(13,true)
 				parent.verticalSensorLeft.force_raycast_update()
 				parent.verticalSensorRight.force_raycast_update()
 				parent.verticalSensorMiddle.force_raycast_update()
@@ -94,7 +94,7 @@ func _process(delta):
 				# No edge detected
 				if getM or !parent.ground or parent.angle != parent.gravityAngle:
 					# Play default idle animation
-					if parent.super and parent.animator.has_animation("idle_super"):
+					if parent.isSuper and parent.animator.has_animation("idle_super"):
 						parent.animator.play("idle_super")
 					else:
 						
@@ -127,7 +127,7 @@ func _process(delta):
 						
 						_: #default
 							# super edge
-							if parent.super and parent.animator.has_animation("edge_super"):
+							if parent.isSuper and parent.animator.has_animation("edge_super"):
 								parent.animator.play("edge_super")
 							# reverse edge
 							elif !getL and getR:
@@ -149,11 +149,11 @@ func _process(delta):
 			parent.animator.play("peelOut")
 	
 	if parent.lastActiveAnimation == "crouch":
-		parent.get_node("HitBox").shape.extents = parent.currentHitbox.CROUCH
+		parent.get_node("HitBox").shape.size = parent.currentHitbox.CROUCH
 		parent.get_node("HitBox").position = parent.hitBoxOffset.crouch
 	else:
 		parent.get_node("HitBox").position = parent.hitBoxOffset.normal
-		parent.get_node("HitBox").shape.extents = parent.currentHitbox.NORMAL
+		parent.get_node("HitBox").shape.size = parent.currentHitbox.NORMAL
 	
 	if parent.inputs[parent.INPUTS.XINPUT] != 0 and !skid:
 		parent.direction = parent.inputs[parent.INPUTS.XINPUT]
@@ -197,7 +197,7 @@ func _physics_process(delta):
 	
 	parent.movement.y = min(parent.movement.y,0)
 	
-	# Camera look
+	# Camera3D look
 	if abs(lookTimer) >= 1:
 		parent.camLookAmount += delta*4*sign(lookTimer)
 	
@@ -205,7 +205,7 @@ func _physics_process(delta):
 	# ignore this if not moving for sonic 1 style slopes
 	parent.movement.x += (parent.slp*sin(parent.angle-parent.gravityAngle))/GlobalFunctions.div_by_delta(delta)
 	
-	var calcAngle = rad2deg(parent.angle-parent.gravityAngle)
+	var calcAngle = rad_to_deg(parent.angle-parent.gravityAngle)
 	if (calcAngle < 0):
 		calcAngle += 360
 	
@@ -225,7 +225,7 @@ func _on_SkidDustTimer_timeout():
 		if !skid:
 			$"../../SkidDustTimer".stop()
 		else:
-			var dust = parent.Particle.instance()
+			var dust = parent.Particle.instantiate()
 			dust.play("SkidDust")
-			dust.global_position = parent.global_position+(Vector2.DOWN*16).rotated(deg2rad(parent.spriteRotation-90))
+			dust.global_position = parent.global_position+(Vector2.DOWN*16).rotated(deg_to_rad(parent.spriteRotation-90))
 			parent.get_parent().add_child(dust)

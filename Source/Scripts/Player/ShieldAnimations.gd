@@ -1,5 +1,5 @@
-tool
-extends AnimatedSprite
+@tool
+extends AnimatedSprite2D
 
 
 func _process(_delta):
@@ -14,8 +14,9 @@ func _on_Shields_frame_changed():
 			z_index = 6
 			offset = Vector2.ZERO
 			scale = Vector2(1,1)
-			if (material.blend_mode != BLEND_MODE_ADD):
-				material.blend_mode = BLEND_MODE_ADD
+			
+			if (material.blend_mode != 1):#BLEND_MODE_ADD):
+				material.blend_mode = 1#BLEND_MODE_ADD
 		"Bubble":
 			z_index = 6
 			offset = Vector2.ZERO
@@ -25,8 +26,8 @@ func _on_Shields_frame_changed():
 				scale.y = -1
 			else:
 				scale.y = 1
-			if (material.blend_mode != BLEND_MODE_DISABLED):
-				material.blend_mode = BLEND_MODE_DISABLED
+			if (material.blend_mode != 0):#BLEND_MODE_DISABLED):
+				material.blend_mode = 0#BLEND_MODE_DISABLED
 		"Elec":
 			if (frame >= 13 and frame < 23):
 				z_index = 4
@@ -40,8 +41,8 @@ func _on_Shields_frame_changed():
 			else:
 				scale.x = 1
 			scale.y = 1
-			if (material.blend_mode != BLEND_MODE_DISABLED):
-				material.blend_mode = BLEND_MODE_DISABLED
+			if (material.blend_mode != 0):#BLEND_MODE_DISABLED):
+				material.blend_mode = 0#BLEND_MODE_DISABLED
 		"Fire":
 			# if frame is odd, make it in front
 			if (fmod(frame,2) == 1):
@@ -55,11 +56,11 @@ func _on_Shields_frame_changed():
 				scale.y = 1
 			scale.x = 1
 			offset = Vector2.ZERO
-			if (material.blend_mode != BLEND_MODE_DISABLED):
-				material.blend_mode = BLEND_MODE_DISABLED
+			if (material.blend_mode != 0):#BLEND_MODE_DISABLED):
+				material.blend_mode = 0#BLEND_MODE_DISABLED
 		_: # default
 			z_index = 6
 			offset = Vector2.ZERO
 			scale = Vector2(1,1)
-			if (material.blend_mode != BLEND_MODE_DISABLED):
-				material.blend_mode = BLEND_MODE_DISABLED
+			if (material.blend_mode != 0):#BLEND_MODE_DISABLED):
+				material.blend_mode = 0#BLEND_MODE_DISABLED

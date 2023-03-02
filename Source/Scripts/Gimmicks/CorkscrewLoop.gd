@@ -1,5 +1,5 @@
 extends Node2D
-tool
+@tool
 
 # player tracking arrays
 var playerListL = []
@@ -7,7 +7,7 @@ var playerListR = []
 var playerList = []
 
 # length of the corkscrew
-export var length = 1
+@export var length = 1
 
 func _ready():
 	# set initial positions for arrays
@@ -25,7 +25,7 @@ func _ready():
 func _process(_delta):
 	if Engine.is_editor_hint():
 		$EnteranceR.position.x = $Corkscrew.texture.get_width()*(length-1)+($Corkscrew.texture.get_width()/2)
-		update()
+		queue_redraw()
 
 func _physics_process(_delta):
 	if !Engine.is_editor_hint():

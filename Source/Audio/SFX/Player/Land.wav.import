@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/Land.wav-314d408f37298255901cacd2fe05f642.sample"
+type="AudioStreamWAV"
+uid="uid://78gy6s87pbbo"
+path="res://.godot/imported/Land.wav-314d408f37298255901cacd2fe05f642.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Player/Land.wav"
-dest_files=[ "res://.import/Land.wav-314d408f37298255901cacd2fe05f642.sample" ]
+dest_files=["res://.godot/imported/Land.wav-314d408f37298255901cacd2fe05f642.sample"]
 
 [params]
 

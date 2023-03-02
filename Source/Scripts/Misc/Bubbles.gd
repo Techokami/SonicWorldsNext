@@ -4,7 +4,7 @@ extends Node2D
 var bubbleType = 0
 
 var velocity = Vector2(1,-32)
-onready var offsetTime = randf()*4
+@onready var offsetTime = randf()*4
 
 func _ready():
 	$Bubble.frame = 0

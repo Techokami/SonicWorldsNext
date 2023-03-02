@@ -1,141 +1,160 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=3 uid="uid://byje3iiukvt4p"]
 
-[ext_resource path="res://Audio/Soundtrack/2. SWD_SpeedUp.ogg" type="AudioStream" id=1]
-[ext_resource path="res://Scripts/Global/Main.gd" type="Script" id=2]
-[ext_resource path="res://Audio/Soundtrack/3. SWD_1Up.ogg" type="AudioStream" id=3]
-[ext_resource path="res://Scene/Presentation/PoweredByWorlds.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Audio/Soundtrack/7. SWD_Drowning.ogg" type="AudioStream" id=5]
-[ext_resource path="res://Entities/Misc/ControllerMenu.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Entities/Misc/PauseMenu.tscn" type="PackedScene" id=7]
-[ext_resource path="res://Audio/Soundtrack/5. SWD_Boss.ogg" type="AudioStream" id=8]
+[ext_resource type="AudioStream" uid="uid://dec4ik84l88go" path="res://Audio/Soundtrack/2. SWD_SpeedUp.ogg" id="1"]
+[ext_resource type="Script" path="res://Scripts/Global/Main.gd" id="2"]
+[ext_resource type="AudioStream" uid="uid://b30ai1lqlh32u" path="res://Audio/Soundtrack/3. SWD_1Up.ogg" id="3"]
+[ext_resource type="PackedScene" uid="uid://c58ontqoxjuti" path="res://Scene/Presentation/PoweredByWorlds.tscn" id="4"]
+[ext_resource type="AudioStream" uid="uid://o4f15hnb5thp" path="res://Audio/Soundtrack/7. SWD_Drowning.ogg" id="5"]
+[ext_resource type="PackedScene" path="res://Entities/Misc/ControllerMenu.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://Entities/Misc/PauseMenu.tscn" id="7"]
+[ext_resource type="AudioStream" uid="uid://25oy5g80wsxu" path="res://Audio/Soundtrack/5. SWD_Boss.ogg" id="8"]
 
-[sub_resource type="CanvasItemMaterial" id=1]
+[sub_resource type="CanvasItemMaterial" id="1"]
 blend_mode = 2
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id="2"]
 resource_name = "FadeOut"
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath("ScreenFader:color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [ Color( 1, 1, 0, 0 ), Color( 1, 1, 1, 1 ) ]
+"values": [Color(1, 1, 0, 0), Color(1, 1, 1, 1)]
 }
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id="3"]
 length = 0.001
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath("ScreenFader:color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ Color( 1, 1, 0, 0 ) ]
+"values": [Color(1, 1, 0, 0)]
 }
 tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/path = NodePath("ScreenFader:material:blend_mode")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [ 2 ]
+"values": [2]
 }
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id="4"]
 resource_name = "SetAdd"
 length = 0.01
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath("ScreenFader:material:blend_mode")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ 1 ]
+"values": [1]
 }
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id="5"]
 resource_name = "SetSub"
 length = 0.01
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath("ScreenFader:material:blend_mode")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ 2 ]
+"values": [2]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_iltn5"]
+_data = {
+"FadeOut": SubResource("2"),
+"RESET": SubResource("3"),
+"SetAdd": SubResource("4"),
+"SetSub": SubResource("5")
 }
 
 [node name="Main" type="Node2D"]
-pause_mode = 2
-script = ExtResource( 2 )
+script = ExtResource("2")
 
 [node name="SceneLoader" type="Node" parent="."]
-pause_mode = 1
+process_mode = 1
 
-[node name="PoweredByWorlds" parent="SceneLoader" instance=ExtResource( 4 )]
+[node name="PoweredByWorlds" parent="SceneLoader" instance=ExtResource("4")]
 
 [node name="Music" type="Node" parent="."]
-pause_mode = 1
+process_mode = 1
 
 [node name="Music" type="AudioStreamPlayer" parent="Music"]
 autoplay = true
-bus = "Music"
+bus = &"Music"
 
 [node name="BossTheme" type="AudioStreamPlayer" parent="Music"]
-stream = ExtResource( 8 )
-bus = "Music"
+stream = ExtResource("8")
+bus = &"Music"
 
 [node name="EffectTheme" type="AudioStreamPlayer" parent="Music"]
-stream = ExtResource( 1 )
-bus = "Music"
+stream = ExtResource("1")
+bus = &"Music"
 
 [node name="Downing" type="AudioStreamPlayer" parent="Music"]
-stream = ExtResource( 5 )
-bus = "Music"
+stream = ExtResource("5")
+bus = &"Music"
 
 [node name="Life" type="AudioStreamPlayer" parent="Music"]
-stream = ExtResource( 3 )
-bus = "Music"
+stream = ExtResource("3")
+bus = &"Music"
 
 [node name="GUI" type="CanvasLayer" parent="."]
-pause_mode = 2
+process_mode = 3
 layer = 128
 
 [node name="ScreenFader" type="ColorRect" parent="GUI"]
-material = SubResource( 1 )
+visible = false
+material = SubResource("1")
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 1, 1, 0, 0 )
+offset_right = -195.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 0, 0)
 
 [node name="Fader" type="AnimationPlayer" parent="GUI"]
-anims/FadeOut = SubResource( 2 )
-anims/RESET = SubResource( 3 )
-anims/SetAdd = SubResource( 4 )
-anims/SetSub = SubResource( 5 )
+libraries = {
+"": SubResource("AnimationLibrary_iltn5")
+}
 
-[node name="ControllerMenu" parent="GUI" instance=ExtResource( 6 )]
+[node name="ControllerMenu" parent="GUI" instance=ExtResource("6")]
+layout_mode = 3
+anchors_preset = 15
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Pause" parent="GUI" instance=ExtResource( 7 )]
+[node name="Pause" parent="GUI" instance=ExtResource("7")]
+layout_mode = 3
+anchors_preset = 15
+grow_horizontal = 2
+grow_vertical = 2
 
 [connection signal="finished" from="Music/Life" to="." method="_on_Life_finished"]

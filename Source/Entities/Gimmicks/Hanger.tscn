@@ -4,7 +4,7 @@
 [ext_resource path="res://Audio/SFX/Player/Grab.wav" type="AudioStream" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 8, 5 )
+size = Vector2( 8, 5 )
 
 [node name="Hanger" type="Area2D"]
 process_priority = -1

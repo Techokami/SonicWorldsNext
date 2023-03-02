@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://Graphics/Items/air_bubbles.png" type="Texture" id=1]
+[ext_resource path="res://Graphics/Items/air_bubbles.png" type="Texture2D" id=1]
 [ext_resource path="res://Scripts/Gimmicks/BubbleGenerator.gd" type="Script" id=2]
 
 [sub_resource type="AtlasTexture" id=1]
@@ -26,13 +26,13 @@ animations = [ {
 [node name="BubbleGenerator" type="Node2D"]
 script = ExtResource( 2 )
 
-[node name="Bubbles" type="AnimatedSprite" parent="."]
+[node name="Bubbles" type="AnimatedSprite2D" parent="."]
 z_index = 6
 frames = SubResource( 4 )
 frame = 2
 playing = true
 
-[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
 position = Vector2( 0, -51 )
 scale = Vector2( 1, 6.1 )
 process_parent = true

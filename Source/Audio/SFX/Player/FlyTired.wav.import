@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/FlyTired.wav-41f1fb75b19cc152d36a489d8fc5dfc9.sample"
+type="AudioStreamWAV"
+uid="uid://di3y4wlj7bxee"
+path="res://.godot/imported/FlyTired.wav-41f1fb75b19cc152d36a489d8fc5dfc9.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Player/FlyTired.wav"
-dest_files=[ "res://.import/FlyTired.wav-41f1fb75b19cc152d36a489d8fc5dfc9.sample" ]
+dest_files=["res://.godot/imported/FlyTired.wav-41f1fb75b19cc152d36a489d8fc5dfc9.sample"]
 
 [params]
 

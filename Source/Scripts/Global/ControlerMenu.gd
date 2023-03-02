@@ -23,7 +23,7 @@ var defaultMap = []
 func _ready():
 	# get defaults before loading inputs
 	for i in InputMap.get_actions():
-		defaultMap.append(InputMap.get_action_list(i))
+		defaultMap.append(InputMap.action_get_events(i))
 	# load config data
 	load_data()
 
@@ -77,7 +77,7 @@ func update_display():
 			if playerControlIndex == 1:
 				p2Text = "_P2"
 			var charList = ""
-			var inputGets = InputMap.get_action_list(bindButton.bind+p2Text)
+			var inputGets = InputMap.action_get_events(bindButton.bind+p2Text)
 			for i in inputGets:
 				if i is InputEventKey:
 					charList += i.as_text()+", "
@@ -95,7 +95,7 @@ func update_display():
 		check_deletion()
 
 func check_deletion():
-	var strings = ["Press " + InputMap.get_action_list("ui_clear_action")[0].as_text() + " to clear", "Press " + InputMap.get_action_list("ui_clear_action")[0].as_text() + " to confirm"]
+	var strings = ["Press " + InputMap.action_get_events("ui_clear_action")[0].as_text() + " to clear", "Press " + InputMap.action_get_events("ui_clear_action")[0].as_text() + " to confirm"]
 	$ClearInfo.text = strings[clearEventStep]
 
 
@@ -106,11 +106,11 @@ func _on_SaveInputs_pressed():
 	var actionCount = 0
 	for i in InputMap.get_actions(): # input names
 		actionCount = 0
-		for j in InputMap.get_action_list(i): # the keys
+		for j in InputMap.action_get_events(i): # the keys
 			# key storage is complex, here we keep a record of keys, gamepad buttons and gamepad axis's
 			# prefix keys: K = Key, B = joypad Button, A = Axis, V = AxisValue
 			if j is InputEventKey:
-				file.set_value("controls","K"+str(actionCount)+i,j.get_scancode_with_modifiers())
+				file.set_value("controls","K"+str(actionCount)+i,j.get_keycode_with_modifiers())
 			elif j is InputEventJoypadButton:
 				file.set_value("controls","B"+str(actionCount)+i,j.button_index)
 				file.set_value("controls","B"+str(actionCount)+i+"Device",j.device)
@@ -152,8 +152,8 @@ func load_data():
 			if (file.has_section_key("controls","K"+str(actionCount)+i)):
 				# define new key
 				var getInput = InputEventKey.new()
-				# grab scancode
-				getInput.scancode = file.get_value("controls","K"+str(actionCount)+i)
+				# grab keycode
+				getInput.keycode = file.get_value("controls","K"+str(actionCount)+i)
 				# set new input
 				InputMap.action_add_event(i,getInput)
 			# joypad button check

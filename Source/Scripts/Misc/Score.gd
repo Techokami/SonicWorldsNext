@@ -15,7 +15,7 @@ func _ready():
 	# add score
 	Global.score += SCORE[scoreID]
 	# set sprite region to match (see RECTS for texture regions
-	$Sprite.region_rect = RECTS[scoreID]
+	$Sprite2D.region_rect = RECTS[scoreID]
 	
 
 func _physics_process(delta):

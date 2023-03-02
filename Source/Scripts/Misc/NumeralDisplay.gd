@@ -1,4 +1,4 @@
-extends Sprite
+extends Sprite2D
 # string look up, put a character in here and the frame index for the texture it represents
 var stringLookup = {
 '0': 0,
@@ -14,8 +14,8 @@ var stringLookup = {
 ':': 10,
 }
 
-export var string = "03"
-onready var stringMem = string
+@export var string = "03"
+@onready var stringMem = string
 
 func _ready():
 	region_enabled = true
@@ -23,7 +23,7 @@ func _ready():
 func _process(_delta):
 	if (stringMem != string):
 		stringMem = string
-		update()
+		queue_redraw()
 
 
 func _draw():

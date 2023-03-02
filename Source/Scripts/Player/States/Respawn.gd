@@ -1,4 +1,4 @@
-extends "res://Scripts/Player/State.gd"
+extends PlayerState
 
 # this is for respawning a second player
 var targetPoint = Vector2.ZERO
@@ -21,7 +21,7 @@ func _process(_delta):
 func _physics_process(delta):
 	parent.translate = true
 	# slowly move the target point towards the player based on distance
-	targetPoint = targetPoint.linear_interpolate(parent.partner.global_position,(targetPoint.distance_to(parent.partner.global_position)/32)*delta)
+	targetPoint = targetPoint.lerp(parent.partner.global_position,(targetPoint.distance_to(parent.partner.global_position)/32)*delta)
 	
 	# if player is in range or is in a valid state, return to normal
 	var goToNormal = (parent.global_position.distance_to(targetPoint) <= 64 and round(parent.global_position.y) == round(targetPoint.y)
@@ -31,10 +31,10 @@ func _physics_process(delta):
 	
 	var layerMemory = parent.collision_layer
 	# set parent layer to collide with terrain
-	parent.set_collision_layer_bit(0,true)
-	parent.set_collision_layer_bit(1,true)
-	parent.set_collision_layer_bit(2,true)
-	parent.set_collision_layer_bit(3,true)
+	parent.set_collision_layer_value(0,true)
+	parent.set_collision_layer_value(1,true)
+	parent.set_collision_layer_value(2,true)
+	parent.set_collision_layer_value(3,true)
 	
 	# Do a test move to make sure we aren't inside an object, if not in a free location then just do fly logic
 	if !goToNormal or parent.test_move(parent.global_transform,Vector2.ZERO):

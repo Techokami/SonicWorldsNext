@@ -1,8 +1,8 @@
-extends "res://Scripts/Player/State.gd"
+extends PlayerState
 
 
 func state_exit():
-	parent.get_node("HitBox").shape.extents = parent.currentHitbox.NORMAL
+	parent.get_node("HitBox").shape.size = parent.currentHitbox.NORMAL
 	
 func state_activated():
 	parent.get_node("HitBox").position = parent.hitBoxOffset.crouch

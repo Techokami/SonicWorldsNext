@@ -1,14 +1,14 @@
 extends Button
 
-export var bind = "gm_action"
-onready var control = get_parent()
+@export var bind = "gm_action"
+@onready var control = get_parent()
 var active = false
 
 func _ready():
 	# check that playerControlIndex is in parent. if it isn't get the second parent
 	if control.get("playerControlIndex") == null:
 		control = get_parent().get_parent()
-	var _con = connect("pressed",self,"lock_in_button")
+	var _con = connect("pressed",Callable(self,"lock_in_button"))
 
 # input remaping
 func _unhandled_input(event):

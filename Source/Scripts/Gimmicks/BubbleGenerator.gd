@@ -19,7 +19,7 @@ func _process(delta):
 		else:
 			# if timer runs out, set to a random number between 0 and 3 and generate bubble
 			bubbleTimer = randf()*3
-			var bubble = Bubble.instance()
+			var bubble = Bubble.instantiate()
 			# pick either 0 or 1 for the bubble type
 			bubble.bubbleType = int(round(randf()))
 			add_child(bubble)
@@ -31,7 +31,7 @@ func _process(delta):
 		else:
 			# if timer runs out generate bubble and reset timer to 10 seconds
 			bigBubbleTimer = 10
-			var bubble = Bubble.instance()
+			var bubble = Bubble.instantiate()
 			# set type to 2 for big bubbles
 			bubble.bubbleType = 2
 			add_child(bubble)

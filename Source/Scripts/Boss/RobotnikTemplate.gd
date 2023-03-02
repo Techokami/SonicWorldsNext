@@ -7,11 +7,10 @@ var dead = false
 var phase = 0
 var attackTimer = 0
 
-onready var getPose = [$LeftPoint.global_position,$RightPoint.global_position]
+@onready var getPose = [$LeftPoint.global_position,$RightPoint.global_position]
 var currentPoint = 1
 var Explosion = preload("res://Entities/Misc/GenericParticle.tscn")
 
-var velocity = Vector2.ZERO
 var hoverOffset = 0
 
 var animationPriority = ["default","move","laugh","hit","exploded"]
@@ -20,7 +19,7 @@ func _ready():
 	# move to the set currentPoint position before the boss starts (plus 128 pixels higher)
 	global_position = getPose[currentPoint]+Vector2(0,-1)*128
 	# run laugh function for everytime the boss gets hit
-	connect("hit_player",self,"do_laugh")
+	connect("hit_player",Callable(self,"do_laugh"))
 
 func _process(delta):
 	# flame jet (only visible when moving)
@@ -67,10 +66,10 @@ func _physics_process(delta):
 		match(phase):
 			0: # intro
 				if global_position.y < getPose[currentPoint].y:
-					velocity = ((getPose[currentPoint]-global_position)*60).clamped(64)
+					velocity = ((getPose[currentPoint]-global_position)*60).limit_length(64)
 				# move to center between positions
-				elif global_position.x > (getPose[0].linear_interpolate(getPose[1],0.5)).x:
-					velocity = ((getPose[0].linear_interpolate(getPose[1],0.5)-global_position)*60).clamped(64)
+				elif global_position.x > (getPose[0].lerp(getPose[1],0.5)).x:
+					velocity = ((getPose[0].lerp(getPose[1],0.5)-global_position)*60).limit_length(64)
 				elif attackTimer < 2:
 					# do laugh
 					if flashTimer <= 0:
@@ -89,13 +88,13 @@ func _physics_process(delta):
 				hoverOffset = move_toward(hoverOffset,cos(Global.levelTime*4)*4,delta*10)
 				# move
 				var getPosition = (getPose[currentPoint]-global_position)*60
-				velocity = getPosition.clamped(64)
+				velocity = getPosition.limit_length(64)
 				# now move the hover position back
 				global_position.y = global_position.y+hoverOffset
 				
 				# set scale to face the current point position
 				if is_equal_approx(global_position.x,getPose[currentPoint].x):
-					scale.x = abs(scale.x)*range_lerp(currentPoint,0,1,-1,1)
+					scale.x = abs(scale.x)*remap(currentPoint,0,1,-1,1)
 				
 				# increase attack timer
 				attackTimer += delta
@@ -156,11 +155,11 @@ func _on_SmokeTimer_timeout():
 		# play explosion sound
 		$Explode.play()
 		# spawn exposion particles
-		var expl = Explosion.instance()
+		var expl = Explosion.instantiate()
 		# set animation
 		expl.play("BossExplosion")
 		expl.z_index = 10
 		# add object
 		get_parent().add_child(expl)
 		# set position reletive to us
-		expl.global_position = global_position+Vector2(rand_range(-32,32),rand_range(-32,32))
+		expl.global_position = global_position+Vector2(randf_range(-32,32),randf_range(-32,32))

@@ -1,9 +1,9 @@
-tool
+@tool
 extends StaticBody2D
 
-export var speed = 60
+@export var speed = 60
 var frame = 0
-export var length = 1
+@export var length = 1
 
 func _ready():
 	# sprite related animations

@@ -1,12 +1,12 @@
-tool
-extends KinematicBody2D
+@tool
+extends CharacterBody2D
 
 var physics = false
 var grv = 0.21875
 var yspeed = 0
 var playerTouch = null
 var isActive = true
-export (int, "Ring", "Speed Shoes", "Invincibility", "Shield", "Elec Shield", "Fire Shield",
+@export_enum("Ring", "Speed Shoes", "Invincibility", "Shield", "Elec Shield", "Fire Shield",
 "Bubble Shield", "Super", "Blue Ring", "Boost", "1up") var item = 0
 var Explosion = preload("res://Entities/Misc/BadnickSmoke.tscn")
 
@@ -29,7 +29,7 @@ func destroy():
 	if !isActive:
 		return false
 	# create explosion
-	var explosion = Explosion.instance()
+	var explosion = Explosion.instantiate()
 	get_parent().add_child(explosion)
 	explosion.global_position = global_position
 	
@@ -42,9 +42,9 @@ func destroy():
 	$Animator.play("DestroyMonitor")
 	$SFX/Destroy.play()
 	# remove visibility enabler to prevent items from not being activated
-	$VisibilityEnabler2D.queue_free()
+	$VisibleOnScreenEnabler2D.queue_free()
 	# wait for animation to finish
-	yield($Animator,"animation_changed")
+	await $Animator.animation_changed
 	# enable effect
 	match (item):
 		0: # Rings
@@ -101,7 +101,7 @@ func physics_collision(body, hitVector):
 		if body.movement.y < 0:
 			body.movement.y *= -1
 	# check that player has the rolling layer bit set
-	elif body.get_collision_layer_bit(19):
+	elif body.get_collision_layer_value(19):
 		# Bounce from below
 		if hitVector.x != 0:
 			# check conditions for interaction (and the player is the first player)

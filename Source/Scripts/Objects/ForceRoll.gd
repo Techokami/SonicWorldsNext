@@ -1,7 +1,7 @@
 extends Area2D
 
 var players = []
-export (int, "left", "right") var forceDirection = 1
+@export_enum("left", "right") var forceDirection = 1
 
 func _physics_process(_delta):
 	# if any players are found in the array, if they're on the ground make them roll

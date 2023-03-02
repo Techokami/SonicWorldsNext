@@ -1,7 +1,7 @@
 extends StaticBody2D
 var getCam = null
 
-onready var screenXSize = get_viewport_rect().size.x
+@onready var screenXSize = get_viewport_rect().size.x
 
 var Animal = preload("res://Entities/Misc/Animal.tscn")
 var animalTrackers = []
@@ -15,7 +15,7 @@ func _physics_process(delta):
 	if timerActive and timer > 0:
 			# every 8/60 steps spawn an animal in the animal ground with an alarm of 12/60
 			if wrapf(timer,0,8.0/60.0) < wrapf(timer-delta,0,8.0/60.0):
-				var animal = Animal.instance()
+				var animal = Animal.instantiate()
 				# set animal sprite
 				animal.animal = Global.animals[round(randf())]
 				# deactivate animal to stop movement
@@ -25,7 +25,7 @@ func _physics_process(delta):
 				get_parent().add_child(animal)
 				animalTrackers.append(animal)
 				# set animal position, starting from -28 on the x position and increasing by 8 per animal
-				animal.global_position = global_position+Vector2(rand_range(-20,20),0)
+				animal.global_position = global_position+Vector2(randf_range(-20,20),0)
 				# set alarms, starting at 12.0/60.0 (converting the original timer)
 				animal.get_node("ActivationTimer").start(12.0/60.0)
 			
@@ -56,7 +56,7 @@ func activate():
 		
 		# set player camera limits
 		for i in Global.players:
-			# Camera limit set
+			# Camera3D limit set
 			i.limitLeft = global_position.x -screenXSize/2
 			i.limitRight = global_position.x +screenXSize/2
 
@@ -65,7 +65,7 @@ func activate():
 func spawn_animals():
 	# create animals
 	for i in range(8):
-		var animal = Animal.instance()
+		var animal = Animal.instantiate()
 		# set animal sprite
 		animal.animal = Global.animals[round(randf())]
 		# deactivate animal to stop movement

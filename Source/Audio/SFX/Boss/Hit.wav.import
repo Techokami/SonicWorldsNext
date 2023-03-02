@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/Hit.wav-edd3ee96cddbf5448c71aaedd966a891.sample"
+type="AudioStreamWAV"
+uid="uid://bvhfglhmpystw"
+path="res://.godot/imported/Hit.wav-edd3ee96cddbf5448c71aaedd966a891.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Boss/Hit.wav"
-dest_files=[ "res://.import/Hit.wav-edd3ee96cddbf5448c71aaedd966a891.sample" ]
+dest_files=["res://.godot/imported/Hit.wav-edd3ee96cddbf5448c71aaedd966a891.sample"]
 
 [params]
 

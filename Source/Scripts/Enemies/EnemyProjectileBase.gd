@@ -1,10 +1,10 @@
-class_name EnemyProjectileBase extends KinematicBody2D
+class_name EnemyProjectileBase extends CharacterBody2D
 
-export (int, "Normal", "Fire", "Elec", "Water") var damageType = 0
-export var canBeReflect = true
+@export_enum("Normal", "Fire", "Elec", "Water") var damageType = 0
+@export var canBeReflect = true
 var playerHit = []
 
-var velocity = Vector2.ZERO
+
 var reflected = false
 var reflectSpeed = 400
 var forceReflect
@@ -34,7 +34,7 @@ func _on_body_exited(body):
 		playerHit.erase(body)
 
 func _on_DamageArea_area_entered(area):
-	if area.get("parent") != null and area.get_collision_layer_bit(19):
+	if area.get("parent") != null and area.get_collision_layer_value(19):
 		if !playerHit.has(area.parent):
 			forceReflect = true
 			playerHit.append(area.parent)

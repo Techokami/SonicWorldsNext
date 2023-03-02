@@ -1,6 +1,6 @@
 extends EnemyBase
 
-# Original Code Reference translated by VAdaPEGA
+# Original Code RefCounted translated by VAdaPEGA
 var animFrame = 0.0
 
 func _ready():

@@ -1,8 +1,8 @@
 extends StaticBody2D
 
-export (float)var shiftTimer = 0.00
-onready var start = position
-onready var shiftPoint = position+(Vector2.DOWN*scale.sign()).rotated(rotation)*32
+@export (float)var shiftTimer = 0.00
+@onready var start = position
+@onready var shiftPoint = position+(Vector2.DOWN*scale.sign()).rotated(rotation)*32
 var sunk = false
 var sunkShift = 0
 
@@ -11,7 +11,7 @@ func _ready():
 	if !is_equal_approx(shiftTimer,0):
 		$ShiftTimer.start(abs(shiftTimer))
 	else:
-		$VisibilityEnabler2D.physics_process_parent = false
+		$VisibleOnScreenEnabler2D.physics_process_parent = false
 		set_physics_process(false)
 
 func _physics_process(delta):
@@ -22,12 +22,12 @@ func _physics_process(delta):
 
 # Collision check (this is where the player gets hurt, OW!)
 func physics_collision(body, hitVector):
-	if hitVector.is_equal_approx((Vector2.DOWN*scale.sign()).rotated(deg2rad(stepify(rotation_degrees,90)))):
+	if hitVector.is_equal_approx((Vector2.DOWN*scale.sign()).rotated(deg_to_rad(snapped(rotation_degrees,90)))):
 		body.hit_player(global_position)
 		return true
 
 
 func _on_ShiftTimer_timeout():
-	if $VisibilityEnabler2D.is_on_screen():
+	if $VisibleOnScreenEnabler2D.is_on_screen():
 		$sfxSpikeShift.play()
 	sunk = !sunk

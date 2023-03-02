@@ -1,10 +1,10 @@
 [gd_scene load_steps=11 format=2]
 
-[ext_resource path="res://Graphics/Enemies/buzzBomber.png" type="Texture" id=1]
+[ext_resource path="res://Graphics/Enemies/buzzBomber.png" type="Texture2D" id=1]
 [ext_resource path="res://Scripts/Enemies/BuzzBomber.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 24, 12 )
+size = Vector2( 24, 12 )
 
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 1 )
@@ -45,9 +45,9 @@ animations = [ {
 } ]
 
 [sub_resource type="RectangleShape2D" id=8]
-extents = Vector2( 40, 96 )
+size = Vector2( 40, 96 )
 
-[node name="BuzzBomber" type="KinematicBody2D" groups=["Enemy"]]
+[node name="BuzzBomber" type="CharacterBody2D" groups=["Enemy"]]
 collision_layer = 16384
 collision_mask = 0
 script = ExtResource( 2 )
@@ -67,34 +67,34 @@ modulate = Color( 1, 0, 0, 1 )
 position = Vector2( 0, -3 )
 shape = SubResource( 1 )
 
-[node name="Sprite" type="Node2D" parent="."]
+[node name="Sprite2D" type="Node2D" parent="."]
 
-[node name="Wings" type="AnimatedSprite" parent="Sprite"]
+[node name="Wings" type="AnimatedSprite2D" parent="Sprite2D"]
 frames = SubResource( 7 )
 animation = "wing"
 frame = 1
 playing = true
 
-[node name="BuzzBomber" type="Sprite" parent="Sprite"]
+[node name="BuzzBomber" type="Sprite2D" parent="Sprite2D"]
 texture = ExtResource( 1 )
 hframes = 2
 vframes = 3
 
-[node name="Fire" type="AnimatedSprite" parent="Sprite"]
+[node name="Fire" type="AnimatedSprite2D" parent="Sprite2D"]
 frames = SubResource( 7 )
 playing = true
 
-[node name="PlayerCheck" type="Area2D" parent="Sprite"]
+[node name="PlayerCheck" type="Area2D" parent="Sprite2D"]
 z_index = -1
 collision_layer = 0
 collision_mask = 4096
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite/PlayerCheck"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/PlayerCheck"]
 modulate = Color( 1, 1, 1, 0.352941 )
 position = Vector2( -40, 86 )
 shape = SubResource( 8 )
 
-[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
 scale = Vector2( 2.7, 2.7 )
 process_parent = true
 physics_process_parent = true
@@ -104,4 +104,4 @@ physics_process_parent = true
 [connection signal="area_entered" from="DamageArea" to="." method="_on_DamageArea_area_entered"]
 [connection signal="body_entered" from="DamageArea" to="." method="_on_body_entered"]
 [connection signal="body_exited" from="DamageArea" to="." method="_on_body_exited"]
-[connection signal="body_entered" from="Sprite/PlayerCheck" to="." method="_on_PlayerCheck_body_entered"]
+[connection signal="body_entered" from="Sprite2D/PlayerCheck" to="." method="_on_PlayerCheck_body_entered"]

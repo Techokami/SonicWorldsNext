@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/RingL.wav-71211837cdf41bda2de988d4adb064e1.sample"
+type="AudioStreamWAV"
+uid="uid://mbnafvbxgyv5"
+path="res://.godot/imported/RingL.wav-71211837cdf41bda2de988d4adb064e1.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Objects/RingL.wav"
-dest_files=[ "res://.import/RingL.wav-71211837cdf41bda2de988d4adb064e1.sample" ]
+dest_files=["res://.godot/imported/RingL.wav-71211837cdf41bda2de988d4adb064e1.sample"]
 
 [params]
 

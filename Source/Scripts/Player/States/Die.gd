@@ -1,4 +1,4 @@
-extends "res://Scripts/Player/State.gd"
+extends PlayerState
 
 func _ready():
 	invulnerability = true # ironic
@@ -17,8 +17,8 @@ func _physics_process(delta):
 			Global.lives -= 1
 			# check if lives are remaining or death was a time over
 			if Global.lives > 0 and Global.levelTime < Global.maxTime:
-				Global.main.change_scene(null,"FadeOut")
-				parent.pause_mode = PAUSE_MODE_STOP
+				Global.main.change_scene_to_file(null,"FadeOut")
+				parent.process_mode = PROCESS_MODE_PAUSABLE
 			else:
 				Global.gameOver = true
 				# reset checkpoint time

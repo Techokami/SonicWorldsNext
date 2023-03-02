@@ -37,7 +37,7 @@ var onOff = ["off","on"]
 # clamp for minimum and maximum sound volume (muted when audio is at lowest)
 var clampSounds = [-40.0,6.0]
 # how much to iterate through (take the total sum then divide it by how many steps we want)
-onready var soundStep = (abs(clampSounds[0])+abs(clampSounds[1]))/100.0
+@onready var soundStep = (abs(clampSounds[0])+abs(clampSounds[1]))/100.0
 # button delay
 var soundStepDelay = 0
 var subSoundStep = 0.2
@@ -90,7 +90,7 @@ func _input(event):
 			2: # Scale
 				if event.is_action_pressed("gm_left") or event.is_action_pressed("gm_right"):
 					Global.zoomSize = clamp(Global.zoomSize+inputDir,zoomClamp[0],zoomClamp[1])
-					OS.set_window_size(get_viewport().get_visible_rect().size*Global.zoomSize)
+					get_window().set_size(get_viewport().get_visible_rect().size*Global.zoomSize)
 		$PauseMenu/VBoxContainer.get_child(option+1).get_child(0).string = update_text(option+1)
 	
 	
@@ -102,7 +102,7 @@ func _input(event):
 					0: # continue
 						if Global.main.wasPaused:
 							# give frame so game doesn't immedaitely unpause
-							yield(get_tree(),"idle_frame")
+							await get_tree().process_frame
 							Global.main.wasPaused = false
 							get_tree().paused = false
 							visible = false
@@ -111,7 +111,7 @@ func _input(event):
 			MENUS.OPTIONS: # options menu
 				match(option): # Options
 					3: # full screen
-						OS.window_fullscreen = !OS.window_fullscreen
+						get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (!((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN))) else Window.MODE_WINDOWED
 						$PauseMenu/VBoxContainer.get_child(option+1).get_child(0).string = update_text(option+1)
 					4: # control menu
 						Global.save_settings()
@@ -133,8 +133,8 @@ func _input(event):
 						visible = false
 						Global.checkPointTime = 0
 						Global.currentCheckPoint = -1
-						Global.main.change_scene(null,"FadeOut")
-						#yield(Global.main,"scene_faded")
+						Global.main.change_scene_to_file(null,"FadeOut")
+						#await Global.main.scene_faded
 						Global.effectTheme.stop()
 						Global.bossMusic.stop()
 						Global.main.set_volume(0)
@@ -143,14 +143,14 @@ func _input(event):
 					0: # cancel
 						set_menu(0)
 					1: # ok
-						yield(get_tree(),"idle_frame")
+						await get_tree().process_frame
 						Global.main.reset_game()
 		
 	
 
 func choose_option(optionSet = option+1, playSound = true):
 	# reset curren option colour to white
-	$PauseMenu/VBoxContainer.get_child(option+1).modulate = Color.white
+	$PauseMenu/VBoxContainer.get_child(option+1).modulate = Color.WHITE
 	# change to new option, set the new option colour to yellow
 	option = wrapi(optionSet,0,menusText[menu].size()-1)
 	$PauseMenu/VBoxContainer.get_child(option+1).modulate = Color(1,1,0)
@@ -167,7 +167,7 @@ func set_menu(menuID = 0):
 	
 	# loop through menu lists and create a text node for each option
 	for i in menusText[menuID].size():
-		var text = Text.instance()
+		var text = Text.instantiate()
 		$PauseMenu/VBoxContainer.add_child(text)
 		var getText = text.get_child(0)
 		if menuID != 1:
@@ -192,6 +192,6 @@ func update_text(textRow = 0):
 		3: # Scale
 			return "scale x"+str(Global.zoomSize)
 		4: # Full screen
-			return "full screen "+onOff[int(OS.window_fullscreen)]
+			return "full screen "+onOff[int(((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN)))]
 		_: # Default
 			return menusText[menu][textRow]

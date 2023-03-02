@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=2]
 
-[ext_resource path="res://Graphics/Gimmicks/CNZBarrel.png" type="Texture" id=1]
+[ext_resource path="res://Graphics/Gimmicks/CNZBarrel.png" type="Texture2D" id=1]
 [ext_resource path="res://Scripts/Gimmicks/CNZBarrelChild.gd" type="Script" id=2]
 [ext_resource path="res://Scripts/Gimmicks/CNZBarrel.gd" type="Script" id=3]
 
@@ -29,10 +29,10 @@ animations = [ {
 } ]
 
 [sub_resource type="RectangleShape2D" id=6]
-extents = Vector2( 32, 2 )
+size = Vector2( 32, 2 )
 
 [sub_resource type="RectangleShape2D" id=7]
-extents = Vector2( 32, 30 )
+size = Vector2( 32, 30 )
 
 [node name="CNZBarrel" type="Node2D"]
 script = ExtResource( 3 )
@@ -41,13 +41,13 @@ __meta__ = {
 "_edit_vertical_guides_": [ -124.0 ]
 }
 
-[node name="CNZBarrelActiveBody" type="KinematicBody2D" parent="."]
+[node name="CNZBarrelActiveBody" type="CharacterBody2D" parent="."]
 collision_layer = 2105359
 collision_mask = 0
 moving_platform_apply_velocity_on_leave = 2
 script = ExtResource( 2 )
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="CNZBarrelActiveBody"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CNZBarrelActiveBody"]
 position = Vector2( 0, 31 )
 frames = SubResource( 5 )
 frame = 1
@@ -57,7 +57,7 @@ playing = true
 position = Vector2( 0, 1 )
 shape = SubResource( 6 )
 
-[node name="CNZBarrelInactiveBody" type="KinematicBody2D" parent="CNZBarrelActiveBody"]
+[node name="CNZBarrelInactiveBody" type="CharacterBody2D" parent="CNZBarrelActiveBody"]
 position = Vector2( 0, 31 )
 collision_layer = 2105359
 collision_mask = 0

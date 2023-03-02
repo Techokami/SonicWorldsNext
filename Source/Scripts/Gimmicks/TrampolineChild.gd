@@ -1,4 +1,4 @@
-extends KinematicBody2D
+extends CharacterBody2D
 
 func physics_collision(body, hitVector):
 	# Not sure if safe.

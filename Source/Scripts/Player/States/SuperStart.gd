@@ -1,9 +1,9 @@
-extends "res://Scripts/Player/State.gd"
+extends PlayerState
 
 var activated = true
 
 func _process(_delta):
-	if activated and !parent.super:
+	if activated and !parent.isSuper:
 		var remVel = parent.movement
 		var lastAnim = parent.animator.current_animation
 		# hide shield
@@ -16,7 +16,7 @@ func _process(_delta):
 		parent.sfx[18].play()
 		parent.animator.play("super")
 		# wait for aniamtion to finish before activating super completely
-		yield(parent.animator,"animation_finished")
+		await parent.animator.animation_finished
 		
 		if parent.ground:
 			parent.animator.play(lastAnim)
@@ -35,11 +35,11 @@ func _process(_delta):
 			parent.sprite.texture = parent.superSprite
 		# reset velocity to memory
 		parent.movement = remVel
-		parent.super = true
+		parent.isSuper = true
 		parent.switch_physics()
 		parent.supTime = 1
 	# if already super just go to air state
-	elif parent.super:
+	elif parent.isSuper:
 		parent.set_state(parent.STATES.AIR)
 		
 

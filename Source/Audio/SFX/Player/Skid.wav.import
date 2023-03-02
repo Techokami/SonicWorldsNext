@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/Skid.wav-1c3476a5b4a1d586eba559392cf3d4c5.sample"
+type="AudioStreamWAV"
+uid="uid://jrhkpluws6u1"
+path="res://.godot/imported/Skid.wav-1c3476a5b4a1d586eba559392cf3d4c5.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Player/Skid.wav"
-dest_files=[ "res://.import/Skid.wav-1c3476a5b4a1d586eba559392cf3d4c5.sample" ]
+dest_files=["res://.godot/imported/Skid.wav-1c3476a5b4a1d586eba559392cf3d4c5.sample"]
 
 [params]
 

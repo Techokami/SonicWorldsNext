@@ -1,25 +1,25 @@
 extends "res://Scripts/Objects/StateMovers/StateMover.gd"
 
-export var moveTime = 4.0 # takes 4 seconds to reach target position
+@export var moveTime = 4.0 # takes 4 seconds to reach target position
 
 var startPos
 var endPos
-export(Vector2) var translation
-export var nextState = 1
+#@export var position: Vector2
+@export var nextState = 1
 
 enum INTERPOLATION {COS, LINEAR}
-export(INTERPOLATION) var interpolationMode = INTERPOLATION.COS
+@export var interpolationMode: INTERPOLATION = INTERPOLATION.COS
 
 var curTime = 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	._ready()
+	super._ready()
 	pass
 	
 func enterState():
 	startPos = Vector2(parent.realPosition)
-	endPos = Vector2(parent.realPosition) + translation
+	endPos = Vector2(parent.realPosition) + position
 	curTime = 0.0
 	pass
 

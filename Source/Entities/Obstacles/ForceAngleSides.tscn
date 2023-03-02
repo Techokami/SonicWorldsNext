@@ -3,7 +3,7 @@
 [ext_resource path="res://Scripts/Objects/ForceAngleSides.gd" type="Script" id=1]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 32, 32 )
+size = Vector2( 32, 32 )
 
 [node name="ForceAngleSides" type="Area2D"]
 z_index = 15

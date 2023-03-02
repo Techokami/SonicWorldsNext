@@ -1,8 +1,8 @@
 extends Area2D
 
 var players = []
-export var speed = 400.0
-export var force = 5.0 # how fast to push the players velocity to speed
+@export var speed = 400.0
+@export var force = 5.0 # how fast to push the players velocity to speed
 
 func _ready():
 	visible = false

@@ -24,7 +24,7 @@ func _process(delta):
 			z_index = 1
 			# get ring to player
 			player.get_ring()
-			var part = Particle.instance()
+			var part = Particle.instantiate()
 			get_parent().add_child(part)
 			part.global_position = global_position
 			part.play("RingSparkle")

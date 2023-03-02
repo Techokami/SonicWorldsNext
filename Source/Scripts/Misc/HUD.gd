@@ -1,19 +1,19 @@
 extends CanvasLayer
 
 # player ID look up
-export var focusPlayer = 0
+@export var focusPlayer = 0
 
 # counter elements pointers
-onready var scoreText = $Counters/Text/ScoreNumber
-onready var timeText = $Counters/Text/TimeNumbers
-onready var ringText = $Counters/Text/RingCount
-onready var lifeText = $LifeCounter/Icon/LifeText
+@onready var scoreText = $Counters/Text/ScoreNumber
+@onready var timeText = $Counters/Text/TimeNumbers
+@onready var ringText = $Counters/Text/RingCount
+@onready var lifeText = $LifeCounter/Icon/LifeText
 
 # play level card, if true will play the level card animator and use the zone name and zone text with the act
-export var playLevelCard = true
-export var zoneName = "Base"
-export var zone = "Zone"
-export var act = 1
+@export var playLevelCard = true
+@export var zoneName = "Base"
+@export var zone = "Zone"
+@export var act = 1
 
 # used for flashing ui elements (rings, time)
 var flashTimer = 0
@@ -58,30 +58,30 @@ func _ready():
 		# make visible if act isn't 0 (0 will just be zone)
 		$LevelCard/Banner/Act.visible = (act > 0)
 		# make sure level card isn't paused so it can keep playing
-		$LevelCard/CardPlayer.pause_mode = PAUSE_MODE_PROCESS
+		$LevelCard/CardPlayer.process_mode = PROCESS_MODE_ALWAYS
 		# temporarily let music play during pauses
 		if Global.musicParent != null:
-			Global.musicParent.pause_mode = PAUSE_MODE_PROCESS
+			Global.musicParent.process_mode = PROCESS_MODE_ALWAYS
 		# pause game while card is playing
 		get_tree().paused = true
 		# play card animations
 		$LevelCard/CardPlayer.play("Start")
 		$LevelCard/CardMover.play("Slider")
 		# wait for card to finish it's entrance animation, then play the end
-		yield($LevelCard/CardPlayer,"animation_finished")
+		await $LevelCard/CardPlayer.animation_finished
 		$LevelCard/CardPlayer.play("End")
 		# unpause the game and set previous pause mode nodes to stop on pause
 		get_tree().paused = false
-		Global.musicParent.pause_mode = PAUSE_MODE_STOP
-		$LevelCard/CardPlayer.pause_mode = PAUSE_MODE_STOP
+		Global.musicParent.process_mode = PROCESS_MODE_PAUSABLE
+		$LevelCard/CardPlayer.process_mode = PROCESS_MODE_PAUSABLE
 		# emit stage start signal
 		Global.emit_stage_start()
 		# wait for title card animator to finish ending before starting the level timer
-		yield($LevelCard/CardPlayer,"animation_finished")
+		await $LevelCard/CardPlayer.animation_finished
 	else:
 		get_tree().paused = true
-		yield(get_tree(),"idle_frame") # delay unpausing for one frame so the player doesn't die immediately
-		yield(get_tree(),"idle_frame") # second one needed for player 2
+		await get_tree().process_frame # delay unpausing for one frame so the player doesn't die immediately
+		await get_tree().process_frame # second one needed for player 2
 		# emit the stage start signal and start the stage
 		Global.emit_stage_start()
 		get_tree().paused = false
@@ -117,9 +117,9 @@ func _process(delta):
 		var cam = GlobalFunctions.getCurrentCamera2D()
 		if cam != null:
 			# if camera exists place the water's y position based on the screen position as the water is a UI overlay
-			$Water/WaterOverlay.rect_position.y = clamp(Global.waterLevel-GlobalFunctions.getCurrentCamera2D().get_camera_screen_center().y+(get_viewport().get_visible_rect().size.y/2),0,get_viewport().get_visible_rect().size.y)
+			$Water/WaterOverlay.position.y = clamp(Global.waterLevel-GlobalFunctions.getCurrentCamera2D().get_screen_center_position().y+(get_viewport().get_visible_rect().size.y/2),0,get_viewport().get_visible_rect().size.y)
 		# scale water level to match the visible screen
-		$Water/WaterOverlay.rect_scale.y = clamp(Global.waterLevel-$Water/WaterOverlay.rect_position.y,0,get_viewport().size.y)
+		$Water/WaterOverlay.scale.y = clamp(Global.waterLevel-$Water/WaterOverlay.position.y,0,get_viewport().size.y)
 		$Water/WaterOverlay.visible = true
 		
 		# Water Overlay Elec flash
@@ -140,7 +140,7 @@ func _process(delta):
 										Global.add_score(j.global_position,Global.SCORE_COMBO[0])
 										j.destroy()
 							# disable flash after a frame
-							yield(get_tree(),"idle_frame")
+							await get_tree().process_frame
 							$Water/WaterOverlay/ElecFlash.visible = false
 						i.SHIELDS.FIRE:
 							# clear shield
@@ -202,15 +202,15 @@ func _process(delta):
 			$LevelClear/Tally/TimeNumbers.string = "%6d" % timeBonus
 			# wait for counter wait time to count down
 			$LevelClear/CounterWait.start()
-			yield($LevelClear/CounterWait,"timeout")
+			await $LevelClear/CounterWait.timeout
 			# start the level counter tally (see _on_CounterCount_timeout)
 			$LevelClear/CounterCount.start()
-			yield(self,"tally_clear")
+			await self.tally_clear
 			# wait 2 seconds (reuse timer)
 			$LevelClear/CounterWait.start(2)
-			yield($LevelClear/CounterWait,"timeout")
+			await $LevelClear/CounterWait.timeout
 			# after clear, change to next level in Global.nextZone (you can set the next zone in the level script node)
-			Global.main.change_scene(Global.nextZone,"FadeOut","FadeOut","SetSub",1)
+			Global.main.change_scene_to_file(Global.nextZone,"FadeOut","FadeOut","SetSub",1)
 	
 	# game over sequence
 	elif Global.gameOver and !gameOver:
@@ -228,16 +228,16 @@ func _process(delta):
 		Global.bossMusic.stop()
 		Global.life.stop()
 		# wait for animation to finish
-		yield($GameOver/GameOver,"animation_finished")
+		await $GameOver/GameOver.animation_finished
 		# reset game
 		if Global.levelTime < Global.maxTime or Global.lives <= 0:
-			Global.main.change_scene(Global.startScene,"FadeOut")
-			yield(Global.main,"scene_faded")
+			Global.main.change_scene_to_file(Global.startScene,"FadeOut")
+			await Global.main.scene_faded
 			Global.reset_values()
 		# reset level (if time over and lives aren't out)
 		else:
-			Global.main.change_scene(null,"FadeOut")
-			yield(Global.main,"scene_faded")
+			Global.main.change_scene_to_file(null,"FadeOut")
+			await Global.main.scene_faded
 			Global.levelTime = 0
 
 # counter count down

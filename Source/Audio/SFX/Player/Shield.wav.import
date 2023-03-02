@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/Shield.wav-53e910cb83d444754fbaec38e7ab78f4.sample"
+type="AudioStreamWAV"
+uid="uid://dg4gnjja2ce0s"
+path="res://.godot/imported/Shield.wav-53e910cb83d444754fbaec38e7ab78f4.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Player/Shield.wav"
-dest_files=[ "res://.import/Shield.wav-53e910cb83d444754fbaec38e7ab78f4.sample" ]
+dest_files=["res://.godot/imported/Shield.wav-53e910cb83d444754fbaec38e7ab78f4.sample"]
 
 [params]
 

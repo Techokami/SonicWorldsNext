@@ -1,4 +1,4 @@
-extends "res://Scripts/Player/State.gd"
+extends PlayerState
 
 var climbPosition = Vector2.ZERO
 var climbUp = false
@@ -15,7 +15,7 @@ func _physics_process(delta):
 	if !climbUp:
 		
 		# climbing
-		parent.movement.y = (parent.inputs[parent.INPUTS.YINPUT]+int(parent.super)*sign(parent.inputs[parent.INPUTS.YINPUT]))*60
+		parent.movement.y = (parent.inputs[parent.INPUTS.YINPUT]+int(parent.isSuper)*sign(parent.inputs[parent.INPUTS.YINPUT]))*60
 		
 		# check vertically (sometimes clinging can cause clipping)
 		if parent.movement.y == 0:
@@ -45,14 +45,14 @@ func _physics_process(delta):
 		# check to climb
 		if !parent.horizontalSensor.is_colliding():
 			parent.movement = Vector2.ZERO
-			parent.animator.playback_speed = 1
+			parent.animator.speed_scale = 1
 			parent.set_state(parent.STATES.GLIDE,parent.currentHitbox.NORMAL)
 			return false
 		
 		# climbing edge
 		# move sensor to the top
-		parent.horizontalSensor.position.y = -parent.get_node("HitBox").shape.extents.y
-		parent.horizontalSensor.cast_to += parent.horizontalSensor.cast_to.normalized()*4
+		parent.horizontalSensor.position.y = -parent.get_node("HitBox").shape.size.y
+		parent.horizontalSensor.target_position += parent.horizontalSensor.target_position.normalized()*4
 		parent.horizontalSensor.force_raycast_update()
 		
 		# check if the player can climb on top of the platform

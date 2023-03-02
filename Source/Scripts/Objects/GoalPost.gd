@@ -1,8 +1,8 @@
-extends Sprite
+extends Sprite2D
 var getCam = null
 var player = null
 
-onready var screenXSize = get_viewport_rect().size.x
+@onready var screenXSize = get_viewport_rect().size.x
 
 func _physics_process(_delta):
 	# check if player.x position is greater then the post
@@ -10,7 +10,7 @@ func _physics_process(_delta):
 		# set player variable
 		player = Global.players[0]
 		
-		# Camera limit set
+		# Camera3D limit set
 		player.limitLeft = global_position.x -screenXSize/2
 		player.limitRight = global_position.x +(screenXSize/2)+48
 		getCam = player.camera
@@ -29,7 +29,7 @@ func _physics_process(_delta):
 		Global.stageClearPhase = 1
 		
 		# wait for spinner to finish
-		yield($Animator,"animation_finished")
+		await $Animator.animation_finished
 		# after finishing spin, set stage clear to 2 and disable the players controls,
 		# stage clear is set to 2 so that the level ending doesn't start prematurely but we can track where the player is
 		Global.stageClearPhase = 2

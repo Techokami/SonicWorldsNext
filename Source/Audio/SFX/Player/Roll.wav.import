@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/Roll.wav-aabbccc4c1f817006ff6e02483b9bd5b.sample"
+type="AudioStreamWAV"
+uid="uid://tldp1etm5kwa"
+path="res://.godot/imported/Roll.wav-aabbccc4c1f817006ff6e02483b9bd5b.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Player/Roll.wav"
-dest_files=[ "res://.import/Roll.wav-aabbccc4c1f817006ff6e02483b9bd5b.sample" ]
+dest_files=["res://.godot/imported/Roll.wav-aabbccc4c1f817006ff6e02483b9bd5b.sample"]
 
 [params]
 

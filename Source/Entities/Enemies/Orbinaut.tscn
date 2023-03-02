@@ -1,13 +1,13 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Scripts/Enemies/Orbinaut.gd" type="Script" id=1]
-[ext_resource path="res://Graphics/Enemies/orbinaut.png" type="Texture" id=2]
+[ext_resource path="res://Graphics/Enemies/orbinaut.png" type="Texture2D" id=2]
 [ext_resource path="res://Scripts/Objects/Hazard.gd" type="Script" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 8, 8 )
+size = Vector2( 8, 8 )
 
-[node name="Orbinaut" type="KinematicBody2D" groups=["Enemy"]]
+[node name="Orbinaut" type="CharacterBody2D" groups=["Enemy"]]
 collision_layer = 16384
 collision_mask = 0
 script = ExtResource( 1 )
@@ -33,19 +33,19 @@ script = ExtResource( 3 )
 modulate = Color( 1, 0, 0, 1 )
 shape = SubResource( 1 )
 
-[node name="orb" type="Sprite" parent="Orb"]
+[node name="orb" type="Sprite2D" parent="Orb"]
 texture = ExtResource( 2 )
 hframes = 2
 vframes = 2
 frame = 3
 
-[node name="orbinaut" type="Sprite" parent="."]
+[node name="orbinaut" type="Sprite2D" parent="."]
 texture = ExtResource( 2 )
 hframes = 2
 vframes = 2
 frame = 2
 
-[node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
 visible = false
 position = Vector2( -1.90735e-06, -1.90735e-06 )
 scale = Vector2( 3.2, 3.2 )

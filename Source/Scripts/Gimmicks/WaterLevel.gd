@@ -3,14 +3,14 @@ extends Node2D
 # initial setup for water
 
 # static will make the water stay still, otherwise it drifts in place
-export var isStatic = false
-onready var hoverY = global_position.y
+@export var isStatic = false
+@onready var hoverY = global_position.y
 
 # art
-export var waterSurface = [preload("res://Graphics/Gimmicks/WaterSurface1.png"),preload("res://Graphics/Gimmicks/WaterSurface2.png")]
+@export var waterSurface = [preload("res://Graphics/Gimmicks/WaterSurface1.png"),preload("res://Graphics/Gimmicks/WaterSurface2.png")]
 
 var frame = 0
-export var animSpeed = 8
+@export var animSpeed = 8
 
 func _ready():
 	# set water level
@@ -22,7 +22,7 @@ func _process(delta):
 	# set position of the water overlay based on the camera position and size
 	var cam = GlobalFunctions.getCurrentCamera2D()
 	if cam != null:
-		$Water.global_position = Vector2(cam.get_camera_screen_center().x,Global.waterLevel)
+		$Water.global_position = Vector2(cam.get_screen_center_position().x,Global.waterLevel)
 	$Water.region_rect.position.x = $Water.global_position.x
 	
 	# Animation

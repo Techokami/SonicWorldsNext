@@ -1,17 +1,16 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://bevjxswfnxfuq"]
 
-[ext_resource path="res://Scripts/Misc/TextDisplay.gd" type="Script" id=1]
-[ext_resource path="res://Graphics/Fonts/small_font.png" type="Texture" id=2]
+[ext_resource type="Script" path="res://Scripts/Misc/TextDisplay.gd" id="1"]
 
 [node name="TextPointer" type="Control"]
+layout_mode = 3
+anchors_preset = 0
 
-[node name="Text" type="Sprite" parent="."]
-texture = ExtResource( 2 )
+[node name="Text" type="Sprite2D" parent="."]
 hframes = 10
 vframes = 4
-script = ExtResource( 1 )
+script = ExtResource("1")
 string = "Pause"
-smallStringTexture = ExtResource( 2 )
 hasNumbers = true
 vAlign = 1
 hAlign = 1

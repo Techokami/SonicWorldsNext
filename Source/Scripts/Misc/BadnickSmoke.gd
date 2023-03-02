@@ -1,9 +1,10 @@
-extends AnimatedSprite
+extends AnimatedSprite2D
 
 var animFinished = false
 
-func _ready():
-	playing = true
+# fix animation
+#func _ready():
+	#playing = true
 
 func _on_animation_finished():
 	animFinished = true

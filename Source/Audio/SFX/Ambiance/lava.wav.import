@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/lava.wav-a50f4f0ba583e2feeaa7e17af408a48b.sample"
+type="AudioStreamWAV"
+uid="uid://burqaecl8oe0f"
+path="res://.godot/imported/lava.wav-a50f4f0ba583e2feeaa7e17af408a48b.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Ambiance/lava.wav"
-dest_files=[ "res://.import/lava.wav-a50f4f0ba583e2feeaa7e17af408a48b.sample" ]
+dest_files=["res://.godot/imported/lava.wav-a50f4f0ba583e2feeaa7e17af408a48b.sample"]
 
 [params]
 

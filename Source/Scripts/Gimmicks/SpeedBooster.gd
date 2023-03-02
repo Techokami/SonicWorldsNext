@@ -1,16 +1,16 @@
 extends Area2D
-tool
+@tool
 
-export (int, "left", "right") var boostDirection = 0
+@export_enum("left", "right") var boostDirection = 0
 var dirMemory = boostDirection
-export var speed = 16
+@export var speed = 16
 
 func _ready():
 	# set direction
 	$Booster.flip_h = bool(boostDirection)
 
 func _process(_delta):
-	if Engine.editor_hint:
+	if Engine.is_editor_hint():
 		if (boostDirection != dirMemory):
 			$Booster.flip_h = bool(boostDirection)
 			dirMemory = boostDirection

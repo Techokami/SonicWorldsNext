@@ -1,21 +1,21 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Graphics/Gimmicks/Corkscrew.png" type="Texture" id=1]
+[ext_resource path="res://Graphics/Gimmicks/Corkscrew.png" type="Texture2D" id=1]
 [ext_resource path="res://Scripts/Gimmicks/CorkscrewLoop.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 32, 8 )
+size = Vector2( 32, 8 )
 
 [node name="CorkscrewLoop" type="Node2D"]
 script = ExtResource( 2 )
 
-[node name="Corkscrew" type="Sprite" parent="."]
+[node name="Corkscrew" type="Sprite2D" parent="."]
 position = Vector2( -96, 0 )
 z_index = -10
 texture = ExtResource( 1 )
 hframes = 2
 
-[node name="CorkscrewFG" type="Sprite" parent="."]
+[node name="CorkscrewFG" type="Sprite2D" parent="."]
 position = Vector2( 96, 0 )
 z_index = 10
 texture = ExtResource( 1 )

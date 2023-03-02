@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/SpecialRing.wav-320341bae7cffd7a922e193f41629378.sample"
+type="AudioStreamWAV"
+uid="uid://cb2g1rrn7b6cc"
+path="res://.godot/imported/SpecialRing.wav-320341bae7cffd7a922e193f41629378.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Objects/SpecialRing.wav"
-dest_files=[ "res://.import/SpecialRing.wav-320341bae7cffd7a922e193f41629378.sample" ]
+dest_files=["res://.godot/imported/SpecialRing.wav-320341bae7cffd7a922e193f41629378.sample"]
 
 [params]
 

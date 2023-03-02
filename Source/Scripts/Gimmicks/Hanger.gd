@@ -30,31 +30,31 @@ const _CONTACT_DISTANCE = 17
 const _CONTACT_TIME_LIMIT = ceil(12.0 * (1000.0 / 60.0))
 
 # If true, the player can drop through by holding down, bypassing the grab.
-export var holdDownToDrop = false
+@export var holdDownToDrop = false
 
 # If true, player will grab the center point of the hanger every time.
 # otherwise the player grabs the bar at the position that the player is located
 # at making contact.
-export var setCenter = false
+@export var setCenter = false
 
 # If false, the player can grab the bar while moving upwards. Otherise the bar
 # is only caught while the player is falling.
-export var onlyActiveMovingDown = true
+@export var onlyActiveMovingDown = true
 
 # If false, the player may turn around freely while on the bar. Otherwise the
 # player's direction is locked to the same direction that they first contacted
 # the hanger in.
-export var lockPlayerDirection = true
+@export var lockPlayerDirection = true
 
 # Can pick up from ground
-export var groundPickup = false
+@export var groundPickup = false
 
 # Changes some behaviors of how the controls work. Only gets set by parent object
 # if the hanger is owned by a player.
 var playerCarryAI = false
 
 # Optionally set sound to play when making contact
-export var grabSound = preload("res://Audio/SFX/Player/Grab.wav")
+@export var grabSound = preload("res://Audio/SFX/Player/Grab.wav")
 
 func _ready():
 	$Grab.stream = grabSound

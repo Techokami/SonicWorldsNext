@@ -1,21 +1,21 @@
 extends Node2D
 
-export var music = preload("res://Audio/Soundtrack/6. SWD_TLZa1.ogg")
-export (PackedScene) var nextZone = load("res://Scene/Zones/BaseZone.tscn")
+@export var music = preload("res://Audio/Soundtrack/6. SWD_TLZa1.ogg")
+@export var nextZone = preload("res://Scene/Zones/BaseZone.tscn")
 
-export (int, "Bird", "Squirrel", "Rabbit", "Chicken", "Penguin", "Seal", "Pig", "Eagle", "Mouse", "Monkey", "Turtle", "Bear")var animal1 = 0
-export (int, "Bird", "Squirrel", "Rabbit", "Chicken", "Penguin", "Seal", "Pig", "Eagle", "Mouse", "Monkey", "Turtle", "Bear")var animal2 = 1
+@export_enum("Bird", "Squirrel", "Rabbit", "Chicken", "Penguin", "Seal", "Pig", "Eagle", "Mouse", "Monkey", "Turtle", "Bear")var animal1 = 0
+@export_enum("Bird", "Squirrel", "Rabbit", "Chicken", "Penguin", "Seal", "Pig", "Eagle", "Mouse", "Monkey", "Turtle", "Bear")var animal2 = 1
 
 # Boundries
-export var setDefaultLeft = true
-export var defaultLeftBoundry  = -100000000
-export var setDefaultTop = true
-export var defaultTopBoundry  = -100000000
+@export var setDefaultLeft = true
+@export var defaultLeftBoundry  = -100000000
+@export var setDefaultTop = true
+@export var defaultTopBoundry  = -100000000
 
-export var setDefaultRight = true
-export var defaultRightBoundry = 100000000
-export var setDefaultBottom = true
-export var defaultBottomBoundry = 100000000
+@export var setDefaultRight = true
+@export var defaultRightBoundry = 100000000
+@export var setDefaultBottom = true
+@export var defaultBottomBoundry = 100000000
 
 # was loaded is used for room loading, this can prevent overwriting global information, see Global.gd for more information on scene loading
 var wasLoaded = false

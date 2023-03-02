@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/Slide.wav-0dfc209febb7f9ce6f447443a117e3d1.sample"
+type="AudioStreamWAV"
+uid="uid://uaa5twt8odin"
+path="res://.godot/imported/Slide.wav-0dfc209febb7f9ce6f447443a117e3d1.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Player/Slide.wav"
-dest_files=[ "res://.import/Slide.wav-0dfc209febb7f9ce6f447443a117e3d1.sample" ]
+dest_files=["res://.godot/imported/Slide.wav-0dfc209febb7f9ce6f447443a117e3d1.sample"]
 
 [params]
 

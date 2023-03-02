@@ -1,15 +1,15 @@
-tool
+@tool
 extends Node2D
 
 # Vertical size of the pylon (center only - edges are constant sized)
-export var vert_size = 96
+@export var vert_size = 96
 # How fast the player should be launched from the pylon when pressing jump
-export var launch_speed = 960
+@export var launch_speed = 960
 # How fast the player should be launching veritcally from the pylon after jumping
 # off
-export var launch_vertical_speed = 110
+@export var launch_vertical_speed = 110
 # How fast the player climbs up/down the pylon
-export var climb_speed = 80
+@export var climb_speed = 80
 
 # An editor only variable. If last_size doesn't match vert_size during process
 # in tool mode, we resize everything in the editor.
@@ -47,8 +47,8 @@ func _ready():
 	animator.play("main")
 	
 	var shape = RectangleShape2D.new()
-	shape.extents.y = vert_size / 2
-	shape.extents.x = 6
+	shape.size.y = vert_size / 2
+	shape.size.x = 6
 	
 	collision.set_shape(shape)
 	collision.position = Vector2(0, -vert_size / 2 - bottomSprite.texture.get_height() / 2)
@@ -121,8 +121,8 @@ func process_editor():
 	bottomSprite.position = mainSprite.position + Vector2(0, (vert_size / 2) + (bottomSprite.texture.get_height() / 4) + 1)
 
 	var shape = RectangleShape2D.new()
-	shape.extents.y = vert_size / 2
-	shape.extents.x = 6
+	shape.size.y = vert_size / 2
+	shape.size.x = 6
 	
 	collision.set_shape(shape)
 	collision.position = Vector2(0, -vert_size / 2 - bottomSprite.texture.get_height() / 2)

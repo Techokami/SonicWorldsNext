@@ -1,12 +1,12 @@
 extends Line2D
 
-export var speed = 8
-export var animation = "roll"
-export var twoWay = false
-export var hitBoxSize = Vector2(4,4)
+@export var speed = 8
+@export var animation = "roll"
+@export var twoWay = false
+@export var hitBoxSize = Vector2(4,4)
 
-export var split = false
-export (int, 0, 100)var splitChance = 100
+@export var split = false
+@export (int, 0, 100)var splitChance = 100
 
 var enteranceArea = Area2D.new()
 var exitArea = Area2D.new()
@@ -23,7 +23,7 @@ func _ready():
 	# generate hitboxes
 	var hitbox = CollisionShape2D.new()
 	var shape = RectangleShape2D.new()
-	shape.extents = hitBoxSize
+	shape.size = hitBoxSize
 	hitbox.set_shape(shape)
 	enteranceArea.add_child(hitbox)
 	
@@ -31,8 +31,8 @@ func _ready():
 	add_child(enteranceArea)
 	enteranceArea.collision_layer = 0
 	enteranceArea.collision_mask = 0
-	enteranceArea.set_collision_mask_bit(12,true)
-	enteranceArea.connect("body_entered", self, "_on_hitbox_enter")
+	enteranceArea.set_collision_mask_value(12,true)
+	enteranceArea.connect("body_entered",Callable(self,"_on_hitbox_enter"))
 	enteranceArea.global_position = global_position+get_point_position(0)
 	
 	# check if two way
@@ -42,13 +42,13 @@ func _ready():
 		add_child(exitArea)
 		exitArea.collision_layer = enteranceArea.collision_layer
 		exitArea.collision_mask = enteranceArea.collision_mask
-		exitArea.connect("body_entered", self, "_on_hitbox_enter")
+		exitArea.connect("body_entered",Callable(self,"_on_hitbox_enter"))
 		exitArea.global_position = global_position+get_point_position(get_point_count()-1)
 
 func _on_hitbox_enter(body):
 	if ((body.currentState == body.STATES.ANIMATION) == split):
 		randomize()
-		var rng = rand_range(0,100)
+		var rng = randf_range(0,100)
 		# run a random chance of a path split, or just continue if it is not a split
 		if (rng <= splitChance or !split):
 			if body.currentState != body.STATES.ANIMATION:

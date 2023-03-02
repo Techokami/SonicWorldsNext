@@ -1,20 +1,20 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Graphics/Obstacles/Crusher.png" type="Texture" id=1]
+[ext_resource path="res://Graphics/Obstacles/Crusher.png" type="Texture2D" id=1]
 [ext_resource path="res://Scripts/Objects/Crusher.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 32, 12 )
+size = Vector2( 32, 12 )
 
 [node name="Crusher" type="Node2D"]
 script = ExtResource( 2 )
 
-[node name="CrushBox" type="KinematicBody2D" parent="."]
+[node name="CrushBox" type="CharacterBody2D" parent="."]
 collision_layer = 2105344
 collision_mask = 0
 motion/sync_to_physics = true
 
-[node name="Crusher" type="Sprite" parent="CrushBox"]
+[node name="Crusher" type="Sprite2D" parent="CrushBox"]
 z_index = -5
 texture = ExtResource( 1 )
 offset = Vector2( 0, -4 )

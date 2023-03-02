@@ -1,4 +1,4 @@
-extends Sprite
+extends Sprite2D
 
 var gravity = 0.21875
 var velocity = Vector2.ZERO

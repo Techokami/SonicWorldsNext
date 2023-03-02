@@ -1,9 +1,9 @@
 extends Node2D
-tool
+@tool
 
-export var top = 2
-export var bottom = 2
-export (int, "up", "down") var rightMovement = 0
+@export var top = 2
+@export var bottom = 2
+@export_enum("up", "down") var rightMovement = 0
 
 var players = []
 var playerPosX = []
@@ -19,14 +19,14 @@ func _ready():
 
 
 func _process(_delta):
-	if Engine.editor_hint:
+	if Engine.is_editor_hint():
 		scale.x = sign(1-(rightMovement*2))*abs(scale.x)
 		$ScrewPipe.region_rect = Rect2($ScrewPipe.region_rect.position,Vector2($ScrewPipe.region_rect.size.x,(top*8)+(bottom*8)))
 		$ScrewPipe.position = Vector2(0,(bottom*4)-(top*4))
 		$ScrewBottom.position.y = (bottom*8)+4
 
 func _physics_process(delta):
-	if !Engine.editor_hint:
+	if !Engine.is_editor_hint():
 		# falling
 		if fall:
 			fallSpeed += 900*delta

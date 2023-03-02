@@ -113,14 +113,14 @@ func _ready():
 		get_tree().paused = true
 		# change scene root to main scene, keep current scene in memory
 		var loadNode = get_tree().current_scene.filename
-		var mainScene = load("res://Scene/Main.tscn").instance()
+		var mainScene = load("res://Scene/Main.tscn").instantiate()
 		get_tree().root.call_deferred("remove_child",get_tree().current_scene)
 		#get_tree().root.current_scene.call_deferred("queue_free")
 		get_tree().root.call_deferred("add_child",mainScene)
 		mainScene.get_node("SceneLoader").get_child(0).nextScene = load(loadNode)
-		yield(get_tree(),"idle_frame")
+		await get_tree().process_frame
 		get_tree().paused = false
-		#mainScene.change_scene(load(loadNode))
+		#mainScene.change_scene_to_file(load(loadNode))
 	is_main_loaded = true
 
 func _process(delta):
@@ -154,7 +154,7 @@ func play_sound(sound = null):
 
 # add a score object, see res://Scripts/Misc/Score.gd for reference
 func add_score(position = Vector2.ZERO,value = 0):
-	var scoreObj = Score.instance()
+	var scoreObj = Score.instantiate()
 	scoreObj.scoreID = value
 	scoreObj.global_position = position
 	add_child(scoreObj)
@@ -189,7 +189,7 @@ func save_settings():
 	file.set_value("Volume","Music",AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Music")))
 	
 	file.set_value("Resolution","Zoom",zoomSize)
-	file.set_value("Resolution","FullScreen",OS.window_fullscreen)
+	file.set_value("Resolution","FullScreen",((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN)))
 	# save config and close
 	file.save("user://Settings.cfg")
 
@@ -208,8 +208,8 @@ func load_settings():
 	
 	if file.has_section_key("Resolution","Zoom"):
 		zoomSize = file.get_value("Resolution","Zoom")
-		OS.set_window_size(get_viewport().get_visible_rect().size*zoomSize)
+		get_window().set_size(get_viewport().get_visible_rect().size*zoomSize)
 	
 	if file.has_section_key("Resolution","FullScreen"):
-		OS.window_fullscreen = file.get_value("Resolution","FullScreen")
+		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (file.get_value("Resolution","FullScreen")) else Window.MODE_WINDOWED
 	

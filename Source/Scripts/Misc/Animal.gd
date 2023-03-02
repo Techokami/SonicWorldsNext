@@ -1,6 +1,6 @@
 extends Node2D
 var animType = 0 # 0 flap, 1 change on fall
-export (int, "Bird", "Squirrel", "Rabbit", "Chicken", "Penguin", "Seal", "Pig", "Eagle", "Mouse", "Monkey", "Turtle", "Bear")var animal = 0
+@export_enum("Bird", "Squirrel", "Rabbit", "Chicken", "Penguin", "Seal", "Pig", "Eagle", "Mouse", "Monkey", "Turtle", "Bear")var animal = 0
 
 var animalPhysics = [
 # (Bird)

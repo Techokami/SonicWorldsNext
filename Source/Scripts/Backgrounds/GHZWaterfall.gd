@@ -1,5 +1,5 @@
 extends Node2D
-tool
+@tool
 
 # By DimensionWarped in concert with RepeatedKibbles
 
@@ -7,31 +7,31 @@ tool
 # Basically a tool for adding tilable animated graphics.
 
 # How many units
-export(float) var width = 4.0 # How many units wide the water fall is (32x pixels each)
+@export var width: float = 4.0 # How many units wide the water fall is (32x pixels each)
 
 # How many units tall the body of the waterfall is. Note that the top of the
 # waterfall is an additional item that rests on top of this one.
 # 1 unit is 16 pixels of added height, 0 = 16px tall total (just the top of the waterfall)
 # 9 = 160px tall (16 * 9 for the base, +16 more for the top
-export(float) var height = 4.0
+@export var height: float = 4.0
 
 # Set this to false to disable drawing of the top of the waterfall
-export(bool) var drawTop = true
+@export var drawTop: bool = true
 
 # How much time in seconds passes between frames
-export(float) var framePeriod = 0.125
+@export var framePeriod: float = 0.125
 
 # Body uses an array of textures - one texture per frame of animation. Has to be that way since
 # we rely on texture wrapping in both directions.
-export(Array, Texture) var bodyTextures
+@export var bodyTextures # (Array, Texture2D)
 
 # The top texture uses a single texture for all animation frames. We can do that because it only
 # needs to tile left to right, so we can just grow the texture downwards to add more frames.
-export(Texture) var topTexture
+@export var topTexture: Texture2D
 
 # How many frames are in the animation for the top sprite -- make sure this is right for your texture
 # or the top sprite will draw incorrectly.
-export(int) var topFrames = 4
+@export var topFrames: int = 4
 
 # These are just used by the tool functions to track whether or not something has changed
 var lastWidth = width

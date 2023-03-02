@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/InstShield.wav-63acd6e4a38d75469033d4768bd9600d.sample"
+type="AudioStreamWAV"
+uid="uid://j82xa85ycfx6"
+path="res://.godot/imported/InstShield.wav-63acd6e4a38d75469033d4768bd9600d.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Player/InstShield.wav"
-dest_files=[ "res://.import/InstShield.wav-63acd6e4a38d75469033d4768bd9600d.sample" ]
+dest_files=["res://.godot/imported/InstShield.wav-63acd6e4a38d75469033d4768bd9600d.sample"]
 
 [params]
 

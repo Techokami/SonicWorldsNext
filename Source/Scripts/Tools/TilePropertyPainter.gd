@@ -1,14 +1,14 @@
 extends TileMap
-export (NodePath) var tileMapLink
+@export (NodePath) var tileMapLink
 
-onready var lowSolid = $LowSolid
-onready var highSolid = $HighSolid
-onready var background = $Background
-onready var lowTop = $LowTop
-onready var highTop = $HighTop
-onready var top = $Top
+@onready var lowSolid = $LowSolid
+@onready var highSolid = $HighSolid
+@onready var background = $Background
+@onready var lowTop = $LowTop
+@onready var highTop = $HighTop
+@onready var top = $Top
 # tile list corresponds with the look up varaibles based on the tile ID of any placed tiles
-onready var tileList = [highSolid,lowSolid,background,highTop,lowTop,top]
+@onready var tileList = [highSolid,lowSolid,background,highTop,lowTop,top]
 
 var tileMap = null
 

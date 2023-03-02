@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/waterfall.wav-daa1b6368a7ff866dfc786a6f59d7898.sample"
+type="AudioStreamWAV"
+uid="uid://uu55iumak4r5"
+path="res://.godot/imported/waterfall.wav-daa1b6368a7ff866dfc786a6f59d7898.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Ambiance/waterfall.wav"
-dest_files=[ "res://.import/waterfall.wav-daa1b6368a7ff866dfc786a6f59d7898.sample" ]
+dest_files=["res://.godot/imported/waterfall.wav-daa1b6368a7ff866dfc786a6f59d7898.sample"]
 
 [params]
 

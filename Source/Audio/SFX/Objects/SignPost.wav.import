@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/SignPost.wav-59b0916d39c156f9ec6727bb8c303007.sample"
+type="AudioStreamWAV"
+uid="uid://b188no3hh5d8y"
+path="res://.godot/imported/SignPost.wav-59b0916d39c156f9ec6727bb8c303007.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Objects/SignPost.wav"
-dest_files=[ "res://.import/SignPost.wav-59b0916d39c156f9ec6727bb8c303007.sample" ]
+dest_files=["res://.godot/imported/SignPost.wav-59b0916d39c156f9ec6727bb8c303007.sample"]
 
 [params]
 

@@ -1,7 +1,7 @@
 extends "res://Scripts/Objects/StateMovers/StateMover.gd"
 
-export var moveTime = 4.0 # takes 4 seconds to reach target position
-export var nextState = 1
+@export var moveTime = 4.0 # takes 4 seconds to reach target position
+@export var nextState = 1
 
 var curTime = 0.0
 
@@ -11,11 +11,11 @@ var curve # The first child of this node MUST BE your custom Path2D
 var bakedLength
 
 enum INTERPOLATION {COS, LINEAR}
-export(INTERPOLATION) var interpolationMode = INTERPOLATION.COS
+@export var interpolationMode: INTERPOLATION = INTERPOLATION.COS
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	._ready()
+	super._ready()
 	path = get_children()[0]
 	curve = path.get_curve()
 	

@@ -1,12 +1,12 @@
 [gd_scene load_steps=35 format=2]
 
 [ext_resource path="res://Scripts/Misc/BadnickSmoke.gd" type="Script" id=1]
-[ext_resource path="res://Graphics/Misc/explosion.png" type="Texture" id=2]
+[ext_resource path="res://Graphics/Misc/explosion.png" type="Texture2D" id=2]
 [ext_resource path="res://Audio/SFX/Objects/DestroyObject.wav" type="AudioStream" id=3]
-[ext_resource path="res://Graphics/Misc/explosion3.png" type="Texture" id=4]
-[ext_resource path="res://Graphics/Misc/explosion5.png" type="Texture" id=5]
-[ext_resource path="res://Graphics/Misc/explosion2.png" type="Texture" id=6]
-[ext_resource path="res://Graphics/Misc/explosion4.png" type="Texture" id=7]
+[ext_resource path="res://Graphics/Misc/explosion3.png" type="Texture2D" id=4]
+[ext_resource path="res://Graphics/Misc/explosion5.png" type="Texture2D" id=5]
+[ext_resource path="res://Graphics/Misc/explosion2.png" type="Texture2D" id=6]
+[ext_resource path="res://Graphics/Misc/explosion4.png" type="Texture2D" id=7]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 5 )
@@ -140,7 +140,7 @@ animations = [ {
 "speed": 15.0
 } ]
 
-[node name="BadnickSmoke" type="AnimatedSprite"]
+[node name="BadnickSmoke" type="AnimatedSprite2D"]
 frames = SubResource( 27 )
 animation = "fire2"
 script = ExtResource( 1 )

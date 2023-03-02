@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/vent.wav-7be0827e20812a5ed424e97c6c44e1bb.sample"
+type="AudioStreamWAV"
+uid="uid://bsvinrnuqv55k"
+path="res://.godot/imported/vent.wav-7be0827e20812a5ed424e97c6c44e1bb.sample"
 
 [deps]
 
 source_file="res://Audio/SFX/Ambiance/vent.wav"
-dest_files=[ "res://.import/vent.wav-7be0827e20812a5ed424e97c6c44e1bb.sample" ]
+dest_files=["res://.godot/imported/vent.wav-7be0827e20812a5ed424e97c6c44e1bb.sample"]
 
 [params]
 
