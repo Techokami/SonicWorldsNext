@@ -3,7 +3,7 @@ extends Node2D
 @export var music = preload("res://Audio/Soundtrack/9. SWD_TitleScreen.ogg")
 @export var speed = 0
 var titleEnd = false
-var startRoom = preload("res://scenes/menu.tscn")
+var startRoom = preload("res://scenes/TileMap.tscn")
 
 func _ready():
 	Global.main.music.stream = music

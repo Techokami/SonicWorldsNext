@@ -1,9 +1,10 @@
-extends Area2D
 @tool
+extends Area2D
+
 
 @onready var screenSize = get_viewport().size
 
-@export (NodePath)var bossPath
+@export_node_path var bossPath
 
 @export var keepLeftLocked = true
 @export var keepTopLocked = true

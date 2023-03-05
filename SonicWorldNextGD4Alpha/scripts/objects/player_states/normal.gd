@@ -57,7 +57,7 @@ func _physics_process(delta):
 	parent.movement.x += (parent.slp*sin(parent.angle))/delta;
 	#parent.movement.x = 100*parent.inputs[parent.INPUTS.XINPUT]
 	
-	var calcAngle = rad2deg(parent.angle)
+	var calcAngle = rad_to_deg(parent.angle)
 	if (calcAngle < 0):
 		calcAngle += 360;
 	

@@ -1,6 +1,5 @@
-extends Node2D
 @tool
-
+extends Node2D
 # By DimensionWarped in concert with RepeatedKibbles
 
 # Tool for adding waterfalls (and possibly other things that act like waterfalls) to a scene.
@@ -23,7 +22,7 @@ extends Node2D
 
 # Body uses an array of textures - one texture per frame of animation. Has to be that way since
 # we rely on texture wrapping in both directions.
-@export var bodyTextures # (Array, Texture2D)
+@export var bodyTextures = [] # (Array, Texture2D)
 
 # The top texture uses a single texture for all animation frames. We can do that because it only
 # needs to tile left to right, so we can just grow the texture downwards to add more frames.

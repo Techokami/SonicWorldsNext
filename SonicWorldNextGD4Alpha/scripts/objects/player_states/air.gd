@@ -27,7 +27,7 @@ extends "res://scripts/objects/player_states/state.gd"
 #					for i in range(4):
 #						var part = elecPart.instance();
 #						part.global_position = parent.global_position;
-#						part.direction = Vector2(1,1).rotated(deg2rad(90*i));
+#						part.direction = Vector2(1,1).rotated(deg_to_rad(90*i));
 #						parent.get_parent().add_child(part);
 #				parent.SHIELDS.FIRE:
 #					parent.sfx[14].play();

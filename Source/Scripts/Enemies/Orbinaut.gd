@@ -1,5 +1,6 @@
-extends EnemyBase
 @tool
+extends EnemyBase
+
 
 @export var orbs = 4
 @export var speed = -100

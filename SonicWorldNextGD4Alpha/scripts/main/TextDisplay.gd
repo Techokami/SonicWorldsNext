@@ -87,7 +87,7 @@ func _ready():
 func _process(delta):
 	if (stringMem != string):
 		stringMem = string;
-		update();
+		queue_redraw()
 
 
 func _draw():

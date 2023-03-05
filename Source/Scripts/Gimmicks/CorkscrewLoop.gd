@@ -1,5 +1,6 @@
-extends Node2D
 @tool
+extends Node2D
+
 
 # player tracking arrays
 var playerListL = []

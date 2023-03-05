@@ -99,7 +99,7 @@ func calculate_input(event, action = "gm_action"):
 
 func _process(delta):
 	if (ground):
-		spriteRotation = rad2deg(angle)+90;
+		spriteRotation = rad_to_deg(angle)+90;
 	else:
 		if (spriteRotation+180 >= 180):
 			spriteRotation = max(90,spriteRotation-(168.75*delta));
@@ -107,7 +107,7 @@ func _process(delta):
 			spriteRotation = min(360,spriteRotation+(168.75*delta));
 
 	if (rotatableSprites.has(animator.current_animation)):
-		sprite.rotation = deg2rad(snapped(spriteRotation,45)-90)-rotation;
+		sprite.rotation = deg_to_rad(snapped(spriteRotation,45)-90)-rotation;
 	else:
 		sprite.rotation = -rotation;
 
@@ -136,7 +136,7 @@ func _process(delta):
 #	if ($InvincibilityBarrier.visible):
 #		var stars = $InvincibilityBarrier.get_children();
 #		for i in stars:
-#			i.position = i.position.rotated(deg2rad(360*delta*2));
+#			i.position = i.position.rotated(deg_to_rad(360*delta*2));
 #			if (fmod(Global.levelTime,0.1)+delta > 0.1):
 #				var star = Star.instance();
 #				star.global_position = i.global_position;
@@ -147,17 +147,17 @@ func _process(delta):
 	match(animator.current_animation):
 		"walk", "run", "peelOut":
 			var duration = floor(max(0,8.0-abs(groundSpeed/60)))
-			animator.playback_speed = (1.0/(duration+1))*(60/10)
+			animator.speed_scale = (1.0/(duration+1))*(60/10)
 		"roll":
 			var duration = floor(max(0,4.0-abs(groundSpeed/60)))
-			animator.playback_speed = (1.0/(duration+1))*(60/10)
+			animator.speed_scale = (1.0/(duration+1))*(60/10)
 		"push":
 			var duration = floor(max(0,8.0-abs(groundSpeed/60)) * 4)
-			animator.playback_speed = (1.0/(duration+1))*(60/10)
+			animator.speed_scale = (1.0/(duration+1))*(60/10)
 		"spinDash": #animate at 60fps (fps were animated at 0.1 seconds)
-			animator.playback_speed = 60/10
+			animator.speed_scale = 60/10
 		_:
-			animator.playback_speed = 1
+			animator.speed_scale = 1
 	
 	if animator.current_animation != "":
 		lastActiveAnimation = animator.current_animation
@@ -268,8 +268,8 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 4):
 #				var ring = Ring.instance();
 #				ring.global_position = global_position;
 #				ring.scattered = true;
-#				ring.velocity.y = -sin(deg2rad(ringAngle))*ringSpeed*Global.originalFPS;
-#				ring.velocity.x = cos(deg2rad(ringAngle))*ringSpeed*Global.originalFPS;
+#				ring.velocity.y = -sin(deg_to_rad(ringAngle))*ringSpeed*Global.originalFPS;
+#				ring.velocity.x = cos(deg_to_rad(ringAngle))*ringSpeed*Global.originalFPS;
 #
 #				if (ringAlt):
 #					ring.velocity.x *= -1;
@@ -299,14 +299,14 @@ func get_ring():
 
 func touch_ceiling():
 	if getVert != null:
-		var getAngle = wrapf(-rad2deg(getVert.get_collision_normal().angle())-90,0,360);
+		var getAngle = wrapf(-rad_to_deg(getVert.get_collision_normal().angle())-90,0,360);
 		if (getAngle > 225 || getAngle < 135):
 			angle = getAngle#snap_angle(-(getVert.get_collision_normal().angle()));
 			#rotation = snap_angle(-(getVert.get_collision_normal().angle())-90);
-			rotation = snap_angle(-deg2rad(getAngle))
+			rotation = snap_angle(-deg_to_rad(getAngle))
 			update_sensors()
 			#position += caster.get_collision_point()-caster.global_position-($HitBox.shape.extents*Vector2(0,1)).rotated(rotation);
-			movement = -Vector2(movement.y*sign(sin(deg2rad(getAngle))),0);
+			movement = -Vector2(movement.y*sign(sin(deg_to_rad(getAngle))),0);
 			ground = true
 			return true
 	movement.y = 0
@@ -318,9 +318,9 @@ func land_floor():
 	
 	# recalculate ground angle
 	#if getVert != null:
-	#	angle = getVert.get_collision_normal().angle()+deg2rad(90)
+	#	angle = getVert.get_collision_normal().angle()+deg_to_rad(90)
 	#	print(angle)
-	var calcAngle = wrapf(rad2deg(angle),0,360);
+	var calcAngle = wrapf(rad_to_deg(angle),0,360);
 	#if (calcAngle < 0):
 	#	calcAngle += 360
 	
@@ -328,10 +328,10 @@ func land_floor():
 	if (calcAngle >= 22.5 && calcAngle <= 337.5 && abs(movement.x) < movement.y):
 		# check half steep
 		if (calcAngle < 45 || calcAngle > 315):
-			#movement.x = movement.y*0.5*-sign(sin(-deg2rad(90)+angle));
+			#movement.x = movement.y*0.5*-sign(sin(-deg_to_rad(90)+angle));
 			movement.x = movement.y*0.5*sign(sin(angle));
 		# else do full steep
 		else:
-			#movement.x = movement.y*-sign(sin(-deg2rad(90)+angle));
+			#movement.x = movement.y*-sign(sin(-deg_to_rad(90)+angle));
 			movement.x = movement.y*sign(sin(angle));
 

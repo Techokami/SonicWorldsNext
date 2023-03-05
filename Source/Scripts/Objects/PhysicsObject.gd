@@ -47,16 +47,16 @@ signal positionChanged
 
 func _ready():
 	slopeCheck.modulate = Color.BLUE_VIOLET
-	$HitBox.add_child(verticalSensorLeft)
-	$HitBox.add_child(verticalSensorMiddle)
-	$HitBox.add_child(verticalSensorMiddleEdge)
-	$HitBox.add_child(verticalSensorRight)
-	$HitBox.add_child(verticalObjectCheck)
-	$HitBox.add_child(horizontalSensor)
-	$HitBox.add_child(slopeCheck)
-	$HitBox.add_child(objectCheck)
-	for i in sensorList:
-		i.enabled = true
+	add_child(verticalSensorLeft)
+	add_child(verticalSensorMiddle)
+	add_child(verticalSensorMiddleEdge)
+	add_child(verticalSensorRight)
+	add_child(verticalObjectCheck)
+	add_child(horizontalSensor)
+	add_child(slopeCheck)
+	add_child(objectCheck)
+	#for i in sensorList:
+	#	i.enabled = true
 	update_sensors()
 	# Object check only needs to be set once
 	objectCheck.set_collision_mask_value(0,false)
@@ -65,8 +65,8 @@ func _ready():
 	objectCheck.set_collision_mask_value(16,true)
 	verticalObjectCheck.set_collision_mask_value(0,false)
 	verticalObjectCheck.set_collision_mask_value(13,true)
-	objectCheck.enabled = true
-	verticalObjectCheck.enabled = true
+	#objectCheck.enabled = true
+	#verticalObjectCheck.enabled = true
 	# middle should also check for objects
 	verticalSensorMiddle.set_collision_mask_value(13,true)
 	verticalSensorMiddleEdge.set_collision_mask_value(13,true)
@@ -75,7 +75,7 @@ func _ready():
 
 func update_sensors():
 	var rotationSnap = snapped(rotation,deg_to_rad(90))
-	var shape = $HitBox.shape.size
+	var shape = $HitBox.shape.size/2
 	
 	# floor sensors
 	yGroundDiff = 0
@@ -186,7 +186,7 @@ func _physics_process(delta):
 		var moveCalc = moveRemaining.normalized()*min(moveStepLength,moveRemaining.length())
 				
 		velocity = moveCalc.rotated(angle)
-		set_velocity(velocity)
+		#set_velocity(velocity)
 		# TODOConverter40 looks that snap in Godot 4.0 is float, not vector like in Godot 3 - previous value `(Vector2.DOWN*3).rotated(gravityAngle)`
 		set_up_direction(Vector2.UP.rotated(gravityAngle))
 		move_and_slide()
@@ -299,31 +299,36 @@ func _physics_process(delta):
 		var dirList = [Vector2.DOWN,Vector2.LEFT,Vector2.RIGHT,Vector2.UP]
 		# loop through directions for collisions
 		for i in dirList:
-			# reset exceptions
-			objectCheck.clear_exceptions()
-			match i:
-				Vector2.DOWN:
-					objectCheck.position = Vector2(-$HitBox.shape.size.x,$HitBox.shape.size.y+1)
-					objectCheck.target_position = Vector2($HitBox.shape.size.x*2,0)
-				Vector2.UP:
-					objectCheck.position = Vector2(-$HitBox.shape.size.x,-$HitBox.shape.size.y-1)
-					objectCheck.target_position = Vector2($HitBox.shape.size.x*2,0)
-				Vector2.RIGHT:
-					objectCheck.position = Vector2($HitBox.shape.size.x+1,-$HitBox.shape.size.y)
-					objectCheck.target_position = Vector2(0,$HitBox.shape.size.y*2)
-				Vector2.LEFT:
-					objectCheck.position = Vector2(-$HitBox.shape.size.x-1,-$HitBox.shape.size.y)
-					objectCheck.target_position = Vector2(0,$HitBox.shape.size.y*2)
 			
-			objectCheck.force_raycast_update()
-			
-			while objectCheck.is_colliding():
-				if objectCheck.get_collider().has_method("physics_collision") and test_move(global_transform,i.rotated(angle).round()):
-					objectCheck.get_collider().physics_collision(self,i.rotated(angle).round())
-				# add exclusion, this loop will continue until there isn't any objects
-				objectCheck.add_exception(objectCheck.get_collider())
-				# update raycast
-				objectCheck.force_raycast_update()
+			var col = move_and_collide(i,true,0)
+			if col:
+				if col.get_collider().has_method("physics_collision"):
+					col.get_collider().physics_collision(self,i.rotated(angle).round())
+#			# reset exceptions --Look
+#			objectCheck.clear_exceptions()
+#			match i:
+#				Vector2.DOWN:
+#					objectCheck.position = Vector2(-$HitBox.shape.size.x,$HitBox.shape.size.y+1)
+#					objectCheck.target_position = Vector2($HitBox.shape.size.x*2,0)
+#				Vector2.UP:
+#					objectCheck.position = Vector2(-$HitBox.shape.size.x,-$HitBox.shape.size.y-1)
+#					objectCheck.target_position = Vector2($HitBox.shape.size.x*2,0)
+#				Vector2.RIGHT:
+#					objectCheck.position = Vector2($HitBox.shape.size.x+1,-$HitBox.shape.size.y)
+#					objectCheck.target_position = Vector2(0,$HitBox.shape.size.y*2)
+#				Vector2.LEFT:
+#					objectCheck.position = Vector2(-$HitBox.shape.size.x-1,-$HitBox.shape.size.y)
+#					objectCheck.target_position = Vector2(0,$HitBox.shape.size.y*2)
+#
+#			objectCheck.force_raycast_update()
+#
+#			while objectCheck.is_colliding():
+#				if objectCheck.get_collider().has_method("physics_collision") and test_move(global_transform,i.rotated(angle).round()):
+#					objectCheck.get_collider().physics_collision(self,i.rotated(angle).round())
+#				# add exclusion, this loop will continue until there isn't any objects
+#				objectCheck.add_exception(objectCheck.get_collider())
+#				# update raycast
+#				objectCheck.force_raycast_update()
 			
 		# reload memory for layers
 		collision_mask = maskMemory

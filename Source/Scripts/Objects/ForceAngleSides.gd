@@ -1,8 +1,8 @@
-extends Area2D
 @tool
+extends Area2D
 
-@export var leftAngle # (float, -90, 90)
-@export var rightAngle # (float, -90, 90)
+@export_range(-90,90) var leftAngle # (float, -90, 90)
+@export_range(-90,90) var rightAngle # (float, -90, 90)
 @export var stickUntilExit = true
 
 @export var maxAngleDifference = 15.0 # (float, -90, 90)

@@ -75,9 +75,9 @@ func _process(delta):
 				var maskMemory = [parent.verticalSensorLeft.collision_mask,parent.verticalSensorRight.collision_mask]
 				parent.verticalSensorLeft.set_collision_mask_value(13,true)
 				parent.verticalSensorRight.set_collision_mask_value(13,true)
-				parent.verticalSensorLeft.force_raycast_update()
-				parent.verticalSensorRight.force_raycast_update()
-				parent.verticalSensorMiddle.force_raycast_update()
+				#parent.verticalSensorLeft.force_raycast_update()
+				#parent.verticalSensorRight.force_raycast_update()
+				#parent.verticalSensorMiddle.force_raycast_update()
 				
 				var getL = parent.verticalSensorLeft.is_colliding()
 				var getR = parent.verticalSensorRight.is_colliding()

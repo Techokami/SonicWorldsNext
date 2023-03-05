@@ -1,5 +1,6 @@
-extends Area2D
 @tool
+extends Area2D
+
 
 @export var setWaterLevel = 0
 @export var setSpeed = 512

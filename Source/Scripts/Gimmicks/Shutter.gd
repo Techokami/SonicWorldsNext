@@ -1,8 +1,9 @@
-extends CharacterBody2D
 @tool
+extends CharacterBody2D
+
 
 @export var texture = preload("res://Graphics/Obstacles/Walls/shutter.png")
-@export (int,"left","right","switch")var side = 0
+@export_enum("left","right","switch")var side = 0
 var open = false
 
 func _ready():

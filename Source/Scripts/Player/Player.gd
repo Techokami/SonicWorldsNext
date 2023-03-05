@@ -1,5 +1,5 @@
 extends PhysicsObject
-const HITBOXESSONIC = {NORMAL = Vector2(9,19), ROLL = Vector2(7,14), CROUCH = Vector2(9,11), GLIDE = Vector2(10,10)}
+const HITBOXESSONIC = {NORMAL = Vector2(9,19)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,11)*2, GLIDE = Vector2(10,10)*2}
 const HITBOXESTAILS = {NORMAL = Vector2(9,15), ROLL = Vector2(7,14), CROUCH = Vector2(9,9.5), GLIDE = Vector2(10,10)}
 const HITBOXESKNUCKLES = {NORMAL = Vector2(9,19), ROLL = Vector2(7,14), CROUCH = Vector2(9,11), GLIDE = Vector2(10,10)}
 var currentHitbox = HITBOXESSONIC
@@ -241,6 +241,7 @@ var poleGrabID = null
 signal enemy_bounced
 
 func _ready():
+	super()
 	# Disable and enable states
 	set_state(currentState)
 	Global.players.append(self)
@@ -613,6 +614,7 @@ func _process(delta):
 	set_inputs()
 
 func _physics_process(delta):
+	super(delta)
 	
 	# Attacking is for rolling type animations
 	var attacking = false
@@ -1182,7 +1184,7 @@ func cam_update(forceMove = false):
 	# Camera3D vertical drag
 	var viewSize = get_viewport_rect().size
 	
-	camera.drag_top_margin =    lerp(0,camDist.y/viewSize.y,cameraDragLerp)
+	#camera.drag_top_margin =    lerp(0,camDist.y/viewSize.y,cameraDragLerp) --LOOK
 	camera.drag_bottom_margin = camera.drag_top_margin
 	
 	# Extra drag margin for rolling

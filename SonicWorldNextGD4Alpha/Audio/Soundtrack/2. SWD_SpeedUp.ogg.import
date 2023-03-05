@@ -1,7 +1,7 @@
 [remap]
 
 importer="oggvorbisstr"
-type="AudioStreamOGGVorbis"
+type="AudioStreamOggVorbis"
 uid="uid://t8135xg4x726"
 path="res://.godot/imported/2. SWD_SpeedUp.ogg-524817b2b870bf74b8f2d5f20fa5456f.oggvorbisstr"
 
@@ -14,3 +14,6 @@ dest_files=["res://.godot/imported/2. SWD_SpeedUp.ogg-524817b2b870bf74b8f2d5f20f
 
 loop=true
 loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

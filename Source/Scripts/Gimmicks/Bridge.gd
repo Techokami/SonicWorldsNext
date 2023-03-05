@@ -3,7 +3,7 @@ extends Node2D
 
 @export var length = 12
 @export var smoothDrop = true #Turn to false to match sonic 1 bridges
-@export (Texture2D)var texture = null
+@export var texture = preload("res://Graphics/Gimmicks/bridge_log.png")
 var dropIndex = 1
 var maxDepression = 0
 

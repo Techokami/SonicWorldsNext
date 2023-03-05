@@ -38,7 +38,7 @@ func _ready():
 	update_sensors()
 
 func update_sensors():
-	var rotationSnap = snapped(rotation,deg2rad(90))
+	var rotationSnap = snapped(rotation,deg_to_rad(90))
 	
 	# floor sensors
 	verticalSensorLeft.position.x = -$HitBox.shape.extents.x
@@ -54,7 +54,7 @@ func update_sensors():
 	# wall sensor
 	horizontallSensor.target_position = Vector2(pushRadius*sign(velocity.rotated(-rotationSnap).x),0)
 	# if the player is on a completely flat surface then move the sensor down 8 pixels
-	horizontallSensor.position.y = 8*int(round(rad2deg(angle)) == round(rad2deg(gravityAngle)) && ground)
+	horizontallSensor.position.y = 8*int(round(rad_to_deg(angle)) == round(rad_to_deg(gravityAngle)) && ground)
 	
 	# slop sensor
 	slopeCheck.position.y = $HitBox.shape.extents.x
@@ -107,7 +107,7 @@ func _physics_process(_delta):
 		var roofMemory = roof
 		ground = is_on_floor()
 		roof = is_on_ceiling()
-		
+		print(velocity)
 		# Wall sensors
 		# Check if colliding
 		if horizontallSensor.is_colliding():
@@ -126,7 +126,7 @@ func _physics_process(_delta):
 				# Set ground to true but only if movement is 0 or more
 				ground = true
 				# get ground angle
-				angle = deg2rad(snapped(rad2deg(getVert.get_collision_normal().rotated(deg2rad(90)).angle()),0.01))
+				angle = deg_to_rad(snapped(rad_to_deg(getVert.get_collision_normal().rotated(deg_to_rad(90)).angle()),0.01))
 			else:
 				# ceiling routine
 				roof = true
@@ -145,7 +145,7 @@ func _physics_process(_delta):
 		# slope check
 		slopeCheck.force_raycast_update()
 		if slopeCheck.is_colliding():
-			var getSlope = snap_angle(slopeCheck.get_collision_normal().angle()+deg2rad(90))
+			var getSlope = snap_angle(slopeCheck.get_collision_normal().angle()+deg_to_rad(90))
 			# compare slope to current angle, check that it's not going to result in our current angle if we rotated
 			if getSlope != rotation:
 				rotation = snap_angle(angle)
@@ -183,7 +183,7 @@ func _physics_process(_delta):
 #				rotation = previousRot
 		
 		
-		#rotation = snapped(angle,deg2rad(90))
+		#rotation = snapped(angle,deg_to_rad(90))
 		
 		moveRemaining -= moveRemaining.normalized()*min(moveStepLength,moveRemaining.length())
 	
@@ -221,17 +221,17 @@ func _physics_process(_delta):
 	collision_layer = layerMemory
 
 func snap_angle(angleSnap = 0):
-	var wrapAngle = wrapf(angleSnap,deg2rad(0),deg2rad(360))
+	var wrapAngle = wrapf(angleSnap,deg_to_rad(0),deg_to_rad(360))
 
-	if wrapAngle >= deg2rad(315) or wrapAngle <= deg2rad(45): # Floor
-		return deg2rad(0)
-	elif wrapAngle > deg2rad(45) and wrapAngle <= deg2rad(134): # Right Wall
-		return deg2rad(90)
-	elif wrapAngle > deg2rad(134) and wrapAngle <= deg2rad(225): # Ceiling
-		return deg2rad(180)
+	if wrapAngle >= deg_to_rad(315) or wrapAngle <= deg_to_rad(45): # Floor
+		return deg_to_rad(0)
+	elif wrapAngle > deg_to_rad(45) and wrapAngle <= deg_to_rad(134): # Right Wall
+		return deg_to_rad(90)
+	elif wrapAngle > deg_to_rad(134) and wrapAngle <= deg_to_rad(225): # Ceiling
+		return deg_to_rad(180)
 	
 	# Left Wall
-	return deg2rad(270)
+	return deg_to_rad(270)
 	
 
 func get_nearest_vertical_sensor():

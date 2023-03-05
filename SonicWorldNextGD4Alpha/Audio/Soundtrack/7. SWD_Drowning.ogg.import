@@ -1,7 +1,7 @@
 [remap]
 
 importer="oggvorbisstr"
-type="AudioStreamOGGVorbis"
+type="AudioStreamOggVorbis"
 uid="uid://4nf8qv1sx2uw"
 path="res://.godot/imported/7. SWD_Drowning.ogg-828b916c28e2776aa16fcd123fa86392.oggvorbisstr"
 
@@ -14,3 +14,6 @@ dest_files=["res://.godot/imported/7. SWD_Drowning.ogg-828b916c28e2776aa16fcd123
 
 loop=true
 loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

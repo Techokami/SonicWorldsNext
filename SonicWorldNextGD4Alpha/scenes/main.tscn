@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://dlwugtvbcnpjl"]
+[gd_scene load_steps=6 format=3 uid="uid://dlwugtvbcnpjl"]
 
 [ext_resource type="Script" path="res://scripts/main/Main.gd" id="1_2j0mb"]
 
@@ -49,8 +49,15 @@ tracks/0/keys = {
 "values": [Color(0, 0, 0, 0)]
 }
 
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_irosv"]
+_data = {
+"FadeBlack": SubResource("Animation_2oa3q"),
+"FadeWhite": SubResource("Animation_3v4x0"),
+"RESET": SubResource("Animation_ovqnj")
+}
+
 [node name="Main" type="Node"]
-script = ExtResource( "1_2j0mb" )
+script = ExtResource("1_2j0mb")
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
 process_mode = 3
@@ -62,11 +69,12 @@ bus = &"Music"
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="ColorOverlay" type="ColorRect" parent="UI"]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color(0, 0, 0, 0)
 
 [node name="ColorAnimations" type="AnimationPlayer" parent="UI"]
-anims/FadeBlack = SubResource( "Animation_2oa3q" )
-anims/FadeWhite = SubResource( "Animation_3v4x0" )
-anims/RESET = SubResource( "Animation_ovqnj" )
+libraries = {
+"": SubResource("AnimationLibrary_irosv")
+}

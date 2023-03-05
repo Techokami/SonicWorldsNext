@@ -26,14 +26,14 @@ func set_spring():
 			$HitBox.disabled = false;
 			$DiagonalHitBox/AreaShape.disabled = true;
 			animID = 0;
-			$HitBox.rotation = deg2rad(0);
+			$HitBox.rotation = deg_to_rad(0);
 			scale = Vector2(1,1-(springDirection*2));
 			hitDirection = Vector2(0,-1+(springDirection*2));
 		2, 3:
 			$HitBox.disabled = false;
 			$DiagonalHitBox/AreaShape.disabled = true;
 			animID = 1;
-			$HitBox.rotation = deg2rad(90);
+			$HitBox.rotation = deg_to_rad(90);
 			scale = Vector2(1-((springDirection-2)*2),1);
 			hitDirection = Vector2(1-((springDirection-2)*2),0);
 		4, 6:

@@ -1,7 +1,7 @@
 [remap]
 
 importer="oggvorbisstr"
-type="AudioStreamOGGVorbis"
+type="AudioStreamOggVorbis"
 uid="uid://cnql0tct8fi0"
 path="res://.godot/imported/8. SWD_GameOver.ogg-b94881d7bd930d7769bcbfcee955555d.oggvorbisstr"
 
@@ -14,3 +14,6 @@ dest_files=["res://.godot/imported/8. SWD_GameOver.ogg-b94881d7bd930d7769bcbfcee
 
 loop=true
 loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,7 +1,7 @@
 [gd_scene load_steps=185 format=3 uid="uid://cioq5saowvqxj"]
 
 [ext_resource type="Script" path="res://Scripts/Player/Player.gd" id="1"]
-[ext_resource type="PackedScene" path="res://Graphics/Players/PlayerAnimations/Sonic.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://d1e4muavtnun6" path="res://Graphics/Players/PlayerAnimations/Sonic.tscn" id="2"]
 [ext_resource type="AudioStream" uid="uid://bx5cur6r54lbo" path="res://Audio/SFX/Player/Jump.wav" id="3"]
 [ext_resource type="Script" path="res://Scripts/PropertiesLookup.gd" id="4"]
 [ext_resource type="AudioStream" uid="uid://iomtgrpokl66" path="res://Audio/SFX/Player/SpindashRev.wav" id="5"]
@@ -65,7 +65,7 @@
 
 [sub_resource type="RectangleShape2D" id="1"]
 resource_local_to_scene = true
-size = Vector2(9, 19)
+size = Vector2(18, 38)
 
 [sub_resource type="CanvasItemMaterial" id="2"]
 blend_mode = 5
@@ -675,10 +675,10 @@ animations = [{
 radius = 25.0
 
 [sub_resource type="RectangleShape2D" id="166"]
-size = Vector2(9, 4)
+size = Vector2(18, 8)
 
 [sub_resource type="RectangleShape2D" id="167"]
-size = Vector2(8, 11.5)
+size = Vector2(16, 23)
 
 [sub_resource type="CircleShape2D" id="58"]
 radius = 64.0
@@ -1139,10 +1139,10 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="168"]
-size = Vector2(1, 2)
+size = Vector2(2, 4)
 
 [sub_resource type="RectangleShape2D" id="169"]
-size = Vector2(2, 1)
+size = Vector2(4, 2)
 
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 4096

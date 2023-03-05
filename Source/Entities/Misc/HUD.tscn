@@ -828,6 +828,7 @@ offset_left = 8.0
 offset_top = -24.0
 offset_right = 72.0
 offset_bottom = -8.0
+grow_vertical = 0
 
 [node name="Icon" type="Sprite2D" parent="LifeCounter"]
 texture = ExtResource("2_cfvjc")
@@ -911,6 +912,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
 
@@ -960,14 +963,14 @@ vframes = 2
 [node name="PatternLeft" type="Control" parent="LevelCard"]
 anchors_preset = 0
 anchor_bottom = 1.0
-offset_bottom = 7648.0
+offset_bottom = 7872.0
 
 [node name="PatternLeft" type="TextureRect" parent="LevelCard/PatternLeft"]
 layout_mode = 0
 anchor_bottom = 1.0
 offset_left = -32.0
 offset_right = 32.0
-offset_bottom = 138656.0
+offset_bottom = 146528.0
 stretch_mode = 2
 
 [node name="RightRatio" type="Control" parent="LevelCard"]
@@ -982,7 +985,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_top = -32.0
-offset_bottom = 7360.0
+offset_bottom = 7584.0
 
 [node name="PatternRight" type="TextureRect" parent="LevelCard/RightRatio/PatternRight"]
 layout_mode = 0
@@ -990,7 +993,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 32.0
-offset_right = 22016.0
+offset_right = 22656.0
 offset_bottom = 64.0
 stretch_mode = 2
 
@@ -1013,6 +1016,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 2
 size_flags_vertical = 2
 
@@ -1105,6 +1110,8 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Game" type="Sprite2D" parent="GameOver"]
 position = Vector2(-256, 0)

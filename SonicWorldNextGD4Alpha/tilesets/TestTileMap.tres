@@ -29,7 +29,7 @@ tile_data = PackedInt32Array(0, 131072, 0, 65536, 131072, 1, 131072, 131072, 1, 
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_su8kq"]
 resource_name = "Default"
-texture = ExtResource( "1_x4gje" )
+texture = ExtResource("1_x4gje")
 use_texture_padding = false
 0:1/0 = 0
 0:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
@@ -9709,7 +9709,7 @@ use_texture_padding = false
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ufqpp"]
 resource_name = "High"
-texture = ExtResource( "2_x6pn3" )
+texture = ExtResource("2_x6pn3")
 use_texture_padding = false
 0:1/0 = 0
 0:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
@@ -18642,7 +18642,7 @@ use_texture_padding = false
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ixxtw"]
 resource_name = "Low"
-texture = ExtResource( "2_4lsi4" )
+texture = ExtResource("2_4lsi4")
 use_texture_padding = false
 0:1/0 = 0
 0:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
@@ -27575,7 +27575,7 @@ use_texture_padding = false
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m1ker"]
 resource_name = "Platform"
-texture = ExtResource( "4_5qybc" )
+texture = ExtResource("4_5qybc")
 use_texture_padding = false
 0:1/0 = 0
 0:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
@@ -36311,10 +36311,10 @@ use_texture_padding = false
 
 [sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_cr30n"]
 resource_name = "Objects"
-scenes/1/scene = ExtResource( "5_gekc1" )
-scenes/2/scene = ExtResource( "6_wwi8p" )
-scenes/3/scene = ExtResource( "7_tvtwx" )
-scenes/4/scene = ExtResource( "8_fblnx" )
+scenes/1/scene = ExtResource("5_gekc1")
+scenes/2/scene = ExtResource("6_wwi8p")
+scenes/3/scene = ExtResource("7_tvtwx")
+scenes/4/scene = ExtResource("8_fblnx")
 
 [resource]
 physics_layer_0/collision_layer = 15
@@ -36324,14 +36324,14 @@ physics_layer_1/collision_mask = 3840
 physics_layer_2/collision_layer = 240
 physics_layer_2/collision_mask = 240
 physics_layer_3/collision_layer = 1
-sources/0 = SubResource( "TileSetAtlasSource_su8kq" )
-sources/1 = SubResource( "TileSetAtlasSource_ufqpp" )
-sources/2 = SubResource( "TileSetAtlasSource_ixxtw" )
-sources/3 = SubResource( "TileSetAtlasSource_m1ker" )
-sources/4 = SubResource( "TileSetScenesCollectionSource_cr30n" )
-pattern_0 = SubResource( "TileMapPattern_8d4re" )
-pattern_1 = SubResource( "TileMapPattern_we1h3" )
-pattern_2 = SubResource( "TileMapPattern_mk7b0" )
-pattern_3 = SubResource( "TileMapPattern_f1wg5" )
-pattern_4 = SubResource( "TileMapPattern_rv0ag" )
-pattern_5 = SubResource( "TileMapPattern_c2qyu" )
+sources/0 = SubResource("TileSetAtlasSource_su8kq")
+sources/1 = SubResource("TileSetAtlasSource_ufqpp")
+sources/2 = SubResource("TileSetAtlasSource_ixxtw")
+sources/3 = SubResource("TileSetAtlasSource_m1ker")
+sources/4 = SubResource("TileSetScenesCollectionSource_cr30n")
+pattern_0 = SubResource("TileMapPattern_8d4re")
+pattern_1 = SubResource("TileMapPattern_we1h3")
+pattern_2 = SubResource("TileMapPattern_mk7b0")
+pattern_3 = SubResource("TileMapPattern_f1wg5")
+pattern_4 = SubResource("TileMapPattern_rv0ag")
+pattern_5 = SubResource("TileMapPattern_c2qyu")

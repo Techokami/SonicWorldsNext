@@ -33,7 +33,7 @@ func _physics_process(delta):
 	else:
 		parent.movement.x += (parent.slprolldown*sin(parent.angle))/delta;
 	
-	var calcAngle = rad2deg(parent.angle);
+	var calcAngle = rad_to_deg(parent.angle);
 	if (calcAngle < 0):
 		calcAngle += 360;
 	

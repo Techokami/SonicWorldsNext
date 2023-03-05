@@ -11,7 +11,7 @@ func _ready():
 
 func switchScene(newScene,fadeOutAnim = "",fadeInAnim = "",outSpeed = 1,inSpeed = 1):
 	
-	$UI/ColorAnimations.playback_speed = outSpeed
+	$UI/ColorAnimations.speed_scale = outSpeed
 	if $UI/ColorAnimations.has_animation(fadeOutAnim):
 		$UI/ColorAnimations.play(fadeOutAnim)
 		await $UI/ColorAnimations.animation_finished
@@ -23,10 +23,10 @@ func switchScene(newScene,fadeOutAnim = "",fadeInAnim = "",outSpeed = 1,inSpeed 
 	sceneLoader.add_child(scene)
 	
 	# Fade in
-	$UI/ColorAnimations.playback_speed = inSpeed
+	$UI/ColorAnimations.speed_scale = inSpeed
 	if $UI/ColorAnimations.has_animation(fadeInAnim):
 		$UI/ColorAnimations.play_backwards(fadeInAnim)
 		await $UI/ColorAnimations.animation_finished
 	else:
 		$UI/ColorAnimations.play("RESET")
-	$UI/ColorAnimations.playback_speed = 1
+	$UI/ColorAnimations.speed_scale = 1

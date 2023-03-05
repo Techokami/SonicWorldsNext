@@ -1,5 +1,6 @@
-extends Node2D
 @tool
+extends Node2D
+
 
 # this moves back and forth based on a timer and speed, direction is angle based
 @export var distance = 64

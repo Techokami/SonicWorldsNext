@@ -1,7 +1,7 @@
 [remap]
 
 importer="oggvorbisstr"
-type="AudioStreamOGGVorbis"
+type="AudioStreamOggVorbis"
 uid="uid://c8d1mhj1ws5fl"
 path="res://.godot/imported/5. SWD_Boss.ogg-88723ee4de1a586b6af161a1f37bc3a5.oggvorbisstr"
 
@@ -14,3 +14,6 @@ dest_files=["res://.godot/imported/5. SWD_Boss.ogg-88723ee4de1a586b6af161a1f37bc
 
 loop=true
 loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

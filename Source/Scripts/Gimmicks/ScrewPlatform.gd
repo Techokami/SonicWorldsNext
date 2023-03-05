@@ -1,5 +1,6 @@
-extends Node2D
 @tool
+extends Node2D
+
 
 @export var top = 2
 @export var bottom = 2

@@ -1,7 +1,7 @@
 [remap]
 
 importer="oggvorbisstr"
-type="AudioStreamOGGVorbis"
+type="AudioStreamOggVorbis"
 uid="uid://lxglaekw6sbj"
 path="res://.godot/imported/6. SWD_TLZa1.ogg-91859a6ddfe0792b14743868a91a559c.oggvorbisstr"
 
@@ -14,3 +14,6 @@ dest_files=["res://.godot/imported/6. SWD_TLZa1.ogg-91859a6ddfe0792b14743868a91a
 
 loop=true
 loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

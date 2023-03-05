@@ -1,5 +1,6 @@
-extends Area2D
 @tool
+extends Area2D
+
 
 @export_enum("left", "right") var boostDirection = 0
 var dirMemory = boostDirection
