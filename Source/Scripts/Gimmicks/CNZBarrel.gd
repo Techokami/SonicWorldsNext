@@ -141,7 +141,7 @@ func attach_player(player):
 
 func detach_player(player, index):
 	player.set_z_index(get_player_z_level(index))
-	players.remove(index)
+	players.remove_at(index)
 	
 	if player.currentState == player.STATES.DIE:
 		player.animator.play("die")

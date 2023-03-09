@@ -166,5 +166,5 @@ func remove_player(player):
 		# Clean out the player from all player-linked arrays.
 		var getIndex = players.find(player)
 		players.erase(player)
-		players_rotation_timer.remove(getIndex)
-		players_z_level.remove(getIndex)
+		players_rotation_timer.remove_at(getIndex)
+		players_z_level.remove_at(getIndex)

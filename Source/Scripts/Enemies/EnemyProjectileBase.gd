@@ -34,7 +34,7 @@ func _on_body_exited(body):
 		playerHit.erase(body)
 
 func _on_DamageArea_area_entered(area):
-	if area.get("parent") != null and area.get_collision_layer_value(19):
+	if area.get("parent") != null and area.get_collision_layer_value(20):
 		if !playerHit.has(area.parent):
 			forceReflect = true
 			playerHit.append(area.parent)

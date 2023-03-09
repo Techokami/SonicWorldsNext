@@ -341,4 +341,4 @@ func remove_player(player):
 		return
 		
 	# Remove the player
-	players.remove(getIndex)
+	players.remove_at(getIndex)

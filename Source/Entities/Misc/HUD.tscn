@@ -963,14 +963,14 @@ vframes = 2
 [node name="PatternLeft" type="Control" parent="LevelCard"]
 anchors_preset = 0
 anchor_bottom = 1.0
-offset_bottom = 7872.0
+offset_bottom = 8096.0
 
 [node name="PatternLeft" type="TextureRect" parent="LevelCard/PatternLeft"]
 layout_mode = 0
 anchor_bottom = 1.0
 offset_left = -32.0
 offset_right = 32.0
-offset_bottom = 146528.0
+offset_bottom = 154624.0
 stretch_mode = 2
 
 [node name="RightRatio" type="Control" parent="LevelCard"]
@@ -985,7 +985,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_top = -32.0
-offset_bottom = 7584.0
+offset_bottom = 7808.0
 
 [node name="PatternRight" type="TextureRect" parent="LevelCard/RightRatio/PatternRight"]
 layout_mode = 0
@@ -993,7 +993,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 32.0
-offset_right = 22656.0
+offset_right = 23104.0
 offset_bottom = 64.0
 stretch_mode = 2
 

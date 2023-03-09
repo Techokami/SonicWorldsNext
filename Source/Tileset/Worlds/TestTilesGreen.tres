@@ -1,6 +1,6 @@
 [gd_resource type="TileSet" load_steps=19 format=3 uid="uid://q0ta2nrsmv6q"]
 
-[ext_resource type="Texture2D" uid="uid://8cr4qxaixwup" path="res://Graphics/Tiles/WorldsTiles/TilesetDefault.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://peu6hqmlsdmd" path="res://Graphics/Tiles/WorldsTiles/TilesetDefault.png" id="1"]
 [ext_resource type="Texture2D" uid="uid://c1fjfilqwmhdv" path="res://Graphics/Tiles/WorldsTiles/Details.png" id="2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fk17d"]
@@ -14056,8 +14056,8 @@ texture_region_size = Vector2i(128, 128)
 0:0/7/physics_layer_0/angular_velocity = 0.0
 
 [resource]
-physics_layer_0/collision_layer = 15
-physics_layer_0/collision_mask = 15
+physics_layer_0/collision_layer = 0
+physics_layer_0/collision_mask = 0
 sources/0 = SubResource("TileSetAtlasSource_fk17d")
 sources/1 = SubResource("TileSetAtlasSource_6py0c")
 sources/2 = SubResource("TileSetAtlasSource_pll3c")

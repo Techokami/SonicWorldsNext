@@ -101,7 +101,7 @@ func physics_collision(body, hitVector):
 		if body.movement.y < 0:
 			body.movement.y *= -1
 	# check that player has the rolling layer bit set
-	elif body.get_collision_layer_value(19):
+	elif body.get_collision_layer_value(20):
 		# Bounce from below
 		if hitVector.x != 0:
 			# check conditions for interaction (and the player is the first player)

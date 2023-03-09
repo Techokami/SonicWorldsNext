@@ -150,6 +150,6 @@ func remove_player(player):
 		# Clean out the player from all player-linked arrays.
 		var getIndex = players.find(player)
 		players.erase(player)
-		players_speed.remove(getIndex)
-		players_cur_loops.remove(getIndex)
-		players_pass_hit.remove(getIndex)
+		players_speed.remove_at(getIndex)
+		players_cur_loops.remove_at(getIndex)
+		players_pass_hit.remove_at(getIndex)

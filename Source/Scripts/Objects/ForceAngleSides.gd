@@ -26,9 +26,11 @@ func _physics_process(_delta):
 				var PrevAngle = i.angle
 				
 				if contactPoint[getIndex] < 0:
-					i.angle = -deg_to_rad(leftAngle)
+					if leftAngle != null:
+						i.angle = -deg_to_rad(leftAngle)
 				else:
-					i.angle = deg_to_rad(rightAngle)
+					if rightAngle != null:
+						i.angle = deg_to_rad(rightAngle)
 				
 				# if greater then angle difference and distance from center is below drop off, disconect from floor
 				if abs(i.angle-PrevAngle) >= deg_to_rad(maxAngleDifference) and abs(i.global_position.x-global_position.x) < dropOff:
@@ -46,9 +48,11 @@ func _physics_process(_delta):
 func _draw():
 	if Engine.is_editor_hint():
 		# Left Arrow
-		draw_line(Vector2.ZERO,Vector2(-32,0).rotated(deg_to_rad(-leftAngle)),Color(0,1,1,0.5),1.5)
+		if leftAngle != null:
+			draw_line(Vector2.ZERO,Vector2(-32,0).rotated(deg_to_rad(-leftAngle)),Color(0,1,1,0.5),1.5)
 		# Right Arrow
-		draw_line(Vector2.ZERO,Vector2(32,0).rotated(deg_to_rad(rightAngle)),Color(0,1,1,0.5),1.5)
+		if rightAngle != null:
+			draw_line(Vector2.ZERO,Vector2(32,0).rotated(deg_to_rad(rightAngle)),Color(0,1,1,0.5),1.5)
 
 
 func _on_ForceAngleSides_body_entered(body):
@@ -67,6 +71,6 @@ func _on_ForceAngleSides_body_exited(body):
 	if players.has(body):
 		# remove angle rotation index
 		var getIndex = players.find(body)
-		contactPoint.remove(getIndex)
+		contactPoint.remove_at(getIndex)
 		
 		players.erase(body)

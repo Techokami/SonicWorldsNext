@@ -19,7 +19,7 @@ var yGroundDiff = 0 # used for y differences on ground sensors
 
 
 var groundLookDistance = 14 # how far down to look
-@onready var pushRadius = max($HitBox.shape.size.x+1,10) # original push radius is 10
+@onready var pushRadius = max(($HitBox.shape.size.x/2)+1,10) # original push radius is 10
 
 
 # physics variables
@@ -59,19 +59,20 @@ func _ready():
 	#	i.enabled = true
 	update_sensors()
 	# Object check only needs to be set once
-	objectCheck.set_collision_mask_value(0,false)
-	objectCheck.set_collision_mask_value(13,true)
-	objectCheck.set_collision_mask_value(15,true)
+	objectCheck.set_collision_mask_value(1,false)
+	objectCheck.set_collision_mask_value(14,true)
 	objectCheck.set_collision_mask_value(16,true)
-	verticalObjectCheck.set_collision_mask_value(0,false)
-	verticalObjectCheck.set_collision_mask_value(13,true)
+	objectCheck.set_collision_mask_value(17,true)
+	verticalObjectCheck.set_collision_mask_value(1,false)
+	verticalObjectCheck.set_collision_mask_value(14,true)
 	#objectCheck.enabled = true
 	#verticalObjectCheck.enabled = true
 	# middle should also check for objects
-	verticalSensorMiddle.set_collision_mask_value(13,true)
-	verticalSensorMiddleEdge.set_collision_mask_value(13,true)
-	verticalSensorMiddle.set_collision_mask_value(16,true)
-	verticalSensorMiddleEdge.set_collision_mask_value(16,true)
+	verticalSensorMiddle.set_collision_mask_value(14,true)
+	verticalSensorMiddleEdge.set_collision_mask_value(14,true)
+	verticalSensorMiddle.set_collision_mask_value(17,true)
+	verticalSensorMiddleEdge.set_collision_mask_value(17,true)
+	print(verticalSensorLeft.get_collision_mask_value(1))
 
 func update_sensors():
 	var rotationSnap = snapped(rotation,deg_to_rad(90))
@@ -149,12 +150,11 @@ func update_sensors():
 	
 	# set collission mask values
 	for i in sensorList:
-		i.set_collision_mask_value(0,i.target_position.rotated(rotationSnap).y > 0)
-		i.set_collision_mask_value(1,i.target_position.rotated(rotationSnap).x > 0)
-		i.set_collision_mask_value(2,i.target_position.rotated(rotationSnap).x < 0)
-		i.set_collision_mask_value(3,i.target_position.rotated(rotationSnap).y < 0)
+		i.set_collision_mask_value(1,i.target_position.rotated(rotationSnap).y > 0)
+		i.set_collision_mask_value(2,i.target_position.rotated(rotationSnap).x > 0)
+		i.set_collision_mask_value(3,i.target_position.rotated(rotationSnap).x < 0)
+		i.set_collision_mask_value(4,i.target_position.rotated(rotationSnap).y < 0)
 		# reset layer masks
-		i.set_collision_mask_value(4,false)
 		i.set_collision_mask_value(5,false)
 		i.set_collision_mask_value(6,false)
 		i.set_collision_mask_value(7,false)
@@ -162,12 +162,13 @@ func update_sensors():
 		i.set_collision_mask_value(9,false)
 		i.set_collision_mask_value(10,false)
 		i.set_collision_mask_value(11,false)
+		i.set_collision_mask_value(12,false)
 		
 		# set layer masks
-		i.set_collision_mask_value(0+((collissionLayer+1)*4),i.get_collision_mask_value(0))
 		i.set_collision_mask_value(1+((collissionLayer+1)*4),i.get_collision_mask_value(1))
 		i.set_collision_mask_value(2+((collissionLayer+1)*4),i.get_collision_mask_value(2))
 		i.set_collision_mask_value(3+((collissionLayer+1)*4),i.get_collision_mask_value(3))
+		i.set_collision_mask_value(4+((collissionLayer+1)*4),i.get_collision_mask_value(4))
 	
 	
 	horizontalSensor.force_raycast_update()
@@ -225,12 +226,12 @@ func _physics_process(delta):
 			var rayHitVec = (getVert.get_collision_point()-getVert.global_position)
 			# Snap the Vector and normalize it
 			var normHitVec = -Vector2.LEFT.rotated(snap_angle(rayHitVec.normalized().angle()))
-			if move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.size.y))-Vector2(0,yGroundDiff).rotated(rotation),true,true,true):
-				var _col = move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.size.y))-Vector2(0,yGroundDiff).rotated(rotation))
+			if move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.size.y/2))-Vector2(0,yGroundDiff).rotated(rotation),true,true,true):
+				var _col = move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.size.y/2))-Vector2(0,yGroundDiff).rotated(rotation))
 			else:
 				# Do a check that we're not in the middle of a rotation, otherwise the player can get caught on outter curves (more noticable on higher physics frame rates)
 				if snap_angle(angle) == snap_angle(rotation):
-					position += (rayHitVec-(normHitVec*($HitBox.shape.size.y+0.25))-Vector2(0,yGroundDiff).rotated(rotation))
+					position += (rayHitVec-(normHitVec*(($HitBox.shape.size.y/2)+0.25))-Vector2(0,yGroundDiff).rotated(rotation))
 				else:
 					# if the angle doesn't match the current rotation, move toward the slope angle unsnapped instead of following the raycast
 					normHitVec = -Vector2.LEFT.rotated(rayHitVec.normalized().angle())

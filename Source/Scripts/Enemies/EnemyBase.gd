@@ -16,7 +16,7 @@ func _process(delta):
 		# loop through players as i
 		for i in playerHit:
 			# check if damage entity is on or supertime is bigger then 0
-			if (i.get_collision_layer_value(19) or i.supTime > 0 or forceDamage):
+			if (i.get_collision_layer_value(20) or i.supTime > 0 or forceDamage):
 				# check player is not on floor
 				if !i.ground:
 					# subtract from velocity if velocity is less then 0 or below enemy (use current velocity to avoid clipping issues)
@@ -53,7 +53,7 @@ func _on_body_exited(body):
 
 func _on_DamageArea_area_entered(area):
 	# damage checking
-	if area.get("parent") != null and area.get_collision_layer_value(19):
+	if area.get("parent") != null and area.get_collision_layer_value(20):
 		if !playerHit.has(area.parent):
 			forceDamage = true
 			playerHit.append(area.parent)
