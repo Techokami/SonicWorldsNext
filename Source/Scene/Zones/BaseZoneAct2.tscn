@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://bjavywoj00j1j"]
+[gd_scene load_steps=26 format=3 uid="uid://bjavywoj00j1j"]
 
 [ext_resource type="TileSet" uid="uid://q0ta2nrsmv6q" path="res://Tileset/Worlds/TestTilesGreen.tres" id="1"]
 [ext_resource type="Script" path="res://Scripts/Level/Level.gd" id="2"]
@@ -6,15 +6,15 @@
 [ext_resource type="PackedScene" uid="uid://c30uceea18q1w" path="res://Entities/Misc/HUD.tscn" id="4"]
 [ext_resource type="Script" path="res://Scripts/Objects/StateMovers/StateMoverMaster.gd" id="5"]
 [ext_resource type="Script" path="res://Scripts/Objects/StateMovers/StateMoverPathFollower.gd" id="6"]
-[ext_resource type="PackedScene" path="res://Entities/Gimmicks/CNZBarrel.tscn" id="7"]
+[ext_resource type="PackedScene" uid="uid://cxxmrbgw17gnw" path="res://Entities/Gimmicks/CNZBarrel.tscn" id="7"]
 [ext_resource type="Script" path="res://Scripts/Objects/StateMovers/StateMoverTranslational.gd" id="8"]
-[ext_resource type="PackedScene" path="res://Entities/Obstacles/InvisibleBarrier.tscn" id="9"]
-[ext_resource type="PackedScene" path="res://Entities/Items/Ring.tscn" id="10"]
+[ext_resource type="PackedScene" uid="uid://msycxndhmuin" path="res://Entities/Obstacles/InvisibleBarrier.tscn" id="9"]
+[ext_resource type="PackedScene" uid="uid://dggjdwwkl527b" path="res://Entities/Items/Ring.tscn" id="10"]
 [ext_resource type="PackedScene" path="res://Entities/Hazards/Saw.tscn" id="11"]
-[ext_resource type="PackedScene" path="res://Entities/Gimmicks/Shutter.tscn" id="12"]
-[ext_resource type="PackedScene" path="res://Entities/Gimmicks/CNZTrampolineBarrel.tscn" id="13"]
+[ext_resource type="PackedScene" uid="uid://blwewyk2fnrew" path="res://Entities/Gimmicks/Shutter.tscn" id="12"]
+[ext_resource type="PackedScene" uid="uid://dvmttrmkfraht" path="res://Entities/Gimmicks/CNZTrampolineBarrel.tscn" id="13"]
 [ext_resource type="Texture2D" uid="uid://dwvek120iiiv" path="res://Graphics/Obstacles/Walls/shutterCNZ.png" id="14"]
-[ext_resource type="PackedScene" path="res://Entities/Items/Monitor.tscn" id="15"]
+[ext_resource type="PackedScene" uid="uid://gklj3ebdwveu" path="res://Entities/Items/Monitor.tscn" id="15"]
 [ext_resource type="PackedScene" uid="uid://cioq5saowvqxj" path="res://Entities/MainObjects/Player.tscn" id="18"]
 [ext_resource type="Texture2D" uid="uid://bemwlrblbgn23" path="res://Graphics/Backgrounds/WorldsBackground.png" id="25"]
 [ext_resource type="PackedScene" path="res://Entities/MainObjects/GoalPost.tscn" id="34"]
@@ -69,9 +69,6 @@ _data = {
 "points": PackedVector2Array(0, 0, 0, 0, 345, -342, 43.4479, -26.939, -43.4479, 26.939, 135, -306, 16.8361, -31.63, -16.8361, 31.63, 44, -224, 0, 0, 0, 0, 0, 0)
 }
 point_count = 4
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_kimdo"]
-size = Vector2(198, 88)
 
 [node name="BaseZoneAct2" type="Node2D"]
 script = ExtResource("2")
@@ -300,11 +297,3 @@ position = Vector2(1056, 641)
 [node name="Monitor" parent="Entities" instance=ExtResource("15")]
 position = Vector2(656, 464)
 item = 4
-
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
-position = Vector2(91, 810)
-collision_layer = 8207
-collision_mask = 8207
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-shape = SubResource("RectangleShape2D_kimdo")

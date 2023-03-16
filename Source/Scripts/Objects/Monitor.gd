@@ -51,14 +51,14 @@ func destroy():
 			playerTouch.rings += 10
 			$SFX/Ring.play()
 		1: # Speed Shoes
-			if !playerTouch.super:
+			if !playerTouch.get("super"):
 				playerTouch.shoeTime = 30
 				playerTouch.switch_physics()
 				Global.currentTheme = 1
 				Global.effectTheme.stream = Global.themes[Global.currentTheme]
 				Global.effectTheme.play()
 		2: # Invincibility
-			if !playerTouch.super:
+			if !playerTouch.get("super"):
 				playerTouch.supTime = 30
 				playerTouch.shieldSprite.visible = false # turn off barrier for stars
 				playerTouch.get_node("InvincibilityBarrier").visible = true
@@ -75,7 +75,7 @@ func destroy():
 			playerTouch.set_shield(playerTouch.SHIELDS.BUBBLE)
 		7: # Super
 			playerTouch.rings += 50
-			if !playerTouch.super:
+			if !playerTouch.get("super"):
 				playerTouch.set_state(playerTouch.STATES.SUPER)
 		10: # 1up
 			Global.life.play()
@@ -101,7 +101,7 @@ func physics_collision(body, hitVector):
 		if body.movement.y < 0:
 			body.movement.y *= -1
 	# check that player has the rolling layer bit set
-	elif body.get_collision_layer_value(20):
+	elif body.get_collision_layer_value(19):
 		# Bounce from below
 		if hitVector.x != 0:
 			# check conditions for interaction (and the player is the first player)

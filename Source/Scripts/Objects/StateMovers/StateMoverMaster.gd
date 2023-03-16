@@ -36,9 +36,9 @@ var states = []
 func _ready():
 	realPosition = Vector2(position.x, position.y)
 	for i in get_children():
-		if i is preload("res://Scripts/Objects/StateMovers/StateMover.gd"):
+		if i is StateMover:
 			states.append(i)
-		pass
+		
 	pass # Replace with function body.
 	
 	origin = Vector2(position)
@@ -51,7 +51,7 @@ func setState(stateIndex):
 	var activeState = states[stateIndex]
 	activeState.enterState()
 	state = stateIndex
-	pass
+	
 	
 func _process(delta):
 	if state == -1:
@@ -69,4 +69,4 @@ func _physics_process(delta):
 	position.x = floor(realPosition.x)
 	position.y = floor(realPosition.y)
 	
-	pass
+	

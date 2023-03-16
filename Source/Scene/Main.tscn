@@ -117,7 +117,7 @@ bus = &"Music"
 stream = ExtResource("1")
 bus = &"Music"
 
-[node name="Downing" type="AudioStreamPlayer" parent="Music"]
+[node name="Drowning" type="AudioStreamPlayer" parent="Music"]
 stream = ExtResource("5")
 bus = &"Music"
 

@@ -1,4 +1,4 @@
-extends Node2D
+class_name StateMover extends Node2D
 
 # If this system is used, at least one state zero must be used to kick off the system
 var parent

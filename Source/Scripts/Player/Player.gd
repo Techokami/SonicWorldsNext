@@ -111,7 +111,7 @@ var CountDown = preload("res://Entities/Misc/CountDownTimer.tscn")
 var RotatingParticle = preload("res://Entities/Misc/RotatingParticle.tscn")
 
 var superSprite = load("res://Graphics/Players/SuperSonic.png")
-@onready var normalSprite = $Sprite2D/Sprite2D.texture
+@onready var normalSprite = $Sonic/Sprite2D.texture
 var playerPal = preload("res://Shaders/PlayerPalette.tres")
 
 # ================
@@ -138,9 +138,9 @@ var reflective = false # used for reflecting projectiles
 
 
 # Animation related
-@onready var animator = $Sprite2D/PlayerAnimation
-@onready var sprite = $Sprite2D/Sprite2D
-@onready var spriteControler = $Sprite2D
+@onready var animator = $Sonic/PlayerAnimation
+@onready var sprite = $Sonic/Sprite2D
+@onready var spriteControler = $Sonic
 var lastActiveAnimation = ""
 var defaultSpriteOffset = Vector2.ZERO
 
@@ -322,7 +322,7 @@ func _ready():
 		CHARACTERS.TAILS:
 			# Set sprites
 			currentHitbox = HITBOXESTAILS
-			get_node("Sprite2D").name = "OldSprite"
+			get_node("Sonic").name = "OldSprite"
 			await get_tree().process_frame
 			var tails = tailsAnimations.instantiate()
 			add_child(tails)
@@ -333,7 +333,7 @@ func _ready():
 		CHARACTERS.KNUCKLES:
 			# Set sprites
 			currentHitbox = HITBOXESKNUCKLES
-			get_node("Sprite2D").name = "OldSprite"
+			get_node("Sonic").name = "OldSprite"
 			var knuckles = knucklesAnimations.instantiate()
 			add_child(knuckles)
 			sprite = knuckles.get_node("Sprite2D")
@@ -351,8 +351,8 @@ func _ready():
 	animator.connect("animation_started",Callable(self,"_on_PlayerAnimation_animation_started"))
 	defaultSpriteOffset = sprite.offset
 	
-	
-	crouchBox = get_node_or_null("Sprite2D/CrouchBox")
+	# set secondary hitboxes
+	crouchBox = spriteControler.get_node_or_null("CrouchBox")
 	if crouchBox != null:
 		crouchBox.get_parent().remove_child(crouchBox)
 		add_child(crouchBox)
@@ -790,11 +790,11 @@ func _physics_process(delta):
 		var crushSensorUp = $CrushSensorUp
 		var crushSensorDown = $CrushSensorDown
 		
-		crushSensorLeft.position.x = -($HitBox.shape.size.x - 1)
-		crushSensorRight.position.x = ($HitBox.shape.size.x - 1)
-		crushSensorUp.position.y = -($HitBox.shape.size.y -1)
+		crushSensorLeft.position.x = -($HitBox.shape.size.x/2 - 1)
+		crushSensorRight.position.x = ($HitBox.shape.size.x/2 - 1)
+		crushSensorUp.position.y = -($HitBox.shape.size.y/2 -1)
 		# note that the bottom crush sensor actually goes *below* the feet so that it can contact the floor
-		crushSensorDown.position.y = ($HitBox.shape.size.y +1)
+		crushSensorDown.position.y = ($HitBox.shape.size.y/2 +1)
 		
 		if (crushSensorLeft.get_overlapping_areas() + crushSensorLeft.get_overlapping_bodies()).size() > 0 and \
 			(crushSensorRight.get_overlapping_areas() + crushSensorRight.get_overlapping_bodies()).size() > 0:
@@ -906,7 +906,7 @@ func set_state(newState, forceMask = Vector2.ZERO):
 		match(newState):
 			STATES.JUMP, STATES.ROLL:
 				# adjust y position
-				forcePoseChange = ((currentHitbox.ROLL-$HitBox.shape.size)*Vector2.UP).rotated(rotation)
+				forcePoseChange = ((currentHitbox.ROLL-$HitBox.shape.size)*Vector2.UP).rotated(rotation)*0.5
 				
 				# change hitbox size
 				$HitBox.shape.size = currentHitbox.ROLL
@@ -916,13 +916,13 @@ func set_state(newState, forceMask = Vector2.ZERO):
 				
 			_:
 				# adjust y position
-				forcePoseChange = ((currentHitbox.NORMAL-$HitBox.shape.size)*Vector2.UP).rotated(rotation)
+				forcePoseChange = ((currentHitbox.NORMAL-$HitBox.shape.size)*Vector2.UP).rotated(rotation)*0.5
 				
 				# change hitbox size
 				$HitBox.shape.size = currentHitbox.NORMAL
 	else:
 		# adjust y position
-		forcePoseChange = ((forceMask-$HitBox.shape.size)*Vector2.UP).rotated(rotation)
+		forcePoseChange = ((forceMask-$HitBox.shape.size)*Vector2.UP).rotated(rotation)*0.5
 		# change hitbox size
 		$HitBox.shape.size = forceMask
 	
@@ -934,7 +934,7 @@ func set_state(newState, forceMask = Vector2.ZERO):
 func set_hitbox(mask = Vector2.ZERO, forcePoseChange = false):
 	# adjust position if on floor or force pose change
 	if ground or forcePoseChange:
-		position += ((mask-$HitBox.shape.size)*Vector2.UP).rotated(rotation)
+		position += ((mask-$HitBox.shape.size)*Vector2.UP).rotated(rotation)*0.5
 	
 	$HitBox.shape.size = mask
 

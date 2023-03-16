@@ -9,7 +9,7 @@ var open = false
 func _ready():
 	if !Engine.is_editor_hint():
 		# set areas
-		$Mask.shape.size = Vector2(texture.get_width()/2,texture.get_height()/2)
+		$Mask.shape.size = Vector2(texture.get_width(),texture.get_height())
 		$OpenShutter/Mask.shape = $Mask.shape
 		$CloseShutter/Mask.shape = $Mask.shape
 		$CloseShutter2/Mask.shape = $Mask.shape
@@ -33,7 +33,7 @@ func _process(delta):
 		# disable mask if opened
 		$Mask.disabled = open
 	else:
-		$Mask.shape.size = Vector2(texture.get_width()/2,texture.get_height()/2)
+		$Mask.shape.size = Vector2(texture.get_width(),texture.get_height())
 		$OpenShutter/Mask.shape = $Mask.shape
 		$CloseShutter/Mask.shape = $Mask.shape
 		$CloseShutter2/Mask.shape = $Mask.shape

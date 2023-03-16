@@ -47,14 +47,14 @@ signal positionChanged
 
 func _ready():
 	slopeCheck.modulate = Color.BLUE_VIOLET
-	add_child(verticalSensorLeft)
-	add_child(verticalSensorMiddle)
-	add_child(verticalSensorMiddleEdge)
-	add_child(verticalSensorRight)
-	add_child(verticalObjectCheck)
-	add_child(horizontalSensor)
-	add_child(slopeCheck)
-	add_child(objectCheck)
+	$HitBox.add_child(verticalSensorLeft)
+	$HitBox.add_child(verticalSensorMiddle)
+	$HitBox.add_child(verticalSensorMiddleEdge)
+	$HitBox.add_child(verticalSensorRight)
+	$HitBox.add_child(verticalObjectCheck)
+	$HitBox.add_child(horizontalSensor)
+	$HitBox.add_child(slopeCheck)
+	$HitBox.add_child(objectCheck)
 	#for i in sensorList:
 	#	i.enabled = true
 	update_sensors()

@@ -18,7 +18,7 @@ var platformDepth = 4
 
 func _ready():
 	# Change platform shape
-	$Platform/Shape3D.shape.size.x = platformSprite.get_size().x/2
+	$Platform/Shape3D.shape.size.x = platformSprite.get_size().x
 	$Platform/Shape3D.shape.size.y = platformDepth/2
 	$Platform/Shape3D.position.y = -(platformSprite.get_size().y/2)+(platformDepth/2)
 	if !Engine.is_editor_hint():
@@ -30,7 +30,7 @@ func _ready():
 
 func _process(delta):
 	if Engine.is_editor_hint():
-		$Platform/Shape3D.shape.size.x = platformSprite.get_size().x/2
+		$Platform/Shape3D.shape.size.x = platformSprite.get_size().x
 		$Platform/Shape3D.shape.size.y = platformDepth/2
 		$Platform/Shape3D.position.y = -(platformSprite.get_size().y/2)+(platformDepth/2)
 		queue_redraw()

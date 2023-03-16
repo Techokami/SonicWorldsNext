@@ -1235,7 +1235,7 @@ autostart = true
 [node name="BubbleTimer" type="Timer" parent="."]
 autostart = true
 
-[node name="Sprite2D" parent="." instance=ExtResource("2")]
+[node name="Sonic" parent="." instance=ExtResource("2")]
 
 [node name="Shields" type="AnimatedSprite2D" parent="."]
 visible = false
