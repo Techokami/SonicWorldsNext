@@ -65,7 +65,7 @@ func _ready():
 
 func _process(_delta):
 	if Engine.is_editor_hint():
-		$TrampolineBody/TrampolineShape.get_shape().set_size(Vector2(platformWidth, platformHeight / 2))
+		$TrampolineBody/TrampolineShape.get_shape().set_size(Vector2(platformWidth*2, platformHeight))
 		$TrampolineBody/TrampolineShape.position.y = -platformYOffset
 	super._process(_delta)
 

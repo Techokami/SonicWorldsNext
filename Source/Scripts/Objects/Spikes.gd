@@ -1,6 +1,6 @@
 extends StaticBody2D
 
-@export (float)var shiftTimer = 0.00
+@export var shiftTimer = 0.00
 @onready var start = position
 @onready var shiftPoint = position+(Vector2.DOWN*scale.sign()).rotated(rotation)*32
 var sunk = false
@@ -11,7 +11,6 @@ func _ready():
 	if !is_equal_approx(shiftTimer,0):
 		$ShiftTimer.start(abs(shiftTimer))
 	else:
-		$VisibleOnScreenEnabler2D.physics_process_parent = false
 		set_physics_process(false)
 
 func _physics_process(delta):

@@ -2,6 +2,7 @@ res://default_env.tres
 res://Scene/Zones/BaseZone.tscn
 res://Tileset/Worlds/TestTilesGreen.tres
 res://Tileset/Worlds/WorldsTileMap.tres
+res://Entities/MainObjects/LayerSwitcher.tscn
 res://Entities/MainObjects/Player.tscn
 res://Entities/Misc/PauseMenuText.tscn
 res://Scene/Presentation/PoweredByWorlds.tscn
@@ -10,8 +11,10 @@ res://Scene/Presentation/CharacterSelect.tscn
 res://Entities/Misc/HUD.tscn
 res://Scene/Main.tscn
 res://Graphics/Players/PlayerAnimations/Sonic.tscn
-res://Scene/Zones/BaseZoneAct2.tscn
-res://Entities/Items/Ring.tscn
-res://Entities/Items/Monitor.tscn
-res://Entities/Misc/GenericParticle.tscn
-res://Entities/Gimmicks/Bridge.tscn
+res://Scripts/Player/Player.gd
+res://Scripts/Objects/Spikes.gd
+res://Entities/Hazards/Spikes.tscn
+res://Entities/Gimmicks/BubbleGenerator.tscn
+res://Entities/Items/Checkpoint.tscn
+res://Entities/Gimmicks/Hanger.tscn
+res://Entities/Gimmicks/VerticalBar.tscn

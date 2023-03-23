@@ -1,20 +1,22 @@
 extends StaticBody2D
 
 # animator is optional
-@export (NodePath) var animator
+@export_node_path("AnimationPlayer")var animator
 @export var animationName = ""
 @export var reactivate = true
 
 var active = false
 var colCheck = false
 
-@onready var animatorNode = get_node_or_null(animator)
+var animatorNode = null
 
 signal pressed_with_body(body)
 signal pressed
 signal released
 
 func _process(_delta):
+	if animator != null:
+		animatorNode = get_node_or_null(animator)
 	if active:
 		# set frame to pressed frame
 		$Sprite2D.frame = 1

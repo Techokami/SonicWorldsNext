@@ -6,7 +6,7 @@ extends Line2D
 @export var hitBoxSize = Vector2(4,4)
 
 @export var split = false
-@export (int, 0, 100)var splitChance = 100
+@export_range(0, 100)var splitChance = 100
 
 var enteranceArea = Area2D.new()
 var exitArea = Area2D.new()
@@ -31,7 +31,7 @@ func _ready():
 	add_child(enteranceArea)
 	enteranceArea.collision_layer = 0
 	enteranceArea.collision_mask = 0
-	enteranceArea.set_collision_mask_value(12,true)
+	enteranceArea.set_collision_mask_value(13,true)
 	enteranceArea.connect("body_entered",Callable(self,"_on_hitbox_enter"))
 	enteranceArea.global_position = global_position+get_point_position(0)
 	
