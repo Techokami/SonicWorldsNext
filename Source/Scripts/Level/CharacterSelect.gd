@@ -82,4 +82,4 @@ func _input(event):
 				2: # Chunk Zone Act 1
 					Global.nextZone = load("res://Scene/Zones/ChunkZone.tscn")
 			
-			Global.main.change_scene_to_file(Global.nextZone,"FadeOut","FadeOut","SetSub",1)
+			Global.main.change_scene_to_file(Global.nextZone,"FadeOut","FadeOut",1)

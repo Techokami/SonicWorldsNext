@@ -93,7 +93,7 @@ func _process(_delta):
 
 
 func _draw():
-	var getRes = Vector2(texture.get_width()/float(hframes),texture.get_height()/float(vframes))
+	var getRes = Vector2(8,8)# Vector2(texture.get_width()/float(hframes),texture.get_height()/float(vframes))
 	# used for string position
 	var getX = 0
 	# calculate vertical alignment

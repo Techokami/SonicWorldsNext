@@ -24,13 +24,13 @@ func _input(event):
 			$HUD/ColorRect/HBoxContainer.get_child(Global.specialStageID).get_child(0).visible = true
 			await $Emerald.finished
 			next_stage()
-			Global.main.change_scene_to_file(null,"FadeOut","","SetAdd",1,true,false)
+			Global.main.change_scene_to_file(null,"WhiteOut","",1,true,false)
 			
 			
 		if event.is_action_pressed("gm_action2"):
 			activated = true
 			next_stage()
-			Global.main.change_scene_to_file(null,"FadeOut","","SetAdd",1,true,false)
+			Global.main.change_scene_to_file(null,"WhiteOut","",1,true,false)
 
 
 func next_stage():

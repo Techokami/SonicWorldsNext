@@ -1310,11 +1310,14 @@ z_index = 7
 position = Vector2(0, -16)
 sprite_frames = SubResource("157")
 animation = &"Invincibility"
+autoplay = "Invincibility"
 
 [node name="StarGenerator2" type="AnimatedSprite2D" parent="InvincibilityBarrier"]
 position = Vector2(0, 16)
 sprite_frames = SubResource("157")
 animation = &"Invincibility"
+autoplay = "Invincibility"
+frame_progress = 0.735639
 
 [node name="SFX" type="Node" parent="."]
 

@@ -59,7 +59,7 @@ func _physics_process(_delta):
 			
 			# Set the player position based on x position and the distance between the corkscrews origin
 			# this uses a cosine function to create a wave pattern
-			var yDistance = -32+(i.currentHitbox.NORMAL.y-19)
+			var yDistance = -32+((i.currentHitbox.NORMAL.y*2)-19)
 			i.global_position.y = global_position.y+((cos(clamp((i.global_position.x-global_position.x)/(192*scale.x),-1,2*length)*PI)*yDistance)-2)*scale.y
 			
 			# Make player camera update as this change is applied after player movement

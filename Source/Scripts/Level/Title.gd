@@ -23,5 +23,5 @@ func _input(event):
 		titleEnd = true
 		if Global.music.get_playback_position() < 14.0:
 			Global.music.seek(14.0)
-		Global.main.change_scene_to_file(nextScene,"FadeOut","FadeOut","SetSub",1)
+		Global.main.change_scene_to_file(nextScene,"FadeOut","FadeOut",1)
 		$Celebrations.emitting = true

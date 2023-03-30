@@ -1,7 +1,7 @@
 extends PhysicsObject
 const HITBOXESSONIC = {NORMAL = Vector2(9,19)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,11)*2, GLIDE = Vector2(10,10)*2}
-const HITBOXESTAILS = {NORMAL = Vector2(9,15), ROLL = Vector2(7,14), CROUCH = Vector2(9,9.5), GLIDE = Vector2(10,10)}
-const HITBOXESKNUCKLES = {NORMAL = Vector2(9,19), ROLL = Vector2(7,14), CROUCH = Vector2(9,11), GLIDE = Vector2(10,10)}
+const HITBOXESTAILS = {NORMAL = Vector2(9,15)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,9.5)*2, GLIDE = Vector2(10,10)*2}
+const HITBOXESKNUCKLES = {NORMAL = Vector2(9,19)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,11)*2, GLIDE = Vector2(10,10)*2}
 var currentHitbox = HITBOXESSONIC
 
 #Sonic's Speed constants
@@ -454,7 +454,7 @@ func _process(delta):
 	# set the sprite to match the sprite rotation variable if it's in the rotatable Sprites list
 	if (rotatableSprites.has(animator.current_animation)):
 		# check if player rotation is greater then 45 degrees or current angle doesn't match the gravity's angle or not on the floor
-		if abs(spriteRotation-90) >= 45 or rotation != gravityAngle or !ground:
+		if abs(spriteRotation-90) >= 32 or rotation != gravityAngle or !ground:
 			sprite.rotation = deg_to_rad(snapped(spriteRotation,45)-90)-rotation-gravityAngle
 		else:
 			sprite.rotation = -rotation-gravityAngle
@@ -639,22 +639,36 @@ func _physics_process(delta):
 			attacking = true
 	
 	# physics sets
-	# collid with solids if not rolling layer
-	set_collision_mask_value(15,!attacking)
-	# collid with solids if not knuckles layer
-	set_collision_mask_value(18,!character == CHARACTERS.KNUCKLES)
-	# collid with solids if not rolling or not knuckles layer
-	set_collision_mask_value(20,(character != CHARACTERS.KNUCKLES and !attacking))
+	# collide with solids if not rolling layer
+	set_collision_mask_value(16,!attacking)
+	# collide with solids if not knuckles layer
+	set_collision_mask_value(19,!character == CHARACTERS.KNUCKLES)
+	# collide with solids if not rolling or not knuckles layer
+	set_collision_mask_value(21,(character != CHARACTERS.KNUCKLES and !attacking))
 	# damage mask bit
-	set_collision_layer_value(19,attacking)
+	set_collision_layer_value(20,attacking)
 	
 	
 	if (ground):
 		groundSpeed = movement.x
+	
+	# calculate wall objects
+	var getObjectHitCheck = false
+	# hit check is left by default (if moving right set to right)
+	var hitDirection = HITDIRECTION.LEFT
+	
+	# only check for collisions if moving (for pushing wall effect)
+	if movement.x != 0:
+		if movement.x > 0:
+			hitDirection = HITDIRECTION.RIGHT
+		# get hit check
+		getObjectHitCheck = objectHits[hitDirection]
+	
 	# wall detection
 	if horizontalSensor.is_colliding() or is_on_wall():
 		# give pushingWall a buffer otherwise this just switches on and off
 		pushingWall = 2
+		print(horizontalSensor.target_position)
 		if sign(movement.x) == sign(horizontalSensor.target_position.x):
 			movement.x = 0
 		

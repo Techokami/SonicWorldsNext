@@ -63,6 +63,7 @@ func _ready():
 	objectCheck.set_collision_mask_value(14,true)
 	objectCheck.set_collision_mask_value(16,true)
 	objectCheck.set_collision_mask_value(17,true)
+	objectCheck.hit_from_inside = true
 	verticalObjectCheck.set_collision_mask_value(1,false)
 	verticalObjectCheck.set_collision_mask_value(14,true)
 	#objectCheck.enabled = true
@@ -72,7 +73,6 @@ func _ready():
 	verticalSensorMiddleEdge.set_collision_mask_value(14,true)
 	verticalSensorMiddle.set_collision_mask_value(17,true)
 	verticalSensorMiddleEdge.set_collision_mask_value(17,true)
-	print(verticalSensorLeft.get_collision_mask_value(1))
 
 func update_sensors():
 	var rotationSnap = snapped(rotation,deg_to_rad(90))
@@ -134,7 +134,8 @@ func update_sensors():
 		
 	
 	# wall sensor
-	horizontalSensor.target_position = Vector2(pushRadius*sign(velocity.rotated(-rotationSnap).x),0)
+	if sign(velocity.rotated(-rotationSnap).x) != 0:
+		horizontalSensor.target_position = Vector2(pushRadius*sign(velocity.rotated(-rotationSnap).x),0)
 	# if the player is on a completely flat surface then move the sensor down 8 pixels
 	horizontalSensor.position.y = 8*int(round(rad_to_deg(angle)) == round(rad_to_deg(gravityAngle)) and ground)
 	
@@ -294,42 +295,43 @@ func _physics_process(delta):
 		var maskMemory = collision_mask
 		
 		# move in place to make sure the player doesn't clip into objects
-		set_collision_mask_value(16,true)
+		set_collision_mask_value(17,true)
 		var _col = move_and_collide(Vector2.ZERO)
 		
-		var dirList = [Vector2.DOWN,Vector2.LEFT,Vector2.RIGHT,Vector2.UP]
+		var dirList = [Vector2.UP,Vector2.DOWN,Vector2.LEFT,Vector2.RIGHT]
+		
 		# loop through directions for collisions
 		for i in dirList:
+#			var col = move_and_collide(i*0.1,true,0)
+#			if col:
+#				if col.get_collider().has_method("physics_collision"):
+#					col.get_collider().physics_collision(self,i.rotated(angle).round())
+			# reset exceptions --Look
+			objectCheck.clear_exceptions()
+			match i:
+				Vector2.DOWN:
+					objectCheck.position = Vector2(-$HitBox.shape.size.x,$HitBox.shape.size.y)/2 +i
+					objectCheck.target_position = Vector2($HitBox.shape.size.x,0)
+				Vector2.UP:
+					objectCheck.position = Vector2(-$HitBox.shape.size.x,-$HitBox.shape.size.y)/2 +i
+					objectCheck.target_position = Vector2($HitBox.shape.size.x,0)
+				Vector2.RIGHT:
+					objectCheck.position = Vector2($HitBox.shape.size.x,-$HitBox.shape.size.y)/2 +i
+					objectCheck.target_position = Vector2(0,$HitBox.shape.size.y)
+				Vector2.LEFT:
+					objectCheck.position = Vector2(-$HitBox.shape.size.x,-$HitBox.shape.size.y)/2 +i
+					objectCheck.target_position = Vector2(0,$HitBox.shape.size.y)
+
+			objectCheck.force_raycast_update()
+
+			while objectCheck.is_colliding():
+				if objectCheck.get_collider().has_method("physics_collision") and test_move(global_transform,i.rotated(angle).round()):
+					objectCheck.get_collider().physics_collision(self,i.rotated(angle).round())
+				# add exclusion, this loop will continue until there isn't any objects
+				objectCheck.add_exception(objectCheck.get_collider())
+				# update raycast
+				objectCheck.force_raycast_update()
 			
-			var col = move_and_collide(i,true,0)
-			if col:
-				if col.get_collider().has_method("physics_collision"):
-					col.get_collider().physics_collision(self,i.rotated(angle).round())
-#			# reset exceptions --Look
-#			objectCheck.clear_exceptions()
-#			match i:
-#				Vector2.DOWN:
-#					objectCheck.position = Vector2(-$HitBox.shape.size.x,$HitBox.shape.size.y+1)
-#					objectCheck.target_position = Vector2($HitBox.shape.size.x*2,0)
-#				Vector2.UP:
-#					objectCheck.position = Vector2(-$HitBox.shape.size.x,-$HitBox.shape.size.y-1)
-#					objectCheck.target_position = Vector2($HitBox.shape.size.x*2,0)
-#				Vector2.RIGHT:
-#					objectCheck.position = Vector2($HitBox.shape.size.x+1,-$HitBox.shape.size.y)
-#					objectCheck.target_position = Vector2(0,$HitBox.shape.size.y*2)
-#				Vector2.LEFT:
-#					objectCheck.position = Vector2(-$HitBox.shape.size.x-1,-$HitBox.shape.size.y)
-#					objectCheck.target_position = Vector2(0,$HitBox.shape.size.y*2)
-#
-#			objectCheck.force_raycast_update()
-#
-#			while objectCheck.is_colliding():
-#				if objectCheck.get_collider().has_method("physics_collision") and test_move(global_transform,i.rotated(angle).round()):
-#					objectCheck.get_collider().physics_collision(self,i.rotated(angle).round())
-#				# add exclusion, this loop will continue until there isn't any objects
-#				objectCheck.add_exception(objectCheck.get_collider())
-#				# update raycast
-#				objectCheck.force_raycast_update()
 			
 		# reload memory for layers
 		collision_mask = maskMemory

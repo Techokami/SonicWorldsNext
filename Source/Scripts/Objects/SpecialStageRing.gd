@@ -33,7 +33,7 @@ func _process(delta):
 			Global.nodeMemory.append(get_path())
 			
 			# fade to new scene
-			Global.main.change_scene_to_file(load("res://Scene/SpecialStage/SpecialStageResult.tscn"),"FadeOut","FadeOut","SetAdd",1,true,false)
+			Global.main.change_scene_to_file(load("res://Scene/SpecialStage/SpecialStageResult.tscn"),"WhiteOut","WhiteOut",1,true,false)
 			# wait for scene to fade
 			await Global.main.scene_faded
 			
@@ -73,6 +73,14 @@ func _process(delta):
 					player.collision_mask = maskMemory[1]
 				Global.timerActive = true
 				queue_free()
+	# Spinning ring logic
+	else:
+		# loop the spawn animation
+		if !$VisibleOnScreenNotifier2D.is_on_screen():
+			$Ring.play("spawn")
+		else:
+			if !$Ring.is_playing():
+				$Ring.play("default")
 
 func _on_Hitbox_body_entered(body):
 	# check if not active and that the player is player 1

@@ -6,7 +6,7 @@ var Piece = preload("res://Entities/Misc/BlockPiece.tscn")
 
 func physics_collision(body, hitVector):
 	# check if physics object is coming down and check for a bit where the player isn't on floor
-	if hitVector == Vector2.DOWN and body.get_collision_layer_value(19):
+	if hitVector == Vector2.DOWN and body.get_collision_layer_value(20):
 		# disable collision
 		$CollisionShape2D.disabled = true
 		$Sprite2D.visible = false

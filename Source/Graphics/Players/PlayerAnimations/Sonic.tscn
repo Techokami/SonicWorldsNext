@@ -945,6 +945,7 @@ vframes = 18
 [node name="DashDust" type="AnimatedSprite2D" parent="Sprite2D"]
 visible = false
 sprite_frames = SubResource("96")
+autoplay = "default"
 frame = 3
 offset = Vector2(-9, -4)
 

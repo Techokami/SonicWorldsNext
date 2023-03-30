@@ -210,7 +210,7 @@ func _process(delta):
 			$LevelClear/CounterWait.start(2)
 			await $LevelClear/CounterWait.timeout
 			# after clear, change to next level in Global.nextZone (you can set the next zone in the level script node)
-			Global.main.change_scene_to_file(Global.nextZone,"FadeOut","FadeOut","SetSub",1)
+			Global.main.change_scene_to_file(Global.nextZone,"FadeOut","FadeOut",1)
 	
 	# game over sequence
 	elif Global.gameOver and !gameOver:

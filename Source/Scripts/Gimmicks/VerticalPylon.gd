@@ -47,8 +47,8 @@ func _ready():
 	animator.play("main")
 	
 	var shape = RectangleShape2D.new()
-	shape.size.y = vert_size / 2
-	shape.size.x = 6
+	shape.size.y = vert_size
+	shape.size.x = 12
 	
 	collision.set_shape(shape)
 	collision.position = Vector2(0, -vert_size / 2 - bottomSprite.texture.get_height() / 2)
