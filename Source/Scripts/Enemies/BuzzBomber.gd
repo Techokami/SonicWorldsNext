@@ -31,6 +31,8 @@ func _process(delta):
 			editorOffset -= (speed*delta/travelDistance)*2
 		else:
 			editorOffset = 1
+	else:
+		super(delta)
 
 func _physics_process(delta):
 	if !Engine.is_editor_hint():

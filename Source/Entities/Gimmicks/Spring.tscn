@@ -1,8 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://4q0hpddgto2k"]
+[gd_scene load_steps=10 format=3 uid="uid://4q0hpddgto2k"]
 
 [ext_resource type="Texture2D" uid="uid://c7218f78hwl8o" path="res://Graphics/Gimmicks/springs_yellow.png" id="1"]
 [ext_resource type="Script" path="res://Scripts/Gimmicks/Spring.gd" id="2"]
-[ext_resource type="AudioStream" uid="uid://b3ieb8ay5vc2" path="res://Audio/SFX/Gimmicks/Springs.wav" id="3"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(32, 16)
@@ -156,10 +155,6 @@ region_rect = Rect2(0, 16, 32, 16)
 libraries = {
 "": SubResource("AnimationLibrary_3avuf")
 }
-
-[node name="sfxSpring" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3")
-bus = &"SFX"
 
 [node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
 scale = Vector2(2.5, 2.6)

@@ -1,8 +1,8 @@
+Camera2D
 TileMap
 RayCast2D
 CollisionShape2D
 StaticBody2D
-Camera2D
 Node
 AnimationPlayer
 AnimationTree

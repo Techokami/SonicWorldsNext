@@ -302,11 +302,6 @@ func _physics_process(delta):
 		
 		# loop through directions for collisions
 		for i in dirList:
-#			var col = move_and_collide(i*0.1,true,0)
-#			if col:
-#				if col.get_collider().has_method("physics_collision"):
-#					col.get_collider().physics_collision(self,i.rotated(angle).round())
-			# reset exceptions --Look
 			objectCheck.clear_exceptions()
 			match i:
 				Vector2.DOWN:

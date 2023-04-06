@@ -12,6 +12,8 @@ var speed = [10,16]
 
 var springTextures = [preload("res://Graphics/Gimmicks/springs_yellow.png"),preload("res://Graphics/Gimmicks/springs_red.png")]
 
+@export var springSound = preload("res://Audio/SFX/Gimmicks/Springs.wav")
+
 func _ready():
 	set_spring()
 
@@ -98,7 +100,8 @@ func physics_collision(body, hitVector):
 			body.horizontalLockTimer = (15.0/60.0) # lock for 15 frames
 			body.direction = sign(setMove.x)
 		$SpringAnimator.play(animList[animID])
-		$sfxSpring.play()
+		Global.play_sound(springSound)
+		
 		# Disable pole grabs
 		body.poleGrabID = self
 		return true
@@ -122,6 +125,6 @@ func _on_Diagonal_body_entered(body):
 		# play player animation
 		body.animator.play("springScrew")
 		body.animator.queue(curAnim)
-	$sfxSpring.play()
+	Global.play_sound(springSound)
 	# Disable pole grabs
 	body.poleGrabID = self

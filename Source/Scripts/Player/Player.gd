@@ -651,19 +651,7 @@ func _physics_process(delta):
 	
 	if (ground):
 		groundSpeed = movement.x
-	
-	# calculate wall objects
-	var getObjectHitCheck = false
-	# hit check is left by default (if moving right set to right)
-	var hitDirection = HITDIRECTION.LEFT
-	
-	# only check for collisions if moving (for pushing wall effect)
-	if movement.x != 0:
-		if movement.x > 0:
-			hitDirection = HITDIRECTION.RIGHT
-		# get hit check
-		getObjectHitCheck = objectHits[hitDirection]
-	
+		
 	# wall detection
 	if horizontalSensor.is_colliding() or is_on_wall():
 		# give pushingWall a buffer otherwise this just switches on and off
@@ -699,7 +687,7 @@ func _physics_process(delta):
 			else:
 				camLookAmount = 0
 		
-		# Camera3D Lock
+		# Camera Lock
 		
 		if camLockTime > 0:
 			camLockTime -= delta
@@ -1202,7 +1190,7 @@ func cam_update(forceMove = false):
 	# Camera3D vertical drag
 	var viewSize = get_viewport_rect().size
 	
-	#camera.drag_top_margin =    lerp(0,camDist.y/viewSize.y,cameraDragLerp) --LOOK
+	camera.drag_top_margin =    lerp(0.0,float(camDist.y/viewSize.y),float(cameraDragLerp))
 	camera.drag_bottom_margin = camera.drag_top_margin
 	
 	# Extra drag margin for rolling

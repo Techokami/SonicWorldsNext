@@ -166,9 +166,7 @@ script = ExtResource("3")
 [node name="Ring" type="AnimatedSprite2D" parent="."]
 z_index = 4
 sprite_frames = SubResource("14")
-animation = &"spawn"
-frame = 7
-frame_progress = 1.0
+frame = 2
 
 [node name="Hitbox" type="Area2D" parent="."]
 collision_layer = 0

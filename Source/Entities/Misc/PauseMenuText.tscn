@@ -1,17 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://bevjxswfnxfuq"]
+[gd_scene load_steps=3 format=3 uid="uid://bevjxswfnxfuq"]
 
 [ext_resource type="Script" path="res://Scripts/Misc/TextDisplay.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://ml62eqfe7avn" path="res://Graphics/Fonts/small_font.png" id="1_qaiyf"]
 
 [node name="TextPointer" type="Control"]
 layout_mode = 3
 anchors_preset = 0
 
 [node name="Text" type="Sprite2D" parent="."]
+texture = ExtResource("1_qaiyf")
 hframes = 10
 vframes = 4
 region_enabled = true
 script = ExtResource("1")
 string = "Pause"
+smallStringTexture = ExtResource("1_qaiyf")
 hasNumbers = true
 vAlign = 1
 hAlign = 1

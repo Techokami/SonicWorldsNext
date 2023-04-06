@@ -47,7 +47,7 @@ func _process(delta):
 			# move volume lerp to 1
 			volumeLerp = move_toward(volumeLerp,1,delta*volumeFadeSpeed)
 			# use volume lerp to set the effect volume
-			Global.music.volume_db = lerp(startVolumeLevel,setVolumeLevel,volumeLerp)
+			Global.music.volume_db = lerp(float(startVolumeLevel),float(setVolumeLevel),float(volumeLerp))
 			# copy the volume to other songs (you'll want to add yours here if you add more)
 			Global.effectTheme.volume_db = Global.music.volume_db
 			Global.drowning.volume_db = Global.music.volume_db

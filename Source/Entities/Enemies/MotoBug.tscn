@@ -1,50 +1,44 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=5 format=3 uid="uid://cqcgjcw101xxo"]
 
-[ext_resource path="res://Graphics/Enemies/Motobug.png" type="Texture2D" id=1]
-[ext_resource path="res://Scripts/Enemies/MotoBug.gd" type="Script" id=2]
+[ext_resource type="Texture2D" uid="uid://b2qm01hytxx4d" path="res://Graphics/Enemies/Motobug.png" id="1"]
+[ext_resource type="Script" path="res://Scripts/Enemies/MotoBug.gd" id="2"]
 
-[sub_resource type="RectangleShape2D" id=1]
-size = Vector2( 8, 14 )
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(16, 28)
 
-[sub_resource type="RectangleShape2D" id=2]
-size = Vector2( 20, 16 )
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(40, 32)
 
 [node name="Motobug" type="CharacterBody2D" groups=["Enemy"]]
 collision_layer = 16384
 collision_mask = 15
-script = ExtResource( 2 )
-__meta__ = {
-"_edit_vertical_guides_": [  ]
-}
+script = ExtResource("2")
 
 [node name="CollissionMask" type="CollisionShape2D" parent="."]
-shape = SubResource( 1 )
+shape = SubResource("1")
 
 [node name="DamageArea" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 528384
 
 [node name="HitBox" type="CollisionShape2D" parent="DamageArea"]
-modulate = Color( 1, 0, 0, 1 )
-shape = SubResource( 2 )
+modulate = Color(1, 0, 0, 1)
+shape = SubResource("2")
 
 [node name="Motobug" type="Sprite2D" parent="."]
-position = Vector2( 0, 1 )
-texture = ExtResource( 1 )
+position = Vector2(0, 1)
+texture = ExtResource("1")
 hframes = 2
 vframes = 2
 
 [node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
-visible = false
-position = Vector2( -1.90735e-06, -1.90735e-06 )
-scale = Vector2( 3.2, 3.2 )
-process_parent = true
-physics_process_parent = true
+z_index = -100
+position = Vector2(-1.90735e-06, -1.90735e-06)
+scale = Vector2(3.2, 3.2)
 
 [node name="FloorCheck" type="RayCast2D" parent="."]
-position = Vector2( -8, 14 )
-enabled = true
-target_position = Vector2( 0, 14 )
+position = Vector2(-8, 14)
+target_position = Vector2(0, 14)
 
 [connection signal="area_entered" from="DamageArea" to="." method="_on_DamageArea_area_entered"]
 [connection signal="body_entered" from="DamageArea" to="." method="_on_body_entered"]

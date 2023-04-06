@@ -1,7 +1,10 @@
 shader_type canvas_item;
+// NOTE: palette sizes has to be to the power of 2
 uniform float amount : hint_range(1,255,1);
-uniform sampler2D originalPalette;
-uniform sampler2D swapPalette;
+uniform sampler2D originalPalette : filter_nearest;
+uniform sampler2D swapPalette : filter_nearest;
+
+uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_nearest;
 
 void fragment(){
 	vec4 screen = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0);

@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://c30uceea18q1w"]
+[gd_scene load_steps=28 format=3 uid="uid://c30uceea18q1w"]
 
 [ext_resource type="Script" path="res://Scripts/Misc/NumeralDisplay.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://dloxtqer7p78l" path="res://Graphics/HUD/hud_lives.png" id="2_cfvjc"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://Scripts/Misc/TextDisplay.gd" id="9"]
 [ext_resource type="Texture2D" uid="uid://c7a17v25ap4ow" path="res://Graphics/HUD/LevelCards/ActCards.png" id="9_3i4aq"]
 [ext_resource type="Texture2D" uid="uid://bn4id4yr1lron" path="res://Graphics/HUD/hud_results_text.png" id="10_ddlv5"]
+[ext_resource type="Material" uid="uid://uh2c8jbp8qwd" path="res://Shaders/WaterPalette.tres" id="13_1ly2g"]
 [ext_resource type="AudioStream" uid="uid://dh4rsaka62ph4" path="res://Audio/SFX/Gimmicks/Switch.wav" id="16"]
 [ext_resource type="AudioStream" uid="uid://clgobastngtvy" path="res://Audio/SFX/Misc/Score.wav" id="17"]
 
@@ -963,14 +964,14 @@ vframes = 2
 [node name="PatternLeft" type="Control" parent="LevelCard"]
 anchors_preset = 0
 anchor_bottom = 1.0
-offset_bottom = 9888.0
+offset_bottom = 10560.0
 
 [node name="PatternLeft" type="TextureRect" parent="LevelCard/PatternLeft"]
 layout_mode = 0
 anchor_bottom = 1.0
 offset_left = -32.0
 offset_right = 32.0
-offset_bottom = 227456.0
+offset_bottom = 258464.0
 stretch_mode = 2
 
 [node name="RightRatio" type="Control" parent="LevelCard"]
@@ -985,7 +986,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_top = -32.0
-offset_bottom = 9600.0
+offset_bottom = 10272.0
 
 [node name="PatternRight" type="TextureRect" parent="LevelCard/RightRatio/PatternRight"]
 layout_mode = 0
@@ -993,7 +994,7 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 32.0
-offset_right = 26112.0
+offset_right = 27424.0
 offset_bottom = 64.0
 stretch_mode = 2
 
@@ -1135,10 +1136,10 @@ libraries = {
 bus = &"Music"
 
 [node name="Water" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="WaterOverlay" type="ColorRect" parent="Water"]
 visible = false
+material = ExtResource("13_1ly2g")
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5

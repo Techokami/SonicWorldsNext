@@ -20,6 +20,7 @@ func _physics_process(delta):
 		velocity.y = -7*60
 
 func _process(delta):
+	super(delta)
 	# animation states
 	if position.y > -192:
 		if velocity.y > 0:

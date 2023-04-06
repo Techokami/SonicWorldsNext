@@ -10,7 +10,7 @@ func physics_collision(body, _hitVector):
 	if body.currentState == body.STATES.JUMP: # set the state to air
 		body.set_state(body.STATES.AIR)
 	
-	$Bumper.frame = 0
+	$Bumper.play("default")
 	
 	Global.play_sound($BumperSFX.stream)
 	# score counter
