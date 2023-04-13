@@ -83,13 +83,13 @@ var physicsList = [
 
 var waterPhysicsList = [
 # 0 Sonic
-[0.046875/2, 0.5/2, 0.046875/2, 6*60/2, 0.09375/2, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
+[0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6.0*60.0/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
 # 1 Tails
-[0.046875/2, 0.5/2, 0.046875/2, 6*60/2, 0.09375/2, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
+[0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6*60/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
 # 2 Knuckles
-[0.046875/2, 0.5/2, 0.046875/2, 6*60/2, 0.09375/2, 0.046875*0.5, 0.125, 0.0625, 3*60, 2],
+[0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6*60/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3*60, 2],
 # 3 Shoes
-[0.046875/2, 0.5/2, 0.046875/2, 6*60/2, 0.09375/2, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
+[0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6*60/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
 # 4 Super Sonic
 [0.09375, 0.5, 0.046875, 5*60, 0.1875, 0.046875, 0.125, 0.0625, 3.5*60, 2],
 # 5 Super Tails
@@ -97,7 +97,7 @@ var waterPhysicsList = [
 # 6 Super Knuckles
 [0.046875, 0.375, 0.046875, 4*60, 0.09375, 0.0234375, 0.125, 0.0625, 3*60, 2],
 # 7 Shoes Knuckles (small jump)
-[0.046875/2, 0.5/2, 0.046875/2, 6*60/2, 0.09375/2, 0.046875*0.5, 0.125, 0.0625, 3*60, 2],
+[0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6*60/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3*60, 2],
 ]
 
 # ================
@@ -282,7 +282,8 @@ func _ready():
 			partner.inputActions = INPUTACTIONS_P2
 		
 		# set my character
-		character = Global.PlayerChar1-1
+		character = Global.PlayerChar1
+		character -= 1
 		
 		# set palettes
 		match (character):
@@ -406,7 +407,7 @@ func _process(delta):
 					partner.inputs[INPUTS.XINPUT] = sign(global_position.x - partner.global_position.x)
 				
 				# Jump if pushing a wall, slower then half speed, on a flat surface and is either normal or jumping
-				if (partner.currentState == STATES.NORMAL or partner.currentState == STATES.JUMP) and abs(partner.movement.x) < top/2 and snap_angle(partner.angle) == 0 or (partner.pushingWall and !pushingWall):
+				if (partner.currentState == STATES.NORMAL or partner.currentState == STATES.JUMP) and abs(partner.movement.x) < top/2.0 and snap_angle(partner.angle) == 0 or (partner.pushingWall and !pushingWall):
 					# check partners position, only jump ever 0.25 seconds (prevent jump spam)
 					if global_position.y+32 < partner.global_position.y and partner.inputs[INPUTS.ACTION] == 0 and partner.ground and ground and (fmod(Global.globalTimer,0.25)+delta > 0.25):
 						partner.inputs[INPUTS.ACTION] = 1
@@ -428,7 +429,7 @@ func _process(delta):
 			# if partner is locked, and stopped then do a spindash
 			# panic for 128 frames before letting go of spindash
 			if partner.horizontalLockTimer > 0 and partner.currentState == STATES.NORMAL and global_position.distance_to(partner.global_position) > 48:
-				partnerPanic = 128/60
+				partnerPanic = 128/60.0
 
 	# respawn mechanics
 	else:
@@ -558,20 +559,20 @@ func _process(delta):
 	# Animator
 	match(animator.current_animation):
 		"walk", "run", "peelOut":
-			var duration = floor(max(0,8.0-abs(groundSpeed/60)))
-			animator.speed_scale = (1.0/(duration+1))*(60/10)
+			var duration = floor(max(0,8.0-abs(groundSpeed/60.0)))
+			animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
 		"roll":
-			var duration = floor(max(0,4.0-abs(groundSpeed/60)))
-			animator.speed_scale = (1.0/(duration+1))*(60/10)
+			var duration = floor(max(0,4.0-abs(groundSpeed/60.0)))
+			animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
 		"push":
-			var duration = floor(max(0,8.0-abs(groundSpeed/60)) * 4)
-			animator.speed_scale = (1.0/(duration+1))*(60/10)
+			var duration = floor(max(0,8.0-abs(groundSpeed/60.0)) * 4)
+			animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
 		"spinDash": #animate at 60fps (fps were animated at 0.1 seconds)
-			animator.speed_scale = 60/10
+			animator.speed_scale = 60.0/10.0
 		"dropDash":
-			animator.speed_scale = 20/10
+			animator.speed_scale = 20.0/10.0
 		"climb":
-			animator.speed_scale = -movement.y/(40.0*(1+int(isSuper)))
+			animator.speed_scale = -movement.y/(40.0*(1.0+float(isSuper)))
 		_:
 			animator.speed_scale = 1
 	
@@ -656,7 +657,6 @@ func _physics_process(delta):
 	if horizontalSensor.is_colliding() or is_on_wall():
 		# give pushingWall a buffer otherwise this just switches on and off
 		pushingWall = 2
-		print(horizontalSensor.target_position)
 		if sign(movement.x) == sign(horizontalSensor.target_position.x):
 			movement.x = 0
 		
@@ -989,7 +989,7 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 		# Ring loss
 		if (shield == SHIELDS.NONE and rings > 0 and playerControl == 1):
 			sfx[9].play()
-			ringDisTime = 64/60 # ignore rings for 64 frames
+			ringDisTime = 64.0/60.0 # ignore rings for 64 frames
 			var ringCount = 0
 			var ringAngle = 101.25
 			var ringAlt = false

@@ -259,7 +259,7 @@ func _physics_process(delta):
 		if ground:
 			getVert = get_nearest_vertical_sensor()
 			if getVert:
-				angle = getVert.get_collision_normal().rotated(deg_to_rad(90)).angle()
+				angle = deg_to_rad(snapped(rad_to_deg(getVert.get_collision_normal().rotated(deg_to_rad(90)).angle()),0.001))
 		
 		# Emit Signals
 		if groundMemory != ground:
@@ -334,18 +334,18 @@ func _physics_process(delta):
 	emit_signal("positionChanged")
 	
 
-func snap_angle(angleSnap = 0):
-	var wrapAngle = wrapf(angleSnap,deg_to_rad(0),deg_to_rad(360))
+func snap_angle(angleSnap = 0.0):
+	var wrapAngle = wrapf(angleSnap,deg_to_rad(0.0),deg_to_rad(360.0))
 
-	if wrapAngle >= deg_to_rad(315) or wrapAngle <= deg_to_rad(45): # Floor
-		return deg_to_rad(0)
-	elif wrapAngle > deg_to_rad(45) and wrapAngle <= deg_to_rad(134): # Right Wall
-		return deg_to_rad(90)
-	elif wrapAngle > deg_to_rad(134) and wrapAngle <= deg_to_rad(225): # Ceiling
-		return deg_to_rad(180)
+	if wrapAngle >= deg_to_rad(315.0) or wrapAngle <= deg_to_rad(45.0): # Floor
+		return deg_to_rad(0.0)
+	elif wrapAngle > deg_to_rad(45.0) and wrapAngle <= deg_to_rad(134.0): # Right Wall
+		return deg_to_rad(90.0)
+	elif wrapAngle > deg_to_rad(134.0) and wrapAngle <= deg_to_rad(225.0): # Ceiling
+		return deg_to_rad(180.0)
 	
 	# Left Wall
-	return deg_to_rad(270)
+	return deg_to_rad(270.0)
 	
 
 func get_nearest_vertical_sensor():

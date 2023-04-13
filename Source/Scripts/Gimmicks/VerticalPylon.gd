@@ -41,9 +41,9 @@ func _ready():
 	# Sizes the gimmick to match with the vert_size parameter
 	last_size = vert_size
 	mainSprite.set_region_rect(Rect2(0, 0, 48, vert_size))
-	mainSprite.position = Vector2(0, -vert_size / 2 - bottomSprite.texture.get_height() / 2)
-	topSprite.position = mainSprite.position + Vector2(0, (-vert_size / 2) - (topSprite.texture.get_height() / 4))
-	bottomSprite.position = mainSprite.position + Vector2(0, (vert_size / 2) + (bottomSprite.texture.get_height() / 4) + 1)
+	mainSprite.position = Vector2(0, -vert_size / 2.0 - bottomSprite.texture.get_height() / 2.0)
+	topSprite.position = mainSprite.position + Vector2(0, (-vert_size / 2.0) - (topSprite.texture.get_height() / 4.0))
+	bottomSprite.position = mainSprite.position + Vector2(0, (vert_size / 2.0) + (bottomSprite.texture.get_height() / 4.0) + 1)
 	animator.play("main")
 	
 	var shape = RectangleShape2D.new()
@@ -51,7 +51,7 @@ func _ready():
 	shape.size.x = 12
 	
 	collision.set_shape(shape)
-	collision.position = Vector2(0, -vert_size / 2 - bottomSprite.texture.get_height() / 2)
+	collision.position = Vector2(0, -vert_size / 2.0 - bottomSprite.texture.get_height() / 2.0)
 		
 	pass # Replace with function body.
 	
@@ -116,16 +116,16 @@ func process_editor():
 	
 	last_size = vert_size
 	mainSprite.set_region_rect(Rect2(0, 0, 48, vert_size))
-	mainSprite.position = Vector2(0, -vert_size / 2 - bottomSprite.texture.get_height() / 2)
-	topSprite.position = mainSprite.position + Vector2(0, (-vert_size / 2) - (topSprite.texture.get_height() / 4))
-	bottomSprite.position = mainSprite.position + Vector2(0, (vert_size / 2) + (bottomSprite.texture.get_height() / 4) + 1)
+	mainSprite.position = Vector2(0, -vert_size / 2.0 - bottomSprite.texture.get_height() / 2.0)
+	topSprite.position = mainSprite.position + Vector2(0, (-vert_size / 2.0) - (topSprite.texture.get_height() / 4.0))
+	bottomSprite.position = mainSprite.position + Vector2(0, (vert_size / 2.0) + (bottomSprite.texture.get_height() / 4.0) + 1)
 
 	var shape = RectangleShape2D.new()
-	shape.size.y = vert_size / 2
+	shape.size.y = vert_size / 2.0
 	shape.size.x = 6
 	
 	collision.set_shape(shape)
-	collision.position = Vector2(0, -vert_size / 2 - bottomSprite.texture.get_height() / 2)
+	collision.position = Vector2(0, -vert_size / 2.0 - bottomSprite.texture.get_height() / 2.0)
 	
 func _process(delta):
 	if Engine.is_editor_hint():

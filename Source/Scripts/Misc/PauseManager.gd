@@ -91,7 +91,7 @@ func _input(event):
 				if event.is_action_pressed("gm_left") or event.is_action_pressed("gm_right"):
 					Global.zoomSize = clamp(Global.zoomSize+inputDir,zoomClamp[0],zoomClamp[1])
 					get_window().set_size(get_viewport().get_visible_rect().size*Global.zoomSize)
-		$PauseMenu/VBoxContainer.get_child(option+1).get_child(0).string = update_text(option+1)
+		$PauseMenu/VBoxContainer.get_child(option+1).get_child(0).text = update_text(option+1)
 	
 	
 	# menu button activate
@@ -112,7 +112,7 @@ func _input(event):
 				match(option): # Options
 					3: # full screen
 						get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (!((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN))) else Window.MODE_WINDOWED
-						$PauseMenu/VBoxContainer.get_child(option+1).get_child(0).string = update_text(option+1)
+						$PauseMenu/VBoxContainer.get_child(option+1).get_child(0).text = update_text(option+1)
 					4: # control menu
 						Global.save_settings()
 						set_menu(0)
@@ -171,9 +171,9 @@ func set_menu(menuID = 0):
 		$PauseMenu/VBoxContainer.add_child(text)
 		var getText = text.get_child(0)
 		if menuID != 1:
-			getText.string = menusText[menuID][i]
+			getText.text = menusText[menuID][i]
 		else: # options menu settings
-			getText.string = update_text(i)
+			getText.text = update_text(i)
 		if i == 0: # set title option to red
 			text.modulate = Color(1,0,0)
 		if i == 1: # set default option to yellow

@@ -24,9 +24,9 @@ func _process(delta):
 	else:
 		parent.animator.play("peelOut")
 	# how fast the animation plays
-	var duration = floor(max(0,8.0-abs(parent.groundSpeed/60)))
+	var duration = floor(max(0,8.0-abs(parent.groundSpeed/60.0)))
 	
-	parent.animator.speed_scale = (1.0/(duration+1))*(60/10)
+	parent.animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
 
 
 	# release

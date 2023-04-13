@@ -1,34 +1,21 @@
 [remap]
 
-importer="texture"
-type="CompressedTexture2D"
+importer="font_data_image"
+type="FontFile"
 uid="uid://2drcpm42k0ne"
-path="res://.godot/imported/largefont1.png-c6cd0deb29777a840ef692ac4483112d.ctex"
-metadata={
-"vram_texture": false
-}
+path="res://.godot/imported/largefont1.png-c6cd0deb29777a840ef692ac4483112d.fontdata"
 
 [deps]
 
 source_file="res://Graphics/HUD/LevelCards/font/largefont1.png"
-dest_files=["res://.godot/imported/largefont1.png-c6cd0deb29777a840ef692ac4483112d.ctex"]
+dest_files=["res://.godot/imported/largefont1.png-c6cd0deb29777a840ef692ac4483112d.fontdata"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
-compress/lossy_quality=0.7
-compress/hdr_compression=1
-compress/normal_map=0
-compress/channel_pack=0
-mipmaps/generate=false
-mipmaps/limit=-1
-roughness/mode=0
-roughness/src_normal=""
-process/fix_alpha_border=true
-process/premult_alpha=false
-process/normal_map_invert_y=false
-process/hdr_as_srgb=false
-process/hdr_clamp_exposure=false
-process/size_limit=0
-detect_3d/compress_to=1
+character_ranges=PackedStringArray("65-90", "32")
+columns=11
+rows=3
+image_margin=Rect2i(0, 0, 0, 0)
+character_margin=Rect2i(0, 0, 0, 0)
+fallbacks=[]
+compress=true

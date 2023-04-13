@@ -95,7 +95,7 @@ var upHeld = false
 # Were one or more players holding down on the last pass through process
 var downHeld = false
 # origin point of the platform, used for spring calculations... should probably always be 0
-var _origin = 0
+#var _origin = 0 #currently unused
 # y velocity of the platform, moves the platform, determines current energy in the platform when combined with difference between current position and origin
 var _yVel = 0
 # where the platform is in relation to its origin as a float value. Maybe unnecessary? Either way I'm using it.
@@ -221,7 +221,7 @@ func _process(delta):
 var skipFrames = 0
 
 # Invoked if this gimmick operates as a trampoline.
-func physics_process_trampoline_mode(delta, upHeld, downHeld):
+func physics_process_trampoline_mode(delta, isUpHeld, isDownHeld):
 	# Energy is the velocity energy plus the spring potential energy
 	var energy = 0.25 * (_yVel * _yVel) + _realY * _realY
 	var pivot = 0
@@ -241,11 +241,11 @@ func physics_process_trampoline_mode(delta, upHeld, downHeld):
 
 	# The players only have influence while acceleration and velocity are working together
 	# Also, holding against the direction of travel has no effect
-	if _realY > 0 and _yVel < 0 and upHeld:
+	if _realY > 0 and _yVel < 0 and isUpHeld:
 		_yVel = clamp(_yVel - (180.0 * delta), -maxVel, maxVel)
 		influenced = true
 		pass
-	elif _realY < 0 and _yVel > 0 and downHeld:
+	elif _realY < 0 and _yVel > 0 and isDownHeld:
 		_yVel = clamp(_yVel * (1 + (influence * delta)), -maxVel, maxVel)
 		_yVel = clamp(_yVel + (180.0 * delta), -maxVel, maxVel)
 		influenced = true

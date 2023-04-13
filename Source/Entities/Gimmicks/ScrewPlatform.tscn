@@ -61,7 +61,7 @@ texture = ExtResource("2")
 hframes = 2
 frame = 1
 
-[node name="Screw" type="CharacterBody2D" parent="."]
+[node name="Screw" type="AnimatableBody2D" parent="."]
 z_index = 5
 position = Vector2(0, -4)
 collision_layer = 2105359

@@ -84,7 +84,7 @@ func _physics_process(_delta):
 		pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	for i in players:
 		# If the player isn't on the bar, skip it.
 		if i.currentState != i.STATES.ANIMATION:

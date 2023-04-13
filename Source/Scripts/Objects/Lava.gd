@@ -21,7 +21,7 @@ func _process(delta):
 		update_graphics()
 	else:
 		# do that thing where the graphics move from side to side
-		$LavaTile.region_rect.position.x = cos(Global.globalTimer/2)*128
+		$LavaTile.region_rect.position.x = cos(Global.globalTimer/2.0)*128
 	
 	# Animation
 	var frameUpdate = (floor(frame+delta*animSpeed) != floor(frame))

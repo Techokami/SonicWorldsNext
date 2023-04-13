@@ -5,7 +5,7 @@
 [ext_resource type="AudioStream" uid="uid://b30ai1lqlh32u" path="res://Audio/Soundtrack/3. SWD_1Up.ogg" id="3"]
 [ext_resource type="PackedScene" uid="uid://c58ontqoxjuti" path="res://Scene/Presentation/PoweredByWorlds.tscn" id="4"]
 [ext_resource type="AudioStream" uid="uid://o4f15hnb5thp" path="res://Audio/Soundtrack/7. SWD_Drowning.ogg" id="5"]
-[ext_resource type="PackedScene" path="res://Entities/Misc/ControllerMenu.tscn" id="6"]
+[ext_resource type="PackedScene" uid="uid://b2xskcomtpo2x" path="res://Entities/Misc/ControllerMenu.tscn" id="6"]
 [ext_resource type="PackedScene" uid="uid://c1xhc4uh26inb" path="res://Entities/Misc/PauseMenu.tscn" id="7"]
 [ext_resource type="AudioStream" uid="uid://25oy5g80wsxu" path="res://Audio/Soundtrack/5. SWD_Boss.ogg" id="8"]
 
@@ -184,10 +184,6 @@ libraries = {
 }
 
 [node name="ControllerMenu" parent="GUI" instance=ExtResource("6")]
-layout_mode = 3
-anchors_preset = 15
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="Pause" parent="GUI" instance=ExtResource("7")]
 grow_horizontal = 2

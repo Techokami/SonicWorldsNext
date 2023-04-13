@@ -118,7 +118,7 @@ func _physics_process(delta):
 	
 
 # animation to play, time is how long the animation should play for until it stops
-func set_animation(animation = "default", time = 0):
+func set_animation(animation = "default", time = 0.0):
 	# check that the animation exists in the animationPriority list
 	if animationPriority.has(animation):
 		# if the animation exists then compare the position

@@ -1,105 +1,39 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://b2xskcomtpo2x"]
 
-[ext_resource path="res://Scripts/Misc/ControlBind.gd" type="Script" id=1]
-[ext_resource path="res://Scripts/Global/ControlerMenu.gd" type="Script" id=2]
-
-[sub_resource type="VisualShaderNodeTexture" id=12]
-source = 1
-
-[sub_resource type="VisualShaderNodeInput" id=13]
-input_name = "screen_uv"
-
-[sub_resource type="VisualShaderNodeFloatConstant" id=14]
-constant = 2.0
-
-[sub_resource type="VisualShaderNodeMix" id=15]
-default_input_values = [ 0, Vector3( 0, 0, 0 ), 1, Vector3( 1, 1, 1 ), 2, Vector3( 0.2, 0.2, 0.2 ) ]
-
-[sub_resource type="VisualShader" id=16]
-code = "shader_type canvas_item;
-
-
-
-void vertex() {
-// Output:0
-
-}
-
-void fragment() {
-// Input:3
-	vec3 n_out3p0 = vec3(SCREEN_UV, 0.0);
-
-// Scalar:4
-	float n_out4p0 = 2.000000;
-
-// Texture2D:2
-	vec3 n_out2p0;
-	float n_out2p1;
-	{
-		vec4 _tex_read = textureLod(SCREEN_TEXTURE, n_out3p0.xy, n_out4p0);
-		n_out2p0 = _tex_read.rgb;
-		n_out2p1 = _tex_read.a;
-	}
-
-// VectorMix:5
-	vec3 n_in5p0 = vec3(0.00000, 0.00000, 0.00000);
-	vec3 n_in5p2 = vec3(0.20000, 0.20000, 0.20000);
-	vec3 n_out5p0 = mix(n_in5p0, n_out2p0, n_in5p2);
-
-// Output:0
-	COLOR.rgb = n_out5p0;
-
-}
-
-void light() {
-// Output:0
-
-}
-"
-graph_offset = Vector2( -407, 109 )
-mode = 1
-flags/light_only = false
-nodes/fragment/0/position = Vector2( 680, 160 )
-nodes/fragment/2/node = SubResource( 12 )
-nodes/fragment/2/position = Vector2( 66, 156 )
-nodes/fragment/3/node = SubResource( 13 )
-nodes/fragment/3/position = Vector2( -200, 160 )
-nodes/fragment/4/node = SubResource( 14 )
-nodes/fragment/4/position = Vector2( -180, 240 )
-nodes/fragment/5/node = SubResource( 15 )
-nodes/fragment/5/position = Vector2( 360, 160 )
-nodes/fragment/connections = PackedInt32Array( 3, 0, 2, 0, 4, 0, 2, 1, 2, 0, 5, 1, 5, 0, 0, 0 )
-
-[sub_resource type="ShaderMaterial" id=11]
-shader = SubResource( 16 )
+[ext_resource type="Script" path="res://Scripts/Misc/ControlBind.gd" id="1"]
+[ext_resource type="Script" path="res://Scripts/Global/ControlerMenu.gd" id="2"]
 
 [node name="ControllerMenu" type="Control"]
 visible = false
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 2 )
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2")
 
 [node name="Background" type="ColorRect" parent="."]
-material = SubResource( 11 )
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.121569, 0.121569, 0.121569, 1 )
+color = Color(0.121569, 0.121569, 0.121569, 1)
 
 [node name="Title" type="Label" parent="."]
+layout_mode = 0
 anchor_right = 1.0
 offset_bottom = 14.0
 text = "Controls"
-align = 1
 
 [node name="CurrentMapList" type="Label" parent="."]
+layout_mode = 0
 anchor_right = 1.0
 offset_top = 15.0973
 offset_bottom = 29.0973
-align = 1
-autowrap = true
 uppercase = true
 
 [node name="ClearInfo" type="Label" parent="."]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -107,9 +41,9 @@ anchor_bottom = 1.0
 offset_left = -160.0
 offset_top = -14.0
 offset_right = 160.0
-align = 1
 
 [node name="Confirm" type="Button" parent="."]
+layout_mode = 0
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 5.0
@@ -119,10 +53,11 @@ offset_bottom = -7.0
 focus_next = NodePath("../Control/Left")
 focus_previous = NodePath("../PlayerSwap")
 text = "OK"
-script = ExtResource( 1 )
+script = ExtResource("1")
 bind = ""
 
 [node name="PlayerSwap" type="Button" parent="."]
+layout_mode = 0
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -134,10 +69,11 @@ offset_bottom = -4.60471
 focus_next = NodePath("../Confirm")
 focus_previous = NodePath("../SaveInputs")
 text = "Swap"
-script = ExtResource( 1 )
+script = ExtResource("1")
 bind = ""
 
 [node name="Label" type="Label" parent="PlayerSwap"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -23.5
@@ -145,10 +81,9 @@ offset_top = -16.0315
 offset_right = 23.5
 offset_bottom = -2.03149
 text = "Player 1"
-align = 1
-valign = 1
 
 [node name="SaveInputs" type="Button" parent="."]
+layout_mode = 0
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -160,10 +95,11 @@ offset_bottom = -44.5801
 focus_next = NodePath("../PlayerSwap")
 focus_previous = NodePath("../Defaults")
 text = "Save"
-script = ExtResource( 1 )
+script = ExtResource("1")
 bind = ""
 
 [node name="Defaults" type="Button" parent="."]
+layout_mode = 0
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -175,10 +111,11 @@ offset_bottom = -69.1848
 focus_next = NodePath("../SaveInputs")
 focus_previous = NodePath("../Action3")
 text = "Default"
-script = ExtResource( 1 )
+script = ExtResource("1")
 bind = ""
 
 [node name="Pause" type="Button" parent="."]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.908
 anchor_right = 0.5
@@ -190,10 +127,11 @@ offset_bottom = -0.0282135
 focus_next = NodePath("../Action")
 focus_previous = NodePath("../Control/Right")
 text = "_"
-script = ExtResource( 1 )
+script = ExtResource("1")
 bind = "gm_pause"
 
 [node name="Label" type="Label" parent="Pause"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -203,10 +141,9 @@ offset_top = -38.6047
 offset_right = 20.0
 offset_bottom = -24.6047
 text = "Start"
-align = 1
-valign = 1
 
 [node name="Action" type="Button" parent="."]
+layout_mode = 0
 anchor_left = 0.916
 anchor_top = 0.5
 anchor_right = 0.916
@@ -218,9 +155,10 @@ offset_bottom = 28.8152
 focus_next = NodePath("../Action2")
 focus_previous = NodePath("../Pause")
 text = "_"
-script = ExtResource( 1 )
+script = ExtResource("1")
 
 [node name="Label" type="Label" parent="Action"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -230,10 +168,9 @@ offset_top = -38.6047
 offset_right = 20.0
 offset_bottom = -24.6047
 text = "A"
-align = 1
-valign = 1
 
 [node name="Action2" type="Button" parent="."]
+layout_mode = 0
 anchor_left = 0.916
 anchor_top = 0.5
 anchor_right = 0.916
@@ -245,10 +182,11 @@ offset_bottom = 7.79282
 focus_next = NodePath("../Action3")
 focus_previous = NodePath("../Action")
 text = "_"
-script = ExtResource( 1 )
+script = ExtResource("1")
 bind = "gm_action2"
 
 [node name="Label" type="Label" parent="Action2"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -258,10 +196,9 @@ offset_top = -38.6047
 offset_right = 20.0
 offset_bottom = -24.6047
 text = "B"
-align = 1
-valign = 1
 
 [node name="Action3" type="Button" parent="."]
+layout_mode = 0
 anchor_left = 0.916
 anchor_top = 0.5
 anchor_right = 0.916
@@ -273,10 +210,11 @@ offset_bottom = -14.4909
 focus_next = NodePath("../Defaults")
 focus_previous = NodePath("../Action2")
 text = "_"
-script = ExtResource( 1 )
+script = ExtResource("1")
 bind = "gm_action3"
 
 [node name="Label" type="Label" parent="Action3"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -286,10 +224,9 @@ offset_top = -38.6047
 offset_right = 20.0
 offset_bottom = -24.6047
 text = "C"
-align = 1
-valign = 1
 
 [node name="Control" type="Control" parent="."]
+anchors_preset = 0
 anchor_left = 0.024
 anchor_top = 0.25
 anchor_right = 0.38
@@ -300,6 +237,7 @@ offset_right = 0.399994
 offset_bottom = -8.00002
 
 [node name="Up" type="Button" parent="Control"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -22.0
@@ -308,10 +246,11 @@ offset_bottom = 20.0
 focus_next = NodePath("../Down")
 focus_previous = NodePath("../Left")
 text = "_"
-script = ExtResource( 1 )
+script = ExtResource("1")
 bind = "gm_up"
 
 [node name="Label" type="Label" parent="Control/Up"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -321,10 +260,9 @@ offset_top = -38.6047
 offset_right = 20.0
 offset_bottom = -24.6047
 text = "UP"
-align = 1
-valign = 1
 
 [node name="Down" type="Button" parent="Control"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -335,10 +273,11 @@ offset_right = 22.0
 focus_next = NodePath("../Right")
 focus_previous = NodePath("../Up")
 text = "_"
-script = ExtResource( 1 )
+script = ExtResource("1")
 bind = "gm_down"
 
 [node name="Label" type="Label" parent="Control/Down"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -348,10 +287,9 @@ offset_top = -36.0486
 offset_right = 30.0
 offset_bottom = -22.0486
 text = "DOWN"
-align = 1
-valign = 1
 
 [node name="Right" type="Button" parent="Control"]
+layout_mode = 0
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
@@ -362,10 +300,11 @@ offset_bottom = 10.0
 focus_next = NodePath("../../Pause")
 focus_previous = NodePath("../Down")
 text = "_"
-script = ExtResource( 1 )
+script = ExtResource("1")
 bind = "gm_right"
 
 [node name="Label" type="Label" parent="Control/Right"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -375,10 +314,9 @@ offset_top = -36.0486
 offset_right = 30.0
 offset_bottom = -22.0486
 text = "RIGHT"
-align = 1
-valign = 1
 
 [node name="Left" type="Button" parent="Control"]
+layout_mode = 0
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_top = -10.0
@@ -387,10 +325,11 @@ offset_bottom = 10.0
 focus_next = NodePath("../Up")
 focus_previous = NodePath("../../Confirm")
 text = "_"
-script = ExtResource( 1 )
+script = ExtResource("1")
 bind = "gm_left"
 
 [node name="Label" type="Label" parent="Control/Left"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -400,8 +339,6 @@ offset_top = -36.0486
 offset_right = 30.0
 offset_bottom = -22.0486
 text = "LEFT"
-align = 1
-valign = 1
 
 [connection signal="pressed" from="Confirm" to="." method="_on_Confirm_pressed"]
 [connection signal="pressed" from="PlayerSwap" to="." method="_on_PlayerSwap_pressed"]

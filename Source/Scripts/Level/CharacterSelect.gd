@@ -17,7 +17,7 @@ var levelID = 0
 func _ready():
 	Global.music.stream = music
 	Global.music.play()
-	$UI/Labels/Control/Character.string = characterLabels[characterID]
+	$UI/Labels/Control/Character.text = characterLabels[characterID]
 	if nextZone != null:
 		Global.nextZone = nextZone
 
@@ -33,8 +33,8 @@ func _input(event):
 		if Input.is_action_just_pressed("gm_up"):
 			levelID = wrapi(levelID-1,0,levelLabels.size())
 		
-		$UI/Labels/Control/Character.string = characterLabels[characterID]
-		$UI/Labels/Control/Level.string = levelLabels[levelID]
+		$UI/Labels/Control/Character.text = characterLabels[characterID]
+		$UI/Labels/Control/Level.text = levelLabels[levelID]
 		
 		# turn on and off visibility of the characters based on the current selection
 		match(characterID):

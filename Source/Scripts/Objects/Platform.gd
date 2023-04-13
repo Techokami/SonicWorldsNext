@@ -19,8 +19,8 @@ var platformDepth = 4
 func _ready():
 	# Change platform shape
 	$Platform/Shape3D.shape.size.x = platformSprite.get_size().x
-	$Platform/Shape3D.shape.size.y = platformDepth/2
-	$Platform/Shape3D.position.y = -(platformSprite.get_size().y/2)+(platformDepth/2)
+	$Platform/Shape3D.shape.size.y = platformDepth/2.0
+	$Platform/Shape3D.position.y = -(platformSprite.get_size().y/2.0)+(platformDepth/2.0)
 	if !Engine.is_editor_hint():
 		# Change platform sprite texture
 		$Platform/Sprite2D.texture = platformSprite
@@ -31,8 +31,8 @@ func _ready():
 func _process(delta):
 	if Engine.is_editor_hint():
 		$Platform/Shape3D.shape.size.x = platformSprite.get_size().x
-		$Platform/Shape3D.shape.size.y = platformDepth/2
-		$Platform/Shape3D.position.y = -(platformSprite.get_size().y/2)+(platformDepth/2)
+		$Platform/Shape3D.shape.size.y = platformDepth/2.0
+		$Platform/Shape3D.position.y = -(platformSprite.get_size().y/2.0)+(platformDepth/2.0)
 		queue_redraw()
 		# Offset timer for the editor to display
 		offsetTimer = wrapf(offsetTimer+(delta*speed),0,PI*2)

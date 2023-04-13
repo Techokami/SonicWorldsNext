@@ -35,12 +35,12 @@ var drawAtPosQueue = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	_anim_timer = 0
-	spriteFrameWidth = spriteTexture.get_width() / spriteFrameCount
+	spriteFrameWidth = float(spriteTexture.get_width()) / float(spriteFrameCount)
 	spriteFrameHeight = spriteTexture.get_height()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	spriteFrameWidth = spriteTexture.get_width() / spriteFrameCount
+	spriteFrameWidth = float(spriteTexture.get_width()) / float(spriteFrameCount)
 	spriteFrameHeight = spriteTexture.get_height()
 	
 	if Engine.is_editor_hint():

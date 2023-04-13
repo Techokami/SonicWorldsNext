@@ -152,7 +152,7 @@ func draw_tool():
 	for n in ringsPerSide:
 		var yOffset = 0
 		if interpolationMode == INTERPOLATION_MODE.linear:
-			yOffset = (ringsPerSide - n - 1) * (platformOffset) / (ringsPerSide - 1)
+			yOffset = (ringsPerSide - n - 1.0) * (platformOffset) / (ringsPerSide - 1.0)
 			pass
 		elif interpolationMode == INTERPOLATION_MODE.center_parabolic:
 			# vertex is at the platform
@@ -166,7 +166,7 @@ func draw_tool():
 		draw_at_pos_internal(Vector2(-ringsMargin - (n * ringsBetween), yOffset))
 		draw_at_pos_internal(Vector2(ringsMargin + (n * ringsBetween), yOffset))
 		
-	draw_texture(platformSprite, Vector2(0 - platformSprite.get_width() / 2 , 0 - (platformSprite.get_height() / 2) + platformOffset))
+	draw_texture(platformSprite, Vector2(0 - platformSprite.get_width() / 2.0 , 0 - (platformSprite.get_height() / 2.0) + platformOffset))
 
 	return
 
@@ -198,4 +198,4 @@ func _draw():
 		draw_at_pos_internal(Vector2(-ringsMargin - (n * ringsBetween), yOffset))
 		draw_at_pos_internal(Vector2( ringsMargin + (n * ringsBetween), yOffset))
 		
-	draw_texture(platformSprite, Vector2(0 - platformSprite.get_width() / 2 , 0 - (platformSprite.get_height() / 2) + body.position.y))
+	draw_texture(platformSprite, Vector2(0 - platformSprite.get_width() / 2.0 , 0 - (platformSprite.get_height() / 2.0) + body.position.y))

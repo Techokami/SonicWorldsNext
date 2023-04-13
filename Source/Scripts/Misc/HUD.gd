@@ -51,8 +51,8 @@ func _ready():
 		# set level card
 		$LevelCard.visible = true
 		# set level name strings
-		$LevelCard/Banner/LevelName.string = zoneName
-		$LevelCard/Banner/Zone.string = zone
+		$LevelCard/Banner/LevelName.text = zoneName
+		$LevelCard/Banner/Zone.text = zone
 		# set act graphic
 		$LevelCard/Banner/Act.frame = act-1
 		# make visible if act isn't 0 (0 will just be zone)
@@ -87,27 +87,27 @@ func _ready():
 		get_tree().paused = false
 	Global.timerActive = true
 	# replace "sonic" in stage clear to match the player clear string
-	$LevelClear/Passed.string = $LevelClear/Passed.string.replace("sonic",characterNames[Global.PlayerChar1-1])
+	$LevelClear/Passed.text = $LevelClear/Passed.text.replace("sonic",characterNames[Global.PlayerChar1-1])
 	# set the act clear frame
 	$LevelClear/Act.frame = act-1
 
 func _process(delta):
 	# set score string to match global score with leading 0s
-	scoreText.string = "%6d" % Global.score
+	scoreText.text = "%6d" % Global.score
 	
 	# clamp time so that it won't go to 10 minutes
 	var timeClamp = min(Global.levelTime,Global.maxTime-1)
 	# set time text, format it to have a leadin 0 so that it's always 2 digits
-	timeText.string = "%2d" % floor(timeClamp/60) + ":" + str(fmod(floor(timeClamp),60)).pad_zeros(2)
+	timeText.text = "%2d" % floor(timeClamp/60) + ":" + str(fmod(floor(timeClamp),60)).pad_zeros(2)
 	# uncomment below (and remove above line) for mili seconds
-	#timeText.string = "%2d" % floor(timeClamp/60) + ":" + str(fmod(floor(timeClamp),60)).pad_zeros(2) + ":" + str(fmod(floor(timeClamp*100),100)).pad_zeros(2)
+	#timeText.text = "%2d" % floor(timeClamp/60) + ":" + str(fmod(floor(timeClamp),60)).pad_zeros(2) + ":" + str(fmod(floor(timeClamp*100),100)).pad_zeros(2)
 	
 	# cehck that there's player, if there is then track the focus players ring count
 	if (Global.players.size() > 0):
-		ringText.string = "%3d" % Global.players[focusPlayer].rings
+		ringText.text = "%3d" % Global.players[focusPlayer].rings
 	
 	# track lives with leading 0s
-	lifeText.string = "%2d" % Global.lives
+	lifeText.text = "%2d" % Global.lives
 	
 	# Water Overlay
 	
@@ -175,12 +175,12 @@ func _process(delta):
 			
 			# show level clear elements
 			$LevelClear.visible = true
-			$LevelClear/Tally/ScoreNumber.string = scoreText.string
+			$LevelClear/Tally/ScoreNumber.text = scoreText.text
 			$LevelClear/Animator.play("LevelClear")
 			
 			# set bonuses
 			ringBonus = floor(Global.players[focusPlayer].rings)*100
-			$LevelClear/Tally/RingNumbers.string = "%6d" % ringBonus
+			$LevelClear/Tally/RingNumbers.text = "%6d" % ringBonus
 			timeBonus = 0
 			# bonus time table
 			var bonusTable = [
@@ -199,7 +199,7 @@ func _process(delta):
 				if Global.levelTime < i[0]:
 					timeBonus = i[1]
 			# set bonus text for time
-			$LevelClear/Tally/TimeNumbers.string = "%6d" % timeBonus
+			$LevelClear/Tally/TimeNumbers.text = "%6d" % timeBonus
 			# wait for counter wait time to count down
 			$LevelClear/CounterWait.start()
 			await $LevelClear/CounterWait.timeout
@@ -265,7 +265,7 @@ func _on_CounterCount_timeout():
 		# emit tally clear signal
 		emit_signal("tally_clear")
 	# set the level clear strings to the bonuses
-	$LevelClear/Tally/ScoreNumber.string = scoreText.string
-	$LevelClear/Tally/TimeNumbers.string = "%6d" % timeBonus
-	$LevelClear/Tally/RingNumbers.string = "%6d" % ringBonus
+	$LevelClear/Tally/ScoreNumber.text = scoreText.text
+	$LevelClear/Tally/TimeNumbers.text = "%6d" % timeBonus
+	$LevelClear/Tally/RingNumbers.text = "%6d" % ringBonus
 	

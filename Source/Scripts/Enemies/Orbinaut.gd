@@ -45,7 +45,7 @@ func _physics_process(delta):
 			# rotate the orbs based on spinOffset
 			for i in range(orbList.size()):
 				var getOrb = orbList[i]
-				getOrb.position = (Vector2.RIGHT*distance).rotated(deg_to_rad(spinOffset+((360/orbs)*i)))
+				getOrb.position = (Vector2.RIGHT*distance).rotated(deg_to_rad(spinOffset+((360.0/orbs)*i)))
 		# Launch base behaviour
 		else:
 			# check player exists
@@ -62,4 +62,4 @@ func _physics_process(delta):
 				spinOffset += speed*5*delta*sign(abs(velocity.x))*$orbinaut.scale.x
 				for i in range(orbList.size()):
 					var getOrb = orbList[i]
-					getOrb.position = (Vector2.RIGHT*distance).rotated(deg_to_rad(spinOffset+((360/orbs)*i)))
+					getOrb.position = (Vector2.RIGHT*distance).rotated(deg_to_rad(spinOffset+((360.0/orbs)*i)))

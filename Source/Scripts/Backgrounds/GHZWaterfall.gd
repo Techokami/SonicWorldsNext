@@ -51,7 +51,7 @@ func _ready():
 	
 	$WaterfallTop.set_texture(topTexture)
 	
-	$WaterfallTop.set_region_rect(Rect2(0, 0, topTexture.get_width() * width, topTexture.get_height() / topFrames))
+	$WaterfallTop.set_region_rect(Rect2(0, 0, topTexture.get_width() * width, topTexture.get_height() / float(topFrames)))
 	$WaterfallBody.set_region_rect(Rect2(0, 0, topTexture.get_width() * width, bodyTextures[0].get_height() * height))
 	
 func process_editor(_delta):
@@ -67,7 +67,7 @@ func process_editor(_delta):
 		# Note that the top texture sets its animation frame by adjusting the y starting position of the regionRect.
 		# That's why it is able to animate with just one texture -- the body of the waterfall has to be able to tile
 		# in both directions, so that trick won't work there.
-		$WaterfallTop.set_region_rect(Rect2(0, 0, topTexture.get_width() * width, topTexture.get_height() / topFrames))
+		$WaterfallTop.set_region_rect(Rect2(0, 0, topTexture.get_width() * width, topTexture.get_height() / float(topFrames)))
 		$WaterfallBody.set_region_rect(Rect2(0, 0, topTexture.get_width() * width, bodyTextures[0].get_height() * height))
 			
 		# Reset our tracking variables
@@ -77,7 +77,7 @@ func process_editor(_delta):
 	pass
 	
 func advance_frame_top():
-	$WaterfallTop.set_region_rect(Rect2(0, curFrame * topTexture.get_height() / topFrames, topTexture.get_width() * width, topTexture.get_height() / topFrames))
+	$WaterfallTop.set_region_rect(Rect2(0, curFrame * topTexture.get_height() / float(topFrames), topTexture.get_width() * width, topTexture.get_height() / float(topFrames)))
 	
 func advance_frame_body():
 	if bodyTextures.size() == 0:

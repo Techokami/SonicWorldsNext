@@ -1,7 +1,6 @@
-[gd_scene load_steps=10 format=3 uid="uid://c58ontqoxjuti"]
+[gd_scene load_steps=9 format=3 uid="uid://c58ontqoxjuti"]
 
-[ext_resource type="Texture2D" uid="uid://dc7feu83eanaq" path="res://Graphics/HUD/LevelCards/font/smallfont4.png" id="1"]
-[ext_resource type="Script" path="res://Scripts/Misc/TextDisplay.gd" id="2"]
+[ext_resource type="FontFile" uid="uid://btb3lh3cpnc6x" path="res://Graphics/Fonts/mid_font.png" id="2_84rl6"]
 [ext_resource type="AudioStream" uid="uid://botxtfwf3ns1j" path="res://Audio/SFX/Misc/SpecialWarp.wav" id="3"]
 [ext_resource type="Texture2D" uid="uid://cmtdertavy6i4" path="res://Graphics/title/SonicWorldsLogo.png" id="4"]
 [ext_resource type="AudioStream" uid="uid://cy0i0dbqpb5eu" path="res://Audio/SFX/Misc/Emerald.wav" id="5"]
@@ -63,29 +62,19 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PoweredBy" type="Control" parent="CanvasLayer/Labels"]
-anchors_preset = 0
-anchor_left = 0.5
-anchor_top = 0.067
-anchor_right = 0.5
-anchor_bottom = 0.067
-offset_top = -2.008
-offset_bottom = nan
+[node name="PoweredBy" type="Label" parent="CanvasLayer/Labels"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 8.0
+offset_bottom = -8.0
 grow_horizontal = 2
-grow_vertical = 0
-
-[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/Labels/PoweredBy"]
-position = Vector2(0, -8)
-texture = ExtResource("1")
-hframes = 10
-vframes = 4
-region_enabled = true
-script = ExtResource("2")
-string = "POWERED BY"
-smallStringTexture = ExtResource("1")
-hasNumbers = true
-vAlign = 2
-hAlign = 1
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_84rl6")
+text = "POWERED BY"
+horizontal_alignment = 1
+uppercase = true
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
 anchors_preset = 8

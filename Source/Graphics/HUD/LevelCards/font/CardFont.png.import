@@ -1,0 +1,21 @@
+[remap]
+
+importer="font_data_image"
+type="FontFile"
+uid="uid://2drcpm42k0ne"
+path="res://.godot/imported/CardFont.png-d96bf0c1281c8dfd415c30d61d9a2db8.fontdata"
+
+[deps]
+
+source_file="res://Graphics/HUD/LevelCards/font/CardFont.png"
+dest_files=["res://.godot/imported/CardFont.png-d96bf0c1281c8dfd415c30d61d9a2db8.fontdata"]
+
+[params]
+
+character_ranges=PackedStringArray("65-90", "32", "48-57", "97-122")
+columns=11
+rows=6
+image_margin=Rect2i(0, 0, 0, 0)
+character_margin=Rect2i(0, 0, 0, 0)
+fallbacks=[]
+compress=true

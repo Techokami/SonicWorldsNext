@@ -8,7 +8,7 @@ func _physics_process(_delta):
 	colCheck = false
 
 # Collision check
-func physics_collision(body, hitVector):
+func physics_collision(_body, hitVector):
 	if hitVector.is_equal_approx((Vector2.DOWN*global_scale.sign()).rotated(deg_to_rad(snapped(global_rotation_degrees,90)))):
 		colCheck = true
 		get_parent().activate()

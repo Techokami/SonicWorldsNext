@@ -1,3 +1,6 @@
+Label
+RichTextLabel
+AnimatableBody2D
 Camera2D
 TileMap
 RayCast2D

@@ -55,12 +55,12 @@ func _physics_process(delta):
 					if averagePlayerOffset == 0:
 						averagePlayerOffset = i.global_position.x
 					# get closest to center
-					elif abs(averagePlayerOffset-(global_position.x+(length/2*16))) > abs(i.global_position.x-(global_position.x+(length/2*16))):
+					elif abs(averagePlayerOffset-(global_position.x+(length/2.0*16.0))) > abs(i.global_position.x-(global_position.x+(length/2.0*16.0))):
 						averagePlayerOffset = lerp(averagePlayerOffset,i.global_position.x,0.5)
 			
-			$Bridge.position.y = max(floor(length/2)*2-snapped(abs(global_position.x+(length*8)-averagePlayerOffset)/8,2-int(smoothDrop)),0)
-			dropIndex = max(1,floor((averagePlayerOffset-global_position.x)/16)+1)
-			if (dropIndex <= length/2):
+			$Bridge.position.y = max(floor(length/2.0)*2.0-snapped(abs(global_position.x+(length*8.0)-averagePlayerOffset)/8.0,2-int(smoothDrop)),0)
+			dropIndex = max(1,floor((averagePlayerOffset-global_position.x)/16.0)+1)
+			if (dropIndex <= length/2.0):
 				maxDepression = dropIndex*2 #Working from the left
 			else:
 				maxDepression = ((length-dropIndex)+1)*2 #Working from the right
