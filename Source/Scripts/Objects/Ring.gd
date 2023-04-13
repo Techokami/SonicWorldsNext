@@ -1,6 +1,7 @@
 extends Node2D
+const MAX_LIFETIME = 256.0/60.0
 var scattered = false
-var lifetime = 256.0/60.0
+var lifetime = MAX_LIFETIME
 var velocity = Vector2.ZERO
 var player
 var magnet = null
@@ -13,7 +14,7 @@ func _process(delta):
 	# scattered logic
 	if (scattered):
 		z_index = 7
-		$RingSprite.speed_scale = lifetime+1
+		$RingSprite.speed_scale = lifetime / MAX_LIFETIME + 1
 		if (lifetime > 0):
 			lifetime -= delta
 		else:
