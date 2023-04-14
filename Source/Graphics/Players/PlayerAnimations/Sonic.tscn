@@ -939,17 +939,16 @@ libraries = {
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 5
 material = ExtResource("1")
+position = Vector2(0, -1)
 texture = ExtResource("2")
 offset = Vector2(0, -4)
 hframes = 16
 vframes = 18
-frame = 48
 
 [node name="DashDust" type="AnimatedSprite2D" parent="Sprite2D"]
 visible = false
 sprite_frames = SubResource("96")
 autoplay = "default"
-frame = 3
 offset = Vector2(-9, -4)
 
 [node name="CrouchBox" type="CollisionShape2D" parent="."]

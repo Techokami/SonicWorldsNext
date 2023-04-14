@@ -14,7 +14,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sonic:region_rect")
+tracks/0/path = NodePath("../Control2/Sonic:region_rect")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -26,7 +26,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Tails:region_rect")
+tracks/1/path = NodePath("../Control2/Tails:region_rect")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -38,7 +38,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Tails/TailsTails:region_rect")
+tracks/2/path = NodePath("../Control2/Tails/TailsTails:region_rect")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -50,7 +50,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Knuckles:region_rect")
+tracks/3/path = NodePath("../Control2/Knuckles:region_rect")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -65,7 +65,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sonic:region_rect")
+tracks/0/path = NodePath("../Control2/Sonic:region_rect")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -77,7 +77,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Tails:region_rect")
+tracks/1/path = NodePath("../Control2/Tails:region_rect")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -89,7 +89,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Tails/TailsTails:region_rect")
+tracks/2/path = NodePath("../Control2/Tails/TailsTails:region_rect")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -101,7 +101,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Knuckles:region_rect")
+tracks/3/path = NodePath("../Control2/Knuckles:region_rect")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -144,44 +144,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="CharacterOrigin" type="Node2D" parent="UI/Labels"]
-position = Vector2(160, 97)
-
-[node name="Sonic" type="Sprite2D" parent="UI/Labels/CharacterOrigin"]
-z_index = 3
-position = Vector2(6, 0)
-texture = ExtResource("1")
-region_enabled = true
-region_rect = Rect2(731, 9, 24, 39)
-
-[node name="Tails" type="Sprite2D" parent="UI/Labels/CharacterOrigin"]
-z_index = 2
-position = Vector2(-12, 2)
-texture = ExtResource("4")
-region_enabled = true
-region_rect = Rect2(676, 205, 33, 35)
-
-[node name="TailsTails" type="Sprite2D" parent="UI/Labels/CharacterOrigin/Tails"]
-z_index = -1
-position = Vector2(-11, 6)
-texture = ExtResource("4")
-region_enabled = true
-region_rect = Rect2(488, 25, 16, 22)
-
-[node name="Knuckles" type="Sprite2D" parent="UI/Labels/CharacterOrigin"]
-visible = false
-z_index = 3
-position = Vector2(-3, 0)
-texture = ExtResource("7")
-region_enabled = true
-region_rect = Rect2(252, 17, 32, 39)
-
-[node name="CharacterAnimations" type="AnimationPlayer" parent="UI/Labels/CharacterOrigin"]
-autoplay = "Animate"
-libraries = {
-"": SubResource("AnimationLibrary_wio08")
-}
 
 [node name="Control" type="Control" parent="UI/Labels"]
 layout_mode = 1
@@ -234,6 +196,51 @@ position = Vector2(60, 4.5)
 texture = ExtResource("9")
 hframes = 2
 frame = 1
+
+[node name="CharacterOrigin" type="Control" parent="UI/Labels"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Sonic" type="Sprite2D" parent="UI/Labels/CharacterOrigin"]
+z_index = 3
+position = Vector2(6, -15.5)
+texture = ExtResource("1")
+region_enabled = true
+region_rect = Rect2(731, 9, 24, 39)
+
+[node name="Tails" type="Sprite2D" parent="UI/Labels/CharacterOrigin"]
+z_index = 2
+position = Vector2(-12.5, -13.5)
+texture = ExtResource("4")
+region_enabled = true
+region_rect = Rect2(676, 205, 33, 35)
+
+[node name="TailsTails" type="Sprite2D" parent="UI/Labels/CharacterOrigin/Tails"]
+z_index = -1
+position = Vector2(-10.5, 5.5)
+texture = ExtResource("4")
+region_enabled = true
+region_rect = Rect2(488, 25, 16, 22)
+
+[node name="Knuckles" type="Sprite2D" parent="UI/Labels/CharacterOrigin"]
+visible = false
+z_index = 3
+position = Vector2(-3, -15)
+texture = ExtResource("7")
+region_enabled = true
+region_rect = Rect2(402, 468, 38, 36)
+
+[node name="CharacterAnimations" type="AnimationPlayer" parent="UI/Labels/CharacterOrigin"]
+autoplay = "Animate"
+libraries = {
+"": SubResource("AnimationLibrary_wio08")
+}
 
 [node name="Cover" type="CanvasLayer" parent="."]
 layer = 0

@@ -40,11 +40,11 @@ func statePhysicsProcess(_delta):
 	if interpolationMode == INTERPOLATION.COS:
 		var interpolationPeriod = 0.5 * -cos((curTime / moveTime) * PI) + 0.5
 		var interpolationPosition = interpolationPeriod * bakedLength
-		parent.realPosition = curve.interpolate_baked(interpolationPosition) + offsetPosition
+		parent.realPosition = curve.sample_baked(interpolationPosition) + offsetPosition
 		pass
 	else:
 		var interpolationPosition = (curTime / moveTime) * bakedLength
-		parent.realPosition = curve.interpolate_baked(interpolationPosition) + offsetPosition
+		parent.realPosition = curve.sample_baked(interpolationPosition) + offsetPosition
 		pass
 	
 	if curTime >= moveTime:

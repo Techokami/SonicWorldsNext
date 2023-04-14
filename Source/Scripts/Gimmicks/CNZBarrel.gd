@@ -272,7 +272,7 @@ func _physics_process(delta):
 		player.direction = 1
 		set_player_phase(index, get_player_phase(index) + (delta / spinning_period) * 2.0 * PI)
 		player.global_position.x = floor(body.global_position.x + get_player_radius(index) * cos(get_player_phase(index)))
-		player.global_position.y = floor(body.global_position.y - player.currentHitbox.NORMAL.y - 2)
+		player.global_position.y = floor(body.global_position.y - player.currentHitbox.NORMAL.y / 2.0 - 1)
 		player.movement.x = 0
 		player.movement.y = 0
 		# XXX need to figure out why player 2 is mispositioned while this gimmick is moving quickly

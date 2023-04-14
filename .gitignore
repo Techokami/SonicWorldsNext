@@ -17,3 +17,6 @@ thumbs.db
 .import/
 logs/
 Source/.import
+Source/.godot/editor/
+Source/.godot/imported/
+Source/.godot/shader_cache/

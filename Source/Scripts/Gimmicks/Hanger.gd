@@ -141,7 +141,7 @@ func physics_process_connected(_delta, player, index):
 	
 	# Perform just the functional parts  of the connect script that move the
 	# player into position.
-	var getPose = (global_position+get_player_contact(index).rotated(rotation)).round()
+	var getPose = (global_position+get_player_contact(index).rotated(rotation) + Vector2(0.0, player.currentHitbox.NORMAL.y / 2.0)).round()
 		
 	# verify position change won't clip into objects
 	if !player.test_move(player.global_transform,getPose-player.global_position):
