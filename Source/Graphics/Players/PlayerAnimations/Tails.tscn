@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=3 uid="uid://bmwjjgi4cj17p"]
+[gd_scene load_steps=70 format=3 uid="uid://by3kgbgiinm60"]
 
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="1"]
 [ext_resource type="Texture2D" uid="uid://c05fsbnx0p7xf" path="res://Graphics/Players/Tails.png" id="2"]
@@ -223,6 +223,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="113"]
 resource_name = "fly"
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -238,6 +239,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="114"]
 resource_name = "flyCarry"
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -253,6 +255,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="115"]
 resource_name = "flyCarryUP"
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -371,6 +374,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="78"]
 resource_name = "hurt"
 length = 0.1
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -557,7 +561,6 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="84"]
 resource_name = "spring"
 length = 0.783
-loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -574,7 +577,6 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="126"]
 resource_name = "springScrew"
 length = 0.783
-loop_mode = 1
 step = 0.0649984
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -608,7 +610,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D/Sprite2D:material:shader_param/row")
+tracks/1/path = NodePath("Sprite2D/Sprite2D:material:shader_parameter/row")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -882,7 +884,7 @@ tracks/1/keys = {
 "values": [Vector2(2, -4), Vector2(-2, -4), Vector2(-2, -4), Vector2(0, -4), Vector2(2, -4), Vector2(2, -4), Vector2(-2, -4), Vector2(-2, -4), Vector2(-2, -4), Vector2(0, -4), Vector2(2, -4), Vector2(2, -4)]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_iqu1n"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ur811"]
 _data = {
 "RESET": SubResource("86"),
 "air": SubResource("121"),
@@ -1261,7 +1263,7 @@ tracks/1/keys = {
 "values": [Vector2(-5, -8)]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_nplyp"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_14wfa"]
 _data = {
 "RESET": SubResource("108"),
 "default": SubResource("109"),
@@ -1273,7 +1275,62 @@ _data = {
 }
 
 [sub_resource type="RectangleShape2D" id="122"]
-size = Vector2(9, 9.5)
+size = Vector2(18, 19)
+
+[sub_resource type="Animation" id="Animation_gl4ec"]
+resource_name = "Flash"
+length = 0.5
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:material:shader_parameter/row")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [7.0, 10.0]
+}
+
+[sub_resource type="Animation" id="Animation_ycyxj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:material:shader_parameter/row")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
+[sub_resource type="Animation" id="Animation_ofgkx"]
+resource_name = "PowerDown"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:material:shader_parameter/row")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [3.0, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2mpk5"]
+_data = {
+"Flash": SubResource("Animation_gl4ec"),
+"PowerDown": SubResource("Animation_ofgkx"),
+"RESET": SubResource("Animation_ycyxj")
+}
 
 [node name="Sprite2D" type="Node2D"]
 
@@ -1281,13 +1338,13 @@ size = Vector2(9, 9.5)
 root_node = NodePath("../..")
 autoplay = "idle"
 libraries = {
-"": SubResource("AnimationLibrary_iqu1n")
+"": SubResource("AnimationLibrary_ur811")
 }
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 5
 material = ExtResource("1")
-position = Vector2(0, -5)
+position = Vector2(0, -4)
 texture = ExtResource("2")
 offset = Vector2(0, -4)
 hframes = 16
@@ -1297,6 +1354,8 @@ script = ExtResource("5")
 [node name="DashDust" type="AnimatedSprite2D" parent="Sprite2D"]
 visible = false
 sprite_frames = SubResource("96")
+autoplay = "default"
+frame = 5
 offset = Vector2(-9, -4)
 
 [node name="Tails" type="Sprite2D" parent="Sprite2D"]
@@ -1316,13 +1375,18 @@ script = ExtResource("4")
 root_node = NodePath("../../..")
 autoplay = "default"
 libraries = {
-"": SubResource("AnimationLibrary_nplyp")
+"": SubResource("AnimationLibrary_14wfa")
 }
 
 [node name="CrouchBox" type="CollisionShape2D" parent="."]
 position = Vector2(0, 5.5)
 shape = SubResource("122")
 disabled = true
+
+[node name="SuperPalette" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_2mpk5")
+}
 
 [connection signal="animation_started" from="PlayerAnimation" to="Sprite2D" method="_on_PlayerAnimation_animation_started"]
 [connection signal="animation_started" from="PlayerAnimation" to="Sprite2D/Tails" method="_on_PlayerAnimation_animation_started"]

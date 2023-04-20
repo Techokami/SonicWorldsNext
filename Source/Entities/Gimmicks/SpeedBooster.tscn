@@ -1,45 +1,52 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=7 format=3 uid="uid://bqj1smfkc5m7n"]
 
-[ext_resource path="res://Scripts/Gimmicks/SpeedBooster.gd" type="Script" id=1]
-[ext_resource path="res://Graphics/Gimmicks/speed_booster.png" type="Texture2D" id=2]
-[ext_resource path="res://Audio/SFX/Gimmicks/Springs.wav" type="AudioStream" id=3]
+[ext_resource type="Script" path="res://Scripts/Gimmicks/SpeedBooster.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://r7ggpq8j3dr1" path="res://Graphics/Gimmicks/speed_booster.png" id="2"]
+[ext_resource type="AudioStream" uid="uid://b3ieb8ay5vc2" path="res://Audio/SFX/Gimmicks/Springs.wav" id="3"]
 
-[sub_resource type="RectangleShape2D" id=1]
-size = Vector2( 8, 8 )
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(8, 8)
 
-[sub_resource type="AtlasTexture" id=2]
-atlas = ExtResource( 2 )
-region = Rect2( 0, 24, 64, 24 )
+[sub_resource type="AtlasTexture" id="2"]
+atlas = ExtResource("2")
+region = Rect2(0, 24, 64, 24)
 
-[sub_resource type="SpriteFrames" id=3]
-animations = [ {
-"frames": [ null, SubResource( 2 ) ],
+[sub_resource type="SpriteFrames" id="3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("2")
+}, {
+"duration": 1.0,
+"texture": null
+}],
 "loop": true,
-"name": "default",
+"name": &"default",
 "speed": 30.0
-} ]
+}]
 
 [node name="SpeedBooster" type="Area2D"]
 collision_layer = 0
 collision_mask = 4096
-script = ExtResource( 1 )
+script = ExtResource("1")
 
 [node name="HitBox" type="CollisionShape2D" parent="."]
-shape = SubResource( 1 )
+shape = SubResource("1")
 
 [node name="Booster" type="Sprite2D" parent="."]
-position = Vector2( 0, -4 )
 z_index = 10
-texture = ExtResource( 2 )
+position = Vector2(0, -4)
+texture = ExtResource("2")
 vframes = 2
 
 [node name="ShineAnimator" type="AnimatedSprite2D" parent="Booster"]
-frames = SubResource( 3 )
+sprite_frames = SubResource("3")
+autoplay = "default"
 frame = 1
-playing = true
+frame_progress = 0.382781
 
 [node name="sfxSpring" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 3 )
-bus = "SFX"
+stream = ExtResource("3")
+bus = &"SFX"
 
 [connection signal="body_entered" from="." to="." method="_on_SpeedBooster_body_entered"]

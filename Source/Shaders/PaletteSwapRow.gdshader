@@ -3,7 +3,7 @@ uniform float amount : hint_range(1,255,1);
 uniform float palRows : hint_range(1,255,1);
 uniform float row : hint_range(1,999,1);
 uniform float approximation : hint_range(0.0,5.0,0.01);
-uniform sampler2D paletteTexture;
+uniform sampler2D paletteTexture : filter_nearest;
 
 
 void fragment(){

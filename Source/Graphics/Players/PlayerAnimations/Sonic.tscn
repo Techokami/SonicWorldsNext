@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://d1e4muavtnun6"]
+[gd_scene load_steps=60 format=3 uid="uid://d1e4muavtnun6"]
 
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="1"]
 [ext_resource type="Texture2D" uid="uid://4lhg0ovh1pe8" path="res://Graphics/Players/Sonic.png" id="2"]
@@ -654,7 +654,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Sonic/Sprite2D:material:shader_param/row")
+tracks/1/path = NodePath("Sonic/Sprite2D:material:shader_parameter/row")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -667,6 +667,7 @@ tracks/1/keys = {
 [sub_resource type="Animation" id="121"]
 resource_name = "swingVerticalBar"
 length = 0.5
+loop_mode = 1
 step = 0.0166667
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -695,6 +696,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="125"]
 resource_name = "swingVerticalBarManaged"
+loop_mode = 1
 step = 0.03125
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -724,6 +726,7 @@ tracks/1/keys = {
 [sub_resource type="Animation" id="122"]
 resource_name = "swingVerticalBarOffset"
 length = 0.6
+loop_mode = 1
 step = 0.02
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -927,6 +930,61 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="111"]
 size = Vector2(18, 22)
 
+[sub_resource type="Animation" id="Animation_o1vbe"]
+resource_name = "Flash"
+length = 0.5
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:material:shader_parameter/row")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [9.0, 6.0]
+}
+
+[sub_resource type="Animation" id="Animation_t7log"]
+resource_name = "PowerDown"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:material:shader_parameter/row")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [5.0, 1.0]
+}
+
+[sub_resource type="Animation" id="Animation_y01gt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:material:shader_parameter/row")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_yhl61"]
+_data = {
+"Flash": SubResource("Animation_o1vbe"),
+"PowerDown": SubResource("Animation_t7log"),
+"RESET": SubResource("Animation_y01gt")
+}
+
 [node name="Sonic" type="Node2D"]
 
 [node name="PlayerAnimation" type="AnimationPlayer" parent="."]
@@ -939,7 +997,6 @@ libraries = {
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 5
 material = ExtResource("1")
-position = Vector2(0, -1)
 texture = ExtResource("2")
 offset = Vector2(0, -4)
 hframes = 16
@@ -949,9 +1006,15 @@ vframes = 18
 visible = false
 sprite_frames = SubResource("96")
 autoplay = "default"
+frame = 3
 offset = Vector2(-9, -4)
 
 [node name="CrouchBox" type="CollisionShape2D" parent="."]
 position = Vector2(0, 8)
 shape = SubResource("111")
 disabled = true
+
+[node name="SuperPalette" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_yhl61")
+}

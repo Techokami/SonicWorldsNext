@@ -51,7 +51,7 @@ func _physics_process(delta):
 		
 		# climbing edge
 		# move sensor to the top
-		parent.horizontalSensor.position.y = -parent.get_node("HitBox").shape.size.y
+		parent.horizontalSensor.position.y = -parent.get_node("HitBox").shape.size.y/2
 		parent.horizontalSensor.target_position += parent.horizontalSensor.target_position.normalized()*4
 		parent.horizontalSensor.force_raycast_update()
 		

@@ -139,6 +139,7 @@ var reflective = false # used for reflecting projectiles
 
 # Animation related
 @onready var animator = $Sonic/PlayerAnimation
+@onready var superAnimator = $Sonic/SuperPalette
 @onready var sprite = $Sonic/Sprite2D
 @onready var spriteControler = $Sonic
 var lastActiveAnimation = ""
@@ -288,20 +289,21 @@ func _ready():
 		# set palettes
 		match (character):
 			CHARACTERS.SONIC:
-				playerPal.set_shader_parameter("amount",3)
-				playerPal.set_shader_parameter("palRows",9)
+				# shader texture sizes need to be to the power of 2
+				playerPal.set_shader_parameter("amount",4)
+				playerPal.set_shader_parameter("palRows",16)
 				playerPal.set_shader_parameter("row",0)
 				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperSonicPal.png"))
 		
 			CHARACTERS.TAILS:
-				playerPal.set_shader_parameter("amount",6)
-				playerPal.set_shader_parameter("palRows",10)
+				playerPal.set_shader_parameter("amount",8)
+				playerPal.set_shader_parameter("palRows",16)
 				playerPal.set_shader_parameter("row",0)
 				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperTails.png"))
 		
 			CHARACTERS.KNUCKLES:
-				playerPal.set_shader_parameter("amount",3)
-				playerPal.set_shader_parameter("palRows",11)
+				playerPal.set_shader_parameter("amount",4)
+				playerPal.set_shader_parameter("palRows",16)
 				playerPal.set_shader_parameter("row",0)
 				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperKnuckles.png"))
 	
@@ -329,6 +331,7 @@ func _ready():
 			add_child(tails)
 			sprite = tails.get_node("Sprite2D")
 			animator = tails.get_node("PlayerAnimation")
+			superAnimator = tails.get_node_or_null("SuperPalette")
 			spriteControler = tails
 			get_node("OldSprite").queue_free()
 		CHARACTERS.KNUCKLES:
@@ -339,6 +342,7 @@ func _ready():
 			add_child(knuckles)
 			sprite = knuckles.get_node("Sprite2D")
 			animator = knuckles.get_node("PlayerAnimation")
+			superAnimator = knuckles.get_node_or_null("SuperPalette")
 			spriteControler = knuckles
 			get_node("OldSprite").queue_free()
 	
@@ -477,13 +481,9 @@ func _process(delta):
 		else:
 			$InvincibilityBarrier.visible = false
 			# Animate Palette
-			match character:
-				CHARACTERS.SONIC:
-					playerPal.set_shader_parameter("row",wrapf(playerPal.get_shader_parameter("row")+delta*5,playerPal.get_shader_parameter("palRows")-3,playerPal.get_shader_parameter("palRows")))
-				CHARACTERS.TAILS:
-					playerPal.set_shader_parameter("row",wrapf(playerPal.get_shader_parameter("row")+delta*5,playerPal.get_shader_parameter("palRows")-4,playerPal.get_shader_parameter("palRows")))
-				CHARACTERS.KNUCKLES:
-					playerPal.set_shader_parameter("row",wrapf(playerPal.get_shader_parameter("row")+delta*5,playerPal.get_shader_parameter("palRows")-9,playerPal.get_shader_parameter("palRows")))
+			if is_instance_valid(superAnimator):
+				if !superAnimator.is_playing():
+					superAnimator.play("Flash")
 			# check if ring count is greater then 0
 			# deactivate if stage cleared
 			if rings > 0 and Global.stageClearPhase == 0:
@@ -501,13 +501,12 @@ func _process(delta):
 			if (shield != SHIELDS.NONE):
 				shieldSprite.visible = true
 			$InvincibilityBarrier.visible = false
+			# turn off super palette
+			if is_instance_valid(superAnimator):
+				superAnimator.play("PowerDown")
 			if Global.currentTheme == 0:
 				Global.music.play()
 				Global.effectTheme.stop()
-	else:
-	# Deactivate super
-		if playerControl != 0:
-			playerPal.set_shader_parameter("row",clamp(playerPal.get_shader_parameter("row")-delta*10,0,playerPal.get_shader_parameter("palRows")-3))
 	
 	if (shoeTime > 0):
 		shoeTime -= delta

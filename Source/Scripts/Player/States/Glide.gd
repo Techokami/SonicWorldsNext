@@ -153,7 +153,7 @@ func _physics_process(delta):
 			parent.movement = Vector2.ZERO
 		
 		# prevent getting stuck on corners
-		parent.horizontalSensor.position.y = parent.get_node("HitBox").shape.size.y-1
+		parent.horizontalSensor.position.y = (parent.get_node("HitBox").shape.size.y/2)-1
 		parent.horizontalSensor.force_raycast_update()
 		if parent.horizontalSensor.is_colliding() and !parent.ground:
 			parent.movement.x = 0

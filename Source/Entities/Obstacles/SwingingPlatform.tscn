@@ -1,33 +1,31 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=6 format=3 uid="uid://7k14xkpjguop"]
 
-[ext_resource path="res://Scripts/Objects/SwingingPlatform.gd" type="Script" id=1]
-[ext_resource path="res://Graphics/Obstacles/SwingChain.png" type="Texture2D" id=2]
-[ext_resource path="res://Graphics/Obstacles/platform_64_2.png" type="Texture2D" id=3]
-[ext_resource path="res://Graphics/Obstacles/SwingPole.png" type="Texture2D" id=4]
+[ext_resource type="Script" path="res://Scripts/Objects/SwingingPlatform.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://dh42s3d2vapgn" path="res://Graphics/Obstacles/SwingChain.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://cjhwfrg8xifj5" path="res://Graphics/Obstacles/platform_64_2.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://bxo0l5r5ep0j4" path="res://Graphics/Obstacles/SwingPole.png" id="4"]
 
-[sub_resource type="RectangleShape2D" id=1]
+[sub_resource type="RectangleShape2D" id="1"]
 resource_local_to_scene = true
-size = Vector2( 40, 0.5 )
+size = Vector2(40, 0.5)
 
 [node name="Platform" type="Node2D"]
-script = ExtResource( 1 )
-rotate_amount = 90
-plat_img = ExtResource( 3 )
-chain_img = ExtResource( 2 )
+script = ExtResource("1")
+plat_img = ExtResource("3")
+chain_img = ExtResource("2")
 
-[node name="SwingBase" type="CharacterBody2D" parent="."]
+[node name="SwingBase" type="AnimatableBody2D" parent="."]
 visible = false
 collision_layer = 8193
 collision_mask = 8192
-motion/sync_to_physics = true
 
 [node name="Shape3D" type="CollisionShape2D" parent="SwingBase"]
-modulate = Color( 1, 1, 1, 0.0980392 )
-position = Vector2( 0, -7.5 )
-shape = SubResource( 1 )
+modulate = Color(1, 1, 1, 0.0980392)
+position = Vector2(0, -7.5)
+shape = SubResource("1")
 one_way_collision = true
 
 [node name="Sprite2D" type="Sprite2D" parent="SwingBase"]
 
 [node name="SwingPole" type="Sprite2D" parent="."]
-texture = ExtResource( 4 )
+texture = ExtResource("4")

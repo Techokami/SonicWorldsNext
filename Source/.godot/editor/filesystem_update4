@@ -1,8 +1,4 @@
 res://default_env.tres
 res://Scene/Zones/BaseZone.tscn
 res://Tileset/Worlds/WorldsTileMap.tres
-res://Tileset/Worlds/TestTilesGreen.tres
-res://Scene/Zones/BaseZoneAct2.tscn
-res://Graphics/Players/PlayerAnimations/Knuckles.tscn
-res://Graphics/Players/PlayerAnimations/Tails.tscn
-res://Graphics/Players/PlayerAnimations/Sonic.tscn
+res://Shaders/PlayerPalette.tres

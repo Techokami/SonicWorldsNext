@@ -588,7 +588,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("116")
 }],
-"loop": true,
+"loop": false,
 "name": &"Super",
 "speed": 30.0
 }, {

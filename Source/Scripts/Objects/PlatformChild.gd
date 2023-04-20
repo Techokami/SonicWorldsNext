@@ -1,4 +1,4 @@
-extends CharacterBody2D
+extends AnimatableBody2D
 
 # drop condition
 func physics_collision(body, hitVector):

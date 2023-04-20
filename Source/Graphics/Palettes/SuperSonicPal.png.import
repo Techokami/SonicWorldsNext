@@ -3,26 +3,25 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://lv4qey45t23s"
-path.s3tc="res://.godot/imported/SuperSonicPal.png-582d92450c09c9da045efeaf9bd1cac4.s3tc.ctex"
+path="res://.godot/imported/SuperSonicPal.png-582d92450c09c9da045efeaf9bd1cac4.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://Graphics/Palettes/SuperSonicPal.png"
-dest_files=["res://.godot/imported/SuperSonicPal.png-582d92450c09c9da045efeaf9bd1cac4.s3tc.ctex"]
+dest_files=["res://.godot/imported/SuperSonicPal.png-582d92450c09c9da045efeaf9bd1cac4.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

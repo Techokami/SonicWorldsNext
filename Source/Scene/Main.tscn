@@ -186,7 +186,5 @@ libraries = {
 [node name="ControllerMenu" parent="GUI" instance=ExtResource("6")]
 
 [node name="Pause" parent="GUI" instance=ExtResource("7")]
-grow_horizontal = 2
-grow_vertical = 2
 
 [connection signal="finished" from="Music/Life" to="." method="_on_Life_finished"]

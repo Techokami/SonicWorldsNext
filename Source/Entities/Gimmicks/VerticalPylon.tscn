@@ -50,8 +50,8 @@ _data = {
 "main": SubResource("1")
 }
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_prt7g"]
-size = Vector2(6, 48)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ktifm"]
+size = Vector2(12, 96)
 
 [node name="FBZ_Pylon_Controller" type="Node2D"]
 script = ExtResource("2")
@@ -65,14 +65,14 @@ region_enabled = true
 region_rect = Rect2(0, 0, 48, 96)
 
 [node name="FBZ_Pylon_Bottom" type="Sprite2D" parent="."]
-position = Vector2(0, -8)
+position = Vector2(0, -7.5)
 texture = ExtResource("3")
 hframes = 3
 vframes = 2
 frame = 5
 
 [node name="FBZ_Pylon_Top" type="Sprite2D" parent="."]
-position = Vector2(0, -121)
+position = Vector2(0, -121.5)
 texture = ExtResource("3")
 hframes = 3
 vframes = 2
@@ -85,12 +85,12 @@ libraries = {
 }
 
 [node name="FBZ_Pylon_Area" type="Area2D" parent="."]
-collision_layer = 8192
+collision_layer = 4096
 collision_mask = 0
 
 [node name="FBZ_Pylon_Collision" type="CollisionShape2D" parent="FBZ_Pylon_Area"]
 position = Vector2(0, -65)
-shape = SubResource("RectangleShape2D_prt7g")
+shape = SubResource("RectangleShape2D_ktifm")
 
 [connection signal="body_entered" from="FBZ_Pylon_Area" to="." method="_on_FBZ_Pylon_Area_body_entered"]
 [connection signal="body_exited" from="FBZ_Pylon_Area" to="." method="_on_FBZ_Pylon_Area_body_exited"]

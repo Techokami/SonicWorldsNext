@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://cnmwjjhpd85i"]
+[gd_scene load_steps=59 format=3 uid="uid://bdaih80dlev3f"]
 
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="1"]
 [ext_resource type="Texture2D" uid="uid://cndrds5482vh5" path="res://Graphics/Players/Knuckles.png" id="2"]
@@ -191,6 +191,7 @@ tracks/1/keys = {
 [sub_resource type="Animation" id="105"]
 resource_name = "edge2"
 length = 0.3
+loop_mode = 1
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -384,6 +385,7 @@ tracks/1/keys = {
 [sub_resource type="Animation" id="78"]
 resource_name = "hurt"
 length = 0.1
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -417,7 +419,6 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="113"]
 resource_name = "idle1"
 length = 5.4
-loop_mode = 1
 step = 0.0166667
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -536,7 +537,6 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="100"]
 resource_name = "skid"
 length = 0.3
-loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -569,6 +569,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="123"]
 resource_name = "slide"
 length = 0.1
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -618,7 +619,6 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="122"]
 resource_name = "springScrew"
 length = 0.783
-loop_mode = 1
 step = 0.065
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -822,7 +822,7 @@ tracks/0/keys = {
 "values": [267, 266, 265, 264, 263, 262, 261, 260, 259, 258, 257, 256]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_q5ooy"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_t3bqq"]
 _data = {
 "RESET": SubResource("86"),
 "air": SubResource("108"),
@@ -925,7 +925,62 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="111"]
-size = Vector2(9, 11)
+size = Vector2(18, 22)
+
+[sub_resource type="Animation" id="Animation_51t3g"]
+resource_name = "Flash"
+length = 0.5
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:material:shader_parameter/row")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [11.0, 7.0]
+}
+
+[sub_resource type="Animation" id="Animation_f3r6g"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:material:shader_parameter/row")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
+[sub_resource type="Animation" id="Animation_6q33s"]
+resource_name = "PowerDown"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:material:shader_parameter/row")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [6.0, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_u50eh"]
+_data = {
+"Flash": SubResource("Animation_51t3g"),
+"PowerDown": SubResource("Animation_6q33s"),
+"RESET": SubResource("Animation_f3r6g")
+}
 
 [node name="Sprite2D" type="Node2D"]
 
@@ -933,14 +988,13 @@ size = Vector2(9, 11)
 root_node = NodePath("../..")
 autoplay = "idle"
 libraries = {
-"": SubResource("AnimationLibrary_q5ooy")
+"": SubResource("AnimationLibrary_t3bqq")
 }
 next/edge1 = &"edge2"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 5
 material = ExtResource("1")
-position = Vector2(0, -1)
 texture = ExtResource("2")
 offset = Vector2(0, -8)
 hframes = 16
@@ -949,9 +1003,16 @@ vframes = 18
 [node name="DashDust" type="AnimatedSprite2D" parent="Sprite2D"]
 visible = false
 sprite_frames = SubResource("96")
+autoplay = "default"
+frame = 2
 offset = Vector2(-9, -4)
 
 [node name="CrouchBox" type="CollisionShape2D" parent="."]
 position = Vector2(0, 8)
 shape = SubResource("111")
 disabled = true
+
+[node name="SuperPalette" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_u50eh")
+}
