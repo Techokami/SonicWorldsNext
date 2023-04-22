@@ -25,8 +25,8 @@ shape = SubResource("1")
 one_way_collision = true
 
 [node name="VerticalBarArea" type="Area2D" parent="."]
-collision_layer = 8192
-collision_mask = 0
+collision_layer = 0
+collision_mask = 4096
 script = ExtResource("2")
 
 [node name="Grab" type="AudioStreamPlayer" parent="VerticalBarArea"]
