@@ -4,7 +4,7 @@ extends PlayerState
 func _physics_process(delta):
 	parent.animator.play("hurt")
 	# gravity
-	parent.movement.y += 0.1875/GlobalFunctions.div_by_delta(delta)
+	parent.movement.y += parent.grv/GlobalFunctions.div_by_delta(delta)
 	
 	# exit if on floor
 	if parent.ground and parent.movement.y >= 0:

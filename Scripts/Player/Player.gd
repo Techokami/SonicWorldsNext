@@ -981,6 +981,9 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 		movement.y = -4*60
 		if (movement.x == 0):
 			movement.x = 2*60
+		# check for water
+		if water:
+			movement = movement*0.5
 
 		disconect_from_floor()
 		set_state(STATES.HIT)

@@ -12,7 +12,7 @@ var pipeDirection = 1
 
 func _process(delta):
 	# this state can be used for several purposes, pipe logic is a bit more complicated so I built some pipe following code here
-	if (pipe != null):
+	if pipe != null:
 		# get next pipe point
 		var point = pipe.global_position+pipe.get_point_position(pipePoint)
 		# set movement
@@ -21,7 +21,8 @@ func _process(delta):
 		parent.translate = true
 		
 		# if nearing the end of the current path pipe check if to end or go to next pipe path
-		if parent.global_position.distance_to(point) < pipe.speed:
+		var getPipeSpeed = pipe.speed
+		while parent.global_position.distance_to(point) <= getPipeSpeed and pipe != null:
 			# check if we're at the end of the path
 			if pipePoint < pipe.get_point_count()-1:
 				parent.global_position = point
@@ -30,7 +31,7 @@ func _process(delta):
 			else:
 				# release the player if no other point can be found
 				parent.set_state(parent.STATES.ROLL)
-				parent.movement = (point-(pipe.global_position+pipe.get_point_position(pipePoint-1))).normalized()*pipe.speed*60.0
+				parent.movement = (point-(pipe.global_position+pipe.get_point_position(pipePoint-1))).normalized()*getPipeSpeed*60.0
 				parent.global_position = point
 				parent.translate = false
 				parent.sfx[3].play()

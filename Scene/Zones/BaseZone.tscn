@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=3 uid="uid://c2ds3vrtxtcgc"]
+[gd_scene load_steps=66 format=3 uid="uid://c2ds3vrtxtcgc"]
 
 [ext_resource type="Script" path="res://Scripts/Level/Level.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://c30uceea18q1w" path="res://Entities/Misc/HUD.tscn" id="4"]
@@ -53,6 +53,7 @@
 [ext_resource type="PackedScene" uid="uid://t0mjpja13x4b" path="res://Entities/Gimmicks/Trampoline.tscn" id="56"]
 [ext_resource type="PackedScene" uid="uid://3ubxvoi41uf1" path="res://Entities/Gimmicks/VerticalBar.tscn" id="57"]
 [ext_resource type="PackedScene" uid="uid://3qpa54q3wjoh" path="res://Entities/Gimmicks/VerticalPylon.tscn" id="58"]
+[ext_resource type="PackedScene" uid="uid://beebd7dn4ioe1" path="res://Entities/Gimmicks/WindCurrent.tscn" id="58_26l62"]
 [ext_resource type="PackedScene" path="res://Entities/Backgrounds/GHZWaterfall.tscn" id="59"]
 [ext_resource type="AudioStream" uid="uid://uu55iumak4r5" path="res://Audio/SFX/Ambiance/waterfall.wav" id="60"]
 [ext_resource type="AudioStream" uid="uid://burqaecl8oe0f" path="res://Audio/SFX/Ambiance/lava.wav" id="61"]
@@ -1643,6 +1644,23 @@ modulate = Color(1, 0.745098, 1, 0.333333)
 z_index = -10
 texture = ExtResource("62_cuvk5")
 centered = false
+
+[node name="WindCurrent" parent="." instance=ExtResource("58_26l62")]
+position = Vector2(6352, 1888)
+scale = Vector2(47, 12)
+
+[node name="WindCurrent2" parent="." instance=ExtResource("58_26l62")]
+position = Vector2(8208, 1904)
+scale = Vector2(76, 6)
+
+[node name="WindCurrent3" parent="." instance=ExtResource("58_26l62")]
+position = Vector2(9984, 2048)
+rotation = -1.57079
+scale = Vector2(116, 4)
+
+[node name="WindCurrent4" parent="." instance=ExtResource("58_26l62")]
+position = Vector2(16, 680)
+scale = Vector2(42, 6)
 
 [editable path="Platforms/Platform"]
 [editable path="Platforms/Platform13"]

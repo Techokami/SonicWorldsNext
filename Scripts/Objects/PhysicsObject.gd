@@ -23,7 +23,7 @@ var groundLookDistance = 14 # how far down to look
 
 
 # physics variables
-var movement = velocity
+var movement = velocity+Vector2(0.00001,0) # this is a band aid fix, physics objects have something triggered to make them work but it only happens when moving horizontally, so the solution for now is to have it add a unnoticeable amount of x movement
 var ground = true
 var roof = false
 var moveStepLength = 8*60

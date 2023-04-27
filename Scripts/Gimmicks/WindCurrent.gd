@@ -1,0 +1,45 @@
+extends Area2D
+
+var players = []
+@export var speed = 400.0
+@export var canMove = true
+@export var moveSpeed = 200.0
+
+func _ready():
+	visible = false
+
+func _physics_process(delta):
+	# if any players are found in the array, if they're on the ground make them roll
+	if players.size() > 0:
+		for i in players:
+			# determine the direction of the arrow based on scale and rotation
+			var getDir = Vector2.RIGHT.rotated(global_rotation)
+			
+			# set movement
+			# calculate movement direction
+			var rotDir = getDir.rotated(deg_to_rad(90)).abs()
+			var moveDir = Vector2(rotDir.dot(Vector2(i.inputs[i.INPUTS.XINPUT],0)),rotDir.dot(Vector2(0,i.inputs[i.INPUTS.YINPUT])))
+			i.movement = (getDir*speed)+(moveDir*moveSpeed)
+			
+			# force player direction
+			if getDir.x != 0:
+				i.direction = getDir.x
+				# set flipping on sprite
+				i.sprite.flip_h = (i.direction < 0)
+			
+			# force slide state
+			if i.currentState != i.STATES.ROLL || i.animator.current_animation != "current":
+				i.set_state(i.STATES.ROLL)
+				i.animator.play("current")
+
+func _on_ForceRoll_body_entered(body):
+	if !players.has(body):
+		players.append(body)
+
+
+func _on_ForceRoll_body_exited(body):
+	if players.has(body):
+		body.set_state(body.STATES.NORMAL)
+		players.erase(body)
+
+

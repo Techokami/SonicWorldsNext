@@ -46,15 +46,15 @@ func _ready():
 		exitArea.global_position = global_position+get_point_position(get_point_count()-1)
 
 func _on_hitbox_enter(body):
-	if ((body.currentState == body.STATES.ANIMATION) == split):
+	if (body.currentState == body.STATES.ANIMATION) == split:
 		randomize()
 		var rng = randf_range(0,100)
+		var animatorNode = body.stateList[body.STATES.ANIMATION]
 		# run a random chance of a path split, or just continue if it is not a split
-		if (rng <= splitChance or !split):
+		if (rng <= splitChance or !split) and animatorNode.pipe != self:
 			if body.currentState != body.STATES.ANIMATION:
 				body.sfx[1].play()
 			body.set_state(body.STATES.ANIMATION,Vector2(2,2))
-			var animatorNode = body.stateList[body.STATES.ANIMATION]
 			animatorNode.pipe = self
 			animatorNode.pipePoint = 1
 			animatorNode.pipeDirection = 1

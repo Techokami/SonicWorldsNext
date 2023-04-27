@@ -1,8 +1,8 @@
 @tool
 extends Area2D
 
-@export_range(-90,90) var leftAngle # (float, -90, 90)
-@export_range(-90,90) var rightAngle # (float, -90, 90)
+@export_range(-90,90) var leftAngle = 0.0 # (float, -90, 90)
+@export_range(-90,90) var rightAngle = 0.0 # (float, -90, 90)
 @export var stickUntilExit = true
 
 @export var maxAngleDifference = 15.0 # (float, -90, 90)
@@ -21,7 +21,6 @@ func _physics_process(_delta):
 		contactPoint.resize(players.size())
 		for i in players:
 			var getIndex = players.find(i)
-			
 			if i.ground and contactPoint[getIndex] != null and abs(i.movement.x) >= speedRange*60:
 				var PrevAngle = i.angle
 				

@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=3 uid="uid://bdaih80dlev3f"]
+[gd_scene load_steps=60 format=3 uid="uid://bdaih80dlev3f"]
 
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="1"]
 [ext_resource type="Texture2D" uid="uid://cndrds5482vh5" path="res://Graphics/Players/Knuckles.png" id="2"]
@@ -29,6 +29,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D/Sprite2D:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [96]
 }
 
 [sub_resource type="Animation" id="108"]
@@ -822,6 +834,24 @@ tracks/0/keys = {
 "values": [267, 266, 265, 264, 263, 262, 261, 260, 259, 258, 257, 256]
 }
 
+[sub_resource type="Animation" id="Animation_p0bj4"]
+resource_name = "current"
+length = 0.53334
+loop_mode = 1
+step = 0.0666667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.133333, 0.2, 0.266667, 0.333333, 0.4, 0.466667, 0.533333, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [96, 97, 98, 99, 100, 101, 102, 103, 104, 105]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_t3bqq"]
 _data = {
 "RESET": SubResource("86"),
@@ -831,6 +861,7 @@ _data = {
 "corkScrew": SubResource("76"),
 "corkScrewOffset": SubResource("88"),
 "crouch": SubResource("77"),
+"current": SubResource("Animation_p0bj4"),
 "die": SubResource("98"),
 "drown": SubResource("99"),
 "edge1": SubResource("104"),
@@ -944,21 +975,6 @@ tracks/0/keys = {
 "values": [11.0, 7.0]
 }
 
-[sub_resource type="Animation" id="Animation_f3r6g"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:material:shader_parameter/row")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [1.0]
-}
-
 [sub_resource type="Animation" id="Animation_6q33s"]
 resource_name = "PowerDown"
 length = 0.5
@@ -973,6 +989,21 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [6.0, 1.0]
+}
+
+[sub_resource type="Animation" id="Animation_f3r6g"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:material:shader_parameter/row")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_u50eh"]
@@ -999,6 +1030,7 @@ texture = ExtResource("2")
 offset = Vector2(0, -8)
 hframes = 16
 vframes = 18
+frame = 96
 
 [node name="DashDust" type="AnimatedSprite2D" parent="Sprite2D"]
 visible = false
