@@ -16,7 +16,7 @@ thumbs.db
 # Directories to ignore.
 .import/
 logs/
-Source/.import
-Source/.godot/editor/
-Source/.godot/imported/
-Source/.godot/shader_cache/
+.import
+.godot/editor/
+.godot/imported/
+.godot/shader_cache/
