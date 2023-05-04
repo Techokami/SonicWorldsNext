@@ -18,7 +18,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, -4)]
+"values": [Vector2(0, -5)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -31,18 +31,6 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [false]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Sprite2D/Sprite2D:frame")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [96]
 }
 
 [sub_resource type="Animation" id="121"]
@@ -133,6 +121,24 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [9]
+}
+
+[sub_resource type="Animation" id="Animation_kiit5"]
+resource_name = "current"
+length = 0.53334
+loop_mode = 1
+step = 0.0666667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.133333, 0.2, 0.266667, 0.333333, 0.4, 0.466667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [96, 97, 98, 99, 100, 101, 102, 103]
 }
 
 [sub_resource type="Animation" id="98"]
@@ -896,24 +902,6 @@ tracks/1/keys = {
 "values": [Vector2(2, -4), Vector2(-2, -4), Vector2(-2, -4), Vector2(0, -4), Vector2(2, -4), Vector2(2, -4), Vector2(-2, -4), Vector2(-2, -4), Vector2(-2, -4), Vector2(0, -4), Vector2(2, -4), Vector2(2, -4)]
 }
 
-[sub_resource type="Animation" id="Animation_kiit5"]
-resource_name = "current"
-length = 0.53334
-loop_mode = 1
-step = 0.0666667
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D/Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0666667, 0.133333, 0.2, 0.266667, 0.333333, 0.4, 0.466667),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [96, 97, 98, 99, 100, 101, 102, 103]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ur811"]
 _data = {
 "RESET": SubResource("86"),
@@ -1095,7 +1083,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-7, -3)]
+"values": [Vector2(-7, -4)]
 }
 
 [sub_resource type="Animation" id="120"]
@@ -1137,7 +1125,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, -3)]
+"values": [Vector2(0, -4)]
 }
 
 [sub_resource type="Animation" id="124"]
@@ -1167,7 +1155,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-5, -3)]
+"values": [Vector2(-5, -4)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -1239,7 +1227,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-6, -3)]
+"values": [Vector2(-6, -4)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -1377,10 +1365,9 @@ z_index = 5
 material = ExtResource("1")
 position = Vector2(0, -4)
 texture = ExtResource("2")
-offset = Vector2(0, -4)
+offset = Vector2(0, -5)
 hframes = 16
 vframes = 18
-frame = 96
 script = ExtResource("5")
 
 [node name="DashDust" type="AnimatedSprite2D" parent="Sprite2D"]
@@ -1394,8 +1381,7 @@ offset = Vector2(-9, -4)
 visible = false
 show_behind_parent = true
 material = ExtResource("1")
-position = Vector2(0, -1)
-rotation = 12.5664
+rotation = 6.28318
 texture = ExtResource("2")
 offset = Vector2(-5, -8)
 hframes = 16

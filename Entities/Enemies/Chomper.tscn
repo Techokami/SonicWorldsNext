@@ -9,7 +9,6 @@ size = Vector2(8, 16)
 [node name="Chomper" type="Node2D" groups=["Enemy"]]
 
 [node name="Chomper" type="CharacterBody2D" parent="."]
-process_mode = 3
 collision_layer = 16384
 collision_mask = 0
 script = ExtResource("1")

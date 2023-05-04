@@ -15,12 +15,26 @@ func _physics_process(delta):
 			# determine the direction of the arrow based on scale and rotation
 			var getDir = Vector2.RIGHT.rotated(global_rotation)
 			
+			# disconect floor
+			if i.ground:
+				i.disconect_from_floor()
+			
 			# set movement
 			# calculate movement direction
 			var rotDir = getDir.rotated(deg_to_rad(90)).abs()
 			var moveDir = Vector2(rotDir.dot(Vector2(i.inputs[i.INPUTS.XINPUT],0)),rotDir.dot(Vector2(0,i.inputs[i.INPUTS.YINPUT])))
 			i.movement = (getDir*speed)+(moveDir*moveSpeed)
 			
+			# move against slopes
+			if i.roof:
+				# check for collision
+				i.verticalSensorLeft.target_position *= 2
+				i.verticalSensorRight.target_position *= 2
+				var slope = i.get_nearest_vertical_sensor()
+				if slope != null:
+					# slide along slope normal
+					i.movement.x = i.movement.slide(slope.get_collision_normal()).x
+
 			# force player direction
 			if getDir.x != 0:
 				i.direction = getDir.x
@@ -28,8 +42,8 @@ func _physics_process(delta):
 				i.sprite.flip_h = (i.direction < 0)
 			
 			# force slide state
-			if i.currentState != i.STATES.ROLL || i.animator.current_animation != "current":
-				i.set_state(i.STATES.ROLL)
+			if i.currentState != i.STATES.ANIMATION || i.animator.current_animation != "current":
+				i.set_state(i.STATES.ANIMATION)
 				i.animator.play("current")
 
 func _on_ForceRoll_body_entered(body):
