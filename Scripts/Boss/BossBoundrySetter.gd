@@ -27,7 +27,7 @@ extends Area2D
 var bossActive = false
 
 func _on_BoundrySetter_body_entered(body):
-	$CollisionShape2D.disabled = true
+	$CollisionShape2D.set.call_deferred("disabled",true)
 	# set boundry settings
 	if !Engine.is_editor_hint() and !bossActive:
 		# Check body has a camera variable

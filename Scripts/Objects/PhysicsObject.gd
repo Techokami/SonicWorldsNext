@@ -375,3 +375,23 @@ func disconect_from_floor(force = false):
 		ground = false
 		if (snap_angle(rotation) != snap_angle(gravityAngle)):
 			rotation = snap_angle(gravityAngle)
+
+# checks and pushes the player out if a collision is detected vertically in either direction
+func push_vertical():
+	# set movement memory
+	var movementMemory = movement
+	var directions = [-1,1]
+	# check directions
+	for i in directions:
+		movement.y = i
+		update_sensors()
+		getVert = get_nearest_vertical_sensor()
+		if getVert:
+			#  Calculate the move distance vectorm, then move
+			var rayHitVec = (getVert.get_collision_point()-getVert.global_position)
+			# Snap the Vector and normalize it
+			var normHitVec = -Vector2.LEFT.rotated(snap_angle(rayHitVec.normalized().angle()))
+			# shift
+			position += (rayHitVec-(normHitVec*(($HitBox.shape.size.y/2)+0.25))-Vector2(0,yGroundDiff).rotated(rotation))
+	# reset movement
+	movement = movementMemory

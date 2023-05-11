@@ -32,6 +32,10 @@ window/size/viewport_width=320
 window/size/viewport_height=224
 window/stretch/mode="viewport"
 
+[dotnet]
+
+project/assembly_name="Sonic Worlds Next"
+
 [importer_defaults]
 
 texture={
@@ -209,6 +213,7 @@ ui_reset={
 2d_physics/layer_20="Damage Entities"
 2d_physics/layer_21="Solid if not Rolling or not Knuckles"
 2d_physics/layer_22="Crusher"
+2d_physics/layer_23="WaterSurface"
 
 [rendering]
 

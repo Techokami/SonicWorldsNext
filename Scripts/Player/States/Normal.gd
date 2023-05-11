@@ -28,6 +28,7 @@ func state_exit():
 	parent.get_node("HitBox").shape.size = parent.currentHitbox.NORMAL
 	
 	lookTimer = 0
+	parent.sfx[29].stop()
 
 func _process(delta):
 	
@@ -159,6 +160,10 @@ func _process(delta):
 		parent.direction = parent.inputs[parent.INPUTS.XINPUT]
 	elif parent.movement.x != 0 and skid:
 		parent.direction = sign(parent.movement.x)
+	
+	# water running
+	parent.action_water_run_handle()
+	
 
 func _physics_process(delta):
 	

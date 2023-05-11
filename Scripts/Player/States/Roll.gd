@@ -8,6 +8,8 @@ func _process(_delta):
 		# true replicates CD and Mania
 		parent.action_jump("roll",true)
 		parent.set_state(parent.STATES.JUMP)
+	# water running
+	parent.action_water_run_handle()
 
 func _physics_process(delta):
 	
@@ -55,3 +57,7 @@ func _physics_process(delta):
 	
 	# clamp rolling top speed
 	parent.movement.x = clamp(parent.movement.x,-parent.toproll,parent.toproll)
+
+# stop the water run sound
+func state_exit():
+	parent.sfx[29].stop()

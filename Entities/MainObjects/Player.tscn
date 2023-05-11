@@ -1,4 +1,4 @@
-[gd_scene load_steps=185 format=3 uid="uid://cioq5saowvqxj"]
+[gd_scene load_steps=186 format=3 uid="uid://cioq5saowvqxj"]
 
 [ext_resource type="Script" path="res://Scripts/Player/Player.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://d1e4muavtnun6" path="res://Graphics/Players/PlayerAnimations/Sonic.tscn" id="2"]
@@ -62,6 +62,7 @@
 [ext_resource type="AudioStream" uid="uid://78gy6s87pbbo" path="res://Audio/SFX/Player/Land.wav" id="60"]
 [ext_resource type="AudioStream" uid="uid://uaa5twt8odin" path="res://Audio/SFX/Player/Slide.wav" id="61"]
 [ext_resource type="Script" path="res://Scripts/Player/States/WallClimb.gd" id="62"]
+[ext_resource type="AudioStream" uid="uid://c2agly02ferrw" path="res://Audio/SFX/Player/WaterRun.wav" id="63_k1lus"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 resource_local_to_scene = true
@@ -1437,6 +1438,11 @@ bus = &"SFX"
 
 [node name="Slide" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("61")
+bus = &"SFX"
+
+[node name="WaterRun" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("63_k1lus")
+volume_db = -10.0
 bus = &"SFX"
 
 [node name="CrushSensorLeft" type="Area2D" parent="."]

@@ -8,7 +8,7 @@ var players = []
 func _ready():
 	visible = false
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	# if any players are found in the array, if they're on the ground make them roll
 	if players.size() > 0:
 		for i in players:
@@ -34,6 +34,9 @@ func _physics_process(delta):
 				if slope != null:
 					# slide along slope normal
 					i.movement.x = i.movement.slide(slope.get_collision_normal()).x
+			# push vertically against ceiling and floors
+			if i.has_method("push_vertical"):
+				i.push_vertical()
 
 			# force player direction
 			if getDir.x != 0:

@@ -1,26 +1,26 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=5 format=3 uid="uid://chyrwm1qwvlyt"]
 
-[ext_resource path="res://Graphics/Gimmicks/button.png" type="Texture2D" id=1]
-[ext_resource path="res://Scripts/Objects/Switch.gd" type="Script" id=2]
-[ext_resource path="res://Audio/SFX/Gimmicks/Switch.wav" type="AudioStream" id=3]
+[ext_resource type="Texture2D" uid="uid://btd1piynn8ofj" path="res://Graphics/Gimmicks/button.png" id="1"]
+[ext_resource type="Script" path="res://Scripts/Objects/Switch.gd" id="2"]
+[ext_resource type="AudioStream" uid="uid://dh4rsaka62ph4" path="res://Audio/SFX/Gimmicks/Switch.wav" id="3"]
 
-[sub_resource type="RectangleShape2D" id=1]
-size = Vector2( 15.5, 4.5 )
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(31, 9)
 
 [node name="Switch" type="StaticBody2D"]
 collision_layer = 8192
 collision_mask = 8192
-script = ExtResource( 2 )
+script = ExtResource("2")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource( 1 )
+texture = ExtResource("1")
 hframes = 2
-region_rect = Rect2( 0, 0, 32, 16 )
+region_rect = Rect2(0, 0, 32, 16)
 
 [node name="HitBox" type="CollisionShape2D" parent="."]
-position = Vector2( 0, 4 )
-shape = SubResource( 1 )
+position = Vector2(0, 4)
+shape = SubResource("1")
 
 [node name="Switch" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 3 )
-bus = "SFX"
+stream = ExtResource("3")
+bus = &"SFX"

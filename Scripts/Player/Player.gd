@@ -647,7 +647,8 @@ func _physics_process(delta):
 	set_collision_mask_value(21,(character != CHARACTERS.KNUCKLES and !attacking))
 	# damage mask bit
 	set_collision_layer_value(20,attacking)
-	
+	# water surface running
+	set_collision_mask_value(23,ground && abs(groundSpeed) >= min(6*60,top))
 	
 	if (ground):
 		groundSpeed = movement.x
@@ -1304,3 +1305,24 @@ func action_jump(animation = "roll", airJumpControl = true, playSound=true):
 
 func emit_enemy_bounce():
 	emit_signal("enemy_bounced")
+
+func action_water_run_handle():
+	var dash = sprite.get_node("DashDust")
+	# check for water (check that collision has the water tag)
+	var touchWater = false
+	var colCheck = move_and_collide(Vector2.DOWN.rotated(rotation),true)
+	if colCheck:
+		touchWater = colCheck.get_collider().get_collision_layer_value(23)
+	
+
+	# enable dash dust if touching water
+	dash.visible = (get_collision_mask_value(23) and touchWater)
+	dash.flip_h = (movement.x < 0)
+	dash.offset.x = abs(dash.offset.x)*sign(-1+int(dash.flip_h)*2)
+
+	# play water run sound
+	if (get_collision_mask_value(23) and touchWater):
+		if !sfx[29].playing:
+			sfx[29].play()
+	else:
+		sfx[29].stop()
