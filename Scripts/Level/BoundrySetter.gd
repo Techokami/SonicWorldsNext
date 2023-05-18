@@ -1,7 +1,7 @@
 @tool
 extends Area2D
 
-var screenSize = Vector2(320,224)
+@onready var screenSize = GlobalFunctions.get_screen_size()
 
 @export var setLeft = true
 @export var leftBoundry  = 0
@@ -35,6 +35,8 @@ func _on_BoundrySetter_body_entered(body):
 func _process(_delta):
 	if (Engine.is_editor_hint()):
 		queue_redraw()
+		# remember to change this for your game if the screen size gets changed, this is just for debugging
+		screenSize = Vector2(320,224)
 		rightBoundry = max(leftBoundry+screenSize.x,rightBoundry)
 		bottomBoundry = max(topBoundry+screenSize.y,bottomBoundry)
 

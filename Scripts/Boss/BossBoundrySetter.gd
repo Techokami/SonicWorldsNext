@@ -1,8 +1,7 @@
-@tool
 extends Area2D
 
 
-@onready var screenSize = get_viewport().size
+@onready var screenSize = GlobalFunctions.get_screen_size()
 
 @export_node_path var bossPath
 
@@ -27,34 +26,35 @@ extends Area2D
 var bossActive = false
 
 func _on_BoundrySetter_body_entered(body):
-	$CollisionShape2D.set.call_deferred("disabled",true)
-	# set boundry settings
-	if !Engine.is_editor_hint() and !bossActive:
-		# Check body has a camera variable
-		if (body.get("camera") != null):
-			var boss = get_node_or_null(bossPath)
-			if boss != null:
-				bossActive = true
-				# Check if set boundry is true, if it is then set the camera's boundries for each player
-				for i in Global.players:
-					if lockLeft:
-						i.limitLeft = max(global_position.x-screenSize.x/2,Global.hardBorderLeft)
-					if lockTop:
-						i.limitTop = max(global_position.y-screenSize.y/2,Global.hardBorderTop)
-					if lockRight:
-						i.limitRight = min(global_position.x+screenSize.x/2,Global.hardBorderRight)
-					if lockBottom:
-						i.limitBottom = min(global_position.y+screenSize.y/2,Global.hardBorderBottom)
-				
-				Global.main.set_volume(-50)
-				await Global.main.volume_set
-				Global.main.set_volume(0,100)
-				
-				Global.bossMusic.play()
-				boss.active = true
-				
-				if boss.has_signal("boss_over"):
-					boss.connect("boss_over",Callable(self,"boss_completed"))
+	if !Engine.is_editor_hint():
+		$CollisionShape2D.set.call_deferred("disabled",true)
+		# set boundry settings
+		if !bossActive:
+			# Check body has a camera variable
+			if (body.get("camera") != null):
+				var boss = get_node_or_null(bossPath)
+				if boss != null:
+					bossActive = true
+					# Check if set boundry is true, if it is then set the camera's boundries for each player
+					for i in Global.players:
+						if lockLeft:
+							i.limitLeft = max(global_position.x-screenSize.x/2,Global.hardBorderLeft)
+						if lockTop:
+							i.limitTop = max(global_position.y-screenSize.y/2,Global.hardBorderTop)
+						if lockRight:
+							i.limitRight = min(global_position.x+screenSize.x/2,Global.hardBorderRight)
+						if lockBottom:
+							i.limitBottom = min(global_position.y+screenSize.y/2,Global.hardBorderBottom)
+					
+					Global.main.set_volume(-50)
+					await Global.main.volume_set
+					Global.main.set_volume(0,100)
+					
+					Global.bossMusic.play()
+					boss.active = true
+					
+					if boss.has_signal("boss_over"):
+						boss.connect("boss_over",Callable(self,"boss_completed"))
 
 func boss_completed():
 	Global.bossMusic.stop()

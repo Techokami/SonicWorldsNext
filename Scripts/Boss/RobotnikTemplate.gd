@@ -58,6 +58,7 @@ func _process(delta):
 				emit_signal("boss_over")
 
 func _physics_process(delta):
+	super(delta)
 	# move boss
 	global_position += velocity*delta
 	# check if alive

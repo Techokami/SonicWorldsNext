@@ -2,7 +2,7 @@ extends Sprite2D
 var getCam = null
 var player = null
 
-@onready var screenXSize = get_viewport_rect().size.x
+@onready var screenXSize = GlobalFunctions.get_screen_size().x
 
 func _physics_process(_delta):
 	# check if player.x position is greater then the post

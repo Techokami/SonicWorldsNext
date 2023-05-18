@@ -1,5 +1,5 @@
 #@tool
-#extends TileMap
+extends TileMap
 #
 #
 ## if to generate

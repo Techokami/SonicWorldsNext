@@ -1,200 +1,340 @@
-[gd_scene load_steps=35 format=2]
+[gd_scene load_steps=35 format=3 uid="uid://cd27rgk5o5jg2"]
 
-[ext_resource path="res://Graphics/Items/air_bubbles.png" type="Texture2D" id=1]
-[ext_resource path="res://Scripts/Misc/Bubbles.gd" type="Script" id=2]
-[ext_resource path="res://Graphics/Misc/CountDown.png" type="Texture2D" id=3]
+[ext_resource type="Texture2D" uid="uid://ceangqioyo4uf" path="res://Graphics/Items/air_bubbles.png" id="1"]
+[ext_resource type="Script" path="res://Scripts/Misc/Bubbles.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://1njf2n5mf43y" path="res://Graphics/Misc/CountDown.png" id="3"]
 
-[sub_resource type="RectangleShape2D" id=1]
-size = Vector2( 4, 4 )
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(4, 4)
 
-[sub_resource type="AtlasTexture" id=2]
-atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 8, 8 )
+[sub_resource type="AtlasTexture" id="5"]
+atlas = ExtResource("1")
+region = Rect2(0, 0, 8, 8)
 
-[sub_resource type="AtlasTexture" id=3]
-atlas = ExtResource( 1 )
-region = Rect2( 8, 0, 8, 8 )
+[sub_resource type="AtlasTexture" id="6"]
+atlas = ExtResource("1")
+region = Rect2(8, 0, 8, 8)
 
-[sub_resource type="AtlasTexture" id=4]
-atlas = ExtResource( 1 )
-region = Rect2( 16, 0, 8, 8 )
+[sub_resource type="AtlasTexture" id="7"]
+atlas = ExtResource("1")
+region = Rect2(16, 0, 8, 8)
 
-[sub_resource type="AtlasTexture" id=5]
-atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 8, 8 )
+[sub_resource type="AtlasTexture" id="8"]
+atlas = ExtResource("1")
+region = Rect2(24, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id=6]
-atlas = ExtResource( 1 )
-region = Rect2( 8, 0, 8, 8 )
+[sub_resource type="AtlasTexture" id="9"]
+atlas = ExtResource("1")
+region = Rect2(40, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id=7]
-atlas = ExtResource( 1 )
-region = Rect2( 16, 0, 8, 8 )
+[sub_resource type="AtlasTexture" id="10"]
+atlas = ExtResource("1")
+region = Rect2(56, 0, 24, 24)
 
-[sub_resource type="AtlasTexture" id=8]
-atlas = ExtResource( 1 )
-region = Rect2( 24, 0, 16, 16 )
+[sub_resource type="AtlasTexture" id="11"]
+atlas = ExtResource("1")
+region = Rect2(0, 24, 32, 32)
 
-[sub_resource type="AtlasTexture" id=9]
-atlas = ExtResource( 1 )
-region = Rect2( 40, 0, 16, 16 )
+[sub_resource type="AtlasTexture" id="12"]
+atlas = ExtResource("1")
+region = Rect2(32, 24, 32, 32)
 
-[sub_resource type="AtlasTexture" id=10]
-atlas = ExtResource( 1 )
-region = Rect2( 56, 0, 24, 24 )
+[sub_resource type="AtlasTexture" id="13"]
+atlas = ExtResource("1")
+region = Rect2(64, 24, 32, 32)
 
-[sub_resource type="AtlasTexture" id=11]
-atlas = ExtResource( 1 )
-region = Rect2( 0, 24, 32, 32 )
+[sub_resource type="AtlasTexture" id="22"]
+atlas = ExtResource("3")
+region = Rect2(0, 120, 16, 24)
 
-[sub_resource type="AtlasTexture" id=12]
-atlas = ExtResource( 1 )
-region = Rect2( 32, 24, 32, 32 )
+[sub_resource type="AtlasTexture" id="23"]
+atlas = ExtResource("3")
+region = Rect2(16, 120, 16, 24)
 
-[sub_resource type="AtlasTexture" id=13]
-atlas = ExtResource( 1 )
-region = Rect2( 64, 24, 32, 32 )
+[sub_resource type="AtlasTexture" id="20"]
+atlas = ExtResource("3")
+region = Rect2(0, 96, 16, 24)
 
-[sub_resource type="AtlasTexture" id=14]
-atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 8, 8 )
+[sub_resource type="AtlasTexture" id="21"]
+atlas = ExtResource("3")
+region = Rect2(16, 96, 16, 24)
 
-[sub_resource type="AtlasTexture" id=15]
-atlas = ExtResource( 1 )
-region = Rect2( 8, 0, 8, 8 )
+[sub_resource type="AtlasTexture" id="24"]
+atlas = ExtResource("3")
+region = Rect2(0, 72, 16, 24)
 
-[sub_resource type="AtlasTexture" id=16]
-atlas = ExtResource( 1 )
-region = Rect2( 16, 0, 8, 8 )
+[sub_resource type="AtlasTexture" id="25"]
+atlas = ExtResource("3")
+region = Rect2(16, 72, 16, 24)
 
-[sub_resource type="AtlasTexture" id=17]
-atlas = ExtResource( 1 )
-region = Rect2( 24, 0, 16, 16 )
+[sub_resource type="AtlasTexture" id="26"]
+atlas = ExtResource("3")
+region = Rect2(0, 48, 16, 24)
 
-[sub_resource type="AtlasTexture" id=18]
-atlas = ExtResource( 1 )
-region = Rect2( 40, 0, 16, 16 )
+[sub_resource type="AtlasTexture" id="27"]
+atlas = ExtResource("3")
+region = Rect2(16, 48, 16, 24)
 
-[sub_resource type="AtlasTexture" id=20]
-atlas = ExtResource( 3 )
-region = Rect2( 0, 96, 16, 24 )
+[sub_resource type="AtlasTexture" id="30"]
+atlas = ExtResource("3")
+region = Rect2(0, 24, 16, 24)
 
-[sub_resource type="AtlasTexture" id=21]
-atlas = ExtResource( 3 )
-region = Rect2( 16, 96, 16, 24 )
+[sub_resource type="AtlasTexture" id="31"]
+atlas = ExtResource("3")
+region = Rect2(16, 24, 16, 24)
 
-[sub_resource type="AtlasTexture" id=22]
-atlas = ExtResource( 3 )
-region = Rect2( 0, 120, 16, 24 )
+[sub_resource type="AtlasTexture" id="28"]
+atlas = ExtResource("3")
+region = Rect2(0, 0, 16, 24)
 
-[sub_resource type="AtlasTexture" id=23]
-atlas = ExtResource( 3 )
-region = Rect2( 16, 120, 16, 24 )
+[sub_resource type="AtlasTexture" id="29"]
+atlas = ExtResource("3")
+region = Rect2(16, 0, 16, 24)
 
-[sub_resource type="AtlasTexture" id=24]
-atlas = ExtResource( 3 )
-region = Rect2( 0, 72, 16, 24 )
+[sub_resource type="AtlasTexture" id="2"]
+atlas = ExtResource("1")
+region = Rect2(0, 0, 8, 8)
 
-[sub_resource type="AtlasTexture" id=25]
-atlas = ExtResource( 3 )
-region = Rect2( 16, 72, 16, 24 )
+[sub_resource type="AtlasTexture" id="3"]
+atlas = ExtResource("1")
+region = Rect2(8, 0, 8, 8)
 
-[sub_resource type="AtlasTexture" id=26]
-atlas = ExtResource( 3 )
-region = Rect2( 0, 48, 16, 24 )
+[sub_resource type="AtlasTexture" id="4"]
+atlas = ExtResource("1")
+region = Rect2(16, 0, 8, 8)
 
-[sub_resource type="AtlasTexture" id=27]
-atlas = ExtResource( 3 )
-region = Rect2( 16, 48, 16, 24 )
+[sub_resource type="AtlasTexture" id="14"]
+atlas = ExtResource("1")
+region = Rect2(0, 0, 8, 8)
 
-[sub_resource type="AtlasTexture" id=28]
-atlas = ExtResource( 3 )
-region = Rect2( 0, 0, 16, 24 )
+[sub_resource type="AtlasTexture" id="15"]
+atlas = ExtResource("1")
+region = Rect2(8, 0, 8, 8)
 
-[sub_resource type="AtlasTexture" id=29]
-atlas = ExtResource( 3 )
-region = Rect2( 16, 0, 16, 24 )
+[sub_resource type="AtlasTexture" id="16"]
+atlas = ExtResource("1")
+region = Rect2(16, 0, 8, 8)
 
-[sub_resource type="AtlasTexture" id=30]
-atlas = ExtResource( 3 )
-region = Rect2( 0, 24, 16, 24 )
+[sub_resource type="AtlasTexture" id="17"]
+atlas = ExtResource("1")
+region = Rect2(24, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id=31]
-atlas = ExtResource( 3 )
-region = Rect2( 16, 24, 16, 24 )
+[sub_resource type="AtlasTexture" id="18"]
+atlas = ExtResource("1")
+region = Rect2(40, 0, 16, 16)
 
-[sub_resource type="SpriteFrames" id=19]
-animations = [ {
-"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ) ],
+[sub_resource type="SpriteFrames" id="19"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("5")
+}, {
+"duration": 1.0,
+"texture": SubResource("6")
+}, {
+"duration": 1.0,
+"texture": SubResource("7")
+}, {
+"duration": 1.0,
+"texture": SubResource("8")
+}, {
+"duration": 1.0,
+"texture": SubResource("9")
+}, {
+"duration": 1.0,
+"texture": SubResource("10")
+}, {
+"duration": 1.0,
+"texture": SubResource("11")
+}],
 "loop": false,
-"name": "default",
+"name": &"air",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ) ],
-"loop": false,
-"name": "air",
-"speed": 5.0
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("12")
 }, {
-"frames": [ SubResource( 12 ), SubResource( 13 ) ],
+"duration": 1.0,
+"texture": SubResource("13")
+}],
 "loop": false,
-"name": "bigPop",
+"name": &"bigPop",
 "speed": 10.0
 }, {
-"frames": [ SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ) ],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("22")
+}, {
+"duration": 1.0,
+"texture": SubResource("23")
+}, {
+"duration": 1.0,
+"texture": SubResource("23")
+}, {
+"duration": 1.0,
+"texture": SubResource("23")
+}, {
+"duration": 1.0,
+"texture": SubResource("23")
+}],
 "loop": false,
-"name": "medium",
+"name": &"count0",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("20")
+}, {
+"duration": 1.0,
+"texture": SubResource("21")
+}, {
+"duration": 1.0,
+"texture": SubResource("21")
+}, {
+"duration": 1.0,
+"texture": SubResource("21")
+}, {
+"duration": 1.0,
+"texture": SubResource("21")
+}],
+"loop": false,
+"name": &"count1",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("24")
+}, {
+"duration": 1.0,
+"texture": SubResource("25")
+}, {
+"duration": 1.0,
+"texture": SubResource("25")
+}, {
+"duration": 1.0,
+"texture": SubResource("25")
+}, {
+"duration": 1.0,
+"texture": SubResource("25")
+}],
+"loop": true,
+"name": &"count2",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("26")
+}, {
+"duration": 1.0,
+"texture": SubResource("27")
+}, {
+"duration": 1.0,
+"texture": SubResource("27")
+}, {
+"duration": 1.0,
+"texture": SubResource("27")
+}, {
+"duration": 1.0,
+"texture": SubResource("27")
+}],
+"loop": false,
+"name": &"count3",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("30")
+}, {
+"duration": 1.0,
+"texture": SubResource("31")
+}, {
+"duration": 1.0,
+"texture": SubResource("31")
+}, {
+"duration": 1.0,
+"texture": SubResource("31")
+}, {
+"duration": 1.0,
+"texture": SubResource("31")
+}],
+"loop": false,
+"name": &"count4",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("28")
+}, {
+"duration": 1.0,
+"texture": SubResource("29")
+}, {
+"duration": 1.0,
+"texture": SubResource("29")
+}, {
+"duration": 1.0,
+"texture": SubResource("29")
+}, {
+"duration": 1.0,
+"texture": SubResource("29")
+}],
+"loop": false,
+"name": &"count5",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("2")
+}, {
+"duration": 1.0,
+"texture": SubResource("3")
+}, {
+"duration": 1.0,
+"texture": SubResource("4")
+}],
+"loop": false,
+"name": &"default",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 20 ), SubResource( 21 ), null, SubResource( 21 ), null, SubResource( 21 ), null, SubResource( 21 ) ],
-"loop": false,
-"name": "count1",
-"speed": 7.0
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("14")
 }, {
-"frames": [ SubResource( 22 ), SubResource( 23 ), null, SubResource( 23 ), null, SubResource( 23 ), null, SubResource( 23 ) ],
-"loop": false,
-"name": "count0",
-"speed": 7.0
+"duration": 1.0,
+"texture": SubResource("15")
 }, {
-"frames": [ SubResource( 24 ), SubResource( 25 ), null, SubResource( 25 ), null, SubResource( 25 ), null, SubResource( 25 ) ],
-"loop": true,
-"name": "count2",
-"speed": 7.0
+"duration": 1.0,
+"texture": SubResource("16")
 }, {
-"frames": [ SubResource( 26 ), SubResource( 27 ), null, SubResource( 27 ), null, SubResource( 27 ), null, SubResource( 27 ) ],
-"loop": false,
-"name": "count3",
-"speed": 7.0
+"duration": 1.0,
+"texture": SubResource("17")
 }, {
-"frames": [ SubResource( 28 ), SubResource( 29 ), null, SubResource( 29 ), null, SubResource( 29 ), null, SubResource( 29 ) ],
+"duration": 1.0,
+"texture": SubResource("18")
+}],
 "loop": false,
-"name": "count5",
-"speed": 7.0
-}, {
-"frames": [ SubResource( 30 ), SubResource( 31 ), null, SubResource( 31 ), null, SubResource( 31 ), null, SubResource( 31 ) ],
-"loop": false,
-"name": "count4",
-"speed": 7.0
-} ]
+"name": &"medium",
+"speed": 5.0
+}]
 
 [node name="Bubbles" type="Node2D"]
-script = ExtResource( 2 )
+script = ExtResource("2")
 
 [node name="BubbleCollect" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 4096
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BubbleCollect"]
-shape = SubResource( 1 )
+shape = SubResource("1")
 disabled = true
 
 [node name="Bubble" type="AnimatedSprite2D" parent="."]
 z_index = 6
-frames = SubResource( 19 )
+sprite_frames = SubResource("19")
 frame = 2
-playing = true
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
-scale = Vector2( 1.6, 12.8 )
+scale = Vector2(1.6, 12.8)
 
 [connection signal="body_entered" from="BubbleCollect" to="." method="_on_BubbleCollect_body_entered"]
 [connection signal="animation_finished" from="Bubble" to="." method="_on_Bubble_animation_finished"]

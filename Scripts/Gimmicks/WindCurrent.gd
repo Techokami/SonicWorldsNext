@@ -46,7 +46,7 @@ func _physics_process(_delta):
 			
 			# force slide state
 			if i.currentState != i.STATES.ANIMATION || i.animator.current_animation != "current":
-				i.set_state(i.STATES.ANIMATION)
+				i.set_state(i.STATES.ANIMATION,i.currentHitbox.ROLL)
 				i.animator.play("current")
 
 func _on_ForceRoll_body_entered(body):

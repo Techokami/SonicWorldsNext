@@ -20,3 +20,7 @@ func getCurrentCamera2D():
 # usually a division by the normal delta will cause the game to freak out at different FPS speeds
 func div_by_delta(delta):
 	return 0.016667*(0.016667/delta)
+
+# get window size resolution as a vector2
+func get_screen_size():
+	return get_viewport().get_visible_rect().size

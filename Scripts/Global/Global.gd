@@ -112,7 +112,7 @@ func _ready():
 	if !(get_tree().current_scene is MainGameScene):
 		get_tree().paused = true
 		# change scene root to main scene, keep current scene in memory
-		var loadNode = get_tree().current_scene.filename
+		var loadNode = get_tree().current_scene.scene_file_path
 		var mainScene = load("res://Scene/Main.tscn").instantiate()
 		get_tree().root.call_deferred("remove_child",get_tree().current_scene)
 		#get_tree().root.current_scene.call_deferred("queue_free")
@@ -120,7 +120,6 @@ func _ready():
 		mainScene.get_node("SceneLoader").get_child(0).nextScene = load(loadNode)
 		await get_tree().process_frame
 		get_tree().paused = false
-		#mainScene.change_scene_to_file(load(loadNode))
 	is_main_loaded = true
 
 func _process(delta):

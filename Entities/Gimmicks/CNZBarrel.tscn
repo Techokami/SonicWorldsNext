@@ -57,6 +57,7 @@ script = ExtResource("2")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CNZBarrelActiveBody"]
 position = Vector2(0, 31)
 sprite_frames = SubResource("5")
+autoplay = "default"
 frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CNZBarrelActiveBody"]

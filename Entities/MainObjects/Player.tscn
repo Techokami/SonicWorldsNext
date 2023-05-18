@@ -1,4 +1,4 @@
-[gd_scene load_steps=186 format=3 uid="uid://cioq5saowvqxj"]
+[gd_scene load_steps=193 format=3 uid="uid://cioq5saowvqxj"]
 
 [ext_resource type="Script" path="res://Scripts/Player/Player.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://d1e4muavtnun6" path="res://Graphics/Players/PlayerAnimations/Sonic.tscn" id="2"]
@@ -63,6 +63,7 @@
 [ext_resource type="AudioStream" uid="uid://uaa5twt8odin" path="res://Audio/SFX/Player/Slide.wav" id="61"]
 [ext_resource type="Script" path="res://Scripts/Player/States/WallClimb.gd" id="62"]
 [ext_resource type="AudioStream" uid="uid://c2agly02ferrw" path="res://Audio/SFX/Player/WaterRun.wav" id="63_k1lus"]
+[ext_resource type="Texture2D" uid="uid://b1k615l251fu5" path="res://Graphics/Misc/WaterSurfaceSplash.png" id="64_ovmgw"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 resource_local_to_scene = true
@@ -1145,6 +1146,49 @@ size = Vector2(2, 4)
 [sub_resource type="RectangleShape2D" id="169"]
 size = Vector2(4, 2)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_56rto"]
+atlas = ExtResource("64_ovmgw")
+region = Rect2(0, 0, 48, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_auknc"]
+atlas = ExtResource("64_ovmgw")
+region = Rect2(48, 0, 48, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qw3eh"]
+atlas = ExtResource("64_ovmgw")
+region = Rect2(96, 0, 48, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1gfu7"]
+atlas = ExtResource("64_ovmgw")
+region = Rect2(0, 16, 48, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c6hdg"]
+atlas = ExtResource("64_ovmgw")
+region = Rect2(48, 16, 48, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_77phq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_56rto")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_auknc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qw3eh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1gfu7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c6hdg")
+}],
+"loop": true,
+"name": &"default",
+"speed": 30.0
+}]
+
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 4096
 collision_mask = 8192
@@ -1477,6 +1521,14 @@ collision_mask = 2097152
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CrushSensorDown"]
 position = Vector2(0, 2)
 shape = SubResource("169")
+
+[node name="WaterSurface" type="AnimatedSprite2D" parent="."]
+visible = false
+position = Vector2(0, 19)
+sprite_frames = SubResource("SpriteFrames_77phq")
+autoplay = "default"
+frame_progress = 0.400739
+offset = Vector2(-16, -8)
 
 [connection signal="timeout" from="States/Fly/FlyBugStop" to="States/Fly" method="_on_FlyBugStop_timeout"]
 [connection signal="timeout" from="SkidDustTimer" to="States/Normal" method="_on_SkidDustTimer_timeout"]
