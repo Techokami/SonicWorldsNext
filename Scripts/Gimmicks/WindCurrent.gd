@@ -1,9 +1,9 @@
 extends Area2D
 
 var players = []
-@export var speed = 400.0
+@export var speed = 400.0 # default power
 @export var canMove = true
-@export var moveSpeed = 200.0
+@export var moveSpeed = 200.0 # player movement power
 
 func _ready():
 	visible = false
@@ -49,12 +49,12 @@ func _physics_process(_delta):
 				i.set_state(i.STATES.ANIMATION,i.currentHitbox.ROLL)
 				i.animator.play("current")
 
-func _on_ForceRoll_body_entered(body):
+func _on_WindCurrent_body_entered(body):
 	if !players.has(body):
 		players.append(body)
 
 
-func _on_ForceRoll_body_exited(body):
+func _on_WindCurrent_body_exited(body):
 	if players.has(body):
 		body.set_state(body.STATES.NORMAL)
 		players.erase(body)

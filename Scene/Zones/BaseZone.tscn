@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=3 uid="uid://c2ds3vrtxtcgc"]
+[gd_scene load_steps=69 format=3 uid="uid://c2ds3vrtxtcgc"]
 
 [ext_resource type="Script" path="res://Scripts/Level/Level.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://c30uceea18q1w" path="res://Entities/Misc/HUD.tscn" id="4"]
@@ -57,6 +57,7 @@
 [ext_resource type="PackedScene" path="res://Entities/Backgrounds/GHZWaterfall.tscn" id="59"]
 [ext_resource type="Texture2D" uid="uid://cfrumqj5mt4q3" path="res://Graphics/Tiles/WorldsTiles/HydoPipe.png" id="59_h8yhq"]
 [ext_resource type="AudioStream" uid="uid://uu55iumak4r5" path="res://Audio/SFX/Ambiance/waterfall.wav" id="60"]
+[ext_resource type="PackedScene" uid="uid://bbf1sa8l70ygh" path="res://Entities/Gimmicks/fan.tscn" id="60_4s85n"]
 [ext_resource type="AudioStream" uid="uid://burqaecl8oe0f" path="res://Audio/SFX/Ambiance/lava.wav" id="61"]
 [ext_resource type="Texture2D" uid="uid://dercm5pflwpn0" path="res://Graphics/TestZoneMap.png" id="62_cuvk5"]
 
@@ -321,6 +322,17 @@ collision_layer = 4194304
 collision_mask = 4194304
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/WaterSurface"]
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_5wk68")
+one_way_collision = true
+debug_color = Color(0, 1, 1, 0.501961)
+
+[node name="WaterSurface2" type="StaticBody2D" parent="Platforms"]
+position = Vector2(8736, 1599)
+collision_layer = 4194304
+collision_mask = 4194304
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/WaterSurface2"]
 position = Vector2(0, 8)
 shape = SubResource("RectangleShape2D_5wk68")
 one_way_collision = true
@@ -930,10 +942,6 @@ scale = Vector2(76, 6)
 position = Vector2(9984, 2048)
 rotation = -1.57079
 scale = Vector2(115, 4)
-
-[node name="WindCurrent4" parent="Entity" instance=ExtResource("58_26l62")]
-position = Vector2(16, 680)
-scale = Vector2(42, 6)
 
 [node name="Rings" type="Node2D" parent="."]
 
@@ -1702,6 +1710,31 @@ position = Vector2(9984, 936)
 texture = ExtResource("59_h8yhq")
 region_enabled = true
 region_rect = Rect2(0, 16, 64, 80)
+
+[node name="Fan" parent="." instance=ExtResource("60_4s85n")]
+position = Vector2(7776, 1968)
+scale = Vector2(1, 11.0082)
+speed = 120.0
+touchActive = true
+
+[node name="Fan2" parent="." instance=ExtResource("60_4s85n")]
+position = Vector2(7840, 1920)
+scale = Vector2(1, 8.00818)
+speed = 120.0
+touchActive = true
+
+[node name="Fan4" parent="." instance=ExtResource("60_4s85n")]
+position = Vector2(192, 752)
+scale = Vector2(1, 8.00818)
+speed = 60.0
+touchActive = true
+
+[node name="Fan3" parent="." instance=ExtResource("60_4s85n")]
+position = Vector2(8144, 1920)
+scale = Vector2(4, 25.648)
+speed = 120.0
+
+[connection signal="pressed" from="Entity/Switch" to="Entity/Switch/Shutter2" method="force_open"]
 
 [editable path="Platforms/Platform"]
 [editable path="Platforms/Platform13"]

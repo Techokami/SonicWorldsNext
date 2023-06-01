@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://bbf1sa8l70ygh"]
+
+[ext_resource type="Script" path="res://Scripts/Gimmicks/Fan.gd" id="1_5mjmq"]
+[ext_resource type="Texture2D" uid="uid://dic8lihkjwmua" path="res://Graphics/Gimmicks/SmallTurbines.png" id="2_dd5q0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_se3l2"]
+resource_local_to_scene = true
+size = Vector2(32, 16)
+
+[node name="Fan" type="Area2D"]
+collision_layer = 0
+collision_mask = 4096
+script = ExtResource("1_5mjmq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_se3l2")
+debug_color = Color(0.666667, 0, 1, 0.501961)
+
+[node name="fan" type="Sprite2D" parent="."]
+texture = ExtResource("2_dd5q0")
+offset = Vector2(0, 4)
+vframes = 5
+frame = 4
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 120)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]
