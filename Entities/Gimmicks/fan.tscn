@@ -21,7 +21,7 @@ debug_color = Color(0.666667, 0, 1, 0.501961)
 texture = ExtResource("2_dd5q0")
 offset = Vector2(0, 4)
 vframes = 5
-frame = 4
+frame = 1
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 120)
 

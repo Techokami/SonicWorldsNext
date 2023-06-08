@@ -1,0 +1,502 @@
+[gd_scene load_steps=26 format=3 uid="uid://bleoc0gltofoh"]
+
+[ext_resource type="Script" path="res://Scripts/Gimmicks/Teleporter.gd" id="1_slfda"]
+[ext_resource type="Texture2D" uid="uid://77onhgopdvvh" path="res://Graphics/Gimmicks/Teleporter.png" id="2_x0857"]
+[ext_resource type="PackedScene" uid="uid://c1ldunfxhq0he" path="res://Entities/Obstacles/ForceAngleSides.tscn" id="3_8fkwi"]
+[ext_resource type="Script" path="res://Scripts/Gimmicks/TeleporterOrb.gd" id="3_hoy6i"]
+[ext_resource type="Texture2D" uid="uid://cxns8hjb477bs" path="res://Graphics/Gimmicks/TeleporterBeam.png" id="5_ckyv7"]
+[ext_resource type="AudioStream" uid="uid://c4m5p4gkb86p5" path="res://Audio/SFX/Gimmicks/PoweringUp.wav" id="6_yj68g"]
+[ext_resource type="AudioStream" uid="uid://be532oskcheum" path="res://Audio/SFX/Gimmicks/Warp.wav" id="7_eleuh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_si173"]
+atlas = ExtResource("2_x0857")
+region = Rect2(0, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_og08s"]
+atlas = ExtResource("2_x0857")
+region = Rect2(24, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a4vmc"]
+atlas = ExtResource("2_x0857")
+region = Rect2(48, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_giyjb"]
+atlas = ExtResource("2_x0857")
+region = Rect2(0, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5wlkr"]
+atlas = ExtResource("2_x0857")
+region = Rect2(24, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jeoue"]
+atlas = ExtResource("2_x0857")
+region = Rect2(48, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_75ytj"]
+atlas = ExtResource("2_x0857")
+region = Rect2(48, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6xb8v"]
+atlas = ExtResource("2_x0857")
+region = Rect2(24, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rgdud"]
+atlas = ExtResource("2_x0857")
+region = Rect2(0, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kd5t5"]
+atlas = ExtResource("2_x0857")
+region = Rect2(48, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1mx2l"]
+atlas = ExtResource("2_x0857")
+region = Rect2(24, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lgyf2"]
+atlas = ExtResource("2_x0857")
+region = Rect2(0, 24, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8wq5r"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_si173")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_og08s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a4vmc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_giyjb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5wlkr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jeoue")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_75ytj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6xb8v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rgdud")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kd5t5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1mx2l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lgyf2")
+}],
+"loop": true,
+"name": &"active",
+"speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_si173")
+}],
+"loop": true,
+"name": &"off",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o7i57"]
+size = Vector2(48, 24)
+
+[sub_resource type="Animation" id="Animation_girh0"]
+resource_name = "Beam"
+length = 2.55
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Orb:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [&"active", &"off"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Beam/BeamL:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.5, 0.6, 1.4, 2.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Rect2(7, 0, 0, 8), Rect2(7, 0, 1, 8), Rect2(7, 0, 1, 8), Rect2(4, 0, 2.222, 8), Rect2(0, 0, 12, 8), Rect2(0, 0, 24, 8)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("BeamWarmUp:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Warp:playing")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(2.5),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Beam/BeamL:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(-1, 1), Vector2(-1, 24), Vector2(-1, 1000)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Beam/BeamL:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.5, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, -8), Vector2(0, -8), Vector2(0, -1.90735e-06)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Beam/BeamR:region_rect")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.6, 1.4, 2.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Rect2(7, 0, 0, 8), Rect2(7, 0, 1, 8), Rect2(2.222, 0, 4, 8), Rect2(0, 0, 12, 8), Rect2(0, 0, 24, 8)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Beam/BeamR:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.1, 0.5, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, -8), Vector2(0, -8), Vector2(0, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Beam/BeamR:scale")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 24), Vector2(1, 1000)]
+}
+
+[sub_resource type="Animation" id="Animation_t41o3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Orb:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"off"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Beam/BeamL:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(0, 0, 0, 8)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("BeamWarmUp:playing")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Warp:playing")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Beam/BeamL:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Beam/BeamL:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -8)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Beam/BeamR:region_rect")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(0, 0, 0, 8)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Beam/BeamR:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -8)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Beam/BeamR:scale")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1000)]
+}
+
+[sub_resource type="Animation" id="Animation_64cnk"]
+resource_name = "Close"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Beam/BeamL:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.8, 0.9, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Rect2(0, 0, 24, 8), Rect2(0, 0, 12, 8), Rect2(4, 0, 2.222, 8), Rect2(7, 0, 1, 8), Rect2(7, 0, 0, 8)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Beam/BeamL:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.8, 0.9, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(-1, 1000), Vector2(-1, 24), Vector2(-1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Beam/BeamL:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.5, 0.9, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, -1.90735e-06), Vector2(0, -8), Vector2(0, -8)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Beam/BeamR:region_rect")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.8, 0.9, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Rect2(0, 0, 24, 8), Rect2(0, 0, 12, 8), Rect2(2.222, 0, 4, 8), Rect2(7, 0, 1, 8), Rect2(7, 0, 0, 8)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Beam/BeamR:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.5, 0.9),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -8)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Beam/BeamR:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.8, 0.9, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1000), Vector2(1, 24), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_07x4t"]
+_data = {
+"Beam": SubResource("Animation_girh0"),
+"Close": SubResource("Animation_64cnk"),
+"RESET": SubResource("Animation_t41o3")
+}
+
+[node name="Teleporter" type="Node2D"]
+script = ExtResource("1_slfda")
+
+[node name="Orb" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -12)
+sprite_frames = SubResource("SpriteFrames_8wq5r")
+animation = &"off"
+autoplay = "off"
+
+[node name="Teleporter" type="Sprite2D" parent="."]
+texture = ExtResource("2_x0857")
+offset = Vector2(0, -4)
+region_enabled = true
+region_rect = Rect2(0, 0, 48, 24)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 15
+collision_mask = 15
+
+[node name="shape" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, -4)
+shape = SubResource("RectangleShape2D_o7i57")
+
+[node name="OrbCollider" type="StaticBody2D" parent="."]
+collision_layer = 8193
+collision_mask = 8193
+script = ExtResource("3_hoy6i")
+
+[node name="shape" type="CollisionPolygon2D" parent="OrbCollider"]
+position = Vector2(0, -4)
+polygon = PackedVector2Array(-11, -14, -10, -14, -10, -16, -9, -16, -9, -17, -8, -17, -8, -18, -6, -18, -6, -19, -4, -19, -4, -20, 4, -20, 4, -19, 6, -19, 6, -18, 8, -18, 8, -17, 9, -17, 9, -16, 10, -16, 10, -14, 11, -14, 11, -12, -11, -12)
+one_way_collision = true
+
+[node name="ForceAngleSides" parent="." instance=ExtResource("3_8fkwi")]
+visible = false
+position = Vector2(0, -16)
+scale = Vector2(0.747275, 0.747275)
+speedRange = 0
+
+[node name="BeamAnimator" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_07x4t")
+}
+
+[node name="Beam" type="Node2D" parent="."]
+z_index = 50
+position = Vector2(0, -16)
+
+[node name="BeamL" type="Sprite2D" parent="Beam"]
+texture_repeat = 1
+position = Vector2(0, -8)
+scale = Vector2(-1, 1)
+texture = ExtResource("5_ckyv7")
+centered = false
+offset = Vector2(0, -8)
+flip_h = true
+region_enabled = true
+region_rect = Rect2(0, 0, 0, 8)
+
+[node name="BeamR" type="Sprite2D" parent="Beam"]
+texture_repeat = 1
+position = Vector2(0, -8)
+scale = Vector2(1, 1000)
+texture = ExtResource("5_ckyv7")
+centered = false
+offset = Vector2(0, -8)
+flip_h = true
+region_enabled = true
+region_rect = Rect2(0, 0, 0, 8)
+
+[node name="BeamWarmUp" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_yj68g")
+bus = &"SFX"
+
+[node name="Warp" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_eleuh")
+bus = &"SFX"
+
+[node name="OrbReference" type="Sprite2D" parent="."]
+position = Vector2(0, -512)
+texture = ExtResource("2_x0857")
+hframes = 3
+vframes = 3
+frame = 2

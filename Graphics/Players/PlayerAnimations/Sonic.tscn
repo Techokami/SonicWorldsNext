@@ -49,7 +49,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="76"]
 resource_name = "corkScrew"
-length = 1.2
+length = 0.6
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -58,7 +58,7 @@ tracks/0/path = NodePath("Sonic/Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59]
@@ -1020,7 +1020,6 @@ texture = ExtResource("2")
 offset = Vector2(0, -4)
 hframes = 16
 vframes = 18
-frame = 48
 
 [node name="DashDust" type="AnimatedSprite2D" parent="Sprite2D"]
 visible = false

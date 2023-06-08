@@ -45,15 +45,18 @@ func _physics_process(delta):
 					i.disconect_from_floor()
 				
 				# set movement
-				# calculate movement direction
-				var rotDir = getDir.rotated(deg_to_rad(90)).abs()
 				# move toward the top of the mask
-				i.movement.y = lerp(i.movement.y, sign((global_position.y-(16*scale.y)+cos(Global.levelTime*4)*4)-i.global_position.y)*speed, delta*30)
+				i.movement.y = lerp(i.movement.y, sign((global_position.y-(16*scale.y)+cos(Global.levelTime*4)*4)-i.global_position.y)*speed-i.grv, delta*30)
 				
 				# force air state
-				if i.currentState != i.STATES.ANIMATION || i.animator.current_animation != "springScrew":
+				var setPlayerAnimation = "corkScrew"
+				# water animation
+				if i.water:
+					setPlayerAnimation = "current"
+				
+				if i.currentState != i.STATES.ANIMATION || i.animator.current_animation != setPlayerAnimation:
 					i.set_state(i.STATES.AIR)
-					i.animator.play("springScrew")
+					i.animator.play(setPlayerAnimation)
 
 
 

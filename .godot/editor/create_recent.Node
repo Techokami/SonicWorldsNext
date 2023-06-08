@@ -1,9 +1,12 @@
 Sprite2D
-AnimatedSprite2D
+AudioStreamPlayer
+Node2D
+AnimationPlayer
 CollisionShape2D
 Area2D
+CollisionPolygon2D
+AnimatedSprite2D
 StaticBody2D
-AnimationPlayer
 AnimatableBody2D
 Control
 Label

@@ -1,9 +1,8 @@
 res://default_env.tres
-res://Entities/Gimmicks/fan.tscn
+res://Graphics/Players/PlayerAnimations/Sonic.tscn
 res://Tileset/Worlds/WorldsTileMap.tres
-res://Scripts/Gimmicks/Fan.gd
-res://Scene/Zones/BaseZone.tscn
 res://Shaders/PlayerPalette.tres
+res://Scripts/Gimmicks/Fan.gd
 res://Scene/Presentation/PoweredByWorlds.tscn
 res://Scene/Presentation/Title.tscn
 res://Scene/Presentation/CharacterSelect.tscn
@@ -16,5 +15,13 @@ res://Entities/Gimmicks/Trampoline.tscn
 res://Entities/MainObjects/Player.tscn
 res://Scene/Zones/BaseZoneAct2.tscn
 res://Entities/Boss/BossBoundrySetter.tscn
+res://Scene/Zones/BaseZone.tscn
 res://Entities/Gimmicks/WindCurrent.tscn
-res://Graphics/Players/PlayerAnimations/Sonic.tscn
+res://Entities/Gimmicks/fan.tscn
+res://Graphics/Players/PlayerAnimations/Knuckles.tscn
+res://Graphics/Players/PlayerAnimations/Tails.tscn
+res://Entities/Gimmicks/Teleporter.tscn
+res://Scripts/Gimmicks/Teleporter.gd
+res://Scripts/Gimmicks/TeleporterOrb.gd
+res://Scripts/Player/Player.gd
+res://Scripts/Player/States/Normal.gd
