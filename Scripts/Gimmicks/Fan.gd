@@ -12,13 +12,15 @@ var animSpeed = 0.0
 func _ready():
 	scale.x = max(1,scale.x)
 	$fan.global_scale = Vector2(1,1)
-	$fan.region_rect.size.x = $fan.texture.get_width()*round(scale.x)
+	if $fan.texture != null:
+		$fan.region_rect.size.x = $fan.texture.get_width()*round(scale.x)
 
 func _process(delta):
 	if Engine.is_editor_hint():
 		scale.x = max(1,scale.x)
 		$fan.global_scale = Vector2(1,1)
-		$fan.region_rect.size.x = $fan.texture.get_width()*round(scale.x)
+		if $fan.texture != null:
+			$fan.region_rect.size.x = $fan.texture.get_width()*round(scale.x)
 	# animate
 	var goSpeed = 0.0
 	if isActive:
