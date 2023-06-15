@@ -1,11 +1,13 @@
+CollisionShape2D
+ShapeCast2D
+Node2D
+AudioStreamPlayer2D
+AnimatedSprite2D
 Sprite2D
 AudioStreamPlayer
-Node2D
 AnimationPlayer
-CollisionShape2D
 Area2D
 CollisionPolygon2D
-AnimatedSprite2D
 StaticBody2D
 AnimatableBody2D
 Control

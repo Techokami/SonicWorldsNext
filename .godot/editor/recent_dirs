@@ -1,6 +1,7 @@
-res://Scripts/Gimmicks
-res://Graphics/Gimmicks
 res://Entities/Gimmicks
+res://Scripts/Objects
+res://Graphics/Gimmicks
+res://Scripts/Gimmicks
 res://Graphics/Misc
 res://Scripts/Player/States
 res://Tileset/Worlds

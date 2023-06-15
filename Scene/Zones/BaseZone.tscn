@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=3 uid="uid://c2ds3vrtxtcgc"]
+[gd_scene load_steps=71 format=3 uid="uid://c2ds3vrtxtcgc"]
 
 [ext_resource type="Script" path="res://Scripts/Level/Level.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://c30uceea18q1w" path="res://Entities/Misc/HUD.tscn" id="4"]
@@ -38,6 +38,7 @@
 [ext_resource type="PackedScene" uid="uid://b8bt0u45oqhe6" path="res://Entities/Hazards/Lava.tscn" id="41"]
 [ext_resource type="PackedScene" uid="uid://ds7bmlo2s41ji" path="res://Entities/Enemies/BuzzBomber.tscn" id="42"]
 [ext_resource type="PackedScene" uid="uid://bkib68ja7giiv" path="res://Entities/Gimmicks/SetWaterLevel.tscn" id="43"]
+[ext_resource type="PackedScene" uid="uid://bbnywgk4cq5cq" path="res://Entities/Gimmicks/giant_fan.tscn" id="43_bxtwp"]
 [ext_resource type="PackedScene" path="res://Entities/Hazards/Crusher.tscn" id="44"]
 [ext_resource type="PackedScene" uid="uid://msycxndhmuin" path="res://Entities/Obstacles/InvisibleBarrier.tscn" id="45"]
 [ext_resource type="PackedScene" uid="uid://c1ldunfxhq0he" path="res://Entities/Obstacles/ForceAngleSides.tscn" id="46"]
@@ -895,6 +896,9 @@ position = Vector2(4608, 1342)
 position = Vector2(6352, 1888)
 scale = Vector2(47, 12)
 
+[node name="GiantFan" parent="Entity" instance=ExtResource("43_bxtwp")]
+position = Vector2(6312, 1888)
+
 [node name="WindCurrent2" parent="Entity" instance=ExtResource("58_26l62")]
 position = Vector2(8208, 1904)
 scale = Vector2(76, 6)
@@ -903,6 +907,22 @@ scale = Vector2(76, 6)
 position = Vector2(9984, 2048)
 rotation = -1.57079
 scale = Vector2(115, 4)
+
+[node name="Teleporter2" parent="Entity" instance=ExtResource("61_p3qos")]
+position = Vector2(9584, 440)
+travelDistance = 320
+
+[node name="Teleporter3" parent="Entity" instance=ExtResource("61_p3qos")]
+position = Vector2(9068, 1592)
+travelDistance = 1152
+
+[node name="Teleporter4" parent="Entity" instance=ExtResource("61_p3qos")]
+position = Vector2(6384, 1528)
+travelDistance = 640
+
+[node name="Teleporter5" parent="Entity" instance=ExtResource("61_p3qos")]
+position = Vector2(5296, 1880)
+travelDistance = 1656
 
 [node name="Rings" type="Node2D" parent="."]
 
@@ -1684,37 +1704,14 @@ scale = Vector2(1, 8.00818)
 speed = 120.0
 touchActive = true
 
-[node name="Fan4" parent="." instance=ExtResource("60_4s85n")]
-position = Vector2(192, 752)
-scale = Vector2(1, 8.00818)
-speed = 60.0
-touchActive = true
-
 [node name="Fan3" parent="." instance=ExtResource("60_4s85n")]
 position = Vector2(8144, 1920)
 scale = Vector2(4, 25.648)
 speed = 120.0
 
-[node name="Teleporter" parent="." instance=ExtResource("61_p3qos")]
-position = Vector2(976, 696)
-
-[node name="Teleporter2" parent="." instance=ExtResource("61_p3qos")]
-position = Vector2(9584, 440)
-travelDistance = 320
-
-[node name="Teleporter3" parent="." instance=ExtResource("61_p3qos")]
-position = Vector2(9068, 1592)
-travelDistance = 1152
-
-[node name="Teleporter4" parent="." instance=ExtResource("61_p3qos")]
-position = Vector2(6384, 1528)
-travelDistance = 640
-
-[node name="Teleporter5" parent="." instance=ExtResource("61_p3qos")]
-position = Vector2(5296, 1880)
-travelDistance = 1656
-
 [connection signal="pressed" from="Entity/Switch" to="Entity/Switch/Shutter2" method="force_open"]
+[connection signal="all_players_exited" from="Entity/WindCurrent" to="Entity/GiantFan" method="deactivate"]
+[connection signal="player_entered" from="Entity/WindCurrent" to="Entity/GiantFan" method="activate"]
 
 [editable path="Platforms/Platform"]
 [editable path="Platforms/Platform13"]

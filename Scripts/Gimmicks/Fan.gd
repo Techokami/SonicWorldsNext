@@ -5,9 +5,11 @@ var players = []
 @export var speed = 90.0 # default power
 @export var isActive = true
 @export var touchActive = false
+@export var playSound = true
 
 var getFrame = 0.0
 var animSpeed = 0.0
+
 
 func _ready():
 	scale.x = max(1,scale.x)
@@ -26,6 +28,16 @@ func _process(delta):
 	if isActive:
 		if !touchActive || players.size() > 0:
 			goSpeed = 30.0
+			# play fan sound
+			if playSound && !Engine.is_editor_hint():
+				if !$FanSound.playing:
+					$FanSound.play()
+		# end sound if playing
+		elif $FanSound.playing:
+				$FanSound.stop()
+	# back up end sound
+	elif $FanSound.playing:
+			$FanSound.stop()
 	
 	animSpeed = lerp(animSpeed,goSpeed,delta*1.5)
 	$fan.frame = getFrame

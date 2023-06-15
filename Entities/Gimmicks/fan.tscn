@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://bbf1sa8l70ygh"]
+[gd_scene load_steps=5 format=3 uid="uid://bbf1sa8l70ygh"]
 
 [ext_resource type="Script" path="res://Scripts/Gimmicks/Fan.gd" id="1_5mjmq"]
 [ext_resource type="Texture2D" uid="uid://dic8lihkjwmua" path="res://Graphics/Gimmicks/SmallTurbines.png" id="2_dd5q0"]
+[ext_resource type="AudioStream" uid="uid://bbng42jqn5isl" path="res://Audio/SFX/Gimmicks/SmallFan.wav" id="3_206io"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_se3l2"]
 resource_local_to_scene = true
@@ -21,8 +22,16 @@ debug_color = Color(0.666667, 0, 1, 0.501961)
 texture = ExtResource("2_dd5q0")
 offset = Vector2(0, 4)
 vframes = 5
+frame = 3
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 120)
+
+[node name="FanSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_206io")
+volume_db = 5.0
+max_distance = 500.0
+attenuation = 0.2
+bus = &"SFX"
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]

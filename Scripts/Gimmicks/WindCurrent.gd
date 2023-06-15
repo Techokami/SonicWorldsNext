@@ -5,6 +5,9 @@ var players = []
 @export var canMove = true
 @export var moveSpeed = 200.0 # player movement power
 
+signal player_entered
+signal all_players_exited
+
 func _ready():
 	visible = false
 
@@ -51,6 +54,9 @@ func _physics_process(_delta):
 
 func _on_WindCurrent_body_entered(body):
 	if !players.has(body):
+		# emit signal for player touches (can be used for giant fans)
+		if players.size() == 0:
+			emit_signal("player_entered")
 		players.append(body)
 
 
@@ -58,5 +64,8 @@ func _on_WindCurrent_body_exited(body):
 	if players.has(body):
 		body.set_state(body.STATES.NORMAL)
 		players.erase(body)
+		# emit signal for players exiting (can be used for giant fans)
+		if players.size() == 0:
+			emit_signal("all_players_exited")
 
 
