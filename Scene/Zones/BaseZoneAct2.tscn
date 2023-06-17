@@ -17,7 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://gklj3ebdwveu" path="res://Entities/Items/Monitor.tscn" id="15"]
 [ext_resource type="PackedScene" uid="uid://cioq5saowvqxj" path="res://Entities/MainObjects/Player.tscn" id="18"]
 [ext_resource type="Texture2D" uid="uid://bemwlrblbgn23" path="res://Graphics/Backgrounds/WorldsBackground.png" id="25"]
-[ext_resource type="PackedScene" path="res://Entities/MainObjects/GoalPost.tscn" id="34"]
+[ext_resource type="PackedScene" uid="uid://c2esop5orct10" path="res://Entities/MainObjects/GoalPost.tscn" id="34"]
 [ext_resource type="PackedScene" uid="uid://dasp221fqgrno" path="res://Entities/Obstacles/Platform.tscn" id="38"]
 [ext_resource type="PackedScene" path="res://Scene/Zones/ChunkZone.tscn" id="50"]
 
@@ -79,7 +79,7 @@ defaultLeftBoundry = 0
 defaultTopBoundry = 0
 defaultRightBoundry = 2465
 defaultBottomBoundry = 2048
-metadata/_edit_vertical_guides_ = [2465.0]
+metadata/_edit_vertical_guides_ = [2466.0]
 
 [node name="HUD" parent="." instance=ExtResource("4")]
 act = 2

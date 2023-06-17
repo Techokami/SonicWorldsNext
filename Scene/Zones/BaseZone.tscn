@@ -28,7 +28,7 @@
 [ext_resource type="PackedScene" uid="uid://c1n8wnllp8pk2" path="res://Entities/Items/SpecialStageRing.tscn" id="31"]
 [ext_resource type="PackedScene" uid="uid://cfteqnft5ynr7" path="res://Entities/Hazards/Spikes.tscn" id="32"]
 [ext_resource type="PackedScene" uid="uid://deeopkxf5fwh4" path="res://Entities/Obstacles/BreakableWall.tscn" id="33"]
-[ext_resource type="PackedScene" path="res://Entities/MainObjects/GoalPost.tscn" id="34"]
+[ext_resource type="PackedScene" uid="uid://c2esop5orct10" path="res://Entities/MainObjects/GoalPost.tscn" id="34"]
 [ext_resource type="PackedScene" uid="uid://b4oxfl2msl6e6" path="res://Entities/Enemies/Chomper.tscn" id="35"]
 [ext_resource type="PackedScene" uid="uid://dnbjgwbrkknnu" path="res://Entities/Gimmicks/ConveyorBelt.tscn" id="36"]
 [ext_resource type="PackedScene" uid="uid://cejf7f3r45h0c" path="res://Entities/Gimmicks/BubbleGenerator.tscn" id="37"]

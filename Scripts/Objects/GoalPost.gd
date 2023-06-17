@@ -56,7 +56,7 @@ func _physics_process(_delta):
 			getCam.global_position.x = global_position.x
 		# if player greater then screen and stage clear phase is 2 then activate the stage clear sequence
 		if player:
-			if player.global_position.x > global_position.x+(screenXSize/2) and player.movement.x > 0 and Global.stageClearPhase == 2:
+			if player.global_position.x > global_position.x+(screenXSize/2) and player.movement.x >= 0 and Global.stageClearPhase == 2:
 				# stage clear won't work is stage clear phase isn't 0
 				Global.stageClearPhase = 0
 				Global.stage_clear()
