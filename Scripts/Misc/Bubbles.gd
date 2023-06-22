@@ -5,6 +5,7 @@ var bubbleType = 0
 
 var velocity = Vector2(1,-32)
 @onready var offsetTime = randf()*4
+var maxDistance = 0
 
 func _ready():
 	$Bubble.frame = 0
@@ -25,10 +26,14 @@ func _on_Bubble_animation_finished():
 func _physics_process(delta):
 	# check if below water level and rise
 	if Global.waterLevel != null:
-		if global_position.y > Global.waterLevel:
+		if global_position.y > Global.waterLevel and (global_position.y > maxDistance or maxDistance == 0):
 			translate(velocity*delta)
 			offsetTime += delta
 			velocity.x = cos(offsetTime*4)*8
+			# slow down y velocity if approaching max distance
+			if maxDistance != 0:
+				if abs(maxDistance-global_position.y) < abs(velocity.y/2.0):
+					velocity.y = min(-32,(maxDistance-global_position.y)*2.0)
 		else:
 			# if big bubble then play popping animation
 			if $Bubble.animation == "air":

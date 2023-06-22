@@ -648,7 +648,7 @@ func _physics_process(delta):
 	# damage mask bit
 	set_collision_layer_value(20,attacking)
 	# water surface running
-	set_collision_mask_value(23,ground && abs(groundSpeed) >= 7*60)
+	set_collision_mask_value(23,ground and abs(groundSpeed) >= 7*60 and !water)
 	
 	if (ground):
 		groundSpeed = movement.x

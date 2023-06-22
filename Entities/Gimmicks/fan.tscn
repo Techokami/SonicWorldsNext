@@ -22,7 +22,7 @@ debug_color = Color(0.666667, 0, 1, 0.501961)
 texture = ExtResource("2_dd5q0")
 offset = Vector2(0, 4)
 vframes = 5
-frame = 3
+frame = 2
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 120)
 
@@ -33,5 +33,10 @@ max_distance = 500.0
 attenuation = 0.2
 bus = &"SFX"
 
+[node name="BubbleTimer" type="Timer" parent="."]
+wait_time = 0.2
+autostart = true
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]
+[connection signal="timeout" from="BubbleTimer" to="." method="_on_bubble_timer_timeout"]
