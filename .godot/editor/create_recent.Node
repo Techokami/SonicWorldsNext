@@ -1,13 +1,14 @@
-Timer
+Area2D
 CollisionShape2D
-ShapeCast2D
+TileMap
 Node2D
+Timer
+ShapeCast2D
 AudioStreamPlayer2D
 AnimatedSprite2D
 Sprite2D
 AudioStreamPlayer
 AnimationPlayer
-Area2D
 CollisionPolygon2D
 StaticBody2D
 AnimatableBody2D
@@ -15,7 +16,6 @@ Control
 Label
 RichTextLabel
 Camera2D
-TileMap
 RayCast2D
 Node
 AnimationTree

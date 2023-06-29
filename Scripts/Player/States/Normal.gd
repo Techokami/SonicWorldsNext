@@ -16,10 +16,12 @@ var playerIdles = [
 "idle4","idle4","idle4","idle4","idle4","idle4","idle4","idle4","idle4","idle4",
 "idle4","idle4","idle4","idle4","idle4","idle4","idle4","idle4","idle4","idle4",
 "idle5"],
-# TAILS
+# Tails
 ["idle1"], # Note: tails idle loops on idle one, to add more idles make sure to disable his idle1 loop
 # Knuckles
-["idle1"]
+["idle1"],
+# Amy
+["idle1","idle2","idle2","idle2","idle2"]
 ]
 
 func state_exit():

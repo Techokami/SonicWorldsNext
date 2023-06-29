@@ -2,6 +2,7 @@ extends PhysicsObject
 const HITBOXESSONIC = {NORMAL = Vector2(9,19)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,11)*2, GLIDE = Vector2(10,10)*2}
 const HITBOXESTAILS = {NORMAL = Vector2(9,15)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,9.5)*2, GLIDE = Vector2(10,10)*2}
 const HITBOXESKNUCKLES = {NORMAL = Vector2(9,19)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,11)*2, GLIDE = Vector2(10,10)*2}
+const HITBOXESAMY = {NORMAL = Vector2(9,15)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,9.5)*2, GLIDE = Vector2(10,10)*2}
 var currentHitbox = HITBOXESSONIC
 
 #Sonic's Speed constants
@@ -57,7 +58,7 @@ var enemyCounter = 0
 # 8 Jump
 # 9 Jump release velocity
 
-enum CHARACTERS {SONIC, TAILS, KNUCKLES}
+enum CHARACTERS {SONIC, TAILS, KNUCKLES, AMY}
 var character = CHARACTERS.SONIC
 
 # 0 = Sonic, 1 = Tails, 2 = Knuckles, 3 = Shoes, 4 = Super Sonic
@@ -224,6 +225,7 @@ const INPUT_MEMORY_LENGTH = 20
 var Player = load("res://Entities/MainObjects/Player.tscn")
 var tailsAnimations = preload("res://Graphics/Players/PlayerAnimations/Tails.tscn")
 var knucklesAnimations = preload("res://Graphics/Players/PlayerAnimations/Knuckles.tscn")
+var amyAnimations = preload("res://Graphics/Players/PlayerAnimations/Amy.tscn")
 
 # Get sfx list
 @onready var sfx = $SFX.get_children()
@@ -306,6 +308,9 @@ func _ready():
 				playerPal.set_shader_parameter("palRows",16)
 				playerPal.set_shader_parameter("row",0)
 				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperKnuckles.png"))
+				
+			#CHARACTERS.AMY:
+				
 	
 	
 	# Checkpoints
@@ -345,6 +350,19 @@ func _ready():
 			superAnimator = knuckles.get_node_or_null("SuperPalette")
 			spriteControler = knuckles
 			get_node("OldSprite").queue_free()
+		CHARACTERS.AMY:
+			# Set sprites
+			currentHitbox = HITBOXESAMY
+			get_node("Sonic").name = "OldSprite"
+			await get_tree().process_frame
+			var amy = amyAnimations.instantiate()
+			add_child(amy)
+			sprite = amy.get_node("Sprite2D")
+			animator = amy.get_node("PlayerAnimation")
+			superAnimator = amy.get_node_or_null("SuperPalette")
+			spriteControler = amy
+			get_node("OldSprite").queue_free()
+			
 	
 	# run switch physics to ensure character specific physics
 	switch_physics()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=3 uid="uid://c2ds3vrtxtcgc"]
+[gd_scene load_steps=74 format=3 uid="uid://c2ds3vrtxtcgc"]
 
 [ext_resource type="Script" path="res://Scripts/Level/Level.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://c30uceea18q1w" path="res://Entities/Misc/HUD.tscn" id="4"]
@@ -11,6 +11,8 @@
 [ext_resource type="PackedScene" uid="uid://fn82q8rojkjl" path="res://Entities/Gimmicks/CorkscrewLoop.tscn" id="10"]
 [ext_resource type="PackedScene" uid="uid://dggjdwwkl527b" path="res://Entities/Items/Ring.tscn" id="11"]
 [ext_resource type="PackedScene" uid="uid://4q0hpddgto2k" path="res://Entities/Gimmicks/Spring.tscn" id="12"]
+[ext_resource type="Script" path="res://Scripts/Objects/CollapsePlatform.gd" id="12_ddr3b"]
+[ext_resource type="TileSet" uid="uid://dn42tsjf760q0" path="res://Graphics/Tiles/MCZPlatform.tres" id="12_j72bk"]
 [ext_resource type="PackedScene" uid="uid://dwybbnboecmkw" path="res://Entities/Obstacles/Bumper.tscn" id="13"]
 [ext_resource type="PackedScene" uid="uid://cyun8u3qemt5i" path="res://Entities/Gimmicks/ScrewPlatform.tscn" id="14"]
 [ext_resource type="PackedScene" uid="uid://bnn5io8fk2i4h" path="res://Entities/Gimmicks/WaterLevel.tscn" id="15"]
@@ -119,6 +121,9 @@ size = Vector2(80, 2)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5wk68"]
 size = Vector2(496, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jc8ku"]
+size = Vector2(64, 8)
 
 [node name="TestScene" type="Node2D"]
 script = ExtResource("2")
@@ -339,6 +344,40 @@ position = Vector2(0, 8)
 shape = SubResource("RectangleShape2D_5wk68")
 one_way_collision = true
 debug_color = Color(0, 1, 1, 0.501961)
+
+[node name="MCZCollapsePlatform" type="Area2D" parent="Platforms"]
+position = Vector2(1664, 752)
+collision_layer = 0
+collision_mask = 4096
+script = ExtResource("12_ddr3b")
+tile = NodePath("Tiles")
+
+[node name="Tiles" type="TileMap" parent="Platforms/MCZCollapsePlatform"]
+tile_set = ExtResource("12_j72bk")
+format = 2
+layer_0/name = "default"
+layer_0/tile_data = PackedInt32Array(-196608, 0, 0, -131072, 0, 1, -65536, 0, 2, -196607, 65536, 0, -131071, 65536, 1, -65535, 65536, 2, -196606, 131072, 0, -131070, 131072, 1, -196605, 196608, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/MCZCollapsePlatform"]
+position = Vector2(32, -48)
+shape = SubResource("RectangleShape2D_jc8ku")
+
+[node name="MCZCollapsePlatform2" type="Area2D" parent="Platforms"]
+position = Vector2(1792, 752)
+collision_layer = 0
+collision_mask = 4096
+script = ExtResource("12_ddr3b")
+tile = NodePath("Tiles")
+
+[node name="Tiles" type="TileMap" parent="Platforms/MCZCollapsePlatform2"]
+tile_set = ExtResource("12_j72bk")
+format = 2
+layer_0/name = "default"
+layer_0/tile_data = PackedInt32Array(-131076, 262144, 0, -131075, 327680, 0, -65539, 327680, 1, -131074, 393216, 0, -65538, 393216, 1, -2, 393216, 2, -131073, 458752, 0, -65537, 458752, 1, -1, 458752, 2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/MCZCollapsePlatform2"]
+position = Vector2(-32, -48)
+shape = SubResource("RectangleShape2D_jc8ku")
 
 [node name="Entity" type="Node2D" parent="."]
 
@@ -1709,6 +1748,10 @@ position = Vector2(8144, 1920)
 scale = Vector2(4, 25.648)
 speed = 120.0
 
+[connection signal="body_entered" from="Platforms/MCZCollapsePlatform" to="Platforms/MCZCollapsePlatform" method="_on_body_entered"]
+[connection signal="body_exited" from="Platforms/MCZCollapsePlatform" to="Platforms/MCZCollapsePlatform" method="_on_body_exited"]
+[connection signal="body_entered" from="Platforms/MCZCollapsePlatform2" to="Platforms/MCZCollapsePlatform2" method="_on_body_entered"]
+[connection signal="body_exited" from="Platforms/MCZCollapsePlatform2" to="Platforms/MCZCollapsePlatform2" method="_on_body_exited"]
 [connection signal="pressed" from="Entity/Switch" to="Entity/Switch/Shutter2" method="force_open"]
 [connection signal="all_players_exited" from="Entity/WindCurrent" to="Entity/GiantFan" method="deactivate"]
 [connection signal="player_entered" from="Entity/WindCurrent" to="Entity/GiantFan" method="activate"]

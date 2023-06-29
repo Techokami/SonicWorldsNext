@@ -22,6 +22,8 @@ func _physics_process(_delta):
 				$Animator.queue("Tails")
 			2:
 				$Animator.queue("Knuckles")
+			3:
+				$Animator.queue("Amy")
 			_:
 				$Animator.queue("Sonic")
 		$GoalPost.play()

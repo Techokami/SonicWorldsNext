@@ -6,9 +6,9 @@ extends Node2D
 var selected = false
 
 # character labels, the amount of labels in here determines the total amount of options, see the set character option at the end for settings
-var characterLabels = ["Sonic and Tails", "Sonic", "Tails", "Knuckles"]
+var characterLabels = ["Sonic and Tails", "Sonic", "Tails", "Knuckles", "Amy"]
 # level labels, the amount of labels in here determines the total amount of options, see set level option at the end for settings
-var levelLabels = ["Base Zone Act 1", "Base Zone Act 2", "Chunk Zone Act 1"]
+var levelLabels = ["Base Zone Act 1", "Base Zone Act 2"]#, "Chunk Zone Act 1"]
 # character id lines up with characterLabels
 var characterID = 0
 # level id lines up with levelLabels
@@ -42,18 +42,27 @@ func _input(event):
 				$UI/Labels/CharacterOrigin/Sonic.visible = true
 				$UI/Labels/CharacterOrigin/Tails.visible = true
 				$UI/Labels/CharacterOrigin/Knuckles.visible = false
+				$UI/Labels/CharacterOrigin/Amy.visible = false
 			1: # Sonic
 				$UI/Labels/CharacterOrigin/Sonic.visible = true
 				$UI/Labels/CharacterOrigin/Tails.visible = false
 				$UI/Labels/CharacterOrigin/Knuckles.visible = false
+				$UI/Labels/CharacterOrigin/Amy.visible = false
 			2: # Tails
 				$UI/Labels/CharacterOrigin/Sonic.visible = false
 				$UI/Labels/CharacterOrigin/Tails.visible = true
 				$UI/Labels/CharacterOrigin/Knuckles.visible = false
+				$UI/Labels/CharacterOrigin/Amy.visible = false
 			3: # Knuckles
 				$UI/Labels/CharacterOrigin/Sonic.visible = false
 				$UI/Labels/CharacterOrigin/Tails.visible = false
 				$UI/Labels/CharacterOrigin/Knuckles.visible = true
+				$UI/Labels/CharacterOrigin/Amy.visible = false
+			4: # Amy
+				$UI/Labels/CharacterOrigin/Sonic.visible = false
+				$UI/Labels/CharacterOrigin/Tails.visible = false
+				$UI/Labels/CharacterOrigin/Knuckles.visible = false
+				$UI/Labels/CharacterOrigin/Amy.visible = true
 		
 		# finish character select if start is pressed
 		if event.is_action_pressed("gm_pause"):
@@ -72,6 +81,8 @@ func _input(event):
 					Global.PlayerChar1 = Global.CHARACTERS.TAILS
 				3: # Knuckles
 					Global.PlayerChar1 = Global.CHARACTERS.KNUCKLES
+				4: # Amy
+					Global.PlayerChar1 = Global.CHARACTERS.AMY
 					
 			# set the level
 			match(levelID):
@@ -79,7 +90,7 @@ func _input(event):
 					Global.nextZone = load("res://Scene/Zones/BaseZone.tscn") # unnecessary since it's arleady set
 				1: # Base Zone Act 2
 					Global.nextZone = load("res://Scene/Zones/BaseZoneAct2.tscn") # Replace me! I don't exist yet!
-				2: # Chunk Zone Act 1
-					Global.nextZone = load("res://Scene/Zones/ChunkZone.tscn")
+				#2: # Chunk Zone Act 1
+				#	Global.nextZone = load("res://Scene/Zones/ChunkZone.tscn")
 			
 			Global.main.change_scene_to_file(Global.nextZone,"FadeOut","FadeOut",1)
