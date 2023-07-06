@@ -1,3 +1,5 @@
+VisibleOnScreenNotifier2D
+Sprite2D
 Area2D
 CollisionShape2D
 TileMap
@@ -6,7 +8,6 @@ Timer
 ShapeCast2D
 AudioStreamPlayer2D
 AnimatedSprite2D
-Sprite2D
 AudioStreamPlayer
 AnimationPlayer
 CollisionPolygon2D

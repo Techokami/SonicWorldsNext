@@ -1,12 +1,12 @@
 res://default_env.tres
 res://Graphics/Players/PlayerAnimations/Amy.tscn
 res://Tileset/Worlds/WorldsTileMap.tres
+res://Graphics/Tiles/MCZPlatform.tres
 res://Shaders/PlayerPalette.tres
-res://Scene/Presentation/CharacterSelect.tscn
-res://Scripts/Level/CharacterSelect.gd
-res://Scripts/Global/Global.gd
+res://Scene/Zones/BaseZone.tscn
 res://Scene/Presentation/PoweredByWorlds.tscn
 res://Scene/Presentation/Title.tscn
+res://Scene/Presentation/CharacterSelect.tscn
 res://Scene/Main.tscn
 res://Entities/Enemies/Orbinaut.tscn
 res://Entities/Enemies/MotoBug.tscn
@@ -16,7 +16,6 @@ res://Entities/Gimmicks/Trampoline.tscn
 res://Entities/MainObjects/Player.tscn
 res://Scene/Zones/BaseZoneAct2.tscn
 res://Entities/Boss/BossBoundrySetter.tscn
-res://Scene/Zones/BaseZone.tscn
 res://Entities/Gimmicks/fan.tscn
 res://Entities/Gimmicks/Teleporter.tscn
 res://Entities/Gimmicks/giant_fan.tscn
@@ -24,8 +23,6 @@ res://Entities/Gimmicks/WindCurrent.tscn
 res://Entities/MainObjects/GoalPost.tscn
 res://Graphics/Players/PlayerAnimations/Sonic.tscn
 res://Scripts/Player/Player.gd
-res://Scripts/Player/States/Normal.gd
-res://Scripts/Misc/HUD.gd
-res://Graphics/Tiles/MCZPlatform.tres
+res://Scripts/Objects/FallingBlockPlat.gd
 res://Scripts/Objects/CollapsePlatform.gd
-res://Scripts/Objects/GoalPost.gd
+res://Entities/Misc/falling_block_plat.tscn

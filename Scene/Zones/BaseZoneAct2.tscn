@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://bjavywoj00j1j"]
+[gd_scene load_steps=28 format=3 uid="uid://bjavywoj00j1j"]
 
 [ext_resource type="Script" path="res://Scripts/Level/Level.gd" id="2"]
 [ext_resource type="Script" path="res://Scripts/Objects/StateMovers/StateMoverPositional.gd" id="3"]
@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://dwvek120iiiv" path="res://Graphics/Obstacles/Walls/shutterCNZ.png" id="14"]
 [ext_resource type="PackedScene" uid="uid://gklj3ebdwveu" path="res://Entities/Items/Monitor.tscn" id="15"]
 [ext_resource type="PackedScene" uid="uid://cioq5saowvqxj" path="res://Entities/MainObjects/Player.tscn" id="18"]
+[ext_resource type="Script" path="res://Scripts/Objects/CollapsePlatform.gd" id="21_x7n5b"]
 [ext_resource type="Texture2D" uid="uid://bemwlrblbgn23" path="res://Graphics/Backgrounds/WorldsBackground.png" id="25"]
 [ext_resource type="PackedScene" uid="uid://c2esop5orct10" path="res://Entities/MainObjects/GoalPost.tscn" id="34"]
 [ext_resource type="PackedScene" uid="uid://dasp221fqgrno" path="res://Entities/Obstacles/Platform.tscn" id="38"]
@@ -69,6 +70,9 @@ _data = {
 "points": PackedVector2Array(0, 0, 0, 0, 345, -342, 43.4479, -26.939, -43.4479, 26.939, 135, -306, 16.8361, -31.63, -16.8361, 31.63, 44, -224, 0, 0, 0, 0, 0, 0)
 }
 point_count = 4
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n7iqd"]
+size = Vector2(128, 24)
 
 [node name="BaseZoneAct2" type="Node2D"]
 script = ExtResource("2")
@@ -315,3 +319,23 @@ position = Vector2(1056, 641)
 [node name="Monitor" parent="Entities" instance=ExtResource("15")]
 position = Vector2(656, 464)
 item = 4
+
+[node name="AdvancedPlatform" type="Area2D" parent="Entities"]
+position = Vector2(1424, 512)
+collision_layer = 0
+collision_mask = 4096
+script = ExtResource("21_x7n5b")
+tile = NodePath("Tiles")
+
+[node name="Tiles" type="TileMap" parent="Entities/AdvancedPlatform"]
+tile_set = ExtResource("6_1cyhs")
+format = 2
+layer_0/name = "default"
+layer_0/tile_data = PackedInt32Array(-393216, 131072, 0, -327680, 131077, 1, -393215, 131072, 0, -327679, 131077, 1, -393214, 0, 8, -393213, 65536, 8, -327678, 131077, 1, -262142, 131077, 1, -327677, 131077, 1, -262141, 131077, 1, -393212, 262144, 66, -393211, 327680, 66, -393210, 393216, 66, -327676, 131077, 1, -262140, 131077, 1, -262139, 131077, 1, -262138, 131077, 1, -327674, 131077, 1, -262143, 131077, 1, -262144, 131077, 1, -196608, 131077, 1, -196607, 131077, 1, -196606, 131077, 1, -196605, 131077, 1, -196604, 131077, 1, -131070, 131077, 1, -131071, 131077, 1, -131072, 131077, 1, -65536, 131077, 1, -327673, 458752, 10, -262137, 131077, 1, -196603, 131077, 1, -131069, 131077, 1, -65535, 131077, 1, -327675, 131077, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/AdvancedPlatform"]
+position = Vector2(64, -92)
+shape = SubResource("RectangleShape2D_n7iqd")
+
+[connection signal="body_entered" from="Entities/AdvancedPlatform" to="Entities/AdvancedPlatform" method="_on_body_entered"]
+[connection signal="body_exited" from="Entities/AdvancedPlatform" to="Entities/AdvancedPlatform" method="_on_body_exited"]

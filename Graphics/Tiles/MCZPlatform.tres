@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://ckl467lne71lc" path="res://Graphics/Gimmicks/CollapsingPlatform.png" id="1_figi8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cmh8o"]
+resource_name = "Platform"
 texture = ExtResource("1_figi8")
 0:0/0 = 0
 0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)

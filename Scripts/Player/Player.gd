@@ -2,7 +2,7 @@ extends PhysicsObject
 const HITBOXESSONIC = {NORMAL = Vector2(9,19)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,11)*2, GLIDE = Vector2(10,10)*2}
 const HITBOXESTAILS = {NORMAL = Vector2(9,15)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,9.5)*2, GLIDE = Vector2(10,10)*2}
 const HITBOXESKNUCKLES = {NORMAL = Vector2(9,19)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,11)*2, GLIDE = Vector2(10,10)*2}
-const HITBOXESAMY = {NORMAL = Vector2(9,15)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,9.5)*2, GLIDE = Vector2(10,10)*2}
+const HITBOXESAMY = {NORMAL = Vector2(9,15)*2, ROLL = Vector2(7,11)*2, CROUCH = Vector2(9,9.5)*2, GLIDE = Vector2(10,10)*2}
 var currentHitbox = HITBOXESSONIC
 
 #Sonic's Speed constants
@@ -362,6 +362,7 @@ func _ready():
 			superAnimator = amy.get_node_or_null("SuperPalette")
 			spriteControler = amy
 			get_node("OldSprite").queue_free()
+			maxCharGroundHeight = 12 # adjust height distance to prevent clipping off floors (amy's smaller)
 			
 	
 	# run switch physics to ensure character specific physics
@@ -1173,6 +1174,12 @@ func determine_physics():
 			elif shoeTime > 0:
 				return 7 # Shoes
 			return 2 # Knuckles
+		CHARACTERS.AMY: # I don't know what amy's physics are so in the meantime we just look at sonic
+			if isSuper:
+				return 4 # Super Sonic
+			elif shoeTime > 0:
+				return 3 # Shoes
+			return 0 # Sonic
 	
 	return -1
 
