@@ -15,6 +15,9 @@ func _physics_process(_delta):
 	# if any players are found in the array, if they're on the ground make them roll
 	if players.size() > 0:
 		for i in players:
+			# ignore if player is dead
+			if i.currentState == i.STATES.DIE:
+				break
 			# determine the direction of the arrow based on scale and rotation
 			var getDir = Vector2.RIGHT.rotated(global_rotation)
 			
@@ -48,9 +51,11 @@ func _physics_process(_delta):
 				i.sprite.flip_h = (i.direction < 0)
 			
 			# force slide state
-			if i.currentState != i.STATES.ANIMATION || i.animator.current_animation != "current":
+			if i.currentState != i.STATES.ANIMATION or i.animator.current_animation != "current":
 				i.set_state(i.STATES.ANIMATION,i.currentHitbox.ROLL)
-				i.animator.play("current")
+				# check that specific animations aren't playing (related to under water bars)
+				if i.animator.current_animation != "clingVerticalBar":
+					i.animator.play("current")
 
 func _on_WindCurrent_body_entered(body):
 	if !players.has(body):
@@ -62,7 +67,9 @@ func _on_WindCurrent_body_entered(body):
 
 func _on_WindCurrent_body_exited(body):
 	if players.has(body):
-		body.set_state(body.STATES.NORMAL)
+		# check that player is not dead
+		if body.currentState != body.STATES.DIE:
+			body.set_state(body.STATES.NORMAL)
 		players.erase(body)
 		# emit signal for players exiting (can be used for giant fans)
 		if players.size() == 0:

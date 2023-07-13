@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=3 uid="uid://bdaih80dlev3f"]
+[gd_scene load_steps=61 format=3 uid="uid://bdaih80dlev3f"]
 
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="1"]
 [ext_resource type="Texture2D" uid="uid://cndrds5482vh5" path="res://Graphics/Players/Knuckles.png" id="2"]
@@ -840,12 +840,43 @@ tracks/0/keys = {
 "values": [267, 266, 265, 264, 263, 262, 261, 260, 259, 258, 257, 256]
 }
 
+[sub_resource type="Animation" id="Animation_4xwdj"]
+resource_name = "clingVerticalBar"
+length = 0.133335
+loop_mode = 1
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [106, 107]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D/Sprite2D:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(21, -2)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_t3bqq"]
 _data = {
 "RESET": SubResource("86"),
 "air": SubResource("108"),
 "climb": SubResource("120"),
 "climbUp": SubResource("121"),
+"clingVerticalBar": SubResource("Animation_4xwdj"),
 "corkScrew": SubResource("76"),
 "corkScrewOffset": SubResource("88"),
 "crouch": SubResource("77"),

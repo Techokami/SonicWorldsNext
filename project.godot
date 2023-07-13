@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Sonic Worlds Next"
 run/main_scene="res://Scene/Main.tscn"
-config/features=PackedStringArray("4.0")
+config/features=PackedStringArray("4.1")
 boot_splash/bg_color=Color(1, 1, 1, 1)
 boot_splash/image="res://icon.png"
 config/icon="res://icon.png"

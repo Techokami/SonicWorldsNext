@@ -1,4 +1,4 @@
-extends Node
+extends Area2D
 
 # Vertical Swinging Bar from Mushroom Hill Zone
 # Author: DimensionWarped

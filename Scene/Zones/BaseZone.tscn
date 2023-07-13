@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=3 uid="uid://c2ds3vrtxtcgc"]
+[gd_scene load_steps=76 format=3 uid="uid://mih20g20mqeq"]
 
 [ext_resource type="Script" path="res://Scripts/Level/Level.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://c30uceea18q1w" path="res://Entities/Misc/HUD.tscn" id="4"]
@@ -45,6 +45,7 @@
 [ext_resource type="PackedScene" uid="uid://msycxndhmuin" path="res://Entities/Obstacles/InvisibleBarrier.tscn" id="45"]
 [ext_resource type="PackedScene" uid="uid://c1ldunfxhq0he" path="res://Entities/Obstacles/ForceAngleSides.tscn" id="46"]
 [ext_resource type="PackedScene" uid="uid://blwewyk2fnrew" path="res://Entities/Gimmicks/Shutter.tscn" id="47"]
+[ext_resource type="PackedScene" uid="uid://c43isa3fib6s6" path="res://Entities/Gimmicks/WaterBar.tscn" id="47_ubh8u"]
 [ext_resource type="PackedScene" uid="uid://cma2mtbqjiqdc" path="res://Entities/Gimmicks/HangingBar.tscn" id="48"]
 [ext_resource type="PackedScene" uid="uid://cqcgjcw101xxo" path="res://Entities/Enemies/MotoBug.tscn" id="49"]
 [ext_resource type="PackedScene" uid="uid://bjavywoj00j1j" path="res://Scene/Zones/BaseZoneAct2.tscn" id="50"]
@@ -124,6 +125,9 @@ size = Vector2(496, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jc8ku"]
 size = Vector2(64, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2ojop"]
+size = Vector2(256, 16)
 
 [node name="TestScene" type="Node2D"]
 script = ExtResource("2")
@@ -412,6 +416,25 @@ layer_0/tile_data = PackedInt32Array(-131076, 262144, 0, -131075, 327680, 0, -65
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/MCZCollapsePlatform3"]
 position = Vector2(-32, -48)
 shape = SubResource("RectangleShape2D_jc8ku")
+
+[node name="WidePlatform" type="Area2D" parent="Platforms"]
+position = Vector2(7360, 1952)
+collision_layer = 0
+collision_mask = 4096
+script = ExtResource("12_ddr3b")
+tile = NodePath("Tiles")
+speed = 6.0
+soundDelay = 0.0
+
+[node name="Tiles" type="TileMap" parent="Platforms/WidePlatform"]
+tile_set = ExtResource("6_b4xdu")
+format = 2
+layer_0/name = "default"
+layer_0/tile_data = PackedInt32Array(-131072, 131075, 0, -65536, 131075, 1, -131071, 131075, 0, -65535, 131075, 1, -131070, 131075, 0, -65534, 131075, 1, -131069, 131075, 0, -65533, 131075, 1, -131068, 131075, 0, -65532, 131075, 1, -131067, 131075, 0, -65531, 131075, 1, -131066, 131075, 0, -65530, 131075, 1, -131065, 131075, 0, -65529, 131075, 1, -131064, 131075, 0, -65528, 131075, 1, -131063, 131075, 0, -65527, 131075, 1, -131062, 131075, 0, -65526, 131075, 1, -131061, 131075, 0, -65525, 131075, 1, -131060, 131075, 0, -65524, 131075, 1, -131059, 131075, 0, -65523, 131075, 1, -131058, 131075, 0, -65522, 131075, 1, -131057, 131075, 0, -65521, 131075, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/WidePlatform"]
+position = Vector2(128, -32)
+shape = SubResource("RectangleShape2D_2ojop")
 
 [node name="Entity" type="Node2D" parent="."]
 
@@ -929,6 +952,10 @@ position = Vector2(896, 1488)
 script = ExtResource("24")
 currentCharacter = 2
 
+[node name="AltSpawn2" type="Node2D" parent="Entity"]
+position = Vector2(5872, 1576)
+script = ExtResource("24")
+
 [node name="ConveyorBelt" parent="Entity" instance=ExtResource("36")]
 position = Vector2(4864, 880)
 constant_linear_velocity = Vector2(-60, 0)
@@ -996,6 +1023,15 @@ travelDistance = 640
 [node name="Teleporter5" parent="Entity" instance=ExtResource("61_p3qos")]
 position = Vector2(5296, 1880)
 travelDistance = 1656
+
+[node name="WaterBar" parent="Entity" instance=ExtResource("47_ubh8u")]
+position = Vector2(6683, 1920)
+
+[node name="WaterBar2" parent="Entity" instance=ExtResource("47_ubh8u")]
+position = Vector2(6771, 1952)
+
+[node name="WaterBar3" parent="Entity" instance=ExtResource("47_ubh8u")]
+position = Vector2(6523, 1888)
 
 [node name="Rings" type="Node2D" parent="."]
 
@@ -1739,7 +1775,6 @@ max_distance = 1000.0
 [node name="TestZoneMap" type="Sprite2D" parent="."]
 visible = false
 modulate = Color(1, 0.745098, 1, 0.333333)
-z_index = -10
 texture = ExtResource("62_cuvk5")
 centered = false
 
@@ -1790,6 +1825,8 @@ speed = 120.0
 [connection signal="body_exited" from="Platforms/MCZCollapsePlatform2" to="Platforms/MCZCollapsePlatform2" method="_on_body_exited"]
 [connection signal="body_entered" from="Platforms/MCZCollapsePlatform3" to="Platforms/MCZCollapsePlatform3" method="_on_body_entered"]
 [connection signal="body_exited" from="Platforms/MCZCollapsePlatform3" to="Platforms/MCZCollapsePlatform3" method="_on_body_exited"]
+[connection signal="body_entered" from="Platforms/WidePlatform" to="Platforms/WidePlatform" method="_on_body_entered"]
+[connection signal="body_exited" from="Platforms/WidePlatform" to="Platforms/WidePlatform" method="_on_body_exited"]
 [connection signal="pressed" from="Entity/Switch" to="Entity/Switch/Shutter2" method="force_open"]
 [connection signal="all_players_exited" from="Entity/WindCurrent" to="Entity/GiantFan" method="deactivate"]
 [connection signal="player_entered" from="Entity/WindCurrent" to="Entity/GiantFan" method="activate"]
