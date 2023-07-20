@@ -35,7 +35,7 @@ func state_exit():
 func _process(delta):
 	
 	# jumping / rolling and more (note, you'll want to adjust the other actions if your character does something different)
-	if parent.inputs[parent.INPUTS.ACTION] == 1 or parent.inputs[parent.INPUTS.ACTION2] == 1 or parent.inputs[parent.INPUTS.ACTION3] == 1:
+	if parent.any_action_pressed():
 		if (parent.movement.x == 0 and parent.inputs[parent.INPUTS.YINPUT] > 0):
 			parent.animator.play("spinDash")
 			parent.sfx[2].play()

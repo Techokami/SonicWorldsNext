@@ -1,3 +1,4 @@
+res://Scripts/Player/States
 res://Entities/Misc
 res://Scripts/Objects
 res://Graphics/Tiles
@@ -5,5 +6,4 @@ res://Entities/Gimmicks
 res://Graphics/Gimmicks
 res://Scripts/Gimmicks
 res://Graphics/Misc
-res://Scripts/Player/States
 res://Tileset/Worlds

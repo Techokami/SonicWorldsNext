@@ -1,4 +1,4 @@
-[gd_scene load_steps=193 format=3 uid="uid://cioq5saowvqxj"]
+[gd_scene load_steps=194 format=3 uid="uid://cioq5saowvqxj"]
 
 [ext_resource type="Script" path="res://Scripts/Player/Player.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://d1e4muavtnun6" path="res://Graphics/Players/PlayerAnimations/Sonic.tscn" id="2"]
@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://d20jsqgat6iup" path="res://Graphics/Items/shield_fire.png" id="16"]
 [ext_resource type="Texture2D" uid="uid://dlgef7vglnii5" path="res://Graphics/Items/shield_bubble.png" id="17"]
 [ext_resource type="Texture2D" uid="uid://d34mlpdkwjuru" path="res://Graphics/Items/shield_lightning.png" id="18"]
+[ext_resource type="Script" path="res://Scripts/Player/States/AmyHammerSwing.gd" id="18_l6lpm"]
 [ext_resource type="Script" path="res://Scripts/Player/ShieldAnimations.gd" id="19"]
 [ext_resource type="Texture2D" uid="uid://frqq7h80cju8" path="res://Graphics/Items/shield_insta.png" id="20"]
 [ext_resource type="AudioStream" uid="uid://dg4gnjja2ce0s" path="res://Audio/SFX/Player/Shield.wav" id="21"]
@@ -1267,6 +1268,10 @@ script = ExtResource("59")
 
 [node name="WallClimb" type="Node" parent="States"]
 script = ExtResource("62")
+
+[node name="AmyHammerSwing" type="Node" parent="States"]
+process_priority = 1
+script = ExtResource("18_l6lpm")
 
 [node name="PhysicsLookUp" type="Node" parent="."]
 script = ExtResource("4")

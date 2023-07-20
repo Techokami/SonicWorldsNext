@@ -122,7 +122,8 @@ var spriteRotation = 0
 var airControl = true
 
 # States
-enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, ANIMATION, HIT, DIE, CORKSCREW, JUMPCANCEL, SUPER, FLY, RESPAWN, HANG, GLIDE, WALLCLIMB}
+enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, ANIMATION, HIT, DIE, CORKSCREW, JUMPCANCEL,
+SUPER, FLY, RESPAWN, HANG, GLIDE, WALLCLIMB, AMYHAMMER}
 var currentState = STATES.AIR
 @onready var hitBoxOffset = {normal = $HitBox.position, crouch = $HitBox.position}
 var crouchBox = null
@@ -169,7 +170,7 @@ var rachetScrollRight = false
 var rachetScrollTop = false
 var rachetScrollBottom = false
 
-var rotatableSprites = ["walk", "run", "peelOut"]
+var rotatableSprites = ["walk", "run", "peelOut", "hammerSwing"]
 var direction = scale.x
 
 # Ground speed is mostly used for timing and animations, there isn't any functionality to it.

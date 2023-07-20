@@ -26,8 +26,8 @@ func _process(_delta):
 		# Shield actions
 		elif ((parent.inputs[parent.INPUTS.ACTION] == 1 or parent.inputs[parent.INPUTS.ACTION2] == 1 or parent.inputs[parent.INPUTS.ACTION3] == 1) and !parent.abilityUsed and isJump):
 			# Super actions
-			if parent.isSuper and parent.character == parent.CHARACTERS.SONIC:
-				parent.abilityUsed = true # has to be set to true for drop dash (Sonic only)
+			if parent.isSuper and (parent.character == parent.CHARACTERS.SONIC or parent.character == parent.CHARACTERS.AMY):
+				parent.abilityUsed = true # has to be set to true for drop dash (Sonic and amy only)
 			# Normal actions
 			else:
 				match (parent.character):
@@ -107,6 +107,13 @@ func _process(_delta):
 						# set initial movement
 						parent.movement = Vector2(parent.direction*4*60,max(parent.movement.y,0))
 						parent.set_state(parent.STATES.GLIDE,parent.currentHitbox.GLIDE)
+					# Amy hammer drop dash
+					parent.CHARACTERS.AMY:
+						# set ability used to true to prevent multiple uses
+						parent.abilityUsed = true
+						# enable insta shield hitbox if hammer drop dashing
+						parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = (parent.animator.current_animation == "dropDash")
+						
 
 
 func _physics_process(delta):
@@ -124,12 +131,12 @@ func _physics_process(delta):
 	# Mechanics if jumping
 	if (isJump):
 		# Cut vertical movement if jump released
-		if !(parent.inputs[parent.INPUTS.ACTION] or parent.inputs[parent.INPUTS.ACTION2] or parent.inputs[parent.INPUTS.ACTION3]) and parent.movement.y < -4*60:
+		if !parent.any_action_held_or_pressed() and parent.movement.y < -4*60:
 			parent.movement.y = -4*60
-		# Drop dash (for sonic)
-		if parent.character == parent.CHARACTERS.SONIC:
+		# Drop dash (for sonic / amy)
+		if parent.character == parent.CHARACTERS.SONIC or parent.character == parent.CHARACTERS.AMY:
 			
-			if (parent.inputs[parent.INPUTS.ACTION] or parent.inputs[parent.INPUTS.ACTION2] or parent.inputs[parent.INPUTS.ACTION3]) and parent.abilityUsed and (parent.shield <= parent.SHIELDS.NORMAL or parent.isSuper or $"../../InvincibilityBarrier".visible):
+			if parent.any_action_held_or_pressed() and parent.abilityUsed and (parent.shield <= parent.SHIELDS.NORMAL or parent.isSuper or $"../../InvincibilityBarrier".visible):
 				if dropTimer < 1:
 					dropTimer += (delta/20)*60 # should be ready in the equivelent of 20 frames at 60FPS
 				else:
@@ -137,7 +144,7 @@ func _physics_process(delta):
 						parent.sfx[20].play()
 						parent.animator.play("dropDash")
 			# Drop dash reset
-			elif !(parent.inputs[parent.INPUTS.ACTION] or parent.inputs[parent.INPUTS.ACTION2] or parent.inputs[parent.INPUTS.ACTION3]) and dropTimer > 0:
+			elif !parent.any_action_held_or_pressed() and dropTimer > 0:
 				dropTimer = 0
 				if parent.animator.current_animation == "dropDash":
 					parent.animator.play("roll")
@@ -163,8 +170,8 @@ func _physics_process(delta):
 			# return to normal state
 			parent.set_state(parent.STATES.NORMAL)
 			
-			# Drop dash release (for sonic)
-			if dropTimer >= 1 and parent.character == parent.CHARACTERS.SONIC:
+			# Drop dash release (for sonic / amy)
+			if dropTimer >= 1 and (parent.character == parent.CHARACTERS.SONIC or parent.character == parent.CHARACTERS.AMY):
 				# Check if moving forward or back
 				# Forward landing
 				if sign(parent.movement.x) == sign(parent.direction) or parent.movement.x == 0:
@@ -178,21 +185,31 @@ func _physics_process(delta):
 					# else calculate landing
 					else:
 						parent.movement.x = clamp((parent.movement.x/2) + (dropSpeed[int(parent.isSuper)]*60*parent.direction), -dropMax[int(parent.isSuper)]*60,dropMax[int(parent.isSuper)]*60)
-				# stop vertical movement downard
-				parent.movement.y = min(0,parent.movement.y)
-				parent.set_state(parent.STATES.ROLL)
-				parent.animator.play("roll")
-				parent.sfx[20].stop()
-				parent.sfx[3].play()
-				# Lag camera
-				parent.lock_camera(16.0/60.0)
-				
-				# drop dash dust
-				var dust = parent.Particle.instantiate()
-				dust.play("DropDash")
-				dust.global_position = parent.global_position+Vector2(0,2).rotated(parent.rotation)
-				dust.scale.x = parent.direction
-				parent.get_parent().add_child(dust)
+				# Sonics drop dash handle
+				if parent.character == parent.CHARACTERS.SONIC:
+					# stop vertical movement downard
+					parent.movement.y = min(0,parent.movement.y)
+					parent.set_state(parent.STATES.ROLL)
+					parent.animator.play("roll")
+					parent.sfx[20].stop()
+					parent.sfx[3].play()
+					# Lag camera
+					parent.lock_camera(16.0/60.0)
+					
+					# drop dash dust
+					var dust = parent.Particle.instantiate()
+					dust.play("DropDash")
+					dust.global_position = parent.global_position+Vector2(0,2).rotated(parent.rotation)
+					dust.scale.x = parent.direction
+					parent.get_parent().add_child(dust)
+				# Amys drop dash handle
+				elif parent.character == parent.CHARACTERS.AMY:
+					# stop vertical movement downard
+					parent.movement.y = min(0,parent.movement.y)
+					parent.set_state(parent.STATES.AMYHAMMER)
+					parent.animator.play("hammerSwing")
+					parent.sfx[20].stop()
+					parent.sfx[3].play()
 	# if velocity going up reset bounce reaction
 	elif parent.movement.y < 0:
 		parent.bounceReaction = 0
