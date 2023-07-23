@@ -176,13 +176,13 @@ var direction = scale.x
 # Ground speed is mostly used for timing and animations, there isn't any functionality to it.
 var groundSpeed = 0
 
-enum INPUTS {XINPUT, YINPUT, ACTION, ACTION2, ACTION3, PAUSE}
+enum INPUTS {XINPUT, YINPUT, ACTION, ACTION2, ACTION3, SUPER, PAUSE}
 # Input control, 0 = 0ff, 1 = pressed, 2 = held
 # (for held it's best to use inputs[INPUTS.ACTION] > 0)
 # XInput and YInput are directions and are either -1, 0 or 1.
-var inputs = [0,0,0,0,0,0,0]
-const INPUTACTIONS_P1 = [["gm_left","gm_right"],["gm_up","gm_down"],"gm_action","gm_action2","gm_action3","gm_pause"]
-const INPUTACTIONS_P2 = [["gm_left_P2","gm_right_P2"],["gm_up_P2","gm_down_P2"],"gm_action_P2","gm_action2_P2","gm_action3_P2","gm_pause_P2"]
+var inputs = [0,0,0,0,0,0,0,0]
+const INPUTACTIONS_P1 = [["gm_left","gm_right"],["gm_up","gm_down"],"gm_action","gm_action2","gm_action3","gm_super","gm_pause"]
+const INPUTACTIONS_P2 = [["gm_left_P2","gm_right_P2"],["gm_up_P2","gm_down_P2"],"gm_action_P2","gm_action2_P2","gm_action3_P2","gm_super_P2","gm_pause_P2"]
 var inputActions = INPUTACTIONS_P1
 # 0 = ai, 1 = player 1, 2 = player 2
 var playerControl = 1
@@ -289,7 +289,7 @@ func _ready():
 		character = Global.PlayerChar1
 		character -= 1
 		
-		# set palettes
+		# set super palettes
 		match (character):
 			CHARACTERS.SONIC:
 				# shader texture sizes need to be to the power of 2
@@ -309,6 +309,12 @@ func _ready():
 				playerPal.set_shader_parameter("palRows",16)
 				playerPal.set_shader_parameter("row",0)
 				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperKnuckles.png"))
+		
+			CHARACTERS.AMY:
+				playerPal.set_shader_parameter("amount",4)
+				playerPal.set_shader_parameter("palRows",8)
+				playerPal.set_shader_parameter("row",0)
+				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperAmy.png"))
 				
 			#CHARACTERS.AMY:
 				
@@ -859,6 +865,7 @@ func set_inputs():
 		inputs[INPUTS.ACTION] = (int(Input.is_action_pressed(inputActions[INPUTS.ACTION]))*2)-int(Input.is_action_just_pressed(inputActions[INPUTS.ACTION]))
 		inputs[INPUTS.ACTION2] = (int(Input.is_action_pressed(inputActions[INPUTS.ACTION2]))*2)-int(Input.is_action_just_pressed(inputActions[INPUTS.ACTION2]))
 		inputs[INPUTS.ACTION3] =  (int(Input.is_action_pressed(inputActions[INPUTS.ACTION3]))*2)-int(Input.is_action_just_pressed(inputActions[INPUTS.ACTION3]))
+		inputs[INPUTS.SUPER] =  (int(Input.is_action_pressed(inputActions[INPUTS.SUPER]))*2)-int(Input.is_action_just_pressed(inputActions[INPUTS.SUPER]))
 	
 	if (playerControl > 0 and horizontalLockTimer <= 0):
 		inputs[INPUTS.XINPUT] = -int(Input.is_action_pressed(inputActions[INPUTS.XINPUT][0]))+int(Input.is_action_pressed(inputActions[INPUTS.XINPUT][1]))

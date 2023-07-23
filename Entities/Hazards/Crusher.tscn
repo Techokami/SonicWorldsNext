@@ -1,24 +1,23 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=4 format=3 uid="uid://bnv0qhju3sj1a"]
 
-[ext_resource path="res://Graphics/Obstacles/Crusher.png" type="Texture2D" id=1]
-[ext_resource path="res://Scripts/Objects/Crusher.gd" type="Script" id=2]
+[ext_resource type="Texture2D" uid="uid://c13lxd2y0xsxp" path="res://Graphics/Obstacles/Crusher.png" id="1"]
+[ext_resource type="Script" path="res://Scripts/Objects/Crusher.gd" id="2"]
 
-[sub_resource type="RectangleShape2D" id=1]
-size = Vector2( 32, 12 )
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(64, 24)
 
 [node name="Crusher" type="Node2D"]
-script = ExtResource( 2 )
+script = ExtResource("2")
 
 [node name="CrushBox" type="CharacterBody2D" parent="."]
 collision_layer = 2105344
 collision_mask = 0
-motion/sync_to_physics = true
 
 [node name="Crusher" type="Sprite2D" parent="CrushBox"]
 z_index = -5
-texture = ExtResource( 1 )
-offset = Vector2( 0, -4 )
+texture = ExtResource("1")
+offset = Vector2(0, -4)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CrushBox"]
-position = Vector2( 0, -52 )
-shape = SubResource( 1 )
+position = Vector2(0, -52)
+shape = SubResource("1")

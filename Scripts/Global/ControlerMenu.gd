@@ -66,7 +66,7 @@ func _on_Confirm_pressed():
 func _on_PlayerSwap_pressed():
 	if bindButton == null:
 		playerControlIndex = int(!playerControlIndex)
-		$PlayerSwap/Label.text = "Player "+str(int(playerControlIndex)+1)
+		$PlayerSwap/Label.text = "P"+str(int(playerControlIndex)+1)
 
 func update_display():
 	if bindButton != null:

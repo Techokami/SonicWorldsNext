@@ -343,6 +343,23 @@ tracks/2/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_eeuda"]
+resource_name = "hammerSwing"
+length = 0.783333
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Amy/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [68, 69, 70, 71, 72, 73, 74, 75, 68, 69, 70, 71, 72, 73, 74, 75]
+}
+
 [sub_resource type="Animation" id="112"]
 resource_name = "hang"
 loop_mode = 1
@@ -849,23 +866,6 @@ tracks/0/keys = {
 "values": [256, 267, 266, 265, 264, 263, 262, 261, 260, 259, 258, 257]
 }
 
-[sub_resource type="Animation" id="Animation_eeuda"]
-resource_name = "hammerSwing"
-length = 0.783333
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Amy/Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [68, 69, 70, 71, 72, 73, 74, 75, 68, 69, 70, 71, 72, 73, 74, 75]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_36uej"]
 _data = {
 "RESET": SubResource("86"),
@@ -987,7 +987,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [9.0, 6.0]
+"values": [8.0, 2.0]
 }
 
 [sub_resource type="Animation" id="Animation_t7log"]
@@ -1003,7 +1003,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [5.0, 1.0]
+"values": [8.0, 1.0]
 }
 
 [sub_resource type="Animation" id="Animation_y01gt"]
@@ -1047,6 +1047,7 @@ vframes = 18
 
 [node name="DashDust" type="AnimatedSprite2D" parent="Sprite2D"]
 visible = false
+position = Vector2(0, -4)
 sprite_frames = SubResource("96")
 autoplay = "default"
 frame = 3
