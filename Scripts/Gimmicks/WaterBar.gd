@@ -109,7 +109,11 @@ func _on_VerticalBarArea_body_entered(body):
 		if !players.has(body):
 			players.append(body)
 			$Grab.play()
-			body.animator.play("clingVerticalBar")
+			# use offset vertical bar cling if the sprite is flipped
+			if body.sprite.flip_h:
+				body.animator.play("clingVerticalBarOffset")
+			else:
+				body.animator.play("clingVerticalBar")
 			body.set_state(body.STATES.ANIMATION)
 
 func _on_VerticalBarArea_body_exited(body):

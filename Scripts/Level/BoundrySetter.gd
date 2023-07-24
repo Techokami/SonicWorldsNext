@@ -1,7 +1,7 @@
 @tool
 extends Area2D
 
-@onready var screenSize = GlobalFunctions.get_screen_size()
+@onready var screenSize = get_viewport().get_visible_rect().size
 
 @export var setLeft = true
 @export var leftBoundry  = 0

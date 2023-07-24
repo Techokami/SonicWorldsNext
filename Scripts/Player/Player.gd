@@ -828,12 +828,13 @@ func _physics_process(delta):
 		# note that the bottom crush sensor actually goes *below* the feet so that it can contact the floor
 		crushSensorDown.position.y = ($HitBox.shape.size.y/2 +1)
 		
+		# crusher deaths
 		if (crushSensorLeft.get_overlapping_areas() + crushSensorLeft.get_overlapping_bodies()).size() > 0 and \
-			(crushSensorRight.get_overlapping_areas() + crushSensorRight.get_overlapping_bodies()).size() > 0:
+			(crushSensorRight.get_overlapping_areas() + crushSensorRight.get_overlapping_bodies()).size() > 0 and !translate:
 			kill()
 
 		if (crushSensorUp.get_overlapping_areas() + crushSensorUp.get_overlapping_bodies()).size() > 0 and \
-			(crushSensorDown.get_overlapping_areas() + crushSensorDown.get_overlapping_bodies()).size() > 0:
+			(crushSensorDown.get_overlapping_areas() + crushSensorDown.get_overlapping_bodies()).size() > 0 and !translate:
 			kill()
 
 # Input buttons

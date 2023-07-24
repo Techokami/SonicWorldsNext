@@ -1,6 +1,7 @@
 [gd_scene load_steps=28 format=3 uid="uid://bjavywoj00j1j"]
 
 [ext_resource type="Script" path="res://Scripts/Level/Level.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://qs5dmtxxf1w1" path="res://Scene/Presentation/Title.tscn" id="2_l4fq6"]
 [ext_resource type="Script" path="res://Scripts/Objects/StateMovers/StateMoverPositional.gd" id="3"]
 [ext_resource type="PackedScene" uid="uid://c30uceea18q1w" path="res://Entities/Misc/HUD.tscn" id="4"]
 [ext_resource type="Script" path="res://Scripts/Objects/StateMovers/StateMoverMaster.gd" id="5"]
@@ -20,7 +21,6 @@
 [ext_resource type="Texture2D" uid="uid://bemwlrblbgn23" path="res://Graphics/Backgrounds/WorldsBackground.png" id="25"]
 [ext_resource type="PackedScene" uid="uid://c2esop5orct10" path="res://Entities/MainObjects/GoalPost.tscn" id="34"]
 [ext_resource type="PackedScene" uid="uid://dasp221fqgrno" path="res://Entities/Obstacles/Platform.tscn" id="38"]
-[ext_resource type="PackedScene" path="res://Scene/Zones/ChunkZone.tscn" id="50"]
 
 [sub_resource type="Animation" id="1"]
 resource_name = "Glow"
@@ -76,7 +76,7 @@ size = Vector2(128, 24)
 
 [node name="BaseZoneAct2" type="Node2D"]
 script = ExtResource("2")
-nextZone = ExtResource("50")
+nextZone = ExtResource("2_l4fq6")
 animal1 = 2
 animal2 = 3
 defaultLeftBoundry = 0
