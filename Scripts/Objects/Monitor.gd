@@ -41,8 +41,6 @@ func destroy():
 	# play destruction animation
 	$Animator.play("DestroyMonitor")
 	$SFX/Destroy.play()
-	# remove visibility enabler to prevent items from not being activated
-	$VisibleOnScreenEnabler2D.queue_free()
 	# wait for animation to finish
 	await $Animator.animation_changed
 	# enable effect

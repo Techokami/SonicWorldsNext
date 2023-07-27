@@ -2,7 +2,7 @@ extends Node2D
 
 
 @export var music = preload("res://Audio/Soundtrack/10. SWD_CharacterSelect.ogg")
-@export var nextZone = preload("res://Scene/Zones/BaseZone.tscn")
+@export var nextZone = load("res://Scene/Zones/BaseZone.tscn")
 var selected = false
 
 # character labels, the amount of labels in here determines the total amount of options, see the set character option at the end for settings

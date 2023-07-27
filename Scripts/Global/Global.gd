@@ -15,7 +15,7 @@ var checkPointTime = 0
 
 # the starting room, this is loaded on game resets, you may want to change this
 var startScene = preload("res://Scene/Presentation/Title.tscn")
-var nextZone = preload("res://Scene/Zones/BaseZone.tscn") # change this to the first level in the game (also set in "reset_values")
+var nextZone = load("res://Scene/Zones/BaseZone.tscn") # change this to the first level in the game (also set in "reset_values")
 # use this to store the current state of the room, changing scene will clear everythin
 var stageInstanceMemory = null
 var stageLoadMemory = null

@@ -16,7 +16,7 @@ func _physics_process(delta):
 				var getDir = sign(scale.rotated(rotation).x)
 				
 				# if below speed, gradually force the movement to the speed value
-				if (abs(i.movement.x) < getDir*speed || sign(i.movement.x) != getDir):
+				if (abs(i.movement.x) < getDir*speed or sign(i.movement.x) != getDir):
 					i.movement.x = lerp(i.movement.x,getDir*speed,delta*force)
 				else:
 				# else just set movement
@@ -29,7 +29,7 @@ func _physics_process(delta):
 					i.sprite.flip_h = (i.direction < 0)
 				
 				# force slide state
-				if i.currentState != i.STATES.ROLL || i.animator.current_animation != "slide":
+				if i.currentState != i.STATES.ROLL or i.animator.current_animation != "slide":
 					i.set_state(i.STATES.ROLL)
 					i.animator.play("slide")
 

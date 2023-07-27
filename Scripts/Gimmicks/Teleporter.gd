@@ -13,7 +13,7 @@ func _ready():
 func _process(delta):
 	if !Engine.is_editor_hint():
 		# beam flashing (only flash if active)
-		$Beam.visible = (!$Beam.visible && active)
+		$Beam.visible = (!$Beam.visible and active)
 	# use this to show a guide for the destination point
 	else:
 		$OrbReference.global_position = global_position+Vector2(0,-travelDistance)

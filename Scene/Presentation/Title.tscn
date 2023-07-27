@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://qs5dmtxxf1w1"]
+[gd_scene load_steps=10 format=3 uid="uid://qs5dmtxxf1w1"]
 
 [ext_resource type="Script" path="res://Scripts/Level/Title.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://cbloyreqnle13" path="res://Graphics/title/Sonic_Worlds_Next_Logo.png" id="2_qt26u"]
 [ext_resource type="FontFile" uid="uid://ml62eqfe7avn" path="res://Graphics/Fonts/small_font.png" id="3_yuhp3"]
+[ext_resource type="Texture2D" uid="uid://dt51ojxk80oqh" path="res://Graphics/Items/Rings/Ring.tres" id="4_vmy7g"]
 
 [sub_resource type="Animation" id="2"]
 length = 0.001
@@ -173,8 +174,12 @@ _data = {
 "TitleAssemble": SubResource("1")
 }
 
+[sub_resource type="Curve" id="Curve_x626m"]
+_data = [Vector2(0, 0), 0.0, 1.4, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="Gradient" id="Gradient_nd4eu"]
-offsets = PackedFloat32Array(0, 0.466472, 0.769679, 0.991254)
+offsets = PackedFloat32Array(0.294461, 0.466472, 0.769679, 1)
 colors = PackedColorArray(1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1)
 
 [node name="TitleScreen" type="Node2D"]
@@ -359,11 +364,15 @@ libraries = {
 position = Vector2(152, 112)
 emitting = false
 amount = 32
+preprocess = 0.5
+texture = ExtResource("4_vmy7g")
 emission_shape = 2
 emission_sphere_radius = 128.0
 direction = Vector2(0, -1)
 gravity = Vector2(0, 300)
 initial_velocity_max = 212.39
+scale_amount_min = 0.5
+scale_amount_curve = SubResource("Curve_x626m")
 color_ramp = SubResource("Gradient_nd4eu")
 hue_variation_min = -0.39
 hue_variation_max = 0.68

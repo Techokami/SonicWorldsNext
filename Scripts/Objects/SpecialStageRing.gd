@@ -42,6 +42,13 @@ func _process(delta):
 				# helps sell the illusion that we reset the room
 				player.global_position = global_position
 				player.direction = 1
+				# Remember to give the player's air back, they might have been under water
+				# imagine if you were underwater and got sucked into another dimension only for when
+				# you get back you immediately drown.
+				# That's happened in real life plenty of times they just never tell you about it
+				# mostly because the people this has happened to have drowned.
+				# But this is Sonic the Hedgehog and not real life so this unrealistic change is fine
+				player.airTimer = player.defaultAirTime
 				
 				# check for partner
 				if player.partner:
@@ -53,6 +60,8 @@ func _process(delta):
 					player.partner.set_state(player.partner.STATES.NORMAL)
 					# play idle
 					player.partner.animator.play("idle")
+					# reset the partners air, imagine if you came home and from another dimension and-
+					player.partner.airTimer = player.partner.defaultAirTime
 				
 				# reset invincibility and shoes
 				player.supTime = 0

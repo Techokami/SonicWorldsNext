@@ -45,6 +45,9 @@ signal disconectCeiling
 signal connectCeiling
 signal positionChanged
 
+# how many pixels can you step on top of objects
+@export var pixelObjectStep = 4
+
 func _ready():
 	slopeCheck.modulate = Color.BLUE_VIOLET
 	$HitBox.add_child(verticalSensorLeft)
@@ -186,12 +189,25 @@ func _physics_process(delta):
 	while (!moveRemaining.is_equal_approx(Vector2.ZERO) or checkOverride) and !translate:
 		checkOverride = false
 		var moveCalc = moveRemaining.normalized()*min(moveStepLength,moveRemaining.length())
-				
+		
 		velocity = moveCalc.rotated(angle)
-		#set_velocity(velocity)
-		# TODOConverter40 looks that snap in Godot 4.0 is float, not vector like in Godot 3 - previous value `(Vector2.DOWN*3).rotated(gravityAngle)`
 		set_up_direction(Vector2.UP.rotated(gravityAngle))
+		# wasMovedUp is set to true if an object collision occurs
+		var wasMovedUp = false
+		# check for any object collisions, if a collision doesn't occur internally, shift up by pixel steps then shift back down
+		if test_move(global_transform,velocity*delta) and test_move(global_transform,velocity*(Vector2.RIGHT.rotated(gravityAngle))*delta) and !test_move(global_transform,Vector2.ZERO) and ground:
+			var testTransform = global_transform
+			testTransform.origin += up_direction*pixelObjectStep
+			# if there's no collision occuring in the upper section then set was moved to true (if there's isn't another collision up if shifted up)
+			if !test_move(testTransform,velocity*delta):
+				var col = move_and_collide(up_direction*pixelObjectStep)
+				wasMovedUp = (col==null)
+		# do the shift
 		move_and_slide()
+		# move back down if we shifted up earlier
+		if wasMovedUp:
+			move_and_collide(-up_direction*pixelObjectStep)
+		
 		var _move = velocity
 		update_sensors()
 		var groundMemory = ground

@@ -30,7 +30,7 @@ func _process(delta):
 		if !touchActive or players.size() > 0:
 			goSpeed = 30.0
 			# play fan sound
-			if playSound && !Engine.is_editor_hint():
+			if playSound and !Engine.is_editor_hint():
 				if !$FanSound.playing:
 					$FanSound.play()
 		# end sound if playing
@@ -75,7 +75,7 @@ func _physics_process(delta):
 				if i.water:
 					setPlayerAnimation = "current"
 				
-				if i.currentState != i.STATES.ANIMATION || i.animator.current_animation != setPlayerAnimation:
+				if i.currentState != i.STATES.ANIMATION or i.animator.current_animation != setPlayerAnimation:
 					i.set_state(i.STATES.AIR)
 					i.animator.play(setPlayerAnimation)
 

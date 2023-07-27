@@ -437,7 +437,7 @@ func _process(delta):
 					partner.inputs[INPUTS.XINPUT] = sign(global_position.x - partner.global_position.x)
 				
 				# Jump if pushing a wall, slower then half speed, on a flat surface and is either normal or jumping
-				if (partner.currentState == STATES.NORMAL or partner.currentState == STATES.JUMP) and abs(partner.movement.x) < top/2.0 and snap_angle(partner.angle) == 0 or (partner.pushingWall and !pushingWall):
+				if (partner.currentState == STATES.NORMAL or partner.currentState == STATES.JUMP) and abs(partner.movement.x) < top/2.0 and snap_angle(partner.angle) == 0 or (partner.pushingWall != 0 and pushingWall == 0):
 					# check partners position, only jump ever 0.25 seconds (prevent jump spam)
 					if global_position.y+32 < partner.global_position.y and partner.inputs[INPUTS.ACTION] == 0 and partner.ground and ground and (fmod(Global.globalTimer,0.25)+delta > 0.25):
 						partner.inputs[INPUTS.ACTION] = 1
@@ -452,7 +452,7 @@ func _process(delta):
 					partnerPanic -= delta
 					partner.inputs[INPUTS.YINPUT] = 1
 					# press action every 0.4 ticks
-					if fmod(partnerPanic,0.4)+delta > 0.4:
+					if fmod(partnerPanic+delta,0.4) < fmod(partnerPanic,0.4):
 						partner.inputs[INPUTS.ACTION] = 1
 
 			# Panic
@@ -516,20 +516,20 @@ func _process(delta):
 				rings -= delta
 			else:
 				# Deactivate super
-				isSuper = false
 				supTime = 0
 				rings = round(rings)
 				if character == CHARACTERS.SONIC:
 					sprite.texture = normalSprite
-				switch_physics()
 				
 		if (supTime <= 0):
 			if (shield != SHIELDS.NONE):
 				shieldSprite.visible = true
 			$InvincibilityBarrier.visible = false
-			# turn off super palette
-			if is_instance_valid(superAnimator):
+			# turn off super palette and physics (if super)
+			if is_instance_valid(superAnimator) and isSuper:
+				isSuper = false
 				superAnimator.play("PowerDown")
+				switch_physics()
 			if Global.currentTheme == 0:
 				Global.music.play()
 				Global.effectTheme.stop()
@@ -681,14 +681,21 @@ func _physics_process(delta):
 		
 	# wall detection
 	if horizontalSensor.is_colliding() or is_on_wall():
+		var getDir = sign(horizontalSensor.target_position.x)
+		if is_on_wall():
+			getDir = -sign(get_wall_normal().x)
+		
 		# give pushingWall a buffer otherwise this just switches on and off
-		pushingWall = 2
+		pushingWall = getDir*2
 		if sign(movement.x) == sign(horizontalSensor.target_position.x):
 			movement.x = 0
+		# disable pushing wall
+		if inputs[INPUTS.XINPUT] != sign(pushingWall):
+			pushingWall == 0
 		
-	elif pushingWall > 0:
+	elif pushingWall != 0:
 		# count down pushingwall
-		pushingWall -= 1
+		pushingWall -= sign(pushingWall)
 	
 	
 	
@@ -828,13 +835,13 @@ func _physics_process(delta):
 		# note that the bottom crush sensor actually goes *below* the feet so that it can contact the floor
 		crushSensorDown.position.y = ($HitBox.shape.size.y/2 +1)
 		
-		# crusher deaths
+		# crusher deaths NOTE: the translate and visibility is used for stuff like the sky sanctuary teleporters, visibility check is for stuff like the carnival night barrels
 		if (crushSensorLeft.get_overlapping_areas() + crushSensorLeft.get_overlapping_bodies()).size() > 0 and \
-			(crushSensorRight.get_overlapping_areas() + crushSensorRight.get_overlapping_bodies()).size() > 0 and !translate:
+			(crushSensorRight.get_overlapping_areas() + crushSensorRight.get_overlapping_bodies()).size() > 0 and (!translate or visible):
 			kill()
 
 		if (crushSensorUp.get_overlapping_areas() + crushSensorUp.get_overlapping_bodies()).size() > 0 and \
-			(crushSensorDown.get_overlapping_areas() + crushSensorDown.get_overlapping_bodies()).size() > 0 and !translate:
+			(crushSensorDown.get_overlapping_areas() + crushSensorDown.get_overlapping_bodies()).size() > 0 and (!translate or visible):
 			kill()
 
 # Input buttons
@@ -1068,11 +1075,15 @@ func kill():
 		return false
 	if currentState != STATES.DIE:
 		disconect_from_floor()
-		isSuper = false
 		supTime = 0
 		shoeTime = 0
-		if Global.currentTheme == 1:
-			#Global.music.stream_paused = false
+		translate = true
+		# turn off super palette and physics (if super)
+		if is_instance_valid(superAnimator) and isSuper:
+			superAnimator.play("PowerDown")
+			isSuper = false
+		# stop special music
+		if playerControl == 1 and Global.effectTheme.is_playing():
 			Global.music.play()
 			Global.effectTheme.stop()
 		collision_layer = 0
@@ -1350,12 +1361,12 @@ func action_water_run_handle():
 	
 
 	# enable dash dust if touching water
-	dash.visible = (get_collision_mask_value(23) and touchWater)
+	dash.visible = (get_collision_mask_value(23) and touchWater and ground)
 	dash.scale.x = sign(movement.x)
 	dash.position.y = $HitBox.shape.size.y/2.0
 
 	# play water run sound
-	if (get_collision_mask_value(23) and touchWater):
+	if get_collision_mask_value(23) and touchWater and ground:
 		if !sfx[29].playing:
 			sfx[29].play()
 	else:

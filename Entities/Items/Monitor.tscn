@@ -261,9 +261,6 @@ stream = ExtResource("5")
 volume_db = -5.0
 bus = &"SFX"
 
-[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
-scale = Vector2(3.2, 3.2)
-
 [node name="InstaArea" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 524288

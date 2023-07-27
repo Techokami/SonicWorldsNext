@@ -964,7 +964,7 @@ vframes = 2
 [node name="PatternLeft" type="Control" parent="LevelCard"]
 anchors_preset = 0
 anchor_bottom = 1.0
-offset_bottom = 12576.0
+offset_bottom = 13024.0
 
 [node name="PatternLeft" type="TextureRect" parent="LevelCard/PatternLeft"]
 layout_mode = 1
@@ -988,7 +988,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_top = -32.0
-offset_bottom = 12288.0
+offset_bottom = 12736.0
 
 [node name="PatternRight" type="TextureRect" parent="LevelCard/RightRatio/PatternRight"]
 layout_mode = 1
@@ -997,15 +997,16 @@ anchor_left = 1.0
 anchor_top = 0.003
 anchor_right = 1.0
 anchor_bottom = 0.003
-offset_top = 32.0
-offset_right = 2880.0
-offset_bottom = 288.0
+offset_top = -6.976
+offset_right = 3744.0
+offset_bottom = 249.024
 grow_horizontal = 0
 grow_vertical = 2
 texture = ExtResource("10_xpi0a")
 stretch_mode = 1
 
 [node name="CardMover" type="AnimationPlayer" parent="LevelCard"]
+process_mode = 1
 autoplay = "Slider"
 speed_scale = 4.0
 libraries = {
@@ -1037,7 +1038,7 @@ offset_top = 56.0
 offset_right = -103.0
 offset_bottom = 82.0
 theme_override_fonts/font = ExtResource("10_8dyi8")
-text = "Sonic got"
+text = "SONIC got"
 uppercase = true
 
 [node name="Through" type="Label" parent="LevelClear"]

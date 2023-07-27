@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=3 uid="uid://d3vtvdbdn6g8v"]
+[gd_scene load_steps=60 format=3 uid="uid://d3vtvdbdn6g8v"]
 
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="1_sk1gs"]
 [ext_resource type="Texture2D" uid="uid://bfesqgvh63scg" path="res://Graphics/Players/Amy.png" id="2_vki44"]
@@ -29,6 +29,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Amy/Sprite2D:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [10]
 }
 
 [sub_resource type="Animation" id="108"]
@@ -75,6 +87,36 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [Vector2(19, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_5tyl8"]
+resource_name = "clingVerticalBarOffset"
+length = 0.133335
+loop_mode = 1
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Amy/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [89, 90]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Amy/Sprite2D:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(-19, 0)]
 }
 
 [sub_resource type="Animation" id="76"]
@@ -429,7 +471,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="114"]
 resource_name = "idle2"
-length = 2.8
+length = 0.366668
 step = 0.0166667
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -438,16 +480,17 @@ tracks/0/path = NodePath("Amy/Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.6, 0.9, 1.2, 1.5, 1.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.0750001, 0.15, 0.216667, 0.3, 0.366667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [4, 8, 7, 8, 7, 8, 9]
+"values": [4, 5, 7, 8, 9, 10]
 }
 
 [sub_resource type="Animation" id="116"]
 resource_name = "idle3"
-length = 0.1
-step = 0.0166667
+length = 4.26667
+loop_mode = 1
+step = 0.0666667
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -455,44 +498,10 @@ tracks/0/path = NodePath("Amy/Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.0666668, 0.133334, 0.2, 0.266669, 0.333334, 0.400001, 0.466668, 0.533334, 0.600001, 0.66667, 0.733335, 0.800002, 0.866668, 0.933335, 1, 1.06667, 1.13334, 1.2, 1.26667, 1.33334, 1.4, 1.46667, 1.53334, 1.6, 1.66667, 1.73333, 1.8, 1.86667, 1.93333, 2, 2.06667, 2.13333, 2.2, 2.26667, 2.33333, 2.4, 2.46667, 2.53333, 2.6, 2.66667, 2.73333, 2.8, 2.86667, 2.93333, 3, 3.06667, 3.13333, 3.2, 3.26667, 3.33333, 3.4, 3.46667, 3.53333, 3.6, 3.66666, 3.73333, 3.8, 3.86667, 3.93333, 4, 4.06666, 4.13333, 4.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [2]
-}
-
-[sub_resource type="Animation" id="117"]
-resource_name = "idle4"
-length = 0.6
-step = 0.0166667
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Amy/Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [3, 4]
-}
-
-[sub_resource type="Animation" id="118"]
-resource_name = "idle5"
-length = 0.133333
-step = 0.0166667
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Amy/Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [5]
+"values": [10, 11, 12, 13, 12, 11, 10, 11, 12, 13, 12, 11, 10, 11, 12, 13, 12, 11, 10, 11, 12, 13, 12, 10, 9, 8, 7, 8, 9, 10, 11, 12, 13, 12, 11, 10, 11, 12, 13, 12, 11, 10, 11, 12, 13, 12, 11, 10, 11, 12, 13, 12, 10, 9, 8, 7, 8, 9, 10, 9, 8, 7, 8, 9]
 }
 
 [sub_resource type="Animation" id="80"]
@@ -866,36 +875,6 @@ tracks/0/keys = {
 "values": [256, 267, 266, 265, 264, 263, 262, 261, 260, 259, 258, 257]
 }
 
-[sub_resource type="Animation" id="Animation_5tyl8"]
-resource_name = "clingVerticalBarOffset"
-length = 0.133335
-loop_mode = 1
-step = 0.0166667
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Amy/Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0666667),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [89, 90]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Amy/Sprite2D:offset")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector2(-19, 0)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_36uej"]
 _data = {
 "RESET": SubResource("86"),
@@ -921,8 +900,6 @@ _data = {
 "idle1": SubResource("113"),
 "idle2": SubResource("114"),
 "idle3": SubResource("116"),
-"idle4": SubResource("117"),
-"idle5": SubResource("118"),
 "lookUp": SubResource("80"),
 "peelOut": SubResource("87"),
 "push": SubResource("103"),
@@ -1075,6 +1052,7 @@ texture = ExtResource("2_vki44")
 offset = Vector2(0, -5)
 hframes = 16
 vframes = 18
+frame = 1
 
 [node name="DashDust" type="AnimatedSprite2D" parent="Sprite2D"]
 visible = false

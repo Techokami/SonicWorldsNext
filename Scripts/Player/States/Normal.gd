@@ -17,11 +17,11 @@ var playerIdles = [
 "idle4","idle4","idle4","idle4","idle4","idle4","idle4","idle4","idle4","idle4",
 "idle5"],
 # Tails
-["idle1"], # Note: tails idle loops on idle one, to add more idles make sure to disable his idle1 loop
+["idle1"], # Note: Tails idle loops on idle one, to add more idles make sure to disable his idle1 loop
 # Knuckles
 ["idle1"],
 # Amy
-["idle1","idle2","idle2","idle2","idle2"]
+["idle1","idle1","idle1","idle1","idle1","idle1","idle1","idle1","idle2","idle3"] # Note: like Tails, Amy loops on idle3
 ]
 
 func state_exit():
@@ -142,7 +142,7 @@ func _process(delta):
 							else:
 								parent.animator.play("edge1")
 					
-		elif parent.pushingWall:
+		elif sign(parent.pushingWall) == sign(parent.movement.x) and parent.pushingWall != 0:
 			parent.animator.play("push")
 		elif(abs(parent.movement.x) < 6*60):
 			parent.animator.play("walk")

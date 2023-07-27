@@ -1,4 +1,4 @@
-[gd_scene load_steps=76 format=3 uid="uid://hj3tt0gklwba"]
+[gd_scene load_steps=75 format=3 uid="uid://hj3tt0gklwba"]
 
 [ext_resource type="Script" path="res://Scripts/Level/Level.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://bjavywoj00j1j" path="res://Scene/Zones/BaseZoneAct2.tscn" id="2_8ek7k"]
@@ -62,7 +62,6 @@
 [ext_resource type="PackedScene" uid="uid://bcoqgftnr4isn" path="res://Entities/Boss/RobotnikTemplate.tscn" id="60_x068e"]
 [ext_resource type="PackedScene" path="res://Entities/Backgrounds/GHZWaterfall.tscn" id="61_cuooh"]
 [ext_resource type="AudioStream" uid="uid://uu55iumak4r5" path="res://Audio/SFX/Ambiance/waterfall.wav" id="62_7xffd"]
-[ext_resource type="Texture2D" uid="uid://dercm5pflwpn0" path="res://Graphics/TestZoneMap.png" id="63_vocmk"]
 [ext_resource type="Texture2D" uid="uid://cfrumqj5mt4q3" path="res://Graphics/Tiles/WorldsTiles/HydoPipe.png" id="64_d1r0g"]
 [ext_resource type="PackedScene" uid="uid://bbf1sa8l70ygh" path="res://Entities/Gimmicks/fan.tscn" id="65_iomqv"]
 
@@ -1029,6 +1028,23 @@ position = Vector2(6771, 1952)
 [node name="WaterBar3" parent="Entity" instance=ExtResource("47_r1ilk")]
 position = Vector2(6523, 1888)
 
+[node name="Fan" parent="Entity" instance=ExtResource("65_iomqv")]
+position = Vector2(7776, 1968)
+scale = Vector2(1, 11.0082)
+speed = 120.0
+touchActive = true
+
+[node name="Fan2" parent="Entity" instance=ExtResource("65_iomqv")]
+position = Vector2(7840, 1920)
+scale = Vector2(1, 8.00818)
+speed = 120.0
+touchActive = true
+
+[node name="Fan3" parent="Entity" instance=ExtResource("65_iomqv")]
+position = Vector2(8144, 1920)
+scale = Vector2(4, 25.648)
+speed = 120.0
+
 [node name="Rings" type="Node2D" parent="."]
 
 [node name="Ring" parent="Rings" instance=ExtResource("48_0y5qa")]
@@ -1768,12 +1784,6 @@ volume_db = -10.0
 autoplay = true
 max_distance = 1000.0
 
-[node name="TestZoneMap" type="Sprite2D" parent="."]
-visible = false
-modulate = Color(1, 0.745098, 1, 0.333333)
-texture = ExtResource("63_vocmk")
-centered = false
-
 [node name="HydoPipe" type="Sprite2D" parent="."]
 z_index = 100
 position = Vector2(9984, 1648)
@@ -1795,23 +1805,6 @@ position = Vector2(9984, 936)
 texture = ExtResource("64_d1r0g")
 region_enabled = true
 region_rect = Rect2(0, 16, 64, 80)
-
-[node name="Fan" parent="." instance=ExtResource("65_iomqv")]
-position = Vector2(7776, 1968)
-scale = Vector2(1, 11.0082)
-speed = 120.0
-touchActive = true
-
-[node name="Fan2" parent="." instance=ExtResource("65_iomqv")]
-position = Vector2(7840, 1920)
-scale = Vector2(1, 8.00818)
-speed = 120.0
-touchActive = true
-
-[node name="Fan3" parent="." instance=ExtResource("65_iomqv")]
-position = Vector2(8144, 1920)
-scale = Vector2(4, 25.648)
-speed = 120.0
 
 [connection signal="body_entered" from="Platforms/MCZCollapsePlatform" to="Platforms/MCZCollapsePlatform" method="_on_body_entered"]
 [connection signal="body_exited" from="Platforms/MCZCollapsePlatform" to="Platforms/MCZCollapsePlatform" method="_on_body_exited"]

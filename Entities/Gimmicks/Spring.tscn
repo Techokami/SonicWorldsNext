@@ -156,7 +156,4 @@ libraries = {
 "": SubResource("AnimationLibrary_3avuf")
 }
 
-[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
-scale = Vector2(2.5, 2.6)
-
 [connection signal="body_entered" from="DiagonalHitBox" to="." method="_on_Diagonal_body_entered"]

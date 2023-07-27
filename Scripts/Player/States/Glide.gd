@@ -112,7 +112,7 @@ func _physics_process(delta):
 		parent.sprite.flip_h = false
 		
 		# air movement
-		if !parent.pushingWall:
+		if parent.pushingWall == 0:
 			parent.movement.x = clamp(parent.movement.x+(glideAccel[int(parent.isSuper)]/GlobalFunctions.div_by_delta(delta)*parent.direction),-speedClamp,speedClamp)
 		
 		# Limit vertical movement

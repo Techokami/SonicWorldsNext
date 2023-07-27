@@ -230,7 +230,9 @@ func _on_ShieldTimer_timeout():
 func state_activated():
 	dropTimer = 0
 	parent.poleGrabID = null
-	
+	# disable water run splash
+	parent.action_water_run_handle()
+
 func state_exit():
 	# deactivate insta shield
 	if (parent.shield == parent.SHIELDS.NONE):
