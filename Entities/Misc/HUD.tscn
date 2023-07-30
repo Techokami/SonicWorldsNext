@@ -964,7 +964,7 @@ vframes = 2
 [node name="PatternLeft" type="Control" parent="LevelCard"]
 anchors_preset = 0
 anchor_bottom = 1.0
-offset_bottom = 13024.0
+offset_bottom = 13248.0
 
 [node name="PatternLeft" type="TextureRect" parent="LevelCard/PatternLeft"]
 layout_mode = 1
@@ -988,7 +988,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_top = -32.0
-offset_bottom = 12736.0
+offset_bottom = 12960.0
 
 [node name="PatternRight" type="TextureRect" parent="LevelCard/RightRatio/PatternRight"]
 layout_mode = 1
@@ -997,9 +997,9 @@ anchor_left = 1.0
 anchor_top = 0.003
 anchor_right = 1.0
 anchor_bottom = 0.003
-offset_top = -6.976
-offset_right = 3744.0
-offset_bottom = 249.024
+offset_top = 32.0
+offset_right = 3776.0
+offset_bottom = 288.0
 grow_horizontal = 0
 grow_vertical = 2
 texture = ExtResource("10_xpi0a")

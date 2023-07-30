@@ -136,7 +136,7 @@ func _physics_process(delta):
 		# Drop dash (for sonic / amy)
 		if parent.character == parent.CHARACTERS.SONIC or parent.character == parent.CHARACTERS.AMY:
 			
-			if parent.any_action_held_or_pressed() and parent.abilityUsed and (parent.shield <= parent.SHIELDS.NORMAL or parent.isSuper or $"../../InvincibilityBarrier".visible):
+			if parent.any_action_held_or_pressed() and parent.abilityUsed and (parent.shield <= parent.SHIELDS.NORMAL or parent.isSuper or $"../../InvincibilityBarrier".visible or parent.character == parent.CHARACTERS.AMY):
 				if dropTimer < 1:
 					dropTimer += (delta/20)*60 # should be ready in the equivelent of 20 frames at 60FPS
 				else:

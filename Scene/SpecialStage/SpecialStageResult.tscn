@@ -250,21 +250,27 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="Label" type="Label" parent="HUD"]
-modulate = Color(0, 0, 0, 1)
-anchors_preset = 5
+modulate = Color(1, 1, 0, 1)
+anchors_preset = 8
 anchor_left = 0.5
+anchor_top = 0.5
 anchor_right = 0.5
-offset_left = -79.5
-offset_top = 16.0
-offset_right = 79.5
-offset_bottom = 47.0
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -66.0
+offset_right = 100.0
+offset_bottom = -22.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "Special Stage
 
 Press Action 1(Z) to Win
-Press Action 2(C) to Lose"
+Press Action 2(X) to Lose"
+horizontal_alignment = 1
+uppercase = true
 
 [node name="Stage" type="Label" parent="HUD"]
-modulate = Color(0, 0, 0, 1)
+modulate = Color(1, 1, 0, 1)
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -274,6 +280,8 @@ offset_left = -79.5
 offset_top = -31.0
 offset_right = 79.5
 text = "Stage 1"
+horizontal_alignment = 1
+uppercase = true
 
 [node name="ColorRect" type="ColorRect" parent="HUD"]
 anchors_preset = 8
