@@ -1,0 +1,46 @@
+[gd_scene load_steps=7 format=3 uid="uid://cejf7f3r45h0c"]
+
+[ext_resource type="Texture2D" uid="uid://ceangqioyo4uf" path="res://Graphics/Items/air_bubbles.png" id="1"]
+[ext_resource type="Script" path="res://Scripts/Gimmicks/BubbleGenerator.gd" id="2"]
+
+[sub_resource type="AtlasTexture" id="1"]
+atlas = ExtResource("1")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="2"]
+atlas = ExtResource("1")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="3"]
+atlas = ExtResource("1")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("1")
+}, {
+"duration": 1.0,
+"texture": SubResource("2")
+}, {
+"duration": 1.0,
+"texture": SubResource("3")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[node name="BubbleGenerator" type="Node2D"]
+script = ExtResource("2")
+
+[node name="Bubbles" type="AnimatedSprite2D" parent="."]
+z_index = 6
+sprite_frames = SubResource("4")
+autoplay = "default"
+frame = 2
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
+position = Vector2(0, -51)
+scale = Vector2(1, 6.1)

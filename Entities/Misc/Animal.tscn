@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Scripts/Misc/Animal.gd" type="Script" id=1]
+[ext_resource path="res://Graphics/Misc/animals.png" type="Texture2D" id=2]
+
+[node name="Animal" type="Node2D"]
+z_index = 1
+script = ExtResource( 1 )
+
+[node name="FloorCheck" type="RayCast2D" parent="."]
+enabled = true
+target_position = Vector2( 0, 8 )
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+scale = Vector2( 2.4, 2.4 )
+
+[node name="animals" type="Sprite2D" parent="."]
+texture = ExtResource( 2 )
+offset = Vector2( 0, -8 )
+hframes = 3
+region_enabled = true
+region_rect = Rect2( 0, 32, 72, 32 )
+
+[node name="ActivationTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]
+[connection signal="timeout" from="ActivationTimer" to="." method="_on_ActivationTimer_timeout"]

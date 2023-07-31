@@ -1,0 +1,74 @@
+[gd_scene load_steps=11 format=3 uid="uid://cxxmrbgw17gnw"]
+
+[ext_resource type="Texture2D" uid="uid://d1cdsc21qx80t" path="res://Graphics/Gimmicks/CNZBarrel.png" id="1"]
+[ext_resource type="Script" path="res://Scripts/Gimmicks/CNZBarrelChild.gd" id="2"]
+[ext_resource type="Script" path="res://Scripts/Gimmicks/CNZBarrel.gd" id="3"]
+
+[sub_resource type="AtlasTexture" id="1"]
+atlas = ExtResource("1")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="2"]
+atlas = ExtResource("1")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="3"]
+atlas = ExtResource("1")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="4"]
+atlas = ExtResource("1")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("1")
+}, {
+"duration": 1.0,
+"texture": SubResource("2")
+}, {
+"duration": 1.0,
+"texture": SubResource("3")
+}, {
+"duration": 1.0,
+"texture": SubResource("4")
+}],
+"loop": true,
+"name": &"default",
+"speed": 30.0
+}]
+
+[sub_resource type="RectangleShape2D" id="6"]
+size = Vector2(64, 4)
+
+[sub_resource type="RectangleShape2D" id="7"]
+size = Vector2(64, 60)
+
+[node name="CNZBarrel" type="Node2D"]
+script = ExtResource("3")
+
+[node name="CNZBarrelActiveBody" type="CharacterBody2D" parent="."]
+collision_layer = 2105359
+collision_mask = 0
+script = ExtResource("2")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CNZBarrelActiveBody"]
+position = Vector2(0, 31)
+sprite_frames = SubResource("5")
+autoplay = "default"
+frame = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CNZBarrelActiveBody"]
+position = Vector2(0, 1)
+shape = SubResource("6")
+
+[node name="CNZBarrelInactiveBody" type="CharacterBody2D" parent="CNZBarrelActiveBody"]
+position = Vector2(0, 31)
+collision_layer = 2105359
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CNZBarrelActiveBody/CNZBarrelInactiveBody"]
+position = Vector2(0, 2)
+shape = SubResource("7")

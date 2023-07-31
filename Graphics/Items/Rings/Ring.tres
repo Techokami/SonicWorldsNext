@@ -1,0 +1,17 @@
+[gd_resource type="AnimatedTexture" load_steps=5 format=3 uid="uid://dt51ojxk80oqh"]
+
+[ext_resource type="Texture2D" uid="uid://dxdognx60rps2" path="res://Graphics/Items/Rings/Ring4.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://cpcs473co21gu" path="res://Graphics/Items/Rings/Ring3.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://csoc5oj6qsv2n" path="res://Graphics/Items/Rings/Ring1.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://blq8n7iy1j0jh" path="res://Graphics/Items/Rings/Ring2.png" id="4"]
+
+[resource]
+frames = 4
+speed_scale = 10.0
+frame_0/texture = ExtResource("3")
+frame_1/texture = ExtResource("4")
+frame_1/duration = 1.0
+frame_2/texture = ExtResource("2")
+frame_2/duration = 1.0
+frame_3/texture = ExtResource("1")
+frame_3/duration = 1.0

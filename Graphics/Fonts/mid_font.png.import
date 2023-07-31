@@ -1,0 +1,21 @@
+[remap]
+
+importer="font_data_image"
+type="FontFile"
+uid="uid://btb3lh3cpnc6x"
+path="res://.godot/imported/mid_font.png-ac433a2aa85d068b989b86ee0fa866a3.fontdata"
+
+[deps]
+
+source_file="res://Graphics/Fonts/mid_font.png"
+dest_files=["res://.godot/imported/mid_font.png-ac433a2aa85d068b989b86ee0fa866a3.fontdata"]
+
+[params]
+
+character_ranges=PackedStringArray("48-57", "65-90", "32")
+columns=10
+rows=4
+image_margin=Rect2i(0, 0, 0, 0)
+character_margin=Rect2i(0, 0, 0, 0)
+fallbacks=[]
+compress=true

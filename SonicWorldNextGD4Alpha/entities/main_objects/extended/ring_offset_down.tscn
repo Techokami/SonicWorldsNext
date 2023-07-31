@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://d0phj6ph420kc"]
-
-[ext_resource type="PackedScene" uid="uid://bylwmywnhci5b" path="res://entities/main_objects/ring.tscn" id="1_vvw8e"]
-
-[node name="RingOffsetRight" type="Node2D"]
-
-[node name="Ring" parent="." instance=ExtResource( "1_vvw8e" )]
-position = Vector2(0, 8)

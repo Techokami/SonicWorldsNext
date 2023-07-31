@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://cfteqnft5ynr7"]
+
+[ext_resource type="AudioStream" uid="uid://cnbx8aqif7hdw" path="res://Audio/SFX/Objects/Spikes.wav" id="1"]
+[ext_resource type="Texture2D" uid="uid://dnxa6qa422huo" path="res://Graphics/Hazards/spikes.png" id="2"]
+[ext_resource type="Script" path="res://Scripts/Objects/Spikes.gd" id="3"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(32, 32)
+
+[node name="Spikes" type="StaticBody2D"]
+collision_layer = 8192
+collision_mask = 8192
+script = ExtResource("3")
+
+[node name="HitBox" type="CollisionShape2D" parent="."]
+shape = SubResource("1")
+
+[node name="Spike" type="Sprite2D" parent="."]
+texture = ExtResource("2")
+region_rect = Rect2(0, 32, 32, 16)
+
+[node name="sfxSpikeShift" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("1")
+bus = &"SFX"
+
+[node name="ShiftTimer" type="Timer" parent="."]
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
+scale = Vector2(2.5, 2.6)
+
+[connection signal="timeout" from="ShiftTimer" to="." method="_on_ShiftTimer_timeout"]

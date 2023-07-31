@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://c43isa3fib6s6"]
+
+[ext_resource type="Texture2D" uid="uid://kbe5exva8pfl" path="res://Graphics/Gimmicks/CurrentPole.png" id="1_s3624"]
+[ext_resource type="Script" path="res://Scripts/Gimmicks/WaterBar.gd" id="2_nky22"]
+[ext_resource type="AudioStream" uid="uid://bfba871gfmv0s" path="res://Audio/SFX/Player/Grab.wav" id="3_5ecld"]
+
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(4, 64)
+
+[node name="WaterBar" type="Node2D"]
+
+[node name="VerticalBarSprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_s3624")
+region_rect = Rect2(0, 0, 8, 8)
+
+[node name="VerticalBarArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4096
+script = ExtResource("2_nky22")
+getSprite = NodePath("../VerticalBarSprite")
+
+[node name="Grab" type="AudioStreamPlayer" parent="VerticalBarArea"]
+stream = ExtResource("3_5ecld")
+bus = &"SFX"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VerticalBarArea"]
+shape = SubResource("2")
+
+[connection signal="body_entered" from="VerticalBarArea" to="VerticalBarArea" method="_on_VerticalBarArea_body_entered"]
+[connection signal="body_exited" from="VerticalBarArea" to="VerticalBarArea" method="_on_VerticalBarArea_body_exited"]

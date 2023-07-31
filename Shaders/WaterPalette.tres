@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://uh2c8jbp8qwd"]
+
+[ext_resource type="Texture2D" uid="uid://cmjo4vbdamyv6" path="res://Graphics/Palettes/WetPal.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://qs2tvv5yyg0f" path="res://Graphics/Palettes/BasePal.png" id="2"]
+[ext_resource type="Shader" path="res://Shaders/PaletteSwap.gdshader" id="3"]
+
+[resource]
+shader = ExtResource("3")
+shader_parameter/amount = 64.0
+shader_parameter/originalPalette = ExtResource("2")
+shader_parameter/swapPalette = ExtResource("1")

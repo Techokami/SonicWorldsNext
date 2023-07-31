@@ -1,0 +1,190 @@
+[gd_scene load_steps=16 format=3 uid="uid://byje3iiukvt4p"]
+
+[ext_resource type="AudioStream" uid="uid://dec4ik84l88go" path="res://Audio/Soundtrack/2. SWD_SpeedUp.ogg" id="1"]
+[ext_resource type="Script" path="res://Scripts/Global/Main.gd" id="2"]
+[ext_resource type="AudioStream" uid="uid://b30ai1lqlh32u" path="res://Audio/Soundtrack/3. SWD_1Up.ogg" id="3"]
+[ext_resource type="PackedScene" uid="uid://c58ontqoxjuti" path="res://Scene/Presentation/PoweredByWorlds.tscn" id="4"]
+[ext_resource type="AudioStream" uid="uid://o4f15hnb5thp" path="res://Audio/Soundtrack/7. SWD_Drowning.ogg" id="5"]
+[ext_resource type="PackedScene" uid="uid://b2xskcomtpo2x" path="res://Entities/Misc/ControllerMenu.tscn" id="6"]
+[ext_resource type="PackedScene" uid="uid://c1xhc4uh26inb" path="res://Entities/Misc/PauseMenu.tscn" id="7"]
+[ext_resource type="AudioStream" uid="uid://25oy5g80wsxu" path="res://Audio/Soundtrack/5. SWD_Boss.ogg" id="8"]
+
+[sub_resource type="CanvasItemMaterial" id="1"]
+
+[sub_resource type="Animation" id="2"]
+resource_name = "FadeOut"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ScreenFader:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(0, 0, 0.498039, 1), Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ScreenFader:material:blend_mode")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [3]
+}
+
+[sub_resource type="Animation" id="3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ScreenFader:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ScreenFader:material:blend_mode")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="4"]
+resource_name = "SetAdd"
+length = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/path = NodePath("ScreenFader:material:blend_mode")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="5"]
+resource_name = "SetSub"
+length = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/path = NodePath("ScreenFader:material:blend_mode")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
+}
+
+[sub_resource type="Animation" id="Animation_rqlip"]
+resource_name = "WhiteOut"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ScreenFader:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 0, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ScreenFader:material:blend_mode")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_iltn5"]
+_data = {
+"FadeOut": SubResource("2"),
+"RESET": SubResource("3"),
+"SetAdd": SubResource("4"),
+"SetSub": SubResource("5"),
+"WhiteOut": SubResource("Animation_rqlip")
+}
+
+[node name="Main" type="Node2D"]
+script = ExtResource("2")
+
+[node name="SceneLoader" type="Node" parent="."]
+process_mode = 1
+
+[node name="PoweredByWorlds" parent="SceneLoader" instance=ExtResource("4")]
+
+[node name="Music" type="Node" parent="."]
+process_mode = 1
+
+[node name="Music" type="AudioStreamPlayer" parent="Music"]
+autoplay = true
+bus = &"Music"
+
+[node name="BossTheme" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource("8")
+bus = &"Music"
+
+[node name="EffectTheme" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource("1")
+bus = &"Music"
+
+[node name="Drowning" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource("5")
+bus = &"Music"
+
+[node name="Life" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource("3")
+bus = &"Music"
+
+[node name="GUI" type="CanvasLayer" parent="."]
+process_mode = 3
+layer = 128
+
+[node name="ScreenFader" type="ColorRect" parent="GUI"]
+material = SubResource("1")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 0, 0)
+
+[node name="Fader" type="AnimationPlayer" parent="GUI"]
+autoplay = "RESET"
+libraries = {
+"": SubResource("AnimationLibrary_iltn5")
+}
+
+[node name="ControllerMenu" parent="GUI" instance=ExtResource("6")]
+
+[node name="Pause" parent="GUI" instance=ExtResource("7")]
+
+[connection signal="finished" from="Music/Life" to="." method="_on_Life_finished"]

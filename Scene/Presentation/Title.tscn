@@ -1,0 +1,378 @@
+[gd_scene load_steps=10 format=3 uid="uid://qs5dmtxxf1w1"]
+
+[ext_resource type="Script" path="res://Scripts/Level/Title.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://cbloyreqnle13" path="res://Graphics/title/Sonic_Worlds_Next_Logo.png" id="2_qt26u"]
+[ext_resource type="FontFile" uid="uid://ml62eqfe7avn" path="res://Graphics/Fonts/small_font.png" id="3_yuhp3"]
+[ext_resource type="Texture2D" uid="uid://dt51ojxk80oqh" path="res://Graphics/Items/Rings/Ring.tres" id="4_vmy7g"]
+
+[sub_resource type="Animation" id="2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BackCog:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="1"]
+resource_name = "TitleAssemble"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Next:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6, 1.1),
+"transitions": PackedFloat32Array(0.5, 0.5, 1),
+"update": 0,
+"values": [Vector2(-65, 163), Vector2(-65, 163), Vector2(223, 163)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sonic:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 1.2),
+"transitions": PackedFloat32Array(0.5, 0.5, 1),
+"update": 0,
+"values": [Vector2(411, 98), Vector2(411, 98), Vector2(191, 98)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Worlds:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.8),
+"transitions": PackedFloat32Array(0.5, 0.5, 1),
+"update": 0,
+"values": [Vector2(-130, 125), Vector2(-130, 125), Vector2(175, 125)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Worlds/Arrow1:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.9),
+"transitions": PackedFloat32Array(0.5, 0.5, 1),
+"update": 0,
+"values": [Vector2(78.8056, 0), Vector2(78.8056, 0), Vector2(95, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Worlds/Arrow2:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.3, 1),
+"transitions": PackedFloat32Array(0.5, 0.5, 1),
+"update": 0,
+"values": [Vector2(75.8055, 0), Vector2(75.8055, 0), Vector2(107, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Worlds/Arrow3:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.3, 1.1),
+"transitions": PackedFloat32Array(0.5, 0.5, 1),
+"update": 0,
+"values": [Vector2(64.8055, 0), Vector2(64.8055, 0), Vector2(117, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("BigCog:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.9),
+"transitions": PackedFloat32Array(0.5, 0.5, 1),
+"update": 0,
+"values": [Vector2(-64, 108), Vector2(-64, 108), Vector2(84, 108)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("BackCog:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.9),
+"transitions": PackedFloat32Array(0.5, 0.5, 1),
+"update": 0,
+"values": [Vector2(156, -39), Vector2(156, -39), Vector2(156, 72)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("CanvasLayer/Cover:scale")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.3, 1.4),
+"transitions": PackedFloat32Array(1, -2, 1),
+"update": 1,
+"values": [Vector2(1, 1e-05), Vector2(1, 1e-05), Vector2(1, 1)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath(".:speed")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 1.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Cover/Back:color")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 1.3, 1.4, 1.6, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("CanvasLayer/Labels:visible")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 1.3, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, false, true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pb3yv"]
+_data = {
+"RESET": SubResource("2"),
+"TitleAssemble": SubResource("1")
+}
+
+[sub_resource type="Curve" id="Curve_x626m"]
+_data = [Vector2(0, 0), 0.0, 1.4, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_nd4eu"]
+offsets = PackedFloat32Array(0.294461, 0.466472, 0.769679, 1)
+colors = PackedColorArray(1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1)
+
+[node name="TitleScreen" type="Node2D"]
+script = ExtResource("2")
+
+[node name="BackCog" type="Sprite2D" parent="."]
+position = Vector2(156, -39)
+texture = ExtResource("2_qt26u")
+region_enabled = true
+region_rect = Rect2(114, 21, 52, 54)
+
+[node name="BigCog" type="Sprite2D" parent="."]
+position = Vector2(-64, 108)
+texture = ExtResource("2_qt26u")
+region_enabled = true
+region_rect = Rect2(0, 0, 97, 97)
+
+[node name="CogCircle" type="Sprite2D" parent="BigCog"]
+z_index = 1
+texture = ExtResource("2_qt26u")
+region_enabled = true
+region_rect = Rect2(24, 24, 48, 48)
+
+[node name="World" type="Sprite2D" parent="BigCog/CogCircle"]
+z_index = 1
+texture = ExtResource("2_qt26u")
+region_enabled = true
+region_rect = Rect2(181, 29, 39, 38)
+
+[node name="Worlds" type="Sprite2D" parent="."]
+position = Vector2(-130, 125)
+texture = ExtResource("2_qt26u")
+region_enabled = true
+region_rect = Rect2(2, 173, 182, 36)
+
+[node name="Arrow1" type="Sprite2D" parent="Worlds"]
+z_index = -1
+position = Vector2(78.8056, 0)
+texture = ExtResource("2_qt26u")
+region_enabled = true
+region_rect = Rect2(190, 173, 17, 36)
+
+[node name="Arrow2" type="Sprite2D" parent="Worlds"]
+z_index = -1
+position = Vector2(75.8055, 0)
+texture = ExtResource("2_qt26u")
+region_enabled = true
+region_rect = Rect2(214, 173, 15, 36)
+
+[node name="Arrow3" type="Sprite2D" parent="Worlds"]
+z_index = -1
+position = Vector2(64.8055, 0)
+texture = ExtResource("2_qt26u")
+region_enabled = true
+region_rect = Rect2(235, 173, 12, 36)
+
+[node name="Sonic" type="Sprite2D" parent="."]
+position = Vector2(411, 98)
+texture = ExtResource("2_qt26u")
+region_enabled = true
+region_rect = Rect2(150, 107, 140, 38)
+
+[node name="Cog" type="Sprite2D" parent="Sonic"]
+position = Vector2(-24, 0)
+rotation = 0.271425
+texture = ExtResource("2_qt26u")
+region_enabled = true
+region_rect = Rect2(243, 37, 21, 22)
+
+[node name="Next" type="Sprite2D" parent="."]
+position = Vector2(-65, 163)
+texture = ExtResource("2_qt26u")
+region_enabled = true
+region_rect = Rect2(142, 235, 128, 33)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="Back" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Cover" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+scale = Vector2(1, 1e-05)
+pivot_offset = Vector2(0, 70)
+color = Color(0.533333, 0.533333, 0.533333, 1)
+
+[node name="Labels" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Version" type="Label" parent="CanvasLayer/Labels"]
+modulate = Color(1, 1, 0, 1)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -22.0
+offset_right = 136.0
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_yuhp3")
+text = "v2.0 GIT MAIN"
+vertical_alignment = 2
+uppercase = true
+
+[node name="Date" type="Label" parent="CanvasLayer/Labels"]
+modulate = Color(1, 1, 0, 1)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -72.0
+offset_top = -11.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("3_yuhp3")
+text = "2021 2023"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="PressStart" type="Control" parent="CanvasLayer/Labels"]
+modulate = Color(1, 0.831373, 0, 1)
+anchors_preset = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Text" type="RichTextLabel" parent="CanvasLayer/Labels/PressStart"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -47.5
+offset_top = -12.0
+offset_right = 47.5
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("3_yuhp3")
+bbcode_enabled = true
+text = "
+[center][wave freq=10.0 amp=30.0]PRESS START[/wave][/center]"
+scroll_active = false
+
+[node name="Cover" type="CanvasLayer" parent="."]
+layer = 0
+
+[node name="Back" type="ColorRect" parent="Cover"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)
+
+[node name="TitleAnimate" type="AnimationPlayer" parent="."]
+autoplay = "TitleAssemble"
+libraries = {
+"": SubResource("AnimationLibrary_pb3yv")
+}
+
+[node name="Celebrations" type="CPUParticles2D" parent="."]
+position = Vector2(152, 112)
+emitting = false
+amount = 32
+preprocess = 0.5
+texture = ExtResource("4_vmy7g")
+emission_shape = 2
+emission_sphere_radius = 128.0
+direction = Vector2(0, -1)
+gravity = Vector2(0, 300)
+initial_velocity_max = 212.39
+scale_amount_min = 0.5
+scale_amount_curve = SubResource("Curve_x626m")
+color_ramp = SubResource("Gradient_nd4eu")
+hue_variation_min = -0.39
+hue_variation_max = 0.68

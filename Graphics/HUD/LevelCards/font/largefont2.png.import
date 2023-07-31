@@ -1,0 +1,21 @@
+[remap]
+
+importer="font_data_image"
+type="FontFile"
+uid="uid://blhkdor6800wb"
+path="res://.godot/imported/largefont2.png-74ff2f2ee2be8bc83ae070ac7f5960ed.fontdata"
+
+[deps]
+
+source_file="res://Graphics/HUD/LevelCards/font/largefont2.png"
+dest_files=["res://.godot/imported/largefont2.png-74ff2f2ee2be8bc83ae070ac7f5960ed.fontdata"]
+
+[params]
+
+character_ranges=PackedStringArray("65-90", "32")
+columns=11
+rows=3
+image_margin=Rect2i(0, 0, 0, 0)
+character_margin=Rect2i(0, 0, 0, 0)
+fallbacks=[]
+compress=true

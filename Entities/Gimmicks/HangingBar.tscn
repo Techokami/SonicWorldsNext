@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://cma2mtbqjiqdc"]
+
+[ext_resource type="Texture2D" uid="uid://cksk8csclwr3p" path="res://Graphics/Gimmicks/HangingBar.png" id="1"]
+[ext_resource type="PackedScene" uid="uid://b2qs2ji487f1t" path="res://Entities/Gimmicks/Hanger.tscn" id="2"]
+
+[node name="Hanger" type="Node2D"]
+
+[node name="Hanger" parent="." instance=ExtResource("2")]
+position = Vector2(0, -3)
+scale = Vector2(3, 1)
+
+[node name="HangingBar" type="Sprite2D" parent="."]
+z_index = 10
+texture = ExtResource("1")
+offset = Vector2(0, -17)

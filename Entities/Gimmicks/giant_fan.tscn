@@ -1,0 +1,61 @@
+[gd_scene load_steps=10 format=3 uid="uid://bbnywgk4cq5cq"]
+
+[ext_resource type="Script" path="res://Scripts/Objects/GiantFan.gd" id="1_k2y5a"]
+[ext_resource type="Texture2D" uid="uid://b8j0jkbmfrt2u" path="res://Graphics/Gimmicks/large_turbine.png" id="2_3e6h0"]
+[ext_resource type="AudioStream" uid="uid://bvb5adxlfhcxl" path="res://Audio/SFX/Gimmicks/BigFan.wav" id="3_s1t6n"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kmscp"]
+atlas = ExtResource("2_3e6h0")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vnuox"]
+atlas = ExtResource("2_3e6h0")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wvj66"]
+atlas = ExtResource("2_3e6h0")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1vy65"]
+atlas = ExtResource("2_3e6h0")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vrivn"]
+atlas = ExtResource("2_3e6h0")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ckmfc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kmscp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vnuox")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wvj66")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1vy65")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vrivn")
+}],
+"loop": true,
+"name": &"default",
+"speed": 30.0
+}]
+
+[node name="GiantFan" type="Node2D"]
+script = ExtResource("1_k2y5a")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_ckmfc")
+autoplay = "default"
+frame_progress = 0.199508
+
+[node name="BigFan" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_s1t6n")
+volume_db = 4.0
+max_distance = 1000.0

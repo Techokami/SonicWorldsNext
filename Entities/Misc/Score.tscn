@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Graphics/Misc/score_popup.png" type="Texture2D" id=1]
+[ext_resource path="res://Scripts/Misc/Score.gd" type="Script" id=2]
+
+[node name="Score" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 10, 8 )

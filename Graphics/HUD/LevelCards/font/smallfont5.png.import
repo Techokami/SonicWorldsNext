@@ -1,0 +1,21 @@
+[remap]
+
+importer="font_data_image"
+type="FontFile"
+uid="uid://c66yufs1avq5i"
+path="res://.godot/imported/smallfont5.png-08fda97786d176a2c3317dd91d4e2dae.fontdata"
+
+[deps]
+
+source_file="res://Graphics/HUD/LevelCards/font/smallfont5.png"
+dest_files=["res://.godot/imported/smallfont5.png-08fda97786d176a2c3317dd91d4e2dae.fontdata"]
+
+[params]
+
+character_ranges=PackedStringArray("48-57", "65-90", "32")
+columns=10
+rows=4
+image_margin=Rect2i(0, 0, 0, 0)
+character_margin=Rect2i(0, 0, 0, 0)
+fallbacks=[]
+compress=true

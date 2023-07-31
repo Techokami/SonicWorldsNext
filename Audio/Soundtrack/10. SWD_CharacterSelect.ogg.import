@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://0yh5xvcuhvcd"
+path="res://.godot/imported/10. SWD_CharacterSelect.ogg-8e604a7536a89397f108f36a370c3907.oggvorbisstr"
+
+[deps]
+
+source_file="res://Audio/Soundtrack/10. SWD_CharacterSelect.ogg"
+dest_files=["res://.godot/imported/10. SWD_CharacterSelect.ogg-8e604a7536a89397f108f36a370c3907.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

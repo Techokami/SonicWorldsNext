@@ -1,0 +1,133 @@
+[gd_scene load_steps=9 format=3 uid="uid://bct374kjctkxr"]
+
+[ext_resource type="Texture2D" uid="uid://b0rrjr0vqj386" path="res://Graphics/Items/starpost.png" id="1"]
+[ext_resource type="Script" path="res://Scripts/Objects/Checkpoint.gd" id="2"]
+[ext_resource type="AudioStream" uid="uid://dydspge4asiqv" path="res://Audio/SFX/Objects/Checkpoint.wav" id="3"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(16, 48)
+
+[sub_resource type="Animation" id="3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Center:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Center/Orb:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Center/Orb:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [5]
+}
+
+[sub_resource type="Animation" id="2"]
+resource_name = "flash"
+length = 0.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Center/Orb:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [3, 5]
+}
+
+[sub_resource type="Animation" id="4"]
+resource_name = "spin"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Center:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 720.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Center/Orb:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, -720.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cjryo"]
+_data = {
+"RESET": SubResource("3"),
+"flash": SubResource("2"),
+"spin": SubResource("4")
+}
+
+[node name="Checkpoint" type="Area2D"]
+collision_layer = 0
+collision_mask = 4096
+script = ExtResource("2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("1")
+
+[node name="Post" type="Sprite2D" parent="."]
+texture = ExtResource("1")
+hframes = 2
+
+[node name="Center" type="Node2D" parent="."]
+position = Vector2(0, -21)
+
+[node name="Orb" type="Sprite2D" parent="Center"]
+position = Vector2(0, -11)
+texture = ExtResource("1")
+hframes = 2
+vframes = 3
+frame = 5
+
+[node name="Spinner" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_cjryo")
+}
+next/spin = &"Flash"
+
+[node name="Checkpoint" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3")
+bus = &"SFX"
+
+[connection signal="body_entered" from="." to="." method="_on_Checkpoint_body_entered"]

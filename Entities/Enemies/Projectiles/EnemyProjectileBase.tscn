@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Graphics/Enemies/buzzBomberProjectile.png" type="Texture2D" id=1]
+[ext_resource path="res://Scripts/Enemies/EnemyProjectileBase.gd" type="Script" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+size = Vector2( 4, 4 )
+
+[node name="EnemyProjectileBase" type="CharacterBody2D"]
+collision_layer = 16384
+collision_mask = 0
+script = ExtResource( 2 )
+
+[node name="CollissionMask" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="DamageArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 528384
+
+[node name="HitBox" type="CollisionShape2D" parent="DamageArea"]
+modulate = Color( 1, 0, 0, 1 )
+shape = SubResource( 1 )
+
+[node name="projectile" type="Sprite2D" parent="."]
+texture = ExtResource( 1 )
+hframes = 2
+vframes = 2
+frame = 2
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+scale = Vector2( 2.1, 2.1 )
+
+[connection signal="area_entered" from="DamageArea" to="." method="_on_DamageArea_area_entered"]
+[connection signal="body_entered" from="DamageArea" to="." method="_on_body_entered"]
+[connection signal="body_exited" from="DamageArea" to="." method="_on_body_exited"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]

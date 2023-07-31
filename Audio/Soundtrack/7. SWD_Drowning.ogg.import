@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://o4f15hnb5thp"
+path="res://.godot/imported/7. SWD_Drowning.ogg-828b916c28e2776aa16fcd123fa86392.oggvorbisstr"
+
+[deps]
+
+source_file="res://Audio/Soundtrack/7. SWD_Drowning.ogg"
+dest_files=["res://.godot/imported/7. SWD_Drowning.ogg-828b916c28e2776aa16fcd123fa86392.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
