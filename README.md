@@ -1,7 +1,7 @@
 ***PLEASE PLEASE PLEASE! Before you submit a Pull Request to this repository, post about what you want to submit in [Discussions](https://github.com/Techokami/SonicWorldsNext/discussions) first! PLEASE!***
 
 # Sonic Worlds Next
-![Logo](SageLogo.png)
+![Logo](https://github.com/Techokami/SonicWorldsNext/blob/main/icon.png)
 
 This is the official development repository for the successor to Sonic Worlds Delta.
 
