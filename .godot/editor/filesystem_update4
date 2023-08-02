@@ -1,13 +1,9 @@
 res://default_env.tres
-res://Scene/SpecialStage/SpecialStageResult.tscn
+res://Scene/Presentation/PoweredByWorlds.tscn
 res://Shaders/WaterPalette.tres
 res://Tileset/Worlds/WorldsTileMap.tres
 res://Graphics/Tiles/MCZPlatform.tres
-res://Entities/Items/SpecialStageRing.tscn
-res://Scripts/Player/States/Air.gd
-res://Scene/Presentation/PoweredByWorlds.tscn
 res://Scene/Presentation/Title.tscn
-res://Scene/Presentation/CharacterSelect.tscn
 res://Scene/Main.tscn
 res://Entities/Enemies/Orbinaut.tscn
 res://Entities/Enemies/MotoBug.tscn
@@ -38,3 +34,4 @@ res://Scene/Zones/ChunkZone.tscn
 res://Scene/Zones/BaseZone.tscn
 res://Entities/Gimmicks/Spring.tscn
 res://Entities/Obstacles/SwingingPlatform.tscn
+res://Entities/Items/SpecialStageRing.tscn
