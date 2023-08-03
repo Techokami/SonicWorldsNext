@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://b8bt0u45oqhe6"]
 
 [ext_resource type="Script" path="res://Scripts/Objects/Lava.gd" id="2"]
-[ext_resource type="Texture2D" uid="uid://d2boiuwbrsx7o" path="res://Graphics/Hazards/LavaTiles3.png" id="7"]
-[ext_resource type="Texture2D" uid="uid://d2d6btnsclelg" path="res://Graphics/Hazards/LavaTop3.png" id="9"]
+[ext_resource type="Texture2D" uid="uid://dokrp08dw7117" path="res://Graphics/Hazards/LavaTiles1.png" id="2_62rfd"]
+[ext_resource type="Texture2D" uid="uid://hrlm54app0h3" path="res://Graphics/Hazards/LavaTop1.png" id="3_jturk"]
 
 [sub_resource type="RectangleShape2D" id="2"]
 resource_local_to_scene = true
@@ -28,14 +28,14 @@ shape = SubResource("2")
 [node name="LavaTile" type="Sprite2D" parent="."]
 z_index = 10
 position = Vector2(0, 4)
-texture = ExtResource("7")
+texture = ExtResource("2_62rfd")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
 
 [node name="LavaTop" type="Sprite2D" parent="."]
 z_index = 10
 position = Vector2(0, -16)
-texture = ExtResource("9")
+texture = ExtResource("3_jturk")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 8)
 

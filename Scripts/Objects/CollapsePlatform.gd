@@ -38,7 +38,8 @@ func _physics_process(delta):
 	if !active:
 		# if we can detect any players and they're on the flor, activate
 		for i in players:
-			if i.ground:
+			# do a active check to prevent the sound playing twice
+			if i.ground and !active:
 				active = true
 				# wait for sound delay
 				await get_tree().create_timer(soundDelay,false).timeout

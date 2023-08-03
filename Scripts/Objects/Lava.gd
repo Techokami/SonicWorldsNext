@@ -31,6 +31,7 @@ func _process(delta):
 	if frameUpdate:
 		$LavaTop.texture = lavaGraphicTop[floor(frame)]
 		$LavaTile.texture = lavaGraphic[floor(frame)]
+	super(delta)
 
 func update_graphics():
 	# clamp size

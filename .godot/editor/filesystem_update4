@@ -35,3 +35,8 @@ res://Scene/Zones/BaseZone.tscn
 res://Entities/Gimmicks/Spring.tscn
 res://Entities/Obstacles/SwingingPlatform.tscn
 res://Entities/Items/SpecialStageRing.tscn
+res://Scene/Presentation/CharacterSelect.tscn
+res://Entities/Hazards/Lava.tscn
+res://Scripts/Objects/Lava.gd
+res://Scripts/Objects/CollapsePlatform.gd
+res://Scripts/Player/States/Air.gd

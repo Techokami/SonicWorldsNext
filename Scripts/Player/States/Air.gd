@@ -143,10 +143,10 @@ func _physics_process(delta):
 					if parent.animator.current_animation != "dropDash":
 						parent.sfx[20].play()
 						parent.animator.play("dropDash")
-			# Drop dash reset
+			# Drop dash reset (if sonic, hammer keeps swinging for amy)
 			elif !parent.any_action_held_or_pressed() and dropTimer > 0:
 				dropTimer = 0
-				if parent.animator.current_animation == "dropDash":
+				if parent.animator.current_animation == "dropDash" and parent.character == parent.CHARACTERS.SONIC:
 					parent.animator.play("roll")
 	
 		
