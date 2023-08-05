@@ -66,6 +66,11 @@ func _process(delta):
 				# reset invincibility and shoes (or super low so they player can exit these states normally)
 				player.supTime = min(player.supTime,0.01)
 				player.shoeTime = min(player.supTime,0.01)
+				# reset super phase
+				if player.isSuper:
+					player.isSuper = false
+					if is_instance_valid(player.superAnimator):
+						player.superAnimator.play("PowerDown")
 				# reset super sonic texture
 				if player.character == player.CHARACTERS.SONIC:
 					player.sprite.texture = player.normalSprite
