@@ -439,7 +439,7 @@ func _process(delta):
 				# Jump if pushing a wall, slower then half speed, on a flat surface and is either normal or jumping
 				if (partner.currentState == STATES.NORMAL or partner.currentState == STATES.JUMP) and abs(partner.movement.x) < top/2.0 and snap_angle(partner.angle) == 0 or (partner.pushingWall != 0 and pushingWall == 0):
 					# check partners position, only jump ever 0.25 seconds (prevent jump spam)
-					if global_position.y+32 < partner.global_position.y and partner.inputs[INPUTS.ACTION] == 0 and partner.ground and ground and (fmod(Global.globalTimer,0.25)+delta > 0.25):
+					if global_position.y+32 < partner.global_position.y and partner.inputs[INPUTS.ACTION] == 0 and partner.ground and ground and (fmod(Global.globalTimer+delta,0.25) < fmod(Global.globalTimer,0.25)):
 						partner.inputs[INPUTS.ACTION] = 1
 					elif global_position.y < partner.global_position.y and ground and !partner.ground:
 						partner.inputs[INPUTS.ACTION] = 2
@@ -451,9 +451,11 @@ func _process(delta):
 				if round(partner.movement.x) == 0:
 					partnerPanic -= delta
 					partner.inputs[INPUTS.YINPUT] = 1
-					# press action every 0.4 ticks
-					if fmod(partnerPanic+delta,0.4) < fmod(partnerPanic,0.4):
+					# press action every 0.3 ticks
+					if fmod(partnerPanic+delta,0.3) < fmod(partnerPanic,0.3):
 						partner.inputs[INPUTS.ACTION] = 1
+					else:
+						partner.inputs[INPUTS.ACTION] = 0
 
 			# Panic
 			# if partner is locked, and stopped then do a spindash
@@ -530,7 +532,7 @@ func _process(delta):
 				isSuper = false
 				superAnimator.play("PowerDown")
 				switch_physics()
-			if Global.currentTheme == 0:
+			if Global.currentTheme == 0 and Global.effectTheme.is_playing():
 				Global.music.play()
 				Global.effectTheme.stop()
 	
@@ -567,8 +569,9 @@ func _process(delta):
 		var stars = $InvincibilityBarrier.get_children()
 		for i in stars:
 			i.position = i.position.rotated(deg_to_rad(360*delta*4))
+			i.visible = visible
 
-		if (fmod(Global.globalTimer,0.1)+delta > 0.1):
+		if (fmod(Global.globalTimer,0.1)+delta > 0.1) and visible:
 			var star = RotatingParticle.instantiate()
 			var starPart = star.get_node("GenericParticle")
 			star.global_position = global_position

@@ -63,9 +63,9 @@ func _process(delta):
 					# reset the partners air, imagine if you came home and from another dimension and-
 					player.partner.airTimer = player.partner.defaultAirTime
 				
-				# reset invincibility and shoes
-				player.supTime = 0
-				player.shoeTime = 0
+				# reset invincibility and shoes (or super low so they player can exit these states normally)
+				player.supTime = min(player.supTime,0.01)
+				player.shoeTime = min(player.supTime,0.01)
 				# reset super sonic texture
 				if player.character == player.CHARACTERS.SONIC:
 					player.sprite.texture = player.normalSprite
