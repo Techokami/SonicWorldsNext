@@ -113,6 +113,10 @@ func _process(_delta):
 						parent.abilityUsed = true
 						# enable insta shield hitbox if hammer drop dashing
 						parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = (parent.animator.current_animation == "dropDash")
+						# play hammer sound
+						parent.sfx[30].play()
+						# play dropDash sound
+						parent.animator.play("dropDash")
 						
 
 
@@ -139,9 +143,10 @@ func _physics_process(delta):
 			if parent.any_action_held_or_pressed() and parent.abilityUsed and (parent.shield <= parent.SHIELDS.NORMAL or parent.isSuper or $"../../InvincibilityBarrier".visible or parent.character == parent.CHARACTERS.AMY):
 				if dropTimer < 1:
 					dropTimer += (delta/20)*60 # should be ready in the equivelent of 20 frames at 60FPS
+					if dropTimer >= 1:
+						parent.sfx[20].play()
 				else:
 					if parent.animator.current_animation != "dropDash":
-						parent.sfx[20].play()
 						parent.animator.play("dropDash")
 			# Drop dash reset (if sonic, hammer keeps swinging for amy)
 			elif !parent.any_action_held_or_pressed() and dropTimer > 0:

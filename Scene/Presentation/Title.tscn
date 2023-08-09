@@ -292,7 +292,7 @@ offset_right = 136.0
 grow_vertical = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_yuhp3")
-text = "v2.0.1 GIT MAIN"
+text = "v2.0.2 GIT MAIN"
 vertical_alignment = 2
 uppercase = true
 
