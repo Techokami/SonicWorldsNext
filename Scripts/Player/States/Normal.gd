@@ -127,6 +127,16 @@ func _process(delta):
 							if parent.animator.current_animation != "edge1" and parent.animator.current_animation != "edge2":
 								parent.animator.play("edge1")
 								parent.animator.queue("edge2")
+								
+						parent.CHARACTERS.AMY:
+							if getR: # keep flipping until right sensor (relevent) isn't colliding
+								parent.direction = -parent.direction
+							#far edge
+							if !getMEdge:
+								parent.animator.play("edge2")
+							#normal edge
+							else:
+								parent.animator.play("edge3")
 						
 						_: #default
 							# super edge
