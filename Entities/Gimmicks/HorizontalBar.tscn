@@ -1,0 +1,38 @@
+[gd_scene load_steps=4 format=3 uid="uid://urapmknlu0s5"]
+
+[ext_resource type="Script" path="res://Scripts/Gimmicks/HorizontalBar.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://d1hcoy1ga1m5o" path="res://Graphics/Gimmicks/HorizontalBar.png" id="1_5txwq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bv180"]
+size = Vector2(64, 4)
+
+[node name="HorizontalBar" type="Node2D"]
+script = ExtResource("1")
+spriteTexture = ExtResource("1_5txwq")
+
+[node name="Left_Anchor" type="Sprite2D" parent="."]
+texture = ExtResource("1_5txwq")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 8, 6, 8)
+
+[node name="Main_Body" type="Sprite2D" parent="."]
+position = Vector2(6, 0)
+texture = ExtResource("1_5txwq")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 52, 8)
+
+[node name="Right_Anchor" type="Sprite2D" parent="."]
+position = Vector2(58, 0)
+texture = ExtResource("1_5txwq")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 16, 6, 8)
+
+[node name="Bar_Area" type="Area2D" parent="."]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bar_Area"]
+position = Vector2(32, 3)
+shape = SubResource("RectangleShape2D_bv180")
