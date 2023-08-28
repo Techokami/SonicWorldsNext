@@ -10,7 +10,6 @@ size = Vector2(80, 2)
 [node name="Platform" type="Node2D"]
 process_priority = 10
 script = ExtResource("1")
-offset = 0
 
 [node name="Platform" type="AnimatableBody2D" parent="."]
 process_priority = 10
