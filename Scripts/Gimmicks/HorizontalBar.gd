@@ -124,3 +124,32 @@ func process_tool():
 func _process(_delta):
 	#if Engine.is_editor_hint():
 	process_tool()
+
+
+func _on_bar_area_body_entered(body):
+	if !players.has(body):
+		players.append(body)
+		
+	# The bar only spins one way, so the direction is always going to be forward.
+	body.direction = 1
+	body.sprite.flip_h = false
+
+	# This is ok for now, but we need to clean it up.
+	body.animator.play("swingHorizontalBarMHZ", -1, 1, false)	
+	body.set_state(body.STATES.ANIMATION)
+
+
+func _on_bar_area_body_exited(body):
+	remove_player(body)
+	
+func remove_player(player):
+	if players.has(player):
+		# Don't allow removal of someone who is still on the vertical bar. This can occur with
+		# high speeds. Preventing this should be fine since the player will be brought back into
+		# collision overlap range by virtue of being on the bar.
+		if (player.currentState == player.STATES.ANIMATION):
+			return
+		
+		# Clean out the player from all player-linked arrays.
+		var getIndex = players.find(player)
+		players.erase(player)

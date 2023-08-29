@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/Gimmicks/HorizontalBar.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://d1hcoy1ga1m5o" path="res://Graphics/Gimmicks/HorizontalBar.png" id="1_5txwq"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_bv180"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dg25k"]
 size = Vector2(64, 4)
 
 [node name="HorizontalBar" type="Node2D"]
@@ -31,8 +31,12 @@ region_enabled = true
 region_rect = Rect2(0, 16, 6, 8)
 
 [node name="Bar_Area" type="Area2D" parent="."]
-visible = false
+collision_layer = 0
+collision_mask = 4096
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bar_Area"]
 position = Vector2(32, 3)
-shape = SubResource("RectangleShape2D_bv180")
+shape = SubResource("RectangleShape2D_dg25k")
+
+[connection signal="body_entered" from="Bar_Area" to="." method="_on_bar_area_body_entered"]
+[connection signal="body_exited" from="Bar_Area" to="." method="_on_bar_area_body_exited"]
