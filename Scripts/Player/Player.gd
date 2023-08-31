@@ -1,8 +1,8 @@
 extends PhysicsObject
-const HITBOXESSONIC = {NORMAL = Vector2(9,19)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,11)*2, GLIDE = Vector2(10,10)*2}
-const HITBOXESTAILS = {NORMAL = Vector2(9,15)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,9.5)*2, GLIDE = Vector2(10,10)*2}
-const HITBOXESKNUCKLES = {NORMAL = Vector2(9,19)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,11)*2, GLIDE = Vector2(10,10)*2}
-const HITBOXESAMY = {NORMAL = Vector2(9,15)*2, ROLL = Vector2(7,11)*2, CROUCH = Vector2(9,9.5)*2, GLIDE = Vector2(10,10)*2}
+const HITBOXESSONIC = {NORMAL = Vector2(9,19)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,11)*2, GLIDE = Vector2(10,10)*2, HORIZONTAL = Vector2(22,9)*2}
+const HITBOXESTAILS = {NORMAL = Vector2(9,15)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,9.5)*2, GLIDE = Vector2(10,10)*2, HORIZONTAL = Vector2(22,9)*2}
+const HITBOXESKNUCKLES = {NORMAL = Vector2(9,19)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,11)*2, GLIDE = Vector2(10,10)*2, HORIZONTAL = Vector2(22,9)*2}
+const HITBOXESAMY = {NORMAL = Vector2(9,15)*2, ROLL = Vector2(7,11)*2, CROUCH = Vector2(9,9.5)*2, GLIDE = Vector2(10,10)*2, HORIZONTAL = Vector2(22,9)*2}
 var currentHitbox = HITBOXESSONIC
 
 #Sonic's Speed constants
@@ -126,6 +126,7 @@ enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, ANIMATION, HIT, DIE, CO
 SUPER, FLY, RESPAWN, HANG, GLIDE, WALLCLIMB, AMYHAMMER}
 var currentState = STATES.AIR
 @onready var hitBoxOffset = {normal = $HitBox.position, crouch = $HitBox.position}
+@onready var defaultHitBoxPos = $HitBox.position
 var crouchBox = null
 
 # Shield variables
@@ -144,6 +145,7 @@ var reflective = false # used for reflecting projectiles
 @onready var superAnimator = $Sonic/SuperPalette
 @onready var sprite = $Sonic/Sprite2D
 @onready var spriteControler = $Sonic
+var centerReference = null # center reference is a center reference point used for hitboxes and shields (the sprite node need a node called "CenterReference" for this to work)
 var lastActiveAnimation = ""
 var defaultSpriteOffset = Vector2.ZERO
 
@@ -390,6 +392,12 @@ func _ready():
 		crouchBox.disabled = true
 		hitBoxOffset.crouch = crouchBox.position
 	
+	# add center reference node
+	centerReference = spriteControler.get_node_or_null("CenterReference")
+	# hide reference
+	if centerReference:
+		centerReference.visible = false
+	
 	# reset camera limits
 	limitLeft = Global.hardBorderLeft
 	limitRight = Global.hardBorderRight
@@ -497,6 +505,10 @@ func _process(delta):
 		sprite.rotation = -rotation+gravityAngle
 
 	spriteControler.global_position = global_position.round()
+
+	# Sprite center offset referencing for shields
+	if centerReference != null:
+		shieldSprite.global_position = centerReference.global_position
 
 	if (horizontalLockTimer > 0):
 		horizontalLockTimer -= delta
@@ -794,6 +806,13 @@ func _physics_process(delta):
 	# Clamp position
 	global_position.x = clamp(global_position.x,limitLeft+cameraMargin,limitRight-cameraMargin)
 	
+	
+	# center offsets (only moves hitbox if the centers moved)
+	if centerReference != null:
+		if centerReference.position != Vector2.ZERO:
+			# change to center offset if the center position is different
+			$HitBox.position = centerReference.position
+	
 	# Water
 	if Global.waterLevel != null and currentState != STATES.DIE:
 		# Enter water
@@ -931,7 +950,11 @@ func is_right_held():
 
 func set_state(newState, forceMask = Vector2.ZERO):
 	
-	$HitBox.position = hitBoxOffset.normal
+	defaultHitBoxPos = hitBoxOffset.normal
+	$HitBox.position = defaultHitBoxPos
+	# reset the center offset
+	if centerReference != null:
+		centerReference.position = Vector2.ZERO
 	
 	if currentState != newState:
 		var lastState = currentState
@@ -1165,7 +1188,7 @@ func land_floor():
 
 
 # clean animation
-func _on_PlayerAnimation_animation_started(_anim_name):
+func _on_PlayerAnimation_animation_started(anim_name):
 	if (sprite != null):
 		sprite.flip_v = false
 		sprite.offset = defaultSpriteOffset
@@ -1173,7 +1196,11 @@ func _on_PlayerAnimation_animation_started(_anim_name):
 			animator.speed_scale = abs(animator.speed_scale)
 		elif animator.speed_scale == 0:
 			animator.speed_scale = 1
+		# reset the center offset
+		if centerReference != null:
+			centerReference.position = Vector2.ZERO
 		animator.advance(0)
+
 
 # return the physics id variable, see physicsList array for reference
 func determine_physics():

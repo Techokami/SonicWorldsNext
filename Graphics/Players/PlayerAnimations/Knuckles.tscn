@@ -1,8 +1,9 @@
-[gd_scene load_steps=64 format=3 uid="uid://bdaih80dlev3f"]
+[gd_scene load_steps=65 format=3 uid="uid://bdaih80dlev3f"]
 
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="1"]
 [ext_resource type="Texture2D" uid="uid://cndrds5482vh5" path="res://Graphics/Players/Knuckles.png" id="2"]
 [ext_resource type="Texture2D" uid="uid://dlomjk6vm15ep" path="res://Graphics/Misc/DashDust.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://dvqglf8dididc" path="res://Graphics/Items/shield_plain.png" id="4_6hh3f"]
 
 [sub_resource type="Animation" id="86"]
 length = 0.001
@@ -29,6 +30,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D/CenterReference:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
 }
 
 [sub_resource type="Animation" id="108"]
@@ -109,6 +122,18 @@ tracks/1/keys = {
 "update": 1,
 "values": [Vector2(21, -2)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D/CenterReference:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(20, 7)]
+}
 
 [sub_resource type="Animation" id="Animation_voe8q"]
 resource_name = "clingVerticalBarOffset"
@@ -138,6 +163,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [Vector2(-21, -2)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D/CenterReference:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-20, 7)]
 }
 
 [sub_resource type="Animation" id="76"]
@@ -388,6 +425,18 @@ tracks/2/keys = {
 "method": &"play"
 }]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D/CenterReference:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(21, 0)]
+}
 
 [sub_resource type="Animation" id="127"]
 resource_name = "grabVerticalBarOffset"
@@ -431,6 +480,18 @@ tracks/2/keys = {
 "method": &"play"
 }]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D/CenterReference:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-21, 0)]
+}
 
 [sub_resource type="Animation" id="112"]
 resource_name = "hang"
@@ -458,6 +519,47 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_jja13"]
+resource_name = "hangShimmy"
+length = 0.266668
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [223, 222]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D/Sprite2D:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 14)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D/CenterReference:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.266667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 16), Vector2(0, 16)]
 }
 
 [sub_resource type="Animation" id="78"]
@@ -740,6 +842,47 @@ tracks/1/keys = {
 "values": [1.0, 1.0, 9.0]
 }
 
+[sub_resource type="Animation" id="Animation_3djeu"]
+resource_name = "swingHorizontalBarMHZ"
+length = 0.400002
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0166667, 0.05, 0.116667, 0.2, 0.266667, 0.316667, 0.366667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [221, 204, 205, 206, 207, 220, 221, 204]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D/Sprite2D:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0166667, 0.05, 0.116667, 0.2, 0.266667, 0.316667, 0.366667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(0, 14), Vector2(0, 15), Vector2(0, -22), Vector2(0, -23), Vector2(0, -22), Vector2(0, 11), Vector2(0, 14), Vector2(0, 15)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D/CenterReference:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.0166667, 0.0500001, 0.116667, 0.2, 0.266667, 0.316667, 0.366667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(0, 20), Vector2(0, 13), Vector2(0, -15), Vector2(0, -20), Vector2(0, -12), Vector2(0, 5), Vector2(0, 19), Vector2(0, 13)]
+}
+
 [sub_resource type="Animation" id="124"]
 resource_name = "swingVerticalBar"
 length = 0.5
@@ -768,6 +911,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [Vector2(19, -8), Vector2(13, -8), Vector2(-13, -8), Vector2(-19, -8), Vector2(-13, -8), Vector2(13, -8)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D/CenterReference:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.0333334, 0.133334, 0.2, 0.300001, 0.400001),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(19, 0), Vector2(13, 0), Vector2(-14, 0), Vector2(-18, 0), Vector2(-14, 0), Vector2(0, 0)]
 }
 
 [sub_resource type="Animation" id="128"]
@@ -827,6 +982,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [Vector2(-19, -8), Vector2(-13, -8), Vector2(13, -8), Vector2(19, -8), Vector2(13, -8), Vector2(-13, -8)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D/CenterReference:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.0333334, 0.1336, 0.2, 0.300001, 0.400001),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(-21, 0), Vector2(-14, 0), Vector2(14, 0), Vector2(18, 0), Vector2(14, 0), Vector2(0, 0)]
 }
 
 [sub_resource type="Animation" id="85"]
@@ -898,64 +1065,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [267, 266, 265, 264, 263, 262, 261, 260, 259, 258, 257, 256]
-}
-
-[sub_resource type="Animation" id="Animation_3djeu"]
-resource_name = "swingHorizontalBarMHZ"
-length = 0.400002
-step = 0.0166667
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D/Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0166667, 0.05, 0.116667, 0.2, 0.266667, 0.316667, 0.366667),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [221, 204, 205, 206, 207, 220, 221, 204]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D/Sprite2D:offset")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.0166667, 0.05, 0.116667, 0.2, 0.266667, 0.316667, 0.366667),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [Vector2(0, 14), Vector2(0, 15), Vector2(0, -22), Vector2(0, -23), Vector2(0, -22), Vector2(0, 11), Vector2(0, 14), Vector2(0, 15)]
-}
-
-[sub_resource type="Animation" id="Animation_jja13"]
-resource_name = "hangShimmy"
-length = 0.266668
-step = 0.0166667
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D/Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.133333),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [223, 222]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D/Sprite2D:offset")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 14)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_t3bqq"]
@@ -1157,3 +1266,9 @@ disabled = true
 libraries = {
 "": SubResource("AnimationLibrary_u50eh")
 }
+
+[node name="CenterReference" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0.501961)
+texture = ExtResource("4_6hh3f")
+hframes = 4

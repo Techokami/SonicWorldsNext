@@ -150,7 +150,7 @@ func _on_FBZ_Pylon_Area_body_entered(body):
 	# Play the swinging animation at 0 speed so we can control it manually.
 	body.animator.play("swingVerticalBarManaged", -1, 0, false)
 	
-	body.set_state(body.STATES.ANIMATION)
+	body.set_state(body.STATES.ANIMATION,body.currentHitbox.HORIZONTAL)
 
 func _on_FBZ_Pylon_Area_body_exited(body):
 	remove_player(body)
@@ -163,6 +163,7 @@ func remove_player(player):
 		if (player.currentState == player.STATES.ANIMATION):
 			return
 		player.animator.play("roll")
+		player.set_state(player.STATES.AIR)
 		# Clean out the player from all player-linked arrays.
 		var getIndex = players.find(player)
 		players.erase(player)

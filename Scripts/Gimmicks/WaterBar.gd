@@ -114,7 +114,7 @@ func _on_VerticalBarArea_body_entered(body):
 				body.animator.play("clingVerticalBarOffset")
 			else:
 				body.animator.play("clingVerticalBar")
-			body.set_state(body.STATES.ANIMATION)
+			body.set_state(body.STATES.ANIMATION, body.currentHitbox.HORIZONTAL)
 
 func _on_VerticalBarArea_body_exited(body):
 	remove_player(body)

@@ -130,7 +130,7 @@ func resize():
 	
 	var shape = RectangleShape2D.new()
 	var collision = $Bar_Area/CollisionShape2D
-	shape.size.y = 4
+	shape.size.y = 8
 	# We don't want the player overhanging the outside of the gimmick by a lot, so clamp the size of the collision a bit.
 	shape.size.x = width - 28
 	
@@ -191,7 +191,19 @@ func _process_player_launch_up(player, playerIndex):
 	# Otherwise we just launch the player on out of the gimmick
 	if (player.animator.get_current_animation_position() >= player.animator.get_current_animation_length() * 0.99):
 		player.set_state(player.STATES.NORMAL)
+		# figure out the animation based on the players current animation
+		var curAnim = "walk"
+		match(player.animator.current_animation):
+			"walk", "run", "peelOut":
+				curAnim = player.animator.current_animation
+			# if none of the animations match and speed is equal beyond the players top speed, set it to run (default is walk)
+			_:
+				if(abs(player.groundSpeed) >= min(6*60,player.top)):
+					curAnim = "run"
+		# play player animation
 		player.animator.play("spring", -1, 1, false)
+		player.animator.queue(curAnim)
+		
 		if launchSpeedMode == LAUNCH_SPEED_MODE.MULTIPLY:
 			player.movement.y = playersEntryVel[playerIndex] * multiplySwingSpeed
 			if player.movement.y > -minSwingSpeed:
@@ -225,7 +237,6 @@ func _process_player_launch_down(player, playerIndex):
 		
 func _process_player_monitoring(player, playerIndex):
 	if (player.movement.y < -swingContactSpeed):
-		player.direction = 1
 		player.sprite.flip_h = false
 
 		# This is ok for now, but we need to clean it up.
@@ -238,7 +249,6 @@ func _process_player_monitoring(player, playerIndex):
 		$Grab_Sound.play()
 			
 	elif (player.movement.y > swingContactSpeed):
-		player.direction = 1
 		player.sprite.flip_h = false
 		
 		# This is ok for now, but we need to clean it up.
@@ -252,10 +262,9 @@ func _process_player_monitoring(player, playerIndex):
 		$Grab_Sound.play()
 				
 	else:
-		player.direction = 1
 		player.sprite.flip_h = false
-		player.animator.play("hangShimmy", -1, shimmySpeed / 60.0, false)
 		player.set_state(player.STATES.ANIMATION)
+		player.animator.play("hangShimmy", -1, shimmySpeed / 60.0, false)
 		player.movement.y = 0
 		player.global_position.y = get_global_position().y + 3
 		playersMode[playerIndex] = PLAYER_MODE.SHIMMY

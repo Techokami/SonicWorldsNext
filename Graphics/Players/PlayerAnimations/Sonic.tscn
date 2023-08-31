@@ -1,8 +1,9 @@
-[gd_scene load_steps=65 format=3 uid="uid://d1e4muavtnun6"]
+[gd_scene load_steps=66 format=3 uid="uid://d1e4muavtnun6"]
 
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="1_bjmss"]
 [ext_resource type="Texture2D" uid="uid://4lhg0ovh1pe8" path="res://Graphics/Players/Sonic.png" id="2_6xy2a"]
 [ext_resource type="Texture2D" uid="uid://dlomjk6vm15ep" path="res://Graphics/Misc/DashDust.png" id="3_ll20w"]
+[ext_resource type="Texture2D" uid="uid://dvqglf8dididc" path="res://Graphics/Items/shield_plain.png" id="4_fe5jf"]
 
 [sub_resource type="Animation" id="86"]
 length = 0.001
@@ -29,6 +30,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sonic/CenterReference:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
 }
 
 [sub_resource type="Animation" id="108"]
@@ -76,6 +89,18 @@ tracks/1/keys = {
 "update": 1,
 "values": [Vector2(20, 0)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sonic/CenterReference:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(20, 4)]
+}
 
 [sub_resource type="Animation" id="Animation_l0c1k"]
 resource_name = "clingVerticalBarOffset"
@@ -105,6 +130,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [Vector2(-20, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sonic/CenterReference:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-20, 4)]
 }
 
 [sub_resource type="Animation" id="76"]
@@ -334,6 +371,18 @@ tracks/2/keys = {
 "method": &"play"
 }]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sonic/CenterReference:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(17, 0)]
+}
 
 [sub_resource type="Animation" id="124"]
 resource_name = "grabVerticalBarOffset"
@@ -376,6 +425,18 @@ tracks/2/keys = {
 "args": ["swingVerticalBarOffset", -1, 1.0, false],
 "method": &"play"
 }]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sonic/CenterReference:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-17, 0)]
 }
 
 [sub_resource type="Animation" id="112"]
@@ -422,6 +483,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(0, 20)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sonic/CenterReference:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.266667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 22), Vector2(0, 22)]
 }
 
 [sub_resource type="Animation" id="78"]
@@ -801,6 +874,18 @@ tracks/1/keys = {
 "update": 1,
 "values": [Vector2(0, 20), Vector2(0, 3), Vector2(0, -20), Vector2(0, -20), Vector2(0, -20), Vector2(0, 2), Vector2(0, 20), Vector2(0, 3)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sonic/CenterReference:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.0166667, 0.0500001, 0.116667, 0.2, 0.266667, 0.316667, 0.366667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(0, 18), Vector2(0, 11), Vector2(0, -17), Vector2(0, -20), Vector2(0, -12), Vector2(0, -4), Vector2(0, 18), Vector2(0, 11)]
+}
 
 [sub_resource type="Animation" id="121"]
 resource_name = "swingVerticalBar"
@@ -831,6 +916,18 @@ tracks/1/keys = {
 "update": 1,
 "values": [Vector2(20, -10), Vector2(20, -10), Vector2(-20, -10), Vector2(-20, -10), Vector2(-20, -10), Vector2(0, -10)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sonic/CenterReference:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.0333334, 0.133334, 0.233334, 0.300001, 0.383334),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(18, 0), Vector2(10, 0), Vector2(-15, 0), Vector2(-18, 0), Vector2(-10, 0), Vector2(-3, 0)]
+}
 
 [sub_resource type="Animation" id="125"]
 resource_name = "swingVerticalBarManaged"
@@ -859,6 +956,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(0.784584, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [Vector2(0, -10), Vector2(20, -10), Vector2(20, -10), Vector2(-20, -10), Vector2(-20, -10), Vector2(-20, -10)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sonic/CenterReference:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1875, 0.3125, 0.5, 0.6875, 0.8125),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(-4, 0), Vector2(20, 0), Vector2(10, 0), Vector2(-17, 0), Vector2(-20, 0), Vector2(-11, 0)]
 }
 
 [sub_resource type="Animation" id="122"]
@@ -889,6 +998,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 0.784584),
 "update": 1,
 "values": [Vector2(-20, -10), Vector2(-20, -10), Vector2(20, -10), Vector2(20, -10), Vector2(20, -10), Vector2(0, -10)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sonic/CenterReference:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.04, 0.16, 0.28, 0.36, 0.48),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(-20, 0), Vector2(-11, 0), Vector2(16, 0), Vector2(23, 0), Vector2(11, 0), Vector2(3, 0)]
 }
 
 [sub_resource type="Animation" id="85"]
@@ -1132,7 +1253,7 @@ _data = {
 
 [node name="PlayerAnimation" type="AnimationPlayer" parent="."]
 root_node = NodePath("../..")
-autoplay = "hang"
+autoplay = "idle"
 libraries = {
 "": SubResource("AnimationLibrary_36uej")
 }
@@ -1161,3 +1282,9 @@ disabled = true
 libraries = {
 "": SubResource("AnimationLibrary_yhl61")
 }
+
+[node name="CenterReference" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0.501961)
+texture = ExtResource("4_fe5jf")
+hframes = 4
