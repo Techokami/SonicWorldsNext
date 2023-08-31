@@ -222,56 +222,55 @@ func _process_player_launch_down(player, playerIndex):
 		else:
 			player.movement.y = swingSpeedConstant
 		remove_player(player)
+		
+func _process_player_monitoring(player, playerIndex):
+	if (player.movement.y < -swingContactSpeed):
+		player.direction = 1
+		player.sprite.flip_h = false
+
+		# This is ok for now, but we need to clean it up.
+		player.animator.play("swingHorizontalBarMHZ", -1, 1, false)
+		player.set_state(player.STATES.ANIMATION)
+		player.global_position.y = get_global_position().y + 3
+		playersMode[playerIndex] = PLAYER_MODE.LAUNCH_UP
+		playersEntryVel[playerIndex] = player.movement.y
+		player.movement.y = 0
+		$Grab_Sound.play()
+			
+	elif (player.movement.y > swingContactSpeed):
+		player.direction = 1
+		player.sprite.flip_h = false
+		
+		# This is ok for now, but we need to clean it up.
+		player.animator.play("swingHorizontalBarMHZ", -1, 1, false)
+		player.set_state(player.STATES.ANIMATION)
+		
+		player.global_position.y = get_global_position().y + 3
+		playersMode[playerIndex] = PLAYER_MODE.LAUNCH_DOWN
+		playersEntryVel[playerIndex] = player.movement.y
+		player.movement.y = 0
+		$Grab_Sound.play()
+				
+	else:
+		player.direction = 1
+		player.sprite.flip_h = false
+		player.animator.play("hangShimmy", -1, shimmySpeed / 60.0, false)
+		player.set_state(player.STATES.ANIMATION)
+		player.movement.y = 0
+		player.global_position.y = get_global_position().y + 3
+		playersMode[playerIndex] = PLAYER_MODE.SHIMMY
+		$Grab_Sound.play()
 	
 func process_game(_delta):
 	for i in players:
 		var playerIndex = players.find(i)
 		var xInput = i.get_x_input()
 		
+		# If the player is in monitoring mode, we check for when to stick them to the bar
 		if (playersMode[playerIndex] == PLAYER_MODE.MONITORING):
-			# Depending on the player's direction of travel we should attach either low or high
-			# We only want to engage the monitor within a narrow range of positions.
-			#if (i.global_position.y > global_position.y + 24) or (i.global_position.y < global_position.y + 16):
-			#	continue
+			_process_player_monitoring(i, playerIndex)
 			
-			if (i.movement.y < -shimmySpeed):
-				i.direction = 1
-				i.sprite.flip_h = false
-
-				# This is ok for now, but we need to clean it up.
-				i.animator.play("swingHorizontalBarMHZ", -1, 1, false)
-				i.set_state(i.STATES.ANIMATION)
-				i.global_position.y = get_global_position().y + 3
-				playersMode[playerIndex] = PLAYER_MODE.LAUNCH_UP
-				playersEntryVel[playerIndex] = i.movement.y
-				i.movement.y = 0
-				$Grab_Sound.play()
-			
-			elif (i.movement.y > shimmySpeed):
-				i.direction = 1
-				i.sprite.flip_h = false
-
-				# This is ok for now, but we need to clean it up.
-				i.animator.play("swingHorizontalBarMHZ", -1, 1, false)
-				i.set_state(i.STATES.ANIMATION)
-				
-				i.global_position.y = get_global_position().y + 3
-				playersMode[playerIndex] = PLAYER_MODE.LAUNCH_DOWN
-				playersEntryVel[playerIndex] = i.movement.y
-				i.movement.y = 0
-				$Grab_Sound.play()
-				
-			else:
-				i.direction = 1
-				i.sprite.flip_h = false
-				i.animator.play("hangShimmy", -1, shimmySpeed / 60.0, false)
-				i.set_state(i.STATES.ANIMATION)
-				i.movement.y = 0
-				i.global_position.y = get_global_position().y + 3
-				playersMode[playerIndex] = PLAYER_MODE.SHIMMY
-				$Grab_Sound.play()
-
-		# If the player isn't on the bar yet, we are done.
+		# If the player isn't on the bar yet, we are done with that player.
 		if playersMode[playerIndex] == PLAYER_MODE.MONITORING:
 			continue
 			

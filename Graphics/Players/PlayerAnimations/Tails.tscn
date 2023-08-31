@@ -974,10 +974,10 @@ tracks/0/path = NodePath("Sprite2D/Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.133333, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [223, 222, 88]
+"values": [223, 222]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -1492,7 +1492,6 @@ texture = ExtResource("2")
 offset = Vector2(0, -4)
 hframes = 16
 vframes = 18
-frame = 204
 script = ExtResource("5")
 
 [node name="DashDust" type="AnimatedSprite2D" parent="Sprite2D"]
