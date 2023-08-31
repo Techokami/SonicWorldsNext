@@ -1,4 +1,4 @@
-[gd_scene load_steps=73 format=3 uid="uid://by3kgbgiinm60"]
+[gd_scene load_steps=75 format=3 uid="uid://by3kgbgiinm60"]
 
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="1"]
 [ext_resource type="Texture2D" uid="uid://c05fsbnx0p7xf" path="res://Graphics/Players/Tails.png" id="2"]
@@ -962,6 +962,66 @@ tracks/1/keys = {
 "values": [Vector2(2, -4), Vector2(-2, -4), Vector2(-2, -4), Vector2(0, -4), Vector2(2, -4), Vector2(2, -4), Vector2(-2, -4), Vector2(-2, -4), Vector2(-2, -4), Vector2(0, -4), Vector2(2, -4), Vector2(2, -4)]
 }
 
+[sub_resource type="Animation" id="Animation_rhepm"]
+resource_name = "hangShimmy"
+length = 0.266668
+loop_mode = 1
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [223, 222]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D/Sprite2D:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.133333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 24), Vector2(0, 24)]
+}
+
+[sub_resource type="Animation" id="Animation_mjf1r"]
+resource_name = "swingHorizontalBarMHZ"
+length = 0.400002
+loop_mode = 1
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0166667, 0.05, 0.116667, 0.2, 0.266667, 0.316667, 0.366667, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [221, 204, 205, 206, 207, 220, 221, 204, 88]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D/Sprite2D:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0166667, 0.05, 0.116667, 0.2, 0.266667, 0.316667, 0.366667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(0, 24), Vector2(0, 24), Vector2(0, -16), Vector2(0, -16), Vector2(0, -16), Vector2(0, 5), Vector2(0, 24), Vector2(0, 24)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ur811"]
 _data = {
 "RESET": SubResource("86"),
@@ -984,6 +1044,7 @@ _data = {
 "grabVerticalBar": SubResource("130"),
 "grabVerticalBarOffset": SubResource("131"),
 "hang": SubResource("123"),
+"hangShimmy": SubResource("Animation_rhepm"),
 "hurt": SubResource("78"),
 "idle": SubResource("79"),
 "idle1": SubResource("125"),
@@ -1001,6 +1062,7 @@ _data = {
 "swim": SubResource("116"),
 "swimCarry": SubResource("117"),
 "swimTired": SubResource("118"),
+"swingHorizontalBarMHZ": SubResource("Animation_mjf1r"),
 "swingVerticalBar": SubResource("128"),
 "swingVerticalBarManaged": SubResource("132"),
 "swingVerticalBarOffset": SubResource("129"),

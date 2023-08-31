@@ -51,7 +51,7 @@ _data = {
 "main": SubResource("1")
 }
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_jrrgt"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gg316"]
 size = Vector2(12, 96)
 
 [node name="FBZ_Pylon_Controller" type="Node2D"]
@@ -66,7 +66,7 @@ region_enabled = true
 region_rect = Rect2(0, 0, 48, 96)
 
 [node name="FBZ_Pylon_Bottom" type="Sprite2D" parent="."]
-position = Vector2(0, -8.5)
+position = Vector2(0, -7.5)
 texture = ExtResource("3")
 hframes = 3
 vframes = 2
@@ -91,7 +91,7 @@ collision_mask = 4096
 
 [node name="FBZ_Pylon_Collision" type="CollisionShape2D" parent="FBZ_Pylon_Area"]
 position = Vector2(0, -65)
-shape = SubResource("RectangleShape2D_jrrgt")
+shape = SubResource("RectangleShape2D_gg316")
 
 [connection signal="body_entered" from="FBZ_Pylon_Area" to="." method="_on_FBZ_Pylon_Area_body_entered"]
 [connection signal="body_exited" from="FBZ_Pylon_Area" to="." method="_on_FBZ_Pylon_Area_body_exited"]
