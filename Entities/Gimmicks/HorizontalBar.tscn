@@ -4,8 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://d1hcoy1ga1m5o" path="res://Graphics/Gimmicks/HorizontalBar.png" id="1_5txwq"]
 [ext_resource type="AudioStream" uid="uid://bfba871gfmv0s" path="res://Audio/SFX/Player/Grab.wav" id="3_u5fuj"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_8utrx"]
-size = Vector2(36, 4)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a1mxt"]
+size = Vector2(36, 8)
 
 [node name="HorizontalBar" type="Node2D"]
 script = ExtResource("1")
@@ -37,7 +37,7 @@ collision_mask = 4096
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bar_Area"]
 position = Vector2(32, 3)
-shape = SubResource("RectangleShape2D_8utrx")
+shape = SubResource("RectangleShape2D_a1mxt")
 
 [node name="Grab_Sound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_u5fuj")

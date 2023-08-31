@@ -101,7 +101,9 @@ func _process(_delta):
 										parent.abilityUsed = false
 					# Tails flight
 					parent.CHARACTERS.TAILS:
-						parent.set_state(parent.STATES.FLY)
+						# prevent double tap flight (aka super jumps)
+						if not parent.any_action_held():
+							parent.set_state(parent.STATES.FLY)
 					# Knuckles gliding
 					parent.CHARACTERS.KNUCKLES:
 						# set initial movement

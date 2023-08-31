@@ -865,7 +865,8 @@ position = Vector2(1336, 928)
 position = Vector2(10656, 192)
 
 [node name="Capsule" parent="Entity" instance=ExtResource("32_af06c")]
-position = Vector2(10184, 160)
+z_index = 1
+position = Vector2(10240, 160)
 
 [node name="BubbleGenerator2" parent="Entity" instance=ExtResource("33_wp2fi")]
 position = Vector2(4400, 888)
