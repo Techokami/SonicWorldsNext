@@ -395,8 +395,10 @@ tracks/0/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_pv58b"]
-resource_name = "hang_shimmy"
+resource_name = "hangShimmy"
+length = 0.266668
 loop_mode = 1
+step = 0.0166667
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -404,7 +406,7 @@ tracks/0/path = NodePath("Sonic/Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
+"times": PackedFloat32Array(0, 0.133333),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [94, 95]
@@ -419,7 +421,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 2)]
+"values": [Vector2(0, 20)]
 }
 
 [sub_resource type="Animation" id="78"]
@@ -771,6 +773,35 @@ tracks/1/keys = {
 "values": [1.0, 1.0, 9.0]
 }
 
+[sub_resource type="Animation" id="Animation_d563c"]
+resource_name = "swingHorizontalBarMHZ"
+length = 0.400002
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sonic/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0166667, 0.05, 0.116667, 0.2, 0.266667, 0.316667, 0.366667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [111, 106, 107, 108, 109, 110, 111, 106]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sonic/Sprite2D:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0166667, 0.05, 0.116667, 0.2, 0.266667, 0.316667, 0.366667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(0, 20), Vector2(0, 3), Vector2(0, -20), Vector2(0, -20), Vector2(0, -20), Vector2(0, 2), Vector2(0, 20), Vector2(0, 3)]
+}
+
 [sub_resource type="Animation" id="121"]
 resource_name = "swingVerticalBar"
 length = 0.5
@@ -931,35 +962,6 @@ tracks/0/keys = {
 "values": [256, 267, 266, 265, 264, 263, 262, 261, 260, 259, 258, 257]
 }
 
-[sub_resource type="Animation" id="Animation_d563c"]
-resource_name = "swingHorizontalBarMHZ"
-length = 0.400002
-step = 0.0166667
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sonic/Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0166667, 0.05, 0.116667, 0.2, 0.266667, 0.316667, 0.366667),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [111, 106, 107, 108, 109, 110, 111, 106]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sonic/Sprite2D:offset")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.0166667, 0.05, 0.116667, 0.2, 0.266667, 0.316667, 0.366667),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [Vector2(0, 3), Vector2(0, -14), Vector2(0, -36), Vector2(0, -36), Vector2(0, -36), Vector2(0, -14), Vector2(0, 3), Vector2(0, -14)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_36uej"]
 _data = {
 "RESET": SubResource("86"),
@@ -980,7 +982,7 @@ _data = {
 "grabVerticalBar": SubResource("123"),
 "grabVerticalBarOffset": SubResource("124"),
 "hang": SubResource("112"),
-"hang_shimmy": SubResource("Animation_pv58b"),
+"hangShimmy": SubResource("Animation_pv58b"),
 "hurt": SubResource("78"),
 "idle": SubResource("79"),
 "idle1": SubResource("113"),
@@ -1160,6 +1162,3 @@ disabled = true
 libraries = {
 "": SubResource("AnimationLibrary_yhl61")
 }
-
-[node name="BarCursor - delete me" type="Node2D" parent="."]
-position = Vector2(-9, -17)

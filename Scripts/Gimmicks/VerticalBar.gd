@@ -1,4 +1,4 @@
-extends Area2D
+extends Node2D
 
 # Vertical Swinging Bar from Mushroom Hill Zone
 # Author: DimensionWarped
@@ -79,7 +79,7 @@ func _physics_process(_delta):
 	
 	for i in players:
 		if i.currentState == i.STATES.ANIMATION:
-			i.global_position.x = get_parent().get_global_position().x
+			i.global_position.x = get_global_position().x
 		
 		pass
 
@@ -128,17 +128,6 @@ func check_grab(body):
 		
 	return false
 	
-func _on_VerticalBarArea_body_entered(body):
-	if body != get_parent(): #check that parent isn't going to be carried
-		if !players.has(body):
-			players.append(body)
-			players_speed.resize(players.size())
-			players_cur_loops.resize(players.size())
-			players_pass_hit.resize(players.size())
-
-func _on_VerticalBarArea_body_exited(body):
-	remove_player(body)
-	
 func remove_player(player):
 	if players.has(player):
 		# Don't allow removal of someone who is still on the vertical bar. This can occur with
@@ -153,3 +142,14 @@ func remove_player(player):
 		players_speed.remove_at(getIndex)
 		players_cur_loops.remove_at(getIndex)
 		players_pass_hit.remove_at(getIndex)
+
+func _on_vertical_bar_area_body_entered(body):
+	if body != get_parent(): #check that parent isn't going to be carried
+		if !players.has(body):
+			players.append(body)
+			players_speed.resize(players.size())
+			players_cur_loops.resize(players.size())
+			players_pass_hit.resize(players.size())
+
+func _on_vertical_bar_area_body_exited(body):
+	remove_player(body)

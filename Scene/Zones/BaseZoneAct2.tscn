@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://bjavywoj00j1j"]
+[gd_scene load_steps=30 format=3 uid="uid://bjavywoj00j1j"]
 
 [ext_resource type="Script" path="res://Scripts/Level/Level.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://qs5dmtxxf1w1" path="res://Scene/Presentation/Title.tscn" id="2_l4fq6"]
@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://cioq5saowvqxj" path="res://Entities/MainObjects/Player.tscn" id="18"]
 [ext_resource type="Script" path="res://Scripts/Objects/CollapsePlatform.gd" id="21_x7n5b"]
 [ext_resource type="PackedScene" uid="uid://urapmknlu0s5" path="res://Entities/Gimmicks/HorizontalBar.tscn" id="22_ethvu"]
+[ext_resource type="PackedScene" uid="uid://4q0hpddgto2k" path="res://Entities/Gimmicks/Spring.tscn" id="23_n1r7l"]
 [ext_resource type="Texture2D" uid="uid://bemwlrblbgn23" path="res://Graphics/Backgrounds/WorldsBackground.png" id="25"]
 [ext_resource type="PackedScene" uid="uid://c2esop5orct10" path="res://Entities/MainObjects/GoalPost.tscn" id="34"]
 [ext_resource type="PackedScene" uid="uid://dasp221fqgrno" path="res://Entities/Obstacles/Platform.tscn" id="38"]
@@ -82,9 +83,9 @@ animal1 = 2
 animal2 = 3
 defaultLeftBoundry = 0
 defaultTopBoundry = 0
-defaultRightBoundry = 2465
+defaultRightBoundry = 3600
 defaultBottomBoundry = 2048
-metadata/_edit_vertical_guides_ = [2466.0]
+metadata/_edit_vertical_guides_ = [3600.0]
 
 [node name="HUD" parent="." instance=ExtResource("4")]
 act = 2
@@ -153,7 +154,7 @@ layer_4/tile_data = PackedInt32Array()
 [node name="Entities" type="Node" parent="."]
 
 [node name="GoalPost" parent="Entities" instance=ExtResource("34")]
-position = Vector2(1934, 864)
+position = Vector2(3007, 825)
 
 [node name="Rings" type="Node" parent="Entities"]
 
@@ -341,10 +342,16 @@ position = Vector2(-32, -92)
 shape = SubResource("RectangleShape2D_n7iqd")
 
 [node name="HorizontalBar" parent="." instance=ExtResource("22_ethvu")]
-position = Vector2(864, 234)
+position = Vector2(864, 235)
 width = 320
+allowBrake = true
+allowDownwardDetach = true
 drawLeftAnchor = false
 drawRightAnchor = false
+
+[node name="Spring" parent="." instance=ExtResource("23_n1r7l")]
+z_index = -99
+position = Vector2(938, 360)
 
 [connection signal="body_entered" from="Entities/AdvancedPlatform" to="Entities/AdvancedPlatform" method="_on_body_entered"]
 [connection signal="body_exited" from="Entities/AdvancedPlatform" to="Entities/AdvancedPlatform" method="_on_body_exited"]
