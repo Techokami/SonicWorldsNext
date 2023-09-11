@@ -34,6 +34,7 @@ func _process(delta):
 		parent.movement.x = speedCalc*parent.direction
 		parent.sfx[3].play()
 		parent.sfx[2].stop()
+		parent.peelOutCharge = 0.0
 		parent.set_state(parent.STATES.NORMAL)
 
 func _physics_process(delta):
