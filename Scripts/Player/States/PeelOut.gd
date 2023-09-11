@@ -14,7 +14,7 @@ func _process(delta):
 	
 	# increase spindashPower gradually
 	parent.spindashPower = min(parent.spindashPower+delta*24,dashPower)
-	parent.groundSpeed = speedCalc
+	parent.peelOutCharge = speedCalc
 	
 	# animation based on speed
 	if(speedCalc < 6*60):
@@ -23,10 +23,6 @@ func _process(delta):
 		parent.animator.play("run")
 	else:
 		parent.animator.play("peelOut")
-	# how fast the animation plays
-	var duration = floor(max(0,8.0-abs(parent.groundSpeed/60.0)))
-	
-	parent.animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
 
 
 	# release

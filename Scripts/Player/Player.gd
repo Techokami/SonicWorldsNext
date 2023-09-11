@@ -25,6 +25,7 @@ var grv = 0.21875			#gravity
 var releaseJmp = 4			#jump release velocity
 
 var spindashPower = 0.0
+var peelOutCharge = 0.0
 var abilityUsed = false
 var bounceReaction = 0 # for bubble shield
 var invTime = 0
@@ -597,24 +598,10 @@ func _process(delta):
 			starPart.position = stars[0].global_position-global_position
 
 	# Animator
-	match(animator.current_animation):
-		"walk", "run", "peelOut":
-			var duration = floor(max(0,8.0-abs(groundSpeed/60.0)))
-			animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
-		"roll":
-			var duration = floor(max(0,4.0-abs(groundSpeed/60.0)))
-			animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
-		"push":
-			var duration = floor(max(0,8.0-abs(groundSpeed/60.0)) * 4)
-			animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
-		"spinDash": #animate at 60fps (fps were animated at 0.1 seconds)
-			animator.speed_scale = 60.0/10.0
-		"dropDash":
-			animator.speed_scale = 20.0/10.0
-		"climb":
-			animator.speed_scale = -movement.y/(40.0*(1.0+float(isSuper)))
-		_:
-			animator.speed_scale = 1
+	if currentState != STATES.PEELOUT:
+		handle_animation_speed()
+	else:
+		handle_animation_speed(peelOutCharge)
 	
 	if animator.current_animation != "":
 		lastActiveAnimation = animator.current_animation
@@ -1401,3 +1388,23 @@ func action_water_run_handle():
 			sfx[29].play()
 	else:
 		sfx[29].stop()
+
+func handle_animation_speed(gSpeed = groundSpeed):
+	match(animator.current_animation):
+		"walk", "run", "peelOut":
+			var duration = floor(max(0,8.0-abs(gSpeed/60.0)))
+			animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
+		"roll":
+			var duration = floor(max(0,4.0-abs(gSpeed/60.0)))
+			animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
+		"push":
+			var duration = floor(max(0,8.0-abs(gSpeed/60.0)) * 4)
+			animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
+		"spinDash": #animate at 60fps (fps were animated at 0.1 seconds)
+			animator.speed_scale = 60.0/10.0
+		"dropDash":
+			animator.speed_scale = 20.0/10.0
+		"climb":
+			animator.speed_scale = -movement.y/(40.0*(1.0+float(isSuper)))
+		_:
+			animator.speed_scale = 1
