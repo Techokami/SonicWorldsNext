@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3 uid="uid://bkcus1x0kgiv4"]
+
+[ext_resource type="Texture2D" uid="uid://cl5uppfi6s2e" path="res://Graphics/HUD/controller-sprites/dpad-idle.png" id="1_ljriy"]
+[ext_resource type="Texture2D" uid="uid://b0as00k6unfqa" path="res://Graphics/HUD/controller-sprites/d-idle.png" id="2_jqsmy"]
+[ext_resource type="Texture2D" uid="uid://cpicjcebjua4y" path="res://Graphics/HUD/controller-sprites/d-press.png" id="3_k43sn"]
+[ext_resource type="Texture2D" uid="uid://cmrv2tr3wvmmj" path="res://Graphics/HUD/controller-sprites/a-button.png" id="4_bmsfn"]
+[ext_resource type="Texture2D" uid="uid://dfv7v3vmcd6vt" path="res://Graphics/HUD/controller-sprites/a-idle-button.png" id="5_p7ic5"]
+
+[node name="CanvasLayer" type="CanvasLayer"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(32, 208)
+texture = ExtResource("1_ljriy")
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="."]
+position = Vector2(16, 172)
+texture_normal = ExtResource("2_jqsmy")
+texture_pressed = ExtResource("3_k43sn")
+action = "gm_up"
+
+[node name="TouchScreenButton2" type="TouchScreenButton" parent="."]
+position = Vector2(48, 243)
+rotation = 3.14159
+texture_normal = ExtResource("2_jqsmy")
+texture_pressed = ExtResource("3_k43sn")
+action = "gm_down"
+
+[node name="TouchScreenButton3" type="TouchScreenButton" parent="."]
+position = Vector2(68, 192)
+rotation = 1.5708
+texture_normal = ExtResource("2_jqsmy")
+texture_pressed = ExtResource("3_k43sn")
+action = "gm_right"
+
+[node name="TouchScreenButton4" type="TouchScreenButton" parent="."]
+position = Vector2(-4, 224)
+rotation = -1.5708
+texture_normal = ExtResource("2_jqsmy")
+texture_pressed = ExtResource("3_k43sn")
+action = "gm_left"
+
+[node name="TouchScreenButton5" type="TouchScreenButton" parent="."]
+position = Vector2(337, 185)
+texture_normal = ExtResource("4_bmsfn")
+texture_pressed = ExtResource("5_p7ic5")
+action = "gm_action"

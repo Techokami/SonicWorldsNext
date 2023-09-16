@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://38s3gv258vpr"]
+
+[node name="basezone2" type="Label"]
+offset_left = 85.0
+offset_top = 30.0
+offset_right = 205.0
+offset_bottom = 41.0
+text = "Base Zone Act 1"
+uppercase = true
