@@ -56,7 +56,7 @@ func activate():
 		
 		# set player camera limits
 		for i in Global.players:
-			# Camera3D limit set
+			# Camera limit set
 			i.limitLeft = global_position.x -screenXSize/2
 			i.limitRight = global_position.x +screenXSize/2
 

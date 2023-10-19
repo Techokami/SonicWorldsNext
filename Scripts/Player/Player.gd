@@ -150,8 +150,6 @@ var centerReference = null # center reference is a center reference point used f
 var lastActiveAnimation = ""
 var defaultSpriteOffset = Vector2.ZERO
 
-# Camera3D
-# onready var camera = get_node_or_null("Camera3D")
 var camera = Camera2D.new()
 var camDist = Vector2(32,64)
 var camLookDist = [-104,88] # Up and Down
@@ -255,7 +253,7 @@ func _ready():
 	var _con = connect("connectFloor",Callable(self,"land_floor"))
 	_con = connect("connectCeiling",Callable(self,"touch_ceiling"))
 	
-	# Camera3D settings
+	# Camera settings
 	get_parent().call_deferred("add_child", (camera))
 	camera.enabled = (playerControl == 1)
 	var viewSize = get_viewport_rect().size
@@ -701,7 +699,7 @@ func _physics_process(delta):
 	
 	
 	
-	# Camera3D settings
+	# Camera settings
 	if (camera != null):
 		
 		# Lerp camera scroll based on if on floor
@@ -1252,7 +1250,7 @@ func cam_update(forceMove = false):
 	# Cancel camera movement
 	if currentState == STATES.DIE:
 		return false
-	# Camera3D vertical drag
+	# Camera vertical drag
 	var viewSize = get_viewport_rect().size
 	
 	camera.drag_top_margin =    lerp(0.0,float(camDist.y/viewSize.y),float(cameraDragLerp))
@@ -1273,7 +1271,7 @@ func cam_update(forceMove = false):
 				_:
 					camAdjust = Vector2.ZERO
 
-	# Camera3D lock
+	# Camera lock
 	# remove round() if you are not making a pixel perfect game
 	var getPos = (global_position+Vector2(0,camLookOff)+camAdjust).round()
 	if camLockTime <= 0 and (forceMove or camera.global_position.distance_to(getPos) <= 16):

@@ -10,7 +10,7 @@ func _physics_process(_delta):
 		# set player variable
 		player = Global.players[0]
 		
-		# Camera3D limit set
+		# Camera limit set
 		player.limitLeft = global_position.x -screenXSize/2
 		player.limitRight = global_position.x +(screenXSize/2)+48
 		getCam = player.camera

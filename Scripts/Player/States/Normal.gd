@@ -214,7 +214,7 @@ func _physics_process(delta):
 	
 	parent.movement.y = min(parent.movement.y,0)
 	
-	# Camera3D look
+	# Camera look
 	if abs(lookTimer) >= 1:
 		parent.camLookAmount += delta*4*sign(lookTimer)
 	
