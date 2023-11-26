@@ -932,6 +932,9 @@ func is_left_held():
 	
 func is_right_held():
 	return inputs[INPUTS.XINPUT] > 0
+	
+func get_state():
+	return currentState
 
 func set_state(newState, forceMask = Vector2.ZERO):
 	
