@@ -825,9 +825,9 @@ layout_mode = 3
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 8.0
+offset_left = 16.0
 offset_top = -24.0
-offset_right = 72.0
+offset_right = 80.0
 offset_bottom = -8.0
 grow_vertical = 0
 
@@ -848,9 +848,9 @@ text = "0"
 [node name="Counters" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
-offset_left = 8.0
+offset_left = 16.0
 offset_top = 8.0
-offset_right = 48.0
+offset_right = 56.0
 offset_bottom = 48.0
 
 [node name="Text" type="Sprite2D" parent="Counters"]
@@ -860,10 +860,12 @@ region_enabled = true
 region_rect = Rect2(0, 0, 40, 48)
 
 [node name="ScoreNumber" type="Label" parent="Counters/Text"]
-offset_left = 48.0
-offset_right = 48.0
+offset_left = 40.0
+offset_right = 96.0
+offset_bottom = 19.0
 theme_override_fonts/font = ExtResource("6_synv7")
 text = "0"
+horizontal_alignment = 2
 
 [node name="TimeNumbers" type="Label" parent="Counters/Text"]
 offset_left = 32.0
@@ -874,12 +876,13 @@ theme_override_fonts/font = ExtResource("6_synv7")
 text = "00:00"
 
 [node name="RingCount" type="Label" parent="Counters/Text"]
-offset_left = 48.0
+offset_left = 40.0
 offset_top = 32.0
-offset_right = 56.0
+offset_right = 72.0
 offset_bottom = 51.0
 theme_override_fonts/font = ExtResource("6_synv7")
 text = "0"
+horizontal_alignment = 2
 
 [node name="Time" type="Sprite2D" parent="Counters/Text"]
 visible = false
@@ -997,9 +1000,9 @@ anchor_left = 1.0
 anchor_top = 0.003
 anchor_right = 1.0
 anchor_bottom = 0.003
-offset_top = 32.0
-offset_right = 4160.0
-offset_bottom = 288.0
+offset_top = -11.008
+offset_right = 4352.0
+offset_bottom = 244.992
 grow_horizontal = 0
 grow_vertical = 2
 texture = ExtResource("10_xpi0a")

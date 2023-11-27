@@ -72,7 +72,6 @@ resource_local_to_scene = true
 size = Vector2(18, 38)
 
 [sub_resource type="CanvasItemMaterial" id="2"]
-blend_mode = 5
 
 [sub_resource type="AtlasTexture" id="32"]
 atlas = ExtResource("17")
@@ -1294,13 +1293,14 @@ z_index = 6
 material = SubResource("2")
 sprite_frames = SubResource("57")
 animation = &"Insta"
-frame = 5
+offset = Vector2(0, -1)
 script = ExtResource("19")
 
 [node name="ShieldTimer" type="Timer" parent="Shields"]
 one_shot = true
 
 [node name="InstaShieldHitbox" type="Area2D" parent="Shields"]
+position = Vector2(0, 1)
 collision_layer = 524288
 collision_mask = 524288
 script = ExtResource("43")
@@ -1341,11 +1341,11 @@ stream = ExtResource("58")
 bus = &"SFX"
 
 [node name="RingMagnet" type="Area2D" parent="."]
-visible = false
 collision_layer = 4096
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RingMagnet"]
+visible = false
 modulate = Color(0.529412, 0.607843, 0.882353, 1)
 shape = SubResource("58")
 disabled = true

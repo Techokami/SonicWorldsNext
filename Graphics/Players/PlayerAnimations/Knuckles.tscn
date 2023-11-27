@@ -1245,6 +1245,7 @@ next/edge1 = &"edge2"
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 5
 material = ExtResource("1")
+position = Vector2(0, -1)
 texture = ExtResource("2")
 offset = Vector2(0, -8)
 hframes = 16

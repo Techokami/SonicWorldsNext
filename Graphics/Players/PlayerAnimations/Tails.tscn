@@ -1620,7 +1620,7 @@ libraries = {
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 5
 material = ExtResource("1")
-position = Vector2(0, -4)
+position = Vector2(0, -5)
 texture = ExtResource("2")
 offset = Vector2(0, -4)
 hframes = 16
