@@ -320,7 +320,7 @@ texture = ExtResource("14")
 position = Vector2(1056, 641)
 
 [node name="Monitor" parent="Entities" instance=ExtResource("15")]
-position = Vector2(656, 464)
+position = Vector2(656, 465)
 item = 4
 
 [node name="AdvancedPlatform" type="Area2D" parent="Entities"]

@@ -14,12 +14,12 @@ var dropDistance = 0
 var fallSpeed = 0
 var fallActive = false
 var doDrop = false
-var platformDepth = 4
+var platformDepth = 2
 
 func _ready():
 	# Change platform shape
 	$Platform/Shape3D.shape.size.x = platformSprite.get_size().x
-	$Platform/Shape3D.shape.size.y = platformDepth/2.0
+	$Platform/Shape3D.shape.size.y = platformDepth
 	$Platform/Shape3D.position.y = -(platformSprite.get_size().y/2.0)+(platformDepth/2.0)
 	if !Engine.is_editor_hint():
 		# Change platform sprite texture
@@ -31,7 +31,7 @@ func _ready():
 func _process(delta):
 	if Engine.is_editor_hint():
 		$Platform/Shape3D.shape.size.x = platformSprite.get_size().x
-		$Platform/Shape3D.shape.size.y = platformDepth/2.0
+		$Platform/Shape3D.shape.size.y = platformDepth
 		$Platform/Shape3D.position.y = -(platformSprite.get_size().y/2.0)+(platformDepth/2.0)
 		queue_redraw()
 		# Offset timer for the editor to display

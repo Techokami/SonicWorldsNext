@@ -19,7 +19,7 @@ script = ExtResource("2")
 
 [node name="Shape3D" type="CollisionShape2D" parent="Platform"]
 modulate = Color(1, 1, 1, 0.0980392)
-position = Vector2(0, -14)
+position = Vector2(0, -15)
 shape = SubResource("1")
 one_way_collision = true
 

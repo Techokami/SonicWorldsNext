@@ -165,7 +165,7 @@ region_enabled = true
 region_rect = Rect2(0, 0, 512, 512)
 
 [node name="Player" parent="." instance=ExtResource("5_tgx6m")]
-position = Vector2(83, 748)
+position = Vector2(83, 749)
 
 [node name="TileMap" type="TileMap" parent="."]
 z_index = 50
@@ -1537,69 +1537,69 @@ position = Vector2(1344, 1152)
 [node name="Monitors" type="Node2D" parent="."]
 
 [node name="Monitor" parent="Monitors" instance=ExtResource("8_8svvy")]
-position = Vector2(288, 304)
+position = Vector2(288, 305)
 item = 4
 
 [node name="Monitor2" parent="Monitors" instance=ExtResource("8_8svvy")]
-position = Vector2(408, 672)
+position = Vector2(408, 673)
 
 [node name="Monitor4" parent="Monitors" instance=ExtResource("8_8svvy")]
-position = Vector2(3136, 368)
+position = Vector2(3136, 369)
 item = 10
 
 [node name="Monitor18" parent="Monitors" instance=ExtResource("8_8svvy")]
-position = Vector2(1632, 608)
+position = Vector2(1632, 609)
 item = 1
 
 [node name="Monitor19" parent="Monitors" instance=ExtResource("8_8svvy")]
-position = Vector2(9472, 96)
+position = Vector2(9472, 97)
 
 [node name="Monitor5" parent="Monitors" instance=ExtResource("8_8svvy")]
-position = Vector2(3792, 144)
+position = Vector2(3792, 145)
 item = 3
 
 [node name="Monitor6" parent="Monitors" instance=ExtResource("8_8svvy")]
-position = Vector2(3760, 144)
+position = Vector2(3760, 145)
 
 [node name="Monitor7" parent="Monitors" instance=ExtResource("8_8svvy")]
-position = Vector2(5440, 112)
+position = Vector2(5440, 113)
 item = 5
 
 [node name="Monitor8" parent="Monitors" instance=ExtResource("8_8svvy")]
-position = Vector2(4944, 1104)
+position = Vector2(4944, 1105)
 
 [node name="Monitor9" parent="Monitors" instance=ExtResource("8_8svvy")]
-position = Vector2(4976, 1104)
+position = Vector2(4976, 1105)
 item = 6
 
 [node name="Monitor10" parent="Monitors" instance=ExtResource("8_8svvy")]
-position = Vector2(3984, 1040)
+position = Vector2(3984, 1041)
 item = 4
 
 [node name="Monitor11" parent="Monitors" instance=ExtResource("8_8svvy")]
-position = Vector2(7448, 1712)
+position = Vector2(7448, 1713)
 
 [node name="Monitor12" parent="Monitors" instance=ExtResource("8_8svvy")]
-position = Vector2(9136, 1264)
+position = Vector2(9136, 1265)
 item = 7
 
 [node name="Monitor13" parent="Monitors" instance=ExtResource("8_8svvy")]
-position = Vector2(9752, 1896)
+position = Vector2(9752, 1897)
 
 [node name="Monitor14" parent="Monitors" instance=ExtResource("8_8svvy")]
-position = Vector2(9720, 1896)
+position = Vector2(9720, 1897)
 item = 10
 
 [node name="Monitor15" parent="Monitors" instance=ExtResource("8_8svvy")]
-position = Vector2(9688, 1896)
+position = Vector2(9688, 1897)
 item = 2
 
 [node name="Monitor16" parent="Monitors" instance=ExtResource("8_8svvy")]
-position = Vector2(8368, 304)
+position = Vector2(8368, 305)
 item = 2
 
 [node name="Monitor21" parent="Monitors" instance=ExtResource("8_8svvy")]
-position = Vector2(5440, 480)
+position = Vector2(5440, 481)
 item = 10
 
 [node name="Hazards" type="Node2D" parent="."]

@@ -870,10 +870,11 @@ horizontal_alignment = 2
 [node name="TimeNumbers" type="Label" parent="Counters/Text"]
 offset_left = 32.0
 offset_top = 16.0
-offset_right = 40.0
+offset_right = 72.0
 offset_bottom = 35.0
 theme_override_fonts/font = ExtResource("6_synv7")
-text = "00:00"
+text = "0:00"
+horizontal_alignment = 2
 
 [node name="RingCount" type="Label" parent="Counters/Text"]
 offset_left = 40.0
@@ -967,7 +968,7 @@ vframes = 2
 [node name="PatternLeft" type="Control" parent="LevelCard"]
 anchors_preset = 0
 anchor_bottom = 1.0
-offset_bottom = 14368.0
+offset_bottom = 14592.0
 
 [node name="PatternLeft" type="TextureRect" parent="LevelCard/PatternLeft"]
 layout_mode = 1
@@ -991,7 +992,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_top = -32.0
-offset_bottom = 14080.0
+offset_bottom = 14304.0
 
 [node name="PatternRight" type="TextureRect" parent="LevelCard/RightRatio/PatternRight"]
 layout_mode = 1
@@ -1000,9 +1001,9 @@ anchor_left = 1.0
 anchor_top = 0.003
 anchor_right = 1.0
 anchor_bottom = 0.003
-offset_top = -11.008
-offset_right = 4352.0
-offset_bottom = 244.992
+offset_top = -11.68
+offset_right = 4544.0
+offset_bottom = 244.32
 grow_horizontal = 0
 grow_vertical = 2
 texture = ExtResource("10_xpi0a")

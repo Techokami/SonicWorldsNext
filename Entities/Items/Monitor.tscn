@@ -235,6 +235,7 @@ shape = SubResource("1")
 material = ExtResource("6")
 position = Vector2(0, -2)
 texture = ExtResource("1")
+offset = Vector2(0, -1)
 hframes = 11
 vframes = 2
 frame = 2
@@ -243,6 +244,7 @@ frame = 2
 sprite_frames = SubResource("6")
 autoplay = "default"
 frame = 1
+offset = Vector2(0, -1)
 
 [node name="Animator" type="AnimationPlayer" parent="."]
 libraries = {
