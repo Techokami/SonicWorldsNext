@@ -1612,10 +1612,10 @@ _data = {
 
 [node name="PlayerAnimation" type="AnimationPlayer" parent="."]
 root_node = NodePath("../..")
-autoplay = "idle"
 libraries = {
 "": SubResource("AnimationLibrary_ur811")
 }
+autoplay = "idle"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 5
@@ -1648,10 +1648,10 @@ script = ExtResource("4")
 
 [node name="TailsAnimator" type="AnimationPlayer" parent="Sprite2D/Tails"]
 root_node = NodePath("../../..")
-autoplay = "default"
 libraries = {
 "": SubResource("AnimationLibrary_14wfa")
 }
+autoplay = "default"
 
 [node name="CrouchBox" type="CollisionShape2D" parent="."]
 position = Vector2(0, 5.5)

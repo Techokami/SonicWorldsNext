@@ -292,7 +292,7 @@ offset_right = 136.0
 grow_vertical = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_yuhp3")
-text = "v2.0.5 GIT MAIN"
+text = "v2.0.6 GIT MAIN"
 vertical_alignment = 2
 uppercase = true
 
@@ -355,10 +355,10 @@ grow_vertical = 2
 color = Color(1, 1, 1, 0)
 
 [node name="TitleAnimate" type="AnimationPlayer" parent="."]
-autoplay = "TitleAssemble"
 libraries = {
 "": SubResource("AnimationLibrary_pb3yv")
 }
+autoplay = "TitleAssemble"
 
 [node name="Celebrations" type="CPUParticles2D" parent="."]
 position = Vector2(152, 112)

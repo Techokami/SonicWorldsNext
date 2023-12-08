@@ -51,6 +51,7 @@ func activate():
 	# check if to clear level
 	if Global.stageClearPhase == 0:
 		$Animator.play("Open")
+		$Explode.play()
 		# set global stage clear phase to 1, 1 is used to stop the timer (see HUD script)
 		Global.stageClearPhase = 1
 		

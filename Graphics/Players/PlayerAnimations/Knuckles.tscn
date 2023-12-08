@@ -1236,10 +1236,10 @@ _data = {
 
 [node name="PlayerAnimation" type="AnimationPlayer" parent="."]
 root_node = NodePath("../..")
-autoplay = "idle"
 libraries = {
 "": SubResource("AnimationLibrary_t3bqq")
 }
+autoplay = "idle"
 next/edge1 = &"edge2"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

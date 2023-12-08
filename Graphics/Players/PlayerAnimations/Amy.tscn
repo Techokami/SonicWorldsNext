@@ -1211,10 +1211,10 @@ _data = {
 
 [node name="PlayerAnimation" type="AnimationPlayer" parent="."]
 root_node = NodePath("../..")
-autoplay = "idle"
 libraries = {
 "": SubResource("AnimationLibrary_36uej")
 }
+autoplay = "idle"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 5

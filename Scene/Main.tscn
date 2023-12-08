@@ -178,10 +178,10 @@ grow_vertical = 2
 color = Color(1, 1, 0, 0)
 
 [node name="Fader" type="AnimationPlayer" parent="GUI"]
-autoplay = "RESET"
 libraries = {
 "": SubResource("AnimationLibrary_iltn5")
 }
+autoplay = "RESET"
 
 [node name="ControllerMenu" parent="GUI" instance=ExtResource("6")]
 
