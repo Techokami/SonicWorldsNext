@@ -137,8 +137,8 @@ func _physics_process(delta):
 	# Mechanics if jumping
 	if (isJump):
 		# Cut vertical movement if jump released
-		if !parent.any_action_held_or_pressed() and parent.movement.y < -4*60:
-			parent.movement.y = -4*60
+		if !parent.any_action_held_or_pressed() and parent.movement.y < -parent.releaseJmp*60:
+			parent.movement.y = -parent.releaseJmp*60
 		# Drop dash (for sonic / amy)
 		if parent.character == parent.CHARACTERS.SONIC or parent.character == parent.CHARACTERS.AMY:
 			
