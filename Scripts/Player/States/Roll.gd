@@ -58,6 +58,9 @@ func _physics_process(delta):
 	# clamp rolling top speed
 	parent.movement.x = clamp(parent.movement.x,-parent.toproll,parent.toproll)
 
+func state_activated():
+	parent.movement.y = min(parent.movement.y,0)
+
 # stop the water run sound
 func state_exit():
 	parent.sfx[29].stop()
