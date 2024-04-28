@@ -24,9 +24,6 @@ var playerIdles = [
 ["idle1","idle1","idle1","idle1","idle1","idle1","idle1","idle1","idle2","idle3"] # Note: like Tails, Amy loops on idle3
 ]
 
-func state_activated():
-	parent.movement.y = min(parent.movement.y,0)
-
 func state_exit():
 	skid = false
 	parent.get_node("HitBox").position = parent.hitBoxOffset.normal
