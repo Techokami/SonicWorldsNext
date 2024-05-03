@@ -245,6 +245,8 @@ func state_exit():
 	if (parent.shield == parent.SHIELDS.NONE):
 		parent.shieldSprite.visible = false
 		parent.shieldSprite.stop()
+	if parent.ground:
+		parent.movement.y = min(parent.movement.y,0)
 	parent.poleGrabID = null
 	parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").set_deferred("disabled",true)
 	parent.enemyCounter = 0
