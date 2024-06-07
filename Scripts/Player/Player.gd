@@ -145,7 +145,7 @@ var reflective = false # used for reflecting projectiles
 @onready var animator = $Sonic/PlayerAnimation
 @onready var superAnimator = $Sonic/SuperPalette
 @onready var sprite = $Sonic/Sprite2D
-@onready var spriteControler = $Sonic
+@onready var spriteController = $Sonic
 var centerReference = null # center reference is a center reference point used for hitboxes and shields (the sprite node need a node called "CenterReference" for this to work)
 var lastActiveAnimation = ""
 var defaultSpriteOffset = Vector2.ZERO
@@ -345,7 +345,7 @@ func _ready():
 			sprite = tails.get_node("Sprite2D")
 			animator = tails.get_node("PlayerAnimation")
 			superAnimator = tails.get_node_or_null("SuperPalette")
-			spriteControler = tails
+			spriteController = tails
 			get_node("OldSprite").queue_free()
 		CHARACTERS.KNUCKLES:
 			# Set sprites
@@ -356,7 +356,7 @@ func _ready():
 			sprite = knuckles.get_node("Sprite2D")
 			animator = knuckles.get_node("PlayerAnimation")
 			superAnimator = knuckles.get_node_or_null("SuperPalette")
-			spriteControler = knuckles
+			spriteController = knuckles
 			get_node("OldSprite").queue_free()
 		CHARACTERS.AMY:
 			# Set sprites
@@ -368,7 +368,7 @@ func _ready():
 			sprite = amy.get_node("Sprite2D")
 			animator = amy.get_node("PlayerAnimation")
 			superAnimator = amy.get_node_or_null("SuperPalette")
-			spriteControler = amy
+			spriteController = amy
 			get_node("OldSprite").queue_free()
 			maxCharGroundHeight = 12 # adjust height distance to prevent clipping off floors (amy's smaller)
 			
@@ -384,7 +384,7 @@ func _ready():
 	defaultSpriteOffset = sprite.offset
 	
 	# set secondary hitboxes
-	crouchBox = spriteControler.get_node_or_null("CrouchBox")
+	crouchBox = spriteController.get_node_or_null("CrouchBox")
 	if crouchBox != null:
 		crouchBox.get_parent().remove_child(crouchBox)
 		add_child(crouchBox)
@@ -392,7 +392,7 @@ func _ready():
 		hitBoxOffset.crouch = crouchBox.position
 	
 	# add center reference node
-	centerReference = spriteControler.get_node_or_null("CenterReference")
+	centerReference = spriteController.get_node_or_null("CenterReference")
 	# hide reference
 	if centerReference:
 		centerReference.visible = false
@@ -503,7 +503,7 @@ func _process(delta):
 	else:
 		sprite.rotation = -rotation+gravityAngle
 
-	spriteControler.global_position = global_position.round()
+	spriteController.global_position = global_position.round()
 
 	# Sprite center offset referencing for shields
 	if centerReference != null:
