@@ -9,8 +9,9 @@ var verticalSensorRight = RayCast2D.new()
 var horizontalSensor = RayCast2D.new()
 var slopeCheck = RayCast2D.new()
 var objectCheck = RayCast2D.new()
+var backSensor = RayCast2D.new()
 
-@onready var sensorList = [verticalSensorLeft,verticalSensorMiddle,verticalSensorMiddleEdge,verticalSensorRight,horizontalSensor,slopeCheck]
+@onready var sensorList = [verticalSensorLeft,verticalSensorMiddle,verticalSensorMiddleEdge,verticalSensorRight,horizontalSensor,slopeCheck,backSensor]
 
 var maxCharGroundHeight = 16 # this is to stop players getting stuck at the bottom of 16x16 tiles, 
 # you may want to adjust this to match the height of your tile collisions
@@ -58,6 +59,7 @@ func _ready():
 	$HitBox.add_child(horizontalSensor)
 	$HitBox.add_child(slopeCheck)
 	$HitBox.add_child(objectCheck)
+	$HitBox.add_child(backSensor)
 	#for i in sensorList:
 	#	i.enabled = true
 	update_sensors()
@@ -142,6 +144,12 @@ func update_sensors():
 	# if the player is on a completely flat surface then move the sensor down 8 pixels
 	horizontalSensor.position.y = 8*int(round(rad_to_deg(angle)) == round(rad_to_deg(gravityAngle)) and ground)
 	
+	# back sensor
+	if sign(velocity.rotated(-rotationSnap).x) != 0:
+		backSensor.target_position = Vector2(-pushRadius*sign(velocity.rotated(-rotationSnap).x),0)
+	# if the player is on a completely flat surface then move the sensor down 8 pixels
+	backSensor.position.y = 8*int(round(rad_to_deg(angle)) == round(rad_to_deg(gravityAngle)) and ground)
+	
 	# slop sensor
 	slopeCheck.position.y = shape.x
 	slopeCheck.target_position = Vector2((shape.y+extendFloorLook)*sign(rotation-angle),0)
@@ -150,6 +158,7 @@ func update_sensors():
 	verticalSensorLeft.global_rotation = rotationSnap
 	verticalSensorRight.global_rotation = rotationSnap
 	horizontalSensor.global_rotation = rotationSnap
+	backSensor.global_rotation = rotationSnap
 	slopeCheck.global_rotation = rotationSnap
 	
 	# set collission mask values
@@ -176,6 +185,7 @@ func update_sensors():
 	
 	
 	horizontalSensor.force_raycast_update()
+	backSensor.force_raycast_update()
 	verticalSensorLeft.force_raycast_update()
 	verticalSensorRight.force_raycast_update()
 	slopeCheck.force_raycast_update()
@@ -221,6 +231,12 @@ func _physics_process(delta):
 		if horizontalSensor.is_colliding():
 			#  Calculate the move distance vectorm, then move
 			var rayHitVec = (horizontalSensor.get_collision_point()-horizontalSensor.global_position)
+			var normHitVec = -Vector2.LEFT.rotated(snap_angle(rayHitVec.normalized().angle()))
+			position += (rayHitVec-(normHitVec*(pushRadius)))
+		
+		if backSensor.is_colliding():
+			#  Calculate the move distance vectorm, then move
+			var rayHitVec = (backSensor.get_collision_point()-backSensor.global_position)
 			var normHitVec = -Vector2.LEFT.rotated(snap_angle(rayHitVec.normalized().angle()))
 			position += (rayHitVec-(normHitVec*(pushRadius)))
 		
