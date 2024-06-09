@@ -41,6 +41,10 @@ var panicTime = 12 # start count down at 12 seconds
 var airWarning = 5 # time between air meter sound
 var airTimer = defaultAirTime
 
+# force roll variables
+var forceRoll = 0 # each force roll object the player is in, this increments.
+var forceDirection = 0
+
 # collision related values
 var pushingWall = 0
 
@@ -644,6 +648,14 @@ func _process(delta):
 
 func _physics_process(delta):
 	super(delta)
+	
+	if ground and forceRoll > 0:
+		if (movement*Vector2(1,0)).is_equal_approx(Vector2.ZERO):
+			movement.x = 2*sign(-1+(forceDirection*2))*60.0
+		if currentState != STATES.ROLL:
+			set_state(STATES.ROLL)
+			animator.play("roll")
+			sfx[1].play()
 	
 	# Attacking is for rolling type animations
 	var attacking = false
@@ -1354,15 +1366,16 @@ func action_move(delta):
 				movement.x -= movement.x
 
 func action_jump(animation = "roll", airJumpControl = true, playSound=true):
-	animator.play(animation)
-	animator.advance(0)
-	movement.y = -jmp
-	if playSound:
-		sfx[0].play()
-	airControl = airJumpControl
-	cameraDragLerp = 1
-	disconect_from_floor()
-	set_state(STATES.JUMP)
+	if forceRoll <= 0: # check to prevent jumping in roll tubes
+		animator.play(animation)
+		animator.advance(0)
+		movement.y = -jmp
+		if playSound:
+			sfx[0].play()
+		airControl = airJumpControl
+		cameraDragLerp = 1
+		disconect_from_floor()
+		set_state(STATES.JUMP)
 
 func emit_enemy_bounce():
 	emit_signal("enemy_bounced")

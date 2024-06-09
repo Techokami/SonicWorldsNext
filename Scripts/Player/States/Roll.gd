@@ -7,7 +7,6 @@ func _process(_delta):
 		# use parent.action_jump("roll",false) to have jump lock similar to sonic 1-3
 		# true replicates CD and Mania
 		parent.action_jump("roll",true)
-		parent.set_state(parent.STATES.JUMP)
 	# water running
 	parent.action_water_run_handle()
 
