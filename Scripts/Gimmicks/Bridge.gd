@@ -58,7 +58,9 @@ func _physics_process(delta):
 					elif abs(averagePlayerOffset-(global_position.x+(length/2.0*16.0))) > abs(i.global_position.x-(global_position.x+(length/2.0*16.0))):
 						averagePlayerOffset = lerp(averagePlayerOffset,i.global_position.x,0.5)
 			
+			# remove floor() if you are not making a pixel perfect game
 			$Bridge.position.y = max(floor(length/2.0)*2.0-snapped(abs(global_position.x+(length*8.0)-averagePlayerOffset)/8.0,2-int(smoothDrop)),0)
+			
 			dropIndex = max(1,floor((averagePlayerOffset-global_position.x)/16.0)+1)
 			if (dropIndex <= length/2.0):
 				maxDepression = dropIndex*2 #Working from the left
@@ -87,6 +89,7 @@ func _physics_process(delta):
 			else:
 				logDistance = 1-(difference/((length-dropIndex)+1)) # Working from the right
 			
+			# remove floor() if you are not making a pixel perfect game
 			bridges[i].position.y = lerp(bridges[i].position.y,floor(maxDepression * sin(90 * deg_to_rad(logDistance))),delta*10)
 		
 
