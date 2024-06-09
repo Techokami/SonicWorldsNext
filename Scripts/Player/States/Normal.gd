@@ -226,12 +226,11 @@ func _physics_process(delta):
 	if (calcAngle < 0):
 		calcAngle += 360
 	
-	# if speed below fall speed, either drop or slide down slopes
+	# if speed below fall speed, slide down slopes and maybe also drop
 	if (abs(parent.movement.x) < parent.fall and calcAngle >= 45 and calcAngle <= 315):
 		if (round(calcAngle) >= 90 and round(calcAngle) <= 270):
 			parent.disconect_from_floor()
-		else:
-			parent.horizontalLockTimer = 30.0/60.0
+		parent.horizontalLockTimer = 30.0/60.0
 		
 	# movement
 	parent.action_move(delta)

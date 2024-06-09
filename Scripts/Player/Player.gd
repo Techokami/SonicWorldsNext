@@ -509,9 +509,8 @@ func _process(delta):
 	if centerReference != null:
 		shieldSprite.global_position = centerReference.global_position
 
-	if (horizontalLockTimer > 0):
+	if (horizontalLockTimer > 0 and ground):
 		horizontalLockTimer -= delta
-		inputs[INPUTS.XINPUT] = 0
 
 	# super / invincibility handling
 	if (supTime > 0):
@@ -881,8 +880,6 @@ func set_inputs():
 		inputs[INPUTS.ACTION2] = (int(Input.is_action_pressed(inputActions[INPUTS.ACTION2]))*2)-int(Input.is_action_just_pressed(inputActions[INPUTS.ACTION2]))
 		inputs[INPUTS.ACTION3] =  (int(Input.is_action_pressed(inputActions[INPUTS.ACTION3]))*2)-int(Input.is_action_just_pressed(inputActions[INPUTS.ACTION3]))
 		inputs[INPUTS.SUPER] =  (int(Input.is_action_pressed(inputActions[INPUTS.SUPER]))*2)-int(Input.is_action_just_pressed(inputActions[INPUTS.SUPER]))
-	
-	if (playerControl > 0 and horizontalLockTimer <= 0):
 		inputs[INPUTS.XINPUT] = -int(Input.is_action_pressed(inputActions[INPUTS.XINPUT][0]))+int(Input.is_action_pressed(inputActions[INPUTS.XINPUT][1]))
 		inputs[INPUTS.YINPUT] = -int(Input.is_action_pressed(inputActions[INPUTS.YINPUT][0]))+int(Input.is_action_pressed(inputActions[INPUTS.YINPUT][1]))
 
@@ -1334,18 +1331,19 @@ func _on_BubbleTimer_timeout():
 func action_move(delta):
 	# moving left and right, check if left or right is being pressed
 	if inputs[INPUTS.XINPUT] != 0:
-		# check if movement is less then the top speed
-		if movement.x*inputs[INPUTS.XINPUT] < top:
-			# check if the player is pressing the direction they're moving
-			if sign(movement.x) == inputs[INPUTS.XINPUT] or sign(movement.x) == 0:
-				if abs(movement.x) < top:
-					movement.x = move_toward(movement.x,top*inputs[INPUTS.XINPUT],acc/GlobalFunctions.div_by_delta(delta))
-			else:
-				# reverse direction
-				movement.x += dec/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT]
-				# implament weird turning quirk
-				if (sign(movement.x) != sign(movement.x-dec/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT])):
-					movement.x = 0.5*60*sign(movement.x)
+		if horizontalLockTimer <= 0: # skip logic if lock timer is around, friction gets skipped too since the original games worked like that
+			# check if movement is less then the top speed
+			if movement.x*inputs[INPUTS.XINPUT] < top:
+				# check if the player is pressing the direction they're moving
+				if sign(movement.x) == inputs[INPUTS.XINPUT] or sign(movement.x) == 0:
+					if abs(movement.x) < top:
+						movement.x = move_toward(movement.x,top*inputs[INPUTS.XINPUT],acc/GlobalFunctions.div_by_delta(delta))
+				else:
+					# reverse direction
+					movement.x += dec/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT]
+					# implament weird turning quirk
+					if (sign(movement.x) != sign(movement.x-dec/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT])):
+						movement.x = 0.5*60*sign(movement.x)
 	else:
 		# come to a stop if neither left or right is pressed
 		if (movement.x != 0):
