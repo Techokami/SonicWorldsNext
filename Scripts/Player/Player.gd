@@ -41,6 +41,10 @@ var panicTime = 12 # start count down at 12 seconds
 var airWarning = 5 # time between air meter sound
 var airTimer = defaultAirTime
 
+# force roll variables
+var forceRoll = 0 # each force roll object the player is in, this increments.
+var forceDirection = 0
+
 # collision related values
 var pushingWall = 0
 
@@ -145,7 +149,7 @@ var reflective = false # used for reflecting projectiles
 @onready var animator = $Sonic/PlayerAnimation
 @onready var superAnimator = $Sonic/SuperPalette
 @onready var sprite = $Sonic/Sprite2D
-@onready var spriteControler = $Sonic
+@onready var spriteController = $Sonic
 var centerReference = null # center reference is a center reference point used for hitboxes and shields (the sprite node need a node called "CenterReference" for this to work)
 var lastActiveAnimation = ""
 var defaultSpriteOffset = Vector2.ZERO
@@ -345,7 +349,7 @@ func _ready():
 			sprite = tails.get_node("Sprite2D")
 			animator = tails.get_node("PlayerAnimation")
 			superAnimator = tails.get_node_or_null("SuperPalette")
-			spriteControler = tails
+			spriteController = tails
 			get_node("OldSprite").queue_free()
 		CHARACTERS.KNUCKLES:
 			# Set sprites
@@ -356,7 +360,7 @@ func _ready():
 			sprite = knuckles.get_node("Sprite2D")
 			animator = knuckles.get_node("PlayerAnimation")
 			superAnimator = knuckles.get_node_or_null("SuperPalette")
-			spriteControler = knuckles
+			spriteController = knuckles
 			get_node("OldSprite").queue_free()
 		CHARACTERS.AMY:
 			# Set sprites
@@ -368,7 +372,7 @@ func _ready():
 			sprite = amy.get_node("Sprite2D")
 			animator = amy.get_node("PlayerAnimation")
 			superAnimator = amy.get_node_or_null("SuperPalette")
-			spriteControler = amy
+			spriteController = amy
 			get_node("OldSprite").queue_free()
 			maxCharGroundHeight = 12 # adjust height distance to prevent clipping off floors (amy's smaller)
 			
@@ -384,7 +388,7 @@ func _ready():
 	defaultSpriteOffset = sprite.offset
 	
 	# set secondary hitboxes
-	crouchBox = spriteControler.get_node_or_null("CrouchBox")
+	crouchBox = spriteController.get_node_or_null("CrouchBox")
 	if crouchBox != null:
 		crouchBox.get_parent().remove_child(crouchBox)
 		add_child(crouchBox)
@@ -392,7 +396,7 @@ func _ready():
 		hitBoxOffset.crouch = crouchBox.position
 	
 	# add center reference node
-	centerReference = spriteControler.get_node_or_null("CenterReference")
+	centerReference = spriteController.get_node_or_null("CenterReference")
 	# hide reference
 	if centerReference:
 		centerReference.visible = false
@@ -503,15 +507,14 @@ func _process(delta):
 	else:
 		sprite.rotation = -rotation+gravityAngle
 
-	spriteControler.global_position = global_position.round()
+	spriteController.global_position = global_position.round()
 
 	# Sprite center offset referencing for shields
 	if centerReference != null:
 		shieldSprite.global_position = centerReference.global_position
 
-	if (horizontalLockTimer > 0):
+	if (horizontalLockTimer > 0 and ground):
 		horizontalLockTimer -= delta
-		inputs[INPUTS.XINPUT] = 0
 
 	# super / invincibility handling
 	if (supTime > 0):
@@ -645,6 +648,14 @@ func _process(delta):
 
 func _physics_process(delta):
 	super(delta)
+	
+	if ground and forceRoll > 0:
+		if (movement*Vector2(1,0)).is_equal_approx(Vector2.ZERO):
+			movement.x = 2*sign(-1+(forceDirection*2))*60.0
+		if currentState != STATES.ROLL:
+			set_state(STATES.ROLL)
+			animator.play("roll")
+			sfx[1].play()
 	
 	# Attacking is for rolling type animations
 	var attacking = false
@@ -881,8 +892,6 @@ func set_inputs():
 		inputs[INPUTS.ACTION2] = (int(Input.is_action_pressed(inputActions[INPUTS.ACTION2]))*2)-int(Input.is_action_just_pressed(inputActions[INPUTS.ACTION2]))
 		inputs[INPUTS.ACTION3] =  (int(Input.is_action_pressed(inputActions[INPUTS.ACTION3]))*2)-int(Input.is_action_just_pressed(inputActions[INPUTS.ACTION3]))
 		inputs[INPUTS.SUPER] =  (int(Input.is_action_pressed(inputActions[INPUTS.SUPER]))*2)-int(Input.is_action_just_pressed(inputActions[INPUTS.SUPER]))
-	
-	if (playerControl > 0 and horizontalLockTimer <= 0):
 		inputs[INPUTS.XINPUT] = -int(Input.is_action_pressed(inputActions[INPUTS.XINPUT][0]))+int(Input.is_action_pressed(inputActions[INPUTS.XINPUT][1]))
 		inputs[INPUTS.YINPUT] = -int(Input.is_action_pressed(inputActions[INPUTS.YINPUT][0]))+int(Input.is_action_pressed(inputActions[INPUTS.YINPUT][1]))
 
@@ -1334,18 +1343,19 @@ func _on_BubbleTimer_timeout():
 func action_move(delta):
 	# moving left and right, check if left or right is being pressed
 	if inputs[INPUTS.XINPUT] != 0:
-		# check if movement is less then the top speed
-		if movement.x*inputs[INPUTS.XINPUT] < top:
-			# check if the player is pressing the direction they're moving
-			if sign(movement.x) == inputs[INPUTS.XINPUT] or sign(movement.x) == 0:
-				if abs(movement.x) < top:
-					movement.x = move_toward(movement.x,top*inputs[INPUTS.XINPUT],acc/GlobalFunctions.div_by_delta(delta))
-			else:
-				# reverse direction
-				movement.x += dec/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT]
-				# implament weird turning quirk
-				if (sign(movement.x) != sign(movement.x-dec/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT])):
-					movement.x = 0.5*60*sign(movement.x)
+		if horizontalLockTimer <= 0: # skip logic if lock timer is around, friction gets skipped too since the original games worked like that
+			# check if movement is less then the top speed
+			if movement.x*inputs[INPUTS.XINPUT] < top:
+				# check if the player is pressing the direction they're moving
+				if sign(movement.x) == inputs[INPUTS.XINPUT] or sign(movement.x) == 0:
+					if abs(movement.x) < top:
+						movement.x = move_toward(movement.x,top*inputs[INPUTS.XINPUT],acc/GlobalFunctions.div_by_delta(delta))
+				else:
+					# reverse direction
+					movement.x += dec/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT]
+					# implament weird turning quirk
+					if (sign(movement.x) != sign(movement.x-dec/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT])):
+						movement.x = 0.5*60*sign(movement.x)
 	else:
 		# come to a stop if neither left or right is pressed
 		if (movement.x != 0):
@@ -1356,15 +1366,16 @@ func action_move(delta):
 				movement.x -= movement.x
 
 func action_jump(animation = "roll", airJumpControl = true, playSound=true):
-	animator.play(animation)
-	animator.advance(0)
-	movement.y = -jmp
-	if playSound:
-		sfx[0].play()
-	airControl = airJumpControl
-	cameraDragLerp = 1
-	disconect_from_floor()
-	set_state(STATES.JUMP)
+	if forceRoll <= 0: # check to prevent jumping in roll tubes
+		animator.play(animation)
+		animator.advance(0)
+		movement.y = -jmp
+		if playSound:
+			sfx[0].play()
+		airControl = airJumpControl
+		cameraDragLerp = 1
+		disconect_from_floor()
+		set_state(STATES.JUMP)
 
 func emit_enemy_bounce():
 	emit_signal("enemy_bounced")
