@@ -19,7 +19,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, -4)]
+"values": [Vector2(0, -5)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -1287,7 +1287,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-5, -8)]
+"values": [Vector2(-5, -9)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -1340,7 +1340,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-7, -4)]
+"values": [Vector2(-7, -5)]
 }
 
 [sub_resource type="Animation" id="120"]
@@ -1454,7 +1454,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-12, -8)]
+"values": [Vector2(-12, -9)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -1484,7 +1484,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-6, -4)]
+"values": [Vector2(-6, -5)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -1536,7 +1536,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-5, -8)]
+"values": [Vector2(-5, -9)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_14wfa"]
@@ -1622,7 +1622,7 @@ z_index = 5
 material = ExtResource("1")
 position = Vector2(0, -4)
 texture = ExtResource("2")
-offset = Vector2(0, -4)
+offset = Vector2(0, -5)
 hframes = 16
 vframes = 18
 script = ExtResource("5")
@@ -1640,7 +1640,7 @@ show_behind_parent = true
 material = ExtResource("1")
 rotation = 6.28318
 texture = ExtResource("2")
-offset = Vector2(-5, -8)
+offset = Vector2(-5, -9)
 hframes = 16
 vframes = 18
 frame = 10
