@@ -59,7 +59,7 @@ func _physics_process(delta):
 		if currentState == 1: # scrunch UP
 			$Head.position.y -= 0.5
 			segments[2].get_node("Sprite").position.y -= 0.5
-		if currentState == 2: # stretch dOwN
+		if currentState == 2: # stretch DOWN
 			$Head.position.y += 0.5
 			segments[2].get_node("Sprite").position.y += 0.5
 		# The state system is supposed to help animate the Caterkiller properly, so here it is.
