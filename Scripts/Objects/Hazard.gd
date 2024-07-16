@@ -1,4 +1,4 @@
-extends Area2D
+class_name Hazard extends Area2D
 
 @export_enum("Normal", "Fire", "Elec", "Water") var damageType = 0
 var playerHit = []
