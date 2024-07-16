@@ -27,7 +27,7 @@ func _physics_process(delta):
 			else:
 				# reverse direction
 				parent.movement.x += parent.dec/GlobalFunctions.div_by_delta(delta)*parent.inputs[parent.INPUTS.XINPUT]
-				# implament weird turning quirk
+				# implement weird turning quirk
 				if (sign(parent.movement.x) != sign(parent.movement.x-parent.dec/GlobalFunctions.div_by_delta(delta)*parent.inputs[parent.INPUTS.XINPUT])):
 					parent.movement.x = 0.5*60*sign(parent.movement.x)
 	else:

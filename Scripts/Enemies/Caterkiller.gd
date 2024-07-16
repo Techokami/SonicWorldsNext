@@ -17,14 +17,17 @@ var stateInfo = [
 # is each segment on the ground? this is important since turning around is also based on the sensor not detecting anything
 var segmentgroundstate = [false, false, false, false]
 
+# state animation, even though there's an AnimationPlayer node here it's kinda hacky and results in some inconsistent behavior to do it that vvay.
+var stateTimer: int = 8 # timer for each state to function
+var stateOrderIndex = 0 # the index to svvitch states in the correct order
+var stateOrder = [0,1,0,2] # Pose, scruch, pose, stretch, repeat.
+
+
 func _ready():
 	# move segments out of this object, since they move rather independent of eachother and the main head, even if the head controls them
 	unparent_segment($Segment3)
 	unparent_segment($Segment2)
 	unparent_segment($Segment1)
-	
-	# transition the states using the animation
-	$AnimationPlayer.play("default")
 
 # function used for each segment freeing themselves from the parent's position
 func unparent_segment(child):
@@ -51,9 +54,29 @@ func _physics_process(delta):
 			elif segmentgroundstate[i] == true: # if previously grounded but novv not, turn.
 				segments[i].scale.x *= -1
 			segmentgroundstate[i] = segments[i].get_node("FloorCast").is_colliding() # set ground state
-		# vertical animation is done via the AnimationPlayer
-		# it can't access the segments though, so I'm going to copy it over.
-		segments[2].get_node("Sprite").position.y = $Head.position.y
+		# vertical animation is a table, but i'm not gonna do that, i'm just going to move this a consistent amount
+		# the original table seemed to have some amount of easing or vvhatever, since it makes four 0s to start and three 7s at the end... but idk.
+		if currentState == 1: # scrunch UP
+			$Head.position.y -= 0.5
+			segments[2].get_node("Sprite").position.y -= 0.5
+		if currentState == 2: # stretch dOVVN
+			$Head.position.y += 0.5
+			segments[2].get_node("Sprite").position.y += 0.5
+		# The state system is supposed to help animate the Caterkiller properly, so here it is.
+		stateTimer -= 1
+		if stateTimer == 0: # change the index
+			stateOrderIndex += 1
+			stateOrderIndex %= stateOrder.size() # loop around
+			currentState = stateOrder[stateOrderIndex] # set the state
+			match currentState: # set the timer and javv frame
+				0:
+					stateTimer = 8
+				1:
+					stateTimer = 16
+					$Head.frame = 1 # open javv on scrunch
+				2: 
+					stateTimer = 16
+					$Head.frame = 0 # close javv
 
 func destroy():
 	super() # still actually destroy it
@@ -63,8 +86,6 @@ func destroy():
 				i.queue_free()
 
 func scatter_parts():
-	# STOP THAT ANIMATION RRRRRRRRRIGHT NOVV
-	$AnimationPlayer.stop()
 	$Head.position.y = 0 # sprite offsets are going to look funny vvhen using the same collisions
 	segments[2].get_node("Sprite").position.y = 0
 	for i in segments: # make 'em start bouncing!
@@ -79,4 +100,4 @@ func _process(_delta):
 	# if player array size isn't empty... scatter!!
 	if (playerHit.size() > 0) and scattered == false:
 		scatter_parts() # this IS the head, this is the only difference in this function as the rest is just the EnemyBase.
-	super(_delta) # still act like a hazard tho \:
+	super(_delta) # still act like an enemy tho \:
