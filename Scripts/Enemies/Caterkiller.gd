@@ -2,7 +2,7 @@ extends EnemyBase
 @onready var segments = [self, $Segment1, $Segment2, $Segment3]
 var scattered = false # same as segments.
 var verticalspeed = -4 # specifically for scattering
-@export var currentState = 0 # see below
+var currentState = 0 # see below
 
 # Movement States, each item corresponds to segments in the array above, including the head.
 # State 0 is when a pose is being held by the Caterkiller, so all the values are 0
