@@ -170,6 +170,9 @@ func _physics_process(delta):
 	
 	# Reset state if on ground
 	if (parent.ground):
+		#Restore Air Control when landing
+		#(Needed if Rolling control lock is enabled in Roll.gd)
+		parent.airControl = true
 		# Check bounce reaction first
 		if !bounce():
 			# reset animations (this is for shared animations like the corkscrews)

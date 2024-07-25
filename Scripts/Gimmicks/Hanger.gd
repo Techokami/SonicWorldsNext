@@ -138,6 +138,7 @@ func physics_process_connected(_delta, player, index):
 	# set the animation and convert out of any unusual states into AIR.
 	player.animator.play("hang")
 	player.set_state(player.STATES.AIR)
+	player.airControl = true
 	
 	# Perform just the functional parts  of the connect script that move the
 	# player into position.
