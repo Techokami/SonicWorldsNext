@@ -13,6 +13,9 @@ var levelLabels = ["Base Zone Act 1", "Base Zone Act 2"]#, "Chunk Zone Act 1"]
 var characterID = 0
 # level id lines up with levelLabels
 var levelID = 0
+# Used to avoid repeated detection of inputs with analog stick
+var lastInput = Vector2.ZERO
+
 
 func _ready():
 	Global.music.stream = music
@@ -22,16 +25,23 @@ func _ready():
 		Global.nextZone = nextZone
 
 func _input(event):
+	
 	if !selected:
-		# select character rotation
-		if Input.is_action_just_pressed("gm_left"):
-			characterID = wrapi(characterID-1,0,characterLabels.size())
-		if Input.is_action_just_pressed("gm_right"):
-			characterID = wrapi(characterID+1,0,characterLabels.size())
-		if Input.is_action_just_pressed("gm_down"):
-			levelID = wrapi(levelID+1,0,levelLabels.size())
-		if Input.is_action_just_pressed("gm_up"):
-			levelID = wrapi(levelID-1,0,levelLabels.size())
+		var inputCue = Input.get_vector("gm_left","gm_right","gm_up","gm_down")
+		inputCue.x = round(inputCue.x)
+		inputCue.y = round(inputCue.y)
+		if inputCue != lastInput:
+			# select character rotation
+			if inputCue.x < 0:
+				characterID = wrapi(characterID-1,0,characterLabels.size())
+			if inputCue.x > 0:
+				characterID = wrapi(characterID+1,0,characterLabels.size())
+			if inputCue.y > 0:
+				levelID = wrapi(levelID+1,0,levelLabels.size())
+			if inputCue.y < 0:
+				levelID = wrapi(levelID-1,0,levelLabels.size())
+		#Save previous input for next read
+		lastInput = inputCue
 		
 		$UI/Labels/Control/Character.text = characterLabels[characterID]
 		$UI/Labels/Control/Level.text = levelLabels[levelID]
