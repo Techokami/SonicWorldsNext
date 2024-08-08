@@ -111,7 +111,7 @@ func physics_collision(body, hitVector):
 				body.movement.x = 0
 		# check if player is not an ai or spindashing
 		# if they are then destroy
-		elif body.playerControl == 1 and body.currentState != body.STATES.SPINDASH:
+		if body.playerControl == 1 and body.currentState != body.STATES.SPINDASH:
 			body.movement.y = -abs(body.movement.y)
 			
 			if body.currentState == body.STATES.ROLL:
