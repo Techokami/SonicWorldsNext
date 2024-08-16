@@ -18,11 +18,11 @@ func _physics_process(_delta):
 		# play spinner
 		$Animator.play("Spinner")
 		match player.character:
-			1:
+			Global.CHARACTERS.TAILS:
 				$Animator.queue("Tails")
-			2:
+			Global.CHARACTERS.KNUCKLES:
 				$Animator.queue("Knuckles")
-			3:
+			Global.CHARACTERS.AMY:
 				$Animator.queue("Amy")
 			_:
 				$Animator.queue("Sonic")

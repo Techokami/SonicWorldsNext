@@ -31,7 +31,7 @@ func _process(_delta):
 		Global.effectTheme.stream = Global.themes[Global.currentTheme]
 		Global.effectTheme.play()
 		# swap sprite if sonic
-		if parent.character == parent.CHARACTERS.SONIC:
+		if parent.character == Global.CHARACTERS.SONIC:
 			parent.sprite.texture = parent.superSprite
 		# reset velocity to memory
 		parent.movement = remVel

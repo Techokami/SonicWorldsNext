@@ -63,8 +63,7 @@ var enemyCounter = 0
 # 8 Jump
 # 9 Jump release velocity
 
-enum CHARACTERS {SONIC, TAILS, KNUCKLES, AMY}
-var character = CHARACTERS.SONIC
+var character = Global.CHARACTERS.SONIC
 
 # 0 = Sonic, 1 = Tails, 2 = Knuckles, 3 = Shoes, 4 = Super Sonic
 
@@ -287,41 +286,40 @@ func _ready():
 			get_parent().call_deferred("add_child", (partner))
 			partner.global_position = global_position+Vector2(-24,0)
 			partner.partner = self
-			partner.character = Global.PlayerChar2-1
+			partner.character = Global.PlayerChar2
 			partner.inputActions = INPUTACTIONS_P2
 		
 		# set my character
 		character = Global.PlayerChar1
-		character -= 1
 		
 		# set super palettes
 		match (character):
-			CHARACTERS.SONIC:
+			Global.CHARACTERS.SONIC:
 				# shader texture sizes need to be to the power of 2
 				playerPal.set_shader_parameter("amount",4)
 				playerPal.set_shader_parameter("palRows",16)
 				playerPal.set_shader_parameter("row",0)
 				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperSonicPal.png"))
 		
-			CHARACTERS.TAILS:
+			Global.CHARACTERS.TAILS:
 				playerPal.set_shader_parameter("amount",8)
 				playerPal.set_shader_parameter("palRows",16)
 				playerPal.set_shader_parameter("row",0)
 				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperTails.png"))
 		
-			CHARACTERS.KNUCKLES:
+			Global.CHARACTERS.KNUCKLES:
 				playerPal.set_shader_parameter("amount",4)
 				playerPal.set_shader_parameter("palRows",16)
 				playerPal.set_shader_parameter("row",0)
 				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperKnuckles.png"))
 		
-			CHARACTERS.AMY:
+			Global.CHARACTERS.AMY:
 				playerPal.set_shader_parameter("amount",4)
 				playerPal.set_shader_parameter("palRows",8)
 				playerPal.set_shader_parameter("row",0)
 				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperAmy.png"))
 				
-			#CHARACTERS.AMY:
+			#Global.CHARACTERS.AMY:
 				
 	
 	
@@ -339,7 +337,7 @@ func _ready():
 	
 	# Character settings
 	match (character):
-		CHARACTERS.TAILS:
+		Global.CHARACTERS.TAILS:
 			# Set sprites
 			currentHitbox = HITBOXESTAILS
 			get_node("Sonic").name = "OldSprite"
@@ -351,7 +349,7 @@ func _ready():
 			superAnimator = tails.get_node_or_null("SuperPalette")
 			spriteController = tails
 			get_node("OldSprite").queue_free()
-		CHARACTERS.KNUCKLES:
+		Global.CHARACTERS.KNUCKLES:
 			# Set sprites
 			currentHitbox = HITBOXESKNUCKLES
 			get_node("Sonic").name = "OldSprite"
@@ -362,7 +360,7 @@ func _ready():
 			superAnimator = knuckles.get_node_or_null("SuperPalette")
 			spriteController = knuckles
 			get_node("OldSprite").queue_free()
-		CHARACTERS.AMY:
+		Global.CHARACTERS.AMY:
 			# Set sprites
 			currentHitbox = HITBOXESAMY
 			get_node("Sonic").name = "OldSprite"
@@ -533,7 +531,7 @@ func _process(delta):
 				# Deactivate super
 				supTime = 0
 				rings = round(rings)
-				if character == CHARACTERS.SONIC:
+				if character == Global.CHARACTERS.SONIC:
 					sprite.texture = normalSprite
 				
 		if (supTime <= 0):
@@ -678,9 +676,9 @@ func _physics_process(delta):
 	# collide with solids if not rolling layer
 	set_collision_mask_value(16,!attacking)
 	# collide with solids if not knuckles layer
-	set_collision_mask_value(19,!character == CHARACTERS.KNUCKLES)
+	set_collision_mask_value(19,!character == Global.CHARACTERS.KNUCKLES)
 	# collide with solids if not rolling or not knuckles layer
-	set_collision_mask_value(21,(character != CHARACTERS.KNUCKLES and !attacking))
+	set_collision_mask_value(21,(character != Global.CHARACTERS.KNUCKLES and !attacking))
 	# damage mask bit
 	set_collision_layer_value(20,attacking)
 	# water surface running
@@ -1034,7 +1032,7 @@ func set_shield(setShieldID):
 func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 	if damageType != 0 and shield == damageType+1:
 		return false
-	if (currentState != STATES.HIT and invTime <= 0 and supTime <= 0 and (shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled or character != CHARACTERS.SONIC)):
+	if (currentState != STATES.HIT and invTime <= 0 and supTime <= 0 and (shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled or character != Global.CHARACTERS.SONIC)):
 		movement.x = sign(global_position.x-damagePoint.x)*2*60
 		movement.y = -4*60
 		if (movement.x == 0):
@@ -1203,25 +1201,25 @@ func _on_PlayerAnimation_animation_started(anim_name):
 func determine_physics():
 	# get physics from character
 	match (character):
-		CHARACTERS.SONIC:
+		Global.CHARACTERS.SONIC:
 			if isSuper:
 				return 4 # Super Sonic
 			elif shoeTime > 0:
 				return 3 # Shoes
 			return 0 # Sonic
-		CHARACTERS.TAILS:
+		Global.CHARACTERS.TAILS:
 			if isSuper:
 				return 5 # Super Tails
 			elif shoeTime > 0:
 				return 3 # Shoes
 			return 1 # Tails
-		CHARACTERS.KNUCKLES:
+		Global.CHARACTERS.KNUCKLES:
 			if isSuper:
 				return 6 # Super Knuckles
 			elif shoeTime > 0:
 				return 7 # Shoes
 			return 2 # Knuckles
-		CHARACTERS.AMY: # I don't know what amy's physics are so in the meantime we just look at sonic
+		Global.CHARACTERS.AMY: # I don't know what amy's physics are so in the meantime we just look at sonic
 			if isSuper:
 				return 4 # Super Sonic
 			elif shoeTime > 0:
@@ -1270,7 +1268,7 @@ func cam_update(forceMove = false):
 	
 	# Extra drag margin for rolling
 	match(character):
-		CHARACTERS.TAILS:
+		Global.CHARACTERS.TAILS:
 			match($HitBox.shape.size):
 				currentHitbox.ROLL:
 					camAdjust = Vector2(0,-1)
