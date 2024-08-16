@@ -34,6 +34,7 @@ z_index = 1
 script = ExtResource("1")
 
 [node name="RingSprite" type="AnimatedSprite2D" parent="."]
+process_mode = 1
 z_index = 4
 sprite_frames = SubResource("2")
 autoplay = "default"
