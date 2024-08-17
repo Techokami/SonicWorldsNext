@@ -30,15 +30,16 @@ func _input(event):
 		var inputCue = Input.get_vector("gm_left","gm_right","gm_up","gm_down")
 		inputCue.x = round(inputCue.x)
 		inputCue.y = round(inputCue.y)
-		if inputCue != lastInput:
+		if inputCue.x != lastInput.x:
 			# select character rotation
 			if inputCue.x < 0:
 				characterID = wrapi(characterID-1,0,characterLabels.size())
-			if inputCue.x > 0:
+			elif inputCue.x > 0:
 				characterID = wrapi(characterID+1,0,characterLabels.size())
+		if inputCue.y != lastInput.y:
 			if inputCue.y > 0:
 				levelID = wrapi(levelID+1,0,levelLabels.size())
-			if inputCue.y < 0:
+			elif inputCue.y < 0:
 				levelID = wrapi(levelID-1,0,levelLabels.size())
 		#Save previous input for next read
 		lastInput = inputCue
