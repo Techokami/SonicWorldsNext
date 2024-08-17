@@ -18,7 +18,7 @@ var animationPriority = ["default","move","laugh","hit","exploded"]
 func _ready():
 	# move to the set currentPoint position before the boss starts (plus 128 pixels higher)
 	global_position = getPose[currentPoint]+Vector2(0,-1)*128
-	# run laugh function for everytime the boss gets hit
+	# run laugh function for every time the player gets hit
 	connect("hit_player",Callable(self,"do_laugh"))
 
 func _process(delta):
