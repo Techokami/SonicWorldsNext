@@ -15,12 +15,10 @@ var curTime = 0.0
 func _ready():
 	super._ready()
 	endPos = Vector2(global_position)
-	pass
 	
 func enterState():
 	startPos = Vector2(parent.global_position)
 	curTime = 0.0
-	pass
 
 func stateProcess(delta):
 	curTime += delta
@@ -34,5 +32,3 @@ func statePhysicsProcess(_delta):
 	if curTime >= moveTime:
 		parent.realPosition = endPos
 		parent.setState(nextState)
-		
-	pass

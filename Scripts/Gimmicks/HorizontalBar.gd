@@ -139,13 +139,11 @@ func resize():
 		collision.position = Vector2(width / 2.0, 3)
 	else:
 		collision.position = Vector2(((width) / 2.0) + 0.5, 3)
-	pass
 	
 func process_tool():
 	if previousWidth != width:
 		resize()
 		previousWidth = width
-	pass
 	
 func _process_player_x_movement(_delta, player, playerIndex, xInput):
 	if (xInput < 0 and player.global_position.x > global_position.x + 16):
@@ -179,7 +177,6 @@ func _process_player_shimmy_animation(player, xInput):
 		player.animator.pause()
 	else:
 		player.animator.play("hangShimmy", -1, shimmySpeed / 60.0, false)
-	pass
 	
 func _process_player_launch_up(player, playerIndex):
 	# If brakes are allowed, we want to allow slamming the breaks a little faster than the upwarda nimation normally plas out.
@@ -300,7 +297,6 @@ func process_game(_delta):
 				_process_player_launch_up(i, playerIndex)
 			PLAYER_MODE.LAUNCH_DOWN:
 				_process_player_launch_down(i, playerIndex)
-	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):

@@ -7,8 +7,6 @@ var parent
 func _ready():
 	parent = get_parent()
 
-	pass
-
 # Override this function with the bahavior you want your state to perform when it is entered
 func stateProcess(_delta):
 	pass

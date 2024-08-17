@@ -26,7 +26,6 @@ var players = [] # Tracks the players that are active within the gimmick
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$Grab.stream = grabSound
-	pass # Replace with function body.
 
 # check for players and if the jump button is pressed, release them from the poll
 func _process(_delta):

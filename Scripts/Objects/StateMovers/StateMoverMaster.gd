@@ -38,8 +38,6 @@ func _ready():
 	for i in get_children():
 		if i is StateMover:
 			states.append(i)
-		
-	pass # Replace with function body.
 	
 	origin = Vector2(position)
 	

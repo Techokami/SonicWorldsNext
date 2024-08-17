@@ -21,16 +21,12 @@ func _ready():
 	
 	if position != Vector2(0, 0):
 		printerr("StateMoverPathFollower object should be at position (0,0) within the StateMoverMaster. Expect misaligned pathing.")
-		
-	pass
 	
 func enterState():
 	curTime = 0.0
 	offsetPosition = parent.origin
 	parent.realPosition = curve.get_point_position(0) + offsetPosition
 	bakedLength = curve.get_baked_length()
-	
-	pass
 
 func stateProcess(delta):
 	curTime += delta
@@ -41,13 +37,9 @@ func statePhysicsProcess(_delta):
 		var interpolationPeriod = 0.5 * -cos((curTime / moveTime) * PI) + 0.5
 		var interpolationPosition = interpolationPeriod * bakedLength
 		parent.realPosition = curve.sample_baked(interpolationPosition) + offsetPosition
-		pass
 	else:
 		var interpolationPosition = (curTime / moveTime) * bakedLength
 		parent.realPosition = curve.sample_baked(interpolationPosition) + offsetPosition
-		pass
 	
 	if curTime >= moveTime:
 		parent.setState(nextState)
-	
-	pass

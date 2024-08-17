@@ -37,7 +37,6 @@ var pass_hit = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$Grab.stream = grabSound
-	pass # Replace with function body.
 	
 func _physics_process(_delta):
 	
@@ -80,8 +79,6 @@ func _physics_process(_delta):
 	for i in players:
 		if i.currentState == i.STATES.ANIMATION:
 			i.global_position.x = get_global_position().x
-		
-		pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
