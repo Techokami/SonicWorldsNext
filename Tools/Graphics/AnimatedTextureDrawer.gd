@@ -76,7 +76,6 @@ func draw_at_pos_internal(pos):
 	draw_texture_rect_region(spriteTexture,
 			Rect2(Vector2(-0.5 * spriteFrameWidth, -0.5 * spriteFrameHeight) + pos, Vector2(spriteFrameWidth, spriteFrameHeight)),
 			Rect2(Vector2(spriteFrameWidth * frameToDraw, 0), Vector2(spriteFrameWidth, spriteFrameHeight)))
-	pass
 
 # Draws everything pushed into the drawAtPosQueue.
 func _draw_queue():

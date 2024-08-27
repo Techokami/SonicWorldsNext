@@ -10,7 +10,7 @@ func physics_collision(body, hitVector):
 	# check hit is either left or right
 	if hitVector.x != 0:
 		# verify if rolling or knuckles
-		if body.animator.current_animation == "roll" and (body.currentState == body.STATES.ROLL and body.ground and abs(body.movement.x) > 4.5*60 or type == TYPE.CD) and !get_collision_layer_value(19) or body.character == body.CHARACTERS.KNUCKLES:
+		if body.animator.current_animation == "roll" and (body.currentState == body.STATES.ROLL and body.ground and abs(body.movement.x) > 4.5*60 or type == TYPE.CD) and !get_collision_layer_value(19) or body.character == Global.CHARACTERS.KNUCKLES:
 			# disable physics altering masks
 			set_collision_layer_value(16,false)
 			set_collision_mask_value(14,false)

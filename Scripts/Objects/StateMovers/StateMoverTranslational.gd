@@ -15,13 +15,11 @@ var curTime = 0.0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	super._ready()
-	pass
 	
 func enterState():
 	startPos = Vector2(parent.realPosition)
 	endPos = Vector2(parent.realPosition) + position
 	curTime = 0.0
-	pass
 
 func stateProcess(delta):
 	curTime += delta
@@ -35,5 +33,3 @@ func statePhysicsProcess(_delta):
 	if curTime >= moveTime:
 		parent.realPosition = endPos
 		parent.setState(nextState)
-		
-	pass

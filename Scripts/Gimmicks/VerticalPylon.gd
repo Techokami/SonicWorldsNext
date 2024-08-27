@@ -52,8 +52,6 @@ func _ready():
 	
 	collision.set_shape(shape)
 	collision.position = Vector2(0, -vert_size / 2.0 - bottomSprite.texture.get_height() / 2.0)
-		
-	pass # Replace with function body.
 	
 func process_game(delta):
 	for i in players:
@@ -89,7 +87,6 @@ func process_game(delta):
 		
 		if fmod((players_rotation_timer[getIndex] / rotate_time) - 0.25, 1.0) > 0.5:
 			i.set_z_index(get_z_index() - 100)
-			pass
 		else:
 			i.set_z_index(get_z_index() + 100)
 			
@@ -102,7 +99,6 @@ func process_game(delta):
 				i.movement.x = -launch_speed
 			else:
 				i.movement.x = launch_speed
-	pass
 
 # Tool Function to reset the size and position of elements within the object based on vert_size	
 func process_editor():
