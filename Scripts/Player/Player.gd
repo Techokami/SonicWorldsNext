@@ -50,6 +50,21 @@ var pushingWall = 0
 
 var enemyCounter = 0
 
+var character = Global.CHARACTERS.SONIC
+
+#The jump heights of characters, seperate from the physics list.
+var jumpHeightList = [
+	6.5*60, # Sonic, Tails, Amy, Supers besides Sonic and Knuckles
+	6*60,   # Knuckles & Super Knuckles
+	8*60    # Super Sonic
+]
+
+var waterJumpHeightList = [
+	3.5*60,
+	3*60,
+	3.5*60
+]
+
 # physics list
 # order
 # 0 Acceleration
@@ -60,49 +75,30 @@ var enemyCounter = 0
 # 5 Rolling Friction 
 # 6 Rolling Deceleration
 # 7 Gravity
-# 8 Jump
-# 9 Jump release velocity
-
-var character = Global.CHARACTERS.SONIC
+# 8 Jump release velocity
 
 # 0 = Sonic, 1 = Tails, 2 = Knuckles, 3 = Shoes, 4 = Super Sonic
 
 var physicsList = [
-# 0 Sonic
-[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125, 0.21875, 6.5*60, 4],
-# 1 Tails
-[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125, 0.21875, 6.5*60, 4],
-# 2 Knuckles
-[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125, 0.21875, 6*60, 4],
-# 3 Shoes (remove *0.5 for original rolling friction)
-[0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875*0.5, 0.125, 0.21875, 6.5*60, 4],
-# 4 Super Sonic
-[0.1875, 1, 0.046875, 10*60, 0.375, 0.0234375, 0.125, 0.21875, 8*60, 4],
-# 5 Super Tails
-[0.09375, 0.75, 0.046875, 8*60, 0.1875, 0.0234375, 0.125, 0.21875, 6.5*60, 4],
-# 6 Super Knuckles
-[0.09375, 0.75, 0.046875, 8*60, 0.1875, 0.0234375, 0.125, 0.21875, 6*60, 4],
-# 7 Shoes Knuckles (small jump) (remove *0.5 for original rolling friction)
-[0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875*0.5, 0.125, 0.21875, 6*60, 4],
+# 0 Deafult Character properties
+[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125, 0.21875, 4],
+# 1 Shoes (remove *0.5 for original rolling friction)
+[0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875*0.5, 0.125, 0.21875, 4],
+# 2 Super Sonic
+[0.1875, 1, 0.046875, 10*60, 0.375, 0.0234375, 0.125, 0.21875, 4],
+# 3 Other Super forms
+[0.09375, 0.75, 0.046875, 8*60, 0.1875, 0.0234375, 0.125, 0.21875, 4],
 ]
 
 var waterPhysicsList = [
-# 0 Sonic
+# 0 Deafult Character properties
 [0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6.0*60.0/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
-# 1 Tails
+# 1 Shoes
 [0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6*60/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
-# 2 Knuckles
-[0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6*60/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3*60, 2],
-# 3 Shoes
-[0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6*60/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
-# 4 Super Sonic
+# 2 Super Sonic
 [0.09375, 0.5, 0.046875, 5*60, 0.1875, 0.046875, 0.125, 0.0625, 3.5*60, 2],
-# 5 Super Tails
-[0.046875, 0.375, 0.046875, 4*60, 0.09375, 0.0234375, 0.125, 0.0625, 3.5*60, 2],
-# 6 Super Knuckles
+# 3 Super Knuckles
 [0.046875, 0.375, 0.046875, 4*60, 0.09375, 0.0234375, 0.125, 0.0625, 3*60, 2],
-# 7 Shoes Knuckles (small jump)
-[0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6*60/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3*60, 2],
 ]
 
 # ================
@@ -1199,40 +1195,34 @@ func _on_PlayerAnimation_animation_started(anim_name):
 
 # return the physics id variable, see physicsList array for reference
 func determine_physics():
-	# get physics from character
+	# get physics from character (if a character has unique properties)
 	match (character):
 		Global.CHARACTERS.SONIC:
 			if isSuper:
-				return 4 # Super Sonic
-			elif shoeTime > 0:
-				return 3 # Shoes
-			return 0 # Sonic
-		Global.CHARACTERS.TAILS:
+				return 2 # Super Sonic
+	#Anyone who isn't a special case:
+	if isSuper:
+		return 3 # Super besides Sonic
+	elif shoeTime > 0:
+		return 1 # Shoes
+	return 0 #Default
+
+func get_jump_properties():
+	match (character):
+		Global.CHARACTERS.SONIC:
 			if isSuper:
-				return 5 # Super Tails
-			elif shoeTime > 0:
-				return 3 # Shoes
-			return 1 # Tails
+				return 2 # Super Sonic Jump Height
 		Global.CHARACTERS.KNUCKLES:
-			if isSuper:
-				return 6 # Super Knuckles
-			elif shoeTime > 0:
-				return 7 # Shoes
-			return 2 # Knuckles
-		Global.CHARACTERS.AMY: # I don't know what amy's physics are so in the meantime we just look at sonic
-			if isSuper:
-				return 4 # Super Sonic
-			elif shoeTime > 0:
-				return 3 # Shoes
-			return 0 # Sonic
-	
-	return -1
+			return 1 # Knuckles Jump Height
+	return 0 #Default Jump Height
 
 func switch_physics(isWater = water):
 	var physicsID = determine_physics()
 	var getList = physicsList[max(0,physicsID)]
+	var jumpList = jumpHeightList
 	if isWater:
 		getList = waterPhysicsList[max(0,physicsID)]
+		jumpList = waterJumpHeightList
 	acc = getList[0]
 	dec = getList[1]
 	frc = getList[2]
@@ -1241,9 +1231,8 @@ func switch_physics(isWater = water):
 	rollfrc = getList[5]
 	rolldec = getList[6]
 	grv = getList[7]
-	jmp = getList[8]
-	releaseJmp = getList[9]
-
+	releaseJmp = getList[8]
+	jmp = jumpList[get_jump_properties()]
 
 
 func _on_SparkleTimer_timeout():
