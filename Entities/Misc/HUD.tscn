@@ -503,7 +503,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(-256, 128), Vector2(88, 128)]
+"values": [Vector2(-256, 112), Vector2(88, 112)]
 }
 
 [sub_resource type="Animation" id="8"]
@@ -554,7 +554,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-256, 128)]
+"values": [Vector2(-256, 112)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_21eah"]
@@ -783,9 +783,9 @@ color = Color(0, 0, 0, 1)
 layout_mode = 0
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -94.5
+offset_left = 65.5
 offset_top = -203.0
-offset_right = 94.5
+offset_right = 254.5
 size_flags_stretch_ratio = 0.0
 texture = ExtResource("7_ccygi")
 stretch_mode = 2
@@ -820,7 +820,7 @@ vframes = 2
 [node name="PatternLeft" type="Control" parent="LevelCard"]
 anchors_preset = 0
 anchor_bottom = 1.0
-offset_bottom = 14592.0
+offset_bottom = 14816.0
 
 [node name="PatternLeft" type="TextureRect" parent="LevelCard/PatternLeft"]
 layout_mode = 1
@@ -844,7 +844,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_top = -32.0
-offset_bottom = 14304.0
+offset_bottom = 14528.0
 
 [node name="PatternRight" type="TextureRect" parent="LevelCard/RightRatio/PatternRight"]
 layout_mode = 1
@@ -853,9 +853,9 @@ anchor_left = 1.0
 anchor_top = 0.003
 anchor_right = 1.0
 anchor_bottom = 0.003
-offset_top = -11.68
-offset_right = 4288.0
-offset_bottom = 244.32
+offset_top = 32.0
+offset_right = 4352.0
+offset_bottom = 288.0
 grow_horizontal = 0
 grow_vertical = 2
 texture = ExtResource("10_xpi0a")
@@ -876,7 +876,6 @@ autoplay = "Start"
 
 [node name="LevelClear" type="Control" parent="."]
 process_mode = 1
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -919,24 +918,25 @@ libraries = {
 }
 
 [node name="Tally" type="Sprite2D" parent="LevelClear"]
-position = Vector2(-256, 128)
+position = Vector2(-256, 112)
 texture = ExtResource("10_ddlv5")
 centered = false
 region_enabled = true
 region_rect = Rect2(0, 0, 80, 32)
 
 [node name="ScoreText" type="Sprite2D" parent="LevelClear/Tally"]
-position = Vector2(0, -16)
+position = Vector2(0, 48)
 texture = ExtResource("10_ddlv5")
 centered = false
-region_enabled = true
+vframes = 5
+frame = 3
 region_rect = Rect2(0, 0, 40, 16)
 
 [node name="ScoreNumber" type="Label" parent="LevelClear/Tally"]
 offset_left = 104.0
-offset_top = -16.0
-offset_right = 104.0
-offset_bottom = -16.0
+offset_top = 48.0
+offset_right = 112.0
+offset_bottom = 64.0
 theme_override_fonts/font = ExtResource("6_synv7")
 text = "0"
 
