@@ -52,19 +52,6 @@ var enemyCounter = 0
 
 var character = Global.CHARACTERS.SONIC
 
-#The jump heights of characters, seperate from the physics list.
-var jumpHeightList = [
-	6.5*60, # Sonic, Tails, Amy, Supers besides Sonic and Knuckles
-	6*60,   # Knuckles & Super Knuckles
-	8*60    # Super Sonic
-]
-
-var waterJumpHeightList = [
-	3.5*60,
-	3*60,
-	3.5*60
-]
-
 # physics list
 # order
 # 0 Acceleration
@@ -76,8 +63,6 @@ var waterJumpHeightList = [
 # 6 Rolling Deceleration
 # 7 Gravity
 # 8 Jump release velocity
-
-# 0 = Sonic, 1 = Tails, 2 = Knuckles, 3 = Shoes, 4 = Super Sonic
 
 var physicsList = [
 # 0 Deafult Character properties
@@ -314,8 +299,6 @@ func _ready():
 				playerPal.set_shader_parameter("palRows",8)
 				playerPal.set_shader_parameter("row",0)
 				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperAmy.png"))
-				
-			#Global.CHARACTERS.AMY:
 				
 	
 	
@@ -807,7 +790,7 @@ func _physics_process(delta):
 		# Enter water
 		if global_position.y > Global.waterLevel and !water:
 			water = true
-			switch_physics(true)
+			switch_physics()
 			movement.x *= 0.5
 			movement.y *= 0.25
 			if currentState != STATES.RESPAWN:
@@ -823,7 +806,7 @@ func _physics_process(delta):
 		# Exit water
 		if global_position.y < Global.waterLevel and water:
 			water = false
-			switch_physics(false)
+			switch_physics()
 			movement.y *= 2
 			sfx[17].play()
 			var splash = Particle.instantiate()
@@ -1108,7 +1091,7 @@ func kill():
 		z_index = 100
 		if airTimer > 0:
 			water = false
-			switch_physics(false)
+			switch_physics()
 			movement = Vector2(0,-7*60)
 			animator.play("die")
 			sfx[6].play()
@@ -1207,32 +1190,40 @@ func determine_physics():
 		return 1 # Shoes
 	return 0 #Default
 
-func get_jump_properties():
-	match (character):
-		Global.CHARACTERS.SONIC:
-			if isSuper:
-				return 2 # Super Sonic Jump Height
-		Global.CHARACTERS.KNUCKLES:
-			return 1 # Knuckles Jump Height
-	return 0 #Default Jump Height
+# Return a jump height for the respective context.
+# There are normally only 5 jump height values; 3 above water, with two under.
+# Super Sonic and Knuckles are the onlycharacters with unique jump height, Super sonic above water only.
+func get_jump_property():
+	if !water:
+		match (character):
+			Global.CHARACTERS.SONIC:
+				if isSuper:
+					return 8*60 # Super Sonic Jump Height
+			Global.CHARACTERS.KNUCKLES:
+				return 6*60 # Knuckles Jump Height
+		return 6.5*60 #Default Jump Height
+	else:
+		match (character):
+			Global.CHARACTERS.KNUCKLES:
+				return 3*60 # Knuckles Jump Height underwater
+		return 3.5*60 # Everyone else's Jump Height underwater
 
-func switch_physics(isWater = water):
+
+func switch_physics():
 	var physicsID = determine_physics()
 	var getList = physicsList[max(0,physicsID)]
-	var jumpList = jumpHeightList
-	if isWater:
+	if water:
 		getList = waterPhysicsList[max(0,physicsID)]
-		jumpList = waterJumpHeightList
 	acc = getList[0]
 	dec = getList[1]
 	frc = getList[2]
 	top = getList[3]
-	air = getList[4]
+	air = getList[4] #This could also just be getList[0]*2
 	rollfrc = getList[5]
 	rolldec = getList[6]
 	grv = getList[7]
 	releaseJmp = getList[8]
-	jmp = jumpList[get_jump_properties()]
+	jmp = get_jump_property()
 
 
 func _on_SparkleTimer_timeout():
