@@ -50,6 +50,8 @@ var pushingWall = 0
 
 var enemyCounter = 0
 
+var character = Global.CHARACTERS.SONIC
+
 # physics list
 # order
 # 0 Acceleration
@@ -60,49 +62,28 @@ var enemyCounter = 0
 # 5 Rolling Friction 
 # 6 Rolling Deceleration
 # 7 Gravity
-# 8 Jump
-# 9 Jump release velocity
-
-var character = Global.CHARACTERS.SONIC
-
-# 0 = Sonic, 1 = Tails, 2 = Knuckles, 3 = Shoes, 4 = Super Sonic
+# 8 Jump release velocity
 
 var physicsList = [
-# 0 Sonic
-[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125, 0.21875, 6.5*60, 4],
-# 1 Tails
-[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125, 0.21875, 6.5*60, 4],
-# 2 Knuckles
-[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125, 0.21875, 6*60, 4],
-# 3 Shoes (remove *0.5 for original rolling friction)
-[0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875*0.5, 0.125, 0.21875, 6.5*60, 4],
-# 4 Super Sonic
-[0.1875, 1, 0.046875, 10*60, 0.375, 0.0234375, 0.125, 0.21875, 8*60, 4],
-# 5 Super Tails
-[0.09375, 0.75, 0.046875, 8*60, 0.1875, 0.0234375, 0.125, 0.21875, 6.5*60, 4],
-# 6 Super Knuckles
-[0.09375, 0.75, 0.046875, 8*60, 0.1875, 0.0234375, 0.125, 0.21875, 6*60, 4],
-# 7 Shoes Knuckles (small jump) (remove *0.5 for original rolling friction)
-[0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875*0.5, 0.125, 0.21875, 6*60, 4],
+# 0 Deafult Character properties
+[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125, 0.21875, 4],
+# 1 Shoes (remove *0.5 for original rolling friction)
+[0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875*0.5, 0.125, 0.21875, 4],
+# 2 Super Sonic
+[0.1875, 1, 0.046875, 10*60, 0.375, 0.0234375, 0.125, 0.21875, 4],
+# 3 Other Super forms
+[0.09375, 0.75, 0.046875, 8*60, 0.1875, 0.0234375, 0.125, 0.21875, 4],
 ]
 
 var waterPhysicsList = [
-# 0 Sonic
+# 0 Deafult Character properties
 [0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6.0*60.0/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
-# 1 Tails
+# 1 Shoes
 [0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6*60/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
-# 2 Knuckles
-[0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6*60/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3*60, 2],
-# 3 Shoes
-[0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6*60/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
-# 4 Super Sonic
+# 2 Super Sonic
 [0.09375, 0.5, 0.046875, 5*60, 0.1875, 0.046875, 0.125, 0.0625, 3.5*60, 2],
-# 5 Super Tails
-[0.046875, 0.375, 0.046875, 4*60, 0.09375, 0.0234375, 0.125, 0.0625, 3.5*60, 2],
-# 6 Super Knuckles
+# 3 Super Knuckles
 [0.046875, 0.375, 0.046875, 4*60, 0.09375, 0.0234375, 0.125, 0.0625, 3*60, 2],
-# 7 Shoes Knuckles (small jump)
-[0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6*60/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3*60, 2],
 ]
 
 # ================
@@ -318,8 +299,6 @@ func _ready():
 				playerPal.set_shader_parameter("palRows",8)
 				playerPal.set_shader_parameter("row",0)
 				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperAmy.png"))
-				
-			#Global.CHARACTERS.AMY:
 				
 	
 	
@@ -811,7 +790,7 @@ func _physics_process(delta):
 		# Enter water
 		if global_position.y > Global.waterLevel and !water:
 			water = true
-			switch_physics(true)
+			switch_physics()
 			movement.x *= 0.5
 			movement.y *= 0.25
 			if currentState != STATES.RESPAWN:
@@ -827,7 +806,7 @@ func _physics_process(delta):
 		# Exit water
 		if global_position.y < Global.waterLevel and water:
 			water = false
-			switch_physics(false)
+			switch_physics()
 			movement.y *= 2
 			sfx[17].play()
 			var splash = Particle.instantiate()
@@ -1112,7 +1091,7 @@ func kill():
 		z_index = 100
 		if airTimer > 0:
 			water = false
-			switch_physics(false)
+			switch_physics()
 			movement = Vector2(0,-7*60)
 			animator.play("die")
 			sfx[6].play()
@@ -1199,51 +1178,52 @@ func _on_PlayerAnimation_animation_started(anim_name):
 
 # return the physics id variable, see physicsList array for reference
 func determine_physics():
-	# get physics from character
+	# get physics from character (if a character has unique properties)
 	match (character):
 		Global.CHARACTERS.SONIC:
 			if isSuper:
-				return 4 # Super Sonic
-			elif shoeTime > 0:
-				return 3 # Shoes
-			return 0 # Sonic
-		Global.CHARACTERS.TAILS:
-			if isSuper:
-				return 5 # Super Tails
-			elif shoeTime > 0:
-				return 3 # Shoes
-			return 1 # Tails
-		Global.CHARACTERS.KNUCKLES:
-			if isSuper:
-				return 6 # Super Knuckles
-			elif shoeTime > 0:
-				return 7 # Shoes
-			return 2 # Knuckles
-		Global.CHARACTERS.AMY: # I don't know what amy's physics are so in the meantime we just look at sonic
-			if isSuper:
-				return 4 # Super Sonic
-			elif shoeTime > 0:
-				return 3 # Shoes
-			return 0 # Sonic
-	
-	return -1
+				return 2 # Super Sonic
+	#Anyone who isn't a special case:
+	if isSuper:
+		return 3 # Super besides Sonic
+	elif shoeTime > 0:
+		return 1 # Shoes
+	return 0 #Default
 
-func switch_physics(isWater = water):
+# Return a jump height for the respective context.
+# There are normally only 5 jump height values; 3 above water, with two under.
+# Super Sonic and Knuckles are the onlycharacters with unique jump height, Super sonic above water only.
+func get_jump_property():
+	if !water:
+		match (character):
+			Global.CHARACTERS.SONIC:
+				if isSuper:
+					return 8*60 # Super Sonic Jump Height
+			Global.CHARACTERS.KNUCKLES:
+				return 6*60 # Knuckles Jump Height
+		return 6.5*60 #Default Jump Height
+	else:
+		match (character):
+			Global.CHARACTERS.KNUCKLES:
+				return 3*60 # Knuckles Jump Height underwater
+		return 3.5*60 # Everyone else's Jump Height underwater
+
+
+func switch_physics():
 	var physicsID = determine_physics()
 	var getList = physicsList[max(0,physicsID)]
-	if isWater:
+	if water:
 		getList = waterPhysicsList[max(0,physicsID)]
 	acc = getList[0]
 	dec = getList[1]
 	frc = getList[2]
 	top = getList[3]
-	air = getList[4]
+	air = getList[4] #This could also just be getList[0]*2
 	rollfrc = getList[5]
 	rolldec = getList[6]
 	grv = getList[7]
-	jmp = getList[8]
-	releaseJmp = getList[9]
-
+	releaseJmp = getList[8]
+	jmp = get_jump_property()
 
 
 func _on_SparkleTimer_timeout():
