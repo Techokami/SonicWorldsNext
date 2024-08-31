@@ -55,11 +55,13 @@ func _physics_process(delta):
 			scattered = true
 		#"ringacceleration" would be an array, where: [0] = 0.75 [1] = 0.1875
 		
-		
 
 func _on_Hitbox_body_entered(body):
 	if (player != body):
-		player = body
+		# The check below exists to prevent potential undesirable behavior where a partner
+		# can immediatelly recollect all lost rings as soon as the leader is hurt.
+		if (!scattered) or (scattered and lifetime < (3.3)):
+			player = body
 
 
 func _on_Hitbox_body_exited(body):
