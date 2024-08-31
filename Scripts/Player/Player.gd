@@ -478,7 +478,7 @@ func _process(delta):
 			sprite.rotation = deg_to_rad(snapped(spriteRotation,45)-90)-rotation-gravityAngle
 		else:
 			sprite.rotation = -rotation-gravityAngle
-		# uncomment this next line out for smooth rotation (you should remove the above line too)
+		# uncomment the line below and comment the line above for smooth rotation
 		#sprite.rotation = deg_to_rad(spriteRotation-90)-rotation-gravityAngle
 	else:
 		sprite.rotation = -rotation+gravityAngle
