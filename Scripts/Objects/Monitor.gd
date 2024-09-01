@@ -35,6 +35,7 @@ func destroy():
 	
 	# deactivate
 	isActive = false
+	physics = false
 	
 	# set item to have a high Z index so it overlays a lot
 	$Item.z_index += 1000
