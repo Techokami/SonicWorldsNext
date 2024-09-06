@@ -10,7 +10,8 @@ var characterLabels = ["Sonic and Tails", "Sonic", "Tails", "Knuckles", "Amy"]
 # level labels, the amount of labels in here determines the total amount of options, see set level option at the end for settings
 var levelLabels = ["Base Zone Act 1", "Base Zone Act 2"]#, "Chunk Zone Act 1"]
 # character id lines up with characterLabels
-var characterID = 0
+enum CHARACTER_ID { SONIC_AND_TAILS, SONIC, TAILS, KNUCKLES, AMY }
+var characterID = CHARACTER_ID.SONIC_AND_TAILS
 # level id lines up with levelLabels
 var levelID = 0
 # Used to avoid repeated detection of inputs with analog stick
@@ -33,9 +34,9 @@ func _input(event):
 		if inputCue.x != lastInput.x:
 			# select character rotation
 			if inputCue.x < 0:
-				characterID = wrapi(characterID-1,0,characterLabels.size())
+				characterID = wrapi(characterID-1,0,characterLabels.size()) as CHARACTER_ID
 			elif inputCue.x > 0:
-				characterID = wrapi(characterID+1,0,characterLabels.size())
+				characterID = wrapi(characterID+1,0,characterLabels.size()) as CHARACTER_ID
 		if inputCue.y != lastInput.y:
 			if inputCue.y > 0:
 				levelID = wrapi(levelID+1,0,levelLabels.size())
@@ -49,27 +50,27 @@ func _input(event):
 		
 		# turn on and off visibility of the characters based on the current selection
 		match(characterID):
-			0: # Sonic and Tails
+			CHARACTER_ID.SONIC_AND_TAILS:
 				$UI/Labels/CharacterOrigin/Sonic.visible = true
 				$UI/Labels/CharacterOrigin/Tails.visible = true
 				$UI/Labels/CharacterOrigin/Knuckles.visible = false
 				$UI/Labels/CharacterOrigin/Amy.visible = false
-			1: # Sonic
+			CHARACTER_ID.SONIC:
 				$UI/Labels/CharacterOrigin/Sonic.visible = true
 				$UI/Labels/CharacterOrigin/Tails.visible = false
 				$UI/Labels/CharacterOrigin/Knuckles.visible = false
 				$UI/Labels/CharacterOrigin/Amy.visible = false
-			2: # Tails
+			CHARACTER_ID.TAILS:
 				$UI/Labels/CharacterOrigin/Sonic.visible = false
 				$UI/Labels/CharacterOrigin/Tails.visible = true
 				$UI/Labels/CharacterOrigin/Knuckles.visible = false
 				$UI/Labels/CharacterOrigin/Amy.visible = false
-			3: # Knuckles
+			CHARACTER_ID.KNUCKLES:
 				$UI/Labels/CharacterOrigin/Sonic.visible = false
 				$UI/Labels/CharacterOrigin/Tails.visible = false
 				$UI/Labels/CharacterOrigin/Knuckles.visible = true
 				$UI/Labels/CharacterOrigin/Amy.visible = false
-			4: # Amy
+			CHARACTER_ID.AMY:
 				$UI/Labels/CharacterOrigin/Sonic.visible = false
 				$UI/Labels/CharacterOrigin/Tails.visible = false
 				$UI/Labels/CharacterOrigin/Knuckles.visible = false
@@ -83,16 +84,16 @@ func _input(event):
 			
 			# set the character
 			match(characterID):
-				0: # Sonic and Tails
+				CHARACTER_ID.SONIC_AND_TAILS:
 					Global.PlayerChar1 = Global.CHARACTERS.SONIC
 					Global.PlayerChar2 = Global.CHARACTERS.TAILS
-				1: # Sonic
+				CHARACTER_ID.SONIC:
 					Global.PlayerChar1 = Global.CHARACTERS.SONIC
-				2: # Tails
+				CHARACTER_ID.TAILS:
 					Global.PlayerChar1 = Global.CHARACTERS.TAILS
-				3: # Knuckles
+				CHARACTER_ID.KNUCKLES:
 					Global.PlayerChar1 = Global.CHARACTERS.KNUCKLES
-				4: # Amy
+				CHARACTER_ID.AMY:
 					Global.PlayerChar1 = Global.CHARACTERS.AMY
 					
 			# set the level
