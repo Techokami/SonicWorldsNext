@@ -14,6 +14,8 @@ enum CHARACTER_ID { SONIC_AND_TAILS, SONIC, TAILS, KNUCKLES, AMY }
 var characterID = CHARACTER_ID.SONIC_AND_TAILS
 # level id lines up with levelLabels
 var levelID = 0
+# Used to toggle visibility of character sprites (initialized in `_ready()`)
+var characterSprites = []
 # Used to avoid repeated detection of inputs with analog stick
 var lastInput = Vector2.ZERO
 
@@ -24,6 +26,12 @@ func _ready():
 	$UI/Labels/Control/Character.text = characterLabels[characterID]
 	if nextZone != null:
 		Global.nextZone = nextZone
+
+	for child in $UI/Labels/CharacterOrigin.get_children():
+		if child is Node2D or child is Sprite2D:
+			characterSprites.append(child)
+	assert(characterLabels.size() == characterSprites.size())
+	assert(characterLabels.size() == CHARACTER_ID.size())
 
 func _input(event):
 	
@@ -49,37 +57,8 @@ func _input(event):
 		$UI/Labels/Control/Level.text = levelLabels[levelID]
 		
 		# turn on and off visibility of the characters based on the current selection
-		match(characterID):
-			CHARACTER_ID.SONIC_AND_TAILS:
-				$UI/Labels/CharacterOrigin/SonicAndTails.visible = true
-				$UI/Labels/CharacterOrigin/Sonic.visible = false
-				$UI/Labels/CharacterOrigin/Tails.visible = false
-				$UI/Labels/CharacterOrigin/Knuckles.visible = false
-				$UI/Labels/CharacterOrigin/Amy.visible = false
-			CHARACTER_ID.SONIC:
-				$UI/Labels/CharacterOrigin/SonicAndTails.visible = false
-				$UI/Labels/CharacterOrigin/Sonic.visible = true
-				$UI/Labels/CharacterOrigin/Tails.visible = false
-				$UI/Labels/CharacterOrigin/Knuckles.visible = false
-				$UI/Labels/CharacterOrigin/Amy.visible = false
-			CHARACTER_ID.TAILS:
-				$UI/Labels/CharacterOrigin/SonicAndTails.visible = false
-				$UI/Labels/CharacterOrigin/Sonic.visible = false
-				$UI/Labels/CharacterOrigin/Tails.visible = true
-				$UI/Labels/CharacterOrigin/Knuckles.visible = false
-				$UI/Labels/CharacterOrigin/Amy.visible = false
-			CHARACTER_ID.KNUCKLES:
-				$UI/Labels/CharacterOrigin/SonicAndTails.visible = false
-				$UI/Labels/CharacterOrigin/Sonic.visible = false
-				$UI/Labels/CharacterOrigin/Tails.visible = false
-				$UI/Labels/CharacterOrigin/Knuckles.visible = true
-				$UI/Labels/CharacterOrigin/Amy.visible = false
-			CHARACTER_ID.AMY:
-				$UI/Labels/CharacterOrigin/SonicAndTails.visible = false
-				$UI/Labels/CharacterOrigin/Sonic.visible = false
-				$UI/Labels/CharacterOrigin/Tails.visible = false
-				$UI/Labels/CharacterOrigin/Knuckles.visible = false
-				$UI/Labels/CharacterOrigin/Amy.visible = true
+		for i in characterSprites.size():
+			characterSprites[i].visible = (characterID == i)
 		
 		# finish character select if start is pressed
 		if event.is_action_pressed("gm_pause"):
