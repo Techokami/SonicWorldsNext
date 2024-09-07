@@ -51,26 +51,31 @@ func _input(event):
 		# turn on and off visibility of the characters based on the current selection
 		match(characterID):
 			CHARACTER_ID.SONIC_AND_TAILS:
-				$UI/Labels/CharacterOrigin/Sonic.visible = true
-				$UI/Labels/CharacterOrigin/Tails.visible = true
+				$UI/Labels/CharacterOrigin/SonicAndTails.visible = true
+				$UI/Labels/CharacterOrigin/Sonic.visible = false
+				$UI/Labels/CharacterOrigin/Tails.visible = false
 				$UI/Labels/CharacterOrigin/Knuckles.visible = false
 				$UI/Labels/CharacterOrigin/Amy.visible = false
 			CHARACTER_ID.SONIC:
+				$UI/Labels/CharacterOrigin/SonicAndTails.visible = false
 				$UI/Labels/CharacterOrigin/Sonic.visible = true
 				$UI/Labels/CharacterOrigin/Tails.visible = false
 				$UI/Labels/CharacterOrigin/Knuckles.visible = false
 				$UI/Labels/CharacterOrigin/Amy.visible = false
 			CHARACTER_ID.TAILS:
+				$UI/Labels/CharacterOrigin/SonicAndTails.visible = false
 				$UI/Labels/CharacterOrigin/Sonic.visible = false
 				$UI/Labels/CharacterOrigin/Tails.visible = true
 				$UI/Labels/CharacterOrigin/Knuckles.visible = false
 				$UI/Labels/CharacterOrigin/Amy.visible = false
 			CHARACTER_ID.KNUCKLES:
+				$UI/Labels/CharacterOrigin/SonicAndTails.visible = false
 				$UI/Labels/CharacterOrigin/Sonic.visible = false
 				$UI/Labels/CharacterOrigin/Tails.visible = false
 				$UI/Labels/CharacterOrigin/Knuckles.visible = true
 				$UI/Labels/CharacterOrigin/Amy.visible = false
 			CHARACTER_ID.AMY:
+				$UI/Labels/CharacterOrigin/SonicAndTails.visible = false
 				$UI/Labels/CharacterOrigin/Sonic.visible = false
 				$UI/Labels/CharacterOrigin/Tails.visible = false
 				$UI/Labels/CharacterOrigin/Knuckles.visible = false

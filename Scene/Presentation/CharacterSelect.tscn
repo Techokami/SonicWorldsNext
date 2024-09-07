@@ -73,6 +73,42 @@ tracks/4/keys = {
 "update": 1,
 "values": [Rect2(488, 8, 32, 40), Rect2(536, 8, 32, 40), Rect2(584, 8, 32, 40), Rect2(536, 8, 32, 40)]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SonicAndTails/Sonic:region_rect")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [Rect2(731, 9, 24, 39), Rect2(683, 9, 24, 39), Rect2(731, 9, 24, 39), Rect2(683, 9, 24, 39)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SonicAndTails/Tails:region_rect")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Rect2(672, 200, 40, 40), Rect2(720, 200, 40, 40)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SonicAndTails/Tails/TailsTails:region_rect")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Rect2(488, 25, 16, 22), Rect2(534, 26, 19, 21), Rect2(580, 30, 20, 18), Rect2(628, 32, 20, 16), Rect2(677, 28, 19, 20), Rect2(488, 25, 16, 22), Rect2(534, 26, 19, 21), Rect2(580, 30, 20, 18), Rect2(628, 32, 20, 16), Rect2(677, 28, 19, 20)]
+}
 
 [sub_resource type="Animation" id="2"]
 length = 0.001
@@ -136,6 +172,42 @@ tracks/4/keys = {
 "update": 0,
 "values": [Rect2(488, 8, 32, 40)]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SonicAndTails/Sonic:region_rect")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(731, 9, 24, 39)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SonicAndTails/Tails:region_rect")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(676, 205, 33, 35)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SonicAndTails/Tails/TailsTails:region_rect")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(488, 25, 16, 22)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_wio08"]
 _data = {
@@ -174,16 +246,40 @@ grow_vertical = 2
 [node name="CharacterOrigin" type="Node2D" parent="UI/Labels"]
 position = Vector2(160, 97)
 
-[node name="Sonic" type="Sprite2D" parent="UI/Labels/CharacterOrigin"]
+[node name="SonicAndTails" type="Node2D" parent="UI/Labels/CharacterOrigin"]
+
+[node name="Sonic" type="Sprite2D" parent="UI/Labels/CharacterOrigin/SonicAndTails"]
 z_index = 3
-position = Vector2(6, 0)
+position = Vector2(10, 0)
+texture = ExtResource("1")
+region_enabled = true
+region_rect = Rect2(731, 9, 24, 39)
+
+[node name="Tails" type="Sprite2D" parent="UI/Labels/CharacterOrigin/SonicAndTails"]
+z_index = 2
+position = Vector2(-10, 0)
+texture = ExtResource("4")
+region_enabled = true
+region_rect = Rect2(676, 205, 33, 35)
+
+[node name="TailsTails" type="Sprite2D" parent="UI/Labels/CharacterOrigin/SonicAndTails/Tails"]
+z_index = -1
+position = Vector2(-9, 7)
+texture = ExtResource("4")
+region_enabled = true
+region_rect = Rect2(488, 25, 16, 22)
+
+[node name="Sonic" type="Sprite2D" parent="UI/Labels/CharacterOrigin"]
+visible = false
+z_index = 3
+position = Vector2(-1, 0)
 texture = ExtResource("1")
 region_enabled = true
 region_rect = Rect2(731, 9, 24, 39)
 
 [node name="Tails" type="Sprite2D" parent="UI/Labels/CharacterOrigin"]
+visible = false
 z_index = 2
-position = Vector2(-14, 0)
 texture = ExtResource("4")
 region_enabled = true
 region_rect = Rect2(676, 205, 33, 35)
@@ -198,7 +294,7 @@ region_rect = Rect2(488, 25, 16, 22)
 [node name="Knuckles" type="Sprite2D" parent="UI/Labels/CharacterOrigin"]
 visible = false
 z_index = 3
-position = Vector2(-3, 0)
+position = Vector2(0, 2)
 texture = ExtResource("7")
 region_enabled = true
 region_rect = Rect2(252, 17, 32, 39)
@@ -206,7 +302,7 @@ region_rect = Rect2(252, 17, 32, 39)
 [node name="Amy" type="Sprite2D" parent="UI/Labels/CharacterOrigin"]
 visible = false
 z_index = 3
-position = Vector2(-5, 3)
+position = Vector2(1, 3)
 texture = ExtResource("6_nah0p")
 region_enabled = true
 region_rect = Rect2(488, 8, 32, 40)
