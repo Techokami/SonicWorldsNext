@@ -39,17 +39,19 @@ func _input(event):
 		var inputCue = Input.get_vector("gm_left","gm_right","gm_up","gm_down")
 		inputCue.x = round(inputCue.x)
 		inputCue.y = round(inputCue.y)
-		if inputCue.x != lastInput.x:
+		if inputCue.x != lastInput.x and inputCue.x != 0:
 			# select character rotation
 			if inputCue.x < 0:
 				characterID = wrapi(characterID-1,0,characterLabels.size()) as CHARACTER_ID
-			elif inputCue.x > 0:
+			else: # inputCue.x > 0
 				characterID = wrapi(characterID+1,0,characterLabels.size()) as CHARACTER_ID
-		if inputCue.y != lastInput.y:
+			$Switch.play()
+		if inputCue.y != lastInput.y and inputCue.y != 0:
 			if inputCue.y > 0:
 				levelID = wrapi(levelID+1,0,levelLabels.size())
-			elif inputCue.y < 0:
+			else: # inputCue.y < 0
 				levelID = wrapi(levelID-1,0,levelLabels.size())
+			$Switch.play()
 		#Save previous input for next read
 		lastInput = inputCue
 		

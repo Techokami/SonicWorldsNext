@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://c4e1wv2sxs1gm"]
+[gd_scene load_steps=13 format=3 uid="uid://c4e1wv2sxs1gm"]
 
 [ext_resource type="Texture2D" uid="uid://4lhg0ovh1pe8" path="res://Graphics/Players/Sonic.png" id="1"]
 [ext_resource type="Texture2D" uid="uid://bemwlrblbgn23" path="res://Graphics/Backgrounds/WorldsBackground.png" id="2"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bfesqgvh63scg" path="res://Graphics/Players/Amy.png" id="6_nah0p"]
 [ext_resource type="Texture2D" uid="uid://cndrds5482vh5" path="res://Graphics/Players/Knuckles.png" id="7"]
 [ext_resource type="Texture2D" uid="uid://dhygmoxun35w1" path="res://Graphics/Fonts/arrows_small_font.png" id="9"]
+[ext_resource type="AudioStream" uid="uid://dh4rsaka62ph4" path="res://Audio/SFX/Gimmicks/Switch.wav" id="9_5f42f"]
 
 [sub_resource type="Animation" id="1"]
 resource_name = "Animate"
@@ -375,3 +376,7 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color(1, 1, 1, 0)
+
+[node name="Switch" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_5f42f")
+bus = &"SFX"
