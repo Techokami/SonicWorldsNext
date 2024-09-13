@@ -585,7 +585,7 @@ func _process(delta):
 		
 	# Time over
 	if Global.levelTime >= Global.maxTime:
-		kill()
+		kill(true)
 		
 	
 	# Water timer
@@ -1051,7 +1051,7 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 				get_parent().add_child(ring)
 			rings = 0
 		elif shield == SHIELDS.NONE and playerControl == 1:
-			kill()
+			kill(false)
 		else:
 			sfx[soundID].play()
 		# Disable Shield
@@ -1070,8 +1070,9 @@ func get_ring():
 		if partner.playerControl == 1: # error prevention
 			partner.get_ring()
 	
-func kill():
-	if !(get_tree().current_scene is MainGameScene):
+func kill(always = true):
+	if !(get_tree().current_scene is MainGameScene) and always == false:
+		sfx[6].play()
 		return false
 	if currentState != STATES.DIE:
 		disconect_from_floor()
