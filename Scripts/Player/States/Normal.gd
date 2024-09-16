@@ -223,16 +223,16 @@ func _physics_process(delta):
 	calcAngle = wrapf(calcAngle,0,360)
 	
 	# Apply slope factor, Sonic 1/2/CD/Mania style
-	# If you want more accuracy, the "45" in the line below should actually be "46"
-	if (calcAngle >= 45 and calcAngle <= 315) or parent.movement.x !=0:
+	# If you want symmetry over Accuracy, the "46" in the line below should actually be "45"
+	if (calcAngle >= 46 and calcAngle <= 315) or parent.movement.x !=0:
 		parent.movement.x += (parent.slp*sin(parent.angle-parent.gravityAngle))/GlobalFunctions.div_by_delta(delta)
 	
 	# Apply slope factor, Sonic 3 style
 		# parent.movement.x += (parent.slp*sin(parent.angle-parent.gravityAngle))/GlobalFunctions.div_by_delta(delta)
 	
 	# if speed below fall speed, slide down slopes and maybe also drop
-	# If you want more accuracy, the "45" in the line below should actually be "46"
-	if (abs(parent.movement.x) < parent.fall and calcAngle >= 45 and calcAngle <= 315):
+	# If you want symmetry over Accuracy, the "46" in the line below should actually be "45"
+	if (abs(parent.movement.x) < parent.fall and calcAngle >= 46 and calcAngle <= 315):
 		if (round(calcAngle) >= 90 and round(calcAngle) <= 270):
 			parent.disconect_from_floor()
 		parent.horizontalLockTimer = 30.0/60.0
