@@ -50,10 +50,12 @@ func _process(delta):
 			parent.spindashPower = 0
 			parent.set_state(parent.STATES.PEELOUT)
 		else:
-			# reset animations
-			parent.animator.play("RESET")
-			parent.action_jump()
-			parent.set_state(parent.STATES.JUMP)
+			# Player cannot jump unless a ceiling check fails.
+			if !parent.check_for_ceiling():
+				# reset animations
+				parent.animator.play("RESET")
+				parent.action_jump()
+				parent.set_state(parent.STATES.JUMP)
 		return null
 	
 	if parent.ground and !skid:

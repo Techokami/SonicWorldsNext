@@ -873,14 +873,12 @@ func set_inputs():
 
 # Controller scan functions -- so you don't have to dig into the inputs to check controller state
 func any_action_pressed():
-	if inputs[INPUTS.ACTION] == 1:
-		return true
-	if inputs[INPUTS.ACTION2] == 1:
-		return true
-	if inputs[INPUTS.ACTION3] == 1:
+	if (inputs[INPUTS.ACTION] == 1
+	or inputs[INPUTS.ACTION2] == 1 or
+	inputs[INPUTS.ACTION3] == 1):
 		return true
 	return false
-		
+
 func any_action_held():
 	if inputs[INPUTS.ACTION] == 2:
 		return true
@@ -889,7 +887,7 @@ func any_action_held():
 	if inputs[INPUTS.ACTION3] == 2:
 		return true
 	return false
-		
+
 func any_action_held_or_pressed():
 	if inputs[INPUTS.ACTION] > 0:
 		return true

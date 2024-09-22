@@ -427,3 +427,20 @@ func push_vertical():
 			position += (rayHitVec-(normHitVec*(($HitBox.shape.size.y/2)+0.25))-Vector2(0,yGroundDiff).rotated(rotation))
 	# reset movement
 	movement = movementMemory
+
+# Return true if there is a ceiling above the object based on its y size.
+func check_for_ceiling():
+	var detection = false
+	# Create and set up a temporary Raycast
+	var ceilChecker = RayCast2D.new()
+	$HitBox.add_child(ceilChecker)
+	ceilChecker.collision_mask = 2184
+	ceilChecker.target_position.y = 0-verticalSensorLeft.target_position.y
+	ceilChecker.force_raycast_update()
+	# Check is there's a collision
+	if ceilChecker.is_colliding() or ceilChecker.is_colliding():
+		detection = true
+	# Flag the new Rcast for clearance.
+	ceilChecker.queue_free()
+	# Return the detection value
+	return detection
