@@ -16,6 +16,8 @@ func _physics_process(delta):
 		
 		# climbing
 		parent.movement.y = (parent.inputs[parent.INPUTS.YINPUT]+int(parent.isSuper)*sign(parent.inputs[parent.INPUTS.YINPUT]))*60
+		#Prevent player from leaving play area via climbing.
+		parent.global_position.y = clampf(parent.global_position.y,parent.limitTop+16,parent.limitBottom)
 		
 		# check vertically (sometimes clinging can cause clipping)
 		if parent.movement.y == 0:
