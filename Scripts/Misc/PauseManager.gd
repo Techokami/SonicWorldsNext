@@ -155,7 +155,10 @@ func do_lateral_input():
 			2: # Scale
 				if inputCue.x != 0 and inputCue != lastInput:
 					Global.zoomSize = clamp(Global.zoomSize+inputDir,zoomClamp[0],zoomClamp[1])
-					get_window().set_size(get_viewport().get_visible_rect().size*Global.zoomSize)
+					var window = get_window()
+					var newSize = Vector2i((get_viewport().get_visible_rect().size*Global.zoomSize).round())
+					window.set_position(window.get_position()+(window.size-newSize)/2)
+					window.set_size(newSize)
 		$PauseMenu/VBoxContainer.get_child(option+1).get_child(0).text = update_text(option+1)
 	lastInput = inputCue
 
