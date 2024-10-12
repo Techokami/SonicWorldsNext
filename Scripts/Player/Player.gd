@@ -793,7 +793,7 @@ func _physics_process(delta):
 			switch_physics()
 			movement.x *= 0.5
 			movement.y *= 0.25
-			if currentState != STATES.RESPAWN:
+			if currentState != STATES.RESPAWN and movement.y != 0:
 				sfx[17].play()
 				var splash = Particle.instantiate()
 				splash.behaviour = splash.TYPE.FOLLOW_WATER_SURFACE
