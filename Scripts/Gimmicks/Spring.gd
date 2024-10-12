@@ -69,9 +69,6 @@ func physics_collision(body, hitVector):
 		var setMove = hitDirection.rotated(rotation).rotated(-body.rotation).round()*speed[type]*60
 		# vertical movement
 		if setMove.y != 0:
-			# disable ground
-			body.ground = false
-			body.set_state(body.STATES.AIR)
 			# figure out the animation based on the players current animation
 			var curAnim = "walk"
 			match(body.animator.current_animation):
@@ -87,6 +84,7 @@ func physics_collision(body, hitVector):
 			# set vertical speed
 			body.movement.y = setMove.y
 			body.set_state(body.STATES.AIR)
+			body.disconect_from_floor()
 		# horizontal movement
 		else:
 			# exit out of state on certain states
