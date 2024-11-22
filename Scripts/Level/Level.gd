@@ -44,6 +44,7 @@ func _ready():
 # used for stage starts, also used for returning from special stages
 func level_reset_data(playCard = true):
 	# music handling
+	Global.bossMusic.stop()
 	if Global.music != null:
 		if music != null:
 			Global.music.stream = music
