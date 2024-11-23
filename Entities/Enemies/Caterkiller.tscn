@@ -1,0 +1,57 @@
+[gd_scene load_steps=5 format=3 uid="uid://dimystt8mjbe2"]
+
+[ext_resource type="Script" path="res://Scripts/Enemies/Caterkiller.gd" id="1_8n1y4"]
+[ext_resource type="Texture2D" uid="uid://brlottwk1td54" path="res://Graphics/Enemies/Caterkiller.png" id="2_p4fkr"]
+[ext_resource type="PackedScene" uid="uid://canb4g0vsrw8t" path="res://Entities/Enemies/CaterkillerSegment.tscn" id="4_vay3o"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(17, 15)
+
+[node name="Caterkiller" type="CharacterBody2D" groups=["Enemy"]]
+collision_layer = 16384
+collision_mask = 0
+script = ExtResource("1_8n1y4")
+
+[node name="CollisionMask" type="CollisionShape2D" parent="."]
+modulate = Color(1, 0, 1, 1)
+position = Vector2(0.5, 2.5)
+shape = SubResource("1")
+
+[node name="ScatterRemover" type="VisibleOnScreenNotifier2D" parent="."]
+rect = Rect2(-8, -5, 17, 15)
+
+[node name="DamageArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 528384
+
+[node name="HitBox" type="CollisionShape2D" parent="DamageArea"]
+modulate = Color(1, 0, 1, 1)
+position = Vector2(0.5, 2.5)
+shape = SubResource("1")
+
+[node name="FloorCast" type="RayCast2D" parent="."]
+position = Vector2(0, -26)
+target_position = Vector2(0, 40)
+
+[node name="Head" type="Sprite2D" parent="."]
+texture = ExtResource("2_p4fkr")
+hframes = 3
+
+[node name="Segment3" parent="." node_paths=PackedStringArray("head") instance=ExtResource("4_vay3o")]
+position = Vector2(36, 0)
+head = NodePath("..")
+
+[node name="Segment2" parent="." node_paths=PackedStringArray("head") instance=ExtResource("4_vay3o")]
+position = Vector2(24, 0)
+head = NodePath("..")
+
+[node name="Segment1" parent="." node_paths=PackedStringArray("head") instance=ExtResource("4_vay3o")]
+position = Vector2(12, 0)
+head = NodePath("..")
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
+rect = Rect2(-48, -24, 96, 48)
+
+[connection signal="area_entered" from="DamageArea" to="." method="_on_DamageArea_area_entered"]
+[connection signal="body_entered" from="DamageArea" to="." method="_on_body_entered"]
+[connection signal="body_exited" from="DamageArea" to="." method="_on_body_exited"]
