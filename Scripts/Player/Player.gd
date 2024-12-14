@@ -417,11 +417,23 @@ func _process(delta):
 						# Array into the partner's input for the current frame
 						partner.inputs[i] = inputMemory[memoryPosition][i]
 				
+				#TODO: This current implimentation is better than what we had before,
+				#but it's still a little clunky. Will clean up this clode block later. - Ikey Ilex
+				
 				# x distance difference check, try to go to the partner
 				if (partner.inputs[INPUTS.XINPUT] == 0 and partner.inputs[INPUTS.YINPUT] == 0
 					or global_position.distance_to(partner.global_position) > 48 and round(movement.x/300) == 0
 					) and abs(global_position.x-partner.global_position.x) >= 32:
 					partner.inputs[INPUTS.XINPUT] = sign(global_position.x - partner.global_position.x)
+				
+				#If more than 64 pixels away on X, override AI control to come back.
+				if abs(global_position.x-partner.global_position.x) > 64:
+					partner.inputs[INPUTS.XINPUT] == sign(global_position.x-partner.global_position.x)
+				#Override AI control if Tails is ahead of Sonic
+				else:
+					var testPos = round(global_position.x + (0-direction))
+					if sign((partner.global_position.x - testPos)*direction) > 0:
+						partner.inputs[INPUTS.XINPUT] = sign(0-direction)
 				
 				# Jump if pushing a wall, slower then half speed, on a flat surface and is either normal or jumping
 				if (partner.currentState == STATES.NORMAL or partner.currentState == STATES.JUMP) and abs(partner.movement.x) < top/2.0 and snap_angle(partner.angle) == 0 or (partner.pushingWall != 0 and pushingWall == 0):
@@ -793,7 +805,7 @@ func _physics_process(delta):
 			switch_physics()
 			movement.x *= 0.5
 			movement.y *= 0.25
-			if currentState != STATES.RESPAWN:
+			if currentState != STATES.RESPAWN and movement.y != 0:
 				sfx[17].play()
 				var splash = Particle.instantiate()
 				splash.behaviour = splash.TYPE.FOLLOW_WATER_SURFACE
@@ -1085,6 +1097,13 @@ func kill(always = true):
 		if playerControl == 1 and Global.effectTheme.is_playing():
 			Global.music.play()
 			Global.effectTheme.stop()
+			
+		# If Player 1 dies and a partner exists, initiate respawn flying from current position.
+		if playerControl == 1 and partner:
+			var savedPos = partner.global_position
+			partner.respawn()
+			partner.global_position = savedPos
+			
 		collision_layer = 0
 		collision_mask = 0
 		z_index = 100
