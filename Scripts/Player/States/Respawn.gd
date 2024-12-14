@@ -42,8 +42,14 @@ func _physics_process(delta):
 		parent.collision_layer = layerMemory
 		
 		parent.movement.y = 0
-		# move to player y position
+		# move to Sonic's Y position...
 		parent.global_position.y = move_toward(parent.global_position.y,targetPoint.y,delta*60)
+		if (Global.waterLevel != null):
+			#Block Tails from going underwater in this state
+			parent.global_position.y = min(parent.global_position.y,Global.waterLevel-16)
+		else:
+			#Block Tails from going out of bounds, in case Sonic is dead.
+			parent.global_position.y = min(parent.global_position.y,parent.limitBottom-16)
 		
 		var distance = targetPoint.x-parent.global_position.x
 		# if far then fly by distance
