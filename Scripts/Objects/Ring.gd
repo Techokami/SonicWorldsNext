@@ -59,7 +59,7 @@ func _physics_process(delta):
 func _on_Hitbox_body_entered(body):
 	if (player != body):
 		# The check below exists to prevent potential undesirable behavior where a partner
-		# can immediatelly recollect all lost rings as soon as the leader is hurt.
+		# can immediately recollect all lost rings as soon as the leader is hurt.
 		if (!scattered) or (scattered and lifetime < (3.3)):
 			player = body
 

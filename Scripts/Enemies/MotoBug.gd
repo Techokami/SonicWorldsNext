@@ -13,7 +13,7 @@ func _ready():
 	direction = -sign(scale.x)
 
 func _physics_process(delta):
-	# Dirction checks
+	# Direction checks
 	$Motobug.scale.x = abs($Motobug.scale.x)*-direction
 	$FloorCheck.position.x = abs($FloorCheck.position.x)*direction
 	$FloorCheck.force_raycast_update()

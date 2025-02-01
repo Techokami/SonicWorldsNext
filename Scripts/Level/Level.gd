@@ -21,7 +21,7 @@ extends Node2D
 var wasLoaded = false
 
 func _ready():
-	# debuging
+	# debugging
 	if !Global.is_main_loaded:
 		return false
 	# skip if scene was loaded

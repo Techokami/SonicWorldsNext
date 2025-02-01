@@ -28,7 +28,7 @@ var ringBonus = 0
 # gameOver is used to initialize the game over animation sequence, note: this is for animation, if you want to use the game over status it's in global
 var gameOver = false
 
-# signal that gets emited once the stage tally is over
+# signal that gets emitted once the stage tally is over
 signal tally_clear
 
 # character name strings, used for "[player] has cleared", this matches the players character ID so you'll want to add the characters name in here matching the ID if you want more characters
@@ -102,7 +102,7 @@ func _process(delta):
 	# uncomment below (and remove above line) for mili seconds
 	#timeText.text = "%2d" % floor(timeClamp/60) + ":" + str(fmod(floor(timeClamp),60)).pad_zeros(2) + ":" + str(fmod(floor(timeClamp*100),100)).pad_zeros(2)
 	
-	# cehck that there's player, if there is then track the focus players ring count
+	# check that there's player, if there is then track the focus players ring count
 	if (Global.players.size() > 0):
 		ringText.text = "%3d" % Global.players[focusPlayer].rings
 	
@@ -111,7 +111,7 @@ func _process(delta):
 	
 	# Water Overlay
 	
-	# cehck that this level has water
+	# check that this level has water
 	if Global.waterLevel != null:
 		# get current camera
 		var cam = GlobalFunctions.getCurrentCamera2D()

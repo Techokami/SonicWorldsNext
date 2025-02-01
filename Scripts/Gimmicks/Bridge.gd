@@ -46,7 +46,7 @@ func _physics_process(delta):
 				playerTouch = true
 		
 		if (playerTouch):
-			# set buffer for colissions
+			# set buffer for collisions
 			buffer = 1
 			var averagePlayerOffset = 0
 			for i in player:

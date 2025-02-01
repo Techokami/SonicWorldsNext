@@ -119,19 +119,19 @@ func _process(delta):
 					match (parent.character):
 						
 						Global.CHARACTERS.TAILS:
-							if getR: # keep flipping until right sensor (relevent) isn't colliding
+							if getR: # keep flipping until right sensor (relevant) isn't colliding
 								parent.direction = -parent.direction
 							parent.animator.play("edge1")
 						
 						Global.CHARACTERS.KNUCKLES:
-							if getR: # keep flipping until right sensor (relevent) isn't colliding
+							if getR: # keep flipping until right sensor (relevant) isn't colliding
 								parent.direction = -parent.direction
 							if parent.animator.current_animation != "edge1" and parent.animator.current_animation != "edge2":
 								parent.animator.play("edge1")
 								parent.animator.queue("edge2")
 								
 						Global.CHARACTERS.AMY:
-							if getR: # keep flipping until right sensor (relevent) isn't colliding
+							if getR: # keep flipping until right sensor (relevant) isn't colliding
 								parent.direction = -parent.direction
 							#far edge
 							if !getMEdge:
