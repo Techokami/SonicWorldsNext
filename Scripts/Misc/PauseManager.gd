@@ -73,7 +73,7 @@ func _input(event):
 				match(option): # Options
 					0: # continue
 						if Global.main.wasPaused:
-							# give frame so game doesn't immedaitely unpause
+							# give frame so game doesn't immediately unpause
 							await get_tree().process_frame
 							Global.main.wasPaused = false
 							get_tree().paused = false
@@ -145,7 +145,7 @@ func do_lateral_input():
 	elif inputCue.x != 0 and menu == MENUS.OPTIONS:
 		var inputDir = inputCue.x
 		
-		# set audio busses
+		# set audio buses
 		var getBus = "SFX"
 		if option > 0:
 			getBus = "Music"
@@ -171,7 +171,7 @@ func do_lateral_input():
 	lastInput = inputCue
 
 func choose_option(optionSet = option+1, playSound = true):
-	# reset curren option colour to white
+	# reset current option colour to white
 	$PauseMenu/VBoxContainer.get_child(option+1).modulate = Color.WHITE
 	# change to new option, set the new option colour to yellow
 	option = wrapi(optionSet,0,menusText[menu].size()-1)

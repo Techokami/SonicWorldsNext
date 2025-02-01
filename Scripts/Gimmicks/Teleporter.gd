@@ -29,7 +29,7 @@ func _physics_process(delta):
 		if animator.current_animation == "Beam":
 			if animator.current_animation_position > 1.0:
 				Global.players[0].animator.play("roll")
-				# shift x and y poses seperately so that the movement's not normalized
+				# shift x and y poses separately so that the movement's not normalized
 				Global.players[0].global_position.x = move_toward(Global.players[0].global_position.x,global_position.x,delta*60)
 				Global.players[0].global_position.y -= delta*30
 				# set physics object shift mode to allowTranslate

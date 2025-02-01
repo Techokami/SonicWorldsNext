@@ -164,5 +164,5 @@ func _on_SmokeTimer_timeout():
 		expl.z_index = 10
 		# add object
 		get_parent().add_child(expl)
-		# set position reletive to us
+		# set position relative to us
 		expl.global_position = global_position+Vector2(randf_range(-32,32),randf_range(-32,32))

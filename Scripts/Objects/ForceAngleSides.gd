@@ -31,7 +31,7 @@ func _physics_process(_delta):
 					if rightAngle != null:
 						i.angle = deg_to_rad(rightAngle)
 				
-				# if greater then angle difference and distance from center is below drop off, disconect from floor
+				# if greater then angle difference and distance from center is below drop off, disconnect from floor
 				if abs(i.angle-PrevAngle) >= deg_to_rad(maxAngleDifference) and abs(i.global_position.x-global_position.x) < dropOff:
 					i.disconect_from_floor()
 			else:

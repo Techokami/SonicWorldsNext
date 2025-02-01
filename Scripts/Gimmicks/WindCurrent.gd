@@ -21,7 +21,7 @@ func _physics_process(_delta):
 			# determine the direction of the arrow based on scale and rotation
 			var getDir = Vector2.RIGHT.rotated(global_rotation)
 			
-			# disconect floor
+			# disconnect floor
 			if i.ground:
 				i.disconect_from_floor()
 			

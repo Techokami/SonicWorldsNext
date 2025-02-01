@@ -34,7 +34,7 @@ func _on_Shields_frame_changed():
 			else:
 				z_index = 6
 			offset = Vector2.ZERO
-			# if frames greater then 5 or 13 and less then 10 and 18, flip horizontaly
+			# if frames greater then 5 or 13 and less then 10 and 18, flip horizontally
 			if (frame >= 5 and frame < 10 or
 			frame >= 13 and frame < 18):
 				scale.x = -1

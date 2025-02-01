@@ -9,7 +9,7 @@ extends Node2D
 @export var vert_size = 96
 ## How fast the player should be launched from the pylon when pressing jump
 @export var launch_speed = 960
-## How fast the player should be launching veritcally from the pylon after jumping
+## How fast the player should be launching vertically from the pylon after jumping
 ## off
 @export var launch_vertical_speed = 110
 ## How fast the player climbs up/down the pylon

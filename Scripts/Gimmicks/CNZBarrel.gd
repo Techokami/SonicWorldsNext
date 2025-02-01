@@ -87,7 +87,7 @@ var spinning_period = 128.0 / 60.0
 # impartFactor determines how much the motion of the platform impacts the player when they jump off
 @export var impartFactor = 0.8
 
-# Calcuated based on max velocity, load energy is the amount of energy at which the Loaded constants have full influence
+# Calculated based on max velocity, load energy is the amount of energy at which the Loaded constants have full influence
 var loadEnergy
 
 # Were one or more players holding up on the last pass through process
@@ -183,7 +183,7 @@ func _process(delta):
 	for index in range(players.size() - 1, -1, -1):
 		# Determine inputs, once it's available change player animations
 		# Note that we only care if one player is holding a direction even if they
-		# are fighting eachother and only the direction of current travel matters.
+		# are fighting each other and only the direction of current travel matters.
 		var player = get_player(index)
 		var playerHeldUp = false
 		var playerHeldDown = false
