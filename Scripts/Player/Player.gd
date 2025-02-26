@@ -4,6 +4,7 @@ const HITBOXESTAILS = {NORMAL = Vector2(9,15)*2, ROLL = Vector2(7,14)*2, CROUCH 
 const HITBOXESKNUCKLES = {NORMAL = Vector2(9,19)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,11)*2, GLIDE = Vector2(10,10)*2, HORIZONTAL = Vector2(22,9)*2}
 const HITBOXESAMY = {NORMAL = Vector2(9,15)*2, ROLL = Vector2(7,11)*2, CROUCH = Vector2(9,9.5)*2, GLIDE = Vector2(10,10)*2, HORIZONTAL = Vector2(22,9)*2}
 var currentHitbox = HITBOXESSONIC
+#Knuckles' hitboxes are the same as Sonic's.
 
 #Sonic's Speed constants
 var acc = 0.046875			#acceleration
@@ -209,9 +210,14 @@ var memoryPosition = 0
 const INPUT_MEMORY_LENGTH = 20
 
 var Player = load("res://Entities/MainObjects/Player.tscn")
-var tailsAnimations = preload("res://Graphics/Players/PlayerAnimations/Tails.tscn")
-var knucklesAnimations = preload("res://Graphics/Players/PlayerAnimations/Knuckles.tscn")
-var amyAnimations = preload("res://Graphics/Players/PlayerAnimations/Amy.tscn")
+
+#An array of, well, Arrays, in order of Global.CHARACTERS, skipping 0.
+var playerskins = [
+	[preload("res://Graphics/Players/PlayerAnimations/Sonic.tscn"),HITBOXESSONIC],
+	[preload("res://Graphics/Players/PlayerAnimations/Tails.tscn"),HITBOXESTAILS],
+	[preload("res://Graphics/Players/PlayerAnimations/Knuckles.tscn"),HITBOXESKNUCKLES],
+	[preload("res://Graphics/Players/PlayerAnimations/Amy.tscn"),HITBOXESAMY],
+]
 
 # Get sfx list
 @onready var sfx = $SFX.get_children()
@@ -315,44 +321,19 @@ func _ready():
 	
 	
 	# Character settings
-	match (character):
-		Global.CHARACTERS.TAILS:
-			# Set sprites
-			currentHitbox = HITBOXESTAILS
-			get_node("Sonic").name = "OldSprite"
-			await get_tree().process_frame
-			var tails = tailsAnimations.instantiate()
-			add_child(tails)
-			sprite = tails.get_node("Sprite2D")
-			animator = tails.get_node("PlayerAnimation")
-			superAnimator = tails.get_node_or_null("SuperPalette")
-			spriteController = tails
-			get_node("OldSprite").queue_free()
-		Global.CHARACTERS.KNUCKLES:
-			# Set sprites
-			currentHitbox = HITBOXESKNUCKLES
-			get_node("Sonic").name = "OldSprite"
-			var knuckles = knucklesAnimations.instantiate()
-			add_child(knuckles)
-			sprite = knuckles.get_node("Sprite2D")
-			animator = knuckles.get_node("PlayerAnimation")
-			superAnimator = knuckles.get_node_or_null("SuperPalette")
-			spriteController = knuckles
-			get_node("OldSprite").queue_free()
-		Global.CHARACTERS.AMY:
-			# Set sprites
-			currentHitbox = HITBOXESAMY
-			get_node("Sonic").name = "OldSprite"
-			await get_tree().process_frame
-			var amy = amyAnimations.instantiate()
-			add_child(amy)
-			sprite = amy.get_node("Sprite2D")
-			animator = amy.get_node("PlayerAnimation")
-			superAnimator = amy.get_node_or_null("SuperPalette")
-			spriteController = amy
-			get_node("OldSprite").queue_free()
-			maxCharGroundHeight = 12 # adjust height distance to prevent clipping off floors (amy's smaller)
-			
+	var skin = playerskins[max(min(character-1,playerskins.size()),0)]
+	currentHitbox = skin[1]
+	spriteController.name = "OldSprite"
+	var newSprite = skin[0].instantiate()
+	add_child(newSprite)
+	sprite = newSprite.get_node("Sprite2D")
+	animator = newSprite.get_node("PlayerAnimation")
+	superAnimator = newSprite.get_node_or_null("SuperPalette")
+	spriteController.queue_free()
+	spriteController = newSprite
+	
+	if character == Global.CHARACTERS.AMY:
+		maxCharGroundHeight = 12 # adjust Amy's height distance to prevent clipping off floors
 	
 	# run switch physics to ensure character specific physics
 	switch_physics()
