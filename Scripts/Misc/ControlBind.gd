@@ -10,7 +10,7 @@ func _ready():
 		control = get_parent().get_parent()
 	var _con = connect("pressed",Callable(self,"lock_in_button"))
 
-# input remaping
+# input remapping
 func _unhandled_input(event):
 	# check if active
 	if active:

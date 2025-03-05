@@ -55,7 +55,7 @@ func _physics_process(delta):
 				# better method needs to be done
 				var getDir = Vector2.UP.rotated(global_rotation)
 				
-				# disconect floor
+				# disconnect floor
 				if i.ground:
 					i.disconect_from_floor()
 				

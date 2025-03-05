@@ -189,7 +189,7 @@ func _physics_process(delta):
 			parent.set_hitbox(parent.currentHitbox.NORMAL)
 			isFall = true
 		else:
-			# ground buffer's needed to prevent the player immediately disconecting
+			# ground buffer's needed to prevent the player immediately disconnecting
 			groundBuffer = 1
 			parent.movement.y = 0
 	
@@ -211,7 +211,7 @@ func _physics_process(delta):
 			landed = true
 			# play land sound
 			parent.sfx[27].play()
-			# set movement to nothign
+			# set movement to nothing
 			parent.movement = Vector2.ZERO
 			parent.animator.play("land")
 			# wait for landing animation to finish and check that the state is still the same
