@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://canb4g0vsrw8t"]
+
+[ext_resource type="Script" path="res://Scripts/Enemies/CaterkillerSegment.gd" id="1_m8u1a"]
+[ext_resource type="Texture2D" uid="uid://brlottwk1td54" path="res://Graphics/Enemies/Caterkiller.png" id="2_q6kdf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lyl84"]
+size = Vector2(17, 17)
+
+[node name="Segment" type="Area2D"]
+z_index = -1
+collision_layer = 0
+collision_mask = 4096
+script = ExtResource("1_m8u1a")
+
+[node name="HitBox" type="CollisionShape2D" parent="."]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(0.5, 2.5)
+shape = SubResource("RectangleShape2D_lyl84")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_q6kdf")
+hframes = 3
+frame = 2
+
+[node name="FloorCast" type="RayCast2D" parent="."]
+position = Vector2(0, -26)
+target_position = Vector2(0, 40)
+
+[node name="ScatterRemover" type="VisibleOnScreenNotifier2D" parent="."]
+rect = Rect2(-8, -6, 17, 17)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]
