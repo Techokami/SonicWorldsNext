@@ -53,7 +53,7 @@ var lastInput = Vector2.ZERO
 func _ready():
 	set_menu(menu)
 
-func _process(delta):
+func _process(_delta):
 	# check if paused and visible, otherwise cancel it out
 	if !get_tree().paused or !visible:
 		return null

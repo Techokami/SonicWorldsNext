@@ -28,7 +28,7 @@ func _physics_process(delta):
 	
 	
 
-func _process(delta):
+func _process(_delta):
 	# handle jumping
 	if parent.any_action_pressed():
 		# reset animations

@@ -52,9 +52,9 @@ func _physics_process(_delta):
 			
 			# force slide state
 			if i.currentState != i.STATES.ANIMATION or i.animator.current_animation != "current":
-				i.set_state(i.STATES.ANIMATION,i.currentHitbox.ROLL)
 				# check that specific animations aren't playing (related to under water bars)
 				if i.animator.current_animation != "clingVerticalBar" and i.animator.current_animation != "clingVerticalBarOffset":
+					i.set_state(i.STATES.ANIMATION,i.currentHitbox.ROLL)
 					i.animator.play("current")
 
 func _on_WindCurrent_body_entered(body):

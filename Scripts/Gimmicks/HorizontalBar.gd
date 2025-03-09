@@ -4,6 +4,10 @@ extends Node2D
 # Mushroom Hill Zone Horizontal Bars
 # Author: DimensionWarped
 
+# Warning: In its current implementation, this gimmick may interact poorly with
+# some other objects like moving crushers. Make sure you test the interactions of
+# anything in close proximity to one of these.
+
 # A little info about how your textures should be arranged:
 # The spritesheet needs to be vertically divisible by 3. The width can be
 # whatever you like, but the Main_Body portion needs to stretch across the
@@ -129,16 +133,25 @@ func resize():
 	$Right_Anchor.set_region_rect(Rect2(0, spriteTexture.get_height() / 3 * 2, rightAnchorWidth, spriteTexture.get_height() / 3))
 	
 	var shape = RectangleShape2D.new()
+	var shape2 = RectangleShape2D.new()
 	var collision = $Bar_Area/CollisionShape2D
+	var collision2 = $Bar_Area_Exit/CollisionShape2D
 	shape.size.y = 8
 	# We don't want the player overhanging the outside of the gimmick by a lot, so clamp the size of the collision a bit.
 	shape.size.x = width - 28
 	
+	shape2.size.y = shape.size.y + 32
+	shape2.size.x = shape.size.x + 8
+	
 	collision.set_shape(shape)
+	collision2.set_shape(shape2)
 	if (width % 2 == 0):
 		collision.position = Vector2(width / 2.0, 3)
+		collision2.position = Vector2(width / 2.0, 3)
 	else:
 		collision.position = Vector2(((width) / 2.0) + 0.5, 3)
+		collision2.position = Vector2((width / 2.0) + 0.5, 3)
+	
 	
 func process_tool():
 	if previousWidth != width:
@@ -164,16 +177,17 @@ func _process_player_x_movement(_delta, player, playerIndex, xInput):
 			player.movement.y = -2 * (player.jmp / 3.0)
 			
 		player.groundSpeed = 0
-		player.animator.play("roll")
 		player.set_state(player.STATES.JUMP)
+		player.animator.play("roll")
 		playersMode[playerIndex] = PLAYER_MODE.MONITORING
 		remove_player(player)
 		return 1
 		
 	return 0
 		
-func _process_player_shimmy_animation(player, xInput):
+func _process_player_shimmy_animation(player):
 	if (player.movement.x == 0):
+		player.animator.seek(0)
 		player.animator.pause()
 	else:
 		player.animator.play("hangShimmy", -1, shimmySpeed / 60.0, false)
@@ -233,6 +247,9 @@ func _process_player_launch_down(player, playerIndex):
 		remove_player(player)
 		
 func _process_player_monitoring(player, playerIndex):
+	if (player.ground):
+		return
+	
 	if (player.movement.y < -swingContactSpeed):
 		player.sprite.flip_h = false
 
@@ -265,6 +282,10 @@ func _process_player_monitoring(player, playerIndex):
 		player.movement.y = 0
 		player.global_position.y = get_global_position().y + 3
 		playersMode[playerIndex] = PLAYER_MODE.SHIMMY
+		
+		# terrible workaround to delayed center reference repositioning
+		#player.animator.advance(0)
+		#player.hitbox.position = player.centerReference.position
 		$Grab_Sound.play()
 	
 func process_game(_delta):
@@ -280,6 +301,24 @@ func process_game(_delta):
 		if playersMode[playerIndex] == PLAYER_MODE.MONITORING:
 			continue
 			
+		# Eject the player if their state has changed -- this makes the gimmick compatible with damage sources.
+		if i.get_state() != i.STATES.ANIMATION:
+			remove_player(i)
+			continue
+		
+		# Eject the player if something like a platform picks them up from below.
+		if i.ground:
+			remove_player(i)
+			i.global_position.y = get_global_position().y + 26
+			continue
+			
+		# Eject the player if something like a platform knocks them down from above.
+		# Note: Not implemented
+		#if false:
+		#	remove_player(i)
+		#	i.global_position.y = get_global_position().y + 26
+		#	continue
+			
 		# As long as shimmying is allowed, shimmying is allowed in all active modes.
 		if (allowShimmy):
 			if (_process_player_x_movement(_delta, i, playerIndex, xInput)):
@@ -289,10 +328,9 @@ func process_game(_delta):
 		i.movement.y = 0
 		i.global_position.y = get_global_position().y + 3
 
-		#TODO: Only do this stuff is the state is up launch or down launch
 		match playersMode[playerIndex]:
 			PLAYER_MODE.SHIMMY:
-				_process_player_shimmy_animation(i, xInput)
+				_process_player_shimmy_animation(i)
 			PLAYER_MODE.LAUNCH_UP:
 				_process_player_launch_up(i, playerIndex)
 			PLAYER_MODE.LAUNCH_DOWN:
@@ -317,7 +355,6 @@ func _on_bar_area_body_exited(body):
 	
 func remove_player(player):
 	if players.has(player):
-		
 		# Clean out the player from all player-linked arrays.
 		var getIndex = players.find(player)
 		players.erase(player)
