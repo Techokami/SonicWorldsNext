@@ -31,7 +31,7 @@ var moveStepLength = 8*60
 # angle is the rotation based on the floor normal
 var angle = 0
 var gravityAngle = 0
-# the collission layer, 0 for low, 1 for high
+# the collision layer, 0 for low, 1 for high
 var collissionLayer = 0
 
 # translate, (ignores physics)
@@ -112,21 +112,21 @@ func update_sensors():
 		# check left
 		var offset = 0
 		verticalObjectCheck.position.y = verticalSensorLeft.position.y
-		# give a bit of distance for collissions
+		# give a bit of distance for collisions
 		verticalObjectCheck.target_position = Vector2(0,-(shape.y*0.25)+shape.y*-sign(verticalSensorLeft.target_position.y))
 		
 		# check left sensor
 		verticalObjectCheck.position.x = verticalSensorLeft.position.x
 		verticalObjectCheck.force_raycast_update()
 		if verticalObjectCheck.is_colliding():
-			# calculate the offset using the collission point and the cast positions
+			# calculate the offset using the collision point and the cast positions
 			offset = (verticalObjectCheck.get_collision_point()-(verticalObjectCheck.global_position+verticalObjectCheck.target_position)).y
 		
 		# check right sensor
 		verticalObjectCheck.position.x = verticalSensorRight.position.x
 		verticalObjectCheck.force_raycast_update()
 		if verticalObjectCheck.is_colliding():
-			# calculate the offset using the collission point and the cast positions,
+			# calculate the offset using the collision point and the cast positions,
 			# compare it to the old offset, if it's larger then use new offset
 			var newOffset = (verticalObjectCheck.get_collision_point()-(verticalObjectCheck.global_position+verticalObjectCheck.target_position)).y
 			if abs(newOffset) > abs(offset):
@@ -161,7 +161,7 @@ func update_sensors():
 	backSensor.global_rotation = rotationSnap
 	slopeCheck.global_rotation = rotationSnap
 	
-	# set collission mask values
+	# set collision mask values
 	for i in sensorList:
 		i.set_collision_mask_value(1,i.target_position.rotated(rotationSnap).y > 0)
 		i.set_collision_mask_value(2,i.target_position.rotated(rotationSnap).x > 0)
@@ -208,7 +208,7 @@ func _physics_process(delta):
 		if test_move(global_transform,velocity*delta) and test_move(global_transform,velocity*(Vector2.RIGHT.rotated(gravityAngle))*delta) and !test_move(global_transform,Vector2.ZERO) and ground:
 			var testTransform = global_transform
 			testTransform.origin += up_direction*pixelObjectStep
-			# if there's no collision occuring in the upper section then set was moved to true (if there's isn't another collision up if shifted up)
+			# if there's no collision occurring in the upper section then set was moved to true (if there's isn't another collision up if shifted up)
 			if !test_move(testTransform,velocity*delta):
 				var col = move_and_collide(up_direction*pixelObjectStep)
 				wasMovedUp = (col==null)
@@ -262,7 +262,7 @@ func _physics_process(delta):
 			if move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.size.y/2))-Vector2(0,yGroundDiff).rotated(rotation),true,true,true):
 				var _col = move_and_collide(rayHitVec-(normHitVec*($HitBox.shape.size.y/2))-Vector2(0,yGroundDiff).rotated(rotation))
 			else:
-				# Do a check that we're not in the middle of a rotation, otherwise the player can get caught on outter curves (more noticable on higher physics frame rates)
+				# Do a check that we're not in the middle of a rotation, otherwise the player can get caught on outer curves (more noticeable on higher physics frame rates)
 				if snap_angle(angle) == snap_angle(rotation):
 					position += (rayHitVec-(normHitVec*(($HitBox.shape.size.y/2)+0.25))-Vector2(0,yGroundDiff).rotated(rotation))
 				else:
@@ -389,7 +389,7 @@ func get_nearest_vertical_sensor():
 		return verticalSensorLeft
 	elif not verticalSensorLeft.is_colliding() and verticalSensorRight.is_colliding():
 		return verticalSensorRight
-	# if neither are colliding then return null (nothing), this way we can skip over collission checks
+	# if neither are colliding then return null (nothing), this way we can skip over collision checks
 	elif not verticalSensorLeft.is_colliding() and not verticalSensorRight.is_colliding():
 		return null
 	
@@ -443,7 +443,7 @@ func check_for_ceiling():
 	
 	ceilChecker.target_position.y = 0-verticalSensorLeft.target_position.y
 	ceilChecker.force_raycast_update()
-	# Check is there's a collision
+	# Check if there's a collision
 	if ceilChecker.is_colliding() or ceilChecker.is_colliding():
 		detection = true
 	# Flag the new Rcast for clearance.

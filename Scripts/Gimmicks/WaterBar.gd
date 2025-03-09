@@ -17,7 +17,7 @@ var breakPart = preload("res://Entities/Misc/falling_block_plat.tscn")
 
 # How many seconds before the bar breaks
 @export var strength = 3.0
-# Used for reseting the bar strength
+# Used for resetting the bar strength
 @onready var startStrength = strength
 
 var players = [] # Tracks the players that are active within the gimmick
@@ -89,7 +89,7 @@ func _physics_process(delta):
 				# set the velocity
 				part.velocity = Vector2(releaseDirection*(220-abs(remap(i,0,spriteSplits,-100,80))),remap(i,0,spriteSplits,-100,50))
 			queue_free() # delete
-	# reset strenght
+	# reset strength
 	else:
 		strength = startStrength
 

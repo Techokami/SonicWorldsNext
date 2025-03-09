@@ -16,11 +16,11 @@ var checkPointTime = 0
 # the starting room, this is loaded on game resets, you may want to change this
 var startScene = preload("res://Scene/Presentation/Title.tscn")
 var nextZone = load("res://Scene/Zones/BaseZone.tscn") # change this to the first level in the game (also set in "reset_values")
-# use this to store the current state of the room, changing scene will clear everythin
+# use this to store the current state of the room, changing scene will clear everything
 var stageInstanceMemory = null
 var stageLoadMemory = null
 
-# score instace for add_score()
+# score instance for add_score()
 var Score = preload("res://Entities/Misc/Score.tscn")
 # order for score combo
 const SCORE_COMBO = [1,2,3,4,4,4,4,4,4,4,4,4,4,4,4,5]
@@ -54,7 +54,7 @@ var soundChannel = AudioStreamPlayer.new()
 var score = 0
 var lives = 3
 var continues = 0
-# emeralds use bitwise flag operations, the equivelent for 7 emeralds would be 128
+# emeralds use bitwise flag operations, the equivalent for 7 emeralds would be 128
 var emeralds = 0
 # emerald bit flags
 enum EMERALD {RED = 1, BLUE = 2, GREEN = 4, YELLOW = 8, CYAN = 16, SILVER = 32, PURPLE = 64}
@@ -82,7 +82,7 @@ var hardBorderBottom =  100000000
 # Animal spawn type reference, see the level script for more information on the types
 var animals = [0,1]
 
-# emited when a stage gets started
+# emitted when a stage gets started
 signal stage_started
 
 # Level memory
