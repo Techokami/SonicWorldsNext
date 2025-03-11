@@ -31,7 +31,7 @@ func _physics_process(_delta):
 		colCheck = false
 	elif reactivate:
 		active = false
-		emit_signal("released")
+		released.emit()
 	
 
 # Collision check
@@ -44,8 +44,8 @@ func physics_collision(body, hitVector):
 			# activate and emit signal for being pressed so other nodes can react
 			active = true
 			$Switch.play()
-			emit_signal("pressed_with_body",body)
-			emit_signal("pressed")
+			pressed_with_body.emit(body)
+			pressed.emit()
 			# play animation if a node is hooked up
 			if (animatorNode != null):
 				animatorNode.play(animationName)

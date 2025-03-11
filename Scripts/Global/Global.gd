@@ -178,7 +178,7 @@ func stage_clear():
 
 # Godot doesn't like not having emit signal only done in other nodes so we're using a function to call it
 func emit_stage_start():
-	emit_signal("stage_started")
+	stage_started.emit()
 
 # save data settings
 func save_settings():

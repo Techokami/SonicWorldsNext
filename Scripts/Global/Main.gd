@@ -53,7 +53,7 @@ func _process(delta):
 			Global.drowning.volume_db = Global.music.volume_db
 			Global.bossMusic.volume_db = Global.music.volume_db
 			if volumeLerp >= 1:
-				emit_signal("volume_set")
+				volume_set.emit()
 
 func _input(event):
 	# Pausing
@@ -109,7 +109,7 @@ func change_scene_to_file(scene = null, fadeOut = "", fadeIn = "", length = 1, s
 		await $GUI/Fader.animation_finished
 	
 	# error prevention
-	emit_signal("scene_faded")
+	scene_faded.emit()
 	
 	# use restoreScene to tell if we're restoring a scene
 	var restoreScene = false

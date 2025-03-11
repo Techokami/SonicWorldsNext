@@ -62,7 +62,7 @@ func _on_DamageArea_area_entered(area):
 			playerHit.append(area.parent)
 
 func destroy():
-	emit_signal("destroyed")
+	destroyed.emit()
 	# create explosion
 	var explosion = Explosion.instantiate()
 	get_parent().add_child(explosion)
@@ -74,6 +74,3 @@ func destroy():
 	animal.global_position = global_position
 	# free node
 	queue_free()
-
-
-

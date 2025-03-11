@@ -15,6 +15,8 @@ var hoverOffset = 0
 
 var animationPriority = ["default","move","laugh","hit","exploded"]
 
+signal boss_over
+
 func _ready():
 	# move to the set currentPoint position before the boss starts (plus 128 pixels higher)
 	global_position = getPose[currentPoint]+Vector2(0,-1)*128
@@ -55,7 +57,7 @@ func _process(delta):
 			if deathTimer <= 0:
 				velocity = Vector2(200,-25)
 				scale.x = -abs(scale.x)
-				emit_signal("boss_over")
+				boss_over.emit()
 
 func _physics_process(delta):
 	super(delta)

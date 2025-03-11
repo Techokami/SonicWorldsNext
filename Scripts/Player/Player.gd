@@ -1351,7 +1351,7 @@ func action_jump(animation = "roll", airJumpControl = true, playSound=true):
 		set_state(STATES.JUMP)
 
 func emit_enemy_bounce():
-	emit_signal("enemy_bounced")
+	enemy_bounced.emit()
 
 func action_water_run_handle():
 	var dash = $WaterSurface

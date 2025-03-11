@@ -297,18 +297,18 @@ func _physics_process(delta):
 		if groundMemory != ground:
 			# if on ground emit "connectFloor"
 			if ground:
-				emit_signal("connectFloor")
+				connectFloor.emit()
 			# if no on ground emit "disconectFloor"
 			else:
-				emit_signal("disconectFloor")
+				disconectFloor.emit()
 				disconect_from_floor(true)
 		if roofMemory != roof:
 			# if on roof emit "connectCeiling"
 			if roof:
-				emit_signal("connectCeiling")
+				connectCeiling.emit()
 			# if no on roof emit "disconectCeiling"
 			else:
-				emit_signal("disconectCeiling")
+				disconectCeiling.emit()
 		
 		
 		update_sensors()
@@ -363,7 +363,7 @@ func _physics_process(delta):
 		# reload memory for layers
 		collision_mask = maskMemory
 		collision_layer = layerMemory
-	emit_signal("positionChanged")
+	positionChanged.emit()
 	
 
 func snap_angle(angleSnap = 0.0):

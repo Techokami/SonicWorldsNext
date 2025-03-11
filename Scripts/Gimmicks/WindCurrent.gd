@@ -61,7 +61,7 @@ func _on_WindCurrent_body_entered(body):
 	if !players.has(body):
 		# emit signal for player touches (can be used for giant fans)
 		if players.size() == 0:
-			emit_signal("player_entered")
+			player_entered.emit()
 		players.append(body)
 
 
@@ -73,6 +73,4 @@ func _on_WindCurrent_body_exited(body):
 		players.erase(body)
 		# emit signal for players exiting (can be used for giant fans)
 		if players.size() == 0:
-			emit_signal("all_players_exited")
-
-
+			all_players_exited.emit()
