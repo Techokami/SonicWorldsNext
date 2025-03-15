@@ -18,6 +18,7 @@ var menusText = [
 "music 100",
 "scale x1",
 "full screen off",
+"smooth rotation off",
 "controls",
 "back",],
 # menu 2 (restart menu confirm)
@@ -83,14 +84,17 @@ func _input(event):
 					3: # full screen
 						get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (!((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN))) else Window.MODE_WINDOWED
 						$PauseMenu/VBoxContainer.get_child(option+1).get_child(0).text = update_text(option+1)
-					4: # control menu
+					4: # smooth rotation
+						Global.smoothRotation = (Global.smoothRotation + 1) % 2
+						$PauseMenu/VBoxContainer.get_child(option+1).get_child(0).text = update_text(option+1)
+					5: # control menu
 						Global.save_settings()
 						set_menu(0)
 						$"../ControllerMenu".visible = true
 						visible = false
 						Global.main.wasPaused = false
 						get_tree().paused = true
-					5: # back
+					6: # back
 						Global.save_settings()
 						set_menu(0)
 			MENUS.RESTART: # reset level
@@ -207,5 +211,7 @@ func update_text(textRow = 0):
 			return "scale x"+str(Global.zoomSize)
 		4: # Full screen
 			return "full screen "+onOff[int(((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN)))]
+		5: # Smooth Rotation
+			return "smooth rotation " + onOff[Global.smoothRotation]
 		_: # Default
 			return menusText[menu][textRow]
