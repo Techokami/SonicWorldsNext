@@ -777,7 +777,7 @@ texture_mode = 1
 script = ExtResource("26_1qesq")
 speed = 10
 split = true
-splitChance = 90
+splitChance = 33
 
 [node name="TubeEnd" type="Sprite2D" parent="Entity/ZoomTube/ZoomTubeSplit2"]
 position = Vector2(5776, 1520)
