@@ -136,7 +136,7 @@ func attach_player(player):
 	player.sprite.flip_h = false
 
 	# Prevents player from clipping on walls while they are on the fringes of the gimmick
-	player.translate = true
+	player.allowTranslate = true
 
 func detach_player(player, index):
 	player.set_z_index(get_player_z_level(index))
@@ -149,7 +149,7 @@ func detach_player(player, index):
 	player.global_position.x = clamp(player.global_position.x, global_position.x - 22, global_position.x + 22)
 
 	if player.currentState != player.STATES.DIE:
-		player.translate = false
+		player.allowTranslate = false
 		
 func set_anim(player, lookUp, lookDown):
 	var curAnim = player.animator.get_assigned_animation()

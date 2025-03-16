@@ -408,10 +408,7 @@ func _process(delta):
 					partner.inputs[INPUTS.XINPUT] = sign(global_position.x - partner.global_position.x)
 				
 				#If more than 64 pixels away on X, override AI control to come back.
-				if abs(global_position.x-partner.global_position.x) > 64:
-					partner.inputs[INPUTS.XINPUT] == sign(global_position.x-partner.global_position.x)
-				#Override AI control if Tails is ahead of Sonic
-				else:
+				if abs(global_position.x-partner.global_position.x) <= 64:
 					var testPos = round(global_position.x + (0-direction))
 					if sign((partner.global_position.x - testPos)*direction) > 0:
 						partner.inputs[INPUTS.XINPUT] = sign(0-direction)
@@ -466,13 +463,14 @@ func _process(delta):
 	
 	# set the sprite to match the sprite rotation variable if it's in the rotatable Sprites list
 	if (rotatableSprites.has(animator.current_animation)):
-		# check if player rotation is greater then 45 degrees or current angle doesn't match the gravity's angle or not on the floor
-		if abs(spriteRotation-90) >= 32 or rotation != gravityAngle or !ground:
-			sprite.rotation = deg_to_rad(snapped(spriteRotation,45)-90)-rotation-gravityAngle
+		if (Global.smoothRotation):
+			sprite.rotation = deg_to_rad(spriteRotation-90)-rotation-gravityAngle
 		else:
-			sprite.rotation = -rotation-gravityAngle
-		# uncomment the line below and comment the line above for smooth rotation
-		#sprite.rotation = deg_to_rad(spriteRotation-90)-rotation-gravityAngle
+			# check if player rotation is greater then 45 degrees or current angle doesn't match the gravity's angle or not on the floor
+			if abs(spriteRotation-90) >= 32 or rotation != gravityAngle or !ground:
+				sprite.rotation = deg_to_rad(snapped(spriteRotation,45)-90)-rotation-gravityAngle
+			else:
+				sprite.rotation = -rotation-gravityAngle
 	else:
 		sprite.rotation = -rotation+gravityAngle
 
@@ -684,6 +682,7 @@ func _physics_process(delta):
 		
 		# Lerp camera scroll based on if on floor
 		var playerOffset = ((abs(global_position.y-camera.get_target_position().y)*2)/camDist.y)
+		var scrollSpeed = 4.0*60.0*delta
 		
 		cameraDragLerp = max(int(!ground),min(cameraDragLerp,playerOffset)-6*delta)
 		
@@ -694,8 +693,8 @@ func _physics_process(delta):
 		
 		
 		if camLookAmount != 0:
-			var scrollSpeed = sign(camLookAmount)*delta*2
-			if sign(camLookAmount - scrollSpeed) == sign(camLookAmount):
+			var tmpScrollSpeed = sign(camLookAmount)*delta*2
+			if sign(camLookAmount - tmpScrollSpeed) == sign(camLookAmount):
 				camLookAmount -= sign(camLookAmount)*delta*2
 			else:
 				camLookAmount = 0
@@ -710,7 +709,6 @@ func _physics_process(delta):
 		
 		var viewSize = get_viewport_rect().size
 		var viewPos = camera.get_screen_center_position()
-		var scrollSpeed = 4.0*60.0*delta
 		
 		# Left
 		# snap the limit to the edge of the camera if snap out of range
@@ -822,13 +820,13 @@ func _physics_process(delta):
 		# note that the bottom crush sensor actually goes *below* the feet so that it can contact the floor
 		crushSensorDown.position.y = ($HitBox.shape.size.y/2 +1)
 		
-		# crusher deaths NOTE: the translate and visibility is used for stuff like the sky sanctuary teleporters, visibility check is for stuff like the carnival night barrels
+		# crusher deaths NOTE: the allowTranslate and visibility is used for stuff like the sky sanctuary teleporters, visibility check is for stuff like the carnival night barrels
 		if (crushSensorLeft.get_overlapping_areas() + crushSensorLeft.get_overlapping_bodies()).size() > 0 and \
-			(crushSensorRight.get_overlapping_areas() + crushSensorRight.get_overlapping_bodies()).size() > 0 and (!translate or visible):
+			(crushSensorRight.get_overlapping_areas() + crushSensorRight.get_overlapping_bodies()).size() > 0 and (!allowTranslate or visible):
 			kill()
 
 		if (crushSensorUp.get_overlapping_areas() + crushSensorUp.get_overlapping_bodies()).size() > 0 and \
-			(crushSensorDown.get_overlapping_areas() + crushSensorDown.get_overlapping_bodies()).size() > 0 and (!translate or visible):
+			(crushSensorDown.get_overlapping_areas() + crushSensorDown.get_overlapping_bodies()).size() > 0 and (!allowTranslate or visible):
 			kill()
 
 # Input buttons
@@ -912,8 +910,7 @@ func is_right_held():
 func get_state():
 	return currentState
 
-func set_state(newState, forceMask = Vector2.ZERO):
-	
+func set_state(newState, forceMask = Vector2.ZERO):	
 	defaultHitBoxPos = hitBoxOffset.normal
 	$HitBox.position = defaultHitBoxPos
 	# reset the center offset
@@ -1069,7 +1066,7 @@ func kill(always = true):
 		disconect_from_floor()
 		supTime = 0
 		shoeTime = 0
-		translate = true
+		allowTranslate = true
 		# turn off super palette and physics (if super)
 		if is_instance_valid(superAnimator) and isSuper:
 			superAnimator.play("PowerDown")
@@ -1161,7 +1158,7 @@ func land_floor():
 
 
 # clean animation
-func _on_PlayerAnimation_animation_started(anim_name):
+func _on_PlayerAnimation_animation_started(_anim_name):
 	if (sprite != null):
 		sprite.flip_v = false
 		sprite.offset = defaultSpriteOffset
@@ -1355,7 +1352,7 @@ func action_jump(animation = "roll", airJumpControl = true, playSound=true):
 		set_state(STATES.JUMP)
 
 func emit_enemy_bounce():
-	emit_signal("enemy_bounced")
+	enemy_bounced.emit()
 
 func action_water_run_handle():
 	var dash = $WaterSurface

@@ -12,7 +12,9 @@ signal got_hit
 signal hit_player
 signal flash_finished
 signal defeated
-signal boss_over
+
+# Note - depending on implementation, it could be appropriate to emit this signal from your boss implementation
+# signal boss_over
 
 var active = false
 
@@ -22,7 +24,7 @@ func _physics_process(delta):
 	if flashTimer > 0:
 		flashTimer -= delta
 		if flashTimer <= 0:
-			emit_signal("flash_finished")
+			flash_finished.emit()
 	# if not flashing do damage routine
 	elif hp > 0 and active:
 		# checks if player hit has players inside
@@ -36,7 +38,7 @@ func _physics_process(delta):
 					if hp > 0:
 						$Hit.play()
 						flashTimer = hitTime
-						emit_signal("got_hit")
+						got_hit.emit()
 						hp -= 1
 						# check if gliding, if they are force them to fall
 						if i.get("currentState") != null:
@@ -49,11 +51,11 @@ func _physics_process(delta):
 									i.get_node("States/Glide").isFall = true
 					# check if dead
 					if hp <= 0:
-						emit_signal("defeated")
+						defeated.emit()
 				# if destroying the enemy fails and hit player exists then hit player
 				elif (i.has_method("hit_player")):
 					if i.hit_player(global_position,damageType):
-						emit_signal("hit_player")
+						hit_player.emit()
 
 func _on_body_entered(body):
 	# add to player list

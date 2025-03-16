@@ -24,62 +24,64 @@ func _process(delta):
 		$fan.global_scale = Vector2(1,1)
 		if $fan.texture != null:
 			$fan.region_rect.size.x = $fan.texture.get_width()*round(scale.x)
+		# No need to cotinue running the rest if we are in hint mode
+		return
+
 	# animate
 	var goSpeed = 0.0
 	if isActive:
 		if !touchActive or players.size() > 0:
 			goSpeed = 30.0
 			# play fan sound
-			if playSound and !Engine.is_editor_hint():
-				if !$FanSound.playing:
-					$FanSound.play()
+			if playSound and !$FanSound.playing:
+				$FanSound.play()
 		# end sound if playing
 		elif $FanSound.playing:
-				$FanSound.stop()
+			$FanSound.stop()
 	# back up end sound
 	elif $FanSound.playing:
-			$FanSound.stop()
+		$FanSound.stop()
 	
 	animSpeed = lerp(animSpeed,goSpeed,delta*1.5)
 	$fan.frame = getFrame
 	getFrame = wrapf(getFrame+delta*animSpeed,0,$fan.hframes*$fan.vframes)
 
 
-
 func _physics_process(delta):
-	if !Engine.is_editor_hint():
-		# if any players are found in the array, if they're on the ground make them roll
-		if players.size() > 0:
-			for i in players:
-				# determine the direction of the arrow based on scale and rotation
-				# better method needs to be done
-				var getDir = Vector2.UP.rotated(global_rotation)
-				
-				# disconect floor
-				if i.ground:
-					i.disconect_from_floor()
-				
-				# set movement
-				# get distance for the y axis
-				var yDistance = (global_position.y-(16*scale.y)+cos(Global.levelTime*4)*4)
-				
-				
-				# make sure player is in range
-				if abs(yDistance-i.global_position.y) <= abs(yDistance-global_position.y):
-					# move toward the top of the mask
-					i.movement.y = lerp(i.movement.y, sign(yDistance-i.global_position.y)*speed-i.grv, delta*30)
-				
-				# force air state
-				var setPlayerAnimation = "corkScrew"
-				# water animation
-				if i.water:
-					setPlayerAnimation = "current"
-				
-				if i.currentState != i.STATES.ANIMATION or i.animator.current_animation != setPlayerAnimation:
-					i.set_state(i.STATES.AIR)
-					i.animator.play(setPlayerAnimation)
+	# Do editor hints even run _physics_process?
+	if Engine.is_editor_hint():
+		return
 
-
+	# if any players are found in the array, if they're on the ground make them roll
+	for i in players:
+		# determine the direction of the arrow based on scale and rotation
+		# better method needs to be done
+		# DW's note: commented out for now because this variable wasn't used and it was
+		# causing a warning. Perhaps intended for multi-directional fans being added later?
+		#var getDir = Vector2.UP.rotated(global_rotation)
+			
+		# disconect floor
+		if i.ground:
+			i.disconect_from_floor()
+			
+		# set movement
+		# get distance for the y axis
+		var yDistance = (global_position.y-(16*scale.y)+cos(Global.levelTime*4)*4)
+		
+		# make sure player is in range
+		if abs(yDistance-i.global_position.y) <= abs(yDistance-global_position.y):
+			# move toward the top of the mask
+			i.movement.y = lerp(i.movement.y, sign(yDistance-i.global_position.y)*speed-i.grv, delta*30)
+		
+		# force air state
+		var setPlayerAnimation = "corkScrew"
+		# water animation
+		if i.water:
+			setPlayerAnimation = "current"
+			
+		if i.currentState != i.STATES.ANIMATION or i.animator.current_animation != setPlayerAnimation:
+			i.set_state(i.STATES.AIR)
+			i.animator.play(setPlayerAnimation)
 
 func _on_body_entered(body):
 	if !players.has(body):
