@@ -1,0 +1,18 @@
+4.3 Upgrade Notes
+-----------------
+COMING LATER
+
+4.2 to 4.3 Upgrade Notes
+------------------------
+
+* If upgrading from an older version of 4.2 than the tag, the Ice Cap Zone trampoline Gimmick recently had its dampening
+  values inverted. So if you previously had a trampoline with a dampening value of .97, please change that to .3 -- basically
+  just make it "1 - <old value>" to preserve functionality. If you don't make this change, your trampoline will barely move
+  and most likely fail to launch. If you were using default values, you may not need to make any changes.
+
+* TileMap is deprecated in Godot 4.3. It still works, so you don't neccessarily need to do anything with your tilemaps
+  right now, but it will eventually be removed. Convert your existing TileMap nodes into TileMapLayer nodes when
+  convenient -- Godot 4.3 includes a guide on how to do that. For collapsing platforms specifically, there are some
+  additional steps you need to perform to make this conversion. See CollapseLayer.gd for detailed instructions.
+
+Older upgrade notes will not be provided.
