@@ -102,8 +102,8 @@ func physics_collision(body, hitVector):
 		
 		#Restore Air Control
 		body.airControl = true
-		# Disable pole grabs
-		body.poleGrabID = self
+		# Disable pole grabs - XXX Does this make any sense? How did this ever disable pole grabs?
+		# body.poleGrabID = self
 		return true
 	
 
@@ -128,4 +128,4 @@ func _on_Diagonal_body_entered(body):
 		body.animator.queue(curAnim)
 	Global.play_sound(springSound)
 	# Disable pole grabs
-	body.poleGrabID = self
+	# body.poleGrabID = self

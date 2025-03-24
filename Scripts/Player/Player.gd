@@ -230,7 +230,27 @@ var ring1upCounter = 100
 var cameraMargin = 16
 
 # Gimmick related
-var poleGrabID = null
+## @deprecated
+var poleGrabID = null # Please don't use this anymore, use activeGimmick instead
+
+## The current gimmick the player is interacting with if that player is interacting with one.
+## Otherwise NULL. If this gimmick is set, the player will call a secondary process function and a
+## pleyer hysics process function as part of that player's process/phsyics process functions.
+var activeGimmick = null
+## Dictionary of Variables related to the active gimmick (you probably don't need to proactively
+## clear these)
+var gimmickVariables = {}  
+## A list of up to maxLockedGimmicks gimmick references that are used to tell that gimmick not to
+## bind to the player Until the player touches grass (IE gets grounded). If more are written,
+## the oldest is cleared first. The list is also completely cleared if the player ever touches the
+## ground or if something else explicitly calls for the list to be cleared.
+## Note: Gimmicks must be programmed to check this list in order for it to do anything!
+var lockedGimmicks = [null, null, null]
+## Tracks the position that the lost lockedGimmick as added to the lockedGimmicks list.
+var lockedGimmicksIndex = 0
+## Constrain the size of the locked gimmicks list to ensure that checking for the presence of a specific
+## locked gimmick within the list remains performant. Make sure this size is in sync with the lockedGimmicks declaration.
+var maxLockedGimmicks = 3
 
 # Enemy related
 signal enemy_bounced
@@ -612,6 +632,9 @@ func _process(delta):
 	
 	# Set player inputs
 	set_inputs()
+	
+	if (activeGimmick != null):
+		activeGimmick.player_process(self, delta)
 
 func _physics_process(delta):
 	super(delta)
@@ -828,6 +851,9 @@ func _physics_process(delta):
 		if (crushSensorUp.get_overlapping_areas() + crushSensorUp.get_overlapping_bodies()).size() > 0 and \
 			(crushSensorDown.get_overlapping_areas() + crushSensorDown.get_overlapping_bodies()).size() > 0 and (!allowTranslate or visible):
 			kill()
+			
+	if (activeGimmick != null):
+		activeGimmick.player_physics_process(self, delta)
 
 # Input buttons
 func set_inputs():
@@ -1394,3 +1420,102 @@ func handle_animation_speed(gSpeed = groundSpeed):
 			animator.speed_scale = -movement.y/(40.0*(1.0+float(isSuper)))
 		_:
 			animator.speed_scale = 1
+
+# Player Gimmick Interaction
+#
+# Up until recently, we've been letting gimmicks store their own per-player
+# state and they perform their own on-player processes as part of their own
+# process function. Rather than doing that, I think it's going to become
+# useful to let the player object be responsible for kicking those kinds of
+# actions off while the gimmick process functions focus more on the motion and
+# actions of the gimmick itself.
+
+# Note: Bindable gimmick objects must have the following functions:
+#   player_process(player, delta) - a function that gets called while the connected player is in
+#     process
+#   player_physics_process(player, delta) - a function that gets called while the connected player
+#     in in physics_process
+#   player_force_detach_callback(player) - This function is invoked if something (usually another
+#     gimmick or trigger of some kind) tells the player to detach from its active gimmick.
+#
+# Be aware that not all gimmicks should require explicit attachment to the player. Whether or not
+# one does depends primarily on whether or not the gimmick needs to maintain its own state on each
+# player. Gimmicks that can function without continually tracking some kind of per-player state
+# should continue to do so without using these functions.
+
+## Binds the player to the requested gimmick
+## @param gimmick gimmick to bind the player to
+## @param allowSwap enable to make the new gimmick execute its on force detach callback and to
+##        allow the new gimmick to replace one that is already attached.
+## @retval true if gimmick was able to be connected
+## @retval false otherwise
+func set_active_gimmick(gimmick, allowSwap=false):
+	if allowSwap:
+		if activeGimmick != null: # if there is already an active gimmick, we need to run that
+								  # gimmicks player forced detached callback.
+			activeGimmick.player_force_detach_callback(self)
+		
+		activeGimmick = gimmick
+		return true
+	
+	# when swap is not allowed, we only set it if the player isn't already attached to another gimmick.
+	if activeGimmick != null:
+		return false
+	
+	activeGimmick = gimmick
+	return true
+
+## Unbinds the gimmick from the player (you could just use null on set_active_gimmick too)
+func unset_active_gimmick():
+	activeGimmick = null
+
+## Unbinds the player from its current gimmick, but only after running its force detach
+## callback
+func force_detach():
+	activeGimmick.player_force_detach_callback(self)
+	activeGimmick = null
+
+## Gets the player's currently active gimmick. Might be useful for certain gimmick<->gimmick
+## interactions or just for checking if the player is already bound to the gimmick you are checking
+## from.
+func get_active_gimmick():
+	return activeGimmick
+
+## Sets a value in the player's gimmick variable dictionary. Uses a key value pair.
+func set_gimmick_var(gimmickVarName, gimmickVarValue):
+	gimmickVariables[gimmickVarName] = gimmickVarValue
+
+## Removes a variable from the player's gimmick variable dictionary. Provide a key.
+func unset_gimmick_var(gimmickVarName):
+	gimmickVariables.erase(gimmickVarName)
+
+## Gets a value in the player's gimmick variable dictionary. Provide a key.
+func get_gimmick_var(gimmickVarName):
+	return gimmickVariables.get(gimmickVarName)
+
+## Removes all currently locked gimmicks from the Player's locked gimmick list.
+func clear_locked_gimmicks():
+	for i in range(maxLockedGimmicks):
+		lockedGimmicks[i] = null
+	lockedGimmicksIndex = 0
+
+## Removes a single locked gimmick from the player's locked gimmick list if
+##   present.
+func clear_single_locked_gimmick(gimmick):
+	for i in range(maxLockedGimmicks):
+		if lockedGimmicks[i] == gimmick:
+			lockedGimmicks[i] = null
+
+## Adds a gimmick to the player's locked gimmick list. Useful if you want to
+##   prevent a player from interacting or especially re-interacting with a
+##   gimmick until that player either lands or you manually clear the locked
+##   gimmick list for some reason.
+func add_locked_gimmick(gimmick):
+	lockedGimmicks[lockedGimmicksIndex] = gimmick
+	lockedGimmicks = (lockedGimmicks + 1) % maxLockedGimmicks
+
+## Checks if the gimmick is locked for the player
+func is_gimmick_locked_for_player(gimmick):
+	if gimmick in lockedGimmicks:
+		return true
+	return false

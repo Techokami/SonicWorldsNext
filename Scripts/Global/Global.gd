@@ -229,4 +229,23 @@ func load_settings():
 	
 	if file.has_section_key("Resolution","FullScreen"):
 		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (file.get_value("Resolution","FullScreen")) else Window.MODE_WINDOWED
-	
+
+## Useful for checking triggers that require specifically the first player to be on a gimmick	
+func get_first_player_gimmick():
+	return players[0].get_active_gimmick()
+
+## Useful for gimmicks that can activate if any player is attached that don't need data about
+## the specific player
+func is_any_player_on_gimmick(gimmick):
+	for player in players:
+		if player.get_active_gimmick() == gimmick:
+			return true
+	return false
+
+## Useful for gimmicks that need to potentially iterate through all attached players
+func get_players_on_gimmick(gimmick):
+	var players_on_gimmick = []
+	for player in players:
+		if player.get_active_gimmick() == gimmick:
+			players_on_gimmick.append(player)
+	return players_on_gimmick

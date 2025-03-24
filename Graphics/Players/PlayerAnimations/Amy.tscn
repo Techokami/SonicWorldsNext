@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=3 uid="uid://d3vtvdbdn6g8v"]
+[gd_scene load_steps=64 format=3 uid="uid://d3vtvdbdn6g8v"]
 
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="1_sk1gs"]
 [ext_resource type="Texture2D" uid="uid://bfesqgvh63scg" path="res://Graphics/Players/Amy.png" id="2_vki44"]
@@ -454,6 +454,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="112"]
 resource_name = "hang"
 loop_mode = 1
+step = 0.0166667
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -1044,10 +1045,41 @@ tracks/0/keys = {
 "values": [256, 267, 266, 265, 264, 263, 262, 261, 260, 259, 258, 257]
 }
 
+[sub_resource type="Animation" id="Animation_rt6ym"]
+resource_name = "brachiate"
+length = 0.800002
+loop_mode = 1
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Amy/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.133333, 0.266667, 0.4, 0.533333, 0.666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [217, 218, 219, 220, 215, 216]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Amy/Sprite2D:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -7)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_36uej"]
 _data = {
 "RESET": SubResource("86"),
 "air": SubResource("108"),
+"brachiate": SubResource("Animation_rt6ym"),
 "clingVerticalBar": SubResource("Animation_kwfke"),
 "clingVerticalBarOffset": SubResource("Animation_5tyl8"),
 "corkScrew": SubResource("76"),
@@ -1208,6 +1240,7 @@ _data = {
 }
 
 [node name="Amy" type="Node2D"]
+metadata/_edit_horizontal_guides_ = [-23.0]
 
 [node name="PlayerAnimation" type="AnimationPlayer" parent="."]
 root_node = NodePath("../..")
@@ -1220,9 +1253,10 @@ autoplay = "idle"
 z_index = 5
 material = ExtResource("1_sk1gs")
 texture = ExtResource("2_vki44")
-offset = Vector2(0, -6)
+offset = Vector2(0, -7)
 hframes = 16
 vframes = 18
+frame = 219
 
 [node name="DashDust" type="AnimatedSprite2D" parent="Sprite2D"]
 visible = false
