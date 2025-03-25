@@ -338,13 +338,17 @@ func remove_player(player):
 	
 # It may be prudent to come back later and refactor this gimmick to use these instead of its own
 # process/physics process for player specific actions.
-func player_process(player, delta):
+func player_process(_player, _delta):
 	pass
 	
-func player_physics_process(player, delta):
+func player_physics_process(_player, _delta):
 	pass
 
 # I'll probably need to lock the gimmick here to prevent the same bar from just immediately being
 # grabbed if the player is launched off with a spring or something.
-func player_force_detach_callback(player):
+func player_force_detach_callback(_player):
+	pass
+
+# At this point I really ought to make this a subclass of something else...
+func handle_animation_finished(player, animation):
 	pass

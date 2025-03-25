@@ -348,6 +348,7 @@ func _ready():
 	add_child(newSprite)
 	sprite = newSprite.get_node("Sprite2D")
 	animator = newSprite.get_node("PlayerAnimation")
+	animator.animation_finished.connect(handle_animation_finished)
 	superAnimator = newSprite.get_node_or_null("SuperPalette")
 	spriteController.queue_free()
 	spriteController = newSprite
@@ -1490,8 +1491,8 @@ func unset_gimmick_var(gimmickVarName):
 	gimmickVariables.erase(gimmickVarName)
 
 ## Gets a value in the player's gimmick variable dictionary. Provide a key.
-func get_gimmick_var(gimmickVarName):
-	return gimmickVariables.get(gimmickVarName)
+func get_gimmick_var(gimmickVarName, default: Variant = null):
+	return gimmickVariables.get(gimmickVarName, default)
 
 ## Removes all currently locked gimmicks from the Player's locked gimmick list.
 func clear_locked_gimmicks():
@@ -1519,3 +1520,7 @@ func is_gimmick_locked_for_player(gimmick):
 	if gimmick in lockedGimmicks:
 		return true
 	return false
+	
+func handle_animation_finished(animation):
+	if activeGimmick != null:
+		activeGimmick.handle_animation_finished(self, animation)

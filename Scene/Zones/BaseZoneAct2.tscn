@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=4 uid="uid://bjavywoj00j1j"]
+[gd_scene load_steps=33 format=4 uid="uid://bjavywoj00j1j"]
 
 [ext_resource type="Script" path="res://Scripts/Level/Level.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://qs5dmtxxf1w1" path="res://Scene/Presentation/Title.tscn" id="2_l4fq6"]
@@ -23,6 +23,7 @@
 [ext_resource type="Texture2D" uid="uid://b4cw5q2u4jyb8" path="res://Graphics/Gimmicks/HorizontalBarAlt.png" id="24_ipqgj"]
 [ext_resource type="Texture2D" uid="uid://bemwlrblbgn23" path="res://Graphics/Backgrounds/WorldsBackground.png" id="25"]
 [ext_resource type="PackedScene" uid="uid://dsvob0f0elmrq" path="res://Entities/Gimmicks/MonkeyBar.tscn" id="25_obpie"]
+[ext_resource type="AudioStream" uid="uid://dh4rsaka62ph4" path="res://Audio/SFX/Gimmicks/Switch.wav" id="26_750k6"]
 [ext_resource type="PackedScene" uid="uid://c2esop5orct10" path="res://Entities/MainObjects/GoalPost.tscn" id="34"]
 [ext_resource type="PackedScene" uid="uid://dasp221fqgrno" path="res://Entities/Obstacles/Platform.tscn" id="38"]
 
@@ -420,6 +421,7 @@ z_index = 100
 position = Vector2(1663, -11)
 initial_height = 280
 target_height = 280
+liftSound = null
 
 [node name="MonkeyBar3" parent="." instance=ExtResource("25_obpie")]
 z_index = 100
@@ -427,6 +429,7 @@ position = Vector2(1697, -11)
 initial_height = 280
 target_height = 280
 lift_speed = 0
+liftSound = null
 
 [node name="MonkeyBar4" parent="." instance=ExtResource("25_obpie")]
 z_index = 100
@@ -434,6 +437,7 @@ position = Vector2(1731, -11)
 initial_height = 280
 target_height = 280
 lift_speed = 0
+liftSound = null
 
 [node name="MonkeyBar5" parent="." instance=ExtResource("25_obpie")]
 z_index = 100
@@ -441,6 +445,7 @@ position = Vector2(1765, -11)
 initial_height = 280
 target_height = 280
 lift_speed = 0
+liftSound = null
 
 [node name="MonkeyBar6" parent="." instance=ExtResource("25_obpie")]
 z_index = 100
@@ -448,6 +453,7 @@ position = Vector2(1799, -11)
 initial_height = 280
 target_height = 280
 lift_speed = 0
+liftSound = null
 
 [node name="MonkeyBar7" parent="." instance=ExtResource("25_obpie")]
 z_index = 100
@@ -455,12 +461,17 @@ position = Vector2(1833, -11)
 initial_height = 280
 target_height = 280
 lift_speed = 0
+liftSound = null
 
 [node name="MonkeyBar8" parent="." instance=ExtResource("25_obpie")]
 z_index = 100
 position = Vector2(1867, -11)
 initial_height = 280
-target_height = 286
+target_height = 284
+lift_speed = 90
+grabSound = ExtResource("26_750k6")
+grabSoundPitchRange = 0.0
+liftSound = null
 
 [connection signal="body_entered" from="Entities/AdvancedPlatform" to="Entities/AdvancedPlatform" method="_on_body_entered"]
 [connection signal="body_exited" from="Entities/AdvancedPlatform" to="Entities/AdvancedPlatform" method="_on_body_exited"]

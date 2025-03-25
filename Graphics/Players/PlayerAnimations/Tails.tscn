@@ -1,4 +1,4 @@
-[gd_scene load_steps=77 format=3 uid="uid://by3kgbgiinm60"]
+[gd_scene load_steps=79 format=3 uid="uid://by3kgbgiinm60"]
 
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="1"]
 [ext_resource type="Texture2D" uid="uid://c05fsbnx0p7xf" path="res://Graphics/Players/Tails.png" id="2"]
@@ -60,6 +60,36 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [77]
+}
+
+[sub_resource type="Animation" id="Animation_vba27"]
+resource_name = "brachiate"
+length = 0.800002
+loop_mode = 1
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.133333, 0.266667, 0.4, 0.533333, 0.666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [162, 163, 164, 165, 160, 161]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D/Sprite2D:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 2)]
 }
 
 [sub_resource type="Animation" id="Animation_hleq2"]
@@ -520,6 +550,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(0, -7)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D/Sprite2D:offset")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -5)]
 }
 
 [sub_resource type="Animation" id="Animation_rhepm"]
@@ -1155,10 +1197,9 @@ tracks/1/keys = {
 "values": [Vector2(2, -4), Vector2(-2, -4), Vector2(-2, -4), Vector2(0, -4), Vector2(2, -4), Vector2(2, -4), Vector2(-2, -4), Vector2(-2, -4), Vector2(-2, -4), Vector2(0, -4), Vector2(2, -4), Vector2(2, -4)]
 }
 
-[sub_resource type="Animation" id="Animation_vba27"]
-resource_name = "brachiate"
-length = 0.800002
-loop_mode = 1
+[sub_resource type="Animation" id="Animation_klp16"]
+resource_name = "brachiateLeft"
+length = 0.400002
 step = 0.0166667
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -1167,10 +1208,39 @@ tracks/0/path = NodePath("Sprite2D/Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.133333, 0.266667, 0.4, 0.533333, 0.666667),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.133333, 0.266667),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [162, 163, 164, 165, 160, 161]
+"values": [165, 160, 161]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D/Sprite2D:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 2)]
+}
+
+[sub_resource type="Animation" id="Animation_uh5e1"]
+resource_name = "brachiateRight"
+length = 0.400002
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.133333, 0.266667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [162, 163, 164]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -1190,6 +1260,8 @@ _data = {
 "RESET": SubResource("86"),
 "air": SubResource("121"),
 "brachiate": SubResource("Animation_vba27"),
+"brachiateLeft": SubResource("Animation_klp16"),
+"brachiateRight": SubResource("Animation_uh5e1"),
 "clingVerticalBar": SubResource("Animation_hleq2"),
 "clingVerticalBarOffset": SubResource("Animation_w4arn"),
 "corkScrew": SubResource("76"),
@@ -1657,7 +1729,7 @@ texture = ExtResource("2")
 offset = Vector2(0, -5)
 hframes = 16
 vframes = 18
-frame = 160
+frame = 162
 script = ExtResource("5")
 
 [node name="DashDust" type="AnimatedSprite2D" parent="Sprite2D"]
