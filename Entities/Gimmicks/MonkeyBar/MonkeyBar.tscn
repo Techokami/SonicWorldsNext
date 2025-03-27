@@ -1,0 +1,56 @@
+[gd_scene load_steps=7 format=3 uid="uid://btna3kqcoupda"]
+
+[ext_resource type="Script" path="res://Scripts/Gimmicks/MonkeyBar/MonkeyBar.gd" id="1_4gcsp"]
+[ext_resource type="Texture2D" uid="uid://bjof6o7bmi80f" path="res://Graphics/Gimmicks/FBZMonkeyBar.png" id="2_likc6"]
+[ext_resource type="AudioStream" uid="uid://bfba871gfmv0s" path="res://Audio/SFX/Player/Grab.wav" id="3_7nlb7"]
+[ext_resource type="Script" path="res://Tools/Audio/AudioStream2DController.gd" id="4_k4ep7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4jv0b"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fu4hr"]
+size = Vector2(10, 20)
+
+[node name="MonkeyBar" type="Node2D"]
+script = ExtResource("1_4gcsp")
+
+[node name="MonkeyBarSprite" type="Sprite2D" parent="."]
+position = Vector2(0, 20)
+texture = ExtResource("2_likc6")
+
+[node name="MonkeyBarHanger" type="Area2D" parent="."]
+position = Vector2(0, 43)
+collision_layer = 0
+collision_mask = 4096
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MonkeyBarHanger"]
+shape = SubResource("RectangleShape2D_4jv0b")
+
+[node name="LeftLinker" type="Area2D" parent="."]
+position = Vector2(-25, 38)
+collision_layer = 0
+collision_mask = 4096
+
+[node name="LeftLinkerShape" type="CollisionShape2D" parent="LeftLinker"]
+shape = SubResource("RectangleShape2D_fu4hr")
+
+[node name="RightLinker" type="Area2D" parent="."]
+position = Vector2(25, 38)
+collision_layer = 0
+collision_mask = 4096
+
+[node name="RightLinkerShape" type="CollisionShape2D" parent="RightLinker"]
+shape = SubResource("RectangleShape2D_fu4hr")
+
+[node name="MountPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_7nlb7")
+volume_db = -5.0
+max_distance = 600.0
+script = ExtResource("4_k4ep7")
+rand_pitch_range = 0.15
+
+[connection signal="player_mounted" from="." to="MountPlayer" method="do_play_random_pitch"]
+[connection signal="body_entered" from="LeftLinker" to="." method="_on_left_linker_body_entered"]
+[connection signal="body_exited" from="LeftLinker" to="." method="_on_left_linker_body_exited"]
+[connection signal="body_entered" from="RightLinker" to="." method="_on_right_linker_body_entered"]
+[connection signal="body_exited" from="RightLinker" to="." method="_on_right_linker_body_exited"]

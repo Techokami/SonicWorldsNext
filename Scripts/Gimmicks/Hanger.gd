@@ -350,5 +350,5 @@ func player_force_detach_callback(_player):
 	pass
 
 # At this point I really ought to make this a subclass of something else...
-func handle_animation_finished(player, animation):
+func handle_animation_finished(_player, _animation):
 	pass
