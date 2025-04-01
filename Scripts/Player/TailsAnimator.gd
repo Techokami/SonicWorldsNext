@@ -16,13 +16,13 @@ func _process(_delta):
 			if player:
 				if player.ground:
 					global_rotation = deg_to_rad(snapped(rad_to_deg(player.angle),45))-player.gravityAngle
-					# uncomment below for smooth rotation
+					# uncomment the line below and comment the line above for smooth rotation
 					#global_rotation = player.angle-player.gravityAngle
 					if sign(player.movement.x) != 0:
 						scale = Vector2(sign(player.movement.x),1)
 				else:
 					global_rotation = deg_to_rad(snapped(rad_to_deg(player.movement.angle()),45))-player.gravityAngle
-					# uncomment below for smooth rotation
+					# uncomment the line below and comment the line above for smooth rotation
 					#global_rotation = player.movement.angle()-player.gravityAngle
 					scale = Vector2(1,1-(int(rad_to_deg(rotation) > 90 and rad_to_deg(rotation) < 270)*2))
 				

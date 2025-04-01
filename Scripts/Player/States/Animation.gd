@@ -18,7 +18,7 @@ func _process(delta):
 		# set movement
 		parent.movement = parent.global_position.direction_to(point)
 		parent.global_position = parent.global_position.move_toward(point,pipe.speed*60*delta)
-		parent.translate = true
+		parent.allowTranslate = true
 		
 		# if nearing the end of the current path pipe check if to end or go to next pipe path
 		var getPipeSpeed = pipe.speed
@@ -33,6 +33,6 @@ func _process(delta):
 				parent.set_state(parent.STATES.ROLL)
 				parent.movement = (point-(pipe.global_position+pipe.get_point_position(pipePoint-1))).normalized()*getPipeSpeed*60.0
 				parent.global_position = point
-				parent.translate = false
+				parent.allowTranslate = false
 				parent.sfx[3].play()
 				pipe = null

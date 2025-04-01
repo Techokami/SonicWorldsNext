@@ -1,20 +1,28 @@
 extends Area2D
 
-# collapsing platform code by sharb
+# collapsing platform code by sharb + caverns4
+# conversion and documentation by DimensionWarped
 #
-# Deprecated in Worlds Next 4.3 due to Godot 4.3 deprecating TileMap in favor of
-# individual TileMapLayer nodes.
+# Replaces CollapsePlatform.gd in GD 4.3 -- old consumers need to have their
+# tilemaps converted to tile map layers in order for this script to work.
 #
-# Please covert any consumers of this script to use CollapseLayer.gd instead
-# as this script will eventually be removed from the repository.
-#
-# See CollapseLayer.gd for more detailed instructions on the conversion process
+# To do this:
+# 1. Detach the original CollapsePlatform.gd script from your
+#    collapsing platform node.
+# 2. Extract the layers from the the tilemap using the screwdriver/spanner menu
+#    from the tilemap editor.
+# 3. Reparent the extracted layers so that they aren't children of the tilemap.
+# 4. Delete the deprecated tilemap object.
+# 5. Attach this script (CollapseLayer.gd) to your node from which you
+#    previously detached CollapsePlatform.gd in step 1
+# 6. Lastly, in the property insepctor for your main collapsing platform node,
+#    pick the tilemap layer you extracted to be the new assigned 'Tile'.
 
 # platform particle
 var PlatPart = preload("res://Entities/Misc/falling_block_plat.tscn")
 
 # tilemap source to pull from
-@export_node_path("TileMap")var tile
+@export_node_path("TileMapLayer") var tile
 # how fast the platform collapses
 @export var speed = 3.0
 # how long to wait before playing the sound
@@ -37,7 +45,7 @@ func _ready():
 	# set the tile reference to the tilemap
 	tile = get_node(tile)
 	# grab from first layer
-	for i in tile.get_used_cells(0):
+	for i in tile.get_used_cells():
 		# calculate by distance and give co-ordinant
 		getTiles.append([i.length()/speed,i])
 
@@ -69,8 +77,8 @@ func _physics_process(delta):
 					# set position
 					platPart.position += Vector2(getTiles[i][1]*tile.tile_set.tile_size)+tile.position
 					# references for thet ile
-					var tileData = tile.get_cell_tile_data(0,getTiles[i][1])
-					var tileSource = tile.get_cell_source_id(0,getTiles[i][1])
+					var tileData = tile.get_cell_tile_data(getTiles[i][1])
+					var tileSource = tile.get_cell_source_id(getTiles[i][1])
 					# grab any materials
 					platPart.material = tileData.material
 					# check if the tile's been flipped
@@ -83,11 +91,11 @@ func _physics_process(delta):
 					var tileSetSource = tile.tile_set.get_source(tileSource)
 					if tileSetSource is TileSetAtlasSource:
 						platPart.texture = tileSetSource.texture
-						platPart.region_rect.position = Vector2(tile.get_cell_atlas_coords(0,getTiles[i][1]))*Vector2(tileSetSource.texture_region_size)
+						platPart.region_rect.position = Vector2(tile.get_cell_atlas_coords(getTiles[i][1]))*Vector2(tileSetSource.texture_region_size)
 						platPart.region_rect.size = Vector2(tileSetSource.texture_region_size)
 					
 					# erase from tilemap
-					tile.set_cell(0,getTiles[i][1])
+					tile.set_cell(getTiles[i][1])
 					getTiles.remove_at(i)
 					# decrease i so we don't skip any tiles
 					i -= 1

@@ -47,7 +47,6 @@ func _ready():
 	lastWidth = width
 	lastHeight = height
 	lastDrawTop = drawTop
-	pass # Replace with function body.
 	
 	$WaterfallTop.set_texture(topTexture)
 	
@@ -74,7 +73,6 @@ func process_editor(_delta):
 		lastWidth = width
 		lastDrawTop = drawTop
 		lastHeight = height
-	pass
 	
 func advance_frame_top():
 	$WaterfallTop.set_region_rect(Rect2(0, curFrame * topTexture.get_height() / float(topFrames), topTexture.get_width() * width, topTexture.get_height() / float(topFrames)))

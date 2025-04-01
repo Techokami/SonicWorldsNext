@@ -72,7 +72,7 @@ func _process(delta):
 					if is_instance_valid(player.superAnimator):
 						player.superAnimator.play("PowerDown")
 				# reset super sonic texture
-				if player.character == player.CHARACTERS.SONIC:
+				if player.character == Global.CHARACTERS.SONIC:
 					player.sprite.texture = player.normalSprite
 				# reset physics
 				player.switch_physics()

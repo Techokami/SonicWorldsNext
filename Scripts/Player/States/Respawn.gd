@@ -19,7 +19,7 @@ func _process(_delta):
 		parent.animator.play("fly")
 
 func _physics_process(delta):
-	parent.translate = true
+	parent.allowTranslate = true
 	# slowly move the target point towards the player based on distance
 	targetPoint = targetPoint.lerp(parent.partner.global_position,(targetPoint.distance_to(parent.partner.global_position)/32)*delta)
 	
@@ -42,8 +42,14 @@ func _physics_process(delta):
 		parent.collision_layer = layerMemory
 		
 		parent.movement.y = 0
-		# move to player y position
+		# move to Sonic's Y position...
 		parent.global_position.y = move_toward(parent.global_position.y,targetPoint.y,delta*60)
+		if (Global.waterLevel != null):
+			#Block Tails from going underwater in this state
+			parent.global_position.y = min(parent.global_position.y,Global.waterLevel-16)
+		else:
+			#Block Tails from going out of bounds, in case Sonic is dead.
+			parent.global_position.y = min(parent.global_position.y,parent.limitBottom-16)
 		
 		var distance = targetPoint.x-parent.global_position.x
 		# if far then fly by distance
@@ -67,7 +73,7 @@ func _physics_process(delta):
 			parent.STATES.NORMAL, parent.STATES.AIR, parent.STATES.JUMP:
 				parent.groundSpeed = 0
 				parent.animator.play("walk")
-				parent.translate = false
+				parent.allowTranslate = false
 				parent.collision_layer = parent.defaultLayer
 				parent.collision_mask = parent.defaultMask
 				parent.set_state(parent.STATES.AIR)

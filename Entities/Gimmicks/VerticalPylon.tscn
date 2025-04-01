@@ -51,7 +51,7 @@ _data = {
 "main": SubResource("1")
 }
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_gg316"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cfk3b"]
 size = Vector2(12, 96)
 
 [node name="FBZ_Pylon_Controller" type="Node2D"]
@@ -80,7 +80,7 @@ vframes = 2
 frame = 2
 
 [node name="FBZ_Pylon_Animator" type="AnimationPlayer" parent="."]
-method_call_mode = 1
+callback_mode_method = 1
 libraries = {
 "": SubResource("AnimationLibrary_lyh0a")
 }
@@ -91,7 +91,7 @@ collision_mask = 4096
 
 [node name="FBZ_Pylon_Collision" type="CollisionShape2D" parent="FBZ_Pylon_Area"]
 position = Vector2(0, -65)
-shape = SubResource("RectangleShape2D_gg316")
+shape = SubResource("RectangleShape2D_cfk3b")
 
 [connection signal="body_entered" from="FBZ_Pylon_Area" to="." method="_on_FBZ_Pylon_Area_body_entered"]
 [connection signal="body_exited" from="FBZ_Pylon_Area" to="." method="_on_FBZ_Pylon_Area_body_exited"]

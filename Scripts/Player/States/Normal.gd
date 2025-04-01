@@ -44,16 +44,18 @@ func _process(delta):
 			parent.animator.play("spinDash")
 			parent.set_state(parent.STATES.SPINDASH)
 		# peelout (Sonic only)
-		elif (parent.movement.x == 0 and parent.inputs[parent.INPUTS.YINPUT] < 0 and parent.character == parent.CHARACTERS.SONIC):
+		elif (parent.movement.x == 0 and parent.inputs[parent.INPUTS.YINPUT] < 0 and parent.character == Global.CHARACTERS.SONIC):
 			parent.sfx[2].play()
 			parent.sfx[2].pitch_scale = 1
 			parent.spindashPower = 0
 			parent.set_state(parent.STATES.PEELOUT)
 		else:
-			# reset animations
-			parent.animator.play("RESET")
-			parent.action_jump()
-			parent.set_state(parent.STATES.JUMP)
+			# Player cannot jump unless a ceiling check fails.
+			if !parent.check_for_ceiling():
+				# reset animations
+				parent.animator.play("RESET")
+				parent.action_jump()
+				parent.set_state(parent.STATES.JUMP)
 		return null
 	
 	if parent.ground and !skid:
@@ -103,32 +105,32 @@ func _process(delta):
 						
 						# loop through idle animations to see if there is an idle match
 						var matchIdleCheck = false
-						for i in playerIdles[parent.character]:
+						for i in playerIdles[parent.character-1]:
 							if parent.lastActiveAnimation == i:
 								matchIdleCheck = true
 						
 						if parent.lastActiveAnimation != "idle" and !matchIdleCheck or !parent.animator.is_playing():
 							parent.animator.play("idle")
 							# queue player specific idle animations
-							for i in playerIdles[parent.character]:
+							for i in playerIdles[parent.character-1]:
 								parent.animator.queue(i)
 				
 				else:
 					match (parent.character):
 						
-						parent.CHARACTERS.TAILS:
+						Global.CHARACTERS.TAILS:
 							if getR: # keep flipping until right sensor (relevent) isn't colliding
 								parent.direction = -parent.direction
 							parent.animator.play("edge1")
 						
-						parent.CHARACTERS.KNUCKLES:
+						Global.CHARACTERS.KNUCKLES:
 							if getR: # keep flipping until right sensor (relevent) isn't colliding
 								parent.direction = -parent.direction
 							if parent.animator.current_animation != "edge1" and parent.animator.current_animation != "edge2":
 								parent.animator.play("edge1")
 								parent.animator.queue("edge2")
 								
-						parent.CHARACTERS.AMY:
+						Global.CHARACTERS.AMY:
 							if getR: # keep flipping until right sensor (relevent) isn't colliding
 								parent.direction = -parent.direction
 							#far edge
@@ -218,16 +220,21 @@ func _physics_process(delta):
 	if abs(lookTimer) >= 1:
 		parent.camLookAmount += delta*4*sign(lookTimer)
 	
-	# Apply slope factor
-	# ignore this if not moving for sonic 1 style slopes
-	parent.movement.x += (parent.slp*sin(parent.angle-parent.gravityAngle))/GlobalFunctions.div_by_delta(delta)
-	
+	# Get the player's relative angle.
 	var calcAngle = rad_to_deg(parent.angle-parent.gravityAngle)
-	if (calcAngle < 0):
-		calcAngle += 360
+	calcAngle = wrapf(calcAngle,0,360)
+	
+	# Apply slope factor, Sonic 1/2/CD/Mania style
+	# If you want symmetry over Accuracy, the "46" in the line below should actually be "45"
+	if (calcAngle >= 46 and calcAngle <= 315) or parent.movement.x !=0:
+		parent.movement.x += (parent.slp*sin(parent.angle-parent.gravityAngle))/GlobalFunctions.div_by_delta(delta)
+	
+	# Apply slope factor, Sonic 3 style
+		# parent.movement.x += (parent.slp*sin(parent.angle-parent.gravityAngle))/GlobalFunctions.div_by_delta(delta)
 	
 	# if speed below fall speed, slide down slopes and maybe also drop
-	if (abs(parent.movement.x) < parent.fall and calcAngle >= 45 and calcAngle <= 315):
+	# If you want symmetry over Accuracy, the "46" in the line below should actually be "45"
+	if (abs(parent.movement.x) < parent.fall and calcAngle >= 46 and calcAngle <= 315):
 		if (round(calcAngle) >= 90 and round(calcAngle) <= 270):
 			parent.disconect_from_floor()
 		parent.horizontalLockTimer = 30.0/60.0

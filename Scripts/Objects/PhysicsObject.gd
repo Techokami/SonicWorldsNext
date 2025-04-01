@@ -35,7 +35,7 @@ var gravityAngle = 0
 var collissionLayer = 0
 
 # translate, (ignores physics)
-var translate = false
+var allowTranslate = false
 
 # Vertical sensor reference
 var getVert = null
@@ -196,7 +196,7 @@ func _physics_process(delta):
 	#movement += Vector2(-int(Input.is_action_pressed("gm_left"))+int(Input.is_action_pressed("gm_right")),-int(Input.is_action_pressed("gm_up"))+int(Input.is_action_pressed("gm_down")))*_delta*100
 	var moveRemaining = movement # copy of the movement variable to cut down on until it hits 0
 	var checkOverride = true
-	while (!moveRemaining.is_equal_approx(Vector2.ZERO) or checkOverride) and !translate:
+	while (!moveRemaining.is_equal_approx(Vector2.ZERO) or checkOverride) and !allowTranslate:
 		checkOverride = false
 		var moveCalc = moveRemaining.normalized()*min(moveStepLength,moveRemaining.length())
 		
@@ -297,18 +297,18 @@ func _physics_process(delta):
 		if groundMemory != ground:
 			# if on ground emit "connectFloor"
 			if ground:
-				emit_signal("connectFloor")
+				connectFloor.emit()
 			# if no on ground emit "disconectFloor"
 			else:
-				emit_signal("disconectFloor")
+				disconectFloor.emit()
 				disconect_from_floor(true)
 		if roofMemory != roof:
 			# if on roof emit "connectCeiling"
 			if roof:
-				emit_signal("connectCeiling")
+				connectCeiling.emit()
 			# if no on roof emit "disconectCeiling"
 			else:
-				emit_signal("disconectCeiling")
+				disconectCeiling.emit()
 		
 		
 		update_sensors()
@@ -316,12 +316,12 @@ func _physics_process(delta):
 		moveRemaining -= moveRemaining.normalized()*min(moveStepLength,moveRemaining.length())
 		force_update_transform()
 		
-	if translate:
+	if allowTranslate:
 		position += (movement*delta)
 	
 	#Object checks
 	
-	if !translate:
+	if !allowTranslate:
 		# temporarily reset mask and layer
 		var layerMemory = collision_layer
 		var maskMemory = collision_mask
@@ -363,7 +363,7 @@ func _physics_process(delta):
 		# reload memory for layers
 		collision_mask = maskMemory
 		collision_layer = layerMemory
-	emit_signal("positionChanged")
+	positionChanged.emit()
 	
 
 func snap_angle(angleSnap = 0.0):
@@ -427,3 +427,26 @@ func push_vertical():
 			position += (rayHitVec-(normHitVec*(($HitBox.shape.size.y/2)+0.25))-Vector2(0,yGroundDiff).rotated(rotation))
 	# reset movement
 	movement = movementMemory
+
+# Return true if there is a ceiling above the object based on its y size.
+func check_for_ceiling():
+	var detection = false
+	# Create and set up a temporary Raycast
+	var ceilChecker = RayCast2D.new()
+	$HitBox.add_child(ceilChecker)
+	ceilChecker.collision_mask = 2184
+	
+	if collissionLayer == 0:
+		ceilChecker.set_collision_mask_value(12,false)
+	else:
+		ceilChecker.set_collision_mask_value(8,false)
+	
+	ceilChecker.target_position.y = 0-verticalSensorLeft.target_position.y
+	ceilChecker.force_raycast_update()
+	# Check is there's a collision
+	if ceilChecker.is_colliding() or ceilChecker.is_colliding():
+		detection = true
+	# Flag the new Rcast for clearance.
+	ceilChecker.queue_free()
+	# Return the detection value
+	return detection

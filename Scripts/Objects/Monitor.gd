@@ -35,6 +35,7 @@ func destroy():
 	
 	# deactivate
 	isActive = false
+	physics = false
 	
 	# set item to have a high Z index so it overlays a lot
 	$Item.z_index += 1000
@@ -50,14 +51,14 @@ func destroy():
 			$SFX/Ring.play()
 		1: # Speed Shoes
 			if !playerTouch.get("isSuper"):
-				playerTouch.shoeTime = 30
+				playerTouch.shoeTime = 20
 				playerTouch.switch_physics()
 				Global.currentTheme = 1
 				Global.effectTheme.stream = Global.themes[Global.currentTheme]
 				Global.effectTheme.play()
 		2: # Invincibility
 			if !playerTouch.get("isSuper"):
-				playerTouch.supTime = 30
+				playerTouch.supTime = 20
 				playerTouch.shieldSprite.visible = false # turn off barrier for stars
 				playerTouch.get_node("InvincibilityBarrier").visible = true
 				Global.currentTheme = 0
@@ -111,7 +112,7 @@ func physics_collision(body, hitVector):
 				body.movement.x = 0
 		# check if player is not an ai or spindashing
 		# if they are then destroy
-		elif body.playerControl == 1 and body.currentState != body.STATES.SPINDASH:
+		if body.playerControl == 1 and body.currentState != body.STATES.SPINDASH:
 			body.movement.y = -abs(body.movement.y)
 			
 			if body.currentState == body.STATES.ROLL:

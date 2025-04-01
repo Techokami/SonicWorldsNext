@@ -94,6 +94,7 @@ var nodeMemory = []
 
 # Game settings
 var zoomSize = 1
+var smoothRotation = 0
 
 # Hazard type references
 enum HAZARDS {NORMAL, FIRE, ELEC, WATER}
@@ -178,7 +179,7 @@ func stage_clear():
 
 # Godot doesn't like not having emit signal only done in other nodes so we're using a function to call it
 func emit_stage_start():
-	emit_signal("stage_started")
+	stage_started.emit()
 
 # save data settings
 func save_settings():
@@ -188,6 +189,7 @@ func save_settings():
 	file.set_value("Volume","Music",AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Music")))
 	
 	file.set_value("Resolution","Zoom",zoomSize)
+	file.set_value("Gameplay","SmoothRotation",smoothRotation)
 	file.set_value("Resolution","FullScreen",((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN)))
 	# save config and close
 	file.save("user://Settings.cfg")
@@ -201,13 +203,29 @@ func load_settings():
 	
 	if file.has_section_key("Volume","SFX"):
 		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"),file.get_value("Volume","SFX"))
+		# Set bus mute state
+		AudioServer.set_bus_mute(
+		AudioServer.get_bus_index("SFX"), # Auidio bus to mute
+		AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX")) <= -40.0 # True if < -40.0
+		)
 	
 	if file.has_section_key("Volume","Music"):
 		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"),file.get_value("Volume","Music"))
+		# Set bus mute state
+		AudioServer.set_bus_mute(
+		AudioServer.get_bus_index("Music"), # Auidio bus to mute
+		AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Music")) <= -40.0 # True if < -40.0
+		)
 	
 	if file.has_section_key("Resolution","Zoom"):
 		zoomSize = file.get_value("Resolution","Zoom")
-		get_window().set_size(get_viewport().get_visible_rect().size*zoomSize)
+		var window = get_window()
+		var newSize = Vector2i((get_viewport().get_visible_rect().size*zoomSize).round())
+		window.set_position(window.get_position()+(window.size-newSize)/2)
+		window.set_size(newSize)
+	
+	if file.has_section_key("Gameplay","SmoothRotation"):
+		smoothRotation = file.get_value("Gameplay","SmoothRotation")
 	
 	if file.has_section_key("Resolution","FullScreen"):
 		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (file.get_value("Resolution","FullScreen")) else Window.MODE_WINDOWED

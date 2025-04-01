@@ -138,6 +138,7 @@ func physics_process_connected(_delta, player, index):
 	# set the animation and convert out of any unusual states into AIR.
 	player.animator.play("hang")
 	player.set_state(player.STATES.AIR)
+	player.airControl = true
 	
 	# Perform just the functional parts  of the connect script that move the
 	# player into position.
@@ -171,8 +172,6 @@ func physics_process_disconnected(_delta, player, index):
 		parent.global_position.y -= 6
 		
 	connect_grab(player, index)
-
-	pass
 
 # This function is responsible for connecting grabs in the first place *and* for
 # disconnecting grabs if the player contacts the ground while grabbing.
@@ -254,7 +253,6 @@ func disconnect_grab(player, index, deliberate, jumpUpwards=false):
 	
 	# lower playerContacts value one... I guess in case anything else accesses this in the same process pass.
 	_playerContacts -= 1
-	pass
 	
 func checkPlayerDisconnectByAction(player):
 	if playerCarryAI:

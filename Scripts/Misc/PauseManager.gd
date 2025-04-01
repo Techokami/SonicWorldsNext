@@ -18,6 +18,7 @@ var menusText = [
 "music 100",
 "scale x1",
 "full screen off",
+"smooth rotation off",
 "controls",
 "back",],
 # menu 2 (restart menu confirm)
@@ -40,62 +41,32 @@ var clampSounds = [-40.0,6.0]
 @onready var soundStep = (abs(clampSounds[0])+abs(clampSounds[1]))/100.0
 # button delay
 var soundStepDelay = 0
-var subSoundStep = 0.2
+var subSoundStep = 1.0
 # screen size limit
 var zoomClamp = [1,6]
 
 var menu = 0 # current menu option
 enum MENUS {MAIN, OPTIONS, RESTART, QUIT}
 var option = 0
+# Used to avoid repeated detection of inputs with analog stick
+var lastInput = Vector2.ZERO
 
 func _ready():
 	set_menu(menu)
+
+func _process(_delta):
+	# check if paused and visible, otherwise cancel it out
+	if !get_tree().paused or !visible:
+		return null
+	do_lateral_input()
 
 func _input(event):
 	# check if paused and visible, otherwise cancel it out
 	if !get_tree().paused or !visible:
 		return null
-	
-	if event.is_action_released("gm_left") or event.is_action_released("gm_right"):
-		subSoundStep = 0.2
-		soundStepDelay = 0
-	
-	# change menu options
-	if event.is_action_pressed("gm_down"):
-		choose_option(option+1)
-	elif event.is_action_pressed("gm_up"):
-		choose_option(option-1)
-	
-	# Volume controls
-	elif (event.is_action("gm_left") or event.is_action("gm_right")) and menu == MENUS.OPTIONS:
-		var inputDir = -1+int(event.is_action("gm_right"))*2
-		
-		# set audio busses
-		var getBus = "SFX"
-		if option > 0:
-			getBus = "Music"
-		var soundExample = [$MenuVert,$MenuMusicVolume]
-		
-		match(option):
-			0, 1: # Volume
-				if soundStepDelay <= 0:
-					soundExample[option].play()
-					AudioServer.set_bus_volume_db(AudioServer.get_bus_index(getBus),clamp(AudioServer.get_bus_volume_db(AudioServer.get_bus_index(getBus))+inputDir*soundStep,clampSounds[0],clampSounds[1]))
-					AudioServer.set_bus_mute(AudioServer.get_bus_index(getBus),AudioServer.get_bus_volume_db(AudioServer.get_bus_index(getBus)) <= clampSounds[0])
-					soundStepDelay = subSoundStep
-					if subSoundStep > 0:
-						soundStepDelay -= 0.1
-				else:
-					soundStepDelay -= 0.1
-			2: # Scale
-				if event.is_action_pressed("gm_left") or event.is_action_pressed("gm_right"):
-					Global.zoomSize = clamp(Global.zoomSize+inputDir,zoomClamp[0],zoomClamp[1])
-					get_window().set_size(get_viewport().get_visible_rect().size*Global.zoomSize)
-		$PauseMenu/VBoxContainer.get_child(option+1).get_child(0).text = update_text(option+1)
-	
-	
+
 	# menu button activate
-	elif event.is_action_pressed("gm_pause") or event.is_action_pressed("gm_action"):
+	if event.is_action_pressed("gm_pause") or event.is_action_pressed("gm_action"):
 		match(menu): # menu handles
 			MENUS.MAIN: # main menu
 				match(option): # Options
@@ -113,14 +84,17 @@ func _input(event):
 					3: # full screen
 						get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (!((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN))) else Window.MODE_WINDOWED
 						$PauseMenu/VBoxContainer.get_child(option+1).get_child(0).text = update_text(option+1)
-					4: # control menu
+					4: # smooth rotation
+						Global.smoothRotation = (Global.smoothRotation + 1) % 2
+						$PauseMenu/VBoxContainer.get_child(option+1).get_child(0).text = update_text(option+1)
+					5: # control menu
 						Global.save_settings()
 						set_menu(0)
 						$"../ControllerMenu".visible = true
 						visible = false
 						Global.main.wasPaused = false
 						get_tree().paused = true
-					5: # back
+					6: # back
 						Global.save_settings()
 						set_menu(0)
 			MENUS.RESTART: # reset level
@@ -145,8 +119,52 @@ func _input(event):
 					1: # ok
 						await get_tree().process_frame
 						Global.main.reset_game()
-		
+
+func do_lateral_input():
+
+	var inputCue = Input.get_vector("gm_left","gm_right","gm_up","ui_down")
+	inputCue.x = round(inputCue.x)
+	inputCue.y = round(inputCue.y)
 	
+	if inputCue.x != 0 and subSoundStep == 0:
+		subSoundStep = 5.0
+		soundStepDelay = 0
+	
+	# change menu options
+	if inputCue.y != lastInput.y:
+		if inputCue.y > 0:
+			choose_option(option+1)
+		elif inputCue.y < 0:
+			choose_option(option-1)
+	
+	# Volume controls
+	elif inputCue.x != 0 and menu == MENUS.OPTIONS:
+		var inputDir = inputCue.x
+		
+		# set audio busses
+		var getBus = "SFX"
+		if option > 0:
+			getBus = "Music"
+		var soundExample = [$MenuVert,$MenuMusicVolume]
+		
+		match(option):
+			0, 1: # Volume
+				if soundStepDelay <= 0:
+					soundExample[option].play()
+					AudioServer.set_bus_volume_db(AudioServer.get_bus_index(getBus),clamp(AudioServer.get_bus_volume_db(AudioServer.get_bus_index(getBus))+inputDir*soundStep,clampSounds[0],clampSounds[1]))
+					AudioServer.set_bus_mute(AudioServer.get_bus_index(getBus),AudioServer.get_bus_volume_db(AudioServer.get_bus_index(getBus)) <= clampSounds[0])
+					soundStepDelay = subSoundStep
+				else:
+					soundStepDelay -= 0.1
+			2: # Scale
+				if inputCue.x != 0 and inputCue != lastInput:
+					Global.zoomSize = clamp(Global.zoomSize+inputDir,zoomClamp[0],zoomClamp[1])
+					var window = get_window()
+					var newSize = Vector2i((get_viewport().get_visible_rect().size*Global.zoomSize).round())
+					window.set_position(window.get_position()+(window.size-newSize)/2)
+					window.set_size(newSize)
+		$PauseMenu/VBoxContainer.get_child(option+1).get_child(0).text = update_text(option+1)
+	lastInput = inputCue
 
 func choose_option(optionSet = option+1, playSound = true):
 	# reset curren option colour to white
@@ -193,5 +211,7 @@ func update_text(textRow = 0):
 			return "scale x"+str(Global.zoomSize)
 		4: # Full screen
 			return "full screen "+onOff[int(((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN)))]
+		5: # Smooth Rotation
+			return "smooth rotation " + onOff[Global.smoothRotation]
 		_: # Default
 			return menusText[menu][textRow]

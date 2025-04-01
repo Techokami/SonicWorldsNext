@@ -4,6 +4,7 @@ const HITBOXESTAILS = {NORMAL = Vector2(9,15)*2, ROLL = Vector2(7,14)*2, CROUCH 
 const HITBOXESKNUCKLES = {NORMAL = Vector2(9,19)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,11)*2, GLIDE = Vector2(10,10)*2, HORIZONTAL = Vector2(22,9)*2}
 const HITBOXESAMY = {NORMAL = Vector2(9,15)*2, ROLL = Vector2(7,11)*2, CROUCH = Vector2(9,9.5)*2, GLIDE = Vector2(10,10)*2, HORIZONTAL = Vector2(22,9)*2}
 var currentHitbox = HITBOXESSONIC
+#Knuckles' hitboxes are the same as Sonic's.
 
 #Sonic's Speed constants
 var acc = 0.046875			#acceleration
@@ -50,6 +51,8 @@ var pushingWall = 0
 
 var enemyCounter = 0
 
+var character = Global.CHARACTERS.SONIC
+
 # physics list
 # order
 # 0 Acceleration
@@ -60,50 +63,28 @@ var enemyCounter = 0
 # 5 Rolling Friction 
 # 6 Rolling Deceleration
 # 7 Gravity
-# 8 Jump
-# 9 Jump release velocity
-
-enum CHARACTERS {SONIC, TAILS, KNUCKLES, AMY}
-var character = CHARACTERS.SONIC
-
-# 0 = Sonic, 1 = Tails, 2 = Knuckles, 3 = Shoes, 4 = Super Sonic
+# 8 Jump release velocity
 
 var physicsList = [
-# 0 Sonic
-[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125, 0.21875, 6.5*60, 4],
-# 1 Tails
-[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125, 0.21875, 6.5*60, 4],
-# 2 Knuckles
-[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125, 0.21875, 6*60, 4],
-# 3 Shoes (remove *0.5 for original rolling friction)
-[0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875*0.5, 0.125, 0.21875, 6.5*60, 4],
-# 4 Super Sonic
-[0.1875, 1, 0.046875, 10*60, 0.375, 0.0234375, 0.125, 0.21875, 8*60, 4],
-# 5 Super Tails
-[0.09375, 0.75, 0.046875, 8*60, 0.1875, 0.0234375, 0.125, 0.21875, 6.5*60, 4],
-# 6 Super Knuckles
-[0.09375, 0.75, 0.046875, 8*60, 0.1875, 0.0234375, 0.125, 0.21875, 6*60, 4],
-# 7 Shoes Knuckles (small jump) (remove *0.5 for original rolling friction)
-[0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875*0.5, 0.125, 0.21875, 6*60, 4],
+# 0 Deafult Character properties
+[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125, 0.21875, 4],
+# 1 Shoes (remove *0.5 for original rolling friction)
+[0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875*0.5, 0.125, 0.21875, 4],
+# 2 Super Sonic
+[0.1875, 1, 0.046875, 10*60, 0.375, 0.0234375, 0.125, 0.21875, 4],
+# 3 Other Super forms
+[0.09375, 0.75, 0.046875, 8*60, 0.1875, 0.0234375, 0.125, 0.21875, 4],
 ]
 
 var waterPhysicsList = [
-# 0 Sonic
+# 0 Deafult Character properties
 [0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6.0*60.0/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
-# 1 Tails
+# 1 Shoes
 [0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6*60/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
-# 2 Knuckles
-[0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6*60/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3*60, 2],
-# 3 Shoes
-[0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6*60/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
-# 4 Super Sonic
+# 2 Super Sonic
 [0.09375, 0.5, 0.046875, 5*60, 0.1875, 0.046875, 0.125, 0.0625, 3.5*60, 2],
-# 5 Super Tails
-[0.046875, 0.375, 0.046875, 4*60, 0.09375, 0.0234375, 0.125, 0.0625, 3.5*60, 2],
-# 6 Super Knuckles
+# 3 Super Knuckles
 [0.046875, 0.375, 0.046875, 4*60, 0.09375, 0.0234375, 0.125, 0.0625, 3*60, 2],
-# 7 Shoes Knuckles (small jump)
-[0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6*60/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3*60, 2],
 ]
 
 # ================
@@ -229,9 +210,14 @@ var memoryPosition = 0
 const INPUT_MEMORY_LENGTH = 20
 
 var Player = load("res://Entities/MainObjects/Player.tscn")
-var tailsAnimations = preload("res://Graphics/Players/PlayerAnimations/Tails.tscn")
-var knucklesAnimations = preload("res://Graphics/Players/PlayerAnimations/Knuckles.tscn")
-var amyAnimations = preload("res://Graphics/Players/PlayerAnimations/Amy.tscn")
+
+#An array of, well, Arrays, in order of Global.CHARACTERS, skipping 0.
+var playerskins = [
+	[preload("res://Graphics/Players/PlayerAnimations/Sonic.tscn"),HITBOXESSONIC],
+	[preload("res://Graphics/Players/PlayerAnimations/Tails.tscn"),HITBOXESTAILS],
+	[preload("res://Graphics/Players/PlayerAnimations/Knuckles.tscn"),HITBOXESKNUCKLES],
+	[preload("res://Graphics/Players/PlayerAnimations/Amy.tscn"),HITBOXESAMY],
+]
 
 # Get sfx list
 @onready var sfx = $SFX.get_children()
@@ -287,41 +273,38 @@ func _ready():
 			get_parent().call_deferred("add_child", (partner))
 			partner.global_position = global_position+Vector2(-24,0)
 			partner.partner = self
-			partner.character = Global.PlayerChar2-1
+			partner.character = Global.PlayerChar2
 			partner.inputActions = INPUTACTIONS_P2
 		
 		# set my character
 		character = Global.PlayerChar1
-		character -= 1
 		
 		# set super palettes
 		match (character):
-			CHARACTERS.SONIC:
+			Global.CHARACTERS.SONIC:
 				# shader texture sizes need to be to the power of 2
 				playerPal.set_shader_parameter("amount",4)
 				playerPal.set_shader_parameter("palRows",16)
 				playerPal.set_shader_parameter("row",0)
 				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperSonicPal.png"))
 		
-			CHARACTERS.TAILS:
+			Global.CHARACTERS.TAILS:
 				playerPal.set_shader_parameter("amount",8)
 				playerPal.set_shader_parameter("palRows",16)
 				playerPal.set_shader_parameter("row",0)
 				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperTails.png"))
 		
-			CHARACTERS.KNUCKLES:
+			Global.CHARACTERS.KNUCKLES:
 				playerPal.set_shader_parameter("amount",4)
 				playerPal.set_shader_parameter("palRows",16)
 				playerPal.set_shader_parameter("row",0)
 				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperKnuckles.png"))
 		
-			CHARACTERS.AMY:
+			Global.CHARACTERS.AMY:
 				playerPal.set_shader_parameter("amount",4)
 				playerPal.set_shader_parameter("palRows",8)
 				playerPal.set_shader_parameter("row",0)
 				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperAmy.png"))
-				
-			#CHARACTERS.AMY:
 				
 	
 	
@@ -338,44 +321,19 @@ func _ready():
 	
 	
 	# Character settings
-	match (character):
-		CHARACTERS.TAILS:
-			# Set sprites
-			currentHitbox = HITBOXESTAILS
-			get_node("Sonic").name = "OldSprite"
-			await get_tree().process_frame
-			var tails = tailsAnimations.instantiate()
-			add_child(tails)
-			sprite = tails.get_node("Sprite2D")
-			animator = tails.get_node("PlayerAnimation")
-			superAnimator = tails.get_node_or_null("SuperPalette")
-			spriteController = tails
-			get_node("OldSprite").queue_free()
-		CHARACTERS.KNUCKLES:
-			# Set sprites
-			currentHitbox = HITBOXESKNUCKLES
-			get_node("Sonic").name = "OldSprite"
-			var knuckles = knucklesAnimations.instantiate()
-			add_child(knuckles)
-			sprite = knuckles.get_node("Sprite2D")
-			animator = knuckles.get_node("PlayerAnimation")
-			superAnimator = knuckles.get_node_or_null("SuperPalette")
-			spriteController = knuckles
-			get_node("OldSprite").queue_free()
-		CHARACTERS.AMY:
-			# Set sprites
-			currentHitbox = HITBOXESAMY
-			get_node("Sonic").name = "OldSprite"
-			await get_tree().process_frame
-			var amy = amyAnimations.instantiate()
-			add_child(amy)
-			sprite = amy.get_node("Sprite2D")
-			animator = amy.get_node("PlayerAnimation")
-			superAnimator = amy.get_node_or_null("SuperPalette")
-			spriteController = amy
-			get_node("OldSprite").queue_free()
-			maxCharGroundHeight = 12 # adjust height distance to prevent clipping off floors (amy's smaller)
-			
+	var skin = playerskins[max(min(character-1,playerskins.size()),0)]
+	currentHitbox = skin[1]
+	spriteController.name = "OldSprite"
+	var newSprite = skin[0].instantiate()
+	add_child(newSprite)
+	sprite = newSprite.get_node("Sprite2D")
+	animator = newSprite.get_node("PlayerAnimation")
+	superAnimator = newSprite.get_node_or_null("SuperPalette")
+	spriteController.queue_free()
+	spriteController = newSprite
+	
+	if character == Global.CHARACTERS.AMY:
+		maxCharGroundHeight = 12 # adjust Amy's height distance to prevent clipping off floors
 	
 	# run switch physics to ensure character specific physics
 	switch_physics()
@@ -420,7 +378,6 @@ func calculate_input(event, action = "gm_action"):
 
 
 func _process(delta):
-	
 	# Player 1 input settings and partner AI
 	if playerControl == 1:
 		# Input memory - write the player's input to the inputMemory queue at the current queue position
@@ -441,11 +398,20 @@ func _process(delta):
 						# Array into the partner's input for the current frame
 						partner.inputs[i] = inputMemory[memoryPosition][i]
 				
+				#TODO: This current implimentation is better than what we had before,
+				#but it's still a little clunky. Will clean up this clode block later. - Ikey Ilex
+				
 				# x distance difference check, try to go to the partner
 				if (partner.inputs[INPUTS.XINPUT] == 0 and partner.inputs[INPUTS.YINPUT] == 0
 					or global_position.distance_to(partner.global_position) > 48 and round(movement.x/300) == 0
 					) and abs(global_position.x-partner.global_position.x) >= 32:
 					partner.inputs[INPUTS.XINPUT] = sign(global_position.x - partner.global_position.x)
+				
+				#If more than 64 pixels away on X, override AI control to come back.
+				if abs(global_position.x-partner.global_position.x) <= 64:
+					var testPos = round(global_position.x + (0-direction))
+					if sign((partner.global_position.x - testPos)*direction) > 0:
+						partner.inputs[INPUTS.XINPUT] = sign(0-direction)
 				
 				# Jump if pushing a wall, slower then half speed, on a flat surface and is either normal or jumping
 				if (partner.currentState == STATES.NORMAL or partner.currentState == STATES.JUMP) and abs(partner.movement.x) < top/2.0 and snap_angle(partner.angle) == 0 or (partner.pushingWall != 0 and pushingWall == 0):
@@ -497,13 +463,14 @@ func _process(delta):
 	
 	# set the sprite to match the sprite rotation variable if it's in the rotatable Sprites list
 	if (rotatableSprites.has(animator.current_animation)):
-		# check if player rotation is greater then 45 degrees or current angle doesn't match the gravity's angle or not on the floor
-		if abs(spriteRotation-90) >= 32 or rotation != gravityAngle or !ground:
-			sprite.rotation = deg_to_rad(snapped(spriteRotation,45)-90)-rotation-gravityAngle
+		if (Global.smoothRotation):
+			sprite.rotation = deg_to_rad(spriteRotation-90)-rotation-gravityAngle
 		else:
-			sprite.rotation = -rotation-gravityAngle
-		# uncomment this next line out for smooth rotation (you should remove the above line too)
-		#sprite.rotation = deg_to_rad(spriteRotation-90)-rotation-gravityAngle
+			# check if player rotation is greater then 45 degrees or current angle doesn't match the gravity's angle or not on the floor
+			if abs(spriteRotation-90) >= 32 or rotation != gravityAngle or !ground:
+				sprite.rotation = deg_to_rad(snapped(spriteRotation,45)-90)-rotation-gravityAngle
+			else:
+				sprite.rotation = -rotation-gravityAngle
 	else:
 		sprite.rotation = -rotation+gravityAngle
 
@@ -534,7 +501,7 @@ func _process(delta):
 				# Deactivate super
 				supTime = 0
 				rings = round(rings)
-				if character == CHARACTERS.SONIC:
+				if character == Global.CHARACTERS.SONIC:
 					sprite.texture = normalSprite
 				
 		if (supTime <= 0):
@@ -565,7 +532,7 @@ func _process(delta):
 		if (invTime <= 0):
 			invTime = 0
 			visible = true
-	if (ringDisTime > 0):
+	if (ringDisTime > 0) and currentState != STATES.HIT:
 		ringDisTime -= delta
 
 	# Rings 1up
@@ -609,7 +576,7 @@ func _process(delta):
 		
 	# Time over
 	if Global.levelTime >= Global.maxTime:
-		kill()
+		kill(true)
 		
 	
 	# Water timer
@@ -679,9 +646,9 @@ func _physics_process(delta):
 	# collide with solids if not rolling layer
 	set_collision_mask_value(16,!attacking)
 	# collide with solids if not knuckles layer
-	set_collision_mask_value(19,!character == CHARACTERS.KNUCKLES)
+	set_collision_mask_value(19,!character == Global.CHARACTERS.KNUCKLES)
 	# collide with solids if not rolling or not knuckles layer
-	set_collision_mask_value(21,(character != CHARACTERS.KNUCKLES and !attacking))
+	set_collision_mask_value(21,(character != Global.CHARACTERS.KNUCKLES and !attacking))
 	# damage mask bit
 	set_collision_layer_value(20,attacking)
 	# water surface running
@@ -702,7 +669,7 @@ func _physics_process(delta):
 			movement.x = 0
 		# disable pushing wall
 		if inputs[INPUTS.XINPUT] != sign(pushingWall):
-			pushingWall == 0
+			pushingWall = 0
 		
 	elif pushingWall != 0:
 		# count down pushingwall
@@ -715,6 +682,7 @@ func _physics_process(delta):
 		
 		# Lerp camera scroll based on if on floor
 		var playerOffset = ((abs(global_position.y-camera.get_target_position().y)*2)/camDist.y)
+		var scrollSpeed = 4.0*60.0*delta
 		
 		cameraDragLerp = max(int(!ground),min(cameraDragLerp,playerOffset)-6*delta)
 		
@@ -725,8 +693,8 @@ func _physics_process(delta):
 		
 		
 		if camLookAmount != 0:
-			var scrollSpeed = sign(camLookAmount)*delta*2
-			if sign(camLookAmount - scrollSpeed) == sign(camLookAmount):
+			var tmpScrollSpeed = sign(camLookAmount)*delta*2
+			if sign(camLookAmount - tmpScrollSpeed) == sign(camLookAmount):
 				camLookAmount -= sign(camLookAmount)*delta*2
 			else:
 				camLookAmount = 0
@@ -741,7 +709,6 @@ func _physics_process(delta):
 		
 		var viewSize = get_viewport_rect().size
 		var viewPos = camera.get_screen_center_position()
-		var scrollSpeed = 4.0*60.0*delta
 		
 		# Left
 		# snap the limit to the edge of the camera if snap out of range
@@ -814,10 +781,10 @@ func _physics_process(delta):
 		# Enter water
 		if global_position.y > Global.waterLevel and !water:
 			water = true
-			switch_physics(true)
+			switch_physics()
 			movement.x *= 0.5
 			movement.y *= 0.25
-			if currentState != STATES.RESPAWN:
+			if currentState != STATES.RESPAWN and movement.y != 0:
 				sfx[17].play()
 				var splash = Particle.instantiate()
 				splash.behaviour = splash.TYPE.FOLLOW_WATER_SURFACE
@@ -830,7 +797,7 @@ func _physics_process(delta):
 		# Exit water
 		if global_position.y < Global.waterLevel and water:
 			water = false
-			switch_physics(false)
+			switch_physics()
 			movement.y *= 2
 			sfx[17].play()
 			var splash = Particle.instantiate()
@@ -853,13 +820,13 @@ func _physics_process(delta):
 		# note that the bottom crush sensor actually goes *below* the feet so that it can contact the floor
 		crushSensorDown.position.y = ($HitBox.shape.size.y/2 +1)
 		
-		# crusher deaths NOTE: the translate and visibility is used for stuff like the sky sanctuary teleporters, visibility check is for stuff like the carnival night barrels
+		# crusher deaths NOTE: the allowTranslate and visibility is used for stuff like the sky sanctuary teleporters, visibility check is for stuff like the carnival night barrels
 		if (crushSensorLeft.get_overlapping_areas() + crushSensorLeft.get_overlapping_bodies()).size() > 0 and \
-			(crushSensorRight.get_overlapping_areas() + crushSensorRight.get_overlapping_bodies()).size() > 0 and (!translate or visible):
+			(crushSensorRight.get_overlapping_areas() + crushSensorRight.get_overlapping_bodies()).size() > 0 and (!allowTranslate or visible):
 			kill()
 
 		if (crushSensorUp.get_overlapping_areas() + crushSensorUp.get_overlapping_bodies()).size() > 0 and \
-			(crushSensorDown.get_overlapping_areas() + crushSensorDown.get_overlapping_bodies()).size() > 0 and (!translate or visible):
+			(crushSensorDown.get_overlapping_areas() + crushSensorDown.get_overlapping_bodies()).size() > 0 and (!allowTranslate or visible):
 			kill()
 
 # Input buttons
@@ -897,14 +864,12 @@ func set_inputs():
 
 # Controller scan functions -- so you don't have to dig into the inputs to check controller state
 func any_action_pressed():
-	if inputs[INPUTS.ACTION] == 1:
-		return true
-	if inputs[INPUTS.ACTION2] == 1:
-		return true
-	if inputs[INPUTS.ACTION3] == 1:
+	if (inputs[INPUTS.ACTION] == 1
+	or inputs[INPUTS.ACTION2] == 1 or
+	inputs[INPUTS.ACTION3] == 1):
 		return true
 	return false
-		
+
 func any_action_held():
 	if inputs[INPUTS.ACTION] == 2:
 		return true
@@ -913,7 +878,7 @@ func any_action_held():
 	if inputs[INPUTS.ACTION3] == 2:
 		return true
 	return false
-		
+
 func any_action_held_or_pressed():
 	if inputs[INPUTS.ACTION] > 0:
 		return true
@@ -945,8 +910,7 @@ func is_right_held():
 func get_state():
 	return currentState
 
-func set_state(newState, forceMask = Vector2.ZERO):
-	
+func set_state(newState, forceMask = Vector2.ZERO):	
 	defaultHitBoxPos = hitBoxOffset.normal
 	$HitBox.position = defaultHitBoxPos
 	# reset the center offset
@@ -1035,7 +999,7 @@ func set_shield(setShieldID):
 func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 	if damageType != 0 and shield == damageType+1:
 		return false
-	if (currentState != STATES.HIT and invTime <= 0 and supTime <= 0 and (shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled or character != CHARACTERS.SONIC)):
+	if (currentState != STATES.HIT and invTime <= 0 and supTime <= 0 and (shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled or character != Global.CHARACTERS.SONIC)):
 		movement.x = sign(global_position.x-damagePoint.x)*2*60
 		movement.y = -4*60
 		if (movement.x == 0):
@@ -1046,11 +1010,11 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 
 		disconect_from_floor()
 		set_state(STATES.HIT)
-		invTime = 120
+		invTime = 120 # Ivulnerable for 2 seconds. Starts counting *after* landing.
 		# Ring loss
 		if (shield == SHIELDS.NONE and rings > 0 and playerControl == 1):
 			sfx[9].play()
-			ringDisTime = 64.0/60.0 # ignore rings for 64 frames
+			ringDisTime = 30.0/60.0 # ignore rings for 30 frames after landing
 			var ringCount = 0
 			var ringAngle = 101.25
 			var ringAlt = false
@@ -1075,7 +1039,7 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 				get_parent().add_child(ring)
 			rings = 0
 		elif shield == SHIELDS.NONE and playerControl == 1:
-			kill()
+			kill(false)
 		else:
 			sfx[soundID].play()
 		# Disable Shield
@@ -1091,16 +1055,18 @@ func get_ring():
 		ringChannel = int(!ringChannel)
 		
 	elif partner != null:
-		partner.get_ring()
+		if partner.playerControl == 1: # error prevention
+			partner.get_ring()
 	
-func kill():
-	if !(get_tree().current_scene is MainGameScene):
+func kill(always = true):
+	if !(get_tree().current_scene is MainGameScene) and always == false:
+		sfx[6].play()
 		return false
 	if currentState != STATES.DIE:
 		disconect_from_floor()
 		supTime = 0
 		shoeTime = 0
-		translate = true
+		allowTranslate = true
 		# turn off super palette and physics (if super)
 		if is_instance_valid(superAnimator) and isSuper:
 			superAnimator.play("PowerDown")
@@ -1109,12 +1075,19 @@ func kill():
 		if playerControl == 1 and Global.effectTheme.is_playing():
 			Global.music.play()
 			Global.effectTheme.stop()
+			
+		# If Player 1 dies and a partner exists, initiate respawn flying from current position.
+		if playerControl == 1 and partner:
+			var savedPos = partner.global_position
+			partner.respawn()
+			partner.global_position = savedPos
+			
 		collision_layer = 0
 		collision_mask = 0
 		z_index = 100
 		if airTimer > 0:
 			water = false
-			switch_physics(false)
+			switch_physics()
 			movement = Vector2(0,-7*60)
 			animator.play("die")
 			sfx[6].play()
@@ -1132,8 +1105,8 @@ func kill():
 
 func respawn():
 	if partner != null:
-		# cancel function if partner is dead
-		if partner.currentState == STATES.DIE:
+		# cancel function if partner is dead or ai controlled
+		if partner.currentState == STATES.DIE || partner.playerControl != 1:
 			return false
 		
 		airTimer = 1
@@ -1185,7 +1158,7 @@ func land_floor():
 
 
 # clean animation
-func _on_PlayerAnimation_animation_started(anim_name):
+func _on_PlayerAnimation_animation_started(_anim_name):
 	if (sprite != null):
 		sprite.flip_v = false
 		sprite.offset = defaultSpriteOffset
@@ -1201,51 +1174,52 @@ func _on_PlayerAnimation_animation_started(anim_name):
 
 # return the physics id variable, see physicsList array for reference
 func determine_physics():
-	# get physics from character
+	# get physics from character (if a character has unique properties)
 	match (character):
-		CHARACTERS.SONIC:
+		Global.CHARACTERS.SONIC:
 			if isSuper:
-				return 4 # Super Sonic
-			elif shoeTime > 0:
-				return 3 # Shoes
-			return 0 # Sonic
-		CHARACTERS.TAILS:
-			if isSuper:
-				return 5 # Super Tails
-			elif shoeTime > 0:
-				return 3 # Shoes
-			return 1 # Tails
-		CHARACTERS.KNUCKLES:
-			if isSuper:
-				return 6 # Super Knuckles
-			elif shoeTime > 0:
-				return 7 # Shoes
-			return 2 # Knuckles
-		CHARACTERS.AMY: # I don't know what amy's physics are so in the meantime we just look at sonic
-			if isSuper:
-				return 4 # Super Sonic
-			elif shoeTime > 0:
-				return 3 # Shoes
-			return 0 # Sonic
-	
-	return -1
+				return 2 # Super Sonic
+	#Anyone who isn't a special case:
+	if isSuper:
+		return 3 # Super besides Sonic
+	elif shoeTime > 0:
+		return 1 # Shoes
+	return 0 #Default
 
-func switch_physics(isWater = water):
+# Return a jump height for the respective context.
+# There are normally only 5 jump height values; 3 above water, with two under.
+# Super Sonic and Knuckles are the onlycharacters with unique jump height, Super sonic above water only.
+func get_jump_property():
+	if !water:
+		match (character):
+			Global.CHARACTERS.SONIC:
+				if isSuper:
+					return 8*60 # Super Sonic Jump Height
+			Global.CHARACTERS.KNUCKLES:
+				return 6*60 # Knuckles Jump Height
+		return 6.5*60 #Default Jump Height
+	else:
+		match (character):
+			Global.CHARACTERS.KNUCKLES:
+				return 3*60 # Knuckles Jump Height underwater
+		return 3.5*60 # Everyone else's Jump Height underwater
+
+
+func switch_physics():
 	var physicsID = determine_physics()
 	var getList = physicsList[max(0,physicsID)]
-	if isWater:
+	if water:
 		getList = waterPhysicsList[max(0,physicsID)]
 	acc = getList[0]
 	dec = getList[1]
 	frc = getList[2]
 	top = getList[3]
-	air = getList[4]
+	air = getList[4] #This could also just be getList[0]*2
 	rollfrc = getList[5]
 	rolldec = getList[6]
 	grv = getList[7]
-	jmp = getList[8]
-	releaseJmp = getList[9]
-
+	releaseJmp = getList[8]
+	jmp = get_jump_property()
 
 
 func _on_SparkleTimer_timeout():
@@ -1270,7 +1244,7 @@ func cam_update(forceMove = false):
 	
 	# Extra drag margin for rolling
 	match(character):
-		CHARACTERS.TAILS:
+		Global.CHARACTERS.TAILS:
 			match($HitBox.shape.size):
 				currentHitbox.ROLL:
 					camAdjust = Vector2(0,-1)
@@ -1378,7 +1352,7 @@ func action_jump(animation = "roll", airJumpControl = true, playSound=true):
 		set_state(STATES.JUMP)
 
 func emit_enemy_bounce():
-	emit_signal("enemy_bounced")
+	enemy_bounced.emit()
 
 func action_water_run_handle():
 	var dash = $WaterSurface

@@ -105,7 +105,6 @@ var _realY = 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
 	loadEnergy = 0.25 * maxVel * maxVel
 
 func impart_force(velocityChange):
@@ -137,7 +136,7 @@ func attach_player(player):
 	player.sprite.flip_h = false
 
 	# Prevents player from clipping on walls while they are on the fringes of the gimmick
-	player.translate = true
+	player.allowTranslate = true
 
 func detach_player(player, index):
 	player.set_z_index(get_player_z_level(index))
@@ -150,7 +149,7 @@ func detach_player(player, index):
 	player.global_position.x = clamp(player.global_position.x, global_position.x - 22, global_position.x + 22)
 
 	if player.currentState != player.STATES.DIE:
-		player.translate = false
+		player.allowTranslate = false
 		
 func set_anim(player, lookUp, lookDown):
 	var curAnim = player.animator.get_assigned_animation()
@@ -244,24 +243,19 @@ func physics_process_trampoline_mode(delta, isUpHeld, isDownHeld):
 	if _realY > 0 and _yVel < 0 and isUpHeld:
 		_yVel = clamp(_yVel - (180.0 * delta), -maxVel, maxVel)
 		influenced = true
-		pass
 	elif _realY < 0 and _yVel > 0 and isDownHeld:
 		_yVel = clamp(_yVel * (1 + (influence * delta)), -maxVel, maxVel)
 		_yVel = clamp(_yVel + (180.0 * delta), -maxVel, maxVel)
 		influenced = true
-		pass
 
 	_yVel += accelerationFactor * delta
 	_realY += _yVel * delta
 
 	if !influenced:
 		_yVel = _yVel * (1 - (decay * delta))
-		pass
 
 	# We move the body rather than the node. The body has all the physical components of the gimmick,
 	body.position.y = floor(_realY)
-
-	pass
 
 func _physics_process(delta):
 	if trampolineMode:

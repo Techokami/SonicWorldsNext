@@ -26,7 +26,6 @@ var players = [] # Tracks the players that are active within the gimmick
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$Grab.stream = grabSound
-	pass # Replace with function body.
 
 # check for players and if the jump button is pressed, release them from the poll
 func _process(_delta):
@@ -110,11 +109,11 @@ func _on_VerticalBarArea_body_entered(body):
 			players.append(body)
 			$Grab.play()
 			# use offset vertical bar cling if the sprite is flipped
+			body.set_state(body.STATES.ANIMATION, body.currentHitbox.HORIZONTAL)
 			if body.sprite.flip_h:
 				body.animator.play("clingVerticalBarOffset")
 			else:
 				body.animator.play("clingVerticalBar")
-			body.set_state(body.STATES.ANIMATION, body.currentHitbox.HORIZONTAL)
 
 func _on_VerticalBarArea_body_exited(body):
 	remove_player(body)
@@ -124,5 +123,4 @@ func remove_player(player):
 		# reset player animation
 		player.animator.play("current")
 		# Clean out the player from all player-linked arrays.
-		var getIndex = players.find(player)
 		players.erase(player)

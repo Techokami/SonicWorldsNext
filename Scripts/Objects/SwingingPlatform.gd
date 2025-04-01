@@ -44,13 +44,14 @@ func _physics_process(_delta):
 		
 
 func _draw():
+	var temppos
 	if(!Engine.is_editor_hint()):  # Non-editor stuff
 		# Calcutlate direction
 		var direction = platform.position.normalized()
 		# Draw Each Chain
 		for i in chains:
 			# Calculate Position
-			var temppos = direction * ((i + 1) * chain_size)
+			temppos = direction * ((i + 1) * chain_size)
 			# Center chain
 			temppos -= Vector2(float(chain_img.get_width()) / 2,float(chain_img.get_height()) / 2)
 			# Draw chain
@@ -65,7 +66,7 @@ func _draw():
 	# Draw Each Chain
 	for i in chains:
 		# Calculate Position
-		var temppos = Vector2(editsin * ((i + 1) * chain_size),editcos * ((i + 1) * chain_size))
+		temppos = Vector2(editsin * ((i + 1) * chain_size),editcos * ((i + 1) * chain_size))
 		# Center chain
 		temppos -= Vector2(float(chain_img.get_width()) / 2,float(chain_img.get_height()) / 2)
 		# Draw chain
@@ -74,7 +75,7 @@ func _draw():
 	draw_arc(Vector2.ZERO,chains*chain_size + float(chain_size)/2,deg_to_rad(90+rotate_amount),deg_to_rad(90-rotate_amount),chain_size,Color(0.5,0,1,0.5),2)
 	#draw_circle(Vector2.ZERO,chains*chain_size + chain_size/2,Color(0.5,0,1,0.5))
 	# Draw moving platform
-	var temppos = Vector2(editsin * (chains * chain_size + (float(chain_size) / 2)),editcos * (chains * chain_size + (float(chain_size) / 2)))
+	temppos = Vector2(editsin * (chains * chain_size + (float(chain_size) / 2)),editcos * (chains * chain_size + (float(chain_size) / 2)))
 	temppos -= Vector2(float(plat_img.get_width()) / 2,float(plat_img.get_height()) / 2)
 	draw_texture(plat_img,temppos,Color(1,1,1,1))
 	# Draw the possible bottom position
