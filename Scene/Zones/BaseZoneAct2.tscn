@@ -1,5 +1,3 @@
-[gd_scene load_steps=31 format=4 uid="uid://bjavywoj00j1j"]
-
 [ext_resource type="Script" path="res://Scripts/Level/Level.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://qs5dmtxxf1w1" path="res://Scene/Presentation/Title.tscn" id="2_l4fq6"]
 [ext_resource type="Script" path="res://Scripts/Objects/StateMovers/StateMoverPositional.gd" id="3"]
@@ -17,7 +15,6 @@
 [ext_resource type="Texture2D" uid="uid://dwvek120iiiv" path="res://Graphics/Obstacles/Walls/shutterCNZ.png" id="14"]
 [ext_resource type="PackedScene" uid="uid://gklj3ebdwveu" path="res://Entities/Items/Monitor.tscn" id="15"]
 [ext_resource type="PackedScene" uid="uid://cioq5saowvqxj" path="res://Entities/MainObjects/Player.tscn" id="18"]
-[ext_resource type="Script" path="res://Scripts/Objects/CollapseLayer.gd" id="21_fdxp4"]
 [ext_resource type="PackedScene" uid="uid://urapmknlu0s5" path="res://Entities/Gimmicks/HorizontalBar.tscn" id="22_ethvu"]
 [ext_resource type="PackedScene" uid="uid://4q0hpddgto2k" path="res://Entities/Gimmicks/Spring.tscn" id="23_n1r7l"]
 [ext_resource type="Texture2D" uid="uid://b4cw5q2u4jyb8" path="res://Graphics/Gimmicks/HorizontalBarAlt.png" id="24_ipqgj"]
@@ -169,6 +166,12 @@ position = Vector2(397, 714)
 
 [node name="Ring6" parent="Entities/Rings" instance=ExtResource("10")]
 position = Vector2(432, 696)
+
+[node name="Ring14" parent="Entities/Rings" instance=ExtResource("10")]
+position = Vector2(2504, 1008)
+
+[node name="Ring13" parent="Entities/Rings" instance=ExtResource("10")]
+position = Vector2(2480, 1008)
 
 [node name="Ring7" parent="Entities/Rings" instance=ExtResource("10")]
 position = Vector2(1345, 889)
@@ -334,6 +337,9 @@ tile_set = ExtResource("6_1cyhs")
 position = Vector2(-32, -92)
 shape = SubResource("RectangleShape2D_n7iqd")
 
+[node name="EnemyBase" parent="Entities" instance=ExtResource("22_cqfbe")]
+position = Vector2(2592, 1016)
+
 [node name="HorizontalBar" parent="." instance=ExtResource("22_ethvu")]
 position = Vector2(864, 235)
 width = 320
@@ -397,6 +403,9 @@ width = 520
 shimmySpeed = 180.0
 drawRightAnchor = false
 swingContactSpeed = 3000.0
+
+[node name="Ring14" parent="." instance=ExtResource("10")]
+position = Vector2(2528, 1008)
 
 [connection signal="body_entered" from="Entities/AdvancedPlatform" to="Entities/AdvancedPlatform" method="_on_body_entered"]
 [connection signal="body_exited" from="Entities/AdvancedPlatform" to="Entities/AdvancedPlatform" method="_on_body_exited"]
