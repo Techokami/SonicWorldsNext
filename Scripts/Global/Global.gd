@@ -1,7 +1,7 @@
 extends Node
 
 # player pointers (0 is usually player 1)
-var players = []
+var players: Array[PlayerChar] = []
 # main object reference
 var main = null
 # hud object reference
@@ -99,6 +99,9 @@ var smoothRotation = 0
 # Hazard type references
 enum HAZARDS {NORMAL, FIRE, ELEC, WATER}
 
+# Layers references
+enum LAYERS {LOW, HIGH}
+
 # Debugging
 var is_main_loaded = false
 
@@ -177,7 +180,6 @@ func stage_clear():
 		effectTheme.stop()
 		bossMusic.stop()
 
-# Godot doesn't like not having emit signal only done in other nodes so we're using a function to call it
 func emit_stage_start():
 	stage_started.emit()
 
@@ -229,4 +231,38 @@ func load_settings():
 	
 	if file.has_section_key("Resolution","FullScreen"):
 		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (file.get_value("Resolution","FullScreen")) else Window.MODE_WINDOWED
-	
+
+## Useful for checking triggers that require specifically the first player to be on a gimmick	
+func get_first_player_gimmick():
+	return players[0].get_active_gimmick()
+
+## Useful for gimmicks that can activate if any player is attached that don't need data about
+## the specific player
+func is_any_player_on_gimmick(gimmick):
+	for player in players:
+		if player.get_active_gimmick() == gimmick:
+			return true
+	return false
+
+## Useful for gimmicks that need to potentially iterate through all attached players
+func get_players_on_gimmick(gimmick):
+	var players_on_gimmick = []
+	for player in players:
+		if player.get_active_gimmick() == gimmick:
+			players_on_gimmick.append(player)
+	return players_on_gimmick
+
+## Simple check to see if the player is the first char
+func is_player_first(player : PlayerChar):
+	if players[0] == player:
+		return true
+	return false
+
+## Gets the index of the player selected
+## @param player Which player you are checking
+## @retval 0-N index of the player with 0 being player 1 and higher numbers
+##             being later players
+## @retval -1 if the player isn't in the inbox. That should be impossible unless
+##            you make an orphaned player for some reason.
+func get_player_index(player : PlayerChar):
+	return players.find(player)

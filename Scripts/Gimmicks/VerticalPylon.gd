@@ -1,14 +1,18 @@
 @tool
 extends Node2D
 
-# Vertical size of the pylon (center only - edges are constant sized)
+## Vertical spinning pylon from Flying Battery Zone
+## Author: DimensionWarped
+## Note: This should be refactored into a ConnectableGimmick
+
+## Vertical size of the pylon (center only - edges are constant sized)
 @export var vert_size = 96
-# How fast the player should be launched from the pylon when pressing jump
+## How fast the player should be launched from the pylon when pressing jump
 @export var launch_speed = 960
-# How fast the player should be launching veritcally from the pylon after jumping
-# off
+## How fast the player should be launching veritcally from the pylon after jumping
+## off
 @export var launch_vertical_speed = 110
-# How fast the player climbs up/down the pylon
+## How fast the player climbs up/down the pylon
 @export var climb_speed = 80
 
 # An editor only variable. If last_size doesn't match vert_size during process

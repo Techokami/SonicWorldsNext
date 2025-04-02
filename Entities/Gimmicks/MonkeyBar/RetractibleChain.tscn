@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://kobbay7ehwah"]
+
+[ext_resource type="Script" path="res://Scripts/Gimmicks/MonkeyBar/RetractableChain.gd" id="1_hc1ee"]
+[ext_resource type="AudioStream" uid="uid://o4sr077jns0" path="res://Audio/SFX/Gimmicks/CableLift.wav" id="2_6pw4x"]
+[ext_resource type="Script" path="res://Tools/Audio/AudioStream2DController.gd" id="3_kbwxo"]
+
+[node name="RetractibleChain" type="Node2D"]
+script = ExtResource("1_hc1ee")
+chain_speed_up = 90
+chain_speed_down = 90
+
+[node name="ChainMovingSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_6pw4x")
+script = ExtResource("3_kbwxo")
+
+[connection signal="chain_started_moving" from="." to="ChainMovingSound" method="do_play"]
+[connection signal="chain_stopped_moving" from="." to="ChainMovingSound" method="do_stop"]
