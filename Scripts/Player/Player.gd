@@ -1,4 +1,5 @@
-extends PhysicsObject
+class_name PlayerChar extends PhysicsObject
+
 const HITBOXESSONIC = {NORMAL = Vector2(9,19)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,11)*2, GLIDE = Vector2(10,10)*2, HORIZONTAL = Vector2(22,9)*2}
 const HITBOXESTAILS = {NORMAL = Vector2(9,15)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,9.5)*2, GLIDE = Vector2(10,10)*2, HORIZONTAL = Vector2(22,9)*2}
 const HITBOXESKNUCKLES = {NORMAL = Vector2(9,19)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,11)*2, GLIDE = Vector2(10,10)*2, HORIZONTAL = Vector2(22,9)*2}
@@ -115,8 +116,9 @@ var currentState = STATES.AIR
 @onready var defaultHitBoxPos = $HitBox.position
 var crouchBox = null
 
-# Shield variables
-enum SHIELDS {NONE, NORMAL, FIRE, ELEC, BUBBLE}
+## Shield enumerator - keep COUNT as the last entry since it is used to know how
+## many options there are.
+enum SHIELDS {NONE, NORMAL, FIRE, ELEC, BUBBLE, COUNT}
 var shield = SHIELDS.NONE
 @onready var magnetShape = $RingMagnet/CollisionShape2D
 @onready var shieldSprite = $Shields
@@ -231,26 +233,27 @@ var cameraMargin = 16
 
 # Gimmick related
 ## @deprecated
-var poleGrabID = null # Please don't use this anymore, use activeGimmick instead
+var poleGrabID = null # Please don't use this anymore, use active_gimmick instead
 
 ## The current gimmick the player is interacting with if that player is interacting with one.
 ## Otherwise NULL. If this gimmick is set, the player will call a secondary process function and a
 ## pleyer hysics process function as part of that player's process/phsyics process functions.
-var activeGimmick = null
+var active_gimmick : ConnectableGimmick = null
 ## Dictionary of Variables related to the active gimmick (you probably don't need to proactively
 ## clear these)
-var gimmickVariables = {}  
-## A list of up to maxLockedGimmicks gimmick references that are used to tell that gimmick not to
+var gimmick_variables = {}  
+## A list of up to max_locked_gimmicks gimmick references that are used to tell that gimmick not to
 ## bind to the player Until the player touches grass (IE gets grounded). If more are written,
 ## the oldest is cleared first. The list is also completely cleared if the player ever touches the
 ## ground or if something else explicitly calls for the list to be cleared.
 ## Note: Gimmicks must be programmed to check this list in order for it to do anything!
-var lockedGimmicks = [null, null, null]
-## Tracks the position that the lost lockedGimmick as added to the lockedGimmicks list.
-var lockedGimmicksIndex = 0
+## XXX TODO IMPLEMENT THIS CONCEPT
+var locked_gimmicks = [null, null, null]
+## Tracks the position that the lost lockedGimmick as added to the locked_gimmicks list.
+var locked_gimmicks_index = 0
 ## Constrain the size of the locked gimmicks list to ensure that checking for the presence of a specific
-## locked gimmick within the list remains performant. Make sure this size is in sync with the lockedGimmicks declaration.
-var maxLockedGimmicks = 3
+## locked gimmick within the list remains performant. Make sure this size is in sync with the locked_gimmicks declaration.
+var max_locked_gimmicks = 3
 
 # Enemy related
 signal enemy_bounced
@@ -287,6 +290,7 @@ func _ready():
 			inputMemory.append(inputs.duplicate(true))
 		# Partner (if player character 2 isn't none)
 		if Global.PlayerChar2 != Global.CHARACTERS.NONE:
+			print("Invoked")
 			partner = Player.instantiate()
 			partner.playerControl = 0
 			partner.z_index = z_index-1
@@ -548,7 +552,11 @@ func _process(delta):
 	
 	# Invulnerability timer
 	if (invTime > 0 and currentState != STATES.HIT and currentState != STATES.DIE):
-		visible = !visible
+		var mod_inv_time = (int(invTime)) % 2
+		if mod_inv_time == 0:
+			visible = false
+		else:
+			visible = true
 		invTime -= delta*60
 		if (invTime <= 0):
 			invTime = 0
@@ -634,8 +642,8 @@ func _process(delta):
 	# Set player inputs
 	set_inputs()
 	
-	if (activeGimmick != null):
-		activeGimmick.player_process(self, delta)
+	if (active_gimmick != null):
+		active_gimmick.player_process(self, delta)
 
 func _physics_process(delta):
 	super(delta)
@@ -853,8 +861,8 @@ func _physics_process(delta):
 			(crushSensorDown.get_overlapping_areas() + crushSensorDown.get_overlapping_bodies()).size() > 0 and (!allowTranslate or visible):
 			kill()
 			
-	if (activeGimmick != null):
-		activeGimmick.player_physics_process(self, delta)
+	if (active_gimmick != null):
+		active_gimmick.player_physics_process(self, delta)
 
 # Input buttons
 func set_inputs():
@@ -914,6 +922,17 @@ func any_action_held_or_pressed():
 	if inputs[INPUTS.ACTION3] > 0:
 		return true
 	return false
+
+## This probably seems really niche, but it's useful to prevent
+## Certain jump actions from instantly turning into player specific double
+## jump abilities.
+func convert_pressed_action_btns_to_held():
+	if inputs[INPUTS.ACTION] == 1:
+		inputs[INPUTS.ACTION] = 2
+	if inputs[INPUTS.ACTION2] == 1:
+		inputs[INPUTS.ACTION2] = 2
+	if inputs[INPUTS.ACTION2] == 1:
+		inputs[INPUTS.ACTION2] = 2
 
 # Note that there is no way to check the 'pressed' vs 'held' status of X/Y inputs.
 func get_y_input():
@@ -1035,6 +1054,7 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 		if water:
 			movement = movement*0.5
 
+		force_detach()
 		disconect_from_floor()
 		set_state(STATES.HIT)
 		invTime = 120 # Ivulnerable for 2 seconds. Starts counting *after* landing.
@@ -1422,6 +1442,47 @@ func handle_animation_speed(gSpeed = groundSpeed):
 		_:
 			animator.speed_scale = 1
 
+
+# Standard getters and setters -- for future code, please try to avoid direct
+# access of player variables. Use getters/setters instead. This aids in easing
+# refactoring.
+
+## Gets the player animator -- this is a tad overkill most of the time, but
+## Sometimes you need to control an animation in a more robust way than simply
+## by using play.
+func get_animator() -> AnimationPlayer:
+	return self.animator
+
+## Sets the animation. No frills, just provides a hook to directly call AnimationPlayer.play()
+## for the player animator.
+func play_animation(anim_name: StringName = "", custom_blend: float = -1, custom_speed: float = 1.0,
+					from_end: bool = false) -> void:
+	self.animator.play(anim_name, custom_blend, custom_speed, from_end)
+
+## Available directions for the player to use when using set_direction
+enum DIRECTIONS {LEFT, RIGHT} # I'd wager there is already something more appropriate
+
+## Sets the direction of the player's sprite
+func set_direction(new_direction : int) -> void:
+	if new_direction == DIRECTIONS.LEFT:
+		direction = -1.0
+		sprite.flip_h = true
+		return
+	direction = 1.0
+	sprite.flip_h = false
+
+## Gets the current player hitbox.
+## Note that the hitbox object isn't actually the current hitbox active, but
+## rather a dictionary of available hitboxes depending on the player's
+## situation.
+func get_current_hitbox() -> Dictionary:
+	return self.currentHitbox
+
+## Restores the player's ability to use double jump action. The player still
+## has to be in a state where it is available in the first place to do so.
+func reset_double_jump_action() -> void:
+	abilityUsed = false
+
 # Player Gimmick Interaction
 #
 # Up until recently, we've been letting gimmicks store their own per-player
@@ -1450,77 +1511,85 @@ func handle_animation_speed(gSpeed = groundSpeed):
 ##        allow the new gimmick to replace one that is already attached.
 ## @retval true if gimmick was able to be connected
 ## @retval false otherwise
-func set_active_gimmick(gimmick, allowSwap=false):
+## note: Never returns false if allowSwap is set
+func set_active_gimmick(gimmick : ConnectableGimmick, allowSwap : bool=false) -> bool:
 	if allowSwap:
-		if activeGimmick != null: # if there is already an active gimmick, we need to run that
+		if active_gimmick != null: # if there is already an active gimmick, we need to run that
 								  # gimmicks player forced detached callback.
-			activeGimmick.player_force_detach_callback(self)
+			active_gimmick.player_force_detach_callback(self)
 		
-		activeGimmick = gimmick
+		active_gimmick = gimmick
 		return true
 	
 	# when swap is not allowed, we only set it if the player isn't already attached to another gimmick.
-	if activeGimmick != null:
+	if active_gimmick != null:
 		return false
 	
-	activeGimmick = gimmick
+	active_gimmick = gimmick
 	return true
 
 ## Unbinds the gimmick from the player (you could just use null on set_active_gimmick too)
-func unset_active_gimmick():
-	activeGimmick = null
+func unset_active_gimmick() -> void:
+	active_gimmick = null
 
 ## Unbinds the player from its current gimmick, but only after running its force detach
 ## callback
-func force_detach():
-	activeGimmick.player_force_detach_callback(self)
-	activeGimmick = null
+func force_detach() -> void:
+	if active_gimmick == null:
+		return
+
+	active_gimmick.player_force_detach_callback(self)
+	active_gimmick = null
 
 ## Gets the player's currently active gimmick. Might be useful for certain gimmick<->gimmick
 ## interactions or just for checking if the player is already bound to the gimmick you are checking
 ## from.
-func get_active_gimmick():
-	return activeGimmick
+func get_active_gimmick() -> ConnectableGimmick:
+	return active_gimmick
 
 ## Sets a value in the player's gimmick variable dictionary. Uses a key value pair.
-func set_gimmick_var(gimmickVarName, gimmickVarValue):
-	gimmickVariables[gimmickVarName] = gimmickVarValue
+func set_gimmick_var(gimmickVarName, gimmickVarValue) -> void:
+	gimmick_variables[gimmickVarName] = gimmickVarValue
 
 ## Removes a variable from the player's gimmick variable dictionary. Provide a key.
-func unset_gimmick_var(gimmickVarName):
-	gimmickVariables.erase(gimmickVarName)
+func unset_gimmick_var(gimmickVarName) -> void:
+	gimmick_variables.erase(gimmickVarName)
 
 ## Gets a value in the player's gimmick variable dictionary. Provide a key.
 func get_gimmick_var(gimmickVarName, default: Variant = null):
-	return gimmickVariables.get(gimmickVarName, default)
+	return gimmick_variables.get(gimmickVarName, default)
 
 ## Removes all currently locked gimmicks from the Player's locked gimmick list.
 func clear_locked_gimmicks():
-	for i in range(maxLockedGimmicks):
-		lockedGimmicks[i] = null
-	lockedGimmicksIndex = 0
+	for i in range(max_locked_gimmicks):
+		locked_gimmicks[i] = null
+	locked_gimmicks_index = 0
 
 ## Removes a single locked gimmick from the player's locked gimmick list if
 ##   present.
-func clear_single_locked_gimmick(gimmick):
-	for i in range(maxLockedGimmicks):
-		if lockedGimmicks[i] == gimmick:
-			lockedGimmicks[i] = null
+func clear_single_locked_gimmick(gimmick : ConnectableGimmick):
+	for i in range(max_locked_gimmicks):
+		if locked_gimmicks[i] == gimmick:
+			locked_gimmicks[i] = null
 
 ## Adds a gimmick to the player's locked gimmick list. Useful if you want to
 ##   prevent a player from interacting or especially re-interacting with a
 ##   gimmick until that player either lands or you manually clear the locked
 ##   gimmick list for some reason.
 func add_locked_gimmick(gimmick):
-	lockedGimmicks[lockedGimmicksIndex] = gimmick
-	lockedGimmicks = (lockedGimmicks + 1) % maxLockedGimmicks
+	locked_gimmicks[locked_gimmicks_index] = gimmick
+	locked_gimmicks_index = (locked_gimmicks_index + 1) % max_locked_gimmicks
+	
+func remove_locked_gimmick(gimmick):
+	locked_gimmicks.erase(gimmick)
 
 ## Checks if the gimmick is locked for the player
 func is_gimmick_locked_for_player(gimmick):
-	if gimmick in lockedGimmicks:
+	if gimmick in locked_gimmicks:
 		return true
 	return false
-	
+
+## Invokes the handle_animation_finished callback for the attached gimmick.
 func handle_animation_finished(animation):
-	if activeGimmick != null:
-		activeGimmick.handle_animation_finished(self, animation)
+	if active_gimmick != null:
+		active_gimmick.handle_animation_finished(self, animation)

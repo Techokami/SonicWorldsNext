@@ -1,7 +1,7 @@
 extends Node
 
 # player pointers (0 is usually player 1)
-var players = []
+var players: Array[PlayerChar] = []
 # main object reference
 var main = null
 # hud object reference
@@ -99,6 +99,9 @@ var smoothRotation = 0
 # Hazard type references
 enum HAZARDS {NORMAL, FIRE, ELEC, WATER}
 
+# Layers references
+enum LAYERS {LOW, HIGH}
+
 # Debugging
 var is_main_loaded = false
 
@@ -177,7 +180,6 @@ func stage_clear():
 		effectTheme.stop()
 		bossMusic.stop()
 
-# Godot doesn't like not having emit signal only done in other nodes so we're using a function to call it
 func emit_stage_start():
 	stage_started.emit()
 
@@ -249,3 +251,18 @@ func get_players_on_gimmick(gimmick):
 		if player.get_active_gimmick() == gimmick:
 			players_on_gimmick.append(player)
 	return players_on_gimmick
+
+## Simple check to see if the player is the first char
+func is_player_first(player : PlayerChar):
+	if players[0] == player:
+		return true
+	return false
+
+## Gets the index of the player selected
+## @param player Which player you are checking
+## @retval 0-N index of the player with 0 being player 1 and higher numbers
+##             being later players
+## @retval -1 if the player isn't in the inbox. That should be impossible unless
+##            you make an orphaned player for some reason.
+func get_player_index(player : PlayerChar):
+	return players.find(player)

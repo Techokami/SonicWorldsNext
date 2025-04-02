@@ -1,4 +1,9 @@
-extends Area2D
+
+extends ConnectableGimmick
+
+## Hanging Bar Gimmck
+## Author: Sharb and DimensionWarped
+## Note: Needs refactoring to make proper use of Connectable Gimmick
 
 # Array of Arrays for each player interacting with the gimmick...
 # Please don't access/mutate this array directly, use the relevant functions
@@ -166,6 +171,8 @@ func physics_process_disconnected(_delta, player, index):
 	
 	# XXX This a Tails centric hack right now. I don't like it. It makes Tails
 	# move upwards to avoid disconnecting immediately.
+	# The proper fix for this would be for Sonic's collision to not touch the
+	# ground if he is picked up into a hang state
 	if player.ground:
 		player.set_state(player.STATES.AIR)
 		player.global_position.y -= 6

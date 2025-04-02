@@ -1,31 +1,38 @@
-extends Node2D
-
-# XXX TODO - rename all variables to follow snake_case convention
+## Brachiatable Hanger Bars (IE Monkeybars)
+## Author: DimensionWarped
+class_name Brachiatable extends ConnectableGimmick
 
 ## Just like with hanging bar, if this is set to false then the player can
 ## conect to the central hanger while jumping upwards instead instead of 
 ## only when falling
-@export var onlyActiveMovingDown = true
+@export var only_active_moving_down = true
 
-## Just like with hanging bar, if this is set to true then the player can drop below the gimmick
-## instead of jumping upwards off of it by holding down while jumping.
-## XXX TODO Not implemented yet...
-@export var holdDownToDrop = false
+## Lets a player drop through the hanger without getting caught if they are holding down
+## Note that the official games handled this a bit differently. Holding *any* direction while
+## jumping off of a holdable bar type gimmick would result in all other holdable bar type gimmicks
+## being unconnectable in Sonic 2/3K. That's not very intuitive though and leads to some strange
+## interactions.
+@export var hold_down_to_drop = false
 
 ## Adjusts the brachiate animation speed. This means bar to bar transitions will be faster. Note
 ## that the item you are brachiating to determines the speed, not the item you are brachiating from.
 ## 1.0 is the base. 2.0 is twice as fast. 0.5 is half as fast.
-@export var brachiateSpeed = 1.0
+@export var brachiate_speed = 1.0
 
 ## When jumping off while holding a direction, the player will be imparted with
 ##   some immediate speed
-@export var jumpOffSpeedBoost = 90
+@export var jump_off_speed_boost = 90
 
 ## If true, player will not be able to brachiate off of this bar
 @export var depart_locked = false
 
 ## If true, player will not be able to brachiate on to this bar
 @export var impart_locked = false
+
+## If true, monkeybar will be able to pick player off the ground
+## TODO NOT IMPLEMENTED - blocked by some necessary collision changes around
+## hang animation
+@export var picks_up_grounded_player = false
 
 # Note: If you ever wanted to get *really* crazy with this, you could give
 # every player character a weight and have a weight mounted value instead. Not
@@ -42,14 +49,13 @@ signal became_mounted
 signal became_unmounted
 
 ## Raised every time the number mounted changes regarldess of count
-signal num_mounted_changed(num_mounted)
+signal num_mounted_changed(num_mounted : int)
 
 ## Raised any time a player connects to the monkeybar
-signal player_mounted(player)
+signal player_mounted(player : PlayerChar)
 
 ## Raised any time a player disconnects from the monkeybar
-## XXX TODO NOT IMPLEMENTED YET
-signal player_dismounted(player)
+signal player_dismounted(player : PlayerChar)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -57,7 +63,10 @@ func _ready() -> void:
 
 ## Checks if the player can grab onto the hanger portion of the MonkeyBar Gimmick
 ##   Used when the player is in the jumping state and not mounted on a brachiation surface yet.
-func check_grab(player):
+func check_grab(player: PlayerChar) -> bool:
+	# player won't grab if on the ground
+	if player.ground:
+		return false
 	# We don't grab if the player is on a gimmick already
 	if player.get_active_gimmick() != null:
 		return false
@@ -66,10 +75,10 @@ func check_grab(player):
 		return false
 	# We don't grab if the player is moving upwards and the pole is set not to
 	# grab upward moving players.
-	if player.movement.y < 0 and onlyActiveMovingDown:
+	if player.movement.y < 0 and only_active_moving_down:
 		return false
-	# We don't grab when holdDownToDrop is active and down is held
-	if holdDownToDrop and player.is_down_held():
+	# We don't grab when hold_down_to_drop is active and down is held
+	if hold_down_to_drop and player.is_down_held():
 		return false
 	# We don't grab if the player isn't low enough to grab
 	if player.global_position.y < $MonkeyBarHanger.global_position.y + 7:
@@ -78,35 +87,37 @@ func check_grab(player):
 	# If we didn't hit any of the ejection conditions then we are good to grab
 	return true
 	
-func connect_player(player, allowSwap=false):
+func connect_player(player : PlayerChar, allowSwap: bool = false) -> void:
 	if not player.set_active_gimmick(self, allowSwap):
 		return
 		
 	player_mounted.emit(player)
+
+	player.set_state(player.STATES.ANIMATION)
 	
 	if check_brachiate(player):
 		return
 
 	reposition_player_static(player)
-	player.animator.play("hang")
-	player.set_state(player.STATES.AIR)
+	player.play_animation("hang")
 
 	# Is there anything we need to track as far as variables go? Maybe later.
 	pass
 	
-func disconnect_player(player):
+func disconnect_player(player : PlayerChar) -> void:
 	player.unset_active_gimmick()
-	player.animator.play("roll")
+	player.play_animation("roll")
 	player.set_state(player.STATES.JUMP)
 	player.unset_gimmick_var("brachiate_target_cur")
+	player_dismounted.emit(player)
 	pass
 
 ## Takes a value on a linear distribution from 0 to 1 and spits out
 ##   The equivalent value if it were on an exponential distribution instead
 ##   @param value A value to be transformed. This should be between 0 and 1.
-##   @param exp exponent of the distribution to transform with. Can be anything float really... but
+##   @param my_exp exponent of the distribution to transform with. Can be anything float really... but
 ##              if you want to keep it practical, stick to values from 0.1 to 2.
-func transform_linear_to_exponential(value, exp):
+func transform_linear_to_exponential(value : float, my_exp : float) -> float:
 	# Convert 0,1 to -1,1
 	value = (value * 2.0) - 1.0
 	
@@ -116,49 +127,50 @@ func transform_linear_to_exponential(value, exp):
 
 	# Calculate the exponential distribution transform for the requested value/exponent.
 	#   Flip back to negative if necessary.
-	value = pow(value, exp) * my_sign
+	value = pow(value, my_exp) * my_sign
 	
 	# Convert back to 0,1 range
 	value = (value + 1.0) / 2.0
 	return value
 
-func get_collision_target(hitbox_offset):
+func get_collision_target(hitbox_offset : int) -> Vector2:
 	return $MonkeyBarHanger.global_position + Vector2(0, 13 - hitbox_offset)
 
 ## This function repositions the player between the current connected brachiato
 ##   and the one the player is attempting to move to.
-func brachiate_reposition_player(player, player_brachiation_target):
-	var cur_anim = player.animator.get_current_animation()
-
+func brachiate_reposition_player(player : PlayerChar, player_brachiation_target : Brachiatable):
+	var animator = player.get_animator()
+	var cur_anim = animator.get_current_animation()
+	
 	# Don't do anything if the player isn't in the brachiate animation
 	if cur_anim != "brachiateLeft" and cur_anim != "brachiateRight":
 		return
 		
-	var percent_complete = player.animator.get_current_animation_position() / player.animator.get_current_animation_length()
-	var hitbox_offset = (player.currentHitbox.NORMAL.y / 2.0) - 19 # 0'd for Sonic/Knux, 4 for Tails/Amy I think?
+	var percent_complete = animator.get_current_animation_position() / animator.get_current_animation_length()
+	
+	var hitbox_offset = (player.get_current_hitbox().NORMAL.y / 2.0) - 19 # 0'd for Sonic/Knux, 4 for Tails/Amy I think?
 	var getPose = get_collision_target(hitbox_offset)
 	var getPose2 = player_brachiation_target.get_collision_target(hitbox_offset)
 	var truePose = lerp(getPose, getPose2, transform_linear_to_exponential(percent_complete, 0.65))
-		
-	player.global_position = truePose
-		
-	player.movement = Vector2.ZERO
+
+	player.set_global_position(truePose)
+	player.set_movement(Vector2.ZERO)
 	player.cam_update()
 
 ## Used when repositioning the player while not brachiating
-func reposition_player_static(player):
-		var hitbox_offset = (player.currentHitbox.NORMAL.y / 2.0) - 19 # 0'd for Sonic/Knux, 4 for Tails/Amy I think?
+func reposition_player_static(player : PlayerChar):
+		var hitbox_offset = (player.get_current_hitbox().NORMAL.y / 2.0) - 19 # 0'd for Sonic/Knux, 4 for Tails/Amy I think?
 		var getPose = $MonkeyBarHanger.global_position + Vector2(0, 13 - hitbox_offset)
 		
 		# verify position change won't clip into objects
 		if !player.test_move(player.global_transform,getPose-player.global_position):
-			player.global_position = getPose
+			player.set_global_position(getPose)
 		
-		player.movement = Vector2.ZERO
+		player.set_movement(Vector2.ZERO)
 		player.cam_update()	
 	
-func _physics_process(delta: float) -> void:
-	for player in Global.get_players_on_gimmick(self):
+func _physics_process(_delta: float) -> void:
+	for player : PlayerChar in Global.get_players_on_gimmick(self):
 		var player_brachiation_target = player.get_gimmick_var("brachiate_target_cur")
 		
 		if (player_brachiation_target != null):
@@ -171,21 +183,21 @@ func _physics_process(delta: float) -> void:
 
 ## Checks to see if number of mounted players has changed and sends relevant
 ## signals if so.
-func calculate_mount_signals(num_mounted, new_num_mounted):
-	if num_mounted == new_num_mounted:
+func calculate_mount_signals(old_num_mounted : int, new_num_mounted : int) -> void:
+	if old_num_mounted == new_num_mounted:
 		return
 	
-	if num_mounted == 0 and new_num_mounted > 0:
+	if old_num_mounted == 0 and new_num_mounted > 0:
 		became_mounted.emit()
-	elif num_mounted > 0 and new_num_mounted == 0:
+	elif old_num_mounted > 0 and new_num_mounted == 0:
 		became_unmounted.emit()
 
 	num_mounted_changed.emit(new_num_mounted)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	var players_to_check = $MonkeyBarHanger.get_overlapping_bodies()
-	for player in players_to_check:
+	for player : PlayerChar in players_to_check:
 		if check_grab(player):
 			connect_player(player)
 			continue
@@ -199,10 +211,7 @@ func _process(delta: float) -> void:
 #enum for arm selection
 enum ARM_SELECTION {LEFT, RIGHT}
 
-func brachiate_connect(player, brachiate_target):
-	var animator = player.animator
-	var active_brachiator = self
-	
+func brachiate_connect(player : PlayerChar, brachiate_target : Brachiatable) -> void:
 	# Set the brachiate target so that the player will begin brachiation on the next pass
 	player.set_gimmick_var("brachiate_target_cur", brachiate_target)
 	
@@ -221,15 +230,15 @@ func brachiate_connect(player, brachiate_target):
 
 	# Play the animation associated with your current brachiation arm
 	if next_arm == ARM_SELECTION.RIGHT:
-		player.animator.play("brachiateRight", -1, brachiate_target.brachiateSpeed)
+		player.play_animation("brachiateRight", -1, brachiate_target.brachiate_speed)
 	else:
-		player.animator.play("brachiateLeft", -1, brachiate_target.brachiateSpeed)
+		player.play_animation("brachiateLeft", -1, brachiate_target.brachiate_speed)
 
 ## Checks if the player can swing like a monkey from one monkeybar to another
 ## and if so, starts the process.
-func check_brachiate(player):
+func check_brachiate(player : PlayerChar):
 	# Don't allow check_brachiate while the player is brachiating already!
-	var cur_anim = player.animator.get_current_animation()
+	var cur_anim = player.get_animator().get_current_animation()
 	if cur_anim == "brachiateLeft" or cur_anim == "brachiateRight":
 		return false
 	
@@ -245,6 +254,7 @@ func check_brachiate(player):
 			return false
 		if brachiate_target_right[-1].impart_locked == true:
 			return false
+		player.set_direction(player.DIRECTIONS.RIGHT)
 		brachiate_connect(player, brachiate_target_right[-1])
 		return true
 
@@ -255,6 +265,7 @@ func check_brachiate(player):
 			return false
 		if brachiate_target_left[-1].impart_locked == true:
 			return false
+		player.set_direction(player.DIRECTIONS.LEFT)
 		brachiate_connect(player, brachiate_target_left[-1])
 		return true
 	
@@ -313,24 +324,44 @@ func _on_right_linker_body_exited(body: Node2D) -> void:
 	if brachiate_targets_left != null:
 		brachiate_targets_left.erase(self)
 
-# OVERRIDE FUNCTIONS BELOW (yes, we need to make this a proper subclass, I know.)
+## Locks the gimmick for the player - used if the player is forced off the
+## gimmick in a way that might be likely to result in immediate reconnection.
+func temp_lock_gimmick(player) -> void:
+	var unlock_func = func ():
+		player.clear_single_locked_gimmick(self)
+	
+	var timer:SceneTreeTimer = get_tree().create_timer(0.5)
+	timer.timeout.connect(unlock_func, CONNECT_DEFERRED)
+	
+	player.add_locked_gimmick(self)
+	pass
 
-func player_process(player, delta):
+func player_process(player: PlayerChar, _delta):
 	if player.any_action_pressed():
+		player.reset_double_jump_action()
+		player.convert_pressed_action_btns_to_held()
+		
 		disconnect_player(player)
-		player.movement.y = -235 # Note: not different for Knuckles in spite of his jumping issues.
+		var new_movement = Vector2()
+		new_movement.y = -235 # Note: not different for Knuckles in spite of his jumping issues.
+		
 		if player.is_left_held():
-			player.movement.x -= jumpOffSpeedBoost
+			new_movement.x = -jump_off_speed_boost
 		if player.is_right_held():
-			player.movement.x = jumpOffSpeedBoost
+			new_movement.x = jump_off_speed_boost
+		player.set_movement(new_movement)
 		return
+		
+	if player.ground or player.check_for_ceiling() or \
+			player.check_for_back_wall() or player.check_for_front_wall():
+		temp_lock_gimmick(player)
+		disconnect_player(player)
+		return
+		
 	
 	check_brachiate(player)
 
-func player_physics_process(_player, _delta):
-	pass
-
-func handle_animation_finished(player, animation):
+func handle_animation_finished(player : PlayerChar, animation):
 	if animation != "brachiateLeft" and animation != "brachiateRight":
 		# This shouldn't happen, but who knows.
 		return
@@ -346,7 +377,8 @@ func handle_animation_finished(player, animation):
 
 # I'll probably need to lock the gimmick here to prevent the same bar from just immediately being
 # grabbed if the player is launched off with a spring or something.
-func player_force_detach_callback(player):
+func player_force_detach_callback(player : PlayerChar):
 	# note: it might be more performant to set to null instead.
-	player.unset_gimmick_var("brachiate_target_cur")
+	temp_lock_gimmick(player)
+	disconnect_player(player)
 	pass

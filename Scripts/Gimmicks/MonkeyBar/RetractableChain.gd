@@ -137,12 +137,6 @@ func _process(_delta: float) -> void:
 		
 	queue_redraw()
 
-	# Test junk - delete me
-	if Input.is_key_pressed(KEY_U):
-		send_to_default_target()
-	elif Input.is_key_pressed(KEY_J):
-		send_home()
-
 # Colors used to draw hint arrows for the default target
 var up_color = Color.CRIMSON
 var down_color = Color.DARK_BLUE
@@ -179,8 +173,8 @@ func _draw():
 		draw_texture(link_texture, Vector2(-link_texture.get_width() / 2.0, n - link_texture.get_height()))
 		
 ## Sets the home destination of the chain
-func set_default_height(new_default_height):
-	initial_height = new_default_height
+func set_home_height(new_home_height):
+	initial_height = new_home_height
 
 ## Sets the default target height.
 func set_default_target(new_target_height):

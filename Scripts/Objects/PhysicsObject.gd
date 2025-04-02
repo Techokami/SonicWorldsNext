@@ -450,3 +450,21 @@ func check_for_ceiling():
 	ceilChecker.queue_free()
 	# Return the detection value
 	return detection
+
+## Returns true if front sensor is colliding
+func check_for_front_wall() -> bool:
+	return horizontalSensor.is_colliding()
+	
+## Returns true if back sensor is colldiing
+func check_for_back_wall() -> bool:
+	return backSensor.is_colliding()
+
+# Getters and Setters
+
+## Gets the movement vector of the PhysicsObject
+func get_movement():
+	return self.movement
+	
+## Sets the movement value of the PhysicObject
+func set_movement(newMovement : Vector2):
+	self.movement = newMovement

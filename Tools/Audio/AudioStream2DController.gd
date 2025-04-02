@@ -11,14 +11,6 @@ extends AudioStreamPlayer2D
 ## Sets the pitch that the play functions use as the central pitch.
 @export var main_pitch : float = 1.0
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
 ## Make stream play. Usable from a signal.
 ## _junk_arg is provided as a way of calling this from a singal that has one argument
 ## effectively making it so that you can call this via s signal with either 0 or 1 args.
