@@ -15,7 +15,7 @@ extends CanvasLayer
 @export var zone = "Zone"
 @export var act = 1
 
-# used for flashing ui elements (rings, time)
+# used for flashing UI elements (rings, time)
 var flashTimer = 0
 
 # isStageEnding is used for level completion, stop loop recursions
@@ -28,6 +28,9 @@ var ringBonus = 0
 # gameOver is used to initialize the game over animation sequence, note: this is for animation, if you want to use the game over status it's in global
 var gameOver = false
 
+# used for the score countdown
+var accumulatedDelta = 0.0
+
 # signal that gets emited once the stage tally is over
 signal tally_clear
 
@@ -36,6 +39,11 @@ signal tally_clear
 var characterNames = ["sonic","tails","knuckles","amy"]
 
 func _ready():
+	# create a new stream for the tick sound (so the original stream
+	# will remain unchanged, as it's also used by the switch gimmick),
+	# and set loop parameters, but don't enable looping yet
+	$LevelClear/Counter.stream = $LevelClear/Counter.stream.duplicate()
+	$LevelClear/Counter.stream.loop_end = roundi($LevelClear/Counter.stream.mix_rate / (60.0 / 4))
 	# error prevention
 	if !Global.is_main_loaded:
 		return false
@@ -172,6 +180,9 @@ func _process(delta):
 		# initialize stage clear sequence
 		if !isStageEnding:
 			isStageEnding = true
+
+			# reset air in case we are under water
+			_reset_air()
 			
 			# show level clear elements
 			$LevelClear.visible = true
@@ -205,6 +216,9 @@ func _process(delta):
 			await $LevelClear/CounterWait.timeout
 			# start the level counter tally (see _on_CounterCount_timeout)
 			$LevelClear/CounterCount.start()
+			# initially the tick sound isn't looped, so let's make it loop
+			$LevelClear/Counter.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+			$LevelClear/Counter.play()
 			await self.tally_clear
 			# wait 2 seconds (reuse timer)
 			$LevelClear/CounterWait.start(2)
@@ -240,26 +254,40 @@ func _process(delta):
 			await Global.main.scene_faded
 			Global.levelTime = 0
 
+func _reset_air():
+	for player in Global.players:
+		player.airTimer = player.defaultAirTime
+
+func _add_score(subtractFrom,delta):
+	# Normally we add 100 points per frame at 60 FPS, but player's framerate may
+	# be different. To accomodate for that, we count the number of points based
+	# on time passed since the previous frame.
+	accumulatedDelta += delta
+	var standardDelta = 1.0 / 60.0
+	var points = floor(accumulatedDelta / standardDelta) * 100
+	if (points > subtractFrom):
+		points = subtractFrom
+	accumulatedDelta -= points / 100 * standardDelta
+	# check if adding score would hit the life bonus
+	Global.check_score_life(points)
+	subtractFrom -= points
+	Global.score += points
+	return subtractFrom
+
 # counter count down
-func _on_CounterCount_timeout():
-	# play counter sound
-	$LevelClear/Counter.play()
-	
+func _on_CounterCount_timeout(delta):
+	# reset air in case we are under water
+	_reset_air()
 	# decrease bonuses in order, if time bonus not 0 then count time down, then do the same for rings
 	# if you add other bonuses (like perfect bonus) you'll want to add it to the end of the sequence before the end
 	if timeBonus > 0:
-		# check if adding score would hit the life bonus
-		Global.check_score_life(100)
-		timeBonus -= 100
-		Global.score += 100
+		timeBonus = _add_score(timeBonus,delta)
 	elif ringBonus > 0:
-		# check if adding score would hit the life bonus
-		Global.check_score_life(100)
-		ringBonus -= 100
-		Global.score += 100
+		ringBonus = _add_score(ringBonus,delta)
 	else:
+		# Don't stop the tick sound abruptly, just make it play until the end once
+		$LevelClear/Counter.stream.loop_mode = AudioStreamWAV.LOOP_DISABLED
 		# stop counter timer and play score sound
-		$LevelClear/Counter.play()
 		$LevelClear/CounterCount.stop()
 		$LevelClear/Score.play()
 		# emit tally clear signal
