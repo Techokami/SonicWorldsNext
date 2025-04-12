@@ -949,7 +949,7 @@ position = Vector2(3704, 72)
 [node name="AltSpawn" type="Node2D" parent="Entity"]
 position = Vector2(5649, 1498)
 script = ExtResource("38_8ssba")
-currentCharacter = 3
+current_character = 4
 
 [node name="ConveyorBelt" parent="Entity" instance=ExtResource("39_8a2xw")]
 position = Vector2(4864, 880)
