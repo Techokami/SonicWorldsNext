@@ -1,10 +1,9 @@
-[gd_scene load_steps=17 format=3 uid="uid://gklj3ebdwveu"]
+[gd_scene load_steps=16 format=3 uid="uid://gklj3ebdwveu"]
 
 [ext_resource type="Texture2D" uid="uid://bf6cekji71vif" path="res://Graphics/Items/MonitorIcons.png" id="1"]
 [ext_resource type="Texture2D" uid="uid://c8qtrmw44es3g" path="res://Graphics/Items/monitors.png" id="2"]
 [ext_resource type="Script" path="res://Scripts/Objects/Monitor.gd" id="3"]
 [ext_resource type="AudioStream" uid="uid://ivlmvt8mk3u4" path="res://Audio/SFX/Objects/DestroyObject.wav" id="4"]
-[ext_resource type="AudioStream" uid="uid://jt28gfxybprb" path="res://Audio/SFX/Objects/RingStereo.wav" id="5"]
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="6"]
 
 [sub_resource type="RectangleShape2D" id="1"]
@@ -254,11 +253,6 @@ next/DestroyMonitor = &"fadeIcon"
 
 [node name="Destroy" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("4")
-bus = &"SFX"
-
-[node name="Ring" type="AudioStreamPlayer" parent="SFX"]
-stream = ExtResource("5")
-volume_db = -5.0
 bus = &"SFX"
 
 [node name="InstaArea" type="Area2D" parent="."]

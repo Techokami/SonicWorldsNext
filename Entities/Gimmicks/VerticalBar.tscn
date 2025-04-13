@@ -36,6 +36,3 @@ collision_mask = 4096
 [node name="CollisionShape2D" type="CollisionShape2D" parent="VerticalBarArea"]
 position = Vector2(0, 3.5)
 shape = SubResource("2")
-
-[connection signal="body_entered" from="VerticalBarArea" to="." method="_on_vertical_bar_area_body_entered"]
-[connection signal="body_exited" from="VerticalBarArea" to="." method="_on_vertical_bar_area_body_exited"]

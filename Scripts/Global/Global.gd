@@ -96,7 +96,7 @@ var nodeMemory = []
 var zoomSize = 1
 var smoothRotation = 0
 
-# Hazard type references
+## Hazard type references
 enum HAZARDS {NORMAL, FIRE, ELEC, WATER}
 
 # Layers references
@@ -134,7 +134,7 @@ func _process(delta):
 	if !get_tree().paused:
 		globalTimer += delta
 	
-# reset values, self explanatory, put any variables to their defaults in here
+## reset values, self explanatory, put any variables to their defaults in here
 func reset_values():
 	lives = 3
 	score = 0
@@ -149,21 +149,21 @@ func reset_values():
 	nodeMemory = []
 	nextZone = load("res://Scene/Zones/BaseZone.tscn")
 
-# use this to play a sound globally, use load("res:..") or a preloaded sound
-func play_sound(sound = null):
+## use this to play a sound globally, use load("res:..") or a preloaded sound
+func play_sound(sound = null) -> void:
 	if sound != null:
 		soundChannel.stream = sound
 		soundChannel.play()
 
-# add a score object, see res://Scripts/Misc/Score.gd for reference
-func add_score(position = Vector2.ZERO,value = 0):
+## add a score object, see res://Scripts/Misc/Score.gd for reference
+func add_score(position = Vector2.ZERO,value = 0) -> void:
 	var scoreObj = Score.instantiate()
 	scoreObj.scoreID = value
 	scoreObj.global_position = position
 	add_child(scoreObj)
 
-# use a check function to see if a score increase would go above 50,000
-func check_score_life(scoreAdd = 0):
+## use a check function to see if a score increase would go above 50,000
+func check_score_life(scoreAdd: int = 0) -> void:
 	if fmod(score,50000) > fmod(score+scoreAdd,50000):
 		life.play()
 		lives += 1
@@ -171,8 +171,8 @@ func check_score_life(scoreAdd = 0):
 		music.volume_db = -100
 		bossMusic.volume_db = -100
 
-# use this to set the stage clear theme, only runs if stageClearPhase isn't 0
-func stage_clear():
+## use this to set the stage clear theme, only runs if stageClearPhase isn't 0
+func stage_clear() -> void:
 	if stageClearPhase == 0:
 		currentTheme = 2
 		music.stream = themes[currentTheme]
@@ -180,11 +180,13 @@ func stage_clear():
 		effectTheme.stop()
 		bossMusic.stop()
 
-func emit_stage_start():
+## Emit the stage started signal
+## DW's note: This seems silly. Just invoke Global.stage_started.emit()
+func emit_stage_start() -> void:
 	stage_started.emit()
 
-# save data settings
-func save_settings():
+## save data settings
+func save_settings() -> void:
 	var file = ConfigFile.new()
 	# save settings
 	file.set_value("Volume","SFX",AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX")))
@@ -196,12 +198,12 @@ func save_settings():
 	# save config and close
 	file.save("user://Settings.cfg")
 
-# load settings
-func load_settings():
+## load settings
+func load_settings() -> void:
 	var file = ConfigFile.new()
 	var err = file.load("user://Settings.cfg")
 	if err != OK:
-		return false # Return false as an error
+		return
 	
 	if file.has_section_key("Volume","SFX"):
 		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"),file.get_value("Volume","SFX"))
@@ -232,28 +234,33 @@ func load_settings():
 	if file.has_section_key("Resolution","FullScreen"):
 		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (file.get_value("Resolution","FullScreen")) else Window.MODE_WINDOWED
 
+# Gets the main player.
+func get_first_player() -> PlayerChar:
+	return players[0]
+
 ## Useful for checking triggers that require specifically the first player to be on a gimmick	
-func get_first_player_gimmick():
+func get_first_player_gimmick() -> ConnectableGimmick:
 	return players[0].get_active_gimmick()
 
 ## Useful for gimmicks that can activate if any player is attached that don't need data about
-## the specific player
-func is_any_player_on_gimmick(gimmick):
+## the specific player. A simple boolean of whether or not there is a player on a given
+## ConnectableGimmick.
+func is_any_player_on_gimmick(gimmick: ConnectableGimmick) -> bool:
 	for player in players:
 		if player.get_active_gimmick() == gimmick:
 			return true
 	return false
 
 ## Useful for gimmicks that need to potentially iterate through all attached players
-func get_players_on_gimmick(gimmick):
-	var players_on_gimmick = []
+func get_players_on_gimmick(gimmick) -> Array[PlayerChar]:
+	var players_on_gimmick: Array[PlayerChar] = []
 	for player in players:
 		if player.get_active_gimmick() == gimmick:
 			players_on_gimmick.append(player)
 	return players_on_gimmick
 
 ## Simple check to see if the player is the first char
-func is_player_first(player : PlayerChar):
+func is_player_first(player : PlayerChar) -> bool:
 	if players[0] == player:
 		return true
 	return false
@@ -264,5 +271,26 @@ func is_player_first(player : PlayerChar):
 ##             being later players
 ## @retval -1 if the player isn't in the inbox. That should be impossible unless
 ##            you make an orphaned player for some reason.
-func get_player_index(player : PlayerChar):
+func get_player_index(player : PlayerChar) -> int:
 	return players.find(player)
+
+## get the current active camera
+func getCurrentCamera2D() -> Camera2D:
+	var viewport = get_viewport()
+	if not viewport:
+		return null
+	var camerasGroupName = "__cameras_%d" % viewport.get_viewport_rid().get_id()
+	var cameras = get_tree().get_nodes_in_group(camerasGroupName)
+	for camera in cameras:
+		if camera is Camera2D and camera.enabled:
+			return camera
+	return null
+
+## the original game logic runs at 60 fps, this function is meant to be used to help calculate this,
+## usually a division by the normal delta will cause the game to freak out at different FPS speeds
+func div_by_delta(delta) -> float:
+	return 0.016667*(0.016667/delta)
+
+## get window size resolution as a vector2
+func get_screen_size() -> Vector2:
+	return get_viewport().get_visible_rect().size

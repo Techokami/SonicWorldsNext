@@ -51,7 +51,7 @@ _data = {
 "main": SubResource("1")
 }
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_cfk3b"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_151ia"]
 size = Vector2(12, 96)
 
 [node name="FBZ_Pylon_Controller" type="Node2D"]
@@ -61,23 +61,21 @@ script = ExtResource("2")
 position = Vector2(0, -65)
 texture = ExtResource("1")
 hframes = 3
-frame = 2
 region_enabled = true
 region_rect = Rect2(0, 0, 48, 96)
 
 [node name="FBZ_Pylon_Bottom" type="Sprite2D" parent="."]
-position = Vector2(0, -7.5)
+position = Vector2(0, -8.5)
 texture = ExtResource("3")
 hframes = 3
 vframes = 2
-frame = 5
+frame = 3
 
 [node name="FBZ_Pylon_Top" type="Sprite2D" parent="."]
 position = Vector2(0, -121.5)
 texture = ExtResource("3")
 hframes = 3
 vframes = 2
-frame = 2
 
 [node name="FBZ_Pylon_Animator" type="AnimationPlayer" parent="."]
 callback_mode_method = 1
@@ -91,7 +89,4 @@ collision_mask = 4096
 
 [node name="FBZ_Pylon_Collision" type="CollisionShape2D" parent="FBZ_Pylon_Area"]
 position = Vector2(0, -65)
-shape = SubResource("RectangleShape2D_cfk3b")
-
-[connection signal="body_entered" from="FBZ_Pylon_Area" to="." method="_on_FBZ_Pylon_Area_body_entered"]
-[connection signal="body_exited" from="FBZ_Pylon_Area" to="." method="_on_FBZ_Pylon_Area_body_exited"]
+shape = SubResource("RectangleShape2D_151ia")

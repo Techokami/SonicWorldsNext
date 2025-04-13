@@ -236,7 +236,7 @@ func _physics_process(delta):
 	# If you want symmetry over Accuracy, the "46" in the line below should actually be "45"
 	if (abs(parent.movement.x) < parent.fall and calcAngle >= 46 and calcAngle <= 315):
 		if (round(calcAngle) >= 90 and round(calcAngle) <= 270):
-			parent.disconect_from_floor()
+			parent.disconnect_from_floor()
 		parent.horizontalLockTimer = 30.0/60.0
 		
 	# movement

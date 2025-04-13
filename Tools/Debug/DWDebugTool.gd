@@ -17,11 +17,13 @@
 ##     left
 ## m - Gives the player some rings
 ## , - Cycles through available shields
+## . - Toggles physics slowdown to 1/8th scale
 
 extends Node2D
 
 var brick_movement = Vector2(0, 0)
 var teleport_location = null
+var be_slow = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -86,6 +88,15 @@ func try_cheat():
 		$BigMovingBrick.global_position = Global.players[0].global_position + Vector2(160, 0)
 		brick_movement = Vector2(-2, 0)
 		return KEY_P
+	
+	if Input.is_key_pressed(KEY_PERIOD):
+		if be_slow:
+			Engine.time_scale = 1.0
+			be_slow = false
+		else:
+			Engine.time_scale = 0.125
+			be_slow = true
+		return KEY_PERIOD
 		
 	return 0
 

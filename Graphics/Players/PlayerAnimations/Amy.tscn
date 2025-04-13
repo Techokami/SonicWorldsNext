@@ -1,6 +1,7 @@
-[gd_scene load_steps=66 format=3 uid="uid://d3vtvdbdn6g8v"]
+[gd_scene load_steps=67 format=3 uid="uid://d3vtvdbdn6g8v"]
 
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="1_sk1gs"]
+[ext_resource type="Script" path="res://Graphics/Players/PlayerAnimations/PlayerAnimation.gd" id="1_x2red"]
 [ext_resource type="Texture2D" uid="uid://bfesqgvh63scg" path="res://Graphics/Players/Amy.png" id="2_vki44"]
 [ext_resource type="Texture2D" uid="uid://dlomjk6vm15ep" path="res://Graphics/Misc/DashDust.png" id="3_dg7ud"]
 [ext_resource type="Texture2D" uid="uid://dvqglf8dididc" path="res://Graphics/Items/shield_plain.png" id="4_nx0xn"]
@@ -42,6 +43,20 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(0, 0)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Amy/PlayerAnimation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"reset_loops"
+}]
 }
 
 [sub_resource type="Animation" id="108"]
@@ -990,6 +1005,20 @@ tracks/2/keys = {
 "update": 1,
 "values": [Vector2(16, 0), Vector2(8, 0), Vector2(-14, 0), Vector2(-17, 0), Vector2(-10, 0), Vector2(0, 0)]
 }
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Amy/PlayerAnimation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.483333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"increment_loops"
+}]
+}
 
 [sub_resource type="Animation" id="125"]
 resource_name = "swingVerticalBarManaged"
@@ -1072,6 +1101,20 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [Vector2(-15, 0), Vector2(-9, 0), Vector2(14, 0), Vector2(18, 0), Vector2(14, 0), Vector2(0, 0)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Amy/PlayerAnimation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.58),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"increment_loops"
+}]
 }
 
 [sub_resource type="Animation" id="85"]
@@ -1320,6 +1363,7 @@ libraries = {
 "": SubResource("AnimationLibrary_36uej")
 }
 autoplay = "idle"
+script = ExtResource("1_x2red")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 5
@@ -1328,7 +1372,6 @@ texture = ExtResource("2_vki44")
 offset = Vector2(0, -6)
 hframes = 16
 vframes = 18
-frame = 83
 
 [node name="DashDust" type="AnimatedSprite2D" parent="Sprite2D"]
 visible = false

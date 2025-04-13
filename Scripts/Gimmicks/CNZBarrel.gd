@@ -20,6 +20,11 @@ extends Node2D
 # for optimal efficiency.
 var players = []
 
+# The portions of the gimmick that are AnimatableBody need to be manually repositioned
+# once we move the the barrel due to an annoying glitch in Godot.
+# See: https://github.com/godotengine/godot/issues/58269
+var bodies_to_update = []
+
 # Use to find the index of the player using the player's object ID
 # Return values are the Same as Array.find(obj), but this function takes into
 # account the specific nesting of the array and treats players[n][0] as the key
@@ -65,26 +70,26 @@ var animation_offset = -0.02
 # this will mean throwing off a bunch of stuff.
 var spinning_period = 128.0 / 60.0
 
-# Enable the trampoline mode. Needs to be combined with a maxVel to limit the maximum distance traveled.
-# MaxVel affects the maximum velocity that can be held at any time which effectively limits the maximum
-# distance the gimmick can travel. The closer the current velocity is to the maxVel (absolute), the less impact
-# jumping on will have on the velocity.
+## Enable the trampoline mode. Needs to be combined with a maxVel to limit the maximum distance traveled.
+## MaxVel affects the maximum velocity that can be held at any time which effectively limits the maximum
+## distance the gimmick can travel. The closer the current velocity is to the maxVel (absolute), the less impact
+## jumping on will have on the velocity.
 @export var trampolineMode = false
-# Play with this to determine the maximum distance the barrel can travel. It's going to take trial and error, sorry.
+## Play with this to determine the maximum distance the barrel can travel. It's going to take trial and error, sorry.
 @export var maxVel = 480.0
 
-# Don't mess with the spring constants and/or decay values unless you're preparred to spend a long time tinkering.
-# springConstantLoaded determines the force at which the spring bounces back when the energy in the spring is at its maximum.
+## Don't mess with the spring constants and/or decay values unless you're preparred to spend a long time tinkering.
+## springConstantLoaded determines the force at which the spring bounces back when the energy in the spring is at its maximum.
 @export var springConstantLoaded = 2.0
-# springConstantUnloaded determines the force at which the spring bounces back when the energy in the spring is at 0
+## springConstantUnloaded determines the force at which the spring bounces back when the energy in the spring is at 0
 @export var springConstantUnloaded = 5.0
-# decayLoaded determines how quickly the spring loses energy when the energy in the spring is at its maximum.
+## decayLoaded determines how quickly the spring loses energy when the energy in the spring is at its maximum.
 @export var decayLoaded = 0.3
-# decayUnloaded determines how quickly the spring loses energy when the energy in the spring is at 0
+## decayUnloaded determines how quickly the spring loses energy when the energy in the spring is at 0
 @export var decayUnloaded = 1.0
-# influence determines how much energy the player's directional influence imparts
+## influence determines how much energy the player's directional influence imparts
 @export var influence = 1.0
-# impartFactor determines how much the motion of the platform impacts the player when they jump off
+## impartFactor determines how much the motion of the platform impacts the player when they jump off
 @export var impartFactor = 0.8
 
 # Calcuated based on max velocity, load energy is the amount of energy at which the Loaded constants have full influence
@@ -101,11 +106,16 @@ var _yVel = 0
 # where the platform is in relation to its origin as a float value. Maybe unnecessary? Either way I'm using it.
 var _realY = 0.0
 # The physical parts of the body that move separate from the main node
-@onready var body = $CNZBarrelActiveBody
+@onready var body = $Bodies
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	loadEnergy = 0.25 * maxVel * maxVel
+	
+	for my_node in body.get_children():
+		if my_node is AnimatableBody2D:
+			print("adding node %s" % my_node)
+			bodies_to_update.append(my_node)
 
 func impart_force(velocityChange):
 	_yVel += velocityChange
@@ -116,7 +126,7 @@ func attach_player(player):
 	if find_player(player) >= 0:
 		return
 
-	player.set_state(player.STATES.ANIMATION)	
+	player.set_state(PlayerChar.STATES.ANIMATION)	
 	var player_z_level = player.get_z_index()
 	var player_radius = clamp(player.global_position.x - global_position.x, -max_radius, max_radius)
 	var player_phase = 0
@@ -130,7 +140,7 @@ func attach_player(player):
 
 	if trampolineMode:
 		# Believe it or not, it really is this simple.
-		impart_force(80.0)
+		impart_force(110.0)
 
 	player.direction = 1
 	player.sprite.flip_h = false
@@ -138,17 +148,17 @@ func attach_player(player):
 	# Prevents player from clipping on walls while they are on the fringes of the gimmick
 	player.allowTranslate = true
 
-func detach_player(player, index):
+func detach_player(player: PlayerChar, index):
 	player.set_z_index(get_player_z_level(index))
 	players.remove_at(index)
 	
-	if player.currentState == player.STATES.DIE:
-		player.animator.play("die")
+	if player.get_state() == PlayerChar.STATES.DIE:
+		player.play_animation("die")
 
-	# Clamp position on exit to prevent zips on exit -- probably shouldn't use magic numbers.
+	# Clamp position on exit to prevent zips on exit -- probably shouldn't use magic numbers though.
 	player.global_position.x = clamp(player.global_position.x, global_position.x - 22, global_position.x + 22)
 
-	if player.currentState != player.STATES.DIE:
+	if player.get_state() != PlayerChar.STATES.DIE:
 		player.allowTranslate = false
 		
 func set_anim(player, lookUp, lookDown):
@@ -213,8 +223,12 @@ func _process(delta):
 			player.queue_redraw()
 			continue
 			
-		if player.currentState != player.STATES.ANIMATION:
+		if player.get_state() != PlayerChar.STATES.ANIMATION:
 			detach_player(player, index)
+	
+	for anim_body in bodies_to_update:
+		anim_body.global_position = body.global_position
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 var skipFrames = 0
@@ -267,8 +281,11 @@ func _physics_process(delta):
 		set_player_phase(index, get_player_phase(index) + (delta / spinning_period) * 2.0 * PI)
 		player.global_position.x = floor(body.global_position.x + get_player_radius(index) * cos(get_player_phase(index)))
 		player.global_position.y = floor(body.global_position.y - player.currentHitbox.NORMAL.y / 2.0 - 1)
-		if player.currentState != player.STATES.DIE:
+		if player.get_state() != PlayerChar.STATES.DIE:
 			player.movement.x = 0
 			player.movement.y = 0
 		# XXX need to figure out why player 2 is mispositioned while this gimmick is moving quickly
 		player.cam_update()
+	
+	for anim_body in bodies_to_update:
+		anim_body.global_position = body.global_position

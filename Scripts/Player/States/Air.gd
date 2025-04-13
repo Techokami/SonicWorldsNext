@@ -14,7 +14,7 @@ var lockDir = false
 func _ready():
 	if isJump: # we only want to connect it once so only apply this to the jump variation
 		parent.connect("enemy_bounced",Callable(self,"bounce"))
-
+	
 # Jump actions
 func _process(_delta):
 	if parent.playerControl != 0 or (parent.inputs[parent.INPUTS.YINPUT] < 0 and parent.character == Global.CHARACTERS.TAILS):

@@ -106,8 +106,11 @@ func connect_player(player : PlayerChar, allowSwap: bool = false) -> void:
 	
 func disconnect_player(player : PlayerChar) -> void:
 	player.unset_active_gimmick()
-	player.play_animation("roll")
-	player.set_state(player.STATES.JUMP)
+	
+	if player.get_state() == PlayerChar.STATES.ANIMATION:
+		player.play_animation("roll")
+		player.set_state(player.STATES.JUMP)
+		
 	player.unset_gimmick_var("brachiate_target_cur")
 	player_dismounted.emit(player)
 	pass
@@ -330,7 +333,7 @@ func temp_lock_gimmick(player) -> void:
 	var unlock_func = func ():
 		player.clear_single_locked_gimmick(self)
 	
-	var timer:SceneTreeTimer = get_tree().create_timer(0.5)
+	var timer:SceneTreeTimer = get_tree().create_timer(0.5, false)
 	timer.timeout.connect(unlock_func, CONNECT_DEFERRED)
 	
 	player.add_locked_gimmick(self)

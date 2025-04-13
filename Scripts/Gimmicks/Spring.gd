@@ -62,7 +62,7 @@ func set_spring():
 		$Spring.texture = springTextures[type]
 
 # Collision check
-func physics_collision(body, hitVector):
+func physics_collision(body: PlayerChar, hitVector: Vector2):
 	# check that the players hit direction matches the direction we're facing (ignored for diagonal)
 	if hitVector == -hitDirection:
 		# do a Rock launch HAUGH!!!
@@ -79,29 +79,32 @@ func physics_collision(body, hitVector):
 					if(abs(body.groundSpeed) >= min(6*60,body.top)):
 						curAnim = "run"
 			# play player animation
-			body.animator.play("spring")
-			body.animator.queue(curAnim)
+			body.play_animation("spring")
+			body.get_animator().queue(curAnim)
 			# set vertical speed
 			body.movement.y = setMove.y
 			body.set_state(body.STATES.AIR)
-			body.disconect_from_floor()
+			body.disconnect_from_floor()
 		# horizontal movement
 		else:
 			# exit out of state on certain states
-			match(body.currentState):
-				body.STATES.GLIDE:
-					if !body.ground:
-						body.animator.play("run")
+			match(body.get_state()):
+				PlayerChar.STATES.GLIDE:
+					if !body.is_on_ground():
+						body.play_animation("run")
 						body.set_state(body.STATES.AIR)
 			# set horizontal speed
 			body.movement.x = setMove.x
-			body.horizontalLockTimer = (15.0/60.0) # lock for 15 frames
-			body.direction = sign(setMove.x)
+			body.set_horizontal_lock_timer(15.0/60.0) # lock for 15 frames
+			if sign(setMove.x) > 0:
+				body.set_direction(PlayerChar.DIRECTIONS.RIGHT)
+			else:
+				body.set_direction(PlayerChar.DIRECTIONS.LEFT)
 		$SpringAnimator.play(animList[animID])
 		Global.play_sound(springSound)
 		
 		#Restore Air Control
-		body.airControl = true
+		body.set_air_control(true)
 		# Disable pole grabs - XXX Does this make any sense? How did this ever disable pole grabs?
 		# body.poleGrabID = self
 		return true

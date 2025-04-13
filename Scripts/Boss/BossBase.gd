@@ -30,7 +30,7 @@ func _physics_process(delta):
 		# checks if player hit has players inside
 		if playerHit.size() > 0:
 			# loop through players as i
-			for i in playerHit:
+			for i: PlayerChar in playerHit:
 				# check if damage entity is on or supertime is bigger then 0
 				if (i.get_collision_layer_value(20) or i.supTime > 0 or forceDamage):
 					i.movement = i.movement*-0.5
@@ -41,14 +41,14 @@ func _physics_process(delta):
 						got_hit.emit()
 						hp -= 1
 						# check if gliding, if they are force them to fall
-						if i.get("currentState") != null:
-							if i.currentState == i.STATES.GLIDE:
-								i.animator.play("glideFall")
-								# reset player hitbox
-								i.set_hitbox(i.currentHitbox.NORMAL)
-								i.reflective = false
-								if i.get_node_or_null("States/Glide") != null:
-									i.get_node("States/Glide").isFall = true
+						
+						if i.get_state() == PlayerChar.STATES.GLIDE:
+							i.play_animation("glideFall")
+							# reset player hitbox
+							i.set_hitbox(i.currentHitbox.NORMAL)
+							i.reflective = false
+							# XXX Modifying player state directly from another object seems a little odd to me
+							i.get_state_object(PlayerChar.STATES.GLIDE).isFall = true
 					# check if dead
 					if hp <= 0:
 						defeated.emit()

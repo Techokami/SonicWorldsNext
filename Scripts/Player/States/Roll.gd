@@ -38,7 +38,7 @@ func _physics_process(delta):
 	# drop, if speed below fall speed
 	if (abs(parent.movement.x) < parent.fall and calcAngle >= 45 and calcAngle <= 315):
 		if (round(calcAngle) >= 90 and round(calcAngle) <= 270):
-			parent.disconect_from_floor()
+			parent.disconnect_from_floor()
 		
 		parent.horizontalLockTimer = 30.0/60.0
 	

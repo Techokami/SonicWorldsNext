@@ -4,7 +4,7 @@ extends CharacterBody2D
 var physics = false
 var grv = 0.21875
 var yspeed = 0
-var playerTouch = null
+var playerTouch: PlayerChar = null
 var isActive = true
 @export_enum("Ring", "Speed Shoes", "Invincibility", "Shield", "Elec Shield", "Fire Shield",
 "Bubble Shield", "Super", "Blue Ring", "Boost", "1up") var item = 0
@@ -47,8 +47,7 @@ func destroy():
 	# enable effect
 	match (item):
 		0: # Rings
-			playerTouch.rings += 10
-			$SFX/Ring.play()
+			playerTouch.give_ring(10)
 		1: # Speed Shoes
 			if !playerTouch.get("isSuper"):
 				playerTouch.shoeTime = 20
@@ -75,7 +74,7 @@ func destroy():
 		7: # Super
 			playerTouch.rings += 50
 			if !playerTouch.get("isSuper"):
-				playerTouch.set_state(playerTouch.STATES.SUPER)
+				playerTouch.set_state(PlayerChar.STATES.SUPER)
 		10: # 1up
 			Global.life.play()
 			Global.lives += 1

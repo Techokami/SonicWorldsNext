@@ -44,16 +44,16 @@ func _physics_process(delta):
 				queue_free()
 
 # player collect bubble
-func _on_BubbleCollect_body_entered(body):
+func _on_BubbleCollect_body_entered(player : PlayerChar):
 	# player get air, ignore if they're already in a bubble
-	if !body.ground and $Bubble.frame >= 6 and body.shield != body.SHIELDS.BUBBLE:
-		body.airTimer = body.defaultAirTime
-		body.sfx[23].play()
+	if !player.ground and $Bubble.frame >= 6 and player.get_shield() != player.SHIELDS.BUBBLE:
+		player.airTimer = player.defaultAirTime
+		player.sfx[23].play()
 		
-		body.set_state(body.STATES.AIR)
-		body.animator.play("air")
-		body.animator.queue("walk")
-		body.movement = Vector2.ZERO
+		player.set_state(player.STATES.AIR)
+		player.play_animation("air")
+		player.get_animator().queue("walk")
+		player.movement = Vector2.ZERO
 		$Bubble.play("bigPop")
 		$BubbleCollect/CollisionShape2D.call_deferred("set","disabled",true)
 		set_physics_process(false)

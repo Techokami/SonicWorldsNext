@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=4 uid="uid://bjavywoj00j1j"]
+[gd_scene load_steps=48 format=4 uid="uid://bjavywoj00j1j"]
 
 [ext_resource type="Script" path="res://Scripts/Level/Level.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://qs5dmtxxf1w1" path="res://Scene/Presentation/Title.tscn" id="2_l4fq6"]
@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://dvmttrmkfraht" path="res://Entities/Gimmicks/CNZTrampolineBarrel.tscn" id="13"]
 [ext_resource type="Texture2D" uid="uid://dwvek120iiiv" path="res://Graphics/Obstacles/Walls/shutterCNZ.png" id="14"]
 [ext_resource type="PackedScene" uid="uid://gklj3ebdwveu" path="res://Entities/Items/Monitor.tscn" id="15"]
+[ext_resource type="PackedScene" uid="uid://b2n5ptpbq5ysg" path="res://Tools/Debug/DWDebugTool.tscn" id="17_f05cn"]
 [ext_resource type="PackedScene" uid="uid://cioq5saowvqxj" path="res://Entities/MainObjects/Player.tscn" id="18"]
 [ext_resource type="Script" path="res://Scripts/Objects/CollapseLayer.gd" id="21_fdxp4"]
 [ext_resource type="PackedScene" uid="uid://urapmknlu0s5" path="res://Entities/Gimmicks/HorizontalBar.tscn" id="22_ethvu"]
@@ -143,7 +144,9 @@ centered = false
 region_enabled = true
 region_rect = Rect2(0, 0, 512, 512)
 
-[node name="Player" parent="." instance=ExtResource("18")]
+[node name="Players" type="Node" parent="."]
+
+[node name="Player" parent="Players" instance=ExtResource("18")]
 position = Vector2(49, 747)
 
 [node name="Default" type="TileMapLayer" parent="."]
@@ -223,42 +226,13 @@ script = ExtResource("5")
 [node name="CNZBarrel" parent="Entities/PlatformStatefulMover2" instance=ExtResource("7")]
 
 [node name="TranslationalState_0" type="Node2D" parent="Entities/PlatformStatefulMover2"]
-position = Vector2(256, 0)
-script = ExtResource("8")
-
-[node name="TranslationalState_1" type="Node2D" parent="Entities/PlatformStatefulMover2"]
-position = Vector2(0, -64)
-script = ExtResource("8")
-moveTime = 2.0
-nextState = 2
-
-[node name="TranslationalState_2" type="Node2D" parent="Entities/PlatformStatefulMover2"]
-position = Vector2(-256, 0)
-script = ExtResource("8")
-nextState = 3
-
-[node name="TranslationalState_3" type="Node2D" parent="Entities/PlatformStatefulMover2"]
-position = Vector2(0, 64)
-script = ExtResource("8")
-moveTime = 2.0
-nextState = 4
-
-[node name="TranslationalState_4" type="Node2D" parent="Entities/PlatformStatefulMover2"]
 position = Vector2(128, 0)
 script = ExtResource("8")
-moveTime = 2.0
-nextState = 5
+interpolationMode = 1
 
-[node name="TranslationalState_5" type="Node2D" parent="Entities/PlatformStatefulMover2"]
-position = Vector2(0, -128)
+[node name="TranslationalState_1" type="Node2D" parent="Entities/PlatformStatefulMover2"]
+position = Vector2(-128, 0)
 script = ExtResource("8")
-moveTime = 2.0
-nextState = 6
-
-[node name="TranslationalState_6" type="Node2D" parent="Entities/PlatformStatefulMover2"]
-position = Vector2(-128, 128)
-script = ExtResource("8")
-moveTime = 2.0
 nextState = 0
 
 [node name="StatefulMover3" type="Node2D" parent="Entities"]
@@ -1077,6 +1051,9 @@ position = Vector2(3648, 823)
 position = Vector2(3669, 632)
 travelDistance = 252
 
+[node name="DWDebugTool" parent="." instance=ExtResource("17_f05cn")]
+position = Vector2(-134, 546)
+
 [connection signal="body_entered" from="Entities/AdvancedPlatform" to="Entities/AdvancedPlatform" method="_on_body_entered"]
 [connection signal="body_exited" from="Entities/AdvancedPlatform" to="Entities/AdvancedPlatform" method="_on_body_exited"]
 [connection signal="target_reached" from="ChainedMonkeyBar9/RetractibleChain" to="ChainedMonkeyBar9/SwitchPlayer" method="do_play"]
@@ -1089,8 +1066,8 @@ travelDistance = 252
 [connection signal="target_reached" from="HookSliderAssembly/HookSlider/MobileHook/RetractibleChain" to="HookSliderAssembly/HookSlider" method="send_to_target" binds= [615]]
 [connection signal="pressed" from="Switch" to="ChainedMonkeyBar/RetractibleChain" method="set_default_target" binds= [170]]
 [connection signal="pressed" from="Switch" to="ChainedMonkeyBar/RetractibleChain" method="send_to_height" binds= [609]]
-[connection signal="pressed" from="Switch2" to="ChainedMonkeyBar/RetractibleChain" method="set_default_target" binds= [0]]
 [connection signal="pressed" from="Switch2" to="ChainedMonkeyBar/RetractibleChain" method="set_home_height" binds= [170]]
+[connection signal="pressed" from="Switch2" to="ChainedMonkeyBar/RetractibleChain" method="set_default_target" binds= [0]]
 [connection signal="pressed" from="Switch2" to="ChainedMonkeyBar/RetractibleChain" method="send_to_height" binds= [170]]
 
 [editable path="ChainedMonkeyBar2"]

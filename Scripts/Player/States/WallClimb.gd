@@ -33,7 +33,7 @@ func _physics_process(delta):
 		if parent.ground:
 			parent.animator.play("walk")
 			parent.groundSpeed = 1
-			parent.disconect_from_floor()
+			parent.disconnect_from_floor()
 			parent.set_state(parent.STATES.AIR,parent.currentHitbox.NORMAL)
 			return false
 		

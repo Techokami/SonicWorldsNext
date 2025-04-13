@@ -23,7 +23,7 @@ func _physics_process(_delta):
 			
 			# disconect floor
 			if i.ground:
-				i.disconect_from_floor()
+				i.disconnect_from_floor()
 			
 			# set movement
 			# calculate movement direction

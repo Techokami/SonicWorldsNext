@@ -1,9 +1,8 @@
 @tool
-extends Node2D
+extends ConnectableGimmick
 
 ## Vertical spinning pylon from Flying Battery Zone
 ## Author: DimensionWarped
-## Note: This should be refactored into a ConnectableGimmick
 
 ## Vertical size of the pylon (center only - edges are constant sized)
 @export var vert_size = 96
@@ -14,22 +13,25 @@ extends Node2D
 @export var launch_vertical_speed = 110
 ## How fast the player climbs up/down the pylon
 @export var climb_speed = 80
+## How far out from the center does the player rotate around the gimmick?
+@export var rotation_magnitude = 7
 
 # An editor only variable. If last_size doesn't match vert_size during process
 # in tool mode, we resize everything in the editor.
 var last_size
+
 # How much time it takes to make a full rotation in seconds. The full cycle lasts
 # 32 frames in Sonic and Knuckles.
 var rotate_time = (32.0 / 60.0)
 # array of players currently interacting with the gimmick
-var players = []
+#var players = []
 # array of players time currently spent rotating around the gimmick
-var players_rotation_timer = []
+#var players_rotation_timer = []
 # array of players z levels upon interacting with the gimmick. This is needed
 # because the player's z level will be pushed behind the pylon and in front of
 # the pylon depending on their position in the spinning animation and we need
 # to be able to restore it when the player leaves the gimmick.
-var players_z_level = []
+#var players_z_level = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -47,7 +49,7 @@ func _ready():
 	mainSprite.set_region_rect(Rect2(0, 0, 48, vert_size))
 	mainSprite.position = Vector2(0, -vert_size / 2.0 - bottomSprite.texture.get_height() / 2.0)
 	topSprite.position = mainSprite.position + Vector2(0, (-vert_size / 2.0) - (topSprite.texture.get_height() / 4.0))
-	bottomSprite.position = mainSprite.position + Vector2(0, (vert_size / 2.0) + (bottomSprite.texture.get_height() / 4.0) + 1)
+	bottomSprite.position = mainSprite.position + Vector2(0, (vert_size / 2.0) + (bottomSprite.texture.get_height() / 4.0))
 	animator.play("main")
 	
 	var shape = RectangleShape2D.new()
@@ -57,52 +59,131 @@ func _ready():
 	collision.set_shape(shape)
 	collision.position = Vector2(0, -vert_size / 2.0 - bottomSprite.texture.get_height() / 2.0)
 	
-func process_game(delta):
-	for i in players:
-		var getIndex = players.find(i)
-		var yInput = i.get_y_input()
+## This function will be invoked at the end of the player process. Treat this
+## as a player process function specific to your gimmick. You may be able to
+## work around things in a way that you don't actually need this and can just
+## use your gimmick's process function, and that's ok!
+func player_process(player: PlayerChar, delta: float):
+	var yInput = player.get_y_input()
+	var rotation_timer = player.get_gimmick_var("VerticalPylonRotationTimer")
+	var relative_y_pos = player.get_gimmick_var("VerticalPylonYPos")
+	var relative_y_speed = 0
+	rotation_timer += delta
+	
+	if yInput > 0:
+		relative_y_speed = climb_speed
+	elif yInput < 0:
+		relative_y_speed = -climb_speed
+		
+func check_grab(player: PlayerChar):
+	if player.is_gimmick_locked_for_player(self):
+		return false
+	var player_state = player.get_state()
+	
+	if player_state == PlayerChar.STATES.RESPAWN:
+		return false
+		
+	if player_state == PlayerChar.STATES.DIE:
+		return false
+		
+	if player_state == PlayerChar.STATES.HIT:
+		return false
+	
+	return true
 
-		# If the player isn't on the bar, skip it.
-		if i.currentState != i.STATES.ANIMATION:
+func connect_player(player: PlayerChar):
+	# attmept to connect to the gimmick. If failed, we give up this attempt.
+	if player.set_active_gimmick(self) == false:
+		return
+
+	# XXX TODO: We need to clean up this hitbox setting stuff
+	player.set_state(PlayerChar.STATES.ANIMATION, player.currentHitbox.HORIZONTAL)
+	player.set_direction(PlayerChar.DIRECTIONS.RIGHT)
+	player.play_animation("swingVerticalBarManaged", -1, 0.0)
+	player.set_gimmick_var("VerticalPylonRotationTimer", 0.0)
+	player.set_gimmick_var("VerticalPylonYPos", global_position.y - player.global_position.y)
+	player.set_gimmick_var("VerticalPylonZIndex", player.z_index)
+	player.movement = Vector2(0.0, 0.0)
+	
+func disconnect_player(player: PlayerChar):
+	player.set_z_index(player.get_gimmick_var("VerticalPylonZIndex"))
+	player.unset_active_gimmick()
+
+	# We only change the player state on disconnect if they still in ANIMATION
+	# when we got here.
+	if player.get_state() == PlayerChar.STATES.ANIMATION:
+		player.set_state(PlayerChar.STATES.JUMP)
+		player.play_animation("roll")
+	
+	var unlock_func = func ():
+		print("unlock player %s" % player)
+		player.clear_single_locked_gimmick(self)
+	
+	var timer:SceneTreeTimer = get_tree().create_timer(0.25, false)
+	timer.timeout.connect(unlock_func, CONNECT_DEFERRED)
+	print("lock player %s" % player)
+	player.add_locked_gimmick(self)
+	pass
+
+func process_game(delta):
+	var players_to_check = $FBZ_Pylon_Area.get_overlapping_bodies()
+	for player: PlayerChar in players_to_check:
+		if player.get_active_gimmick() != null:
+			print("player already has gimmick")
 			continue
-		
-		# Increment the rotation timer for the player
-		players_rotation_timer[getIndex] += delta
-		
-		if (yInput == 0):
-			i.movement.y = 0
-		elif (yInput > 0):
-			i.movement.y = climb_speed
-		else:
-			i.movement.y = -climb_speed
-		i.movement.x = 0
-		
+
+		if check_grab(player):
+			connect_player(player)
+			continue
+	
+	for player: PlayerChar in Global.get_players_on_gimmick(self):	
+		# Update the player rotation timer
+		var player_rotation = player.get_gimmick_var("VerticalPylonRotationTimer") + delta
+		player.set_gimmick_var("VerticalPylonRotationTimer", player_rotation)
+
 		# Position the player based on their position in rotation.
-		i.global_position.x = get_global_position().x + 7 * sin((players_rotation_timer[getIndex] / rotate_time * 2 * PI))
+		var rotation_phase = sin(player_rotation * 2.0 * PI / rotate_time)
+		var x_offset = rotation_magnitude * rotation_phase
+		player.global_position.x = global_position.x + x_offset
 		
-		if (i.global_position.y < get_global_position().y - vert_size - 4):
-			i.global_position.y = get_global_position().y - vert_size - 4
+		# Move the player's relative position based on their input and clamp it
+		# based on their relative position XXX TODO
+		var relative_y_pos = player.get_gimmick_var("VerticalPylonYPos")
+
+		var yInput = player.get_y_input()
+		if yInput > 0:
+			relative_y_pos -= climb_speed * delta
+		elif yInput < 0:
+			relative_y_pos += climb_speed * delta
 			
-		if (i.global_position.y > get_global_position().y - 30):
-			i.global_position.y = get_global_position().y - 30
+		# Clamp the player's veritcal position
+		if relative_y_pos > vert_size + 4:
+			relative_y_pos = vert_size + 4
+		elif relative_y_pos < 26:
+			relative_y_pos = 26
+			
+		player.set_gimmick_var("VerticalPylonYPos", relative_y_pos)
+
+		player.global_position.y = global_position.y - relative_y_pos
 			
 		# Animate the player based on their position in rotation.
-		i.animator.seek(players_rotation_timer[getIndex] / rotate_time)
+		player.get_animator().seek(player_rotation / rotate_time)
 		
-		if fmod((players_rotation_timer[getIndex] / rotate_time) - 0.25, 1.0) > 0.5:
-			i.set_z_index(get_z_index() - 100)
+		if fmod((player_rotation / rotate_time) - 0.25, 1.0) > 0.5:
+			player.set_z_index(get_z_index() - 100)
 		else:
-			i.set_z_index(get_z_index() + 100)
+			player.set_z_index(get_z_index() + 100)
 			
-		if (i.any_action_pressed()):
-			i.set_z_index(players_z_level[getIndex])
-			i.set_state(i.STATES.JUMP)
-			# set animation to roll
-			i.movement.y = -launch_vertical_speed
-			if (i.is_left_held()):
-				i.movement.x = -launch_speed
+		if (player.any_action_pressed()):
+			player.movement.y = -launch_vertical_speed
+			if (player.is_left_held()):
+				player.movement.x = -launch_speed
 			else:
-				i.movement.x = launch_speed
+				player.movement.x = launch_speed
+			disconnect_player(player)
+		
+		if player.get_state() != PlayerChar.STATES.ANIMATION:
+			disconnect_player(player)
 
 # Tool Function to reset the size and position of elements within the object based on vert_size	
 func process_editor():
@@ -118,10 +199,10 @@ func process_editor():
 	mainSprite.set_region_rect(Rect2(0, 0, 48, vert_size))
 	mainSprite.position = Vector2(0, -vert_size / 2.0 - bottomSprite.texture.get_height() / 2.0)
 	topSprite.position = mainSprite.position + Vector2(0, (-vert_size / 2.0) - (topSprite.texture.get_height() / 4.0))
-	bottomSprite.position = mainSprite.position + Vector2(0, (vert_size / 2.0) + (bottomSprite.texture.get_height() / 4.0) + 1)
+	bottomSprite.position = mainSprite.position + Vector2(0, (vert_size / 2.0) + (bottomSprite.texture.get_height() / 4.0))
 
 	var shape = RectangleShape2D.new()
-	shape.size.y = vert_size / 2.0
+	shape.size.y = vert_size / 1.0
 	shape.size.x = 6
 	
 	collision.set_shape(shape)
@@ -137,35 +218,8 @@ func _draw():
 	if Engine.is_editor_hint():
 		pass
 
-func _on_FBZ_Pylon_Area_body_entered(body):	
-	if !players.has(body):
-		players.append(body)
-		players_rotation_timer.append(0)
-		players_z_level.append(body.get_z_index())
-		
-	# The bar only spins one way, so the direction is always going to be forward.
-	body.direction = 1
-	body.sprite.flip_h = false
-	
-	# Play the swinging animation at 0 speed so we can control it manually.
-	body.animator.play("swingVerticalBarManaged", -1, 0, false)
-	
-	body.set_state(body.STATES.ANIMATION,body.currentHitbox.HORIZONTAL)
-
-func _on_FBZ_Pylon_Area_body_exited(body):
-	remove_player(body)
-	
-func remove_player(player):
-	if players.has(player):
-		# Don't allow removal of someone who is still on the vertical bar. This can occur with
-		# high speeds. Preventing this should be fine since the player will be brought back into
-		# collision overlap range by virtue of being on the bar.
-		if (player.currentState == player.STATES.ANIMATION):
-			return
-		player.animator.play("roll")
-		player.set_state(player.STATES.AIR)
-		# Clean out the player from all player-linked arrays.
-		var getIndex = players.find(player)
-		players.erase(player)
-		players_rotation_timer.remove_at(getIndex)
-		players_z_level.remove_at(getIndex)
+## This will usually only be invoked if the player gets hit or another object
+## forces the player off
+func player_force_detach_callback(player : PlayerChar):
+	disconnect_player(player)
+	pass
