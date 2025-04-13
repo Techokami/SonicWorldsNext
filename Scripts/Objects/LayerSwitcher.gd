@@ -4,7 +4,8 @@ extends Area2D
 var texture = load("res://Graphics/EditorUI/layer_switchers.png")
 # layer settings, should be self explanatory
 @export var size = Vector2(1,3)
-@export_enum("Horizontal", "Vertical") var orientation = 0
+enum ORIENTATION { HORIZONTAL, VERTICAL }
+@export var orientation: ORIENTATION = ORIENTATION.HORIZONTAL
 @export_enum("Low", "High") var rightLayer = 0
 @export_enum("Low", "High") var leftLayer = 1
 @export var onlyOnFloor = false
@@ -28,12 +29,12 @@ func _physics_process(_delta):
 				# check if on the floor and if we're only check for grounded players
 				if i.ground or not onlyOnFloor:
 					match(orientation):
-						0: #Horizontal
+						ORIENTATION.HORIZONTAL:
 							if (i.global_position.x > global_position.x):
 								i.collissionLayer = rightLayer
 							else:
 								i.collissionLayer = leftLayer
-						1: #Vertical
+						ORIENTATION.VERTICAL:
 							if (i.global_position.y > global_position.y):
 								i.collissionLayer = rightLayer
 							else:
@@ -50,7 +51,7 @@ func _draw():
 	for i in range(size.x):
 		draw_texture_rect_region(texture,
 		Rect2(Vector2((-8*size.x)+(i*16),-8*size.y),Vector2(8,16*size.y)),
-		Rect2(Vector2(orientation*16,0),Vector2(8,16*size.y)))
+		Rect2(Vector2((16 if orientation==ORIENTATION.VERTICAL else 0),0),Vector2(8,16*size.y)))
 	for i in range(size.x):
 		for j in range(size.y):
 			draw_texture_rect_region(texture,
