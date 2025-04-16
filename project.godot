@@ -24,6 +24,7 @@ GlobalFunctions="*res://Scripts/Global/GlobalFunctions.gd"
 
 [debug]
 
+gdscript/warnings/integer_division=0
 shapes/collision/shape_color=Color(1, 1, 1, 0.501961)
 
 [display]

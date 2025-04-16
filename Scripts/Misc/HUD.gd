@@ -104,11 +104,16 @@ func _process(delta):
 	scoreText.text = "%6d" % Global.score
 	
 	# clamp time so that it won't go to 10 minutes
-	var timeClamp = min(Global.levelTime,Global.maxTime-1)
-	# set time text, format it to have a leadin 0 so that it's always 2 digits
-	timeText.text = "%2d" % floor(timeClamp/60) + ":" + str(fmod(floor(timeClamp),60)).pad_zeros(2)
-	# uncomment below (and remove above line) for mili seconds
-	#timeText.text = "%2d" % floor(timeClamp/60) + ":" + str(fmod(floor(timeClamp),60)).pad_zeros(2) + ":" + str(fmod(floor(timeClamp*100),100)).pad_zeros(2)
+	var hud_time = min(Global.levelTime,Global.maxTime-0.001)
+	var hud_time_minutes:int = int(hud_time) / 60
+	var hud_time_seconds:int = int(hud_time) % 60
+	# set time text, format it to have a leading 0 so that it's always 2 digits
+	match Global.time_tracking:
+		Global.TIME_TRACKING_MODES.STANDARD:
+			timeText.text = "%2d:%02d" % [hud_time_minutes,hud_time_seconds]
+		Global.TIME_TRACKING_MODES.SONIC_CD:
+			var hud_time_hundredths:int = int(hud_time * 100) % 100
+			timeText.text = "%2d'%02d\"%02d" % [hud_time_minutes,hud_time_seconds,hud_time_hundredths]
 	
 	# cehck that there's player, if there is then track the focus players ring count
 	if (Global.players.size() > 0):

@@ -95,6 +95,8 @@ var nodeMemory = []
 # Game settings
 var zoomSize = 1
 var smoothRotation = 0
+enum TIME_TRACKING_MODES { STANDARD, SONIC_CD }
+var time_tracking:TIME_TRACKING_MODES = TIME_TRACKING_MODES.STANDARD
 
 # Hazard type references
 enum HAZARDS {NORMAL, FIRE, ELEC, WATER}
@@ -193,6 +195,9 @@ func save_settings():
 	file.set_value("Resolution","Zoom",zoomSize)
 	file.set_value("Gameplay","SmoothRotation",smoothRotation)
 	file.set_value("Resolution","FullScreen",((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN)))
+
+	file.set_value("HUD","TimeTracking",time_tracking)
+
 	# save config and close
 	file.save("user://Settings.cfg")
 
@@ -231,6 +236,11 @@ func load_settings():
 	
 	if file.has_section_key("Resolution","FullScreen"):
 		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (file.get_value("Resolution","FullScreen")) else Window.MODE_WINDOWED
+
+	if file.has_section_key("HUD","TimeTracking"):
+		time_tracking = file.get_value("HUD","TimeTracking")
+		if time_tracking < 0 or time_tracking >= TIME_TRACKING_MODES.size():
+			time_tracking = TIME_TRACKING_MODES.STANDARD
 
 ## Useful for checking triggers that require specifically the first player to be on a gimmick	
 func get_first_player_gimmick():
