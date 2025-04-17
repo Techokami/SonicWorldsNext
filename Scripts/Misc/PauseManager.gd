@@ -19,6 +19,7 @@ var menusText = [
 "scale x1",
 "full screen off",
 "smooth rotation off",
+"time tracking",
 "controls",
 "back",],
 # menu 2 (restart menu confirm)
@@ -87,14 +88,17 @@ func _input(event):
 					4: # smooth rotation
 						Global.smoothRotation = (Global.smoothRotation + 1) % 2
 						$PauseMenu/VBoxContainer.get_child(option+1).get_child(0).text = update_text(option+1)
-					5: # control menu
+					5: # time tracking
+						Global.time_tracking = ((Global.time_tracking + 1) % Global.TIME_TRACKING_MODES.size()) as Global.TIME_TRACKING_MODES
+						$PauseMenu/VBoxContainer.get_child(option+1).get_child(0).text = update_text(option+1)
+					6: # control menu
 						Global.save_settings()
 						set_menu(0)
 						$"../ControllerMenu".visible = true
 						visible = false
 						Global.main.wasPaused = false
 						get_tree().paused = true
-					6: # back
+					7: # back
 						Global.save_settings()
 						set_menu(0)
 			MENUS.RESTART: # reset level
@@ -213,5 +217,7 @@ func update_text(textRow = 0):
 			return "full screen "+onOff[int(((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN)))]
 		5: # Smooth Rotation
 			return "smooth rotation " + onOff[Global.smoothRotation]
+		6: # Time tracking
+			return "time tracking " + Global.TIME_TRACKING_MODES.find_key(Global.time_tracking).capitalize().to_lower()
 		_: # Default
 			return menusText[menu][textRow]
