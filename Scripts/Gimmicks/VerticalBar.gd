@@ -30,7 +30,7 @@ enum {CONSTANT, MULTIPLY}
 
 var players = [] # Tracks the players that are active within the gimmick
 var players_speed = [] # Tracks the player's speed on entering the loop (used for multiply mode)
-var players_cur_loops = [] # Tracks how many loops the player has been throught eh animation
+var players_cur_loops = [] # Tracks how many loops the player has been throughout the animation
 var players_pass_hit = [] # Tracks whether the player has hit the release point of the animation
 
 var pass_hit = false

@@ -6,10 +6,10 @@ extends Node2D # Change this and it probably breaks
 # Export Variables
 @export var chains:int = 8 # How many chains will be rendered # (int,0,100)
 @export var chain_size:int = 16 # The size of the chains (should be the same width and height, can be easily changed though if you want a different width and height)
-@export var speed = 1.0 # Speed of the movement, but the heigher it is the slower it goes, and the lower it is (greater than 0) the faster it goes # (float,0,5)
+@export var speed = 1.0 # Speed of the movement, but the higher it is the slower it goes, and the lower it is (greater than 0) the faster it goes # (float,0,5)
 @export var dir = 1 # The direction of the swing's movement # (int,-1,1)
 @export var rotate_amount = 90.0 # How far do you want the swings to rotate? # (float,1.0,180.0)
-@export var plat_img:Texture2D # Texture2D for hte platform
+@export var plat_img:Texture2D # Texture2D for the platform
 @export var chain_img:Texture2D # Texture2D for the chains
 # Declare time, previous position, editor time, and grab the platform's node
 var time = 0

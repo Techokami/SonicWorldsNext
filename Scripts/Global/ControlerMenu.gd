@@ -118,7 +118,7 @@ func _on_SaveInputs_pressed():
 				file.set_value("controls","A"+str(actionCount)+i,j.axis)
 				file.set_value("controls","V"+str(actionCount)+i,j.axis_value)
 				file.set_value("controls","A"+str(actionCount)+i+"Device",j.device)
-			# incease counters (prevents conflicts)
+			# increase counters (prevents conflicts)
 			actionCount += 1
 	# save config and close
 	file.save("user://Config.cfg")

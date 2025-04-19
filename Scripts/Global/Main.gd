@@ -4,7 +4,7 @@ extends Node2D
 # last scene is used for referencing the current scene (this is used for stage restarting)
 var lastScene = null
 
-# this gets emited when the scene fades, used to load in level details and data to hide it from the player
+# this gets emitted when the scene fades, used to load in level details and data to hide it from the player
 signal scene_faded
 # signal that emits when volume fades
 signal volume_set
@@ -15,7 +15,7 @@ var setVolumeLevel = 0 # where to fade the volume to
 var volumeLerp = 0 # current stage between start and set for volume level
 var volumeFadeSpeed = 1 # speed for volume changing
 
-# was paused enables menu control when the player pauses manually so they don't get stuck (get_tree().paused may want to be used by other intances)
+# was paused enables menu control when the player pauses manually so they don't get stuck (get_tree().paused may want to be used by other instances)
 var wasPaused = false
 # determines if the current scene can pause
 var sceneCanPause = false
@@ -192,7 +192,7 @@ func _on_Life_finished():
 
 # set the volume level
 func set_volume(volume = 0, fadeSpeed = 1):
-	# set the start volume level to the curren volume
+	# set the start volume level to the current volume
 	startVolumeLevel = Global.music.volume_db
 	# set the volume level to go to
 	setVolumeLevel = volume

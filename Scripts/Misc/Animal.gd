@@ -83,7 +83,7 @@ func _physics_process(delta):
 	# gravity
 	velocity.y += gravity*60
 	
-	# move, ignore collission since we're only checking floors
+	# move, ignore collision since we're only checking floors
 	translate(velocity*delta)
 	
 	# if on floor and falling then bounce
@@ -119,6 +119,6 @@ func _process(delta):
 func _on_VisibilityNotifier2D_screen_exited():
 	queue_free()
 
-# set active on time out (some spawning scenerios like a capsule sets a delay)
+# set active on time out (some spawning scenarios like a capsule sets a delay)
 func _on_ActivationTimer_timeout():
 	active = true

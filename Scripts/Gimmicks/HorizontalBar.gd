@@ -96,7 +96,7 @@ var playersEntryVel = []
 
 
 # If player enters with low absolute velocity, enter shimmy mode (unless turned off)
-# If player enters from below with high enough volocity, enter launch up mode
+# If player enters from below with high enough velocity, enter launch up mode
 # If player enters from above with high enough velocity, enter launch down mode
 enum PLAYER_MODE {MONITORING, SHIMMY, LAUNCH_UP, LAUNCH_DOWN}
 
@@ -193,7 +193,7 @@ func _process_player_shimmy_animation(player):
 		player.animator.play("hangShimmy", -1, shimmySpeed / 60.0, false)
 	
 func _process_player_launch_up(player, playerIndex):
-	# If brakes are allowed, we want to allow slamming the breaks a little faster than the upwarda nimation normally plas out.
+	# If brakes are allowed, we want to allow slamming the breaks a little faster than the upward animation normally plays out.
 	if (player.animator.get_current_animation_position() >= player.animator.get_current_animation_length() * 0.91)\
 		and (player.get_y_input() > 0) and (allowBrake):
 		playersMode[playerIndex] = PLAYER_MODE.SHIMMY
@@ -226,7 +226,7 @@ func _process_player_launch_up(player, playerIndex):
 		remove_player(player)
 		
 func _process_player_launch_down(player, playerIndex):
-	# If brakes are allowed, we want to allow slamming the breaks a little faster than the upwarda nimation normally plas out.
+	# If brakes are allowed, we want to allow slamming the breaks a little faster than the upward animation normally plays out.
 	if (player.animator.get_current_animation_position() >= player.animator.get_current_animation_length() * 0.91)\
 		and (player.get_y_input() < 0) and (allowBrake):
 		playersMode[playerIndex] = PLAYER_MODE.SHIMMY

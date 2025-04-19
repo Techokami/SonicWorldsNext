@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-# Depricated, to be removed, use at own risk
+# Deprecated, to be removed, use at own risk
 
 var playerList = []
 var playerOffset = [0]

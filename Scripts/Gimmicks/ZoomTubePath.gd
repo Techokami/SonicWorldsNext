@@ -27,7 +27,7 @@ func _ready():
 	hitbox.set_shape(shape)
 	enteranceArea.add_child(hitbox)
 	
-	# create enterance area
+	# create entrance area
 	add_child(enteranceArea)
 	enteranceArea.collision_layer = 0
 	enteranceArea.collision_mask = 0

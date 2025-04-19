@@ -67,7 +67,7 @@ var character = Global.CHARACTERS.SONIC
 # 8 Jump release velocity
 
 var physicsList = [
-# 0 Deafult Character properties
+# 0 Default Character properties
 [0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125, 0.21875, 4],
 # 1 Shoes (remove *0.5 for original rolling friction)
 [0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875*0.5, 0.125, 0.21875, 4],
@@ -78,7 +78,7 @@ var physicsList = [
 ]
 
 var waterPhysicsList = [
-# 0 Deafult Character properties
+# 0 Default Character properties
 [0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6.0*60.0/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
 # 1 Shoes
 [0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6*60/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
@@ -1374,7 +1374,7 @@ func action_move(delta):
 				else:
 					# reverse direction
 					movement.x += dec/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT]
-					# implament weird turning quirk
+					# implement weird turning quirk
 					if (sign(movement.x) != sign(movement.x-dec/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT])):
 						movement.x = 0.5*60*sign(movement.x)
 	else:

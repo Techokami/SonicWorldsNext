@@ -31,7 +31,7 @@ var gameOver = false
 # used for the score countdown
 var accumulatedDelta = 0.0
 
-# signal that gets emited once the stage tally is over
+# signal that gets emitted once the stage tally is over
 signal tally_clear
 
 # character name strings, used for "[player] has cleared", this matches the players character ID so you'll want to add the characters name in here matching the ID if you want more characters
@@ -115,7 +115,7 @@ func _process(delta):
 			var hud_time_hundredths:int = int(hud_time * 100) % 100
 			timeText.text = "%2d'%02d\"%02d" % [hud_time_minutes,hud_time_seconds,hud_time_hundredths]
 	
-	# cehck that there's player, if there is then track the focus players ring count
+	# check that there's player, if there is then track the focus players ring count
 	if (Global.players.size() > 0):
 		ringText.text = "%3d" % Global.players[focusPlayer].rings
 	
@@ -124,7 +124,7 @@ func _process(delta):
 	
 	# Water Overlay
 	
-	# cehck that this level has water
+	# check that this level has water
 	if Global.waterLevel != null:
 		# get current camera
 		var cam = GlobalFunctions.getCurrentCamera2D()

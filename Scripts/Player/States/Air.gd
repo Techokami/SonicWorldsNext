@@ -144,7 +144,7 @@ func _physics_process(delta):
 			
 			if parent.any_action_held_or_pressed() and parent.abilityUsed and (parent.shield <= parent.SHIELDS.NORMAL or parent.isSuper or $"../../InvincibilityBarrier".visible or parent.character == Global.CHARACTERS.AMY):
 				if dropTimer < 1:
-					dropTimer += (delta/20)*60 # should be ready in the equivelent of 20 frames at 60FPS
+					dropTimer += (delta/20)*60 # should be ready in the equivalent of 20 frames at 60FPS
 					if dropTimer >= 1:
 						parent.sfx[20].play()
 				else:

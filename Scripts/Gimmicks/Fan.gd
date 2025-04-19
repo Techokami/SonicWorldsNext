@@ -60,7 +60,7 @@ func _physics_process(delta):
 		# causing a warning. Perhaps intended for multi-directional fans being added later?
 		#var getDir = Vector2.UP.rotated(global_rotation)
 			
-		# disconect floor
+		# disconnect floor
 		if i.ground:
 			i.disconect_from_floor()
 			

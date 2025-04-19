@@ -37,7 +37,7 @@ func update_graphics():
 	# clamp size
 	size.x = max(size.x,1)
 	size.y = max(size.y,8)
-	# set the collission shape and graphics scaling
+	# set the collision shape and graphics scaling
 	$Collision/CollisionShape2D.shape.size = Vector2(size.x-1,size.y-1)
 	$LavaTile.region_rect.size = size
 	$LavaTop.region_rect.size.x = size.x

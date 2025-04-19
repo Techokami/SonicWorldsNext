@@ -56,7 +56,7 @@ func _physics_process(delta):
 			else:
 				activePlayers.erase(i)
 			
-			# increase move offset by how fast hte player is moving
+			# increase move offset by how fast the player is moving
 			moveOffset += -goDirection
 			
 			if $Screw.position.y > bottom*8:

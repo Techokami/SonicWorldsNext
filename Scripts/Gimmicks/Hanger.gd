@@ -42,7 +42,7 @@ const _CONTACT_TIME_LIMIT = ceil(12.0 * (1000.0 / 60.0))
 # at making contact.
 @export var setCenter = false
 
-# If false, the player can grab the bar while moving upwards. Otherise the bar
+# If false, the player can grab the bar while moving upwards. Otherwise the bar
 # is only caught while the player is falling.
 @export var onlyActiveMovingDown = true
 

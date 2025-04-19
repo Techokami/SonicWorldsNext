@@ -14,7 +14,7 @@ func _ready():
 
 
 func activate():
-	# queue flash, incase an animation is already playing
+	# queue flash, in case an animation is already playing
 	$Spinner.queue("flash")
 	active = true
 	Global.currentCheckPoint = checkPointID
