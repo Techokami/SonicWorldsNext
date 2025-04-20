@@ -1,32 +1,36 @@
 extends Node2D
-var animType = 0 # 0 flap, 1 change on fall
-@export_enum("Bird", "Squirrel", "Rabbit", "Chicken", "Penguin", "Seal", "Pig", "Eagle", "Mouse", "Monkey", "Turtle", "Bear")var animal = 0
 
-var animalPhysics = [
+enum ANIM_TYPE {FLAP,CHANGE_ON_FALL}
+var anim_type: ANIM_TYPE = ANIM_TYPE.FLAP
+
+enum ANIMAL_TYPE {BIRD,SQUIRREL,RABBIT,CHICKEN,PENGUIN,SEAL,PIG,EAGLE,MOUSE,MONKEY,TURTLE,BEAR}
+@export var animal: ANIMAL_TYPE = ANIMAL_TYPE.BIRD
+
+var animal_data: Array[Dictionary] = [
 # (Bird)
-Vector2(3.0,4.0),
+    { position=Vector2(0,32),   anim_type=ANIM_TYPE.FLAP,           physics=Vector2(3.0,4.0) },
 # (Squirrel)
-Vector2(2.5,3.5),
+    { position=Vector2(72,32),  anim_type=ANIM_TYPE.CHANGE_ON_FALL, physics=Vector2(2.5,3.5) },
 # (Rabbit)
-Vector2(2.0,4.0),
+    { position=Vector2(0,96),   anim_type=ANIM_TYPE.CHANGE_ON_FALL, physics=Vector2(2.0,4.0) },
 # (Chicken)
-Vector2(2.0,3.0),
+    { position=Vector2(0,64),   anim_type=ANIM_TYPE.FLAP,           physics=Vector2(2.0,3.0) },
 # (Penguin)
-Vector2(1.5,3.0),
+    { position=Vector2(72,64),  anim_type=ANIM_TYPE.CHANGE_ON_FALL, physics=Vector2(1.5,3.0) },
 # (Seal)
-Vector2(1.25,1.5),
+    { position=Vector2(0,0),    anim_type=ANIM_TYPE.CHANGE_ON_FALL, physics=Vector2(1.25,1.5) },
 # (Pig)
-Vector2(1.75,3.0),
+    { position=Vector2(72,0),   anim_type=ANIM_TYPE.CHANGE_ON_FALL, physics=Vector2(1.75,3.0) },
 # (Eagle)
-Vector2(2.5,3.0),
+    { position=Vector2(72,160), anim_type=ANIM_TYPE.FLAP,           physics=Vector2(2.5,3.0) },
 # (Mouse)
-Vector2(2.0,3.0),
+    { position=Vector2(0,160),  anim_type=ANIM_TYPE.CHANGE_ON_FALL, physics=Vector2(2.0,3.0) },
 # (Monkey)
-Vector2(2.75,3.0),
+    { position=Vector2(72,128), anim_type=ANIM_TYPE.CHANGE_ON_FALL, physics=Vector2(2.75,3.0) },
 # (Turtle)
-Vector2(1.25,2.0),
+    { position=Vector2(72,96),  anim_type=ANIM_TYPE.CHANGE_ON_FALL, physics=Vector2(1.25,2.0) },
 # (Bear)
-Vector2(2.0,3.0),
+    { position=Vector2(0,128),  anim_type=ANIM_TYPE.CHANGE_ON_FALL, physics=Vector2(2.0,3.0) }
 ]
 
 var animTime = 0
@@ -42,39 +46,8 @@ func _ready():
 		scale.x = -scale.x
 	else:
 		scale.x = sign(scale.x)*(1-(round(randf())*2))
-	# set animal properties (animType is 0 by default)
-	match(animal):
-		1: # Squirrel
-			$animals.region_rect.position.x = 72
-			animType = 1
-		2: # Rabbit
-			$animals.region_rect.position.y = 96
-			animType = 1
-		3: # Chicken
-			$animals.region_rect.position.y = 64
-		4: # Penguin
-			$animals.region_rect.position = Vector2(72,64)
-			animType = 1
-		5: # Seal
-			$animals.region_rect.position.y = 0
-			animType = 1
-		6: # Pig
-			$animals.region_rect.position = Vector2(72,0)
-			animType = 1
-		7: # Eagle
-			$animals.region_rect.position = Vector2(72,160)
-		8: # Mouse
-			$animals.region_rect.position.y = 160
-			animType = 1
-		9: # Monkey
-			$animals.region_rect.position = Vector2(72,128)
-			animType = 1
-		10: # Turtle
-			$animals.region_rect.position = Vector2(72,96)
-			animType = 1
-		11: # Bear
-			$animals.region_rect.position.y = 128
-			animType = 1
+	$animals.region_rect.position = animal_data[animal].position
+	anim_type = animal_data[animal].anim_type
 
 func _physics_process(delta):
 	# check if active, if not then stop processing physics
@@ -88,12 +61,11 @@ func _physics_process(delta):
 	
 	# if on floor and falling then bounce
 	if ($FloorCheck.is_colliding() and velocity.y > 0):
-		speed = animalPhysics[animal].x*60
-		bouncePower = animalPhysics[animal].y*60
+		speed = animal_data[animal].physics.x*60
+		bouncePower = animal_data[animal].physics.y*60
 		
-		match(animal):
-			0, 3, 7: # gravity bird types
-				gravity = 0.09375
+		if animal_data[animal].anim_type == ANIM_TYPE.FLAP:
+			gravity = 0.09375
 		
 		velocity.y = -bouncePower
 		velocity.x = speed*scale.x
@@ -103,13 +75,13 @@ func _physics_process(delta):
 func _process(delta):
 	# animation code
 	if (velocity.x != 0):
-		match (animType):
-			0: # flap
+		match (anim_type):
+			ANIM_TYPE.FLAP:
 				animTime += delta*30
 				if (animTime >= 1):
 					animTime = 0
 					$animals.frame = wrapi($animals.frame+1,1,3)
-			1: # bounce
+			ANIM_TYPE.CHANGE_ON_FALL:
 				if (velocity.y >= 0):
 					$animals.frame = 2
 				else:
