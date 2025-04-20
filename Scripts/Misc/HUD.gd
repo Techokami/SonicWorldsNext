@@ -15,7 +15,7 @@ extends CanvasLayer
 @export var zone = "Zone"
 @export var act = 1
 
-# used for flashing ui elements (rings, time)
+# used for flashing UI elements (rings, time)
 var flashTimer = 0
 
 # isStageEnding is used for level completion, stop loop recursions
@@ -28,6 +28,9 @@ var ringBonus = 0
 # gameOver is used to initialize the game over animation sequence, note: this is for animation, if you want to use the game over status it's in global
 var gameOver = false
 
+# used for the score countdown
+var accumulatedDelta = 0.0
+
 # signal that gets emited once the stage tally is over
 signal tally_clear
 
@@ -36,6 +39,11 @@ signal tally_clear
 var characterNames = ["sonic","tails","knuckles","amy"]
 
 func _ready():
+	# create a new stream for the tick sound (so the original stream
+	# will remain unchanged, as it's also used by the switch gimmick),
+	# and set loop parameters, but don't enable looping yet
+	$LevelClear/Counter.stream = $LevelClear/Counter.stream.duplicate()
+	$LevelClear/Counter.stream.loop_end = roundi($LevelClear/Counter.stream.mix_rate / (60.0 / 4))
 	# error prevention
 	if !Global.is_main_loaded:
 		return false
@@ -96,11 +104,16 @@ func _process(delta):
 	scoreText.text = "%6d" % Global.score
 	
 	# clamp time so that it won't go to 10 minutes
-	var timeClamp = min(Global.levelTime,Global.maxTime-1)
-	# set time text, format it to have a leadin 0 so that it's always 2 digits
-	timeText.text = "%2d" % floor(timeClamp/60) + ":" + str(fmod(floor(timeClamp),60)).pad_zeros(2)
-	# uncomment below (and remove above line) for mili seconds
-	#timeText.text = "%2d" % floor(timeClamp/60) + ":" + str(fmod(floor(timeClamp),60)).pad_zeros(2) + ":" + str(fmod(floor(timeClamp*100),100)).pad_zeros(2)
+	var hud_time = min(Global.levelTime,Global.maxTime-0.001)
+	var hud_time_minutes:int = int(hud_time) / 60
+	var hud_time_seconds:int = int(hud_time) % 60
+	# set time text, format it to have a leading 0 so that it's always 2 digits
+	match Global.time_tracking:
+		Global.TIME_TRACKING_MODES.STANDARD:
+			timeText.text = "%2d:%02d" % [hud_time_minutes,hud_time_seconds]
+		Global.TIME_TRACKING_MODES.SONIC_CD:
+			var hud_time_hundredths:int = int(hud_time * 100) % 100
+			timeText.text = "%2d'%02d\"%02d" % [hud_time_minutes,hud_time_seconds,hud_time_hundredths]
 	
 	# cehck that there's player, if there is then track the focus players ring count
 	if (Global.players.size() > 0):
@@ -172,6 +185,9 @@ func _process(delta):
 		# initialize stage clear sequence
 		if !isStageEnding:
 			isStageEnding = true
+
+			# reset air in case we are under water
+			_reset_air()
 			
 			# show level clear elements
 			$LevelClear.visible = true
@@ -205,6 +221,9 @@ func _process(delta):
 			await $LevelClear/CounterWait.timeout
 			# start the level counter tally (see _on_CounterCount_timeout)
 			$LevelClear/CounterCount.start()
+			# initially the tick sound isn't looped, so let's make it loop
+			$LevelClear/Counter.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+			$LevelClear/Counter.play()
 			await self.tally_clear
 			# wait 2 seconds (reuse timer)
 			$LevelClear/CounterWait.start(2)
@@ -240,26 +259,41 @@ func _process(delta):
 			await Global.main.scene_faded
 			Global.levelTime = 0
 
+func _reset_air():
+	for player in Global.players:
+		player.airTimer = player.defaultAirTime
+
+func _add_score(subtractFrom,delta):
+	# Normally we add 100 points per frame at 60 FPS, but player's framerate may
+	# be different. To accommodate for that, we count the number of points based
+	# on time passed since the previous frame.
+	accumulatedDelta += delta
+	var standardDelta = 1.0 / 60.0
+	var points = floor(accumulatedDelta / standardDelta) * 100
+	if (points > subtractFrom):
+		points = subtractFrom
+	accumulatedDelta -= points / 100 * standardDelta
+	# check if adding score would hit the life bonus
+	Global.check_score_life(points)
+	subtractFrom -= points
+	Global.score += points
+	return subtractFrom
+
 # counter count down
-func _on_CounterCount_timeout():
-	# play counter sound
-	$LevelClear/Counter.play()
-	
+func _on_CounterCount_timeout(delta):
+	# reset air in case we are under water
+	_reset_air()
 	# decrease bonuses in order, if time bonus not 0 then count time down, then do the same for rings
 	# if you add other bonuses (like perfect bonus) you'll want to add it to the end of the sequence before the end
 	if timeBonus > 0:
-		# check if adding score would hit the life bonus
-		Global.check_score_life(100)
-		timeBonus -= 100
-		Global.score += 100
+		timeBonus = _add_score(timeBonus,delta)
 	elif ringBonus > 0:
-		# check if adding score would hit the life bonus
-		Global.check_score_life(100)
-		ringBonus -= 100
-		Global.score += 100
+		ringBonus = _add_score(ringBonus,delta)
 	else:
+		# Don't stop the tick sound abruptly, just disable looping,
+		# so it stops by itself after it plays until the end once
+		$LevelClear/Counter.stream.loop_mode = AudioStreamWAV.LOOP_DISABLED
 		# stop counter timer and play score sound
-		$LevelClear/Counter.play()
 		$LevelClear/CounterCount.stop()
 		$LevelClear/Score.play()
 		# emit tally clear signal
