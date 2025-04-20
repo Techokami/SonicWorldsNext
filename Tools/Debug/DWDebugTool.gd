@@ -17,11 +17,13 @@
 ##     left
 ## m - Gives the player some rings
 ## , - Cycles through available shields
+## . - Toggles physics slowdown to 1/8th scale
 
 extends Node2D
 
 var brick_movement = Vector2(0, 0)
 var teleport_location = null
+var be_slow = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -60,7 +62,13 @@ func try_cheat():
 		return KEY_M
 		
 	if Input.is_key_pressed(KEY_COMMA):
-		Global.players[0].set_shield((Global.players[0].shield + 1) % Global.players[0].SHIELDS.COUNT)
+		if Global.players[0].is_in_water():
+			# if the player is in water, the only bubble and normal shield are useful. We'll just
+			# always go with water to avoid extra conditions.
+			Global.players[0].set_shield(PlayerChar.SHIELDS.BUBBLE)
+		else:
+			# Otherwise cycle the shields in order
+			Global.players[0].set_shield((Global.players[0].shield + 1) % Global.players[0].SHIELDS.COUNT)
 		return KEY_COMMA
 		
 	# Place the test block below the player and make it move upwards
@@ -86,6 +94,15 @@ func try_cheat():
 		$BigMovingBrick.global_position = Global.players[0].global_position + Vector2(160, 0)
 		brick_movement = Vector2(-2, 0)
 		return KEY_P
+	
+	if Input.is_key_pressed(KEY_PERIOD):
+		if be_slow:
+			Engine.time_scale = 1.0
+			be_slow = false
+		else:
+			Engine.time_scale = 0.125
+			be_slow = true
+		return KEY_PERIOD
 		
 	return 0
 

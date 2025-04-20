@@ -33,7 +33,7 @@ func _physics_process(_delta):
 				
 				# if greater then angle difference and distance from center is below drop off, disconect from floor
 				if abs(i.angle-PrevAngle) >= deg_to_rad(maxAngleDifference) and abs(i.global_position.x-global_position.x) < dropOff:
-					i.disconect_from_floor()
+					i.disconnect_from_floor()
 			else:
 				# set contact point to player floor sensor position
 				var getVert = i.get_nearest_vertical_sensor()

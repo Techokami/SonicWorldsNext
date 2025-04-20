@@ -1,6 +1,5 @@
-extends CharacterBody2D
+extends AnimatableBody2D
 
-# drop condition
-func physics_collision(body, hitVector):
-	if hitVector.y > 0 and body.ground:
-		get_parent().attach_player(body)
+func physics_collision(body: PlayerChar, hit_vector):
+	if hit_vector.y > 0 and body.ground:
+		get_parent().get_parent().attach_player(body)

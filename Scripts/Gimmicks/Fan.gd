@@ -53,7 +53,7 @@ func _physics_process(delta):
 		return
 
 	# if any players are found in the array, if they're on the ground make them roll
-	for i in players:
+	for i: PlayerChar in players:
 		# determine the direction of the arrow based on scale and rotation
 		# better method needs to be done
 		# DW's note: commented out for now because this variable wasn't used and it was
@@ -61,8 +61,8 @@ func _physics_process(delta):
 		#var getDir = Vector2.UP.rotated(global_rotation)
 			
 		# disconect floor
-		if i.ground:
-			i.disconect_from_floor()
+		if i.is_on_ground():
+			i.disconnect_from_floor()
 			
 		# set movement
 		# get distance for the y axis
@@ -79,9 +79,9 @@ func _physics_process(delta):
 		if i.water:
 			setPlayerAnimation = "current"
 			
-		if i.currentState != i.STATES.ANIMATION or i.animator.current_animation != setPlayerAnimation:
-			i.set_state(i.STATES.AIR)
-			i.animator.play(setPlayerAnimation)
+		if i.get_state() != PlayerChar.STATES.ANIMATION or i.get_animator().get_current_animation() != setPlayerAnimation:
+			i.set_state(PlayerChar.STATES.AIR)
+			i.play_animation(setPlayerAnimation)
 
 func _on_body_entered(body):
 	if !players.has(body):
@@ -89,7 +89,7 @@ func _on_body_entered(body):
 
 func _on_body_exited(body):
 	if players.has(body):
-		body.set_state(body.STATES.NORMAL)
+		body.set_state(PlayerChar.STATES.NORMAL)
 		players.erase(body)
 
 func activate():

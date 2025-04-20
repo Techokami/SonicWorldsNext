@@ -69,7 +69,7 @@ func _process(_delta):
 			parent.animator.play("glideFall")
 			parent.sprite.flip_h = (parent.direction < 0)
 			# reset hitbox
-			parent.set_hitbox(parent.currentHitbox.NORMAL)
+			parent.set_hitbox(parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL))
 			isFall = true
 			parent.reflective = false
 
@@ -146,7 +146,7 @@ func _physics_process(delta):
 				parent.direction = sign(parent.movement.x)
 			parent.sprite.flip_h = (parent.direction < 0)
 			
-			parent.set_state(parent.STATES.WALLCLIMB,parent.currentHitbox.GLIDE)
+			parent.set_state(parent.STATES.WALLCLIMB,parent.get_predefined_hitbox(PlayerChar.HITBOXES.GLIDE))
 			# play grab sound
 			parent.sfx[26].play()
 			parent.animator.play("climb")
@@ -169,7 +169,7 @@ func _physics_process(delta):
 		parent.sprite.flip_h = (parent.direction < 0)
 		if parent.movement.x == 0 and parent.lastActiveAnimation != "glideGetUp" and parent.ground:
 			parent.cameraDragLerp = 1
-			parent.set_hitbox(parent.currentHitbox.NORMAL)
+			parent.set_predefined_hitbox(PlayerChar.HITBOXES.NORMAL)
 			parent.animator.play("glideGetUp")
 			# wait for animation to finish and check that the state is still the same
 			await parent.animator.animation_finished
@@ -186,7 +186,7 @@ func _physics_process(delta):
 			parent.animator.play("glideFall")
 			parent.sprite.flip_h = (parent.direction < 0)
 			# reset hitbox
-			parent.set_hitbox(parent.currentHitbox.NORMAL)
+			parent.set_predefined_hitbox(PlayerChar.HITBOXES.NORMAL)
 			isFall = true
 		else:
 			# ground buffer's needed to prevent the player immediately disconecting

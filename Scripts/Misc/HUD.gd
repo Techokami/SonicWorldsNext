@@ -95,7 +95,7 @@ func _ready():
 		get_tree().paused = false
 	Global.timerActive = true
 	# replace "sonic" in stage clear to match the player clear string
-	$LevelClear/Passed.text = $LevelClear/Passed.text.replace("SONIC",characterNames[Global.PlayerChar1-1])
+	$LevelClear/Passed.text = $LevelClear/Passed.text.replace("SONIC",Global.get_character_name(Global.PlayerChar1))
 	# set the act clear frame
 	$LevelClear/Act.frame = act-1
 

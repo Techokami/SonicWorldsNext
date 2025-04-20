@@ -4,16 +4,16 @@ var timer = 0
 # active is set to true when the player enters the ring
 var active = false
 
-var player = null
+var player: PlayerChar = null
 var maskMemory = []
 
-func _ready():
+func _ready() -> void:
 	# check that the current ring hasn't already been collected and all 7 emeralds aren't collected
 	# the emerald check is so that it'll spawn if you have all emeralds anyway
 	if Global.nodeMemory.has(get_path()) and Global.emeralds < 127:
 		queue_free()
 
-func _process(delta):
+func _process(delta: float) -> void:
 	if active:
 		# stop level timer (prevents time over)
 		Global.timerActive = false
@@ -51,17 +51,18 @@ func _process(delta):
 				player.airTimer = player.defaultAirTime
 				
 				# check for partner
-				if player.partner:
-					player.partner.global_position = global_position+Vector2(-32,0)
-					player.partner.direction = 1
-					player.partner.movement = Vector2.ZERO
-					player.partner.velocity = Vector2.ZERO
+				var partner = player.get_partner()
+				if partner != null:
+					partner.global_position = global_position+Vector2(-32,0)
+					partner.direction = 1
+					partner.movement = Vector2.ZERO
+					partner.velocity = Vector2.ZERO
 					# reset state
-					player.partner.set_state(player.partner.STATES.NORMAL)
+					partner.set_state(player.partner.STATES.NORMAL)
 					# play idle
-					player.partner.animator.play("idle")
+					partner.animator.play("idle")
 					# reset the partners air, imagine if you came home and from another dimension and-
-					player.partner.airTimer = player.partner.defaultAirTime
+					partner.airTimer = player.partner.defaultAirTime
 				
 				# reset invincibility and shoes (or super low so they player can exit these states normally)
 				player.supTime = min(player.supTime,0.01)
@@ -96,25 +97,25 @@ func _process(delta):
 			if !$Ring.is_playing():
 				$Ring.play("default")
 
-func _on_Hitbox_body_entered(body):
+func _on_Hitbox_body_entered(player_entered: PlayerChar) -> void:
 	# check if not active and that the player is player 1
-	if !active and body.playerControl == 1 and visible:
+	if !active and player_entered.playerControl == 1 and visible:
 		# if 7 emeraldsn haven't been collected, go to special stage
 		if Global.emeralds < 127:
 			active = true
-			body.visible = false
-			body.movement = Vector2.ZERO
+			player_entered.visible = false
+			player_entered.movement = Vector2.ZERO
 			# set players state to animation so nothing takes them out of it
-			body.set_state(body.STATES.ANIMATION)
+			player_entered.set_state(player_entered.STATES.ANIMATION)
 			# set player collision layer and mask to nothing to avoid collissions
-			maskMemory.append(body.collision_layer)
-			maskMemory.append(body.collision_mask)
-			body.collision_layer = 0
-			body.collision_mask = 0
-			player = body
-			body.invTime = 0
+			maskMemory.append(player_entered.collision_layer)
+			maskMemory.append(player_entered.collision_mask)
+			player_entered.collision_layer = 0
+			player_entered.collision_mask = 0
+			self.player = player_entered
+			player_entered.invTime = 0
 		else:
-			body.rings += 50
+			player_entered.give_rings(50, false)
 		
 		# play sound
 		$RingEnter.play()
@@ -126,7 +127,7 @@ func _on_Hitbox_body_entered(body):
 		$Hitbox/CollisionShape2D.disabled = true
 
 # play spawning animation when the ring enters the screen
-func _on_VisibilityNotifier2D_viewport_entered(_viewport):
+func _on_VisibilityNotifier2D_viewport_entered(_viewport) -> void:
 	$Ring.play("spawn")
 	$Ring.frame = 0
 	await $Ring.animation_finished

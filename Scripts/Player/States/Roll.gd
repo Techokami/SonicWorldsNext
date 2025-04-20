@@ -15,7 +15,7 @@ func _physics_process(delta):
 	
 	# Set air if not on floor
 	if (!parent.ground):
-		parent.set_state(parent.STATES.AIR,parent.currentHitbox.ROLL)
+		parent.set_state(parent.STATES.AIR,parent.get_predefined_hitbox(PlayerChar.HITBOXES.ROLL))
 		return null
 	# Set normal if speed is 0
 	if (parent.movement.x == 0):
@@ -38,7 +38,7 @@ func _physics_process(delta):
 	# drop, if speed below fall speed
 	if (abs(parent.movement.x) < parent.fall and calcAngle >= 45 and calcAngle <= 315):
 		if (round(calcAngle) >= 90 and round(calcAngle) <= 270):
-			parent.disconect_from_floor()
+			parent.disconnect_from_floor()
 		
 		parent.horizontalLockTimer = 30.0/60.0
 	

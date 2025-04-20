@@ -1,9 +1,12 @@
-[gd_scene load_steps=66 format=3 uid="uid://d3vtvdbdn6g8v"]
+[gd_scene load_steps=68 format=3 uid="uid://d3vtvdbdn6g8v"]
 
+[ext_resource type="Script" path="res://Scripts/Player/PlayerAvatars/AmyAvatar.gd" id="1_onyi3"]
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="1_sk1gs"]
+[ext_resource type="Script" path="res://Entities/PlayerAvatars/PlayerAnimation.gd" id="1_x2red"]
 [ext_resource type="Texture2D" uid="uid://bfesqgvh63scg" path="res://Graphics/Players/Amy.png" id="2_vki44"]
 [ext_resource type="Texture2D" uid="uid://dlomjk6vm15ep" path="res://Graphics/Misc/DashDust.png" id="3_dg7ud"]
 [ext_resource type="Texture2D" uid="uid://dvqglf8dididc" path="res://Graphics/Items/shield_plain.png" id="4_nx0xn"]
+[ext_resource type="Texture2D" uid="uid://decpuepom6w1d" path="res://Graphics/Tools/bar_helper.png" id="7_drhm3"]
 
 [sub_resource type="Animation" id="86"]
 length = 0.001
@@ -38,6 +41,32 @@ tracks/2/path = NodePath("Amy/CenterReference:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Amy/PlayerAnimation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"reset_loops"
+}]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Amy/HandsReference:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -168,68 +197,14 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Amy/Sprite2D:offset")
+tracks/1/path = NodePath("Amy/HandsReference:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector2(19, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Amy/CenterReference:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(16, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_5tyl8"]
-resource_name = "clingVerticalBarOffset"
-length = 0.133335
-loop_mode = 1
-step = 0.0166667
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Amy/Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0666667),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [89, 90]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Amy/Sprite2D:offset")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector2(-19, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Amy/CenterReference:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(-16, 0)]
+"values": [Vector2(-20, 0)]
 }
 
 [sub_resource type="Animation" id="76"]
@@ -990,6 +965,20 @@ tracks/2/keys = {
 "update": 1,
 "values": [Vector2(16, 0), Vector2(8, 0), Vector2(-14, 0), Vector2(-17, 0), Vector2(-10, 0), Vector2(0, 0)]
 }
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Amy/PlayerAnimation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.483333),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"increment_loops"
+}]
+}
 
 [sub_resource type="Animation" id="125"]
 resource_name = "swingVerticalBarManaged"
@@ -1073,6 +1062,20 @@ tracks/2/keys = {
 "update": 1,
 "values": [Vector2(-15, 0), Vector2(-9, 0), Vector2(14, 0), Vector2(18, 0), Vector2(14, 0), Vector2(0, 0)]
 }
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Amy/PlayerAnimation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.58),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"increment_loops"
+}]
+}
 
 [sub_resource type="Animation" id="85"]
 resource_name = "walk"
@@ -1153,7 +1156,6 @@ _data = {
 "brachiateLeft": SubResource("Animation_nsifk"),
 "brachiateRight": SubResource("Animation_mp6ka"),
 "clingVerticalBar": SubResource("Animation_kwfke"),
-"clingVerticalBarOffset": SubResource("Animation_5tyl8"),
 "corkScrew": SubResource("76"),
 "corkScrewOffset": SubResource("88"),
 "crouch": SubResource("77"),
@@ -1312,6 +1314,7 @@ _data = {
 }
 
 [node name="Amy" type="Node2D"]
+script = ExtResource("1_onyi3")
 metadata/_edit_horizontal_guides_ = [-23.0]
 
 [node name="PlayerAnimation" type="AnimationPlayer" parent="."]
@@ -1320,6 +1323,7 @@ libraries = {
 "": SubResource("AnimationLibrary_36uej")
 }
 autoplay = "idle"
+script = ExtResource("1_x2red")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 5
@@ -1328,7 +1332,6 @@ texture = ExtResource("2_vki44")
 offset = Vector2(0, -6)
 hframes = 16
 vframes = 18
-frame = 83
 
 [node name="DashDust" type="AnimatedSprite2D" parent="Sprite2D"]
 visible = false
@@ -1353,3 +1356,8 @@ visible = false
 modulate = Color(1, 1, 1, 0.501961)
 texture = ExtResource("4_nx0xn")
 hframes = 4
+
+[node name="HandsReference" type="Sprite2D" parent="."]
+visible = false
+z_index = 50
+texture = ExtResource("7_drhm3")

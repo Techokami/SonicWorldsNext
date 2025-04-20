@@ -1,3 +1,5 @@
+# Note: Strong candidate for becoming a ConnectableGimmick
+
 @tool
 extends Node2D
 
@@ -42,47 +44,49 @@ func _physics_process(_delta):
 					playerList.append(i)
 		
 		# Set player sprites
-		for i in playerList:
-			if (i.currentState != i.STATES.CORKSCREW and i.currentState != i.STATES.JUMP):
+		for i: PlayerChar in playerList:
+			if (i.get_state() != i.STATES.CORKSCREW and i.get_state() != PlayerChar.STATES.JUMP):
 				# Set state
-				i.set_state(i.STATES.CORKSCREW)
+				i.set_state(PlayerChar.STATES.CORKSCREW)
 				# Animation check
-				if i.animator.current_animation != "roll":
+				if i.get_animator().get_current_animation() != "roll":
 					if (i.direction > 0):
 						i.animator.play("corkScrew")
 					else:
 						i.animator.play("corkScrewOffset")
 			
 			# Set vertical movement to 0 so player doesn't fall off
-			elif (i.currentState == i.STATES.CORKSCREW):
+			elif (i.get_state() == PlayerChar.STATES.CORKSCREW):
 				i.movement.y = 0
 			
 			# Set the player position based on x position and the distance between the corkscrews origin
 			# this uses a cosine function to create a wave pattern
-			var yDistance = -50+(i.currentHitbox.NORMAL.y/2.0)
+			var yDistance = -50+(i.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL).y/2.0)
 			i.global_position.y = global_position.y+((cos(clamp((i.global_position.x-global_position.x)/(192*scale.x),-1,2*length)*PI)*yDistance))*scale.y
 			
 			# Make player camera update as this change is applied after player movement
 			i.cam_update()
 
 			# Animation
-			if i.animator.current_animation == "corkScrew" or i.animator.current_animation == "corkScrewOffset":
-				var animSize = i.animator.current_animation_length
-				i.animator.advance(-i.animator.current_animation_position+animSize-(global_position.x-i.global_position.x+(192*scale.x))/((192*scale.x)*2)*animSize)
+			var animator = i.get_animator()
+			var cur_anim = animator.get_current_animation()
+			if cur_anim == "corkScrew" or cur_anim == "corkScrewOffset":
+				var animSize = animator.get_current_animation_length()
+				animator.advance(-animator.get_current_animation_position()+animSize-(global_position.x-i.global_position.x+(192*scale.x))/((192*scale.x)*2)*animSize)
 			
 			# Check to see if to remove player
-			if (i.global_position.x < $EnteranceL.global_position.x-8 or i.global_position.x > $EnteranceR.global_position.x+8 or abs(i.movement.x) < i.top/2 or i.currentState == i.STATES.JUMP):
+			if (i.global_position.x < $EnteranceL.global_position.x-8 or i.global_position.x > $EnteranceR.global_position.x+8 or abs(i.movement.x) < i.top/2.0 or i.get_state() == PlayerChar.STATES.JUMP):
 				if (playerList.has(i)):
-					if i.currentState == i.STATES.CORKSCREW:
-						if i.animator.current_animation != "roll":
-							i.set_state(i.STATES.AIR)
+					if i.get_state() == PlayerChar.STATES.CORKSCREW:
+						if animator.get_current_animation() != "roll":
+							i.set_state(PlayerChar.STATES.AIR)
 						else:
-							i.set_state(i.STATES.ROLL)
+							i.set_state(PlayerChar.STATES.ROLL)
 					else:
 						# otherwise reset animation settings
-						var animMem = i.animator.current_animation
-						i.animator.play("RESET")
-						i.animator.queue(animMem)
+						var animMem = animator.get_current_animation()
+						i.play_animation("RESET")
+						animator.queue(animMem)
 					playerList.erase(i)
 
 

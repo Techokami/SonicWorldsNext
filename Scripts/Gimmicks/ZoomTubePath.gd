@@ -54,6 +54,7 @@ func _on_hitbox_enter(body):
 		if (rng <= splitChance or !split) and animatorNode.pipe != self:
 			if body.currentState != body.STATES.ANIMATION:
 				body.sfx[1].play()
+			# TODO This seems totally unnoticeable. Also I don't get it.
 			body.set_state(body.STATES.ANIMATION,Vector2(2,2))
 			animatorNode.pipe = self
 			animatorNode.pipePoint = 1

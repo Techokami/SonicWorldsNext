@@ -24,7 +24,7 @@ func _process(delta):
 		if (player.ringDisTime <= 0 and (player.invTime*60 <= 90 or scattered)):
 			z_index = 1
 			# get ring to player
-			player.get_ring()
+			player.give_ring()
 			var part = Particle.instantiate()
 			get_parent().add_child(part)
 			part.global_position = global_position

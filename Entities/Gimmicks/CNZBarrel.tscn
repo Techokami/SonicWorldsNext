@@ -40,35 +40,36 @@ animations = [{
 "speed": 30.0
 }]
 
-[sub_resource type="RectangleShape2D" id="6"]
-size = Vector2(64, 4)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3347u"]
+size = Vector2(64, 11)
 
-[sub_resource type="RectangleShape2D" id="7"]
-size = Vector2(64, 60)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3dimk"]
+size = Vector2(64, 53)
 
 [node name="CNZBarrel" type="Node2D"]
 script = ExtResource("3")
 
-[node name="CNZBarrelActiveBody" type="CharacterBody2D" parent="."]
-collision_layer = 2105359
-collision_mask = 0
-script = ExtResource("2")
+[node name="Bodies" type="Node2D" parent="."]
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CNZBarrelActiveBody"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Bodies"]
 position = Vector2(0, 31)
 sprite_frames = SubResource("5")
 autoplay = "default"
 frame = 1
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CNZBarrelActiveBody"]
-position = Vector2(0, 1)
-shape = SubResource("6")
+[node name="CNZBarrelActiveBody" type="AnimatableBody2D" parent="Bodies"]
+collision_layer = 2105359
+collision_mask = 0
+script = ExtResource("2")
 
-[node name="CNZBarrelInactiveBody" type="CharacterBody2D" parent="CNZBarrelActiveBody"]
-position = Vector2(0, 31)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bodies/CNZBarrelActiveBody"]
+position = Vector2(0, 4.5)
+shape = SubResource("RectangleShape2D_3347u")
+
+[node name="CNZBarrelInactiveBody" type="AnimatableBody2D" parent="Bodies"]
 collision_layer = 2105359
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CNZBarrelActiveBody/CNZBarrelInactiveBody"]
-position = Vector2(0, 2)
-shape = SubResource("7")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bodies/CNZBarrelInactiveBody"]
+position = Vector2(0, 36.5)
+shape = SubResource("RectangleShape2D_3dimk")
