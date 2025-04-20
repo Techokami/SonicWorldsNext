@@ -7,7 +7,7 @@ class_name ConnectableGimmick extends Node2D
 ## as a player process function specific to your gimmick. You may be able to
 ## work around things in a way that you don't actually need this and can just
 ## use your gimmick's process function, and that's ok!
-func player_process(_player : PlayerChar, _delta : float):
+func player_process(_player : PlayerChar, _delta : float) -> void:
 	pass
 
 ## Same as player_process, but for the physics_process instead. As with
@@ -15,7 +15,7 @@ func player_process(_player : PlayerChar, _delta : float):
 ## gimmick's process function.
 ## @param _player player whose process function is responsible for running this
 ## @param _delta how much time has passed between last frame and this one in seconds
-func player_physics_process(_player : PlayerChar, _delta : float):
+func player_physics_process(_player : PlayerChar, _delta : float) -> void:
 	pass
 
 ## Some objects may for the player to detach from their current gimmick either
@@ -24,7 +24,7 @@ func player_physics_process(_player : PlayerChar, _delta : float):
 ## function will be ran. You can use it to clean up player state among other
 ## things.
 ## @param _player player being detached by force
-func player_force_detach_callback(_player : PlayerChar):
+func player_force_detach_callback(_player : PlayerChar) -> void:
 	pass
 
 ## When a player is attached to your gimmick this will excute whenever an animation
@@ -32,5 +32,5 @@ func player_force_detach_callback(_player : PlayerChar):
 ## take action on the player when that happens.
 ## @param _player - which player entity finished their animation
 ## @param _animation - name of the animation that finished
-func handle_animation_finished(_player : PlayerChar, _animation : String):
+func handle_animation_finished(_player : PlayerChar, _animation : String) -> void:
 	pass

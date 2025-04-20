@@ -1,10 +1,12 @@
-[gd_scene load_steps=70 format=3 uid="uid://d1e4muavtnun6"]
+[gd_scene load_steps=71 format=3 uid="uid://d1e4muavtnun6"]
 
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="1_bjmss"]
-[ext_resource type="Script" path="res://Graphics/Players/PlayerAnimations/PlayerAnimation.gd" id="1_m2hur"]
+[ext_resource type="Script" path="res://Entities/PlayerAvatars/PlayerAnimation.gd" id="1_m2hur"]
+[ext_resource type="Script" path="res://Scripts/Player/PlayerAvatars/SonicAvatar.gd" id="1_wkbba"]
 [ext_resource type="Texture2D" uid="uid://4lhg0ovh1pe8" path="res://Graphics/Players/Sonic.png" id="2_6xy2a"]
 [ext_resource type="Texture2D" uid="uid://dlomjk6vm15ep" path="res://Graphics/Misc/DashDust.png" id="3_ll20w"]
 [ext_resource type="Texture2D" uid="uid://dvqglf8dididc" path="res://Graphics/Items/shield_plain.png" id="4_fe5jf"]
+[ext_resource type="Texture2D" uid="uid://decpuepom6w1d" path="res://Graphics/Tools/bar_helper.png" id="7_5kn2b"]
 
 [sub_resource type="Animation" id="86"]
 length = 0.001
@@ -69,6 +71,18 @@ tracks/4/keys = {
 "args": [],
 "method": &"reset_loops"
 }]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sonic/HandsReference:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
 }
 
 [sub_resource type="Animation" id="108"]
@@ -195,68 +209,26 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Sonic/Sprite2D:offset")
+tracks/1/path = NodePath("Sonic/CenterReference:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector2(20, 0)]
+"update": 0,
+"values": [Vector2(0, -2)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Sonic/CenterReference:position")
+tracks/2/path = NodePath("Sonic/HandsReference:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(0.0166667),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(20, 4)]
-}
-
-[sub_resource type="Animation" id="Animation_l0c1k"]
-resource_name = "clingVerticalBarOffset"
-length = 0.133335
-loop_mode = 1
-step = 0.0166667
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sonic/Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0666667),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [89, 90]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sonic/Sprite2D:offset")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector2(-20, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Sonic/CenterReference:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(-20, 4)]
+"values": [Vector2(-20, -1)]
 }
 
 [sub_resource type="Animation" id="76"]
@@ -325,6 +297,18 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [128, 129, 130, 131, 132, 133, 134, 135]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sonic/CenterReference:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -1)]
 }
 
 [sub_resource type="Animation" id="98"]
@@ -1234,7 +1218,6 @@ _data = {
 "brachiateLeft": SubResource("Animation_xr886"),
 "brachiateRight": SubResource("Animation_o80m3"),
 "clingVerticalBar": SubResource("Animation_3l35s"),
-"clingVerticalBarOffset": SubResource("Animation_l0c1k"),
 "corkScrew": SubResource("76"),
 "corkScrewOffset": SubResource("88"),
 "crouch": SubResource("77"),
@@ -1396,14 +1379,15 @@ _data = {
 }
 
 [node name="Sonic" type="Node2D"]
+script = ExtResource("1_wkbba")
 metadata/_edit_horizontal_guides_ = [-18.0]
+metadata/_edit_vertical_guides_ = [-20.0]
 
 [node name="PlayerAnimation" type="AnimationPlayer" parent="."]
 root_node = NodePath("../..")
 libraries = {
 "": SubResource("AnimationLibrary_36uej")
 }
-autoplay = "idle"
 script = ExtResource("1_m2hur")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -1422,6 +1406,7 @@ frame = 3
 offset = Vector2(-9, -4)
 
 [node name="CrouchBox" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, 8)
 shape = SubResource("111")
 disabled = true
@@ -1434,5 +1419,11 @@ libraries = {
 [node name="CenterReference" type="Sprite2D" parent="."]
 visible = false
 modulate = Color(1, 1, 1, 0.501961)
+z_index = 50
 texture = ExtResource("4_fe5jf")
 hframes = 4
+
+[node name="HandsReference" type="Sprite2D" parent="."]
+visible = false
+z_index = 50
+texture = ExtResource("7_5kn2b")

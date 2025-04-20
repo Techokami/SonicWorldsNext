@@ -149,7 +149,7 @@ func physics_process_connected(_delta, player: PlayerChar, index):
 	
 	# Perform just the functional parts  of the connect script that move the
 	# player into position.
-	var getPose = (global_position+get_player_contact(index).rotated(rotation) + Vector2(0.0, player.get_current_hitbox().NORMAL.y / 2.0)).round()
+	var getPose = (global_position+get_player_contact(index).rotated(rotation) + Vector2(0.0, player.get_avatar().get_hitbox(PlayerChar.HITBOXES.NORMAL).y / 2.0)).round()
 		
 	# verify position change won't clip into objects
 	if !player.test_move(player.global_transform,getPose-player.global_position):
@@ -209,7 +209,7 @@ func connect_grab(player: PlayerChar, index):
 	if get_player_contact(index) == null:
 		$Grab.play()
 		player.set_active_gimmick(self)
-		var calcDistance = _CONTACT_DISTANCE+(19-player.currentHitbox.NORMAL.y)
+		var calcDistance = _CONTACT_DISTANCE+(19-player.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL).y)
 		if !setCenter:
 			set_player_contact(index, Vector2(player.global_position.x-global_position.x,calcDistance))
 		else:

@@ -151,7 +151,7 @@ func brachiate_reposition_player(player : PlayerChar, player_brachiation_target 
 		
 	var percent_complete = animator.get_current_animation_position() / animator.get_current_animation_length()
 	
-	var hitbox_offset = (player.get_current_hitbox().NORMAL.y / 2.0) - 19 # 0'd for Sonic/Knux, 4 for Tails/Amy I think?
+	var hitbox_offset = (player.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL).y / 2.0) - 19 # 0'd for Sonic/Knux, 4 for Tails/Amy I think?
 	var getPose = get_collision_target(hitbox_offset)
 	var getPose2 = player_brachiation_target.get_collision_target(hitbox_offset)
 	var truePose = lerp(getPose, getPose2, transform_linear_to_exponential(percent_complete, 0.65))
@@ -162,7 +162,7 @@ func brachiate_reposition_player(player : PlayerChar, player_brachiation_target 
 
 ## Used when repositioning the player while not brachiating
 func reposition_player_static(player : PlayerChar):
-		var hitbox_offset = (player.get_current_hitbox().NORMAL.y / 2.0) - 19 # 0'd for Sonic/Knux, 4 for Tails/Amy I think?
+		var hitbox_offset = (player.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL).y / 2.0) - 19 # 0'd for Sonic/Knux, 4 for Tails/Amy I think?
 		var getPose = $MonkeyBarHanger.global_position + Vector2(0, 13 - hitbox_offset)
 		
 		# verify position change won't clip into objects

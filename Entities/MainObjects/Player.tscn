@@ -1,7 +1,7 @@
 [gd_scene load_steps=195 format=3 uid="uid://cioq5saowvqxj"]
 
 [ext_resource type="Script" path="res://Scripts/Player/Player.gd" id="1"]
-[ext_resource type="PackedScene" uid="uid://d1e4muavtnun6" path="res://Graphics/Players/PlayerAnimations/Sonic.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://d1e4muavtnun6" path="res://Entities/PlayerAvatars/Sonic.tscn" id="2"]
 [ext_resource type="AudioStream" uid="uid://bx5cur6r54lbo" path="res://Audio/SFX/Player/Jump.wav" id="3"]
 [ext_resource type="Script" path="res://Scripts/PropertiesLookup.gd" id="4"]
 [ext_resource type="AudioStream" uid="uid://iomtgrpokl66" path="res://Audio/SFX/Player/SpindashRev.wav" id="5"]

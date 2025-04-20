@@ -15,7 +15,7 @@ func _physics_process(delta):
 	
 	# Set air if not on floor
 	if (!parent.ground):
-		parent.set_state(parent.STATES.AIR,parent.currentHitbox.ROLL)
+		parent.set_state(parent.STATES.AIR,parent.get_predefined_hitbox(PlayerChar.HITBOXES.ROLL))
 		return null
 	# Set normal if speed is 0
 	if (parent.movement.x == 0):

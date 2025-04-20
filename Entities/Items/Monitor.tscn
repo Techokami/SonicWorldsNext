@@ -241,7 +241,6 @@ frame = 2
 [node name="Monitor" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("6")
 autoplay = "default"
-frame = 1
 
 [node name="Animator" type="AnimationPlayer" parent="."]
 libraries = {

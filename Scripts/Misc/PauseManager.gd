@@ -158,11 +158,11 @@ func do_lateral_input():
 					soundStepDelay -= 0.1
 			2: # Scale
 				if inputCue.x != 0 and inputCue != lastInput:
-					Global.zoomSize = clamp(Global.zoomSize+inputDir,zoomClamp[0],zoomClamp[1])
-					var window = get_window()
-					var newSize = Vector2i((get_viewport().get_visible_rect().size*Global.zoomSize).round())
-					window.set_position(window.get_position()+(window.size-newSize)/2)
-					window.set_size(newSize)
+					
+					var zoom_size = Global.get_zoom_size()
+					zoom_size = clamp(zoom_size+inputDir,zoomClamp[0],zoomClamp[1])
+					Global.resize_window(zoom_size)
+					
 		$PauseMenu/VBoxContainer.get_child(option+1).get_child(0).text = update_text(option+1)
 	lastInput = inputCue
 
@@ -208,7 +208,7 @@ func update_text(textRow = 0):
 		2: # Music
 			return "music "+str(round(((AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Music"))-clampSounds[0])/(abs(clampSounds[0])+abs(clampSounds[1])))*100))
 		3: # Scale
-			return "scale x"+str(Global.zoomSize)
+			return "scale x"+str(Global.get_zoom_size())
 		4: # Full screen
 			return "full screen "+onOff[int(((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN)))]
 		5: # Smooth Rotation

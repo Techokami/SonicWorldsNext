@@ -1,12 +1,14 @@
-[gd_scene load_steps=80 format=3 uid="uid://by3kgbgiinm60"]
+[gd_scene load_steps=81 format=3 uid="uid://by3kgbgiinm60"]
 
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="1"]
-[ext_resource type="Script" path="res://Graphics/Players/PlayerAnimations/PlayerAnimation.gd" id="1_q7n5h"]
+[ext_resource type="Script" path="res://Scripts/Player/PlayerAvatars/TailsAvatar.gd" id="1_ifxof"]
+[ext_resource type="Script" path="res://Entities/PlayerAvatars/PlayerAnimation.gd" id="1_q7n5h"]
 [ext_resource type="Texture2D" uid="uid://c05fsbnx0p7xf" path="res://Graphics/Players/Tails.png" id="2"]
 [ext_resource type="Texture2D" uid="uid://dlomjk6vm15ep" path="res://Graphics/Misc/DashDust.png" id="3"]
 [ext_resource type="Script" path="res://Scripts/Player/TailsAnimator.gd" id="4"]
 [ext_resource type="Script" path="res://Scripts/Player/TailsSpriteSettings.gd" id="5"]
 [ext_resource type="Texture2D" uid="uid://dvqglf8dididc" path="res://Graphics/Items/shield_plain.png" id="6_kof51"]
+[ext_resource type="Texture2D" uid="uid://decpuepom6w1d" path="res://Graphics/Tools/bar_helper.png" id="9_ofppa"]
 
 [sub_resource type="Animation" id="86"]
 length = 0.001
@@ -59,6 +61,18 @@ tracks/3/keys = {
 "args": [],
 "method": &"reset_loops"
 }]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Tails/HandsReference:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
 }
 
 [sub_resource type="Animation" id="121"]
@@ -185,68 +199,26 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Tails/Sprite2D:offset")
+tracks/1/path = NodePath("Tails/CenterReference:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector2(21, 0)]
+"update": 0,
+"values": [Vector2(-4, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Tails/CenterReference:position")
+tracks/2/path = NodePath("Tails/HandsReference:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(17, 4)]
-}
-
-[sub_resource type="Animation" id="Animation_w4arn"]
-resource_name = "clingVerticalBarOffset"
-length = 0.133335
-loop_mode = 1
-step = 0.0166667
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Tails/Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0666667),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [104, 105]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Tails/Sprite2D:offset")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector2(-21, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Tails/CenterReference:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(-17, 4)]
+"values": [Vector2(-20, 0)]
 }
 
 [sub_resource type="Animation" id="76"]
@@ -1306,7 +1278,6 @@ _data = {
 "brachiateLeft": SubResource("Animation_klp16"),
 "brachiateRight": SubResource("Animation_uh5e1"),
 "clingVerticalBar": SubResource("Animation_hleq2"),
-"clingVerticalBarOffset": SubResource("Animation_w4arn"),
 "corkScrew": SubResource("76"),
 "corkScrewOffset": SubResource("88"),
 "crouch": SubResource("77"),
@@ -1755,6 +1726,7 @@ _data = {
 }
 
 [node name="Tails" type="Node2D"]
+script = ExtResource("1_ifxof")
 metadata/_edit_horizontal_guides_ = [-22.0]
 
 [node name="PlayerAnimation" type="AnimationPlayer" parent="."]
@@ -1816,6 +1788,11 @@ visible = false
 modulate = Color(1, 1, 1, 0.501961)
 texture = ExtResource("6_kof51")
 hframes = 4
+
+[node name="HandsReference" type="Sprite2D" parent="."]
+visible = false
+z_index = 50
+texture = ExtResource("9_ofppa")
 
 [connection signal="animation_started" from="PlayerAnimation" to="Sprite2D" method="_on_PlayerAnimation_animation_started"]
 [connection signal="animation_started" from="PlayerAnimation" to="Sprite2D/Tails" method="_on_PlayerAnimation_animation_started"]

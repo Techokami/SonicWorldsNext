@@ -59,22 +59,7 @@ func _ready():
 	collision.set_shape(shape)
 	collision.position = Vector2(0, -vert_size / 2.0 - bottomSprite.texture.get_height() / 2.0)
 	
-## This function will be invoked at the end of the player process. Treat this
-## as a player process function specific to your gimmick. You may be able to
-## work around things in a way that you don't actually need this and can just
-## use your gimmick's process function, and that's ok!
-func player_process(player: PlayerChar, delta: float):
-	var yInput = player.get_y_input()
-	var rotation_timer = player.get_gimmick_var("VerticalPylonRotationTimer")
-	var relative_y_pos = player.get_gimmick_var("VerticalPylonYPos")
-	var relative_y_speed = 0
-	rotation_timer += delta
-	
-	if yInput > 0:
-		relative_y_speed = climb_speed
-	elif yInput < 0:
-		relative_y_speed = -climb_speed
-		
+
 func check_grab(player: PlayerChar):
 	if player.is_gimmick_locked_for_player(self):
 		return false
@@ -97,7 +82,7 @@ func connect_player(player: PlayerChar):
 		return
 
 	# XXX TODO: We need to clean up this hitbox setting stuff
-	player.set_state(PlayerChar.STATES.ANIMATION, player.currentHitbox.HORIZONTAL)
+	player.set_state(PlayerChar.STATES.ANIMATION, player.get_predefined_hitbox(PlayerChar.HITBOXES.HORIZONTAL))
 	player.set_direction(PlayerChar.DIRECTIONS.RIGHT)
 	player.play_animation("swingVerticalBarManaged", -1, 0.0)
 	player.set_gimmick_var("VerticalPylonRotationTimer", 0.0)
@@ -116,12 +101,10 @@ func disconnect_player(player: PlayerChar):
 		player.play_animation("roll")
 	
 	var unlock_func = func ():
-		print("unlock player %s" % player)
 		player.clear_single_locked_gimmick(self)
 	
 	var timer:SceneTreeTimer = get_tree().create_timer(0.25, false)
 	timer.timeout.connect(unlock_func, CONNECT_DEFERRED)
-	print("lock player %s" % player)
 	player.add_locked_gimmick(self)
 	pass
 
@@ -129,7 +112,6 @@ func process_game(delta):
 	var players_to_check = $FBZ_Pylon_Area.get_overlapping_bodies()
 	for player: PlayerChar in players_to_check:
 		if player.get_active_gimmick() != null:
-			print("player already has gimmick")
 			continue
 
 		if check_grab(player):

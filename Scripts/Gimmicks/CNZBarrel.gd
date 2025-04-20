@@ -114,7 +114,6 @@ func _ready():
 	
 	for my_node in body.get_children():
 		if my_node is AnimatableBody2D:
-			print("adding node %s" % my_node)
 			bodies_to_update.append(my_node)
 
 func impart_force(velocityChange):
@@ -161,7 +160,7 @@ func detach_player(player: PlayerChar, index):
 	if player.get_state() != PlayerChar.STATES.DIE:
 		player.allowTranslate = false
 		
-func set_anim(player, lookUp, lookDown):
+func set_anim(player: PlayerChar, lookUp, lookDown):
 	var curAnim = player.animator.get_assigned_animation()
 	var targetAnim
 	
@@ -177,13 +176,11 @@ func set_anim(player, lookUp, lookDown):
 		player.animator.play(targetAnim)
 		player.animator.advance(seekTime)
 		if targetAnim == "yRotationLookDown":
-			#player.set_hitbox(player.currentHitbox.CROUCH, true)
-			player.get_node("HitBox").shape.size = player.currentHitbox.CROUCH
+			player.set_predefined_hitbox(PlayerChar.HITBOXES.CROUCH)
 			player.get_node("HitBox").position = player.hitBoxOffset.crouch
 		else:
-			#player.set_hitbox(player.currentHitbox.NORMAL, true)	
 			player.get_node("HitBox").position = player.hitBoxOffset.normal
-			player.get_node("HitBox").shape.size = player.currentHitbox.NORMAL
+			player.set_predefined_hitbox(PlayerChar.HITBOXES.NORMAL)
 
 func _process(delta):
 	upHeld = false
@@ -276,11 +273,11 @@ func _physics_process(delta):
 		physics_process_trampoline_mode(delta, upHeld, downHeld)
 
 	for index in range(players.size()):
-		var player = get_player(index)
+		var player: PlayerChar = get_player(index)
 		player.direction = 1
 		set_player_phase(index, get_player_phase(index) + (delta / spinning_period) * 2.0 * PI)
 		player.global_position.x = floor(body.global_position.x + get_player_radius(index) * cos(get_player_phase(index)))
-		player.global_position.y = floor(body.global_position.y - player.currentHitbox.NORMAL.y / 2.0 - 1)
+		player.global_position.y = floor(body.global_position.y - player.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL).y / 2.0 - 1)
 		if player.get_state() != PlayerChar.STATES.DIE:
 			player.movement.x = 0
 			player.movement.y = 0

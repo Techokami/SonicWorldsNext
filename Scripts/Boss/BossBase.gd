@@ -45,7 +45,7 @@ func _physics_process(delta):
 						if i.get_state() == PlayerChar.STATES.GLIDE:
 							i.play_animation("glideFall")
 							# reset player hitbox
-							i.set_hitbox(i.currentHitbox.NORMAL)
+							i.set_predefined_hitbox(PlayerChar.HITBOXES.NORMAL)
 							i.reflective = false
 							# XXX Modifying player state directly from another object seems a little odd to me
 							i.get_state_object(PlayerChar.STATES.GLIDE).isFall = true

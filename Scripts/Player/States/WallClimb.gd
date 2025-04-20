@@ -34,7 +34,7 @@ func _physics_process(delta):
 			parent.animator.play("walk")
 			parent.groundSpeed = 1
 			parent.disconnect_from_floor()
-			parent.set_state(parent.STATES.AIR,parent.currentHitbox.NORMAL)
+			parent.set_state(parent.STATES.AIR,parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL))
 			return false
 		
 		# check for wall using the wall sensors
@@ -48,7 +48,7 @@ func _physics_process(delta):
 		if !parent.horizontalSensor.is_colliding():
 			parent.movement = Vector2.ZERO
 			parent.animator.speed_scale = 1
-			parent.set_state(parent.STATES.GLIDE,parent.currentHitbox.NORMAL)
+			parent.set_state(parent.STATES.GLIDE,parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL))
 			return false
 		
 		# climbing edge
@@ -78,7 +78,7 @@ func _physics_process(delta):
 		parent.global_position = climbPosition+(shiftPoses[min(floor(offset),shiftPoses.size()-1)]*Vector2(parent.direction,1))
 		# if timer greater then animator then exit climb
 		if climbTimer > parent.animator.current_animation_length:
-			parent.set_state(parent.STATES.NORMAL,parent.currentHitbox.NORMAL)
+			parent.set_state(parent.STATES.NORMAL,parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL))
 			climbUp = false
 			parent.global_position = climbPosition+(shiftPoses[shiftPoses.size()-1]*Vector2(parent.direction,1))
 

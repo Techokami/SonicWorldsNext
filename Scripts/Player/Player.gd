@@ -1,11 +1,7 @@
 class_name PlayerChar extends PhysicsObject
 
-const HITBOXESSONIC = {NORMAL = Vector2(9,19)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,11)*2, GLIDE = Vector2(10,10)*2, HORIZONTAL = Vector2(22,9)*2}
-const HITBOXESTAILS = {NORMAL = Vector2(9,15)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,9.5)*2, GLIDE = Vector2(10,10)*2, HORIZONTAL = Vector2(22,9)*2}
-const HITBOXESKNUCKLES = {NORMAL = Vector2(9,19)*2, ROLL = Vector2(7,14)*2, CROUCH = Vector2(9,11)*2, GLIDE = Vector2(10,10)*2, HORIZONTAL = Vector2(22,9)*2}
-const HITBOXESAMY = {NORMAL = Vector2(9,15)*2, ROLL = Vector2(7,11)*2, CROUCH = Vector2(9,9.5)*2, GLIDE = Vector2(10,10)*2, HORIZONTAL = Vector2(22,9)*2}
-var currentHitbox = HITBOXESSONIC
-#Knuckles' hitboxes are the same as Sonic's.
+## Enumerator of the various hitbox types
+enum HITBOXES { NORMAL, ROLL, CROUCH, GLIDE, HORIZONTAL, NOCHANGE }
 
 #Sonic's Speed constants
 var acc = 0.046875			#acceleration
@@ -55,7 +51,7 @@ var pushingWall = 0
 var enemyCounter = 0
 
 # Which character is this player controlling?
-var character = Global.CHARACTERS.SONIC
+var character: Global.CHARACTERS = Global.CHARACTERS.SONIC
 
 # physics list
 # order
@@ -68,6 +64,13 @@ var character = Global.CHARACTERS.SONIC
 # 6 Rolling Deceleration
 # 7 Gravity
 # 8 Jump release velocity
+
+enum PHYSICS_FLAGS {
+	NORMAL = 0,
+	UNDERWATER = 1,
+	SUPER = 2,
+	SUPER_UNDERWATER = 3
+}
 
 var physicsList = [
 # 0 Default Character properties
@@ -134,11 +137,10 @@ var reflective = false # used for reflecting projectiles
 @onready var animator: PlayerCharAnimationPlayer = $Sonic/PlayerAnimation
 @onready var superAnimator = $Sonic/SuperPalette
 @onready var sprite = $Sonic/Sprite2D
-@onready var spriteController = $Sonic
+@onready var player_avatar: PlayerAvatar = $Sonic
 var centerReference = null # center reference is a center reference point used for hitboxes and shields (the sprite node need a node called "CenterReference" for this to work)
 var lastActiveAnimation = ""
 var defaultSpriteOffset = Vector2.ZERO
-var animation_loops = 0
 
 var camera = Camera2D.new()
 var camDist = Vector2(32,64)
@@ -216,11 +218,11 @@ const INPUT_MEMORY_LENGTH = 20
 var Player = load("res://Entities/MainObjects/Player.tscn")
 
 #An array of, well, Arrays, in order of Global.CHARACTERS, skipping 0.
-var playerskins = [
-	[preload("res://Graphics/Players/PlayerAnimations/Sonic.tscn"),HITBOXESSONIC],
-	[preload("res://Graphics/Players/PlayerAnimations/Tails.tscn"),HITBOXESTAILS],
-	[preload("res://Graphics/Players/PlayerAnimations/Knuckles.tscn"),HITBOXESKNUCKLES],
-	[preload("res://Graphics/Players/PlayerAnimations/Amy.tscn"),HITBOXESAMY],
+var playeravatars = [
+	preload("res://Entities/PlayerAvatars/Sonic.tscn"),
+	preload("res://Entities/PlayerAvatars/Tails.tscn"),
+	preload("res://Entities/PlayerAvatars/Knuckles.tscn"),
+	preload("res://Entities/PlayerAvatars/Amy.tscn"),
 ]
 
 # Get sfx list
@@ -263,6 +265,7 @@ var locked_gimmicks_index: int = 0
 # Enemy related
 signal enemy_bounced
 
+
 func _initialize_states():
 	for i:PlayerState in stateList:
 		i.set_process(false)
@@ -273,6 +276,7 @@ func _initialize_states():
 	stateList[active_state].set_process(true)
 	stateList[active_state].set_physics_process(true)
 	stateList[active_state].set_process_input(true)
+
 
 func _ready():
 	super()
@@ -292,7 +296,7 @@ func _ready():
 	camera.drag_bottom_margin = camDist.y/viewSize.y
 	camera.drag_horizontal_enabled = true
 	camera.drag_vertical_enabled = true
-	_con = connect("positionChanged",Callable(self,"on_position_changed"))
+	_con = connect("positionChanged",Callable(self,"_on_position_changed"))
 	camera.global_position = global_position
 	
 	# Tails carry stuff
@@ -355,17 +359,20 @@ func _ready():
 			Global.levelTime = 0
 	
 	# Character settings
-	var skin = playerskins[max(min(character-1,playerskins.size()),0)]
-	currentHitbox = skin[1]
-	spriteController.name = "OldSprite"
-	var newSprite = skin[0].instantiate()
-	add_child(newSprite)
-	sprite = newSprite.get_node("Sprite2D")
-	animator = newSprite.get_node("PlayerAnimation")
+	var avatar = playeravatars[0]
+	if character != Global.CHARACTERS.NONE:
+		avatar = playeravatars[character - 1]
+	
+	player_avatar.name = "OldSprite"
+	var new_avatar: PlayerAvatar = avatar.instantiate()
+	add_child(new_avatar)
+	
+	sprite = new_avatar.get_node("Sprite2D")
+	animator = new_avatar.get_node("PlayerAnimation")
 	animator.animation_finished.connect(handle_animation_finished)
-	superAnimator = newSprite.get_node_or_null("SuperPalette")
-	spriteController.queue_free()
-	spriteController = newSprite
+	superAnimator = new_avatar.get_node_or_null("SuperPalette")
+	player_avatar.queue_free()
+	player_avatar = new_avatar
 	
 	if character == Global.CHARACTERS.AMY:
 		maxCharGroundHeight = 12 # adjust Amy's height distance to prevent clipping off floors
@@ -374,14 +381,14 @@ func _ready():
 	switch_physics()
 	
 	# Set hitbox
-	$HitBox.shape.size = currentHitbox.NORMAL
+	$HitBox.shape.size = player_avatar.get_hitbox(HITBOXES.NORMAL)
 	
 	# connect animator
 	animator.connect("animation_started",Callable(self,"_on_PlayerAnimation_animation_started"))
 	defaultSpriteOffset = sprite.offset
 	
 	# set secondary hitboxes
-	crouchBox = spriteController.get_node_or_null("CrouchBox")
+	crouchBox = player_avatar.get_node_or_null("CrouchBox")
 	if crouchBox != null:
 		crouchBox.get_parent().remove_child(crouchBox)
 		add_child(crouchBox)
@@ -389,7 +396,7 @@ func _ready():
 		hitBoxOffset.crouch = crouchBox.position
 	
 	# add center reference node
-	centerReference = spriteController.get_node_or_null("CenterReference")
+	centerReference = player_avatar.get_node_or_null("CenterReference")
 	# hide reference
 	if centerReference:
 		centerReference.visible = false
@@ -405,6 +412,7 @@ func _ready():
 	if playerControl == 0:
 		partner.sfx = sfx
 
+
 ## Returns the input for a button as a numerical value
 ##
 ## @param event
@@ -415,6 +423,7 @@ func _ready():
 ## @retval -1 released
 func calculate_input(event, action = "gm_action"):
 	return int(event.is_action(action) or event.is_action_pressed(action))-int(event.is_action_released(action))
+
 
 func _process(delta):
 	# Player 1 input settings and partner AI
@@ -513,7 +522,7 @@ func _process(delta):
 	else:
 		sprite.rotation = -rotation+gravityAngle
 
-	spriteController.global_position = global_position.round()
+	player_avatar.global_position = global_position.round()
 
 	# Sprite center offset referencing for shields
 	if centerReference != null:
@@ -643,10 +652,11 @@ func _process(delta):
 		partnerControlTime -= delta
 	
 	# Set player inputs
-	set_inputs()
+	_set_inputs()
 	
 	if (active_gimmick != null):
 		active_gimmick.player_process(self, delta)
+
 
 func _physics_process(delta):
 	super(delta)
@@ -864,8 +874,9 @@ func _physics_process(delta):
 	if (active_gimmick != null):
 		active_gimmick.player_physics_process(self, delta)
 
-# Input buttons
-func set_inputs():
+
+# Reads the controller state for the player
+func _set_inputs():
 	# player control inputs
 	# check if ai or player 2
 	if playerControl == 0 or playerControl == 2:
@@ -897,7 +908,9 @@ func set_inputs():
 		inputs[INPUTS.XINPUT] = -int(Input.is_action_pressed(inputActions[INPUTS.XINPUT][0]))+int(Input.is_action_pressed(inputActions[INPUTS.XINPUT][1]))
 		inputs[INPUTS.YINPUT] = -int(Input.is_action_pressed(inputActions[INPUTS.YINPUT][0]))+int(Input.is_action_pressed(inputActions[INPUTS.YINPUT][1]))
 
+
 # Controller scan functions -- so you don't have to dig into the inputs to check controller state
+## Returns true if any of the three action buttons were just pressed this frame
 func any_action_pressed():
 	if (inputs[INPUTS.ACTION] == 1
 	or inputs[INPUTS.ACTION2] == 1 or
@@ -905,6 +918,8 @@ func any_action_pressed():
 		return true
 	return false
 
+
+## Returns true if any of the action buttons have been held for more than one frame
 func any_action_held():
 	if inputs[INPUTS.ACTION] == 2:
 		return true
@@ -914,6 +929,7 @@ func any_action_held():
 		return true
 	return false
 
+## Returns true if any of the three action buttons are currently held/pressed
 func any_action_held_or_pressed():
 	if inputs[INPUTS.ACTION] > 0:
 		return true
@@ -922,6 +938,7 @@ func any_action_held_or_pressed():
 	if inputs[INPUTS.ACTION3] > 0:
 		return true
 	return false
+
 
 ## This probably seems really niche, but it's useful to prevent
 ## Certain jump actions from instantly turning into player specific double
@@ -934,139 +951,44 @@ func convert_pressed_action_btns_to_held():
 	if inputs[INPUTS.ACTION2] == 1:
 		inputs[INPUTS.ACTION2] = 2
 
-# Note that there is no way to check the 'pressed' vs 'held' status of X/Y inputs.
+
 ## Check the y input of the player's controller
 func get_y_input():
 	return inputs[INPUTS.YINPUT]
 
-## Check the if the player is holding up on their controller	
+
+## Check the if the player is holding up on their controller
+## Note: a press and a hold are the same thing for directions -- no effort is made to track the
+## difference for these.
 func is_up_held():
 	return inputs[INPUTS.YINPUT] < 0
 
+
 ## Check the if the player is holding dow on their controller	
+## Note: a press and a hold are the same thing for directions -- no effort is made to track the
+## difference for these.
 func is_down_held():
 	return inputs[INPUTS.YINPUT] > 0
+
 
 ## Check the x input of the player's controller
 func get_x_input():
 	return inputs[INPUTS.XINPUT]
 
-## Check the if the player is holding left on their controller	
+
+## Check the if the player is holding left on their controller
+## Note: a press and a hold are the same thing for directions -- no effort is made to track the
+## difference for these.
 func is_left_held():
 	return inputs[INPUTS.XINPUT] < 0
 
+
 ## Check the if the player is holding right on their controller	
+## Note: a press and a hold are the same thing for directions -- no effort is made to track the
+## difference for these.
 func is_right_held():
 	return inputs[INPUTS.XINPUT] > 0
 
-## Gets the current state value of the player
-## Note: gets the enum value only, not the actual state object
-func get_state()->PlayerChar.STATES:
-	return currentState
-
-## Gets a player state object
-## I don't recommend using this function, but we have some code in the codebase
-## that uses this approach so I'm exposing it anyway. The preferred way to read/
-## manipulate a player's state value is usually going to be to add a new function
-## to the player that does it for you.
-##
-## @param for_state - which state you want to get the state object for
-## @retval PlayerState object that the for_state value represents
-func get_state_object(for_state: PlayerChar.STATES) -> PlayerState:
-	return stateList[for_state]
-
-## Sets the player's state while performing normal state change operations
-## Always use this to set the player's state, never try to change the player's
-## state directly.
-##
-## @param new_state - State player is changing to
-## @param force_mask - Vector2 
-func set_state(new_state: PlayerChar.STATES, force_mask:Vector2 = Vector2.ZERO):	
-	defaultHitBoxPos = hitBoxOffset.normal
-	$HitBox.position = defaultHitBoxPos
-	# reset the center offset
-	if centerReference != null:
-		centerReference.position = Vector2.ZERO
-	
-	# Exit old state, enter the new one.
-	stateList[currentState].state_exit()
-	stateList[new_state].state_activated()
-
-	# Enable/Disable process functions in case this state uses the deprecated approach
-	stateList[currentState].set_process(false)
-	stateList[currentState].set_physics_process(false)
-	stateList[currentState].set_process_input(false)
-	stateList[new_state].set_process(true)
-	stateList[new_state].set_physics_process(true)
-	stateList[new_state].set_process_input(true)
-	
-	currentState = new_state
-	
-	var forcePoseChange = Vector2.ZERO
-	
-	if (force_mask == Vector2.ZERO):
-		match(new_state):
-			STATES.JUMP, STATES.ROLL:
-				# adjust y position
-				forcePoseChange = ((currentHitbox.ROLL-$HitBox.shape.size)*Vector2.UP).rotated(rotation)*0.5
-				
-				# change hitbox size
-				$HitBox.shape.size = currentHitbox.ROLL
-			STATES.SPINDASH:
-				# change hitbox size
-				$HitBox.shape.size = currentHitbox.CROUCH
-				
-			_:
-				# adjust y position
-				forcePoseChange = ((currentHitbox.NORMAL-$HitBox.shape.size)*Vector2.UP).rotated(rotation)*0.5
-				
-				# change hitbox size
-				$HitBox.shape.size = currentHitbox.NORMAL
-	else:
-		# adjust y position
-		forcePoseChange = ((force_mask-$HitBox.shape.size)*Vector2.UP).rotated(rotation)*0.5
-		# change hitbox size
-		$HitBox.shape.size = force_mask
-	
-	position += forcePoseChange
-	
-	sprite.get_node("DashDust").visible = false
-
-# sets the hitbox mask shape, referenced in other states
-func set_hitbox(mask = Vector2.ZERO, force_pose_change = false):
-	# adjust position if on floor or force pose change
-	if ground or force_pose_change:
-		position += ((mask-$HitBox.shape.size)*Vector2.UP).rotated(rotation)*0.5
-	
-	$HitBox.shape.size = mask
-
-## Sets the player's shield
-## @param setShieldID - Which shield the player should get
-func set_shield(setShieldID: PlayerChar.SHIELDS) -> void:
-	magnetShape.disabled = true
-	# verify not in water and shield compatible
-	if water and (setShieldID == SHIELDS.FIRE or setShieldID == SHIELDS.ELEC):
-		return
-	
-	shield = setShieldID
-	# make shield visible if not super and the invincibility barrier isn't going
-	shieldSprite.visible = !isSuper and !$InvincibilityBarrier.visible
-	match (shield):
-		SHIELDS.NORMAL:
-			shieldSprite.play("Default")
-			sfx[5].play()
-		SHIELDS.ELEC:
-			shieldSprite.play("Elec")
-			sfx[10].play()
-			magnetShape.disabled = false
-		SHIELDS.FIRE:
-			shieldSprite.play("Fire")
-			sfx[11].play()
-		SHIELDS.BUBBLE:
-			shieldSprite.play("Bubble")
-			sfx[12].play()
-		_: # disable
-			shieldSprite.visible = false
 
 ## Hits the player. This usually causes loss of shield, loss of rings, or
 ## death.
@@ -1134,6 +1056,7 @@ func hit_player(damagePoint:Vector2 = global_position, damageType: Global.HAZARD
 		return true
 	return false
 
+
 ## Gives the player a ring by default, overridable to any requested number.
 ##
 ## @param num_rings - one by default. This may be negative to take away rings,
@@ -1178,9 +1101,11 @@ func give_ring(num_rings: int = 1, play_sound: bool = true) -> void:
 		Global.bossMusic.volume_db = -100
 		Global.music.volume_db = -100
 
+
 ## Resets the player's air timer to the default air time value
 func reset_air()->void:
 	airTimer = defaultAirTime
+
 
 ## Murders the player instantly
 ## Disable 'always' to... uh... I guess not kill under certain conditions?
@@ -1227,12 +1152,14 @@ func kill():
 		animator.play("drown")
 		sfx[25].play()
 
-	set_state(STATES.DIE,currentHitbox.NORMAL)
+	set_state(STATES.DIE,player_avatar.get_hitbox(HITBOXES.NORMAL))
 		
 	#if playerControl == 1:
 		#Global.main.sceneCanPause = false # stop the ability to pause
 
-## Makes the 
+
+## Makes a partner character re-enter the scene
+## TODO: Make this compatible with partners other than Tails
 func respawn() -> void:
 	if partner == null:
 		return
@@ -1260,8 +1187,13 @@ func respawn() -> void:
 		
 	set_state(STATES.RESPAWN)
 
+
+## Gets the character's partner (note that in the current to player setup, each player character is
+## the other's partner, so calling get_partner on Sonic in Sonic and Tails mode gets Tails and
+## calling it on Tails gets Sonic.
 func get_partner() -> PlayerChar:
 	return partner
+
 
 func _touch_ceiling():
 	if getVert != null:
@@ -1274,6 +1206,7 @@ func _touch_ceiling():
 			ground = true
 			return true
 	movement.y = 0
+
 
 func _land_floor():
 	
@@ -1292,6 +1225,7 @@ func _land_floor():
 		else:
 			movement.x = movement.y*sign(sin(angle-gravityAngle))
 
+
 # clean animation
 func _on_PlayerAnimation_animation_started(_anim_name):
 	if (sprite != null):
@@ -1305,6 +1239,7 @@ func _on_PlayerAnimation_animation_started(_anim_name):
 		if centerReference != null:
 			centerReference.position = Vector2.ZERO
 		animator.advance(0)
+
 
 # return the physics id variable, see physicsList array for reference
 func _determine_physics():
@@ -1320,10 +1255,12 @@ func _determine_physics():
 		return 1 # Shoes
 	return 0 #Default
 
-# Return a jump height for the respective context.
-# There are normally only 5 jump height values; 3 above water, with two under.
-# Super Sonic and Knuckles are the onlycharacters with unique jump height, Super sonic above water only.
-func get_jump_property():
+
+## Return a jump height for the respective context.
+## There are normally only 5 jump height values; 3 above water, with two under.
+## Super Sonic and Knuckles are the onlycharacters with unique jump height, Super sonic above
+## water only.
+func _get_jump_property():
 	if !water:
 		match (character):
 			Global.CHARACTERS.SONIC:
@@ -1354,7 +1291,8 @@ func switch_physics() -> void:
 	rolldec = getList[6]
 	grv = getList[7]
 	releaseJmp = getList[8]
-	jmp = get_jump_property()
+	jmp = _get_jump_property()
+
 
 func _on_SparkleTimer_timeout() -> void:
 	if isSuper and abs(groundSpeed) >= top:
@@ -1363,8 +1301,10 @@ func _on_SparkleTimer_timeout() -> void:
 		sparkle.play("Super")
 		get_parent().add_child(sparkle)
 
-func on_position_changed():
+
+func _on_position_changed():
 	cam_update(true)
+
 
 ## Repositions the player camera per normal camera movement rules
 ## @param force_move Ignores camera locking mechanics if true
@@ -1382,18 +1322,16 @@ func cam_update(forceMove = false) -> void:
 	# Extra drag margin for rolling
 	match(character):
 		Global.CHARACTERS.TAILS:
-			match($HitBox.shape.size):
-				currentHitbox.ROLL:
-					camAdjust = Vector2(0,-1)
-				_:
-					camAdjust = Vector2.ZERO
+			if get_state() == STATES.ROLL:
+				camAdjust = Vector2(0,-1)
+			else:
+				camAdjust = Vector2.ZERO
 		_: # default
-			match($HitBox.shape.size):
-				currentHitbox.ROLL:
-					camAdjust = Vector2(0,-5)
-				_:
-					camAdjust = Vector2.ZERO
-
+			if get_state() == STATES.ROLL:
+				camAdjust = Vector2(0,-5)
+			else:
+				camAdjust = Vector2.ZERO
+	
 	# Camera lock
 	# remove round() if you are not making a pixel perfect game
 	var getPos = (global_position+Vector2(0,camLookOff)+camAdjust).round()
@@ -1419,6 +1357,7 @@ func cam_update(forceMove = false) -> void:
 	if rachetScrollBottom:
 		limitBottom = max(limitBottom,camera.get_screen_center_position().y+viewSize.y/2)
 
+
 ## Locks the position of the camera for a while
 ## @param time how long (in seconds) to lock the camera for
 ## Note: If the camera is already locked, this function can raise
@@ -1426,11 +1365,13 @@ func cam_update(forceMove = false) -> void:
 func lock_camera(time: float = 1.0):
 	camLockTime = max(time,camLockTime)
 
+
 func _snap_camera_to_limits():
 	camera.limit_left = max(limitLeft,Global.hardBorderLeft)
 	camera.limit_right = min(limitRight,Global.hardBorderRight)
 	camera.limit_top = max(limitTop,Global.hardBorderTop)
 	camera.limit_bottom = min(limitBottom,Global.hardBorderBottom)
+
 
 # Water bubble timer
 func _on_BubbleTimer_timeout():
@@ -1451,9 +1392,10 @@ func _on_BubbleTimer_timeout():
 			$BubbleTimer.start(max(randf()*3,0.5))
 		get_parent().add_child(bub)
 
-# player actions
 
-# player movements
+## Handles player's standard movement based on controller input -- you might call this if you are
+## programming either a state or a gimmick that uses the ANIMATION state and don't want to take
+## standard directional control away from the player.
 func action_move(delta):
 	# moving left and right, check if left or right is being pressed
 	if inputs[INPUTS.XINPUT] != 0:
@@ -1479,21 +1421,35 @@ func action_move(delta):
 			else:
 				movement.x -= movement.x
 
-func action_jump(animation = "roll", airJumpControl = true, playSound=true):
+
+## Makes the player jump with their standard jump strength
+func action_jump(animation = "roll", air_jump_control : bool = true, play_sound : bool = true):
 	if forceRoll <= 0: # check to prevent jumping in roll tubes
 		animator.play(animation)
 		animator.advance(0)
 		movement.y = -jmp
-		if playSound:
+		if play_sound:
 			sfx[0].play()
-		airControl = airJumpControl
+		airControl = air_jump_control
 		cameraDragLerp = 1
 		disconnect_from_floor()
 		set_state(STATES.JUMP)
 
+
+## Restores the player's ability to use double jump action. The player still
+## has to be in a state where it is available in the first place to do so.
+func reset_double_jump_action() -> void:
+	abilityUsed = false
+
+
+## Makes the player emit the enemy_bounced signal
 func emit_enemy_bounce():
 	enemy_bounced.emit()
 
+
+## Makes the player perform water run actions if applicable. Only really has an impact if
+## the player is in contact iwth the water's surface. You invoke this in any action that
+## water running is allowed from.
 func action_water_run_handle():
 	var dash = $WaterSurface
 	# check for water (check that collision has the water tag)
@@ -1502,7 +1458,6 @@ func action_water_run_handle():
 	if colCheck:
 		touchWater = colCheck.get_collider().get_collision_layer_value(23)
 	
-
 	# enable dash dust if touching water
 	dash.visible = (get_collision_mask_value(23) and touchWater and ground)
 	dash.scale.x = sign(movement.x)
@@ -1514,6 +1469,7 @@ func action_water_run_handle():
 			sfx[29].play()
 	else:
 		sfx[29].stop()
+
 
 func _handle_animation_speed(gSpeed = groundSpeed):
 	match(animator.current_animation):
@@ -1539,24 +1495,164 @@ func _handle_animation_speed(gSpeed = groundSpeed):
 # Standard getters and setters -- for future code, please try to avoid direct
 # access of player variables. Use getters/setters instead. This aids in easing
 # refactoring.
+## Gets the current state value of the player
+## Note: gets the enum value only, not the actual state object
+func get_state()->PlayerChar.STATES:
+	return currentState
 
-## Gets the player animator -- this is a tad overkill most of the time, but
-## Sometimes you need to control an animation in a more robust way than simply
-## by using play.
-func get_animator() -> PlayerCharAnimationPlayer:
-	return self.animator
+
+## Gets a player state object
+## I don't recommend using this function, but we have some code in the codebase
+## that uses this approach so I'm exposing it anyway. The preferred way to read/
+## manipulate a player's state value is usually going to be to add a new function
+## to the player that does it for you.
+##
+## @param for_state - which state you want to get the state object for
+## @retval PlayerState object that the for_state value represents
+func get_state_object(for_state: PlayerChar.STATES) -> PlayerState:
+	return stateList[for_state]
+
+
+## Sets the player's state while performing normal state change operations
+## Always use this to set the player's state, never try to change the player's
+## state directly.
+##
+## @param new_state - State player is changing to
+## @param force_mask - Vector2 
+func set_state(new_state: PlayerChar.STATES, force_mask:Vector2 = Vector2.ZERO):	
+	defaultHitBoxPos = hitBoxOffset.normal
+	$HitBox.position = defaultHitBoxPos
+	# reset the center offset
+	if centerReference != null:
+		centerReference.position = Vector2.ZERO
+	
+	# Exit old state, enter the new one.
+	stateList[currentState].state_exit()
+	stateList[new_state].state_activated()
+
+	# Enable/Disable process functions in case this state uses the deprecated approach
+	stateList[currentState].set_process(false)
+	stateList[currentState].set_physics_process(false)
+	stateList[currentState].set_process_input(false)
+	stateList[new_state].set_process(true)
+	stateList[new_state].set_physics_process(true)
+	stateList[new_state].set_process_input(true)
+	
+	currentState = new_state
+	
+	var forcePoseChange = Vector2.ZERO
+	
+	if (force_mask == Vector2.ZERO):
+		match(new_state):
+			STATES.JUMP, STATES.ROLL:
+				# adjust y position
+				forcePoseChange = ((player_avatar.get_hitbox(HITBOXES.ROLL)-$HitBox.shape.size)*Vector2.UP).rotated(rotation)*0.5
+				
+				# change hitbox size
+				$HitBox.shape.size = player_avatar.get_hitbox(HITBOXES.ROLL)
+			STATES.SPINDASH:
+				# change hitbox size
+				$HitBox.shape.size = player_avatar.get_hitbox(HITBOXES.CROUCH)
+				
+			_:
+				# adjust y position
+				forcePoseChange = ((player_avatar.get_hitbox(HITBOXES.NORMAL)-$HitBox.shape.size)*Vector2.UP).rotated(rotation)*0.5
+				
+				# change hitbox size
+				$HitBox.shape.size = player_avatar.get_hitbox(HITBOXES.NORMAL)
+	else:
+		# adjust y position
+		forcePoseChange = ((force_mask-$HitBox.shape.size)*Vector2.UP).rotated(rotation)*0.5
+		# change hitbox size
+		$HitBox.shape.size = force_mask
+	
+	position += forcePoseChange
+	
+	sprite.get_node("DashDust").visible = false
+
+
+## sets the hitbox mask shape, referenced in other states
+## @param size - new hitbox size
+## @param force_pose_change normally if the player's hitbox size changes
+##        and they are on the ground, the player's hitbox will be repositioned to
+##        maintain the same bottom position. Using force_pose_change causes this
+##        behavior to be used with this set_hitbox operation even if the player isn't
+##        on the ground.
+func set_hitbox(size = Vector2.ZERO, force_pose_change = false):
+	# adjust position if on floor or force pose change
+	if ground or force_pose_change:
+		position += ((size-$HitBox.shape.size)*Vector2.UP).rotated(rotation)*0.5
+	
+	$HitBox.shape.size = size
+
+
+## Gets the size of the current hitbox
+func get_hitbox() -> Vector2:
+	return $HitBox.shape.size
+
+
+## Gets the predefined hitbox dimensions for a predefined hitbox.
+## predefined hitboxes are listed in the PlayerChar.HITBOXES enum.
+## TODO -> Just get the avatar and use get_hitbox instead.
+func get_predefined_hitbox(which: PlayerChar.HITBOXES) -> Vector2:
+	return player_avatar.get_hitbox(which)
+
+
+## sets the hitbox mask shape to one of the predefined shapes.
+func set_predefined_hitbox(which: PlayerChar.HITBOXES, force_pose_change: bool = false):
+	return set_hitbox(get_predefined_hitbox(which), force_pose_change)
+
+
+## Sets the player's shield
+## @param setShieldID - Which shield the player should get
+func set_shield(setShieldID: PlayerChar.SHIELDS) -> void:
+	magnetShape.disabled = true
+	# verify not in water and shield compatible
+	if water and (setShieldID == SHIELDS.FIRE or setShieldID == SHIELDS.ELEC):
+		return
+	
+	shield = setShieldID
+	# make shield visible if not super and the invincibility barrier isn't going
+	shieldSprite.visible = !isSuper and !$InvincibilityBarrier.visible
+	match (shield):
+		SHIELDS.NORMAL:
+			shieldSprite.play("Default")
+			sfx[5].play()
+		SHIELDS.ELEC:
+			shieldSprite.play("Elec")
+			sfx[10].play()
+			magnetShape.disabled = false
+		SHIELDS.FIRE:
+			shieldSprite.play("Fire")
+			sfx[11].play()
+		SHIELDS.BUBBLE:
+			shieldSprite.play("Bubble")
+			sfx[12].play()
+		_: # disable
+			shieldSprite.visible = false
+
 
 ## Gets the value of the player's current shield. The value will be one of the
 ## values of the SHIELDS enumerator for the player.
 func get_shield() -> PlayerChar.SHIELDS:
 	return self.shield
 
+
+## Gets the player animator -- this is a tad overkill most of the time, but
+## Sometimes you need to control an animation in a more robust way than simply
+## by using play.
+## XXX TODO Remove this in favor of getting the PlayerAvatar->Animator instead
+func get_animator() -> PlayerCharAnimationPlayer:
+	return self.animator
+
 ## Sets the animation. No frills, just provides a hook to directly call AnimationPlayer.play()
 ## for the player animator. Also resets the animation loop count to zero (only matters for
 ## animations that count their own loops)
+## XXX TODO Remove this in favor of getting the PlayerAvatar->Animator instead
 func play_animation(anim_name: StringName = "", custom_blend: float = -1, custom_speed: float = 1.0,
 					from_end: bool = false) -> void:
 	self.animator.play_proxy(anim_name, custom_blend, custom_speed, from_end)
+
 
 ## Gets the current count of animation loops that have happened so far in the
 ## current animation (note that you will need to manually reset the loop count
@@ -1564,17 +1660,28 @@ func play_animation(anim_name: StringName = "", custom_blend: float = -1, custom
 ## track the number of animation loops. Also only animations that are set up
 ## to track their own loop count will do so. See the vertical bar swing
 ## animations for an example)
+## XXX TODO Remove this in favor of getting the PlayerAvatar->Animator instead
 func get_animation_loops():
 	return self.animator.get_loops()
+
 
 ## Resets the count of loop animations. Use this if you invoke an animation
 ## change in a way that you need to reset the animation loop count for. You
 ## probably won't need this.
+## XXX TODO Remove this in favor of getting the PlayerAvatar->Animator instead
 func reset_animation_loops():
 	self.animator.reset_loops()
+	
+
+## Returns the current PlayerAvatar for the player. You should use this to get
+## to character-specific properties and the animator.
+func get_avatar() -> PlayerAvatar:
+	return self.player_avatar
+
 
 ## Available directions for the player to use when using set_direction
 enum DIRECTIONS {LEFT, RIGHT} # I'd wager there is already something more appropriate
+
 
 ## Sets the direction of the player's sprite and direction value
 func set_direction(new_direction: PlayerChar.DIRECTIONS) -> void:
@@ -1585,6 +1692,7 @@ func set_direction(new_direction: PlayerChar.DIRECTIONS) -> void:
 	direction = 1.0
 	sprite.flip_h = false
 
+
 ## Gets the player's direction using the PlayerChar.DIRECTIONS enum
 func get_direction() -> PlayerChar.DIRECTIONS:
 	if direction < 0:
@@ -1592,19 +1700,28 @@ func get_direction() -> PlayerChar.DIRECTIONS:
 	else:
 		return DIRECTIONS.RIGHT
 
+
 ## Gets the players direction in a way that is useful for calculations
 ## @retval -1.0 if left
 ## @retval 1.0 if right
 func get_direction_multiplier() -> float:
 	return direction
 
+
 ## Gets the player's ground speed
 func get_ground_speed() -> float:
 	return groundSpeed
 
+
 ## Sets the player's ground speed
 func set_ground_speed(new_ground_speed: float) -> void:
 	self.groundSpeed = new_ground_speed
+
+
+## Gets whether or not the player is in water
+func is_in_water() -> bool:
+	return self.water
+
 
 ## Sets the player's horizontal lock timer
 ## Note that the horizontal lock timer being above zero will temporarily prevent
@@ -1612,21 +1729,11 @@ func set_ground_speed(new_ground_speed: float) -> void:
 func set_horizontal_lock_timer(lock_time: float) -> void:
 	self.horizontalLockTimer = lock_time
 
+
 ## Sets whether or not the player currently has air control
 func set_air_control(control: bool) -> void:
 	self.airControl = control
 
-## Gets the current player hitbox.
-## Note that the hitbox object isn't actually the current hitbox active, but
-## rather a dictionary of available hitboxes depending on the player's
-## situation.
-func get_current_hitbox() -> Dictionary:
-	return self.currentHitbox
-
-## Restores the player's ability to use double jump action. The player still
-## has to be in a state where it is available in the first place to do so.
-func reset_double_jump_action() -> void:
-	abilityUsed = false
 
 # Player Gimmick Interaction
 #
@@ -1669,9 +1776,11 @@ func set_active_gimmick(gimmick : ConnectableGimmick, allowSwap : bool=false) ->
 	active_gimmick = gimmick
 	return true
 
+
 ## Unbinds the gimmick from the player (you could just use null on set_active_gimmick too)
 func unset_active_gimmick() -> void:
 	active_gimmick = null
+
 
 ## Unbinds the player from its current gimmick, but only after running its force detach
 ## callback
@@ -1682,23 +1791,28 @@ func force_detach() -> void:
 	active_gimmick.player_force_detach_callback(self)
 	active_gimmick = null
 
+
 ## Gets the player's currently active gimmick. Might be useful for certain gimmick<->gimmick
 ## interactions or just for checking if the player is already bound to the gimmick you are checking
 ## from.
 func get_active_gimmick() -> ConnectableGimmick:
 	return active_gimmick
 
+
 ## Sets a value in the player's gimmick variable dictionary. Uses a key value pair.
-func set_gimmick_var(gimmickVarName, gimmickVarValue) -> void:
+func set_gimmick_var(gimmickVarName: String, gimmickVarValue) -> void:
 	gimmick_variables[gimmickVarName] = gimmickVarValue
+
 
 ## Removes a variable from the player's gimmick variable dictionary. Provide a key.
 func unset_gimmick_var(gimmickVarName) -> void:
 	gimmick_variables.erase(gimmickVarName)
 
+
 ## Gets a value in the player's gimmick variable dictionary. Provide a key.
 func get_gimmick_var(gimmickVarName, default: Variant = null):
 	return gimmick_variables.get(gimmickVarName, default)
+
 
 ## Removes all currently locked gimmicks from the Player's locked gimmick list.
 func clear_locked_gimmicks():
@@ -1706,12 +1820,28 @@ func clear_locked_gimmicks():
 		locked_gimmicks[i] = null
 	locked_gimmicks_index = 0
 
+
+## Locks a gimmick for the player using a timer to unlock it
+## @param gimmick - which gimmick should be locked
+## @param lock_time - how long should the gimmick be locked in seconds
+func timed_gimmick_lock(gimmick: ConnectableGimmick, lock_time: float) -> void:
+	var unlock_func = func ():
+		clear_single_locked_gimmick(gimmick)
+	
+	var timer:SceneTreeTimer = get_tree().create_timer(lock_time, false)
+	timer.timeout.connect(unlock_func, CONNECT_DEFERRED)
+	
+	add_locked_gimmick(gimmick)
+	pass
+
+
 ## Removes a single locked gimmick from the player's locked gimmick list if
 ##   present.
 func clear_single_locked_gimmick(gimmick : ConnectableGimmick):
 	for i in range(max_locked_gimmicks):
 		if locked_gimmicks[i] == gimmick:
 			locked_gimmicks[i] = null
+
 
 ## Adds a gimmick to the player's locked gimmick list. Useful if you want to
 ##   prevent a player from interacting or especially re-interacting with a
@@ -1721,17 +1851,20 @@ func add_locked_gimmick(gimmick):
 	locked_gimmicks[locked_gimmicks_index] = gimmick
 	locked_gimmicks_index = (locked_gimmicks_index + 1) % max_locked_gimmicks
 
+
 ## Removes a locked gimmick from the locked gimmicks list for the player
 ## You can still use this even if the gimmick is no longer in the player's
 ## locked gimmicks list, it'll just not actually do anything in that case.
 func remove_locked_gimmick(gimmick):
 	locked_gimmicks.erase(gimmick)
 
+
 ## Checks if the gimmick is locked for the player
 func is_gimmick_locked_for_player(gimmick):
 	if gimmick in locked_gimmicks:
 		return true
 	return false
+
 
 ## Invokes the handle_animation_finished callback for the attached gimmick.
 func handle_animation_finished(animation):

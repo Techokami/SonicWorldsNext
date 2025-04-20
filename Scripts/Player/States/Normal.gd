@@ -27,7 +27,7 @@ var playerIdles = [
 func state_exit():
 	skid = false
 	parent.get_node("HitBox").position = parent.hitBoxOffset.normal
-	parent.get_node("HitBox").shape.size = parent.currentHitbox.NORMAL
+	parent.get_node("HitBox").shape.size = parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL)
 	
 	lookTimer = 0
 	parent.sfx[29].stop()
@@ -164,11 +164,11 @@ func _process(delta):
 			parent.animator.play("peelOut")
 	
 	if parent.lastActiveAnimation == "crouch":
-		parent.get_node("HitBox").shape.size = parent.currentHitbox.CROUCH
+		parent.get_node("HitBox").shape.size = parent.get_predefined_hitbox(PlayerChar.HITBOXES.CROUCH)
 		parent.get_node("HitBox").position = parent.hitBoxOffset.crouch
 	else:
+		parent.get_node("HitBox").shape.size = parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL)
 		parent.get_node("HitBox").position = parent.hitBoxOffset.normal
-		parent.get_node("HitBox").shape.size = parent.currentHitbox.NORMAL
 	
 	if parent.inputs[parent.INPUTS.XINPUT] != 0 and !skid:
 		parent.direction = parent.inputs[parent.INPUTS.XINPUT]

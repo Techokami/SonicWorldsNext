@@ -25,6 +25,9 @@ func reset_loops() -> void:
 ## PlayerCharAnimationPlayer
 func increment_loops() -> void:
 	cur_loops += 1
-	
+
+## Retrieves the current number of loops currently played in looping animations that support
+## this feature. In order to add support for this feature to an animation, add a keyframe that
+## updates cur_loops to the last frame of the animation.
 func get_loops() -> int:
 	return cur_loops
