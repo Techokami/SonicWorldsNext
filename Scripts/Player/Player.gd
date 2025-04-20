@@ -100,7 +100,6 @@ var Ring = preload("res://Entities/Items/Ring.tscn")
 var ringChannel = 0
 
 var Particle = preload("res://Entities/Misc/GenericParticle.tscn")
-var Bubble = preload("res://Entities/Misc/Bubbles.tscn")
 var CountDown = preload("res://Entities/Misc/CountDownTimer.tscn")
 var RotatingParticle = preload("res://Entities/Misc/RotatingParticle.tscn")
 
@@ -1377,20 +1376,14 @@ func _snap_camera_to_limits():
 func _on_BubbleTimer_timeout():
 	if water:
 		# Generate Bubble
-		var bub = Bubble.instantiate()
-		bub.z_index = z_index+3
 		if airTimer > 0:
-			bub.global_position = global_position+Vector2(8*direction,0)
+			Bubble.create_small_bubble(get_parent(),global_position+Vector2(8*direction,0),Vector2.ZERO,0.0,z_index+3)
 			$BubbleTimer.start(max(randf()*3,0.5))
 		elif movement.y < 250:
-			bub.global_position = global_position+Vector2(0,-8)
-			# pick either 0 or 1 for the bubble type (cosmetic)
-			bub.bubbleType = int(round(randf()))
+			Bubble.create_small_or_medium_bubble(get_parent(),global_position+Vector2(0,-8),Vector2.ZERO,0.0,z_index+3)
 			$BubbleTimer.start(0.1)
 		else:
-			bub.queue_free()
 			$BubbleTimer.start(max(randf()*3,0.5))
-		get_parent().add_child(bub)
 
 
 ## Handles player's standard movement based on controller input -- you might call this if you are
