@@ -10,8 +10,6 @@ var players = []
 var getFrame = 0.0
 var animSpeed = 0.0
 
-var Bubble = preload("res://Entities/Misc/Bubbles.tscn")
-
 func _ready():
 	scale.x = max(1,scale.x)
 	$fan.global_scale = Vector2(1,1)
@@ -107,11 +105,6 @@ func deactivate_touch_active():
 # generate bubbles
 func _on_bubble_timer_timeout():
 	if isActive and (!touchActive or players.size() > 0):
-		var bub = Bubble.instantiate()
-		bub.global_position = global_position+Vector2((16.0*abs(scale.x)-4.0)*randf_range(-1.0,1.0),-8.0*sign(scale.y))
-		# choose between 2 bubble types, both cosmetic
-		bub.bubbleType = int(round(randf()))
-		# add to the speed of the bubbles
-		bub.velocity.y -= speed*0.5
-		bub.maxDistance = (global_position.y-(16*scale.y)+cos(Global.levelTime*4)*4)
-		get_parent().add_child(bub)
+		var pos: Vector2 = global_position+Vector2((16.0*abs(scale.x)-4.0)*randf_range(-1.0,1.0),-8.0*sign(scale.y))
+		var max_distance: float = (global_position.y-(16*scale.y)+cos(Global.levelTime*4)*4)
+		Bubble.create_small_or_medium_bubble(get_parent(),pos,Vector2(0.0,-speed*0.5),max_distance)
