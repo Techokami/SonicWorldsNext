@@ -72,14 +72,9 @@ var waterScrollSpeed = 64 # used by other nodes for how fast to move the water t
 # characters (if you want more you should add one here, see the player script too for more settings)
 enum CHARACTERS {NONE,SONIC,TAILS,KNUCKLES,AMY}
 
-# Make sure this is ordered the same as CHARACTERS above.
-var character_names = [
-	"None",
-	"Sonic",
-	"Tails",
-	"Knuckles",
-	"Amy",
-]
+# autofill the array with capitalized names from enum CHARACTERS
+@onready var character_names: Array = \
+	CHARACTERS.keys().map(func(char_name: String): return char_name.capitalize())
 
 var PlayerChar1 = CHARACTERS.SONIC
 var PlayerChar2 = CHARACTERS.TAILS

@@ -37,7 +37,19 @@ func _physics_process(_delta: float) -> void:
 		
 		# set movement
 		# calculate movement direction
-		var move_dir = Vector2(0, player.get_y_input())
+		# The current direction is normalized and we use abs. Normalization is so that the impact
+		# of the player's movement is always just based on move_speed without influence from the
+		# strength of the current. Abs is because we want left/right and up/down not to get inverted
+		# if the current is going left or upwards.
+		var mod_dir = current_vector.normalized().abs()
+		
+		# Linear algebra is scary, but this basically just makes it so that if the current is moving
+		# right, then up/down motion works and if the current is moving up, left/right movement works...
+		# Then for everything in between, you get a mix of both.
+		var move_dir = Vector2(mod_dir.dot(Vector2(0, player.get_x_input())),
+		                       mod_dir.dot(Vector2(player.get_y_input(), 0))
+		                      )
+		
 		player.movement = current_vector+(move_dir*move_speed)
 		
 		# move against slopes
@@ -78,8 +90,6 @@ func _on_current_body_exited(body: PlayerChar) -> void:
 		body.unset_gimmick_var("ActiveCurrent")
 	if normal_state_on_exit and body.get_state() == PlayerChar.STATES.ANIMATION:
 		body.set_state(PlayerChar.STATES.NORMAL, body.get_predefined_hitbox(PlayerChar.HITBOXES.HORIZONTAL))
-		
-		body.movement.y = 0
 		
 	player_count -= 1
 	if player_count == 0:
