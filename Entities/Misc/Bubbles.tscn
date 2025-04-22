@@ -336,6 +336,5 @@ frame = 2
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
 scale = Vector2(1.6, 12.8)
 
-[connection signal="body_entered" from="BubbleCollect" to="." method="_on_BubbleCollect_body_entered"]
 [connection signal="animation_finished" from="Bubble" to="." method="_on_Bubble_animation_finished"]
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]
