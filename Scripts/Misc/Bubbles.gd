@@ -82,6 +82,25 @@ func _on_Bubble_animation_finished():
 		queue_free()
 
 func _physics_process(delta):
+	# check if the bubble is big and it collides with any players
+	if bubble_type == BUBBLE_TYPES.BIG and $Bubble.animation == "air" and $Bubble.frame >= 6:
+		var players: Array[Node2D] = $BubbleCollect.get_overlapping_bodies()
+		if players.size() != 0:
+			# get the first PlayerChar body the bubble collides with
+			for player: PlayerChar in players:
+				if !player.ground and player.get_shield() != player.SHIELDS.BUBBLE:
+					player.airTimer = player.defaultAirTime
+					player.sfx[23].play()
+					player.set_state(player.STATES.AIR)
+					player.play_animation("air")
+					player.get_animator().queue("walk")
+					player.movement = Vector2.ZERO
+					$Bubble.play("bigPop")
+					$BubbleCollect/CollisionShape2D.disabled = true
+					set_physics_process(false)
+					inhaled.emit(player)
+					break
+	
 	# check if below water level and rise
 	if Global.waterLevel != null:
 		if global_position.y > Global.waterLevel and (global_position.y > max_distance or max_distance == 0):
@@ -100,22 +119,6 @@ func _physics_process(delta):
 				$BubbleCollect/CollisionShape2D.disabled = true
 			else:
 				queue_free()
-
-# player collect bubble
-func _on_BubbleCollect_body_entered(player : PlayerChar):
-	# player get air, ignore if they're already in a bubble
-	if !player.ground and $Bubble.frame >= 6 and player.get_shield() != player.SHIELDS.BUBBLE:
-		player.airTimer = player.defaultAirTime
-		player.sfx[23].play()
-		
-		player.set_state(player.STATES.AIR)
-		player.play_animation("air")
-		player.get_animator().queue("walk")
-		player.movement = Vector2.ZERO
-		$Bubble.play("bigPop")
-		$BubbleCollect/CollisionShape2D.call_deferred("set","disabled",true)
-		set_physics_process(false)
-		inhaled.emit(body)
 
 # clear if off screen
 func _on_VisibilityNotifier2D_screen_exited():

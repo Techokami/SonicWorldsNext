@@ -1378,11 +1378,11 @@ func _on_BubbleTimer_timeout():
 		# Generate Bubble
 		if airTimer > 0:
 			var bub_pos: Vector2 = global_position+Vector2(8*direction,0)
-			Bubble.create_small_bubble(get_parent(),bub_pos,Vector2.ZERO,0.0,z_index+3)
+			Bubble.create_small_bubble(get_parent().get_parent(),bub_pos,Vector2.ZERO,0.0,z_index+3)
 			$BubbleTimer.start(max(randf()*3,0.5))
 		elif movement.y < 250:
 			var bub_pos: Vector2 = global_position+Vector2(0,-8)
-			Bubble.create_small_or_medium_bubble(get_parent(),bub_pos,Vector2.ZERO,0.0,z_index+3)
+			Bubble.create_small_or_medium_bubble(get_parent().get_parent(),bub_pos,Vector2.ZERO,0.0,z_index+3)
 			$BubbleTimer.start(0.1)
 		else:
 			$BubbleTimer.start(max(randf()*3,0.5))
