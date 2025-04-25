@@ -1,37 +1,52 @@
-extends Sprite2D
+extends Node2D
+
+# textures for character-specific frames (0 is for Robotnik)
+static var char_textures: Array[Texture2D] = []
+
 var getCam = null
 var player = null
 
-@onready var screenXSize = GlobalFunctions.get_screen_size().x
+var screenXSize = 0
+
+func _ready():
+	# since char_textures is static, the following code will only run once,
+	# even if the level contains more than 1 goal post, and even if it restarts
+	if char_textures.size() == 0:
+		# load textures for character-specific frames
+		char_textures.resize(Global.CHARACTERS.size())
+		char_textures[0] = $Sprite.sprite_frames.get_frame_texture("default", 0) as Texture2D
+		for char_name: String in Global.CHARACTERS.keys():
+			if char_name != "NONE":
+				char_textures[Global.CHARACTERS[char_name]] = \
+					load("res://Graphics/Items/goal_post_%s.png" % char_name.to_lower()) as Texture2D
+		# overwrite the texture in each 4'th frame (3, 7, 11, ..., 123) with a character-specific one,
+		# but don't touch frame 127 yet, in case the player character will be changed mid-level
+		for i in 128 / 4 - 1:
+			$Sprite.sprite_frames.set_frame("spinner", i * 4 + 3, char_textures[(i + 1) % char_textures.size()])
 
 func _physics_process(_delta):
-	# check if player.x position is greater then the post
-	if Global.players[0].global_position.x > global_position.x and Global.players[0].global_position.y <= global_position.y and Global.stageClearPhase == 0:
+	# check if player.x position is greater than the post
+	if Global.stageClearPhase == 0 and Global.players[0].global_position.x > global_position.x and Global.players[0].global_position.y <= global_position.y:
 		# set player variable
 		player = Global.players[0]
 		
 		# Camera limit set
+		screenXSize = GlobalFunctions.get_screen_size().x
 		player.limitLeft = global_position.x -screenXSize/2
 		player.limitRight = global_position.x +(screenXSize/2)+48
 		getCam = player.camera
-		
+
+		# set the texture for frame 127 to the one that corresponds to the player character
+		# (this is not done in _ready, in case the character was changed mid-level)
+		$Sprite.sprite_frames.set_frame("spinner", 127, char_textures[Global.PlayerChar1])
 		# play spinner
-		$Animator.play("Spinner")
-		match player.character:
-			Global.CHARACTERS.TAILS:
-				$Animator.queue("Tails")
-			Global.CHARACTERS.KNUCKLES:
-				$Animator.queue("Knuckles")
-			Global.CHARACTERS.AMY:
-				$Animator.queue("Amy")
-			_:
-				$Animator.queue("Sonic")
+		$Sprite.play("spinner")
 		$GoalPost.play()
 		# set global stage clear phase to 1, 1 is used to stop the timer (see HUD script)
 		Global.stageClearPhase = 1
 		
 		# wait for spinner to finish
-		await $Animator.animation_finished
+		await $Sprite.animation_finished
 		# after finishing spin, set stage clear to 2 and disable the players controls,
 		# stage clear is set to 2 so that the level ending doesn't start prematurely but we can track where the player is
 		Global.stageClearPhase = 2
