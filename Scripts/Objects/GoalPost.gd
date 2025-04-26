@@ -26,7 +26,7 @@ func _ready():
 
 func _physics_process(_delta):
 	# check if player.x position is greater than the post
-	if Global.stageClearPhase == 0 and Global.players[0].global_position.x > global_position.x and Global.players[0].global_position.y <= global_position.y:
+	if !Global.is_in_any_stage_clear_phase() and Global.players[0].global_position.x > global_position.x and Global.players[0].global_position.y <= global_position.y:
 		# set player variable
 		player = Global.players[0]
 		
@@ -42,14 +42,15 @@ func _physics_process(_delta):
 		# play spinner
 		$Sprite.play("spinner")
 		$GoalPost.play()
-		# set global stage clear phase to 1, 1 is used to stop the timer (see HUD script)
-		Global.stageClearPhase = 1
+		# set global stage clear phase to STARTED, this is used to stop the timer (see HUD script)
+		Global.set_stage_clear_phase(Global.STAGE_CLEAR_PHASES.STARTED)
 		
 		# wait for spinner to finish
 		await $Sprite.animation_finished
-		# after finishing spin, set stage clear to 2 and disable the players controls,
-		# stage clear is set to 2 so that the level ending doesn't start prematurely but we can track where the player is
-		Global.stageClearPhase = 2
+		# after finishing spin, set stage clear phase to GOALPOST_SPIN_END and disable the players controls,
+		# stage clear phase is set to GOALPOST_SPIN_END so that the level ending doesn't start prematurely
+		# but we can track where the player is
+		Global.set_stage_clear_phase(Global.STAGE_CLEAR_PHASES.GOALPOST_SPIN_END)
 		player.playerControl = -1
 		# put states under player in here if the state could end up getting the player soft locked
 		var stateCancelList = [player.STATES.WALLCLIMB]
@@ -67,15 +68,16 @@ func _physics_process(_delta):
 			player.partner.inputs[player.INPUTS.ACTION] = 0
 	
 	# stage clear settings
-	if Global.stageClearPhase != 0:
+	if Global.is_in_any_stage_clear_phase():
 		# lock camera to self
 		if getCam:
 			getCam.global_position.x = global_position.x
-		# if player greater then screen and stage clear phase is 2 then activate the stage clear sequence
+		# if player greater then screen and stage clear phase is GOALPOST_SPIN_END then activate the stage clear sequence
 		if player:
-			if player.global_position.x > global_position.x+(screenXSize/2) and player.movement.x >= 0 and Global.stageClearPhase == 2:
-				# stage clear won't work is stage clear phase isn't 0
-				Global.stageClearPhase = 0
+			if player.global_position.x > global_position.x+(screenXSize/2) and \
+			   player.movement.x >= 0 and Global.get_stage_clear_phase() == Global.STAGE_CLEAR_PHASES.GOALPOST_SPIN_END:
+				# temporarily set stage clear to NOT_STARTED so that the music can play
+				Global.reset_stage_clear_phase()
 				Global.stage_clear()
-				# set stage clear to 3, this will activate the HUD sequence
-				Global.stageClearPhase = 3
+				# set stage clear phase to SCORE_TALLY, this will activate the HUD sequence
+				Global.set_stage_clear_phase(Global.STAGE_CLEAR_PHASES.SCORE_TALLY)

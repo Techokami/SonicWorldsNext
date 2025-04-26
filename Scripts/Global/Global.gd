@@ -30,10 +30,23 @@ var timerActive = false
 var gameOver = false
 
 # stage clear is used to identify the current state of the stage clear sequence
-# this is reference in
+# this is referenced in
+# res://Scripts/Global/Main.gd
 # res://Scripts/Misc/HUD.gd
+# res://Scripts/Objects/Capsule.gd
 # res://Scripts/Objects/GoalPost.gd
-var stageClearPhase = 0
+# res://Scripts/Player/Player.gd
+enum STAGE_CLEAR_PHASES { NOT_STARTED, STARTED, GOALPOST_SPIN_END, SCORE_TALLY }
+var _stage_clear_phase: STAGE_CLEAR_PHASES = STAGE_CLEAR_PHASES.NOT_STARTED:
+	get = get_stage_clear_phase, set = set_stage_clear_phase
+func get_stage_clear_phase() -> STAGE_CLEAR_PHASES:
+	return _stage_clear_phase
+func set_stage_clear_phase(value: STAGE_CLEAR_PHASES) -> void:
+	_stage_clear_phase = value
+func is_in_any_stage_clear_phase() -> bool:
+	return get_stage_clear_phase() != STAGE_CLEAR_PHASES.NOT_STARTED
+func reset_stage_clear_phase() -> void:
+	set_stage_clear_phase(Global.STAGE_CLEAR_PHASES.NOT_STARTED)
 
 # Music
 var musicParent = null
@@ -137,7 +150,7 @@ func _ready():
 
 func _process(delta):
 	# do a check for certain variables, if it's all clear then count the level timer up
-	if stageClearPhase == 0 and !gameOver and !get_tree().paused and timerActive:
+	if !is_in_any_stage_clear_phase() and !gameOver and !get_tree().paused and timerActive:
 		levelTime += delta
 	# count global timer if game isn't paused
 	if !get_tree().paused:
@@ -185,9 +198,9 @@ func check_score_life(scoreAdd: int = 0) -> void:
 		bossMusic.volume_db = -100
 
 
-## use this to set the stage clear theme, only runs if stageClearPhase isn't 0
+## use this to set the stage clear theme, only runs if stage clear phase is NONE
 func stage_clear() -> void:
-	if stageClearPhase == 0:
+	if !is_in_any_stage_clear_phase():
 		currentTheme = 2
 		music.stream = themes[currentTheme]
 		music.play()

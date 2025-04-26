@@ -135,12 +135,12 @@ func change_scene_to_file(scene = null, fadeOut = "", fadeIn = "", length = 1, s
 		Global.checkPoints = []
 		Global.waterLevel = null
 		Global.gameOver = false
-		if Global.stageClearPhase != 0:
+		if Global.is_in_any_stage_clear_phase():
 			Global.currentCheckPoint = -1
 			Global.levelTime = 0
 			Global.timerActive = false
+			Global.reset_stage_clear_phase()
 		Global.globalTimer = 0
-		Global.stageClearPhase = 0
 	
 	# check if to restore scene
 	if restoreScene:

@@ -543,7 +543,7 @@ func _process(delta):
 					superAnimator.play("Flash")
 			# check if ring count is greater then 0
 			# deactivate if stage cleared
-			if rings > 0 and Global.stageClearPhase == 0:
+			if rings > 0 and Global.is_in_any_stage_clear_phase():
 				rings -= delta
 			else:
 				# Deactivate super
