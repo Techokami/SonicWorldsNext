@@ -3,11 +3,6 @@ extends Node2D
 # textures for character-specific frames (0 is for Robotnik)
 static var char_textures: Array[Texture2D] = []
 
-var getCam = null
-var player = null
-
-var screenXSize = 0
-
 func _ready():
 	# since char_textures is static, the following code will only run once,
 	# even if the level contains more than 1 goal post, and even if it restarts
@@ -25,16 +20,15 @@ func _ready():
 			$Sprite.sprite_frames.set_frame("spinner", i * 4 + 3, char_textures[(i + 1) % char_textures.size()])
 
 func _physics_process(_delta):
+	var player: PlayerChar = Global.players[0]
 	# check if player.x position is greater than the post
-	if !Global.is_in_any_stage_clear_phase() and Global.players[0].global_position.x > global_position.x and Global.players[0].global_position.y <= global_position.y:
-		# set player variable
-		player = Global.players[0]
+	if !Global.is_in_any_stage_clear_phase() and player.global_position.x > global_position.x and player.global_position.y <= global_position.y:
+
 		
 		# Camera limit set
-		screenXSize = GlobalFunctions.get_screen_size().x
-		player.limitLeft = global_position.x -screenXSize/2
-		player.limitRight = global_position.x +(screenXSize/2)+48
-		getCam = player.camera
+		var screen_width: float = GlobalFunctions.get_screen_size().x
+		player.limitLeft = global_position.x - screen_width/2
+		player.limitRight = global_position.x + (screen_width/2) + 48
 
 		# set the texture for frame 127 to the one that corresponds to the player character
 		# (this is not done in _ready, in case the character was changed mid-level)
@@ -70,14 +64,12 @@ func _physics_process(_delta):
 	# stage clear settings
 	if Global.is_in_any_stage_clear_phase():
 		# lock camera to self
-		if getCam:
-			getCam.global_position.x = global_position.x
+		player.camera.global_position.x = global_position.x
 		# if player greater then screen and stage clear phase is GOALPOST_SPIN_END then activate the stage clear sequence
-		if player:
-			if player.global_position.x > global_position.x+(screenXSize/2) and \
-			   player.movement.x >= 0 and Global.get_stage_clear_phase() == Global.STAGE_CLEAR_PHASES.GOALPOST_SPIN_END:
-				# temporarily set stage clear to NOT_STARTED so that the music can play
-				Global.reset_stage_clear_phase()
-				Global.stage_clear()
-				# set stage clear phase to SCORE_TALLY, this will activate the HUD sequence
-				Global.set_stage_clear_phase(Global.STAGE_CLEAR_PHASES.SCORE_TALLY)
+		if player.global_position.x > global_position.x+(GlobalFunctions.get_screen_size().x/2) and \
+		   player.movement.x >= 0 and Global.get_stage_clear_phase() == Global.STAGE_CLEAR_PHASES.GOALPOST_SPIN_END:
+			# temporarily set stage clear to NOT_STARTED so that the music can play
+			Global.reset_stage_clear_phase()
+			Global.stage_clear()
+			# set stage clear phase to SCORE_TALLY, this will activate the HUD sequence
+			Global.set_stage_clear_phase(Global.STAGE_CLEAR_PHASES.SCORE_TALLY)
