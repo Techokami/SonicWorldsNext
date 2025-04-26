@@ -1,4 +1,4 @@
-extends Node2D
+class_name Level extends Node2D
 
 @export var music = preload("res://Audio/Soundtrack/6. SWD_TLZa1.ogg")
 @export var nextZone = load("res://Scene/Zones/BaseZone.tscn")
@@ -40,6 +40,8 @@ func _ready():
 	level_reset_data(false)
 	
 	wasLoaded = true
+	
+	Global.set_level(self)
 
 # used for stage starts, also used for returning from special stages
 func level_reset_data(playCard = true):

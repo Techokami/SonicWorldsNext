@@ -16,14 +16,14 @@ func _process(_delta):
 			$Booster.flip_h = bool(boostDirection)
 			dirMemory = boostDirection
 
-func _on_SpeedBooster_body_entered(body):
+func _on_SpeedBooster_body_entered(body: PlayerChar):
 	# DO THE BOOST, WHOOOOOSH!!!!!!!
 	body.movement.x = speed*(-1+(boostDirection*2))*60
 	body.horizontalLockTimer = (15.0/60.0) # lock for 15 frames
 	$sfxSpring.play()
 	# exit out of state on certain states
-	match(body.currentState):
-		body.STATES.GLIDE:
+	match(body.get_state()):
+		PlayerChar.STATES.GLIDE:
 			if !body.ground:
-				body.animator.play("run")
-				body.set_state(body.STATES.AIR)
+				body.play_animation("run")
+				body.set_state(PlayerChar.STATES.AIR)

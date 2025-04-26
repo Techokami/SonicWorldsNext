@@ -1,3 +1,6 @@
+## DEPRECATED, please use the functions of the same name in Global.gd from now on. This file may
+## be removed at a later date.
+
 extends Node
 
 # returns an int, 0 = none, 1 = pressed, 2 = held (you'll most likely want to do > 0 if you're checking for pressed)

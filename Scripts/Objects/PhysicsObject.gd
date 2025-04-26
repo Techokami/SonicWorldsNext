@@ -24,18 +24,18 @@ var groundLookDistance = 14 # how far down to look
 
 
 # physics variables
-var movement = velocity+Vector2(0.00001,0) # this is a band aid fix, physics objects have something triggered to make them work but it only happens when moving horizontally, so the solution for now is to have it add a unnoticeable amount of x movement
-var ground = true
-var roof = false
-var moveStepLength = 8*60
+var movement: Vector2 = velocity+Vector2(0.00001,0) # this is a band aid fix, physics objects have something triggered to make them work but it only happens when moving horizontally, so the solution for now is to have it add a unnoticeable amount of x movement
+var ground: bool = true
+var roof: bool = false
+var moveStepLength: int = 8*60
 # angle is the rotation based on the floor normal
-var angle = 0
-var gravityAngle = 0
+var angle: float = 0.0
+var gravityAngle: float = 0.0
 # the collission layer, 0 for low, 1 for high
-var collissionLayer = 0
+var collissionLayer: int = 0
 
 # translate, (ignores physics)
-var allowTranslate = false
+var allowTranslate: bool = false
 
 # Vertical sensor reference
 var getVert = null
@@ -79,6 +79,8 @@ func _ready():
 	verticalSensorMiddle.set_collision_mask_value(17,true)
 	verticalSensorMiddleEdge.set_collision_mask_value(17,true)
 
+## Resets the position of the PhysicsObject's sensor objects and reruns all collision
+## checks.
 func update_sensors():
 	var rotationSnap = snapped(rotation,deg_to_rad(90))
 	var shape = $HitBox.shape.size/2
@@ -225,7 +227,6 @@ func _physics_process(delta):
 		ground = is_on_floor()
 		roof = is_on_ceiling()
 		
-		
 		# Wall sensors
 		# Check if colliding
 		if horizontalSensor.is_colliding():
@@ -301,7 +302,7 @@ func _physics_process(delta):
 			# if no on ground emit "disconectFloor"
 			else:
 				disconectFloor.emit()
-				disconect_from_floor(true)
+				disconnect_from_floor(true)
 		if roofMemory != roof:
 			# if on roof emit "connectCeiling"
 			if roof:
@@ -365,7 +366,10 @@ func _physics_process(delta):
 		collision_layer = layerMemory
 	positionChanged.emit()
 	
-
+## Snaps the physics objeect to the nearest requested angle increment.
+## @param angleSnap - angle increment in degrees
+## note: You should probably use something that multiplies evenly into 360 if you
+## want to use this function.
 func snap_angle(angleSnap = 0.0):
 	var wrapAngle = wrapf(angleSnap,deg_to_rad(0.0),deg_to_rad(360.0))
 
@@ -379,7 +383,9 @@ func snap_angle(angleSnap = 0.0):
 	# Left Wall
 	return deg_to_rad(270.0)
 	
-
+## Returns one of the left vertical sensor, the right veritcal sensor, or null
+## for the physics object depending on whether or not either of them are touching
+## ground and if both are, which one's collision point is closer to the physics object
 func get_nearest_vertical_sensor():
 	verticalSensorLeft.force_raycast_update()
 	verticalSensorRight.force_raycast_update()
@@ -399,7 +405,9 @@ func get_nearest_vertical_sensor():
 	else:
 		return verticalSensorRight
 
-func disconect_from_floor(force = false):
+## Converts the player's ground movement (single dimensional) into air movement
+## (two dimensional)
+func disconnect_from_floor(force = false):
 	if ground or force:
 		# convert velocity
 		movement = movement.rotated(angle-gravityAngle)
@@ -408,7 +416,7 @@ func disconect_from_floor(force = false):
 		if (snap_angle(rotation) != snap_angle(gravityAngle)):
 			rotation = snap_angle(gravityAngle)
 
-# checks and pushes the player out if a collision is detected vertically in either direction
+## checks and pushes the player out if a collision is detected vertically in either direction
 func push_vertical():
 	# set movement memory
 	var movementMemory = movement
@@ -428,7 +436,7 @@ func push_vertical():
 	# reset movement
 	movement = movementMemory
 
-# Return true if there is a ceiling above the object based on its y size.
+## Return true if there is a ceiling above the object based on its y size.
 func check_for_ceiling():
 	var detection = false
 	# Create and set up a temporary Raycast
@@ -468,3 +476,15 @@ func get_movement():
 ## Sets the movement value of the PhysicObject
 func set_movement(newMovement : Vector2):
 	self.movement = newMovement
+
+## Returns true if the PhysicsObject is on the ground
+func is_on_ground():
+	return ground
+
+## Gets the PhysicsObject's angle (in radians)
+func get_angle() -> float:
+	return angle
+
+## Sets the PhysicsObject's angle (supply new angle as radians)
+func set_angle(new_angle: float) -> void:
+	self.angle = new_angle

@@ -1,7 +1,7 @@
 [gd_scene load_steps=195 format=3 uid="uid://cioq5saowvqxj"]
 
 [ext_resource type="Script" path="res://Scripts/Player/Player.gd" id="1"]
-[ext_resource type="PackedScene" uid="uid://d1e4muavtnun6" path="res://Graphics/Players/PlayerAnimations/Sonic.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://d1e4muavtnun6" path="res://Entities/PlayerAvatars/Sonic.tscn" id="2"]
 [ext_resource type="AudioStream" uid="uid://bx5cur6r54lbo" path="res://Audio/SFX/Player/Jump.wav" id="3"]
 [ext_resource type="Script" path="res://Scripts/PropertiesLookup.gd" id="4"]
 [ext_resource type="AudioStream" uid="uid://iomtgrpokl66" path="res://Audio/SFX/Player/SpindashRev.wav" id="5"]
@@ -63,7 +63,7 @@
 [ext_resource type="AudioStream" uid="uid://78gy6s87pbbo" path="res://Audio/SFX/Player/Land.wav" id="60"]
 [ext_resource type="AudioStream" uid="uid://uaa5twt8odin" path="res://Audio/SFX/Player/Slide.wav" id="61"]
 [ext_resource type="Script" path="res://Scripts/Player/States/WallClimb.gd" id="62"]
-[ext_resource type="AudioStream" uid="uid://c2agly02ferrw" path="res://Audio/SFX/Player/WaterRun.wav" id="63_k1lus"]
+[ext_resource type="AudioStream" uid="uid://bmiq3qg6r81hw" path="res://Audio/SFX/Player/WaterRunV2.wav" id="64_04xna"]
 [ext_resource type="Texture2D" uid="uid://b1k615l251fu5" path="res://Graphics/Misc/WaterSurfaceSplash.png" id="64_ovmgw"]
 [ext_resource type="AudioStream" uid="uid://buu4anko53vx2" path="res://Audio/SFX/Objects/ChemJump.wav" id="65_7v2sx"]
 
@@ -1491,7 +1491,7 @@ stream = ExtResource("61")
 bus = &"SFX"
 
 [node name="WaterRun" type="AudioStreamPlayer" parent="SFX"]
-stream = ExtResource("63_k1lus")
+stream = ExtResource("64_04xna")
 volume_db = -10.0
 bus = &"SFX"
 

@@ -106,8 +106,11 @@ func connect_player(player : PlayerChar, allowSwap: bool = false) -> void:
 	
 func disconnect_player(player : PlayerChar) -> void:
 	player.unset_active_gimmick()
-	player.play_animation("roll")
-	player.set_state(player.STATES.JUMP)
+	
+	if player.get_state() == PlayerChar.STATES.ANIMATION:
+		player.play_animation("roll")
+		player.set_state(player.STATES.JUMP)
+		
 	player.unset_gimmick_var("brachiate_target_cur")
 	player_dismounted.emit(player)
 	pass
@@ -148,7 +151,7 @@ func brachiate_reposition_player(player : PlayerChar, player_brachiation_target 
 		
 	var percent_complete = animator.get_current_animation_position() / animator.get_current_animation_length()
 	
-	var hitbox_offset = (player.get_current_hitbox().NORMAL.y / 2.0) - 19 # 0'd for Sonic/Knux, 4 for Tails/Amy I think?
+	var hitbox_offset = (player.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL).y / 2.0) - 19 # 0'd for Sonic/Knux, 4 for Tails/Amy I think?
 	var getPose = get_collision_target(hitbox_offset)
 	var getPose2 = player_brachiation_target.get_collision_target(hitbox_offset)
 	var truePose = lerp(getPose, getPose2, transform_linear_to_exponential(percent_complete, 0.65))
@@ -159,7 +162,7 @@ func brachiate_reposition_player(player : PlayerChar, player_brachiation_target 
 
 ## Used when repositioning the player while not brachiating
 func reposition_player_static(player : PlayerChar):
-		var hitbox_offset = (player.get_current_hitbox().NORMAL.y / 2.0) - 19 # 0'd for Sonic/Knux, 4 for Tails/Amy I think?
+		var hitbox_offset = (player.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL).y / 2.0) - 19 # 0'd for Sonic/Knux, 4 for Tails/Amy I think?
 		var getPose = $MonkeyBarHanger.global_position + Vector2(0, 13 - hitbox_offset)
 		
 		# verify position change won't clip into objects
@@ -330,7 +333,7 @@ func temp_lock_gimmick(player) -> void:
 	var unlock_func = func ():
 		player.clear_single_locked_gimmick(self)
 	
-	var timer:SceneTreeTimer = get_tree().create_timer(0.5)
+	var timer:SceneTreeTimer = get_tree().create_timer(0.5, false)
 	timer.timeout.connect(unlock_func, CONNECT_DEFERRED)
 	
 	player.add_locked_gimmick(self)

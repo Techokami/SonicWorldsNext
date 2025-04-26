@@ -126,28 +126,30 @@ func is_player_disconnect_time_elapsed(index):
 func get_player_contacting_count():
 	return _playerContacts
 	
-func physics_process_connected(_delta, player, index):
-	if player.ground:
+func physics_process_connected(_delta, player: PlayerChar, index):
+	if player.is_on_ground():
 		disconnect_grab(player, index, false)
 		return
 
 	# XXX In the future, we should make the states themselves have properties for whether or not
 	# they allow interaction with gimmicks that use the player's hands so that we don't have to
 	# make up a list of states for stuff like this every time.
-	if player.currentState != player.STATES.AIR and player.currentState != player.STATES.JUMP and player.currentState != player.STATES.GLIDE and player.currentState != player.STATES.FLY:
+	var state = player.get_state()
+	if state != PlayerChar.STATES.AIR and state != PlayerChar.STATES.JUMP and \
+			state != PlayerChar.STATES.GLIDE and state != PlayerChar.STATES.FLY:
 		disconnect_grab(player, index, false)
 		return
 
 	# For some reason all the movement logic is in here?
 	# jump and air states don't change animation, so no need for a new state. Just
 	# set the animation and convert out of any unusual states into AIR.
-	player.animator.play("hang")
-	player.set_state(player.STATES.AIR)
-	player.airControl = true
+	player.play_animation("hang")
+	player.set_state(PlayerChar.STATES.AIR)
+	player.set_air_control(true)
 	
 	# Perform just the functional parts  of the connect script that move the
 	# player into position.
-	var getPose = (global_position+get_player_contact(index).rotated(rotation) + Vector2(0.0, player.currentHitbox.NORMAL.y / 2.0)).round()
+	var getPose = (global_position+get_player_contact(index).rotated(rotation) + Vector2(0.0, player.get_avatar().get_hitbox(PlayerChar.HITBOXES.NORMAL).y / 2.0)).round()
 		
 	# verify position change won't clip into objects
 	if !player.test_move(player.global_transform,getPose-player.global_position):
@@ -156,24 +158,24 @@ func physics_process_connected(_delta, player, index):
 				
 	player.cam_update()
 	
-func physics_process_disconnected(_delta, player, index):
+func physics_process_disconnected(_delta: float, player: PlayerChar, index: int):
 	# we use parent only for picking up off ground
 	var parent = get_parent()
-	if (!groundPickup and player.ground):
+	if (!groundPickup and player.is_on_ground()):
 		return
 		
 	if !check_grab(player, index):
 		return
 
 	# If it's going to pick a player up off the ground, it has to be moving upwards.
-	if player.ground and parent.movement.y > 0:
+	if player.is_on_ground() and parent.movement.y > 0:
 		return
 	
 	# XXX This a Tails centric hack right now. I don't like it. It makes Tails
 	# move upwards to avoid disconnecting immediately.
 	# The proper fix for this would be for Sonic's collision to not touch the
 	# ground if he is picked up into a hang state
-	if player.ground:
+	if player.is_on_ground():
 		player.set_state(player.STATES.AIR)
 		player.global_position.y -= 6
 		parent.global_position.y -= 6
@@ -198,7 +200,7 @@ func _physics_process(delta):
 
 # This function is responsible for positioning the player while the player is connected to the hanger.
 # It also sets animation... that seems wrong, animation should be set on first contact, not repeatedly.
-func connect_grab(player, index):
+func connect_grab(player: PlayerChar, index):
 	# Iterate player contacts by one. Only really used by Tails fly-carry right now, but who knows,
 	# maybe it could be part of a weight mechanic for some gimmick later.
 	_playerContacts += 1
@@ -207,7 +209,7 @@ func connect_grab(player, index):
 	if get_player_contact(index) == null:
 		$Grab.play()
 		player.set_active_gimmick(self)
-		var calcDistance = _CONTACT_DISTANCE+(19-player.currentHitbox.NORMAL.y)
+		var calcDistance = _CONTACT_DISTANCE+(19-player.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL).y)
 		if !setCenter:
 			set_player_contact(index, Vector2(player.global_position.x-global_position.x,calcDistance))
 		else:
@@ -224,7 +226,7 @@ func connect_grab(player, index):
 
 	# lock player direction if that toggle is set.
 	if lockPlayerDirection:
-		player.stateList[player.STATES.AIR].lockDir = true	
+		player.stateList[PlayerChar.STATES.AIR].lockDir = true	
 
 func disconnect_grab(player, index, deliberate, jumpUpwards=false):
 	# Don't bother disconnecting if they aren't already connected.
@@ -235,7 +237,7 @@ func disconnect_grab(player, index, deliberate, jumpUpwards=false):
 	set_player_disconnect_time(index)
 	
 	player.animator.play("roll")
-	player.set_state(player.STATES.JUMP)
+	player.set_state(PlayerChar.STATES.JUMP)
 	
 	if deliberate:
 		if (jumpUpwards):
@@ -243,11 +245,11 @@ func disconnect_grab(player, index, deliberate, jumpUpwards=false):
 		else:
 			player.movement.y = player.jmp/16
 		# set ground speed to 0 to stop rolling going nuts
-		player.groundSpeed = 0
+		player.set_ground_speed(0)
 
 	# Unlock air direction if we previous locked it.
 	if lockPlayerDirection:
-		player.stateList[player.STATES.AIR].lockDir = false
+		player.stateList[PlayerChar.STATES.AIR].lockDir = false
 
 	# unset player variable for pole XXX want to switch to dictionary later
 	player.unset_active_gimmick()
@@ -272,10 +274,10 @@ func _process(_delta):
 	# to jump off of the hanger.
 	for index in players.size():
 		var jumpUp
-		var player = players[index][0]
+		var player: PlayerChar = players[index][0]
 		
 		# verify state is valid for grabbing and not on floor
-		if player.ground or player.currentState != player.STATES.AIR:
+		if player.is_on_ground() or player.get_state() != PlayerChar.STATES.AIR:
 			continue
 
 		# We don't need to do anything if the player isn't jumping off
@@ -332,6 +334,13 @@ func _on_Hanger_body_entered(body):
 func _on_Hanger_body_exited(body):
 	remove_player(body)
 
+## Removes all players currently on the hanger. Run this if you are going to do
+## something like turn the hanger off.
+func disconnect_all():
+	for index in players.size():
+		var player: PlayerChar = get_player(index)
+		disconnect_grab(player, index, false)
+
 func remove_player(player):
 	# remove player from contact point
 	var getIndex = find_player(player)
@@ -342,20 +351,3 @@ func remove_player(player):
 		
 	# Remove the player
 	players.remove_at(getIndex)
-	
-# It may be prudent to come back later and refactor this gimmick to use these instead of its own
-# process/physics process for player specific actions.
-func player_process(_player, _delta):
-	pass
-	
-func player_physics_process(_player, _delta):
-	pass
-
-# I'll probably need to lock the gimmick here to prevent the same bar from just immediately being
-# grabbed if the player is launched off with a spring or something.
-func player_force_detach_callback(_player):
-	pass
-
-# At this point I really ought to make this a subclass of something else...
-func handle_animation_finished(_player, _animation):
-	pass

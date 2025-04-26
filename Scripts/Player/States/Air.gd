@@ -14,7 +14,7 @@ var lockDir = false
 func _ready():
 	if isJump: # we only want to connect it once so only apply this to the jump variation
 		parent.connect("enemy_bounced",Callable(self,"bounce"))
-
+	
 # Jump actions
 func _process(_delta):
 	if parent.playerControl != 0 or (parent.inputs[parent.INPUTS.YINPUT] < 0 and parent.character == Global.CHARACTERS.TAILS):
@@ -90,7 +90,10 @@ func _process(_delta):
 										parent.sfx[15].play()
 										# set movement and bounce reaction
 										parent.movement = Vector2(0,8*60)
-										parent.bounceReaction = 7.5
+										if parent.is_in_water():
+											parent.bounceReaction = 4.0
+										else:
+											parent.bounceReaction = 7.5
 										parent.shieldSprite.play("BubbleAction")
 										# set timer for animation related resets
 										var getTimer = parent.shieldSprite.get_node_or_null("ShieldTimer")
@@ -108,7 +111,7 @@ func _process(_delta):
 					Global.CHARACTERS.KNUCKLES:
 						# set initial movement
 						parent.movement = Vector2(parent.direction*4*60,max(parent.movement.y,0))
-						parent.set_state(parent.STATES.GLIDE,parent.currentHitbox.GLIDE)
+						parent.set_state(parent.STATES.GLIDE,parent.get_predefined_hitbox(PlayerChar.HITBOXES.GLIDE))
 					# Amy hammer drop dash
 					Global.CHARACTERS.AMY:
 						# set ability used to true to prevent multiple uses

@@ -59,6 +59,7 @@ var emeralds = 0
 # emerald bit flags
 enum EMERALD {RED = 1, BLUE = 2, GREEN = 4, YELLOW = 8, CYAN = 16, SILVER = 32, PURPLE = 64}
 var specialStageID = 0
+var level = null # reference to the currently active level
 var levelTime = 0 # the timer that counts down while the level isn't completed or in a special ring
 var globalTimer = 0 # global timer, used as reference for animations
 var maxTime = 60*10
@@ -70,6 +71,11 @@ var waterScrollSpeed = 64 # used by other nodes for how fast to move the water t
 
 # characters (if you want more you should add one here, see the player script too for more settings)
 enum CHARACTERS {NONE,SONIC,TAILS,KNUCKLES,AMY}
+
+# autofill the array with capitalized names from enum CHARACTERS
+@onready var character_names: Array = \
+	CHARACTERS.keys().map(func(char_name: String): return char_name.capitalize())
+
 var PlayerChar1 = CHARACTERS.SONIC
 var PlayerChar2 = CHARACTERS.TAILS
 
@@ -93,12 +99,12 @@ signal stage_started
 var nodeMemory = []
 
 # Game settings
-var zoomSize = 1
+var zoom_size = 1.0
 var smoothRotation = 0
 enum TIME_TRACKING_MODES { STANDARD, SONIC_CD }
 var time_tracking:TIME_TRACKING_MODES = TIME_TRACKING_MODES.STANDARD
 
-# Hazard type references
+## Hazard type references
 enum HAZARDS {NORMAL, FIRE, ELEC, WATER}
 
 # Layers references
@@ -127,6 +133,7 @@ func _ready():
 		await get_tree().process_frame
 		get_tree().paused = false
 	is_main_loaded = true
+	
 
 func _process(delta):
 	# do a check for certain variables, if it's all clear then count the level timer up
@@ -136,7 +143,8 @@ func _process(delta):
 	if !get_tree().paused:
 		globalTimer += delta
 	
-# reset values, self explanatory, put any variables to their defaults in here
+
+## reset values, self explanatory, put any variables to their defaults in here
 func reset_values():
 	lives = 3
 	score = 0
@@ -151,21 +159,24 @@ func reset_values():
 	nodeMemory = []
 	nextZone = load("res://Scene/Zones/BaseZone.tscn")
 
-# use this to play a sound globally, use load("res:..") or a preloaded sound
-func play_sound(sound = null):
+
+## use this to play a sound globally, use load("res:..") or a preloaded sound
+func play_sound(sound = null) -> void:
 	if sound != null:
 		soundChannel.stream = sound
 		soundChannel.play()
 
-# add a score object, see res://Scripts/Misc/Score.gd for reference
-func add_score(position = Vector2.ZERO,value = 0):
+
+## add a score object, see res://Scripts/Misc/Score.gd for reference
+func add_score(position = Vector2.ZERO,value = 0) -> void:
 	var scoreObj = Score.instantiate()
 	scoreObj.scoreID = value
 	scoreObj.global_position = position
 	add_child(scoreObj)
 
-# use a check function to see if a score increase would go above 50,000
-func check_score_life(scoreAdd = 0):
+
+## use a check function to see if a score increase would go above 50,000
+func check_score_life(scoreAdd: int = 0) -> void:
 	if fmod(score,50000) > fmod(score+scoreAdd,50000):
 		life.play()
 		lives += 1
@@ -173,8 +184,9 @@ func check_score_life(scoreAdd = 0):
 		music.volume_db = -100
 		bossMusic.volume_db = -100
 
-# use this to set the stage clear theme, only runs if stageClearPhase isn't 0
-func stage_clear():
+
+## use this to set the stage clear theme, only runs if stageClearPhase isn't 0
+func stage_clear() -> void:
 	if stageClearPhase == 0:
 		currentTheme = 2
 		music.stream = themes[currentTheme]
@@ -182,17 +194,20 @@ func stage_clear():
 		effectTheme.stop()
 		bossMusic.stop()
 
-func emit_stage_start():
+
+## Emit the stage started signal
+func emit_stage_start() -> void:
 	stage_started.emit()
 
-# save data settings
-func save_settings():
+
+## save data settings
+func save_settings() -> void:
 	var file = ConfigFile.new()
 	# save settings
 	file.set_value("Volume","SFX",AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX")))
 	file.set_value("Volume","Music",AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Music")))
 	
-	file.set_value("Resolution","Zoom",zoomSize)
+	file.set_value("Resolution","Zoom",zoom_size)
 	file.set_value("Gameplay","SmoothRotation",smoothRotation)
 	file.set_value("Resolution","FullScreen",((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN)))
 
@@ -201,12 +216,13 @@ func save_settings():
 	# save config and close
 	file.save("user://Settings.cfg")
 
-# load settings
-func load_settings():
+
+## load settings
+func load_settings() -> void:
 	var file = ConfigFile.new()
 	var err = file.load("user://Settings.cfg")
 	if err != OK:
-		return false # Return false as an error
+		return
 	
 	if file.has_section_key("Volume","SFX"):
 		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"),file.get_value("Volume","SFX"))
@@ -225,11 +241,8 @@ func load_settings():
 		)
 	
 	if file.has_section_key("Resolution","Zoom"):
-		zoomSize = file.get_value("Resolution","Zoom")
-		var window = get_window()
-		var newSize = Vector2i((get_viewport().get_visible_rect().size*zoomSize).round())
-		window.set_position(window.get_position()+(window.size-newSize)/2)
-		window.set_size(newSize)
+		zoom_size = file.get_value("Resolution","Zoom")
+		resize_window(zoom_size)
 	
 	if file.has_section_key("Gameplay","SmoothRotation"):
 		smoothRotation = file.get_value("Gameplay","SmoothRotation")
@@ -242,31 +255,54 @@ func load_settings():
 		if time_tracking < 0 or time_tracking >= TIME_TRACKING_MODES.size():
 			time_tracking = TIME_TRACKING_MODES.STANDARD
 
+
+func resize_window(new_zoom_size):
+	var window = get_window()
+	var new_size = Vector2i((get_viewport().get_visible_rect().size*new_zoom_size).round())
+	window.set_position(window.get_position()+(window.size-new_size)/2)
+	window.set_size(new_size)
+	zoom_size = new_zoom_size
+	
+	
+func get_zoom_size() -> float:
+	return zoom_size
+
+
+## Gets the main player.
+func get_first_player() -> PlayerChar:
+	return players[0]
+
+
 ## Useful for checking triggers that require specifically the first player to be on a gimmick	
-func get_first_player_gimmick():
+func get_first_player_gimmick() -> ConnectableGimmick:
 	return players[0].get_active_gimmick()
 
+
 ## Useful for gimmicks that can activate if any player is attached that don't need data about
-## the specific player
-func is_any_player_on_gimmick(gimmick):
+## the specific player. A simple boolean of whether or not there is a player on a given
+## ConnectableGimmick.
+func is_any_player_on_gimmick(gimmick: ConnectableGimmick) -> bool:
 	for player in players:
 		if player.get_active_gimmick() == gimmick:
 			return true
 	return false
 
+
 ## Useful for gimmicks that need to potentially iterate through all attached players
-func get_players_on_gimmick(gimmick):
-	var players_on_gimmick = []
+func get_players_on_gimmick(gimmick) -> Array[PlayerChar]:
+	var players_on_gimmick: Array[PlayerChar] = []
 	for player in players:
 		if player.get_active_gimmick() == gimmick:
 			players_on_gimmick.append(player)
 	return players_on_gimmick
 
+
 ## Simple check to see if the player is the first char
-func is_player_first(player : PlayerChar):
+func is_player_first(player : PlayerChar) -> bool:
 	if players[0] == player:
 		return true
 	return false
+
 
 ## Gets the index of the player selected
 ## @param player Which player you are checking
@@ -274,5 +310,44 @@ func is_player_first(player : PlayerChar):
 ##             being later players
 ## @retval -1 if the player isn't in the inbox. That should be impossible unless
 ##            you make an orphaned player for some reason.
-func get_player_index(player : PlayerChar):
+func get_player_index(player : PlayerChar) -> int:
 	return players.find(player)
+
+
+## get the current active camera
+func getCurrentCamera2D() -> Camera2D:
+	var viewport = get_viewport()
+	if not viewport:
+		return null
+	var camerasGroupName = "__cameras_%d" % viewport.get_viewport_rid().get_id()
+	var cameras = get_tree().get_nodes_in_group(camerasGroupName)
+	for camera in cameras:
+		if camera is Camera2D and camera.enabled:
+			return camera
+	return null
+
+
+## the original game logic runs at 60 fps, this function is meant to be used to help calculate this,
+## usually a division by the normal delta will cause the game to freak out at different FPS speeds
+func div_by_delta(delta) -> float:
+	return 0.016667*(0.016667/delta)
+
+
+## get window size resolution as a vector2
+func get_screen_size() -> Vector2:
+	return get_viewport().get_visible_rect().size
+	
+	
+## Sets the current level (used as part of a level ready script usually)
+func set_level(new_level: Level) -> void:
+	self.level = new_level
+
+
+## Gets the current level (useful for always knowing where the active level root is)
+func get_level() -> Level:
+	return self.level
+
+
+## Gets the name of a character
+func get_character_name(which: CHARACTERS) -> String:
+	return character_names[which]

@@ -1,153 +1,129 @@
-extends Node2D
+extends ConnectableGimmick
 
 ## Vertical Swinging Bar from Mushroom Hill Zone
 ## Author: DimensionWarped
-## Note: This should be refactored into a ConnectableGimmick
 
-# Sound to play when the bar is grabbed
+## Sound to play when the bar is grabbed
 @export var grabSound = preload("res://Audio/SFX/Player/Grab.wav")
-
-# How many times to spin around the bar before launching
+## How many times to spin around the bar before launching
 @export var rotations = 1
-
-# How fast the player needs to be going to catch the bar
+## How fast the player needs to be going to catch the bar
 @export var grabSpeed = 300
-
-# How fast to launch the player if the mode is constant
+## How fast to launch the player if the mode is constant
 @export var launchSpeed = 720
-
-# How fast to launch the player if the mode is multiply
+## How fast to launch the player if the mode is multiply
 @export var launchMultiplier = 1.5
-
-# Maximum speed to allow the player to launch when in multiply
+## Maximum speed to allow the player to launch when in multiply
 @export var launchMultiMaxSpeed = 900
 
-# The CONSTANT launch mode will always launch the player with a set speed based on launchSpeed
-# The MULTIPLY launch mode will launch the player at a multiple of their incoming velocity limit_length
-#              to a given max value.
-enum {CONSTANT, MULTIPLY}
-@export_enum("constant","multiply") var launchMode # Keep these in the same order as the above enum # (int, "constant", "multiply")
+enum LAUNCH_MODES {CONSTANT, MULTIPLY}
+## The CONSTANT launch mode will always launch the player with a set speed based on launchSpeed
+## The MULTIPLY launch mode will launch the player at a multiple of their incoming velocity limit_length
+##              to a given max value.
+@export var launchMode: LAUNCH_MODES = LAUNCH_MODES.MULTIPLY  # Keep these in the same order as the above enum # (int, "constant", "multiply")
 
-var players = [] # Tracks the players that are active within the gimmick
-var players_speed = [] # Tracks the player's speed on entering the loop (used for multiply mode)
-var players_cur_loops = [] # Tracks how many loops the player has been throught eh animation
-var players_pass_hit = [] # Tracks whether the player has hit the release point of the animation
-
-var pass_hit = false
-
-# Called when the node enters the scene tree for the first time.
+## Called when the node enters the scene tree for the first time.
 func _ready():
 	$Grab.stream = grabSound
-	
-func _physics_process(_delta):
-	
-	# Iterate through every player to see if they should be mounted to the bar
-	for i in players:
-		var playerIndex = players.find(i)
-		if !(check_grab(i)):
-			continue
-			
-		if players_speed[playerIndex] == null:
-				
-			# Stores the player's speed when hitting the bar so we can unleash it later.
-			players_speed[playerIndex] = i.groundSpeed
-			players_cur_loops[playerIndex] = 0
-			players_pass_hit[playerIndex] = false
-			
-			# Reset the player's direction to their direction of travel so that they don't mount
-			# the bar backwards if they are facing against their direction of travel.
-			if (i.groundSpeed > 0):
-				i.direction = 1
-			else:
-				i.direction = -1
-				
-			i.sprite.flip_h = (i.direction < 0)
-				
-			$Grab.play()
-			if (i.direction > 0):
-				i.animator.play("grabVerticalBar")
-			else:
-				i.animator.play("grabVerticalBarOffset")
-			
-			i.set_state(i.STATES.ANIMATION)
-			
-			# Drop all the speed values to 0 to prevent issues.
-			i.groundSpeed = 0
-			i.movement.x = 0
-			i.movement.y = 0
-			i.cam_update()
-	
-	for i in players:
-		if i.currentState == i.STATES.ANIMATION:
-			i.global_position.x = get_global_position().x
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
-	for i in players:
-		# If the player isn't on the bar, skip it.
-		if i.currentState != i.STATES.ANIMATION:
+## All we do here is check if anyone needs to get connected
+func _process(_delta: float) -> void:
+	var players_to_check = $VerticalBarArea.get_overlapping_bodies()
+	for player : PlayerChar in players_to_check:
+		if check_grab(player):
+			connect_player(player)
 			continue
+
+## Binds the player to the vertical bar gimmick
+func connect_player(player: PlayerChar):
+	# attmept to connect to the gimmick. If failed, we give up this attempt.
+	if player.set_active_gimmick(self) == false:
+		return
+
+	$Grab.play()
+	if player.movement.x > 0:
+		player.set_direction(PlayerChar.DIRECTIONS.RIGHT)
+		player.play_animation("grabVerticalBar")
+	else:
+		player.set_direction(PlayerChar.DIRECTIONS.LEFT)
+		player.play_animation("grabVerticalBarOffset")
+
+	player.set_state(PlayerChar.STATES.ANIMATION)
+	player.set_gimmick_var("VerticalBarSpeedAtEntry", player.groundSpeed)
 			
-		var playerIndex = players.find(i)
-		
-		# We don't start tracking rotation and stuff if the player hasn't gotten out of grabVerticalBar/Offset
-		# Switch the player out of the grab animation pretty much immediately.
-		var anim = i.animator.get_current_animation()
-		if (anim == "grabVerticalBar" or anim == "grabVerticalBarOffset"):
-			continue
-		
-		# Real code -- release the player after they hit the desired number of loops through the animation
-		if (!players_pass_hit[playerIndex]):
-			if (i.animator.get_current_animation_position() >= i.animator.get_current_animation_length() * 0.95):
-				players_pass_hit[playerIndex] = true
-				players_cur_loops[playerIndex] += 1
-				if (players_cur_loops[playerIndex] >= rotations):
-					if launchMode == MULTIPLY:
-						i.movement.x = min(launchMultiMaxSpeed, max(-launchMultiMaxSpeed, players_speed[playerIndex] * launchMultiplier))
-					else:
-						i.movement.x = launchSpeed * i.direction
-					i.set_state(i.STATES.NORMAL)
-					i.movement.y = 0
+	# Drop all the speed values to 0 to prevent issues.
+	player.groundSpeed = 0
+	player.movement.x = 0
+	player.movement.y = 0
+	player.cam_update()
+	player.global_position.x = get_global_position().x
+	
+	player.set_active_gimmick(self)
+	
+## Locks the gimmick for the player - prevents the player from immediately
+## reconnecting after launching off the gimmick.
+func temp_lock_gimmick(player: PlayerChar) -> void:
+	var unlock_func = func ():
+		player.clear_single_locked_gimmick(self)
+	
+	var timer:SceneTreeTimer = get_tree().create_timer(0.25, false)
+	timer.timeout.connect(unlock_func, CONNECT_DEFERRED)
+	
+	player.add_locked_gimmick(self)
+	pass
+
+## Disconnects the player from the bar. If we came in here due to the end
+## of the animation, 
+func disconnect_player(player: PlayerChar, do_launch: bool = true):
+	# If we aren't doing the launch we probably either jumped off or got hit.
+	if do_launch:
+		if launchMode == LAUNCH_MODES.MULTIPLY:
+			player.movement.x = min(launchMultiMaxSpeed, max(-launchMultiMaxSpeed,
+			  player.get_gimmick_var("VerticalBarSpeedAtEntry") * launchMultiplier))
 		else:
-			if (i.animator.get_current_animation_position() < i.animator.get_current_animation_length() * 0.25):
-				players_pass_hit[playerIndex] = false
-
-func check_grab(body):
-	# Only grab the bar if the player is in a ground state (rolling or running) and speed is above value
-	if !(body.ground):
-		return false
-		
-	# Skip if already on the vertical bar or player is jumping
-	if (body.currentState == body.STATES.ANIMATION or body.currentState == body.STATES.JUMP):
-		return false
-		
-	if abs(body.groundSpeed) > grabSpeed:
-		return true
-		
-	return false
+			player.movement.x = launchSpeed * player.get_direction()
+		player.movement.y = 0
+		player.set_state(PlayerChar.STATES.NORMAL)
 	
-func remove_player(player):
-	if players.has(player):
-		# Don't allow removal of someone who is still on the vertical bar. This can occur with
-		# high speeds. Preventing this should be fine since the player will be brought back into
-		# collision overlap range by virtue of being on the bar.
-		if (player.currentState == player.STATES.ANIMATION):
-			return
-			
-		# Clean out the player from all player-linked arrays.
-		var getIndex = players.find(player)
-		players.erase(player)
-		players_speed.remove_at(getIndex)
-		players_cur_loops.remove_at(getIndex)
-		players_pass_hit.remove_at(getIndex)
+	player.unset_active_gimmick()
+	# Lock the gimmick for a short bit now so that the player can slip past if it fthey launched
+	temp_lock_gimmick(player)
 
-func _on_vertical_bar_area_body_entered(body):
-	if body != get_parent(): #check that parent isn't going to be carried
-		if !players.has(body):
-			players.append(body)
-			players_speed.resize(players.size())
-			players_cur_loops.resize(players.size())
-			players_pass_hit.resize(players.size())
+## Disconnects either on animation or when the player attempts to jump off
+func player_process(player : PlayerChar, _delta : float):
+	if player.get_animation_loops() >= rotations:
+		disconnect_player(player, true)
+	
+	if player.any_action_pressed():
+		# Whoa! JUMP!
+		disconnect_player(player, false)
+		var sprite: Sprite2D = player.sprite
+		player.position.x += (sprite.offset.x / 2.0)
+		player.action_jump("roll",true, false)
 
-func _on_vertical_bar_area_body_exited(body):
-	remove_player(body)
+## Checks if the player should grab the bar
+func check_grab(player: PlayerChar) -> bool:
+	# Don't grab if the gimmick is locked (which it will be for a short time after releasing it)
+	if (player.is_gimmick_locked_for_player(self)):
+		return false
+		
+	# Only grab the bar if the player is in a ground state (rolling or running) and speed is above value
+	if !(player.is_on_ground()):
+		return false
+		
+	# Skip if already in a special animation state or if the player is jumping
+	if (player.get_state() == PlayerChar.STATES.ANIMATION or player.get_state() == PlayerChar.STATES.JUMP):
+		return false
+
+	# We never grab the bar unless the player is running fast enough
+	if abs(player.get_ground_speed()) < grabSpeed:
+		return false
+
+	# We passed all the checks and should grab the bar
+	return true
+
+## This will usually only be invoked if the player gets hit or another object
+## forces the player off
+func player_force_detach_callback(player : PlayerChar):
+	disconnect_player(player, false)
+	pass

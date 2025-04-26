@@ -22,6 +22,7 @@ func state_activated():
 	actionPressed = true
 	
 func state_exit():
+	carryBox.disconnect_all()
 	flyHitBox.call_deferred("set","disabled",true)
 	carryHitBox.call_deferred("set","disabled",true)
 	# stop flight sound
