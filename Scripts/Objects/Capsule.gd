@@ -39,21 +39,21 @@ func _physics_process(delta):
 				animalTrackers.erase(i)
 		
 		if animalTrackers.size() <= 0:
-			# temporarily set stage clear to 0 so that the music can play
-			Global.stageClearPhase = 0
+			# temporarily set stage clear to NOT_STARTED so that the music can play
+			Global.reset_stage_clear_phase()
 			Global.stage_clear()
-			# set stage clear to 3 to continue playing the level clear phase
-			Global.stageClearPhase = 3
+			# set stage clear to SCORE_TALLY to continue playing the level clear phase
+			Global.set_stage_clear_phase(Global.STAGE_CLEAR_PHASES.SCORE_TALLY)
 			checkAnimals = false
 
 
 func activate():
 	# check if to clear level
-	if Global.stageClearPhase == 0:
+	if !Global.is_in_any_stage_clear_phase():
 		$Animator.play("Open")
 		$Explode.play()
-		# set global stage clear phase to 1, 1 is used to stop the timer (see HUD script)
-		Global.stageClearPhase = 1
+		# set global stage clear phase to START, this is used to stop the timer (see HUD script)
+		Global.set_stage_clear_phase(Global.STAGE_CLEAR_PHASES.STARTED)
 		
 		# set player camera limits
 		for i in Global.players:

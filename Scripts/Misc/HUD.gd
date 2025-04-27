@@ -181,7 +181,7 @@ func _process(delta):
 		flashTimer -= delta
 	
 	# stage clear handling
-	if Global.stageClearPhase > 2:
+	if Global.get_stage_clear_phase() >= Global.STAGE_CLEAR_PHASES.SCORE_TALLY:
 		# initialize stage clear sequence
 		if !isStageEnding:
 			isStageEnding = true
