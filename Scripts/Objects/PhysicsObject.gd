@@ -1,3 +1,5 @@
+
+## Class for things that move along the ground
 class_name PhysicsObject extends CharacterBody2D
 
 # Sensors

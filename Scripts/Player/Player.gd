@@ -1,3 +1,4 @@
+## The PlayerChar class is our main player controller.
 class_name PlayerChar extends PhysicsObject
 
 ## Enumerator of the various hitbox types
@@ -1020,7 +1021,7 @@ func hit_player(damagePoint:Vector2 = global_position, damageType: Global.HAZARD
 		set_state(STATES.HIT)
 		invTime = 120 # Ivulnerable for 2 seconds. Starts counting *after* landing.
 		# Ring loss
-		if (shield == SHIELDS.NONE and rings > 0 and playerControl == 1):
+		if (shield == SHIELDS.NONE and rings > 0 and is_independent()):
 			sfx[9].play()
 			ringDisTime = 30.0/60.0 # ignore rings for 30 frames after landing
 			var ringCount = 0
@@ -1046,7 +1047,7 @@ func hit_player(damagePoint:Vector2 = global_position, damageType: Global.HAZARD
 					ringAngle = 101.25 # Reset angle
 				get_parent().add_child(ring)
 			rings = 0
-		elif shield == SHIELDS.NONE and playerControl == 1:
+		elif shield == SHIELDS.NONE and is_independent():
 			kill()
 		else:
 			sfx[soundID].play()
@@ -1054,6 +1055,21 @@ func hit_player(damagePoint:Vector2 = global_position, damageType: Global.HAZARD
 		set_shield(SHIELDS.NONE)
 		return true
 	return false
+	
+## Determines whether the player should be treated like player 1 for the purpose of gimmicks and
+## similar things. This is determined by a combination of whether or not they actually *are* player
+## 1 and if the game mode is in one of the more multiplayer centric modes.
+func is_independent()->bool:
+	# First player is always indepdent
+	if Global.get_first_player() == self:
+		return true
+
+	# Players other than the first are indepdendent in non-standard mutliplayer modes
+	if Global.get_multimode() != Global.MULTIMODE.NORMAL:
+		return true
+	
+	return false
+	
 
 
 ## Gives the player a ring by default, overridable to any requested number.
@@ -1070,10 +1086,8 @@ func give_ring(num_rings: int = 1, play_sound: bool = true) -> void:
 	# We should come back to this after we decouple player from playerchar
 	# so that we can let a player 2 character get rings if the game is in versus
 	# mode
-	if playerControl != 1:
-		if partner != null:
-			return Global.get_first_player().give_ring(num_rings, play_sound)
-		return
+	if !is_independent():
+		return Global.get_first_player().give_ring(num_rings, play_sound)
 
 	rings += num_rings
 	

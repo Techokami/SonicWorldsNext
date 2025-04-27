@@ -85,8 +85,31 @@ var waterScrollSpeed = 64 # used by other nodes for how fast to move the water t
 # characters (if you want more you should add one here, see the player script too for more settings)
 enum CHARACTERS {NONE,SONIC,TAILS,KNUCKLES,AMY}
 
+## Which multiplayer mode is in use alters some aspects of how the second (and on if that's ever
+## implemented) works. Note that this is separate from concepts like split screen and it does not
+## inherently set up a competitive 
+##
+## This is also a work in progress, not all intended features are currently implemented.
+##
+## NORMAL - Additional players are partner characters. They can't collect monitors. Rings they
+##          collect are given to player 1. They don't die on hit. If the second controller is idle
+##          for an extended period of time, Partner automation will take over. This is the normal
+##          'little brother mode' multiplayer that you have in single player mode from the Genesis
+##          games.
+##  PEERS - Additional players are their own players. They can collect monitors. They get their
+##          own rings. They take damage normally. They never get taken over by automation. They
+##          have their own score count.
+##          the main difference between this mode and VERSUS mode is that partner actions (and
+##          Tails being able to carry a player around is the only one of these) work in this mode.
+##          Also, when an act is finished, both players pass at the same time.
+## VERSUS - Same as PEERS, but partner actions are disabled. When a Sign Post victory condition is
+##          passed, the level does not immediately end and score is not tallied. Instead the final
+##          time and ring bonus are stored for use in a results screen.
+enum MULTIMODE {NORMAL = 0, PEERS = 1, VERSUS = 2}
+var multiplayer_mode = MULTIMODE.NORMAL
+
 # autofill the array with capitalized names from enum CHARACTERS
-@onready var character_names: Array = \
+var character_names: Array = \
 	CHARACTERS.keys().map(func(char_name: String): return char_name.capitalize())
 
 var PlayerChar1 = CHARACTERS.SONIC
@@ -364,3 +387,8 @@ func get_level() -> Level:
 ## Gets the name of a character
 func get_character_name(which: CHARACTERS) -> String:
 	return character_names[which]
+
+
+## Gets the current multiplayer mode	
+func get_multimode() -> MULTIMODE:
+	return multiplayer_mode
