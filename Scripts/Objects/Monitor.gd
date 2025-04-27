@@ -1,6 +1,13 @@
 @tool
 extends CharacterBody2D
 
+# 0 holds the original items sheet and all the other slots
+# hold character-specific 1up frames
+static var item_textures: Array[Texture2D] = []
+
+static var _original_hframes: int
+static var _original_vframes: int
+
 var physics = false
 var grv = 0.21875
 var yspeed = 0
@@ -12,15 +19,33 @@ var Explosion = preload("res://Entities/Misc/BadnickSmoke.tscn")
 "Bubble Shield", "Super", "1up") var item = 0:
 	set(value):
 		item = value
-		_set_item_frame()
+		if !item_textures.is_empty():
+			_set_item_frame()
 
 func _set_item_frame():
-	$Item.frame = item+2
-	# Life Icon (life icons are a special case)
-	if item == 10 and !Engine.is_editor_hint():
-		$Item.frame = item+1+Global.PlayerChar1
+	if item == 8:
+		$Item.hframes = 1
+		$Item.vframes = 1
+		$Item.frame = 0
+		$Item.texture = item_textures[1 if Engine.is_editor_hint() else Global.PlayerChar1]
+	else:
+		$Item.vframes = _original_vframes
+		$Item.hframes = _original_hframes
+		$Item.frame = item
+		$Item.texture = item_textures[0]
 
 func _ready():
+	# since char_textures is static, the following code will only run once
+	if item_textures.is_empty():
+		_original_vframes = $Item.vframes
+		_original_hframes = $Item.hframes
+		# load textures for character-specific frames
+		item_textures.resize(Global.CHARACTERS.size())
+		item_textures[0] = $Item.texture as Texture2D
+		for char_name: String in Global.CHARACTERS.keys():
+			if char_name != "NONE":
+				item_textures[Global.CHARACTERS[char_name]] = \
+					load("res://Graphics/Items/monitor_icon_%s.png" % char_name.to_lower()) as Texture2D
 	# if we're in the editor, set the 1'st frame
 	# for the monitor itself, so the item icon can be seen
 	if Engine.is_editor_hint():
@@ -80,7 +105,7 @@ func destroy():
 			playerTouch.rings += 50
 			if !playerTouch.get("isSuper"):
 				playerTouch.set_state(PlayerChar.STATES.SUPER)
-		10: # 1up
+		8: # 1up
 			Global.life.play()
 			Global.lives += 1
 			Global.effectTheme.volume_db = -100

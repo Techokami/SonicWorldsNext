@@ -1,6 +1,6 @@
 [gd_scene load_steps=16 format=3 uid="uid://gklj3ebdwveu"]
 
-[ext_resource type="Texture2D" uid="uid://bf6cekji71vif" path="res://Graphics/Items/MonitorIcons.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://bf6cekji71vif" path="res://Graphics/Items/monitor_icons.png" id="1"]
 [ext_resource type="Texture2D" uid="uid://c8qtrmw44es3g" path="res://Graphics/Items/monitors.png" id="2"]
 [ext_resource type="Script" path="res://Scripts/Objects/Monitor.gd" id="3"]
 [ext_resource type="AudioStream" uid="uid://ivlmvt8mk3u4" path="res://Audio/SFX/Objects/DestroyObject.wav" id="4"]
@@ -234,9 +234,8 @@ shape = SubResource("1")
 material = ExtResource("6")
 position = Vector2(0, -2)
 texture = ExtResource("1")
-hframes = 11
+hframes = 8
 vframes = 2
-frame = 2
 
 [node name="Monitor" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("6")
