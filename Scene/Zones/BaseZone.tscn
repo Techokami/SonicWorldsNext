@@ -289,7 +289,7 @@ shape = SubResource("5")
 
 [node name="Monitor17" parent="Platforms/FallingPlatform5/Platform" index="2" instance=ExtResource("8_8svvy")]
 position = Vector2(-24, -32)
-item = 10
+item = 8
 
 [node name="Platform5" parent="Platforms" instance=ExtResource("7_rjmim")]
 position = Vector2(432, 336)
@@ -1552,7 +1552,7 @@ position = Vector2(408, 672)
 
 [node name="Monitor4" parent="Monitors" instance=ExtResource("8_8svvy")]
 position = Vector2(3136, 368)
-item = 10
+item = 8
 
 [node name="Monitor18" parent="Monitors" instance=ExtResource("8_8svvy")]
 position = Vector2(1632, 608)
@@ -1595,7 +1595,7 @@ position = Vector2(9752, 1896)
 
 [node name="Monitor14" parent="Monitors" instance=ExtResource("8_8svvy")]
 position = Vector2(9720, 1896)
-item = 10
+item = 8
 
 [node name="Monitor15" parent="Monitors" instance=ExtResource("8_8svvy")]
 position = Vector2(9688, 1896)
@@ -1611,7 +1611,11 @@ item = 6
 
 [node name="Monitor21" parent="Monitors" instance=ExtResource("8_8svvy")]
 position = Vector2(5440, 480)
-item = 10
+item = 8
+
+[node name="Monitor22" parent="Monitors" instance=ExtResource("8_8svvy")]
+position = Vector2(8544, 1712)
+item = 9
 
 [node name="Hazards" type="Node2D" parent="."]
 
