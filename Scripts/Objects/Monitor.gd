@@ -19,7 +19,7 @@ enum ITEMS {
 	# when adding new item types, please make sure
 	# 1up is the last item in the list
 	RING, SPEED_SHOES, INVINCIBILITY, SHIELD, ELEC_SHIELD, FIRE_SHIELD,
-	BUBBLE_SHIELD, SUPER, _1UP
+	BUBBLE_SHIELD, SUPER, _1UP, ROBOTNIK
 }
 @export var item: ITEMS = ITEMS.RING:
 	set(value):
@@ -36,7 +36,7 @@ func _set_item_frame():
 	else:
 		$Item.vframes = _original_vframes
 		$Item.hframes = _original_hframes
-		$Item.frame = item
+		$Item.frame = item - int(item > ITEMS._1UP) # skip 1up
 		$Item.texture = item_textures[0]
 
 func _ready():
@@ -115,6 +115,8 @@ func destroy():
 			Global.lives += 1
 			Global.effectTheme.volume_db = -100
 			Global.music.volume_db = -100
+		ITEMS.ROBOTNIK:
+			playerTouch.hit_player(playerTouch.global_position, Global.HAZARDS.NORMAL, 9)
 
 func _physics_process(delta):
 	if !Engine.is_editor_hint():

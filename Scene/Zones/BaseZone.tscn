@@ -1613,6 +1613,10 @@ item = 6
 position = Vector2(5440, 480)
 item = 8
 
+[node name="Monitor22" parent="Monitors" instance=ExtResource("8_8svvy")]
+position = Vector2(8544, 1712)
+item = 9
+
 [node name="Hazards" type="Node2D" parent="."]
 
 [node name="Spikes" parent="Hazards" instance=ExtResource("50_mtg26")]
