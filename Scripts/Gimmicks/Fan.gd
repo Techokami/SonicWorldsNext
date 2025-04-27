@@ -10,8 +10,6 @@ var players = []
 var getFrame = 0.0
 var animSpeed = 0.0
 
-var Bubble = preload("res://Entities/Misc/Bubbles.tscn")
-
 func _ready():
 	scale.x = max(1,scale.x)
 	$fan.global_scale = Vector2(1,1)
@@ -53,7 +51,7 @@ func _physics_process(delta):
 		return
 
 	# if any players are found in the array, if they're on the ground make them roll
-	for i: PlayerChar in players:
+	for i in players:
 		# determine the direction of the arrow based on scale and rotation
 		# better method needs to be done
 		# DW's note: commented out for now because this variable wasn't used and it was
@@ -61,8 +59,8 @@ func _physics_process(delta):
 		#var getDir = Vector2.UP.rotated(global_rotation)
 			
 		# disconect floor
-		if i.is_on_ground():
-			i.disconnect_from_floor()
+		if i.ground:
+			i.disconect_from_floor()
 			
 		# set movement
 		# get distance for the y axis
@@ -79,9 +77,9 @@ func _physics_process(delta):
 		if i.water:
 			setPlayerAnimation = "current"
 			
-		if i.get_state() != PlayerChar.STATES.ANIMATION or i.get_animator().get_current_animation() != setPlayerAnimation:
-			i.set_state(PlayerChar.STATES.AIR)
-			i.play_animation(setPlayerAnimation)
+		if i.currentState != i.STATES.ANIMATION or i.animator.current_animation != setPlayerAnimation:
+			i.set_state(i.STATES.AIR)
+			i.animator.play(setPlayerAnimation)
 
 func _on_body_entered(body):
 	if !players.has(body):
@@ -89,7 +87,7 @@ func _on_body_entered(body):
 
 func _on_body_exited(body):
 	if players.has(body):
-		body.set_state(PlayerChar.STATES.NORMAL)
+		body.set_state(body.STATES.NORMAL)
 		players.erase(body)
 
 func activate():
@@ -107,11 +105,6 @@ func deactivate_touch_active():
 # generate bubbles
 func _on_bubble_timer_timeout():
 	if isActive and (!touchActive or players.size() > 0):
-		var bub = Bubble.instantiate()
-		bub.global_position = global_position+Vector2((16.0*abs(scale.x)-4.0)*randf_range(-1.0,1.0),-8.0*sign(scale.y))
-		# choose between 2 bubble types, both cosmetic
-		bub.bubbleType = int(round(randf()))
-		# add to the speed of the bubbles
-		bub.velocity.y -= speed*0.5
-		bub.maxDistance = (global_position.y-(16*scale.y)+cos(Global.levelTime*4)*4)
-		get_parent().add_child(bub)
+		var pos: Vector2 = global_position+Vector2((16.0*abs(scale.x)-4.0)*randf_range(-1.0,1.0),-8.0*sign(scale.y))
+		var max_distance: float = (global_position.y-(16*scale.y)+cos(Global.levelTime*4)*4)
+		Bubble.create_small_or_medium_bubble(get_parent(),pos,Vector2(0.0,-speed*0.5),max_distance)

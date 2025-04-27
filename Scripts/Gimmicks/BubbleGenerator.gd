@@ -4,7 +4,6 @@ extends Node2D
 
 var bubbleTimer = 0
 var bigBubbleTimer = 10
-var Bubble = preload("res://Entities/Misc/Bubbles.tscn")
 
 func _process(delta):
 	if Global.waterLevel != null:
@@ -12,28 +11,20 @@ func _process(delta):
 	else:
 		visible = false
 	
-	# Since visibility is tied to water level, bubbles only generate when below water level
+	# Since visibility is tied to water level, bubbles only generate when below water levelz
 	if visible:
 		if bubbleTimer > 0:
 			bubbleTimer -= delta
 		else:
 			# if timer runs out, set to a random number between 0 and 3 and generate bubble
-			bubbleTimer = randf()*3
-			var bubble = Bubble.instantiate()
-			# pick either 0 or 1 for the bubble type
-			bubble.bubbleType = int(round(randf()))
-			add_child(bubble)
-			bubble.global_position = global_position
+			bubbleTimer += randf()*3.0
+			Bubble.create_small_or_medium_bubble(self, global_position)
 		
 		# Big bubble generator
 		if bigBubbleTimer > 0:
 			bigBubbleTimer -= delta
 		else:
 			# if timer runs out generate bubble and reset timer to 10 seconds
-			bigBubbleTimer = 10
-			var bubble = Bubble.instantiate()
-			# set type to 2 for big bubbles
-			bubble.bubbleType = 2
-			add_child(bubble)
-			bubble.global_position = global_position
+			bigBubbleTimer += 10.0
+			Bubble.create_air_bubble(self, global_position)
 		
