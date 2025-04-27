@@ -62,7 +62,7 @@ func _physics_process(_delta):
 			player.partner.inputs[player.INPUTS.ACTION] = 0
 	
 	# stage clear settings
-	if Global.is_in_any_stage_clear_phase():
+	if Global.is_in_any_stage_clear_phase() and $Sprite.animation == "spinner":
 		# lock camera to self
 		player.camera.global_position.x = global_position.x
 		# if player greater then screen and stage clear phase is GOALPOST_SPIN_END then activate the stage clear sequence
