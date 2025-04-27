@@ -67,7 +67,7 @@ func set_paused(value: bool) -> void:
 	_update_process_callbacks()
 
 ## Returns [constant TIMER_PROCESS_IDLE] if the timer fires on each frame
-## or [constant TIMER_PROCESS_PHYSICS] if it fires on each physics frame.
+## or [constant TIMER_PROCESS_PHYSICS] if it fires on each physics frame
 func get_process_callback() -> TimerProcessCallback:
 	return process_callback
 
