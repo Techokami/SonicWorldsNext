@@ -15,15 +15,20 @@ var playerTouch: PlayerChar = null
 var isActive = true
 var Explosion = preload("res://Entities/Misc/BadnickSmoke.tscn")
 
-@export_enum("Ring", "Speed Shoes", "Invincibility", "Shield", "Elec Shield", "Fire Shield",
-"Bubble Shield", "Super", "1up") var item = 0:
+enum ITEMS {
+	# when adding new item types, please make sure
+	# 1up is the last item in the list
+	RING, SPEED_SHOES, INVINCIBILITY, SHIELD, ELEC_SHIELD, FIRE_SHIELD,
+	BUBBLE_SHIELD, SUPER, _1UP
+}
+@export var item: ITEMS = ITEMS.RING:
 	set(value):
 		item = value
 		if !item_textures.is_empty():
 			_set_item_frame()
 
 func _set_item_frame():
-	if item == 8:
+	if item == ITEMS._1UP:
 		$Item.hframes = 1
 		$Item.vframes = 1
 		$Item.frame = 0
@@ -76,16 +81,16 @@ func destroy():
 	await $Animator.animation_changed
 	# enable effect
 	match (item):
-		0: # Rings
+		ITEMS.RING:
 			playerTouch.give_ring(10)
-		1: # Speed Shoes
+		ITEMS.SPEED_SHOES:
 			if !playerTouch.get("isSuper"):
 				playerTouch.shoeTime = 20
 				playerTouch.switch_physics()
 				Global.currentTheme = 1
 				Global.effectTheme.stream = Global.themes[Global.currentTheme]
 				Global.effectTheme.play()
-		2: # Invincibility
+		ITEMS.INVINCIBILITY:
 			if !playerTouch.get("isSuper"):
 				playerTouch.supTime = 20
 				playerTouch.shieldSprite.visible = false # turn off barrier for stars
@@ -93,19 +98,19 @@ func destroy():
 				Global.currentTheme = 0
 				Global.effectTheme.stream = Global.themes[Global.currentTheme]
 				Global.effectTheme.play()
-		3: # Shield
+		ITEMS.SHIELD:
 			playerTouch.set_shield(playerTouch.SHIELDS.NORMAL)
-		4: # Elec
+		ITEMS.ELEC_SHIELD:
 			playerTouch.set_shield(playerTouch.SHIELDS.ELEC)
-		5: # Fire
+		ITEMS.FIRE_SHIELD:
 			playerTouch.set_shield(playerTouch.SHIELDS.FIRE)
-		6: # Bubble
+		ITEMS.BUBBLE_SHIELD:
 			playerTouch.set_shield(playerTouch.SHIELDS.BUBBLE)
-		7: # Super
+		ITEMS.SUPER:
 			playerTouch.rings += 50
 			if !playerTouch.get("isSuper"):
 				playerTouch.set_state(PlayerChar.STATES.SUPER)
-		8: # 1up
+		ITEMS._1UP:
 			Global.life.play()
 			Global.lives += 1
 			Global.effectTheme.volume_db = -100
