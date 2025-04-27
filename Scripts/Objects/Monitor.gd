@@ -12,7 +12,12 @@ var Explosion = preload("res://Entities/Misc/BadnickSmoke.tscn")
 
 
 func _ready():
-	# set frame
+	# if we're in the editor, set the 1'st frame
+	# for the monitor itself, so the item icon can be seen
+	if Engine.is_editor_hint():
+		$Monitor.play("", 0.0)
+		$Monitor.set_frame_and_progress(1, 0.0)
+	# set item frame
 	$Item.frame = item+2
 	# Life Icon (life icons are a special case)
 	if item == 10 and !Engine.is_editor_hint():
