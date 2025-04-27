@@ -6,10 +6,19 @@ var grv = 0.21875
 var yspeed = 0
 var playerTouch: PlayerChar = null
 var isActive = true
-@export_enum("Ring", "Speed Shoes", "Invincibility", "Shield", "Elec Shield", "Fire Shield",
-"Bubble Shield", "Super", "Blue Ring", "Boost", "1up") var item = 0
 var Explosion = preload("res://Entities/Misc/BadnickSmoke.tscn")
 
+@export_enum("Ring", "Speed Shoes", "Invincibility", "Shield", "Elec Shield", "Fire Shield",
+"Bubble Shield", "Super", "1up") var item = 0:
+	set(value):
+		item = value
+		_set_item_frame()
+
+func _set_item_frame():
+	$Item.frame = item+2
+	# Life Icon (life icons are a special case)
+	if item == 10 and !Engine.is_editor_hint():
+		$Item.frame = item+1+Global.PlayerChar1
 
 func _ready():
 	# if we're in the editor, set the 1'st frame
@@ -18,16 +27,7 @@ func _ready():
 		$Monitor.play("", 0.0)
 		$Monitor.set_frame_and_progress(1, 0.0)
 	# set item frame
-	$Item.frame = item+2
-	# Life Icon (life icons are a special case)
-	if item == 10 and !Engine.is_editor_hint():
-		$Item.frame = item+1+Global.PlayerChar1
-	
-
-func _process(_delta):
-	# update for editor
-	if (Engine.is_editor_hint()):
-		$Item.frame = item+2
+	_set_item_frame()
 
 func destroy():
 	# skip if not activated
