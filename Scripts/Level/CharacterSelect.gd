@@ -18,12 +18,15 @@ var levelID = 0
 var characterSprites = []
 # Used to avoid repeated detection of inputs with analog stick
 var lastInput = Vector2.ZERO
+# Used to avoid repeated ditection of inputs from buttons
+var action_was_pressed_last_frame = false
 
 
 func _ready():
 	Global.music.stream = music
 	Global.music.play()
 	$UI/Labels/Control/Character.text = characterLabels[characterID]
+	$UI/Labels/Control/MutliplayerMode.text = Global.MULTIMODE.find_key(Global.get_multimode())
 	if nextZone != null:
 		Global.nextZone = nextZone
 
@@ -62,6 +65,14 @@ func _input(event):
 		for i in characterSprites.size():
 			characterSprites[i].visible = (characterID == i)
 		
+		# Cycle multiplayer mode on 'A' press
+		if event.is_action_pressed("gm_action"):
+			if !action_was_pressed_last_frame:
+				change_multiplayer_mode()
+				action_was_pressed_last_frame = true
+		else:
+			action_was_pressed_last_frame = false
+		
 		# finish character select if start is pressed
 		if event.is_action_pressed("gm_pause"):
 			selected = true
@@ -92,3 +103,7 @@ func _input(event):
 				#	Global.nextZone = load("res://Scene/Zones/ChunkZone.tscn")
 			
 			Global.main.change_scene_to_file(Global.nextZone,"FadeOut","FadeOut",1)
+			
+func change_multiplayer_mode():
+	Global.cycle_multimode()
+	$UI/Labels/Control/MutliplayerMode.text = Global.MULTIMODE.find_key(Global.get_multimode())

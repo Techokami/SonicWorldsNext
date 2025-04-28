@@ -114,7 +114,7 @@ func physics_collision(body: PlayerChar, hitVector):
 		if body.is_independent() and body.get_state() != body.STATES.SPINDASH:
 			body.movement.y = -abs(body.movement.y)
 			
-			if body.currentState == body.STATES.ROLL:
+			if body.get_state() == PlayerChar.STATES.ROLL:
 				body.movement.y = 0
 			body.ground = false
 			playerTouch = body

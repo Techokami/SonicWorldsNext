@@ -47,9 +47,9 @@ func _physics_process(_delta):
 		Global.set_stage_clear_phase(Global.STAGE_CLEAR_PHASES.GOALPOST_SPIN_END)
 		player.playerControl = -1
 		# put states under player in here if the state could end up getting the player soft locked
-		var stateCancelList = [player.STATES.WALLCLIMB]
+		var stateCancelList = [PlayerChar.STATES.WALLCLIMB, PlayerChar.STATES.ANIMATION]
 		for i in stateCancelList:
-			if i == player.currentState:
+			if i == player.get_state():
 				player.set_state(player.STATES.AIR)
 		# set inputs to right
 		player.inputs[player.INPUTS.XINPUT] = 1

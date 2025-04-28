@@ -10,13 +10,13 @@ var players = []
 func _physics_process(_delta):
 	# if any players are found in the array, if they're on the ground make them roll
 	if players.size() > 0:
-		for i in players:
+		for i:PlayerChar in players:
 			if i.ground:
 				if (i.movement*Vector2(1,0)).is_equal_approx(Vector2.ZERO):
 					i.movement.x = 2*sign(-1+(forceDirection*2))*60.0
-				if i.currentState != i.STATES.ROLL:
-					i.set_state(i.STATES.ROLL)
-					i.animator.play("roll")
+				if i.get_state() != PlayerChar.STATES.ROLL:
+					i.set_state(PlayerChar.STATES.ROLL)
+					i.play_animation("roll")
 					i.sfx[1].play()
 
 func _on_ForceRoll_body_entered(body):

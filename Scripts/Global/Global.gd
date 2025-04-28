@@ -392,3 +392,15 @@ func get_character_name(which: CHARACTERS) -> String:
 ## Gets the current multiplayer mode	
 func get_multimode() -> MULTIMODE:
 	return multiplayer_mode
+
+
+## Sets the multiplayer mode to the requested value
+func set_multimode(new_multimode: MULTIMODE) -> void:
+	self.multiplayer_mode = new_multimode
+
+
+## Cycles the multiplayer mode
+func cycle_multimode() -> void:
+	self.multiplayer_mode = self.multiplayer_mode + 1
+	if multiplayer_mode >= MULTIMODE.size():
+		self.multiplayer_mode = 0

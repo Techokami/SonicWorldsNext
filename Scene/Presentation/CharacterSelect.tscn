@@ -341,6 +341,25 @@ horizontal_alignment = 1
 vertical_alignment = 2
 uppercase = true
 
+[node name="MutliplayerMode" type="Label" parent="UI/Labels/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = 65.0
+offset_right = 60.0
+offset_bottom = 97.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3")
+text = "NORMAL"
+horizontal_alignment = 1
+vertical_alignment = 2
+uppercase = true
+
 [node name="Level" type="Label" parent="UI/Labels/Control"]
 layout_mode = 1
 anchors_preset = 5
