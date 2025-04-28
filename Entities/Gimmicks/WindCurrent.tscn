@@ -12,14 +12,14 @@ collision_mask = 4096
 script = ExtResource("1_jo0wr")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2(8, 0)
 shape = SubResource("RectangleShape2D_gjva2")
 
 [node name="WaterPath" type="Sprite2D" parent="."]
-modulate = Color(1, 1, 1, 0.45098)
+visible = false
+modulate = Color(1, 1, 1, 0.156863)
 position = Vector2(8, 0)
 texture = ExtResource("2")
 
-[connection signal="body_entered" from="." to="." method="_on_WindCurrent_body_entered"]
-[connection signal="body_exited" from="." to="." method="_on_WindCurrent_body_exited"]
+[connection signal="body_entered" from="." to="." method="_on_current_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_current_body_exited"]

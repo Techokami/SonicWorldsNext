@@ -169,7 +169,12 @@ region_rect = Rect2(0, 0, 512, 512)
 [node name="Players" type="Node" parent="."]
 
 [node name="Player" parent="Players" instance=ExtResource("5_tgx6m")]
-position = Vector2(5654, 1498)
+position = Vector2(98, 748)
+
+[node name="AltSpawn" type="Node2D" parent="Players"]
+position = Vector2(896, 1486)
+script = ExtResource("38_8ssba")
+current_character = 3
 
 [node name="Default" type="TileMapLayer" parent="."]
 use_parent_material = true
@@ -945,11 +950,6 @@ side = 2
 
 [node name="Shutter3" parent="Entity/Switch" instance=ExtResource("36_0g2sp")]
 position = Vector2(3704, 72)
-
-[node name="AltSpawn" type="Node2D" parent="Entity"]
-position = Vector2(5649, 1498)
-script = ExtResource("38_8ssba")
-current_character = 4
 
 [node name="ConveyorBelt" parent="Entity" instance=ExtResource("39_8a2xw")]
 position = Vector2(4864, 880)
