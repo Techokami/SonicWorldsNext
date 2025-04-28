@@ -1,28 +1,63 @@
 @tool
 extends CharacterBody2D
 
+# 0 holds the original items sheet and all the other slots
+# hold character-specific 1up frames
+static var item_textures: Array[Texture2D] = []
+
+static var _original_hframes: int
+static var _original_vframes: int
+
 var physics = false
 var grv = 0.21875
 var yspeed = 0
 var playerTouch: PlayerChar = null
 var isActive = true
-@export_enum("Ring", "Speed Shoes", "Invincibility", "Shield", "Elec Shield", "Fire Shield",
-"Bubble Shield", "Super", "Blue Ring", "Boost", "1up") var item = 0
 var Explosion = preload("res://Entities/Misc/BadnickSmoke.tscn")
 
+enum ITEMS {
+	# when adding new item types, please make sure
+	# 1up is the last item in the list
+	RING, SPEED_SHOES, INVINCIBILITY, SHIELD, ELEC_SHIELD, FIRE_SHIELD,
+	BUBBLE_SHIELD, SUPER, _1UP, ROBOTNIK
+}
+@export var item: ITEMS = ITEMS.RING:
+	set(value):
+		item = value
+		if !item_textures.is_empty():
+			_set_item_frame()
+
+func _set_item_frame():
+	if item == ITEMS._1UP:
+		$Item.hframes = 1
+		$Item.vframes = 1
+		$Item.frame = 0
+		$Item.texture = item_textures[1 if Engine.is_editor_hint() else Global.PlayerChar1]
+	else:
+		$Item.vframes = _original_vframes
+		$Item.hframes = _original_hframes
+		$Item.frame = item - int(item > ITEMS._1UP) # skip 1up
+		$Item.texture = item_textures[0]
 
 func _ready():
-	# set frame
-	$Item.frame = item+2
-	# Life Icon (life icons are a special case)
-	if item == 10 and !Engine.is_editor_hint():
-		$Item.frame = item+1+Global.PlayerChar1
-	
-
-func _process(_delta):
-	# update for editor
-	if (Engine.is_editor_hint()):
-		$Item.frame = item+2
+	# since char_textures is static, the following code will only run once
+	if item_textures.is_empty():
+		_original_vframes = $Item.vframes
+		_original_hframes = $Item.hframes
+		# load textures for character-specific frames
+		item_textures.resize(Global.CHARACTERS.size())
+		item_textures[0] = $Item.texture as Texture2D
+		for char_name: String in Global.CHARACTERS.keys():
+			if char_name != "NONE":
+				item_textures[Global.CHARACTERS[char_name]] = \
+					load("res://Graphics/Items/monitor_icon_%s.png" % char_name.to_lower()) as Texture2D
+	# if we're in the editor, set the 1'st frame
+	# for the monitor itself, so the item icon can be seen
+	if Engine.is_editor_hint():
+		$Monitor.play("", 0.0)
+		$Monitor.set_frame_and_progress(1, 0.0)
+	# set item frame
+	_set_item_frame()
 
 func destroy():
 	# skip if not activated
@@ -46,16 +81,16 @@ func destroy():
 	await $Animator.animation_changed
 	# enable effect
 	match (item):
-		0: # Rings
+		ITEMS.RING:
 			playerTouch.give_ring(10)
-		1: # Speed Shoes
+		ITEMS.SPEED_SHOES:
 			if !playerTouch.get("isSuper"):
 				playerTouch.shoeTime = 20
 				playerTouch.switch_physics()
 				Global.currentTheme = 1
 				Global.effectTheme.stream = Global.themes[Global.currentTheme]
 				Global.effectTheme.play()
-		2: # Invincibility
+		ITEMS.INVINCIBILITY:
 			if !playerTouch.get("isSuper"):
 				playerTouch.supTime = 20
 				playerTouch.shieldSprite.visible = false # turn off barrier for stars
@@ -63,23 +98,25 @@ func destroy():
 				Global.currentTheme = 0
 				Global.effectTheme.stream = Global.themes[Global.currentTheme]
 				Global.effectTheme.play()
-		3: # Shield
+		ITEMS.SHIELD:
 			playerTouch.set_shield(playerTouch.SHIELDS.NORMAL)
-		4: # Elec
+		ITEMS.ELEC_SHIELD:
 			playerTouch.set_shield(playerTouch.SHIELDS.ELEC)
-		5: # Fire
+		ITEMS.FIRE_SHIELD:
 			playerTouch.set_shield(playerTouch.SHIELDS.FIRE)
-		6: # Bubble
+		ITEMS.BUBBLE_SHIELD:
 			playerTouch.set_shield(playerTouch.SHIELDS.BUBBLE)
-		7: # Super
+		ITEMS.SUPER:
 			playerTouch.rings += 50
 			if !playerTouch.get("isSuper"):
 				playerTouch.set_state(PlayerChar.STATES.SUPER)
-		10: # 1up
+		ITEMS._1UP:
 			Global.life.play()
 			Global.lives += 1
 			Global.effectTheme.volume_db = -100
 			Global.music.volume_db = -100
+		ITEMS.ROBOTNIK:
+			playerTouch.hit_player(playerTouch.global_position, Global.HAZARDS.NORMAL, 9)
 
 func _physics_process(delta):
 	if !Engine.is_editor_hint():
