@@ -40,7 +40,7 @@ func _set_item_frame():
 		$Item.texture = item_textures[0]
 
 func _ready():
-	# since char_textures is static, the following code will only run once
+	# since item_textures is static, the following code will only run once
 	if item_textures.is_empty():
 		_original_vframes = $Item.vframes
 		_original_hframes = $Item.hframes
