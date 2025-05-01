@@ -1,4 +1,10 @@
+@tool
 extends CanvasLayer
+
+static var tick_looped: AudioStreamWAV = null
+
+# holds textures for each characters' icon and name text (not including Global.CHARACTERS.NONE)
+static var lives_textures: Array[Texture2D] = []
 
 # player ID look up
 @export var focusPlayer = 0
@@ -35,20 +41,39 @@ var accumulatedDelta = 0.0
 signal tally_clear
 
 func _ready():
-	# create a new stream for the tick sound (so the original stream
-	# will remain unchanged, as it's also used by the switch gimmick),
-	# and set loop parameters, but don't enable looping yet
-	$LevelClear/Counter.stream = $LevelClear/Counter.stream.duplicate()
-	$LevelClear/Counter.stream.loop_end = roundi($LevelClear/Counter.stream.mix_rate / (60.0 / 4))
+	var in_editor: bool = Engine.is_editor_hint()
+	if !in_editor:
+		# create a new stream for the tick sound (so the original stream
+		# will remain unchanged, as it's also used by the switch gimmick),
+		# and set loop parameters, but don't enable looping yet
+		if tick_looped == null:
+			assert($LevelClear/Counter.stream is AudioStreamWAV)
+			tick_looped = $LevelClear/Counter.stream.duplicate()
+			tick_looped.loop_end = roundi(tick_looped.mix_rate / (60.0 / 4))
+		$LevelClear/Counter.stream = tick_looped
+	# load character icons
+	# (if we are in the editor, only load the icon for the 1'st character
+	# from the list, as the other icons won't be shown in the editor anyway)
+	if lives_textures.is_empty():
+		lives_textures.resize(1 if in_editor else Global.CHARACTERS.size() - 1)
+		for char_name: String in Global.CHARACTERS.keys():
+			if char_name != "NONE":
+				lives_textures[Global.CHARACTERS[char_name] - 1] = \
+					load("res://Graphics/HUD/hud_lives_%s.png" % char_name.to_lower()) as Texture2D
+				if in_editor:
+					$LifeCounter/Icon.texture = lives_textures[0]
+					self.set_process(false)
+					return
+
 	# error prevention
 	if !Global.is_main_loaded:
-		return false
+		return
 	
 	# stop timer from counting during stage start up and set global hud to self
 	Global.timerActive = false
 	Global.hud = self
 	# Set character Icon
-	$LifeCounter/Icon.frame = Global.PlayerChar1-1
+	$LifeCounter/Icon.texture = lives_textures[Global.PlayerChar1 - 1]
 	
 	# play level card routine if level card is true
 	if playLevelCard:
@@ -100,15 +125,15 @@ func _process(delta):
 	scoreText.text = "%6d" % Global.score
 	
 	# clamp time so that it won't go to 10 minutes
-	var hud_time = min(Global.levelTime,Global.maxTime-0.001)
-	var hud_time_minutes:int = int(hud_time) / 60
-	var hud_time_seconds:int = int(hud_time) % 60
+	var hud_time = min(Global.levelTime,Global.maxTime - 0.001)
+	var hud_time_minutes: int = int(hud_time) / 60
+	var hud_time_seconds: int = int(hud_time) % 60
 	# set time text, format it to have a leading 0 so that it's always 2 digits
 	match Global.time_tracking:
 		Global.TIME_TRACKING_MODES.STANDARD:
 			timeText.text = "%2d:%02d" % [hud_time_minutes,hud_time_seconds]
 		Global.TIME_TRACKING_MODES.SONIC_CD:
-			var hud_time_hundredths:int = int(hud_time * 100) % 100
+			var hud_time_hundredths: int = int(hud_time * 100) % 100
 			timeText.text = "%2d'%02d\"%02d" % [hud_time_minutes,hud_time_seconds,hud_time_hundredths]
 	
 	# cehck that there's player, if there is then track the focus players ring count
@@ -218,7 +243,7 @@ func _process(delta):
 			# start the level counter tally (see _on_CounterCount_timeout)
 			$LevelClear/CounterCount.start()
 			# initially the tick sound isn't looped, so let's make it loop
-			$LevelClear/Counter.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+			tick_looped.loop_mode = AudioStreamWAV.LOOP_FORWARD
 			$LevelClear/Counter.play()
 			await self.tally_clear
 			# wait 2 seconds (reuse timer)
@@ -288,7 +313,7 @@ func _on_CounterCount_timeout(delta):
 	else:
 		# Don't stop the tick sound abruptly, just disable looping,
 		# so it stops by itself after it plays until the end once
-		$LevelClear/Counter.stream.loop_mode = AudioStreamWAV.LOOP_DISABLED
+		tick_looped.loop_mode = AudioStreamWAV.LOOP_DISABLED
 		# stop counter timer and play score sound
 		$LevelClear/CounterCount.stop()
 		$LevelClear/Score.play()
