@@ -34,10 +34,6 @@ var accumulatedDelta = 0.0
 # signal that gets emited once the stage tally is over
 signal tally_clear
 
-# character name strings, used for "[player] has cleared", this matches the players character ID so you'll want to add the characters name in here matching the ID if you want more characters
-# see Global.PlayerChar1
-var characterNames = ["sonic","tails","knuckles","amy"]
-
 func _ready():
 	# create a new stream for the tick sound (so the original stream
 	# will remain unchanged, as it's also used by the switch gimmick),
