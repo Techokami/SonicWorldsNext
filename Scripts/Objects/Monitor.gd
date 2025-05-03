@@ -40,20 +40,25 @@ func _set_item_frame():
 		$Item.texture = item_textures[0]
 
 func _ready():
+	var in_editor: bool = Engine.is_editor_hint()
 	# since item_textures is static, the following code will only run once
 	if item_textures.is_empty():
 		_original_vframes = $Item.vframes
 		_original_hframes = $Item.hframes
 		# load textures for character-specific frames
-		item_textures.resize(Global.CHARACTERS.size())
+		# (if we are in the editor, only load the icon for the 1'st character
+		# from the list, as the other icons won't be shown in the editor anyway)
+		item_textures.resize(2 if in_editor else Global.CHARACTERS.size())
 		item_textures[0] = $Item.texture as Texture2D
 		for char_name: String in Global.CHARACTERS.keys():
 			if char_name != "NONE":
 				item_textures[Global.CHARACTERS[char_name]] = \
 					load("res://Graphics/Items/monitor_icon_%s.png" % char_name.to_lower()) as Texture2D
+				if in_editor:
+					break
 	# if we're in the editor, set the 1'st frame
 	# for the monitor itself, so the item icon can be seen
-	if Engine.is_editor_hint():
+	if in_editor:
 		$Monitor.play("", 0.0)
 		$Monitor.set_frame_and_progress(1, 0.0)
 	# set item frame
