@@ -61,6 +61,7 @@ func _ready():
 	if in_editor:
 		$Monitor.play("", 0.0)
 		$Monitor.set_frame_and_progress(1, 0.0)
+		set_physics_process(false)
 	# set item frame
 	_set_item_frame()
 
@@ -124,13 +125,12 @@ func destroy():
 			playerTouch.hit_player(playerTouch.global_position, Global.HAZARDS.NORMAL, 9)
 
 func _physics_process(delta):
-	if !Engine.is_editor_hint():
-		# if physics are on make em fall
-		if physics:
-			var collide = move_and_collide(Vector2(0,yspeed)*delta)
-			yspeed += grv/GlobalFunctions.div_by_delta(delta)
-			if collide and yspeed > 0:
-				physics = false
+	# if physics are on make em fall
+	if physics:
+		var collide = move_and_collide(Vector2(0,yspeed)*delta)
+		yspeed += grv/GlobalFunctions.div_by_delta(delta)
+		if collide and yspeed > 0:
+			physics = false
 
 # physics collision check, see physics object
 func physics_collision(body: PlayerChar, hitVector):
