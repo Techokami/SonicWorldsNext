@@ -55,15 +55,20 @@ func _ready():
 	# (if we are in the editor, only load the icon for the 1'st character
 	# from the list, as the other icons won't be shown in the editor anyway)
 	if lives_textures.is_empty():
-		lives_textures.resize(1 if in_editor else Global.CHARACTERS.size() - 1)
-		for char_name: String in Global.CHARACTERS.keys():
-			if char_name != "NONE":
-				lives_textures[Global.CHARACTERS[char_name] - 1] = \
-					load("res://Graphics/HUD/hud_lives_%s.png" % char_name.to_lower()) as Texture2D
-				if in_editor:
-					$LifeCounter/Icon.texture = lives_textures[0]
-					self.set_process(false)
-					return
+		var char_names: Array = Global.CHARACTERS.keys()
+		var num_characters: int = char_names.size()
+		lives_textures.resize(1 if in_editor else num_characters)
+		# replace "NONE" with the name of the 1'st character from the list,
+		# for development purposes (e.g. when we implement a new game mode
+		# and PlayerChar1 is not set, so Godot won't throw a ton of errors)
+		char_names[0] = char_names[1]
+		# load the icons
+		for i: int in num_characters:
+			lives_textures[i] = load("res://Graphics/HUD/hud_lives_%s.png" % char_names[i].to_lower()) as Texture2D
+			if in_editor:
+				$LifeCounter/Icon.texture = lives_textures[0]
+				self.set_process(false)
+				return
 
 	# error prevention
 	if !Global.is_main_loaded:
@@ -73,7 +78,7 @@ func _ready():
 	Global.timerActive = false
 	Global.hud = self
 	# Set character Icon
-	$LifeCounter/Icon.texture = lives_textures[Global.PlayerChar1 - 1]
+	$LifeCounter/Icon.texture = lives_textures[Global.PlayerChar1]
 	
 	# play level card routine if level card is true
 	if playLevelCard:
