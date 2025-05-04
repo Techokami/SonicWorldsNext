@@ -1,17 +1,22 @@
 extends StaticBody2D
-## How many pieces make up the block (affects splitting)
+
+## How many pieces make up the wall (affects splitting).
 @export var pieces = Vector2(1,4)
-# Each broken piece will use this scene
+
+## Each broken piece will use this scene.
 var Piece = preload("res://Entities/Misc/BlockPiece.tscn")
-## Sound to play when breaking the block
+
+## Sound to play when breaking the wall.
 @export var sound = preload("res://Audio/SFX/Gimmicks/Collapse.wav")
-## If NORMAL, block requires most characters to be moving at a fairly high speed to break.
-## If CD, the block is made of paper and any roll will break it.
-@export var type: TYPE = 0
+
+enum TYPE {
+	NORMAL, ## The wall requires most characters to be moving at a fairly high speed to break.
+	CD ## The wall is made of paper and any roll will break it.
+}
+@export var type: TYPE = TYPE.NORMAL
 
 
-enum TYPE {NORMAL,CD}
-
+## Breaks the wall, plays the break sound and creates broken pieces.
 func break_wall(player: PlayerChar, hitVector):
 	# disable physics altering masks
 	set_collision_layer_value(16,false)
@@ -48,6 +53,7 @@ func break_wall(player: PlayerChar, hitVector):
 			Vector2(spriteWidth/pieces.x,spriteHeight/pieces.y))
 			get_parent().add_child(piece)
 
+## Checks if the player can break the wall.
 func physics_collision(body: PlayerChar, hitVector):
 	# check hit is either left or right
 	if hitVector.x != 0:
