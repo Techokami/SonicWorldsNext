@@ -23,8 +23,8 @@ func state_activated():
 	
 func state_exit():
 	carryBox.disconnect_all()
-	flyHitBox.call_deferred("set","disabled",true)
-	carryHitBox.call_deferred("set","disabled",true)
+	flyHitBox.set_deferred("disabled",true)
+	carryHitBox.set_deferred("disabled",true)
 	# stop flight sound
 	parent.sfx[21].stop()
 	parent.sfx[22].stop()

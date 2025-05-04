@@ -401,6 +401,4 @@ func set_multimode(new_multimode: MULTIMODE) -> void:
 
 ## Cycles the multiplayer mode
 func cycle_multimode() -> void:
-	self.multiplayer_mode = self.multiplayer_mode + 1
-	if multiplayer_mode >= MULTIMODE.size():
-		self.multiplayer_mode = 0
+	self.multiplayer_mode = (self.multiplayer_mode + 1) % MULTIMODE.size() as MULTIMODE

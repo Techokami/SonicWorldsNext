@@ -6,9 +6,10 @@ static var char_textures: Array[Texture2D] = []
 func _ready():
 	# since char_textures is static, the following code will only run once,
 	# even if the level contains more than 1 goal post, and even if it restarts
-	if char_textures.size() == 0:
+	if char_textures.is_empty():
 		# load textures for character-specific frames
-		char_textures.resize(Global.CHARACTERS.size())
+		var num_textures: int = Global.CHARACTERS.size()
+		char_textures.resize(num_textures)
 		char_textures[0] = $Sprite.sprite_frames.get_frame_texture("default", 0) as Texture2D
 		for char_name: String in Global.CHARACTERS.keys():
 			if char_name != "NONE":
@@ -16,8 +17,9 @@ func _ready():
 					load("res://Graphics/Items/goal_post_%s.png" % char_name.to_lower()) as Texture2D
 		# overwrite the texture in each 4'th frame (3, 7, 11, ..., 123) with a character-specific one,
 		# but don't touch frame 127 yet, in case the player character will be changed mid-level
+		# (this relies on Robotnik's frame position being (0,0) in the texture file)
 		for i in 128 / 4 - 1:
-			$Sprite.sprite_frames.set_frame("spinner", i * 4 + 3, char_textures[(i + 1) % char_textures.size()])
+			$Sprite.sprite_frames.set_frame("spinner", 3 + i * 4, char_textures[(i + 1) % num_textures])
 
 func _physics_process(_delta):
 	var player: PlayerChar = Global.players[0]
