@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dloxtqer7p78l"
-path="res://.godot/imported/hud_lives.png-4ad57aba6ac52c222fea2305056ff2a5.ctex"
+uid="uid://b2lvhqm3qebph"
+path="res://.godot/imported/hud_lives_knuckles.png-d3efef34c32522ab2c2e470abbf58f9b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Graphics/HUD/hud_lives.png"
-dest_files=["res://.godot/imported/hud_lives.png-4ad57aba6ac52c222fea2305056ff2a5.ctex"]
+source_file="res://Graphics/HUD/hud_lives_knuckles.png"
+dest_files=["res://.godot/imported/hud_lives_knuckles.png-d3efef34c32522ab2c2e470abbf58f9b.ctex"]
 
 [params]
 
