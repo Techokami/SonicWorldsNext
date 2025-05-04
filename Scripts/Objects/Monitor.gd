@@ -1,12 +1,12 @@
 @tool
 extends CharacterBody2D
 
-# 0 holds the original items sheet and all the other slots
-# hold character-specific 1up frames
-static var item_textures: Array[Texture2D] = []
+static var _orig_texture: Texture2D = null
 
-static var _original_hframes: int
-static var _original_vframes: int
+static var _1up_textures: Array[Texture2D] = []
+
+static var _orig_vframes: int
+static var _orig_hframes: int
 
 var physics = false
 var grv = 0.21875
@@ -24,7 +24,7 @@ enum ITEMS {
 @export var item: ITEMS = ITEMS.RING:
 	set(value):
 		item = value
-		if !item_textures.is_empty():
+		if _orig_texture != null:
 			_set_item_frame()
 
 func _set_item_frame():
@@ -32,36 +32,44 @@ func _set_item_frame():
 		$Item.hframes = 1
 		$Item.vframes = 1
 		$Item.frame = 0
-		$Item.texture = item_textures[1 if Engine.is_editor_hint() else Global.PlayerChar1]
+		$Item.texture = _1up_textures[0 if Engine.is_editor_hint() else Global.PlayerChar1]
 	else:
-		$Item.vframes = _original_vframes
-		$Item.hframes = _original_hframes
+		$Item.vframes = _orig_vframes
+		$Item.hframes = _orig_hframes
 		$Item.frame = item - int(item > ITEMS._1UP) # skip 1up
-		$Item.texture = item_textures[0]
+		$Item.texture = _orig_texture
 
 func _ready():
 	var in_editor: bool = Engine.is_editor_hint()
-	# since item_textures is static, the following code will only run once
-	if item_textures.is_empty():
-		_original_vframes = $Item.vframes
-		_original_hframes = $Item.hframes
+	if _orig_texture == null:
+		# back up the original texture and the number of frames in it
+		_orig_texture = $Item.texture as Texture2D
+		_orig_vframes = $Item.vframes
+		_orig_hframes = $Item.hframes
+		# resize the 1up textures array
+		var char_names: Array = Global.CHARACTERS.keys()
+		var num_characters: int = char_names.size()
+		_1up_textures.resize(1 if in_editor else num_characters)
+		# replace "NONE" with the name of the 1'st character from the list,
+		# for development purposes (e.g. when we implement a new game mode
+		# and PlayerChar1 is not set, so Godot won't throw a ton of errors)
+		char_names[0] = char_names[1]
 		# load textures for character-specific frames
 		# (if we are in the editor, only load the icon for the 1'st character
 		# from the list, as the other icons won't be shown in the editor anyway)
-		item_textures.resize(2 if in_editor else Global.CHARACTERS.size())
-		item_textures[0] = $Item.texture as Texture2D
-		for char_name: String in Global.CHARACTERS.keys():
-			if char_name != "NONE":
-				item_textures[Global.CHARACTERS[char_name]] = \
-					load("res://Graphics/Items/monitor_icon_%s.png" % char_name.to_lower()) as Texture2D
-				if in_editor:
-					break
-	# if we're in the editor, set the 1'st frame
-	# for the monitor itself, so the item icon can be seen
+		for i: int in num_characters:
+			_1up_textures[i] = load("res://Graphics/Items/monitor_icon_%s.png" % char_names[i].to_lower()) as Texture2D
+			if in_editor:
+				break
+
+	# when in the editor, frame 0 in the monitor sprite sheet overlaps the item icon
+	# with static, which is why we need to set the 1'st frame for the monitor sprite,
+	# so the item icon could be seen through the transparent part of that frame
 	if in_editor:
 		$Monitor.play("", 0.0)
 		$Monitor.set_frame_and_progress(1, 0.0)
 		set_physics_process(false)
+
 	# set item frame
 	_set_item_frame()
 
