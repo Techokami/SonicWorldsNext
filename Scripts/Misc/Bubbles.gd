@@ -96,7 +96,7 @@ func _physics_process(delta):
 					player.get_animator().queue("walk")
 					player.movement = Vector2.ZERO
 					$Bubble.play("bigPop")
-					$BubbleCollect/CollisionShape2D.disabled = true
+					$BubbleCollect/CollisionShape2D.set_deferred("disabled", true)
 					set_physics_process(false)
 					inhaled.emit(player)
 					break
