@@ -57,10 +57,12 @@ func break_wall(player: PlayerChar, hitVector):
 func physics_collision(body: PlayerChar, hitVector):
 	# check hit is either left or right
 	if hitVector.x != 0:
-		# If the player is Knuckles, it's an auto-break.
-		if body.character == Global.CHARACTERS.KNUCKLES:
-			break_wall(body, hitVector)
-			return
+		# If the player is Knuckles or Amy doing the hammer attack, it's an auto-break.
+		match body.character:
+			Global.CHARACTERS.KNUCKLES, \
+			Global.CHARACTERS.AMY when body.get_state() == PlayerChar.STATES.AMYHAMMER:
+				break_wall(body, hitVector)
+				return
 		
 		# Non-Knuckles characters can't break
 		if get_collision_layer_value(19):
