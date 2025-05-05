@@ -21,7 +21,9 @@ var playerIdles = [
 # Knuckles
 ["idle1"],
 # Amy
-["idle1","idle1","idle1","idle1","idle1","idle1","idle1","idle1","idle2","idle3"] # Note: like Tails, Amy loops on idle3
+["idle1","idle1","idle1","idle1","idle1","idle1","idle1","idle1","idle2","idle3"], # Note: like Tails, Amy loops on idle3
+#Shadow
+["idle1","idle2"]
 ]
 
 func state_exit():
@@ -139,6 +141,11 @@ func _process(delta):
 							#normal edge
 							else:
 								parent.animator.play("edge3")
+						
+						Global.CHARACTERS.SHADOW:
+							if getR: # keep flipping until right sensor (relevent) isn't colliding
+								parent.direction = -parent.direction
+							parent.animator.play("edge1")
 						
 						_: #default
 							# super edge

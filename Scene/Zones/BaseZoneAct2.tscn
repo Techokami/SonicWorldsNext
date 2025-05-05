@@ -226,12 +226,13 @@ script = ExtResource("5")
 [node name="CNZBarrel" parent="Entities/PlatformStatefulMover2" instance=ExtResource("7")]
 
 [node name="TranslationalState_0" type="Node2D" parent="Entities/PlatformStatefulMover2"]
-position = Vector2(128, 0)
+position = Vector2(256, 0)
 script = ExtResource("8")
 interpolationMode = 1
 
 [node name="TranslationalState_1" type="Node2D" parent="Entities/PlatformStatefulMover2"]
-position = Vector2(-128, 0)
+visible = false
+position = Vector2(-256, 0)
 script = ExtResource("8")
 nextState = 0
 

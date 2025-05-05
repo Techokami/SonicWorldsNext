@@ -83,7 +83,7 @@ var setWaterLevel = 0 # used by other nodes to change the water level
 var waterScrollSpeed = 64 # used by other nodes for how fast to move the water to different levels
 
 # characters (if you want more you should add one here, see the player script too for more settings)
-enum CHARACTERS {NONE,SONIC,TAILS,KNUCKLES,AMY}
+enum CHARACTERS {NONE,SONIC,TAILS,KNUCKLES,AMY,SHADOW}
 
 ## Which multiplayer mode is in use alters some aspects of how the second (and on if that's ever
 ## implemented) works. Note that this is separate from concepts like split screen and it does not

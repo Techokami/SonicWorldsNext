@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://c4e1wv2sxs1gm"]
+[gd_scene load_steps=14 format=3 uid="uid://c4e1wv2sxs1gm"]
 
 [ext_resource type="Texture2D" uid="uid://4lhg0ovh1pe8" path="res://Graphics/Players/Sonic.png" id="1"]
 [ext_resource type="Texture2D" uid="uid://bemwlrblbgn23" path="res://Graphics/Backgrounds/WorldsBackground.png" id="2"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://Scripts/Level/CharacterSelect.gd" id="5"]
 [ext_resource type="Texture2D" uid="uid://bfesqgvh63scg" path="res://Graphics/Players/Amy.png" id="6_nah0p"]
 [ext_resource type="Texture2D" uid="uid://cndrds5482vh5" path="res://Graphics/Players/Knuckles.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://ddeai00k1elsy" path="res://Graphics/Players/Shadow.png" id="7_gqfmo"]
 [ext_resource type="Texture2D" uid="uid://dhygmoxun35w1" path="res://Graphics/Fonts/arrows_small_font.png" id="9"]
 [ext_resource type="AudioStream" uid="uid://dh4rsaka62ph4" path="res://Audio/SFX/Gimmicks/Switch.wav" id="9_5f42f"]
 
@@ -286,6 +287,7 @@ region_enabled = true
 region_rect = Rect2(676, 205, 33, 35)
 
 [node name="TailsTails" type="Sprite2D" parent="UI/Labels/CharacterOrigin/Tails"]
+visible = false
 z_index = -1
 position = Vector2(-9, 7)
 texture = ExtResource("4")
@@ -295,9 +297,11 @@ region_rect = Rect2(488, 25, 16, 22)
 [node name="Knuckles" type="Sprite2D" parent="UI/Labels/CharacterOrigin"]
 visible = false
 z_index = 3
-position = Vector2(0, 2)
+position = Vector2(-2, -8)
 texture = ExtResource("7")
-region_enabled = true
+hframes = 16
+vframes = 18
+frame = 134
 region_rect = Rect2(252, 17, 32, 39)
 
 [node name="Amy" type="Sprite2D" parent="UI/Labels/CharacterOrigin"]
@@ -307,6 +311,15 @@ position = Vector2(1, 3)
 texture = ExtResource("6_nah0p")
 region_enabled = true
 region_rect = Rect2(488, 8, 32, 40)
+
+[node name="Shadow" type="Sprite2D" parent="UI/Labels/CharacterOrigin"]
+visible = false
+z_index = 3
+position = Vector2(0, -4)
+texture = ExtResource("7_gqfmo")
+hframes = 16
+vframes = 18
+frame = 1
 
 [node name="CharacterAnimations" type="AnimationPlayer" parent="UI/Labels/CharacterOrigin"]
 libraries = {

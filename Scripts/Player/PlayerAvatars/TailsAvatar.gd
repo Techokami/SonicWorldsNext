@@ -4,9 +4,7 @@
 ## character code.
 extends PlayerAvatar
 
-# All attributes for this base class are used by Sonic
-
-# All attributes for this base class are used by Sonic
+# All attributes for this base class are used by Tails
 func get_hitbox(hitbox_type: PlayerChar.HITBOXES):
 	return hitboxes[hitbox_type]
 	

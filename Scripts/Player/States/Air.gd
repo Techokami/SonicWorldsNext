@@ -122,7 +122,9 @@ func _process(_delta):
 						parent.sfx[30].play()
 						# play dropDash sound
 						parent.animator.play("dropDash")
-						
+					Global.CHARACTERS.SHADOW:
+						pass
+					
 
 
 func _physics_process(delta):

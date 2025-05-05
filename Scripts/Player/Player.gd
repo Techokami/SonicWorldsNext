@@ -223,6 +223,7 @@ var playeravatars = [
 	preload("res://Entities/PlayerAvatars/Tails.tscn"),
 	preload("res://Entities/PlayerAvatars/Knuckles.tscn"),
 	preload("res://Entities/PlayerAvatars/Amy.tscn"),
+	preload("res://Entities/PlayerAvatars/Shadow.tscn"),
 ]
 
 # Get sfx list
@@ -347,6 +348,12 @@ func _ready():
 				playerPal.set_shader_parameter("palRows",8)
 				playerPal.set_shader_parameter("row",0)
 				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperAmy.png"))
+			
+			Global.CHARACTERS.SHADOW:
+				playerPal.set_shader_parameter("amount",4)
+				playerPal.set_shader_parameter("palRows",16)
+				playerPal.set_shader_parameter("row",0)
+				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperSonicPal.png")) # CHANGE ME
 	
 	# Checkpoints
 	await get_tree().process_frame
@@ -1481,8 +1488,12 @@ func action_water_run_handle():
 func _handle_animation_speed(gSpeed = groundSpeed):
 	match(animator.current_animation):
 		"walk", "run", "peelOut":
-			var duration = floor(max(0,8.0-abs(gSpeed/60.0)))
-			animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
+			if character == Global.CHARACTERS.SHADOW:
+				var duration = floor(max(0,12.0-abs(gSpeed/60.0)))
+				animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
+			else:
+				var duration = floor(max(0,8.0-abs(gSpeed/60.0)))
+				animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
 		"roll":
 			var duration = floor(max(0,4.0-abs(gSpeed/60.0)))
 			animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
