@@ -59,9 +59,13 @@ func break_wall(player: PlayerChar, hitVector):
 func physics_collision(body: PlayerChar, hitVector):
 	# check hit is either left or right
 	if hitVector.x != 0:
-		# If the player is Knuckles or Amy doing the hammer attack, it's an auto-break.
+		# If the player is Knuckles or Amy doing the hammer attack, or Sonic
+		# (or potentially any other character who's able to use shields)
+		# using Fire Shield ability, it's an auto-break.
 		if body.character == Global.CHARACTERS.KNUCKLES or \
-		   body.character == Global.CHARACTERS.AMY and body.get_state() == PlayerChar.STATES.AMYHAMMER:
+		   body.character == Global.CHARACTERS.AMY and body.get_state() == PlayerChar.STATES.AMYHAMMER or \
+		   (body.get_shield() == PlayerChar.SHIELDS.FIRE and body.get_state() == PlayerChar.STATES.JUMP and
+		   body.shieldSprite.animation == "FireAction"):
 			break_wall(body, hitVector)
 			return
 		
