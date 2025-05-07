@@ -8,6 +8,13 @@ extends PlayerAvatar
 func get_hitbox(hitbox_type: PlayerChar.HITBOXES):
 	return hitboxes[hitbox_type]
 
+## Sonic needs the following modifications to states --
+## 1 - Super Peel Out added to Ground State
+## 2 - Insta-shield / Elemental Shield actions added to Air State
+## 3 - Drop Dash added to the transition from Air to Ground state
+func register_state_modifications(player: PlayerChar):
+	pass
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	hitboxes = [

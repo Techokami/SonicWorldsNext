@@ -34,8 +34,17 @@ func state_exit():
 	lookTimer = 0
 	parent.sfx[29].stop()
 
-func _process(delta):
-	
+func _on_SkidDustTimer_timeout():
+	if parent.get_state() == PlayerChar.STATES.NORMAL:
+		if !skid:
+			$"../../SkidDustTimer".stop()
+		else:
+			var dust = parent.Particle.instantiate()
+			dust.play("SkidDust")
+			dust.global_position = parent.global_position+(Vector2.DOWN*16).rotated(deg_to_rad(parent.spriteRotation-90))
+			parent.get_parent().add_child(dust)
+
+func state_process(delta: float) -> void:
 	# jumping / rolling and more (note, you'll want to adjust the other actions if your character does something different)
 	if parent.any_action_pressed():
 		if (parent.movement.x == 0 and parent.inputs[parent.INPUTS.YINPUT] > 0):
@@ -58,7 +67,7 @@ func _process(delta):
 				parent.animator.play("RESET")
 				parent.action_jump()
 				parent.set_state(parent.STATES.JUMP)
-		return null
+		return
 	
 	if parent.ground and !skid:
 		if parent.movement.x == 0:
@@ -143,7 +152,7 @@ func _process(delta):
 								parent.animator.play("edge3")
 						
 						Global.CHARACTERS.SHADOW:
-							if getR: # keep flipping until right sensor (relevent) isn't colliding
+							if getL: # keep flipping until left sensor (relevent) isn't colliding
 								parent.direction = -parent.direction
 							parent.animator.play("edge1")
 						
@@ -184,22 +193,21 @@ func _process(delta):
 	
 	# water running
 	parent.action_water_run_handle()
+	pass
 	
-
-func _physics_process(delta):
-	
-	# rolling
+func state_physics_process(delta: float) -> void:
+	# enter roll if player pushes down while at speed
 	if (parent.inputs[parent.INPUTS.YINPUT] == 1 and parent.inputs[parent.INPUTS.XINPUT] == 0 and abs(parent.movement.x) > 0.5*60):
 		parent.set_state(parent.STATES.ROLL)
 		parent.animator.play("roll")
 		parent.sfx[1].play()
-		return null
+		return
 	
 	# set air state
 	if (!parent.ground):
 		parent.set_state(parent.STATES.AIR)
 		#Stop script
-		return null
+		return
 	
 	# skidding
 	if !skid and sign(parent.inputs[parent.INPUTS.XINPUT]) != sign(parent.movement.x) and abs(parent.movement.x) >= 5*60 and parent.inputs[parent.INPUTS.XINPUT] != 0 and parent.horizontalLockTimer <= 0:
@@ -218,7 +226,6 @@ func _physics_process(delta):
 		if !parent.animator.is_playing() or inputX == sign(parent.movement.x):
 			skid = (round(parent.movement.x) != 0 and inputX != sign(parent.movement.x) and inputX != 0)
 		
-	
 	parent.sprite.flip_h = (parent.direction < 0)
 	
 	parent.movement.y = min(parent.movement.y,0)
@@ -248,14 +255,4 @@ func _physics_process(delta):
 		
 	# movement
 	parent.action_move(delta)
-
-
-func _on_SkidDustTimer_timeout():
-	if parent.currentState == parent.STATES.NORMAL:
-		if !skid:
-			$"../../SkidDustTimer".stop()
-		else:
-			var dust = parent.Particle.instantiate()
-			dust.play("SkidDust")
-			dust.global_position = parent.global_position+(Vector2.DOWN*16).rotated(deg_to_rad(parent.spriteRotation-90))
-			parent.get_parent().add_child(dust)
+	pass

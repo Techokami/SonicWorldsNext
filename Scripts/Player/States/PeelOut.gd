@@ -2,7 +2,7 @@ extends PlayerState
 
 var dashPower = 12
 
-func _process(delta):
+func state_process(delta: float) -> void:
 	# dust sprite
 	var dash = parent.sprite.get_node("DashDust")
 	dash.visible = true
@@ -37,7 +37,8 @@ func _process(delta):
 		parent.peelOutCharge = 0.0
 		parent.set_state(parent.STATES.NORMAL)
 
-func _physics_process(delta):
+
+func state_physics_process(delta: float) -> void:
 	# Gravity
 	if !parent.ground:
 		parent.movement.y += parent.grv/GlobalFunctions.div_by_delta(delta)

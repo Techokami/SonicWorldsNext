@@ -2,13 +2,21 @@ extends PlayerState
 var hammerTime = 1.0
 
 
-func _physics_process(delta):
+func state_process(_delta: float) -> void:
+	# handle jumping
+	if parent.any_action_pressed():
+		# reset animations
+		parent.animator.play("RESET")
+		parent.action_jump()
+		parent.set_state(parent.STATES.JUMP)
+
+
+func state_physics_process(delta: float) -> void:
 	# if not on floor, set walk animation and return to normal or if hammer time runs out
 	if !parent.ground or hammerTime <= 0 or !parent.animator.is_playing() or parent.horizontalLockTimer > 0:
 		parent.set_state(parent.STATES.AIR)
 		parent.animator.play("walk")
-		# return null to cancel script
-		return null
+		return
 	
 	# set direction
 	if parent.inputs[parent.INPUTS.XINPUT] != 0:
@@ -25,21 +33,13 @@ func _physics_process(delta):
 	# decrease hammer time
 	if hammerTime > 0:
 		hammerTime -= delta
-	
-	
-
-func _process(_delta):
-	# handle jumping
-	if parent.any_action_pressed():
-		# reset animations
-		parent.animator.play("RESET")
-		parent.action_jump()
-		parent.set_state(parent.STATES.JUMP)
+		
 
 # enable the instashield hitmask
 func state_activated():
 	hammerTime = 1.0
 	parent.shieldSprite.get_node("InstaShieldHitbox/HitBox").set_deferred("disabled",false)
+
 
 # disable the instashield hitmask
 func state_exit():

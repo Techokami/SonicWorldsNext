@@ -723,6 +723,7 @@ tracks/0/keys = {
 resource_name = "peelOut"
 length = 0.2
 loop_mode = 1
+step = 0.0166667
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -1745,6 +1746,7 @@ texture = ExtResource("2")
 offset = Vector2(0, -5)
 hframes = 16
 vframes = 18
+frame = 27
 script = ExtResource("5")
 
 [node name="DashDust" type="AnimatedSprite2D" parent="Sprite2D"]

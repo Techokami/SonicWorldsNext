@@ -14,13 +14,15 @@ func _ready():
 	carryHitBox = parent.get_node("TailsCarryBox/HitBox")
 	carryBox = parent.get_node("TailsCarryBox")
 
+
 func state_activated():
 	flightTime = 8
 	flyGrav = 0.03125
 	flyHitBox.disabled = false
 	carryHitBox.disabled = false
 	actionPressed = true
-	
+
+
 func state_exit():
 	carryBox.disconnect_all()
 	flyHitBox.set_deferred("disabled",true)
@@ -32,7 +34,8 @@ func state_exit():
 	if $FlyBugStop.is_inside_tree():
 		$FlyBugStop.start(0.1)
 
-func _process(_delta):
+
+func state_process(_delta: float) -> void:
 	# Animation
 	if parent.water:
 		if carryBox.get_player_contacting_count() != 0:
@@ -65,10 +68,10 @@ func _process(_delta):
 	else:
 		parent.sfx[21].stop()
 		parent.sfx[22].stop()
-	
+	pass
 
-func _physics_process(delta):
-	
+
+func state_physics_process(delta: float) -> void:
 	# If carrying another player, 
 	var carriedPlayer = null
 	
@@ -137,7 +140,7 @@ func _physics_process(delta):
 	# Reset state if on ground
 	if (parent.ground):
 		parent.set_state(parent.STATES.NORMAL)
-
+		
 
 func _on_FlyBugStop_timeout():
 	parent.sfx[21].stop()

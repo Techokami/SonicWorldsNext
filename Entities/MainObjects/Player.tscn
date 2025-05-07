@@ -1,4 +1,4 @@
-[gd_scene load_steps=195 format=3 uid="uid://cioq5saowvqxj"]
+[gd_scene load_steps=194 format=3 uid="uid://cioq5saowvqxj"]
 
 [ext_resource type="Script" path="res://Scripts/Player/Player.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://d1e4muavtnun6" path="res://Entities/PlayerAvatars/Sonic.tscn" id="2"]
@@ -36,7 +36,6 @@
 [ext_resource type="Texture2D" uid="uid://bihgasvpr4jyb" path="res://Graphics/Items/invincible_stars.png" id="33"]
 [ext_resource type="AudioStream" uid="uid://dmwqv4rtqnk0n" path="res://Audio/SFX/Gimmicks/Splash.wav" id="34"]
 [ext_resource type="Script" path="res://Scripts/Player/States/CorkScrew.gd" id="35"]
-[ext_resource type="Script" path="res://Scripts/Player/States/JumpCancel.gd" id="36"]
 [ext_resource type="Script" path="res://Scripts/Player/States/Fly.gd" id="37"]
 [ext_resource type="AudioStream" uid="uid://di3y4wlj7bxee" path="res://Audio/SFX/Player/FlyTired.wav" id="38"]
 [ext_resource type="Script" path="res://Scripts/Player/States/SuperStart.gd" id="39"]
@@ -1241,10 +1240,6 @@ script = ExtResource("41")
 [node name="CorkScrew" type="Node" parent="States"]
 process_priority = 1
 script = ExtResource("35")
-
-[node name="JumpCancel" type="Node" parent="States"]
-process_priority = 1
-script = ExtResource("36")
 
 [node name="SuperStart" type="Node" parent="States"]
 process_priority = 1

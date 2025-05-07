@@ -3,12 +3,13 @@ extends PlayerState
 
 func state_exit():
 	parent.get_node("HitBox").shape.size = parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL)
-	
+
+
 func state_activated():
 	parent.get_node("HitBox").position = parent.hitBoxOffset.crouch
-	
-func _process(delta):
-	
+
+
+func state_process(delta: float) -> void:
 	# Charging up (if your character does something different for button 2 or 3 you'll want to adjust this)
 	if parent.inputs[parent.INPUTS.ACTION] == 1 or parent.inputs[parent.INPUTS.ACTION2] == 1 or parent.inputs[parent.INPUTS.ACTION3] == 1:
 		# reset animation
@@ -43,7 +44,9 @@ func _process(delta):
 	# decrease the dash power for next frame
 	parent.spindashPower -= ((parent.spindashPower / 0.125) / (256))*60*delta
 
-func _physics_process(_delta):
+## Physics function that the player invokes while this state is active
+## Override this when creating your state if you need this funcitonality
+func state_physics_process(_delta: float) -> void:
 	# Gravity
 	if !parent.ground:
 		parent.set_state(parent.STATES.AIR)

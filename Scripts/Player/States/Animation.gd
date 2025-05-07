@@ -10,7 +10,7 @@ var pipe = null
 var pipePoint = 0
 var pipeDirection = 1
 
-func _process(delta):
+func state_process(delta: float) -> void:
 	# this state can be used for several purposes, pipe logic is a bit more complicated so I built some pipe following code here
 	if pipe != null:
 		# get next pipe point

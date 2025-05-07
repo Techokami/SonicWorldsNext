@@ -470,6 +470,7 @@ tracks/3/keys = {
 
 [sub_resource type="Animation" id="112"]
 resource_name = "hang"
+length = 1.6
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -478,10 +479,10 @@ tracks/0/path = NodePath("Shadow/Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.4, 0.8, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [86, 87]
+"values": [124, 125, 126, 125]
 }
 
 [sub_resource type="Animation" id="Animation_pv58b"]
@@ -1344,7 +1345,7 @@ texture = ExtResource("4_0t11s")
 offset = Vector2(0, -5)
 hframes = 16
 vframes = 18
-frame = 26
+frame = 125
 
 [node name="DashDust" type="AnimatedSprite2D" parent="Sprite2D"]
 visible = false

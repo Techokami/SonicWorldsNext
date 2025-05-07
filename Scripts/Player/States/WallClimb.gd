@@ -9,8 +9,19 @@ var shiftPoses = [Vector2(4,-4),Vector2(13,-15),Vector2(4,-28),Vector2(13,-34)]
 func state_activated():
 	climbUp = false
 	climbTimer = 0
-	
-func _physics_process(delta):
+
+
+func state_process(_delta: float) -> void:
+	# jumping off
+	if (parent.inputs[parent.INPUTS.ACTION] == 1 or parent.inputs[parent.INPUTS.ACTION2] == 1 or parent.inputs[parent.INPUTS.ACTION3] == 1) and !climbUp:
+		parent.movement = Vector2(-4*60*parent.direction,-4*60)
+		parent.direction *= -1
+		parent.animator.play("roll")
+		parent.animator.advance(0)
+		parent.set_state(parent.STATES.JUMP)
+
+
+func state_physics_process(delta: float) -> void:
 	# do climb logic if climbUp is false
 	if !climbUp:
 		
@@ -35,7 +46,7 @@ func _physics_process(delta):
 			parent.groundSpeed = 1
 			parent.disconnect_from_floor()
 			parent.set_state(parent.STATES.AIR,parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL))
-			return false
+			return
 		
 		# check for wall using the wall sensors
 
@@ -49,7 +60,7 @@ func _physics_process(delta):
 			parent.movement = Vector2.ZERO
 			parent.animator.speed_scale = 1
 			parent.set_state(parent.STATES.GLIDE,parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL))
-			return false
+			return
 		
 		# climbing edge
 		# move sensor to the top
@@ -81,12 +92,3 @@ func _physics_process(delta):
 			parent.set_state(parent.STATES.NORMAL,parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL))
 			climbUp = false
 			parent.global_position = climbPosition+(shiftPoses[shiftPoses.size()-1]*Vector2(parent.direction,1))
-
-func _process(_delta):
-	# jumping off
-	if (parent.inputs[parent.INPUTS.ACTION] == 1 or parent.inputs[parent.INPUTS.ACTION2] == 1 or parent.inputs[parent.INPUTS.ACTION3] == 1) and !climbUp:
-		parent.movement = Vector2(-4*60*parent.direction,-4*60)
-		parent.direction *= -1
-		parent.animator.play("roll")
-		parent.animator.advance(0)
-		parent.set_state(parent.STATES.JUMP)

@@ -1,8 +1,6 @@
 extends PlayerState
 
-
-
-func _process(_delta):
+func state_process(_delta: float) -> void:
 	# Player cannot jump unless a ceiling check fails.
 	if parent.any_action_pressed() and !parent.check_for_ceiling():
 		# use parent.action_jump("roll",false) to have jump lock similar to sonic 1-3
@@ -11,16 +9,16 @@ func _process(_delta):
 	# water running
 	parent.action_water_run_handle()
 
-func _physics_process(delta):
-	
+
+func state_physics_process(delta: float) -> void:
 	# Set air if not on floor
 	if (!parent.ground):
 		parent.set_state(parent.STATES.AIR,parent.get_predefined_hitbox(PlayerChar.HITBOXES.ROLL))
-		return null
+		return
 	# Set normal if speed is 0
 	if (parent.movement.x == 0):
 		parent.set_state(parent.STATES.NORMAL)
-		return null
+		return
 	
 	# Lock vertical movement
 	parent.movement.y = min(parent.movement.y,0)
@@ -42,9 +40,6 @@ func _physics_process(delta):
 		
 		parent.horizontalLockTimer = 30.0/60.0
 	
-	
-	
-	
 	if (parent.movement.x != 0):
 		var checkX = sign(parent.movement.x)
 		if (parent.inputs[parent.INPUTS.XINPUT] != 0 and sign(parent.movement.x) != parent.inputs[parent.INPUTS.XINPUT]):
@@ -57,6 +52,7 @@ func _physics_process(delta):
 	
 	# clamp rolling top speed
 	parent.movement.x = clamp(parent.movement.x,-parent.toproll,parent.toproll)
+
 
 # stop the water run sound
 func state_exit():

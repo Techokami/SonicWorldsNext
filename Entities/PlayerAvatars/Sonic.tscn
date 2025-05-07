@@ -869,6 +869,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="83"]
 resource_name = "spinDash"
 loop_mode = 1
+step = 0.0166667
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -1397,6 +1398,7 @@ texture = ExtResource("2_6xy2a")
 offset = Vector2(0, -5)
 hframes = 16
 vframes = 18
+frame = 24
 
 [node name="DashDust" type="AnimatedSprite2D" parent="Sprite2D"]
 visible = false

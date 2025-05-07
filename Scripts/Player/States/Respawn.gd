@@ -2,32 +2,45 @@ extends PlayerState
 
 # this is for respawning a second player
 var targetPoint = Vector2.ZERO
-
 var spawnTicker = (1.0/64.0)*60.0
+
 
 func _ready():
 	invulnerability = true # ironic
 
+
 func state_activated():
 	targetPoint = parent.partner.global_position
 
-func _process(_delta):
+
+func state_process(_delta: float) -> void:
 	# Animation
 	if parent.water:
 		parent.animator.play("swim")
 	else:
 		parent.animator.play("fly")
 
-func _physics_process(delta):
+
+func state_physics_process(delta: float) -> void:
 	parent.allowTranslate = true
 	# slowly move the target point towards the player based on distance
 	targetPoint = targetPoint.lerp(parent.partner.global_position,(targetPoint.distance_to(parent.partner.global_position)/32)*delta)
 	
-	# if player is in range or is in a valid state, return to normal
-	var goToNormal = (parent.global_position.distance_to(targetPoint) <= 64 and round(parent.global_position.y) == round(targetPoint.y)
-		or parent.global_position.distance_to(parent.partner.global_position) <= 16) and (
-		parent.partner.currentState == parent.STATES.NORMAL or parent.partner.currentState == parent.STATES.AIR
-		or parent.partner.currentState == parent.STATES.JUMP)
+	# If player is in range or in a valid state, return to normal
+	var is_close_to_target = parent.global_position.distance_to(targetPoint) <= 64
+	var is_aligned_vertically = round(parent.global_position.y) == round(targetPoint.y)
+
+	var is_partner_nearby = parent.global_position.distance_to(parent.partner.global_position) <= 16
+
+	var partner_state = parent.partner.get_state()
+	var is_partner_in_valid_state = (
+		partner_state == parent.STATES.NORMAL or
+		partner_state == parent.STATES.AIR or
+		partner_state == parent.STATES.JUMP
+	)
+
+	var goToNormal = ((is_close_to_target and is_aligned_vertically) or is_partner_nearby) and \
+		is_partner_in_valid_state
 	
 	var layerMemory = parent.collision_layer
 	# set parent layer to collide with terrain
@@ -84,4 +97,3 @@ func _physics_process(delta):
 				parent.limitRight = parent.partner.limitRight
 				parent.limitTop = parent.partner.limitTop
 				parent.limitBottom = parent.partner.limitBottom
-

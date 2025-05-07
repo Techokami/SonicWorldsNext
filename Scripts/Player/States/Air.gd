@@ -14,9 +14,26 @@ var lockDir = false
 func _ready():
 	if isJump: # we only want to connect it once so only apply this to the jump variation
 		parent.connect("enemy_bounced",Callable(self,"bounce"))
-	
-# Jump actions
-func _process(_delta):
+
+# Shield timer timeouts (used to reset animations)
+func _on_ShieldTimer_timeout():
+	match(parent.shieldSprite.animation):
+		"FireAction":
+			parent.shieldSprite.play("Fire")
+		"BubbleAction":
+			parent.shieldSprite.play("Bubble")
+		"BubbleBounce":
+			parent.shieldSprite.play("Bubble")
+
+# reset drop dash timer and gripping when this state is set
+func state_activated():
+	dropTimer = 0
+	parent.poleGrabID = null
+	# disable water run splash
+	parent.action_water_run_handle()
+
+
+func state_process(_delta: float) -> void:
 	if parent.playerControl != 0 or (parent.inputs[parent.INPUTS.YINPUT] < 0 and parent.character == Global.CHARACTERS.TAILS):
 		# Super
 		if parent.inputs[parent.INPUTS.SUPER] == 1 and !parent.isSuper and isJump:
@@ -124,10 +141,9 @@ func _process(_delta):
 						parent.animator.play("dropDash")
 					Global.CHARACTERS.SHADOW:
 						pass
-					
 
 
-func _physics_process(delta):
+func state_physics_process(delta: float) -> void:
 	# air movement
 	if (parent.inputs[parent.INPUTS.XINPUT] != 0 and parent.airControl):
 		
@@ -228,25 +244,6 @@ func _physics_process(delta):
 	# if velocity going up reset bounce reaction
 	elif parent.movement.y < 0:
 		parent.bounceReaction = 0
-	
-	
-
-# Shield timer timeouts (used to reset animations)
-func _on_ShieldTimer_timeout():
-	match(parent.shieldSprite.animation):
-		"FireAction":
-			parent.shieldSprite.play("Fire")
-		"BubbleAction":
-			parent.shieldSprite.play("Bubble")
-		"BubbleBounce":
-			parent.shieldSprite.play("Bubble")
-
-# reset drop dash timer and gripping when this state is set
-func state_activated():
-	dropTimer = 0
-	parent.poleGrabID = null
-	# disable water run splash
-	parent.action_water_run_handle()
 
 func state_exit():
 	# deactivate insta shield

@@ -115,7 +115,7 @@ var spriteRotation = 0
 var airControl = true
 
 # States
-enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, ANIMATION, HIT, DIE, CORKSCREW, JUMPCANCEL,
+enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, ANIMATION, HIT, DIE, CORKSCREW, 
 SUPER, FLY, RESPAWN, HANG, GLIDE, WALLCLIMB, AMYHAMMER}
 var currentState = STATES.AIR
 @onready var hitBoxOffset = {normal = $HitBox.position, crouch = $HitBox.position}
@@ -379,6 +379,7 @@ func _ready():
 	animator.animation_finished.connect(handle_animation_finished)
 	superAnimator = new_avatar.get_node_or_null("SuperPalette")
 	player_avatar.queue_free()
+	new_avatar.register_state_modifications(self)
 	player_avatar = new_avatar
 	
 	if character == Global.CHARACTERS.AMY:
@@ -550,7 +551,7 @@ func _process(delta):
 					superAnimator.play("Flash")
 			# check if ring count is greater then 0
 			# deactivate if stage cleared
-			if rings > 0 and Global.is_in_any_stage_clear_phase():
+			if rings > 0 and !Global.is_in_any_stage_clear_phase():
 				rings -= delta
 			else:
 				# Deactivate super
@@ -558,7 +559,7 @@ func _process(delta):
 				rings = round(rings)
 				if character == Global.CHARACTERS.SONIC:
 					sprite.texture = normalSprite
-				
+		
 		if (supTime <= 0):
 			if (shield != SHIELDS.NONE):
 				shieldSprite.visible = true
@@ -663,6 +664,8 @@ func _process(delta):
 	
 	if (active_gimmick != null):
 		active_gimmick.player_process(self, delta)
+		
+	stateList[currentState].state_process(delta)
 
 
 func _physics_process(delta):
@@ -881,6 +884,8 @@ func _physics_process(delta):
 	if (active_gimmick != null):
 		active_gimmick.player_physics_process(self, delta)
 
+	stateList[currentState].state_physics_process(delta)
+
 
 # Reads the controller state for the player
 func _set_inputs():
@@ -1062,7 +1067,8 @@ func hit_player(damagePoint:Vector2 = global_position, damageType: Global.HAZARD
 		set_shield(SHIELDS.NONE)
 		return true
 	return false
-	
+
+
 ## Determines whether the player should be treated like player 1 for the purpose of gimmicks and
 ## similar things. This is determined by a combination of whether or not they actually *are* player
 ## 1 and if the game mode is in one of the more multiplayer centric modes.
@@ -1076,7 +1082,6 @@ func is_independent()->bool:
 		return true
 	
 	return false
-	
 
 
 ## Gives the player a ring by default, overridable to any requested number.
@@ -1128,9 +1133,6 @@ func reset_air()->void:
 
 
 ## Murders the player instantly
-## Disable 'always' to... uh... I guess not kill under certain conditions?
-## I'd recommend just never using it because testing suggests it doesn't do
-## anything.
 func kill():
 	# Already dying
 	if currentState == STATES.DIE:
@@ -1294,6 +1296,7 @@ func _get_jump_property():
 			Global.CHARACTERS.KNUCKLES:
 				return 3*60 # Knuckles Jump Height underwater
 		return 3.5*60 # Everyone else's Jump Height underwater
+
 
 ## Resets the PlayerChar's physics attributes based on their
 ## current status.
@@ -1547,14 +1550,6 @@ func set_state(new_state: PlayerChar.STATES, force_mask:Vector2 = Vector2.ZERO):
 	# Exit old state, enter the new one.
 	stateList[currentState].state_exit()
 	stateList[new_state].state_activated()
-
-	# Enable/Disable process functions in case this state uses the deprecated approach
-	stateList[currentState].set_process(false)
-	stateList[currentState].set_physics_process(false)
-	stateList[currentState].set_process_input(false)
-	stateList[new_state].set_process(true)
-	stateList[new_state].set_physics_process(true)
-	stateList[new_state].set_process_input(true)
 	
 	currentState = new_state
 	
@@ -1662,6 +1657,7 @@ func get_shield() -> PlayerChar.SHIELDS:
 ## XXX TODO Remove this in favor of getting the PlayerAvatar->Animator instead
 func get_animator() -> PlayerCharAnimationPlayer:
 	return self.animator
+
 
 ## Sets the animation. No frills, just provides a hook to directly call AnimationPlayer.play()
 ## for the player animator. Also resets the animation loop count to zero (only matters for

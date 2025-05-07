@@ -43,8 +43,8 @@ func state_activated():
 func state_exit():
 	parent.reflective = false
 
-# process mostly used for inputs (see player)
-func _process(_delta):
+
+func state_process(_delta: float) -> void:
 	# Jump and Spindash cancel
 	if (parent.inputs[parent.INPUTS.ACTION] == 1 or parent.inputs[parent.INPUTS.ACTION2] == 1 or parent.inputs[parent.INPUTS.ACTION3] == 1) and parent.ground and (sliding or isFall):
 		parent.movement.x = 0
@@ -73,7 +73,8 @@ func _process(_delta):
 			isFall = true
 			parent.reflective = false
 
-func _physics_process(delta):
+
+func state_physics_process(delta: float) -> void:
 	# Change parent direction
 	if parent.inputs[parent.INPUTS.XINPUT] != 0 and !sliding:
 		parent.direction = parent.inputs[parent.INPUTS.XINPUT]
@@ -173,8 +174,8 @@ func _physics_process(delta):
 			parent.animator.play("glideGetUp")
 			# wait for animation to finish and check that the state is still the same
 			await parent.animator.animation_finished
-			if parent.currentState == parent.STATES.GLIDE and sliding:
-				parent.set_state(parent.STATES.NORMAL)
+			if parent.get_state() == PlayerChar.STATES.GLIDE and sliding:
+				parent.set_state(PlayerChar.STATES.NORMAL)
 		
 		# check if angle is default, if not then set movement to 0
 		if !is_equal_approx(parent.snap_angle(parent.gravityAngle),parent.snap_angle(parent.global_rotation)):
@@ -216,13 +217,13 @@ func _physics_process(delta):
 			parent.animator.play("land")
 			# wait for landing animation to finish and check that the state is still the same
 			await parent.animator.animation_finished
-			if parent.currentState == parent.STATES.GLIDE and isFall:
-				parent.set_state(parent.STATES.NORMAL)
+			if parent.get_state() == PlayerChar.STATES.GLIDE and isFall:
+				parent.set_state(PlayerChar.STATES.NORMAL)
 
 
 # create skid dust
 func _on_SkidDustTimer_timeout():
-	if parent.currentState == parent.STATES.GLIDE:
+	if parent.get_state() == PlayerChar.STATES.GLIDE:
 		if !sliding or (parent.movement.x == 0 and parent.ground):
 			$"../../SkidDustTimer".stop()
 		elif parent.ground:

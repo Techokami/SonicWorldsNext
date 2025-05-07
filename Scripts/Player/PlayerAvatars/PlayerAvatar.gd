@@ -32,7 +32,11 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	pass
-	
+
+## Override this to add additions to specific states for a given player -- this is useful for
+## adding special abilities. You can also provide a total override to the state code if needed
+func register_state_modifications(player: PlayerChar):
+	pass
 	
 ## Returns the position of the avatar's hands relative to origin (0,0)
 ## Animations must be set up with a HandsReference position key for this to be particularly

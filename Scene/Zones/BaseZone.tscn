@@ -169,7 +169,7 @@ region_rect = Rect2(0, 0, 512, 512)
 [node name="Players" type="Node" parent="."]
 
 [node name="Player" parent="Players" instance=ExtResource("5_tgx6m")]
-position = Vector2(98, 748)
+position = Vector2(8046, 1240)
 
 [node name="AltSpawn" type="Node2D" parent="Players"]
 position = Vector2(896, 1486)
@@ -1826,6 +1826,10 @@ region_rect = Rect2(0, 16, 64, 80)
 
 [node name="DWDebugTool" parent="." instance=ExtResource("66_lhwlu")]
 position = Vector2(-157, 714)
+
+[node name="Spring" parent="." instance=ExtResource("15_sn1cn")]
+position = Vector2(7809, 2044)
+type = 1
 
 [connection signal="body_entered" from="Platforms/MCZCollapsePlatform" to="Platforms/MCZCollapsePlatform" method="_on_body_entered"]
 [connection signal="body_exited" from="Platforms/MCZCollapsePlatform" to="Platforms/MCZCollapsePlatform" method="_on_body_exited"]

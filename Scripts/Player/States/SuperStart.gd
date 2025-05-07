@@ -2,7 +2,7 @@ extends PlayerState
 
 var activated = true
 
-func _process(_delta):
+func state_process(_delta: float) -> void:
 	if activated and !parent.isSuper:
 		var remVel = parent.movement
 		var lastAnim = parent.animator.current_animation
@@ -36,12 +36,14 @@ func _process(_delta):
 		# reset velocity to memory
 		parent.movement = remVel
 		parent.isSuper = true
+		print("isSuper set to true")
 		parent.switch_physics()
 		parent.supTime = 1
+	
 	# if already super just go to air state
 	elif parent.isSuper:
 		parent.set_state(parent.STATES.AIR)
-		
+
 
 func state_exit():
 	activated = true
