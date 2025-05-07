@@ -14,7 +14,16 @@ script = ExtResource("1")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("1")
 
+[node name="CollisionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 524288
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionArea"]
+shape = SubResource("1")
+
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 64)
+
+[connection signal="area_entered" from="CollisionArea" to="." method="_on_CollisionArea_area_entered"]

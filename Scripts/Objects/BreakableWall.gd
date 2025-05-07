@@ -21,9 +21,11 @@ func break_wall(player: PlayerChar, hitVector):
 	# disable physics altering masks
 	set_collision_layer_value(16,false)
 	set_collision_mask_value(14,false)
+	$CollisionArea.set_collision_mask_value(20,false)
 	# give frame buffer
 	await get_tree().process_frame
 	$CollisionShape2D.disabled = true
+	$CollisionArea/CollisionShape2D.disabled = true
 	$Sprite2D.visible = false
 	Global.play_sound(sound)
 	
@@ -57,12 +59,15 @@ func break_wall(player: PlayerChar, hitVector):
 func physics_collision(body: PlayerChar, hitVector):
 	# check hit is either left or right
 	if hitVector.x != 0:
-		# If the player is Knuckles or Amy doing the hammer attack, it's an auto-break.
-		match body.character:
-			Global.CHARACTERS.KNUCKLES, \
-			Global.CHARACTERS.AMY when body.get_state() == PlayerChar.STATES.AMYHAMMER:
-				break_wall(body, hitVector)
-				return
+		# If the player is Knuckles or Amy doing the hammer attack, or Sonic
+		# (or potentially any other character who's able to use shields)
+		# using Fire Shield ability, it's an auto-break.
+		if body.character == Global.CHARACTERS.KNUCKLES or \
+		   body.character == Global.CHARACTERS.AMY and body.get_state() == PlayerChar.STATES.AMYHAMMER or \
+		   (body.get_shield() == PlayerChar.SHIELDS.FIRE and body.get_state() == PlayerChar.STATES.JUMP and
+		   body.shieldSprite.animation == "FireAction"):
+			break_wall(body, hitVector)
+			return
 		
 		# Non-Knuckles characters can't break
 		if get_collision_layer_value(19):
@@ -82,3 +87,12 @@ func physics_collision(body: PlayerChar, hitVector):
 			body.movement.x = 0
 				
 	return
+
+func _on_CollisionArea_area_entered(area: Area2D) -> void:
+	if area.name == "InstaShieldHitbox":
+		var player: PlayerChar = area.get_parent().get_parent()
+		if player.character == Global.CHARACTERS.AMY:
+			# It should be okay to have either (1,0) or (-1,0) as a hit vector,
+			# as the Y part of the vector is not used by break_wall() anyway
+			var hit_vector: Vector2 = Vector2(sign(global_position.x - player.global_position.x), 0.0)
+			break_wall(player, hit_vector)
