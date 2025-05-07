@@ -67,8 +67,10 @@ func _ready():
 			lives_textures[i] = load("res://Graphics/HUD/hud_lives_%s.png" % char_names[i].to_lower()) as Texture2D
 			if in_editor:
 				$LifeCounter/Icon.texture = lives_textures[0]
-				self.set_process(false)
-				return
+				break
+	if in_editor:
+		set_process(false)
+		return
 
 	# error prevention
 	if !Global.is_main_loaded:
