@@ -67,7 +67,7 @@ var soundChannel = AudioStreamPlayer.new()
 var score = 0
 var lives = 3
 var continues = 0
-# emeralds use bitwise flag operations, the equivelent for 7 emeralds would be 128
+# emeralds use bitwise flag operations, the equivelent for 7 emeralds would be 127
 var emeralds = 0
 # emerald bit flags
 enum EMERALD {RED = 1, BLUE = 2, GREEN = 4, YELLOW = 8, CYAN = 16, SILVER = 32, PURPLE = 64}
