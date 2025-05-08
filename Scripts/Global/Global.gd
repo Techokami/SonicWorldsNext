@@ -67,10 +67,23 @@ var soundChannel = AudioStreamPlayer.new()
 var score = 0
 var lives = 3
 var continues = 0
-# emeralds use bitwise flag operations, the equivelent for 7 emeralds would be 127
-var emeralds = 0
 # emerald bit flags
-enum EMERALD {RED = 1, BLUE = 2, GREEN = 4, YELLOW = 8, CYAN = 16, SILVER = 32, PURPLE = 64}
+enum EMERALDS {
+	RED    = 1 << 0,
+	BLUE   = 1 << 1,
+	GREEN  = 1 << 2,
+	YELLOW = 1 << 3,
+	CYAN   = 1 << 4,
+	SILVER = 1 << 5,
+	PURPLE = 1 << 6,
+	ALL = (1 << 7) - 1
+}
+# emeralds use bitwise flag operations, the equivalent for 7 emeralds would be 127
+var emeralds: int = (func() -> int:
+	# make sure EMERALDS.ALL holds a correct value
+	assert(EMERALDS.ALL == (1 << EMERALDS.size() - 1) - 1)
+	return 0
+).call()
 var specialStageID = 0
 var level = null # reference to the currently active level
 var levelTime = 0 # the timer that counts down while the level isn't completed or in a special ring

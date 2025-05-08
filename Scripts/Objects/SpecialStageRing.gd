@@ -10,7 +10,7 @@ var maskMemory = []
 func _ready() -> void:
 	# check that the current ring hasn't already been collected and all 7 emeralds aren't collected
 	# the emerald check is so that it'll spawn if you have all emeralds anyway
-	if Global.nodeMemory.has(get_path()) and Global.emeralds < 127:
+	if Global.nodeMemory.has(get_path()) and Global.emeralds < Global.EMERALDS.ALL:
 		queue_free()
 
 func _process(delta: float) -> void:
@@ -100,8 +100,8 @@ func _process(delta: float) -> void:
 func _on_Hitbox_body_entered(player_entered: PlayerChar) -> void:
 	# check if not active and that the player is player 1
 	if !active and player_entered.playerControl == 1 and visible:
-		# if 7 emeraldsn haven't been collected, go to special stage
-		if Global.emeralds < 127:
+		# if 7 emeralds haven't been collected, go to special stage
+		if Global.emeralds < Global.EMERALDS.ALL:
 			active = true
 			player_entered.visible = false
 			player_entered.movement = Vector2.ZERO

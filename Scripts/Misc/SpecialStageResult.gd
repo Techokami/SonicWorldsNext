@@ -36,8 +36,8 @@ func _input(event):
 func next_stage():
 	# done a loop ensures that the while loop executes at least once
 	var doneALoop = false
-	# if emeralds less then 127 (all 7 emeralds collected in binary)
+	# if emeralds less than Global.EMERALDS.ALL (not all emeralds collected)
 	# check that there isn't already an emerald collected on current stage
-	while Global.emeralds < 127 and (Global.emeralds & (1 << Global.specialStageID) or !doneALoop):
+	while Global.emeralds < Global.EMERALDS.ALL and (Global.emeralds & (1 << Global.specialStageID) or !doneALoop):
 		Global.specialStageID = wrapi(Global.specialStageID+1,0,7)
 		doneALoop = true
