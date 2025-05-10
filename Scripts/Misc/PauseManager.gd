@@ -18,6 +18,8 @@ var menusText = [
 "music 100",
 "scale x1",
 "full screen off",
+"smooth rotation off",
+"time tracking",
 "controls",
 "back",],
 # menu 2 (restart menu confirm)
@@ -53,7 +55,7 @@ var lastInput = Vector2.ZERO
 func _ready():
 	set_menu(menu)
 
-func _process(delta):
+func _process(_delta):
 	# check if paused and visible, otherwise cancel it out
 	if !get_tree().paused or !visible:
 		return null
@@ -83,14 +85,20 @@ func _input(event):
 					3: # full screen
 						get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (!((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN))) else Window.MODE_WINDOWED
 						$PauseMenu/VBoxContainer.get_child(option+1).get_child(0).text = update_text(option+1)
-					4: # control menu
+					4: # smooth rotation
+						Global.smoothRotation = (Global.smoothRotation + 1) % 2
+						$PauseMenu/VBoxContainer.get_child(option+1).get_child(0).text = update_text(option+1)
+					5: # time tracking
+						Global.time_tracking = ((Global.time_tracking + 1) % Global.TIME_TRACKING_MODES.size()) as Global.TIME_TRACKING_MODES
+						$PauseMenu/VBoxContainer.get_child(option+1).get_child(0).text = update_text(option+1)
+					6: # control menu
 						Global.save_settings()
 						set_menu(0)
 						$"../ControllerMenu".visible = true
 						visible = false
 						Global.main.wasPaused = false
 						get_tree().paused = true
-					5: # back
+					7: # back
 						Global.save_settings()
 						set_menu(0)
 			MENUS.RESTART: # reset level
@@ -155,7 +163,10 @@ func do_lateral_input():
 			2: # Scale
 				if inputCue.x != 0 and inputCue != lastInput:
 					Global.zoomSize = clamp(Global.zoomSize+inputDir,zoomClamp[0],zoomClamp[1])
-					get_window().set_size(get_viewport().get_visible_rect().size*Global.zoomSize)
+					var window = get_window()
+					var newSize = Vector2i((get_viewport().get_visible_rect().size*Global.zoomSize).round())
+					window.set_position(window.get_position()+(window.size-newSize)/2)
+					window.set_size(newSize)
 		$PauseMenu/VBoxContainer.get_child(option+1).get_child(0).text = update_text(option+1)
 	lastInput = inputCue
 
@@ -204,5 +215,9 @@ func update_text(textRow = 0):
 			return "scale x"+str(Global.zoomSize)
 		4: # Full screen
 			return "full screen "+onOff[int(((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN)))]
+		5: # Smooth Rotation
+			return "smooth rotation " + onOff[Global.smoothRotation]
+		6: # Time tracking
+			return "time tracking " + Global.TIME_TRACKING_MODES.find_key(Global.time_tracking).capitalize().to_lower()
 		_: # Default
 			return menusText[menu][textRow]

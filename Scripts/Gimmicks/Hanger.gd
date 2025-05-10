@@ -1,4 +1,9 @@
-extends Area2D
+
+extends ConnectableGimmick
+
+## Hanging Bar Gimmck
+## Author: Sharb and DimensionWarped
+## Note: Needs refactoring to make proper use of Connectable Gimmick
 
 # Array of Arrays for each player interacting with the gimmick...
 # Please don't access/mutate this array directly, use the relevant functions
@@ -166,6 +171,8 @@ func physics_process_disconnected(_delta, player, index):
 	
 	# XXX This a Tails centric hack right now. I don't like it. It makes Tails
 	# move upwards to avoid disconnecting immediately.
+	# The proper fix for this would be for Sonic's collision to not touch the
+	# ground if he is picked up into a hang state
 	if player.ground:
 		player.set_state(player.STATES.AIR)
 		player.global_position.y -= 6
@@ -189,10 +196,6 @@ func _physics_process(delta):
 			physics_process_disconnected(delta, player,index)
 			continue
 
-# TODO: DimensionWarped note regarding player.poleGrabID - I don't like adding values to the player definition
-# to facilitate gimmicks or systems belonging to a specific gimmick, so I'm marking this section as something
-# I want to come back to. We should replace this with a dictionary on the player that gets its keys created by
-# gimmick systems on first use.
 # This function is responsible for positioning the player while the player is connected to the hanger.
 # It also sets animation... that seems wrong, animation should be set on first contact, not repeatedly.
 func connect_grab(player, index):
@@ -203,7 +206,7 @@ func connect_grab(player, index):
 	# set contact point (start grab)
 	if get_player_contact(index) == null:
 		$Grab.play()
-		player.poleGrabID = self
+		player.set_active_gimmick(self)
 		var calcDistance = _CONTACT_DISTANCE+(19-player.currentHitbox.NORMAL.y)
 		if !setCenter:
 			set_player_contact(index, Vector2(player.global_position.x-global_position.x,calcDistance))
@@ -247,7 +250,7 @@ func disconnect_grab(player, index, deliberate, jumpUpwards=false):
 		player.stateList[player.STATES.AIR].lockDir = false
 
 	# unset player variable for pole XXX want to switch to dictionary later
-	player.poleGrabID = null
+	player.unset_active_gimmick()
 	# unset the contact point for the player XXX want to switch to mutator function later
 	set_player_contact(index, null)
 	
@@ -267,7 +270,6 @@ func checkPlayerDisconnectByAction(player):
 func _process(_delta):
 	# All this process does is disconnects a grab if the player who owns it makes a deliberate action
 	# to jump off of the hanger.
-
 	for index in players.size():
 		var jumpUp
 		var player = players[index][0]
@@ -295,7 +297,7 @@ func check_grab(player, index):
 		return true
 	
 	# We never grab when the poleID is already on a valid poll (self isn't a valid pole... how this can get set I'm not sure)
-	if player.poleGrabID != null and player.poleGrabID != self:
+	if player.get_active_gimmick() != null and player.get_active_gimmick() != self:
 		return false
 
 	# We don't grab if the player is moving upwards and the pole is set not to grab upward moving players.
@@ -340,3 +342,20 @@ func remove_player(player):
 		
 	# Remove the player
 	players.remove_at(getIndex)
+	
+# It may be prudent to come back later and refactor this gimmick to use these instead of its own
+# process/physics process for player specific actions.
+func player_process(_player, _delta):
+	pass
+	
+func player_physics_process(_player, _delta):
+	pass
+
+# I'll probably need to lock the gimmick here to prevent the same bar from just immediately being
+# grabbed if the player is launched off with a spring or something.
+func player_force_detach_callback(_player):
+	pass
+
+# At this point I really ought to make this a subclass of something else...
+func handle_animation_finished(_player, _animation):
+	pass

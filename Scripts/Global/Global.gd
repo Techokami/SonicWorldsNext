@@ -1,7 +1,7 @@
 extends Node
 
 # player pointers (0 is usually player 1)
-var players = []
+var players: Array[PlayerChar] = []
 # main object reference
 var main = null
 # hud object reference
@@ -94,9 +94,15 @@ var nodeMemory = []
 
 # Game settings
 var zoomSize = 1
+var smoothRotation = 0
+enum TIME_TRACKING_MODES { STANDARD, SONIC_CD }
+var time_tracking:TIME_TRACKING_MODES = TIME_TRACKING_MODES.STANDARD
 
 # Hazard type references
 enum HAZARDS {NORMAL, FIRE, ELEC, WATER}
+
+# Layers references
+enum LAYERS {LOW, HIGH}
 
 # Debugging
 var is_main_loaded = false
@@ -176,9 +182,8 @@ func stage_clear():
 		effectTheme.stop()
 		bossMusic.stop()
 
-# Godot doesn't like not having emit signal only done in other nodes so we're using a function to call it
 func emit_stage_start():
-	emit_signal("stage_started")
+	stage_started.emit()
 
 # save data settings
 func save_settings():
@@ -188,7 +193,11 @@ func save_settings():
 	file.set_value("Volume","Music",AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Music")))
 	
 	file.set_value("Resolution","Zoom",zoomSize)
+	file.set_value("Gameplay","SmoothRotation",smoothRotation)
 	file.set_value("Resolution","FullScreen",((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN)))
+
+	file.set_value("HUD","TimeTracking",time_tracking)
+
 	# save config and close
 	file.save("user://Settings.cfg")
 
@@ -217,8 +226,53 @@ func load_settings():
 	
 	if file.has_section_key("Resolution","Zoom"):
 		zoomSize = file.get_value("Resolution","Zoom")
-		get_window().set_size(get_viewport().get_visible_rect().size*zoomSize)
+		var window = get_window()
+		var newSize = Vector2i((get_viewport().get_visible_rect().size*zoomSize).round())
+		window.set_position(window.get_position()+(window.size-newSize)/2)
+		window.set_size(newSize)
+	
+	if file.has_section_key("Gameplay","SmoothRotation"):
+		smoothRotation = file.get_value("Gameplay","SmoothRotation")
 	
 	if file.has_section_key("Resolution","FullScreen"):
 		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (file.get_value("Resolution","FullScreen")) else Window.MODE_WINDOWED
-	
+
+	if file.has_section_key("HUD","TimeTracking"):
+		time_tracking = file.get_value("HUD","TimeTracking")
+		if time_tracking < 0 or time_tracking >= TIME_TRACKING_MODES.size():
+			time_tracking = TIME_TRACKING_MODES.STANDARD
+
+## Useful for checking triggers that require specifically the first player to be on a gimmick	
+func get_first_player_gimmick():
+	return players[0].get_active_gimmick()
+
+## Useful for gimmicks that can activate if any player is attached that don't need data about
+## the specific player
+func is_any_player_on_gimmick(gimmick):
+	for player in players:
+		if player.get_active_gimmick() == gimmick:
+			return true
+	return false
+
+## Useful for gimmicks that need to potentially iterate through all attached players
+func get_players_on_gimmick(gimmick):
+	var players_on_gimmick = []
+	for player in players:
+		if player.get_active_gimmick() == gimmick:
+			players_on_gimmick.append(player)
+	return players_on_gimmick
+
+## Simple check to see if the player is the first char
+func is_player_first(player : PlayerChar):
+	if players[0] == player:
+		return true
+	return false
+
+## Gets the index of the player selected
+## @param player Which player you are checking
+## @retval 0-N index of the player with 0 being player 1 and higher numbers
+##             being later players
+## @retval -1 if the player isn't in the inbox. That should be impossible unless
+##            you make an orphaned player for some reason.
+func get_player_index(player : PlayerChar):
+	return players.find(player)

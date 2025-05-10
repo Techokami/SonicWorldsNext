@@ -38,8 +38,8 @@ enum INTERPOLATION_MODE {linear, center_parabolic}
 # These are your physical values for the trampoline and affect things
 @export var weightFactor = 10 # How many pixels one unit of weight (IE one character) causes the trampoline to sag
 @export var springConstant = 30.0 # How rapidly the trampoline snaps back
-@export var dampingFactorWeightless = 0.97 # A lower value means the trampoline returns to rest more quickly when not weighted
-@export var dampingFactorWeighted = 0.98 # A lower value means the trampoline returns to rest more quickly when weighted
+@export var dampingFactorWeightless = 0.03 # Rate at which the trampoline loses energy when no player is onboard. A higher value will make it snap back quicker
+@export var dampingFactorWeighted = 0.02 # Rate at which the trampoline loses energy when a player is onboard. A higher value will make it snap back quicker but also reduce the launch power and increase the initial speed required to launch.
 @export var maxVelocity = 700 # The maximum velocity the trampoline can have at any point in time in the downward direction.
 @export var minVelocityForLaunch = 150 # If yVelocity of the trampoline exceeds this as the trampoline moves past its rest point (roughly), any players riding it will be launched into the air
 @export var bounceFactor = 1.75 # Multiplier for how much of the trampoline's velocity should be imparted to the player when the player is launched (should always be higher than 1)
@@ -92,9 +92,9 @@ func physics_process_game(delta):
 	body.position.y = floor(trampolineRealY)
 	# Damping - The trampoline should have a tendency to return to rest
 	if weight == baseWeight:
-		yVelocity *= dampingFactorWeightless
+		yVelocity *= 1 - (dampingFactorWeightless * delta * 60.0) # Rate of energy loss will be half per frame if frame rate is double
 	else:
-		yVelocity *= dampingFactorWeighted
+		yVelocity *= 1 - (dampingFactorWeighted * delta * 60.0) # Rate of energy loss will be half per frame if frame rate is double
 	
 	var passedMidpoint = false
 	if (trampolineRealY < (0.8 * pivot) and yVelocity < -minVelocityForLaunch):

@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=4 uid="uid://b2n5ptpbq5ysg"]
+
+[ext_resource type="Script" path="res://Tools/Debug/DWDebugTool.gd" id="1_8ihaf"]
+[ext_resource type="TileSet" uid="uid://b52aenq8bhfsf" path="res://Tileset/Worlds/WorldsTileMap.tres" id="1_n6fbn"]
+
+[node name="DWDebugTool" type="Node2D"]
+script = ExtResource("1_8ihaf")
+
+[node name="BigMovingBrick" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAD/////AAAHADQAAAD//wAAAAAHADQAAAAAAP//AAAHADQAAAAAAAAAAAAHADQAAAD+//7/AAABAAAAAAD+////AAABAAEAAAD+/wAAAAABAAEAAAD+/wEAAAABAAIAAAD///7/AAACAAAAAAD//wEAAAACAAIAAAAAAP7/AAACAAAAAAAAAAEAAAACAAIAAAABAP7/AAADAAAAAAABAP//AAADAAEAAAABAAAAAAADAAEAAAABAAEAAAADAAIAAAA=")
+tile_set = ExtResource("1_n6fbn")

@@ -10,7 +10,7 @@ func _ready():
 		# delete orb reference
 		$OrbReference.queue_free()
 
-func _process(delta):
+func _process(_delta):
 	if !Engine.is_editor_hint():
 		# beam flashing (only flash if active)
 		$Beam.visible = (!$Beam.visible and active)
@@ -32,8 +32,8 @@ func _physics_process(delta):
 				# shift x and y poses seperately so that the movement's not normalized
 				Global.players[0].global_position.x = move_toward(Global.players[0].global_position.x,global_position.x,delta*60)
 				Global.players[0].global_position.y -= delta*30
-				# set physics object shift mode to translate
-				Global.players[0].translate = true
+				# set physics object shift mode to allowTranslate
+				Global.players[0].allowTranslate = true
 		# only continue if the animator isn't playing
 		elif !animator.is_playing():
 			# shift up until player is above the travel distance
@@ -51,7 +51,7 @@ func _physics_process(delta):
 				# set player state to air so they can play again
 				Global.players[0].set_state(Global.players[0].STATES.AIR)
 				# turn physics checking back on and restore collision mask
-				Global.players[0].translate = false
+				Global.players[0].allowTranslate = false
 				# give player a bit of velocity in that direction
 				Global.players[0].movement.y = -30
 				Global.players[0].airTimer = Global.players[0].defaultAirTime

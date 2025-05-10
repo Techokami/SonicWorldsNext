@@ -1,7 +1,8 @@
 extends Node2D
 
-# Vertical Swinging Bar from Mushroom Hill Zone
-# Author: DimensionWarped
+## Vertical Swinging Bar from Mushroom Hill Zone
+## Author: DimensionWarped
+## Note: This should be refactored into a ConnectableGimmick
 
 # Sound to play when the bar is grabbed
 @export var grabSound = preload("res://Audio/SFX/Player/Grab.wav")

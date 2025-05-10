@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://dh346sb5sjgmo"]
+
+[ext_resource type="PackedScene" uid="uid://kobbay7ehwah" path="res://Entities/Gimmicks/MonkeyBar/RetractibleChain.tscn" id="2_s5pjk"]
+[ext_resource type="PackedScene" uid="uid://btna3kqcoupda" path="res://Entities/Gimmicks/MonkeyBar/MonkeyBar.tscn" id="3_ajmij"]
+
+[node name="ChainedMonkeyBar" type="Node2D"]
+
+[node name="RetractibleChain" parent="." node_paths=PackedStringArray("end_of_chain") instance=ExtResource("2_s5pjk")]
+end_of_chain = NodePath("../MonkeyBar")
+
+[node name="MonkeyBar" parent="." instance=ExtResource("3_ajmij")]
+position = Vector2(0, 100)
+
+[connection signal="became_mounted" from="MonkeyBar" to="RetractibleChain" method="send_to_default_target"]
+[connection signal="became_unmounted" from="MonkeyBar" to="RetractibleChain" method="send_home"]

@@ -1,6 +1,14 @@
 extends Area2D
 
 # collapsing platform code by sharb
+#
+# Deprecated in Worlds Next 4.3 due to Godot 4.3 deprecating TileMap in favor of
+# individual TileMapLayer nodes.
+#
+# Please covert any consumers of this script to use CollapseLayer.gd instead
+# as this script will eventually be removed from the repository.
+#
+# See CollapseLayer.gd for more detailed instructions on the conversion process
 
 # platform particle
 var PlatPart = preload("res://Entities/Misc/falling_block_plat.tscn")

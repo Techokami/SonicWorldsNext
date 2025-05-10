@@ -1,15 +1,19 @@
-[gd_scene load_steps=5 format=3 uid="uid://urapmknlu0s5"]
+[gd_scene load_steps=6 format=3 uid="uid://urapmknlu0s5"]
 
 [ext_resource type="Script" path="res://Scripts/Gimmicks/HorizontalBar.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://d1hcoy1ga1m5o" path="res://Graphics/Gimmicks/HorizontalBar.png" id="1_5txwq"]
 [ext_resource type="AudioStream" uid="uid://bfba871gfmv0s" path="res://Audio/SFX/Player/Grab.wav" id="3_u5fuj"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_7ovkw"]
-size = Vector2(36, 8)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kom7r"]
+size = Vector2(37, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h1grx"]
+size = Vector2(45, 40)
 
 [node name="HorizontalBar" type="Node2D"]
 script = ExtResource("1")
 spriteTexture = ExtResource("1_5txwq")
+width = 65
 
 [node name="Left_Anchor" type="Sprite2D" parent="."]
 texture = ExtResource("1_5txwq")
@@ -22,10 +26,10 @@ position = Vector2(6, 0)
 texture = ExtResource("1_5txwq")
 centered = false
 region_enabled = true
-region_rect = Rect2(0, 0, 52, 8)
+region_rect = Rect2(0, 0, 53, 8)
 
 [node name="Right_Anchor" type="Sprite2D" parent="."]
-position = Vector2(58, 0)
+position = Vector2(59, 0)
 texture = ExtResource("1_5txwq")
 centered = false
 region_enabled = true
@@ -36,12 +40,20 @@ collision_layer = 0
 collision_mask = 4096
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bar_Area"]
-position = Vector2(32, 3)
-shape = SubResource("RectangleShape2D_7ovkw")
+position = Vector2(33, 3)
+shape = SubResource("RectangleShape2D_kom7r")
+
+[node name="Bar_Area_Exit" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4096
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bar_Area_Exit"]
+position = Vector2(33, 3)
+shape = SubResource("RectangleShape2D_h1grx")
 
 [node name="Grab_Sound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_u5fuj")
 bus = &"SFX"
 
 [connection signal="body_entered" from="Bar_Area" to="." method="_on_bar_area_body_entered"]
-[connection signal="body_exited" from="Bar_Area" to="." method="_on_bar_area_body_exited"]
+[connection signal="body_exited" from="Bar_Area_Exit" to="." method="_on_bar_area_body_exited"]

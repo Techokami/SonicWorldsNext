@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=3 uid="uid://xpsg8eoppqbo"]
+
+[ext_resource type="PackedScene" uid="uid://kobbay7ehwah" path="res://Entities/Gimmicks/MonkeyBar/RetractibleChain.tscn" id="1_opmfd"]
+[ext_resource type="Texture2D" uid="uid://dgskksiri8iq7" path="res://Graphics/Gimmicks/FFZHookLink.png" id="2_gxa7o"]
+[ext_resource type="PackedScene" uid="uid://btna3kqcoupda" path="res://Entities/Gimmicks/MonkeyBar/MonkeyBar.tscn" id="3_desd7"]
+[ext_resource type="Texture2D" uid="uid://dm2px67qgxkn8" path="res://Graphics/Gimmicks/FFZHook.png" id="4_mn75u"]
+
+[node name="FFZHook" type="Node2D"]
+
+[node name="RetractibleChain" parent="." node_paths=PackedStringArray("end_of_chain") instance=ExtResource("1_opmfd")]
+link_texture = ExtResource("2_gxa7o")
+end_of_chain = NodePath("../MonkeyBar")
+
+[node name="MonkeyBar" parent="." instance=ExtResource("3_desd7")]
+position = Vector2(0, 100)
+
+[node name="MonkeyBarSprite" parent="MonkeyBar" index="0"]
+position = Vector2(0, 16)
+texture = ExtResource("4_mn75u")
+metadata/_edit_lock_ = true
+
+[node name="MonkeyBarHanger" parent="MonkeyBar" index="1"]
+position = Vector2(0, 30)
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" parent="MonkeyBar/MonkeyBarHanger" index="0"]
+metadata/_edit_lock_ = true
+
+[node name="LeftLinker" parent="MonkeyBar" index="2"]
+position = Vector2(-25, 25)
+metadata/_edit_lock_ = true
+
+[node name="LeftLinkerShape" parent="MonkeyBar/LeftLinker" index="0"]
+metadata/_edit_lock_ = true
+
+[node name="RightLinker" parent="MonkeyBar" index="3"]
+position = Vector2(25, 26)
+metadata/_edit_lock_ = true
+
+[node name="RightLinkerShape" parent="MonkeyBar/RightLinker" index="0"]
+metadata/_edit_lock_ = true
+
+[node name="MountPlayer" parent="MonkeyBar" index="4"]
+metadata/_edit_lock_ = true
+
+[connection signal="became_mounted" from="MonkeyBar" to="RetractibleChain" method="send_to_default_target"]
+[connection signal="became_unmounted" from="MonkeyBar" to="RetractibleChain" method="send_home"]
+
+[editable path="MonkeyBar"]

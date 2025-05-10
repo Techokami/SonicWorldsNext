@@ -1,18 +1,31 @@
 extends StaticBody2D
 
 # animator is optional
+## Optionally choose an AnimationPlayer for this switch to control
 @export_node_path("AnimationPlayer")var animator
+
+## When using animator with this switch, use animationName to automatically set
+## the animation of animator to the animation of this name
 @export var animationName = ""
+
+## If false, the switch will automatically release when whatever is holding it down
+## gets off the switch, at which point the 'released' signals will be sent.
 @export var reactivate = true
 
 var active = false
 var colCheck = false
-
 var animatorNode = null
 
+## Emitted when the switch is pressed - includes the player character
+## responsible for pushing the switch as an argument
 signal pressed_with_body(body)
+
+## Emitted when the switch is pressed - no args
 signal pressed
+
+## Emitted when the switch is released - no args
 signal released
+
 
 func _process(_delta):
 	if animator != null:
@@ -30,9 +43,7 @@ func _physics_process(_delta):
 	if colCheck:
 		colCheck = false
 	elif reactivate:
-		active = false
-		emit_signal("released")
-	
+		deactivate()
 
 # Collision check
 func physics_collision(body, hitVector):
@@ -44,9 +55,15 @@ func physics_collision(body, hitVector):
 			# activate and emit signal for being pressed so other nodes can react
 			active = true
 			$Switch.play()
-			emit_signal("pressed_with_body",body)
-			emit_signal("pressed")
+			pressed_with_body.emit(body)
+			pressed.emit()
 			# play animation if a node is hooked up
 			if (animatorNode != null):
 				animatorNode.play(animationName)
 		return true
+
+## This can depress a switch using a remote signal. Only really useful if
+## Reactivate is false.
+func deactivate():
+	active = false
+	released.emit()
