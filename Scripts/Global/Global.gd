@@ -64,7 +64,7 @@ var currentTheme = 0
 var soundChannel = AudioStreamPlayer.new()
 
 # Gameplay values
-var score = 0
+var score: int = 0
 var lives = 3
 var continues = 0
 # emerald bit flags
@@ -225,8 +225,8 @@ func add_score(position = Vector2.ZERO,value = 0) -> void:
 
 
 ## use a check function to see if a score increase would go above 50,000
-func check_score_life(scoreAdd: int = 0) -> void:
-	if fmod(score,50000) > fmod(score+scoreAdd,50000):
+func check_score_life(score_add: int = 0) -> void:
+	if score / 50000 < (score + score_add) / 50000:
 		life.play()
 		lives += 1
 		effectTheme.volume_db = -100
