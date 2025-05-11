@@ -46,19 +46,15 @@ func _on_BoundrySetter_body_entered(body):
 						if lockBottom:
 							i.limitBottom = min(global_position.y+screenSize.y/2,Global.hardBorderBottom)
 					
-					Global.main.set_volume(-50)
-					await Global.main.volume_set
-					Global.main.set_volume(0,100)
 					
-					Global.bossMusic.play()
+					MusicController.play_music_theme(MusicController.MusicTheme.BOSS_THEME)
 					boss.active = true
 					
 					if boss.has_signal("boss_over"):
 						boss.connect("boss_over",Callable(self,"boss_completed"))
 
 func boss_completed():
-	Global.bossMusic.stop()
-	Global.music.play()
+	MusicController.stop_music_theme(MusicController.MusicTheme.BOSS_THEME)
 	# set boundries for players
 	for i in Global.players:
 		if is_instance_valid(i):

@@ -103,8 +103,7 @@ func _ready():
 		# make sure level card isn't paused so it can keep playing
 		$LevelCard/CardPlayer.process_mode = PROCESS_MODE_ALWAYS
 		# temporarily let music play during pauses
-		if Global.musicParent != null:
-			Global.musicParent.process_mode = PROCESS_MODE_ALWAYS
+		MusicController.process_mode = PROCESS_MODE_ALWAYS
 		# pause game while card is playing
 		get_tree().paused = true
 		# play card animations
@@ -115,7 +114,7 @@ func _ready():
 		$LevelCard/CardPlayer.play("End")
 		# unpause the game and set previous pause mode nodes to stop on pause
 		get_tree().paused = false
-		Global.musicParent.process_mode = PROCESS_MODE_PAUSABLE
+		MusicController.process_mode = PROCESS_MODE_PAUSABLE
 		$LevelCard/CardPlayer.process_mode = PROCESS_MODE_PAUSABLE
 		# emit stage start signal
 		Global.emit_stage_start()
@@ -276,14 +275,11 @@ func _process(delta):
 		# determine if the game over is a time over (game over and time over sequences are the same but game says time)
 		if Global.levelTime >= Global.maxTime:
 			$GameOver/Game.frame = 1
+		# stop normal music tracks
+		MusicController.stop_all_music_themes()
 		# play game over animation and play music
 		$GameOver/GameOver.play("GameOver")
-		$GameOver/GameOverMusic.play()
-		# stop normal music tracks
-		Global.music.stop()
-		Global.effectTheme.stop()
-		Global.bossMusic.stop()
-		Global.life.stop()
+		MusicController.play_music_theme(MusicController.MusicTheme.GAME_OVER)
 		# wait for animation to finish
 		await $GameOver/GameOver.animation_finished
 		# reset game

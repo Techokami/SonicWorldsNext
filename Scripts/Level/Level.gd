@@ -1,6 +1,6 @@
 class_name Level extends Node2D
 
-@export var music = preload("res://Audio/Soundtrack/6. SWD_TLZa1.ogg")
+@export var music: AudioStream = preload("res://Audio/Soundtrack/6. SWD_TLZa1.ogg")
 @export var nextZone = load("res://Scene/Zones/BaseZone.tscn")
 
 @export var animal1: Animal.ANIMAL_TYPE = Animal.ANIMAL_TYPE.BIRD
@@ -46,15 +46,9 @@ func _ready():
 # used for stage starts, also used for returning from special stages
 func level_reset_data(playCard = true):
 	# music handling
-	Global.bossMusic.stop()
-	if Global.music != null:
-		if music != null:
-			Global.music.stream = music
-			Global.music.play()
-			Global.music.stream_paused = false
-		else:
-			Global.music.stop()
-			Global.music.stream = null
+	MusicController.reset_music_themes()
+	if music != null:
+		MusicController.set_level_music(music)
 	# set next zone
 	if nextZone != null:
 		Global.nextZone = nextZone

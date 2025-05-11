@@ -113,15 +113,14 @@ func _input(event):
 						Global.currentCheckPoint = -1
 						Global.main.change_scene_to_file(null,"FadeOut")
 						#await Global.main.scene_faded
-						Global.effectTheme.stop()
-						Global.bossMusic.stop()
-						Global.main.set_volume(0)
+						MusicController.reset_music_themes()
 			MENUS.QUIT: # quit option
 				match(option): # Options
 					0: # cancel
 						set_menu(0)
 					1: # ok
 						await get_tree().process_frame
+						MusicController.reset_music_themes()
 						Global.main.reset_game()
 
 func do_lateral_input():

@@ -1,7 +1,7 @@
 extends Node2D
 
 
-@export var music = preload("res://Audio/Soundtrack/10. SWD_CharacterSelect.ogg")
+@export var music: AudioStream = preload("res://Audio/Soundtrack/10. SWD_CharacterSelect.ogg")
 @export var nextZone = load("res://Scene/Zones/BaseZone.tscn")
 var selected = false
 
@@ -23,8 +23,8 @@ var action_was_pressed_last_frame = false
 
 
 func _ready():
-	Global.music.stream = music
-	Global.music.play()
+	MusicController.reset_music_themes()
+	MusicController.set_level_music(music)
 	$UI/Labels/Control/Character.text = characterLabels[characterID]
 	$UI/Labels/Control/MutliplayerMode.text = Global.MULTIMODE.find_key(Global.get_multimode())
 	if nextZone != null:

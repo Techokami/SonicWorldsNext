@@ -28,9 +28,7 @@ func state_process(_delta: float) -> void:
 		activated = true
 		
 		# start super theme
-		Global.currentTheme = 0
-		Global.effectTheme.stream = Global.themes[Global.currentTheme]
-		Global.effectTheme.play()
+		MusicController.play_music_theme(MusicController.MusicTheme.INVINCIBLE)
 		
 		# Start graphics changes needed to go super
 		parent.get_avatar().go_super()

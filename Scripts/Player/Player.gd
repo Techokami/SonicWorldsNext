@@ -468,17 +468,13 @@ func _process(delta):
 				isSuper = false
 				superAnimator.play("PowerDown")
 				switch_physics()
-			if Global.currentTheme == 0 and Global.effectTheme.is_playing():
-				Global.music.play()
-				Global.effectTheme.stop()
+			MusicController.stop_music_theme(MusicController.MusicTheme.INVINCIBLE)
 	
 	if (shoeTime > 0):
 		shoeTime -= delta
 		if (shoeTime <= 0):
 			switch_physics()
-			if Global.currentTheme == 1:
-				Global.music.play()
-				Global.effectTheme.stop()
+			MusicController.stop_music_theme(MusicController.MusicTheme.SPEED_UP)
 	
 	# Invulnerability timer
 	if (invTime > 0 and current_state != STATES.HIT and current_state != STATES.DIE):
@@ -549,10 +545,12 @@ func _process(delta):
 	
 	# drowning theme related
 	if playerControl == 1:
-		if !Global.drowning.playing and airTimer <= panicTime and airTimer > 0:
-			Global.drowning.play()
-		elif Global.drowning.playing and airTimer > panicTime or airTimer <= 0:
-			Global.drowning.stop()
+		if !MusicController.is_music_theme_playing(MusicController.MusicTheme.DROWNING) and \
+		   airTimer <= panicTime and airTimer > 0:
+			MusicController.play_music_theme(MusicController.MusicTheme.DROWNING)
+		elif MusicController.is_music_theme_playing(MusicController.MusicTheme.DROWNING) and \
+			 airTimer > panicTime or airTimer <= 0:
+			MusicController.stop_music_theme(MusicController.MusicTheme.DROWNING)
 	
 	# partner control timer for player 2
 	if partnerControlTime > 0:
@@ -1023,11 +1021,8 @@ func give_ring(num_rings: int = 1, play_sound: bool = true) -> void:
 	if rings >= ring1upCounter:
 		ring1upCounter += 100
 		# award 1up
-		Global.life.play()
+		MusicController.play_music_theme(MusicController.MusicTheme._1UP)
 		Global.lives += 1
-		Global.effectTheme.volume_db = -100
-		Global.bossMusic.volume_db = -100
-		Global.music.volume_db = -100
 
 
 ## Resets the player's air timer to the default air time value
@@ -1051,9 +1046,8 @@ func kill():
 		isSuper = false
 		
 	# stop special music
-	if playerControl == 1 and Global.effectTheme.is_playing():
-		Global.music.play()
-		Global.effectTheme.stop()
+	if playerControl == 1 and MusicController.is_music_theme_with_priority_playing(MusicController.PriorityLevel.EFFECT_THEME):
+		MusicController.stop_music_theme_with_priority(MusicController.PriorityLevel.EFFECT_THEME)
 			
 	# If Player 1 dies and a partner exists, initiate respawn flying from current position.
 	if playerControl == 1 and partner:
@@ -1072,8 +1066,8 @@ func kill():
 		sfx[6].play()
 	else:
 		if playerControl == 1:
-			Global.music.stop()
-			Global.effectTheme.stop()
+			MusicController.stop_music_theme(MusicController.MusicTheme.LEVEL_THEME)
+			MusicController.stop_music_theme_with_priority(MusicController.PriorityLevel.EFFECT_THEME)
 		movement = Vector2(0,0)
 		_animator.play("drown")
 		sfx[25].play()
