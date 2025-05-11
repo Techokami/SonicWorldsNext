@@ -178,7 +178,7 @@ func _process(delta):
 							for j in get_tree().get_nodes_in_group("Enemy"):
 								if j.global_position.y >= Global.waterLevel and i.global_position.distance_to(j.global_position) <= 256:
 									if j.has_method("destroy"):
-										Global.add_score(j.global_position,Global.SCORE_COMBO[0])
+										Score.create(j.get_parent(), j.global_position, Global.SCORE_COMBO[0])
 										j.destroy()
 							# disable flash after a frame
 							await get_tree().process_frame

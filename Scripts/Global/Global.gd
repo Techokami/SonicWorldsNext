@@ -20,8 +20,6 @@ var nextZone = load("res://Scene/Zones/BaseZone.tscn") # change this to the firs
 var stageInstanceMemory = null
 var stageLoadMemory = null
 
-# score instace for add_score()
-var Score = preload("res://Entities/Misc/Score.tscn")
 # order for score combo
 const SCORE_COMBO = [1,2,3,4,4,4,4,4,4,4,4,4,4,4,4,5]
 
@@ -214,14 +212,6 @@ func play_sound(sound = null) -> void:
 	if sound != null:
 		soundChannel.stream = sound
 		soundChannel.play()
-
-
-## add a score object, see res://Scripts/Misc/Score.gd for reference
-func add_score(position = Vector2.ZERO,value = 0) -> void:
-	var scoreObj = Score.instantiate()
-	scoreObj.scoreID = value
-	scoreObj.global_position = position
-	add_child(scoreObj)
 
 
 ## use a check function to see if a score increase would go above 50,000

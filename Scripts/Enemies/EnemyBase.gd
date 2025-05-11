@@ -31,7 +31,7 @@ func _process(delta):
 					if i.shield == i.SHIELDS.BUBBLE:
 							i.emit_enemy_bounce()
 				# destroy
-				Global.add_score(global_position,Global.SCORE_COMBO[min(Global.SCORE_COMBO.size()-1,i.enemyCounter)])
+				Score.create(get_parent(), global_position, Global.SCORE_COMBO[min(Global.SCORE_COMBO.size()-1,i.enemyCounter)])
 				i.enemyCounter += 1
 				destroy()
 				# cut the script short
