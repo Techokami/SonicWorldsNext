@@ -10,6 +10,9 @@ func get_hitbox(hitbox_type: PlayerChar.HITBOXES):
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	normal_sprite = preload("res://Graphics/Players/Shadow.png")
+	super_sprite = null
+	
 	hitboxes = [
 		Vector2(9,19)*2,  # NORMAL
 		Vector2(7,14)*2,  # ROLL
@@ -18,6 +21,8 @@ func _ready() -> void:
 		Vector2(16,14)*2  # HORIZONTAL
 	]
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass
+
+## Shadow can break things if he is actively boosting or using power stomp.
+func get_break_power(player: PlayerChar) -> int:
+	## Coming after Shadow actually has moves
+	return super(player)

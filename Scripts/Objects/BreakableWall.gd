@@ -57,12 +57,8 @@ func break_wall(player: PlayerChar, hitVector):
 func physics_collision(body: PlayerChar, hitVector):
 	# check hit is either left or right
 	if hitVector.x != 0:
-		# If the player is Knuckles or Amy doing the hammer attack, it's an auto-break.
-		match body.character:
-			Global.CHARACTERS.KNUCKLES, \
-			Global.CHARACTERS.AMY when body.get_state() == PlayerChar.STATES.AMYHAMMER:
-				break_wall(body, hitVector)
-				return
+		
+		#XXX TODO Need to fix this script to use character break force for all checks
 		
 		# Non-Knuckles characters can't break
 		if get_collision_layer_value(19):

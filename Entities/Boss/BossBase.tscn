@@ -1,36 +1,36 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=5 format=3 uid="uid://b6p1ravqsug31"]
 
-[ext_resource path="res://Scripts/Boss/BossBase.gd" type="Script" id=1]
-[ext_resource path="res://Audio/SFX/Boss/Hit.wav" type="AudioStream" id=2]
-[ext_resource path="res://Graphics/Boss/Eggmobile.png" type="Texture2D" id=3]
+[ext_resource type="Script" path="res://Scripts/Boss/BossBase.gd" id="1"]
+[ext_resource type="AudioStream" uid="uid://bvhfglhmpystw" path="res://Audio/SFX/Boss/Hit.wav" id="2"]
+[ext_resource type="Texture2D" uid="uid://6ds1jcc8jmyf" path="res://Graphics/Boss/Eggmobile.png" id="3"]
 
-[sub_resource type="RectangleShape2D" id=5]
-size = Vector2( 24, 24 )
+[sub_resource type="RectangleShape2D" id="5"]
+size = Vector2(24, 24)
 
 [node name="Boss" type="CharacterBody2D"]
 collision_layer = 16384
 collision_mask = 0
-script = ExtResource( 1 )
+script = ExtResource("1")
 
 [node name="EggMobile" type="Sprite2D" parent="."]
-texture = ExtResource( 3 )
-offset = Vector2( 0, -8 )
+texture = ExtResource("3")
+offset = Vector2(0, -8)
 hframes = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 5 )
+shape = SubResource("5")
 
 [node name="Hit" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 2 )
-bus = "SFX"
+stream = ExtResource("2")
+bus = &"SFX"
 
 [node name="HitBox" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 528384
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
-modulate = Color( 1, 0, 0, 1 )
-shape = SubResource( 5 )
+modulate = Color(1, 0, 0, 1)
+shape = SubResource("5")
 
 [connection signal="area_entered" from="HitBox" to="." method="_on_DamageArea_area_entered"]
 [connection signal="area_exited" from="HitBox" to="." method="_on_HitBox_area_exited"]

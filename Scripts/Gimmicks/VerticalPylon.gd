@@ -82,7 +82,7 @@ func connect_player(player: PlayerChar):
 		return
 
 	# XXX TODO: We need to clean up this hitbox setting stuff
-	player.set_state(PlayerChar.STATES.ANIMATION, player.get_predefined_hitbox(PlayerChar.HITBOXES.HORIZONTAL))
+	player.set_state(PlayerChar.STATES.GIMMICK, player.get_predefined_hitbox(PlayerChar.HITBOXES.HORIZONTAL))
 	player.set_direction(PlayerChar.DIRECTIONS.RIGHT)
 	player.play_animation("swingVerticalBarManaged", -1, 0.0)
 	player.set_gimmick_var("VerticalPylonRotationTimer", 0.0)
@@ -94,9 +94,9 @@ func disconnect_player(player: PlayerChar):
 	player.set_z_index(player.get_gimmick_var("VerticalPylonZIndex"))
 	player.unset_active_gimmick()
 
-	# We only change the player state on disconnect if they still in ANIMATION
+	# We only change the player state on disconnect if they still in GIMMICK
 	# when we got here.
-	if player.get_state() == PlayerChar.STATES.ANIMATION:
+	if player.get_state() == PlayerChar.STATES.GIMMICK:
 		player.set_state(PlayerChar.STATES.JUMP)
 		player.play_animation("roll")
 	
@@ -164,7 +164,7 @@ func process_game(delta):
 				player.movement.x = launch_speed
 			disconnect_player(player)
 		
-		if player.get_state() != PlayerChar.STATES.ANIMATION:
+		if player.get_state() != PlayerChar.STATES.GIMMICK:
 			disconnect_player(player)
 
 # Tool Function to reset the size and position of elements within the object based on vert_size	

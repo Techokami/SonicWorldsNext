@@ -10,6 +10,7 @@ var carryHitBox
 var carryBox
 
 func _ready():
+	super()
 	flyHitBox = parent.get_node("TailsFlightHitArea/HitBox")
 	carryHitBox = parent.get_node("TailsCarryBox/HitBox")
 	carryBox = parent.get_node("TailsCarryBox")
@@ -82,7 +83,7 @@ func state_physics_process(delta: float) -> void:
 	if carriedPlayer != null:
 		if carriedPlayer.poleGrabID == carryBox:
 			carriedPlayer.movement = parent.movement
-			carriedPlayer.stateList[parent.STATES.AIR].lockDir = true
+			carriedPlayer.get_state_object(parent.STATES.AIR).lockDir = true
 			# set carried player direction
 			carriedPlayer.direction = parent.direction
 			carriedPlayer.sprite.flip_h = (parent.direction < 0)

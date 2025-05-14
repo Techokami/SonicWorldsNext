@@ -49,7 +49,12 @@ func _physics_process(_delta):
 		Global.set_stage_clear_phase(Global.STAGE_CLEAR_PHASES.GOALPOST_SPIN_END)
 		player.playerControl = -1
 		# put states under player in here if the state could end up getting the player soft locked
-		var stateCancelList = [PlayerChar.STATES.WALLCLIMB, PlayerChar.STATES.ANIMATION]
+		var stateCancelList = [
+			PlayerChar.STATES.CHARACTERACTION,
+			PlayerChar.STATES.GIMMICK,
+			PlayerChar.STATES.PATHFOLLOW
+		]
+			
 		for i in stateCancelList:
 			if i == player.get_state():
 				player.set_state(player.STATES.AIR)

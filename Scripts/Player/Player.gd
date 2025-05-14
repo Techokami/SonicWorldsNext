@@ -103,10 +103,7 @@ var ringChannel = 0
 var Particle = preload("res://Entities/Misc/GenericParticle.tscn")
 var CountDown = preload("res://Entities/Misc/CountDownTimer.tscn")
 var RotatingParticle = preload("res://Entities/Misc/RotatingParticle.tscn")
-
-var superSprite = load("res://Graphics/Players/SuperSonic.png")
-@onready var normalSprite = $Sonic/Sprite2D.texture
-var playerPal = preload("res://Shaders/PlayerPalette.tres")
+#var playerPal = preload("res://Shaders/PlayerPalette.tres")
 
 # ================
 
@@ -115,9 +112,9 @@ var spriteRotation = 0
 var airControl = true
 
 # States
-enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, ANIMATION, HIT, DIE, CORKSCREW, 
-SUPER, FLY, RESPAWN, HANG, GLIDE, WALLCLIMB, AMYHAMMER}
-var currentState = STATES.AIR
+enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, PATHFOLLOW, HIT, DIE, CORKSCREW, 
+SUPER, FLY, RESPAWN, GIMMICK, GLIDE, CHARACTERACTION}
+var current_state = STATES.AIR
 @onready var hitBoxOffset = {normal = $HitBox.position, crouch = $HitBox.position}
 @onready var defaultHitBoxPos = $HitBox.position
 var crouchBox = null
@@ -127,11 +124,11 @@ var crouchBox = null
 enum SHIELDS {NONE, NORMAL, FIRE, ELEC, BUBBLE, COUNT}
 var shield = SHIELDS.NONE
 @onready var magnetShape = $RingMagnet/CollisionShape2D
-@onready var shieldSprite = $Shields
+@onready var shieldSprite: AnimatedSprite2D = $Shields
 var reflective = false # used for reflecting projectiles
 
 # State array
-@onready var stateList = $States.get_children()
+@onready var state_list = $States.get_children()
 
 # Animation related
 @onready var animator: PlayerCharAnimationPlayer = $Sonic/PlayerAnimation
@@ -217,8 +214,9 @@ const INPUT_MEMORY_LENGTH = 20
 
 var Player = load("res://Entities/MainObjects/Player.tscn")
 
-#An array of, well, Arrays, in order of Global.CHARACTERS, skipping 0.
+# Arrays, in order of Global.CHARACTERS
 var playeravatars = [
+	preload("res://Entities/PlayerAvatars/Sonic.tscn"),
 	preload("res://Entities/PlayerAvatars/Sonic.tscn"),
 	preload("res://Entities/PlayerAvatars/Tails.tscn"),
 	preload("res://Entities/PlayerAvatars/Knuckles.tscn"),
@@ -265,24 +263,12 @@ var locked_gimmicks_index: int = 0
 
 # Enemy related
 signal enemy_bounced
-
-
-func _initialize_states():
-	for i:PlayerState in stateList:
-		i.set_process(false)
-		i.set_physics_process(false)
-		i.set_process_input(false)
-
-	var active_state = PlayerChar.STATES.AIR
-	stateList[active_state].set_process(true)
-	stateList[active_state].set_physics_process(true)
-	stateList[active_state].set_process_input(true)
+signal player_bounced(player: PlayerChar)
 
 
 func _ready():
 	super()
-	# Disable and enable states
-	_initialize_states()
+
 	Global.players.append(self)
 	var _con = connect("connectFloor",Callable(self,"_land_floor"))
 	_con = connect("connectCeiling",Callable(self,"_touch_ceiling"))
@@ -300,10 +286,7 @@ func _ready():
 	_con = connect("positionChanged",Callable(self,"_on_position_changed"))
 	camera.global_position = global_position
 	
-	# Tails carry stuff
-	$TailsCarryBox/HitBox.disabled = true
-	
-	# verify that we're not an ai
+	# verify that we are player 1
 	if playerControl == 1:
 		# input memory
 		for _i in range(INPUT_MEMORY_LENGTH):
@@ -319,41 +302,8 @@ func _ready():
 			partner.character = Global.PlayerChar2
 			partner.inputActions = INPUTACTIONS_P2
 		
-		# set my character
+		# set my character - Uh... isn't this going to work on player 2 as well?
 		character = Global.PlayerChar1
-		
-		# set super palettes
-		match (character):
-			Global.CHARACTERS.SONIC:
-				# shader texture sizes need to be to the power of 2
-				playerPal.set_shader_parameter("amount",4)
-				playerPal.set_shader_parameter("palRows",16)
-				playerPal.set_shader_parameter("row",0)
-				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperSonicPal.png"))
-		
-			Global.CHARACTERS.TAILS:
-				playerPal.set_shader_parameter("amount",8)
-				playerPal.set_shader_parameter("palRows",16)
-				playerPal.set_shader_parameter("row",0)
-				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperTails.png"))
-		
-			Global.CHARACTERS.KNUCKLES:
-				playerPal.set_shader_parameter("amount",4)
-				playerPal.set_shader_parameter("palRows",16)
-				playerPal.set_shader_parameter("row",0)
-				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperKnuckles.png"))
-		
-			Global.CHARACTERS.AMY:
-				playerPal.set_shader_parameter("amount",4)
-				playerPal.set_shader_parameter("palRows",8)
-				playerPal.set_shader_parameter("row",0)
-				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperAmy.png"))
-			
-			Global.CHARACTERS.SHADOW:
-				playerPal.set_shader_parameter("amount",4)
-				playerPal.set_shader_parameter("palRows",16)
-				playerPal.set_shader_parameter("row",0)
-				playerPal.set_shader_parameter("paletteTexture",load("res://Graphics/Palettes/SuperSonicPal.png")) # CHANGE ME
 	
 	# Checkpoints
 	await get_tree().process_frame
@@ -368,7 +318,7 @@ func _ready():
 	# Character settings
 	var avatar = playeravatars[0]
 	if character != Global.CHARACTERS.NONE:
-		avatar = playeravatars[character - 1]
+		avatar = playeravatars[character]
 	
 	player_avatar.name = "OldSprite"
 	var new_avatar: PlayerAvatar = avatar.instantiate()
@@ -470,7 +420,7 @@ func _process(delta):
 						partner.inputs[INPUTS.XINPUT] = sign(0-direction)
 				
 				# Jump if pushing a wall, slower then half speed, on a flat surface and is either normal or jumping
-				if (partner.currentState == STATES.NORMAL or partner.currentState == STATES.JUMP) and abs(partner.movement.x) < top/2.0 and snap_angle(partner.angle) == 0 or (partner.pushingWall != 0 and pushingWall == 0):
+				if (partner.current_state == STATES.NORMAL or partner.current_state == STATES.JUMP) and abs(partner.movement.x) < top/2.0 and snap_angle(partner.angle) == 0 or (partner.pushingWall != 0 and pushingWall == 0):
 					# check partners position, only jump ever 0.25 seconds (prevent jump spam)
 					if global_position.y+32 < partner.global_position.y and partner.inputs[INPUTS.ACTION] == 0 and partner.ground and ground and (fmod(Global.globalTimer+delta,0.25) < fmod(Global.globalTimer,0.25)):
 						partner.inputs[INPUTS.ACTION] = 1
@@ -493,7 +443,7 @@ func _process(delta):
 			# Panic
 			# if partner is locked, and stopped then do a spindash
 			# panic for 128 frames before letting go of spindash
-			if partner.horizontalLockTimer > 0 and partner.currentState == STATES.NORMAL and global_position.distance_to(partner.global_position) > 48:
+			if partner.horizontalLockTimer > 0 and partner.current_state == STATES.NORMAL and global_position.distance_to(partner.global_position) > 48:
 				partnerPanic = 128/60.0
 
 	# respawn mechanics
@@ -546,9 +496,6 @@ func _process(delta):
 		else:
 			$InvincibilityBarrier.visible = false
 			# Animate Palette
-			if is_instance_valid(superAnimator):
-				if !superAnimator.is_playing():
-					superAnimator.play("Flash")
 			# check if ring count is greater then 0
 			# deactivate if stage cleared
 			if rings > 0 and !Global.is_in_any_stage_clear_phase():
@@ -557,8 +504,7 @@ func _process(delta):
 				# Deactivate super
 				supTime = 0
 				rings = round(rings)
-				if character == Global.CHARACTERS.SONIC:
-					sprite.texture = normalSprite
+				player_avatar.end_super()
 		
 		if (supTime <= 0):
 			if (shield != SHIELDS.NONE):
@@ -582,7 +528,7 @@ func _process(delta):
 				Global.effectTheme.stop()
 	
 	# Invulnerability timer
-	if (invTime > 0 and currentState != STATES.HIT and currentState != STATES.DIE):
+	if (invTime > 0 and current_state != STATES.HIT and current_state != STATES.DIE):
 		var mod_inv_time = (int(invTime)) % 2
 		if mod_inv_time == 0:
 			visible = false
@@ -592,7 +538,7 @@ func _process(delta):
 		if (invTime <= 0):
 			invTime = 0
 			visible = true
-	if (ringDisTime > 0) and currentState != STATES.HIT:
+	if (ringDisTime > 0) and current_state != STATES.HIT:
 		ringDisTime -= delta
 
 	#Rotating stars
@@ -616,7 +562,7 @@ func _process(delta):
 			starPart.position = stars[0].global_position-global_position
 
 	# Animator
-	if currentState != STATES.PEELOUT:
+	if current_state != STATES.PEELOUT:
 		_handle_animation_speed()
 	else:
 		_handle_animation_speed(peelOutCharge)
@@ -642,7 +588,7 @@ func _process(delta):
 					count.countTime = clamp(round(airTimer/1.8)-2,0,5)
 					count.global_position = global_position+Vector2(8*direction,0)
 			airTimer -= delta
-		elif currentState != STATES.DIE: # Drown (kill checks if air timer is greater then 0)
+		elif current_state != STATES.DIE: # Drown (kill checks if air timer is greater then 0)
 			$BubbleTimer.start(0.1)
 			kill()
 	else:
@@ -665,7 +611,7 @@ func _process(delta):
 	if (active_gimmick != null):
 		active_gimmick.player_process(self, delta)
 		
-	stateList[currentState].state_process(delta)
+	state_list[current_state].state_process_entry(delta)
 
 
 func _physics_process(delta):
@@ -674,7 +620,7 @@ func _physics_process(delta):
 	if ground and forceRoll > 0:
 		if (movement*Vector2(1,0)).is_equal_approx(Vector2.ZERO):
 			movement.x = 2*sign(-1+(forceDirection*2))*60.0
-		if currentState != STATES.ROLL:
+		if current_state != STATES.ROLL:
 			set_state(STATES.ROLL)
 			animator.play("roll")
 			sfx[1].play()
@@ -829,14 +775,14 @@ func _physics_process(delta):
 			$HitBox.position = centerReference.position
 	
 	# Water
-	if Global.waterLevel != null and currentState != STATES.DIE:
+	if Global.waterLevel != null and current_state != STATES.DIE:
 		# Enter water
 		if global_position.y > Global.waterLevel and !water:
 			water = true
 			switch_physics()
 			movement.x *= 0.5
 			movement.y *= 0.25
-			if currentState != STATES.RESPAWN and movement.y != 0:
+			if current_state != STATES.RESPAWN and movement.y != 0:
 				sfx[17].play()
 				var splash = Particle.instantiate()
 				splash.behaviour = splash.TYPE.FOLLOW_WATER_SURFACE
@@ -860,7 +806,7 @@ func _physics_process(delta):
 			get_parent().add_child(splash)
 	
 	# We don't check for crushing if the player is in an invulnerable state (note that invulernable means immune to crushing/death by falling)
-	if !stateList[currentState].get_state_invulnerable():
+	if !state_list[current_state].get_invulnerability():
 		var crushSensorLeft = $CrushSensorLeft
 		var crushSensorRight = $CrushSensorRight
 		var crushSensorUp = $CrushSensorUp
@@ -884,7 +830,7 @@ func _physics_process(delta):
 	if (active_gimmick != null):
 		active_gimmick.player_physics_process(self, delta)
 
-	stateList[currentState].state_physics_process(delta)
+	state_list[current_state].state_physics_process(delta)
 
 
 # Reads the controller state for the player
@@ -1019,7 +965,7 @@ func is_right_held():
 func hit_player(damagePoint:Vector2 = global_position, damageType: Global.HAZARDS = Global.HAZARDS.NORMAL, soundID:int = 6):
 	if damageType != 0 and shield == damageType+1:
 		return false
-	if (currentState != STATES.HIT and invTime <= 0 and supTime <= 0 and (shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled or character != Global.CHARACTERS.SONIC)):
+	if (current_state != STATES.HIT and invTime <= 0 and supTime <= 0 and (shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled or character != Global.CHARACTERS.SONIC)):
 		movement.x = sign(global_position.x-damagePoint.x)*2*60
 		movement.y = -4*60
 		if (movement.x == 0):
@@ -1135,7 +1081,7 @@ func reset_air()->void:
 ## Murders the player instantly
 func kill():
 	# Already dying
-	if currentState == STATES.DIE:
+	if current_state == STATES.DIE:
 		return
 		
 	disconnect_from_floor()
@@ -1143,9 +1089,10 @@ func kill():
 	shoeTime = 0
 	allowTranslate = true
 	# turn off super palette and physics (if super)
-	if is_instance_valid(superAnimator) and isSuper:
-		superAnimator.play("PowerDown")
+	if isSuper:
+		player_avatar.end_super()
 		isSuper = false
+		
 	# stop special music
 	if playerControl == 1 and Global.effectTheme.is_playing():
 		Global.music.play()
@@ -1187,7 +1134,7 @@ func respawn() -> void:
 		return
 	
 	# cancel function if partner is dead or ai controlled
-	if partner.currentState == STATES.DIE || partner.playerControl != 1:
+	if partner.current_state == STATES.DIE || partner.playerControl != 1:
 		return
 		
 	airTimer = 1
@@ -1204,8 +1151,6 @@ func respawn() -> void:
 	limitRight = partner.limitRight
 	limitTop = partner.limitTop
 	limitBottom = partner.limitBottom
-	
-	get_node("TailsCarryBox/HitBox").disabled = true
 		
 	set_state(STATES.RESPAWN)
 
@@ -1333,7 +1278,7 @@ func _on_position_changed():
 ## @param force_move Ignores camera locking mechanics if true
 func cam_update(forceMove = false) -> void:
 	# Cancel camera movement
-	if currentState == STATES.DIE:
+	if current_state == STATES.DIE:
 		return
 		
 	# Camera vertical drag
@@ -1384,7 +1329,8 @@ func cam_update(forceMove = false) -> void:
 ## Locks the position of the camera for a while
 ## @param time how long (in seconds) to lock the camera for
 ## Note: If the camera is already locked, this function can raise
-## the locked time up to time, but it can't go below time.
+## the locked time up to time, but it can't go below the current
+## remaining lock time.
 func lock_camera(time: float = 1.0):
 	camLockTime = max(time,camLockTime)
 
@@ -1464,6 +1410,13 @@ func emit_enemy_bounce():
 	enemy_bounced.emit()
 
 
+## Makes the player emit the player_bounced signal - only if the player bounces off the ground
+## for some reason.
+## TODO - does this occur for anything other than bubble shield in the air state?
+func emit_player_bounce():
+	player_bounced.emit(self)
+
+
 ## Makes the player perform water run actions if applicable. Only really has an impact if
 ## the player is in contact iwth the water's surface. You invoke this in any action that
 ## water running is allowed from.
@@ -1519,7 +1472,17 @@ func _handle_animation_speed(gSpeed = groundSpeed):
 ## Gets the current state value of the player
 ## Note: gets the enum value only, not the actual state object
 func get_state()->PlayerChar.STATES:
-	return currentState
+	return current_state
+
+## Use this variant of get_state when you want to check character actions and not standard states.
+func get_state_character_action()->int:
+	if current_state != STATES.CHARACTERACTION:
+		return -1
+	else:
+		var action_state_obj = state_list[STATES.CHARACTERACTION]
+		return action_state_obj.get_character_action_state_index
+		
+
 
 
 ## Gets a player state object
@@ -1531,27 +1494,62 @@ func get_state()->PlayerChar.STATES:
 ## @param for_state - which state you want to get the state object for
 ## @retval PlayerState object that the for_state value represents
 func get_state_object(for_state: PlayerChar.STATES) -> PlayerState:
-	return stateList[for_state]
+	return state_list[for_state]
 
 
 ## Sets the player's state while performing normal state change operations
-## Always use this to set the player's state, never try to change the player's
+## Always use this to set the player's state. Don't try to change the player's
 ## state directly.
 ##
 ## @param new_state - State player is changing to
-## @param force_mask - Vector2 
-func set_state(new_state: PlayerChar.STATES, force_mask:Vector2 = Vector2.ZERO):	
+## @param force_mask - Vector2 for a mask change. Note that ZERO is the default, but it implies
+##                     change. This needs work.
+## @param skip_supplements - If this is enabled (and if set_state is called from a supplement, it
+##                           should be), we won't run supplements.
+## @param new_character_state - Should only be used if setting the state to CHARACTERACTION.
+##                              This value is used to set up the CHARACTERACTION state to make it
+##                              proxy to the new character action state as well as to engage
+##                              enter/exit for the character-specific state and to run supplements
+##                              that might affect that state.
+func set_state(new_state: PlayerChar.STATES,
+		force_mask:Vector2 = Vector2.ZERO,
+		skip_supplements:bool = false,
+		new_character_state: int = -1):	
+	
+	var new_state_obj: PlayerState = null
+	var old_state_obj: PlayerState = state_list[current_state]
+	
 	defaultHitBoxPos = hitBoxOffset.normal
 	$HitBox.position = defaultHitBoxPos
+	
+	if new_state == STATES.CHARACTERACTION:
+		new_state_obj = player_avatar.get_character_state_object(new_character_state)
+		if new_state_obj == null:
+			push_error("Attempted to set CHARACTERACTION with invalid new_character_state")
+			return
+	else:
+		new_state_obj = state_list[new_state]
+	
 	# reset the center offset
 	if centerReference != null:
 		centerReference.position = Vector2.ZERO
+
+	# Run the state exit supplements unless we were told not to. If we are told to bail, do so.
+	if !skip_supplements and old_state_obj.state_exit_entry(new_state, new_character_state) == false:
+		return
 	
-	# Exit old state, enter the new one.
-	stateList[currentState].state_exit()
-	stateList[new_state].state_activated()
+	# Enter the new state. If a supplement tells us to abandon the state change, do so.
+	# TODO XXX Coming later
 	
-	currentState = new_state
+	new_state_obj.state_activated()
+	
+	# If we are using a CharacterAction state, we need to set the proxy to the new character action
+	# being proxied now.
+	if new_state == STATES.CHARACTERACTION:
+		var character_action_state: CharacterActionState = state_list[STATES.CHARACTERACTION]
+		character_action_state.set_character_action_state(new_character_state)
+	
+	current_state = new_state
 	
 	var forcePoseChange = Vector2.ZERO
 	
@@ -1582,6 +1580,16 @@ func set_state(new_state: PlayerChar.STATES, force_mask:Vector2 = Vector2.ZERO):
 	position += forcePoseChange
 	
 	sprite.get_node("DashDust").visible = false
+
+
+## Shorthand for setting the character state to character action while also providing
+## a new_character_state. Generally this is preferable to use over the full form version when
+## switching to a character-specific state.
+func set_character_action_state(new_character_state: int,
+		force_mask:Vector2 = Vector2.ZERO,
+		skip_supplements:bool = false,
+	):
+		set_state(STATES.CHARACTERACTION, force_mask, skip_supplements, new_character_state)
 
 
 ## sets the hitbox mask shape, referenced in other states
@@ -1766,6 +1774,9 @@ func set_air_control(control: bool) -> void:
 # one does depends primarily on whether or not the gimmick needs to maintain its own state on each
 # player. Gimmicks that can function without continually tracking some kind of per-player state
 # should continue to do so without using these functions.
+#
+# Also be aware that failing to disconnect a gimmick when you should is going to cause lots of
+# problems with other gimmick interactions.
 
 ## Binds the player to the requested gimmick
 ## @param gimmick gimmick to bind the player to

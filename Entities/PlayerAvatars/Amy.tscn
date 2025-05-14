@@ -1,12 +1,13 @@
-[gd_scene load_steps=68 format=3 uid="uid://d3vtvdbdn6g8v"]
+[gd_scene load_steps=69 format=3 uid="uid://d3vtvdbdn6g8v"]
 
 [ext_resource type="Script" path="res://Scripts/Player/PlayerAvatars/AmyAvatar.gd" id="1_onyi3"]
-[ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="1_sk1gs"]
 [ext_resource type="Script" path="res://Entities/PlayerAvatars/PlayerAnimation.gd" id="1_x2red"]
 [ext_resource type="Texture2D" uid="uid://bfesqgvh63scg" path="res://Graphics/Players/Amy.png" id="2_vki44"]
+[ext_resource type="Material" uid="uid://dh6lceurc5knf" path="res://Shaders/PlayerPalettes/AmyPalette.tres" id="3_8c8t7"]
 [ext_resource type="Texture2D" uid="uid://dlomjk6vm15ep" path="res://Graphics/Misc/DashDust.png" id="3_dg7ud"]
 [ext_resource type="Texture2D" uid="uid://dvqglf8dididc" path="res://Graphics/Items/shield_plain.png" id="4_nx0xn"]
 [ext_resource type="Texture2D" uid="uid://decpuepom6w1d" path="res://Graphics/Tools/bar_helper.png" id="7_drhm3"]
+[ext_resource type="Script" path="res://Scripts/Player/States/AmyHammerSwing.gd" id="8_5egt6"]
 
 [sub_resource type="Animation" id="86"]
 length = 0.001
@@ -1327,7 +1328,7 @@ script = ExtResource("1_x2red")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 5
-material = ExtResource("1_sk1gs")
+material = ExtResource("3_8c8t7")
 texture = ExtResource("2_vki44")
 offset = Vector2(0, -6)
 hframes = 16
@@ -1361,3 +1362,9 @@ hframes = 4
 visible = false
 z_index = 50
 texture = ExtResource("7_drhm3")
+
+[node name="CharacterStates" type="Node" parent="."]
+
+[node name="AmyHammerSwing" type="Node" parent="CharacterStates"]
+process_priority = 1
+script = ExtResource("8_5egt6")

@@ -54,22 +54,16 @@ func state_process(delta: float) -> void:
 			parent.spindashPower = 0
 			parent.animator.play("spinDash")
 			parent.set_state(parent.STATES.SPINDASH)
-		# peelout (Sonic only)
-		elif (parent.movement.x == 0 and parent.inputs[parent.INPUTS.YINPUT] < 0 and parent.character == Global.CHARACTERS.SONIC):
-			parent.sfx[2].play()
-			parent.sfx[2].pitch_scale = 1
-			parent.spindashPower = 0
-			parent.set_state(parent.STATES.PEELOUT)
 		else:
-			# Player cannot jump unless a ceiling check fails.
-			if !parent.check_for_ceiling():
+			# Player cannot jump unless a ceiling check fails. Also block jumping if not grounded in
+			# in case DW puts a character in the NORMAL state while they are airborne again.
+			if !parent.check_for_ceiling() and parent.is_on_ground():
 				# reset animations
 				parent.animator.play("RESET")
 				parent.action_jump()
-				parent.set_state(parent.STATES.JUMP)
 		return
 	
-	if parent.ground and !skid:
+	if parent.is_on_ground() and !skid:
 		if parent.movement.x == 0:
 			if (parent.inputs[parent.INPUTS.YINPUT] > 0):
 				lookTimer = max(0,lookTimer+delta*0.5)

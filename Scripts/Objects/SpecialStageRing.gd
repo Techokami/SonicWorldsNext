@@ -106,7 +106,7 @@ func _on_Hitbox_body_entered(player_entered: PlayerChar) -> void:
 			player_entered.visible = false
 			player_entered.movement = Vector2.ZERO
 			# set players state to animation so nothing takes them out of it
-			player_entered.set_state(player_entered.STATES.ANIMATION)
+			player_entered.set_state(player_entered.STATES.GIMMICK)
 			# set player collision layer and mask to nothing to avoid collissions
 			maskMemory.append(player_entered.collision_layer)
 			maskMemory.append(player_entered.collision_mask)

@@ -77,7 +77,7 @@ func _physics_process(delta):
 		if i.water:
 			setPlayerAnimation = "current"
 			
-		if i.get_state() != PlayerChar.STATES.ANIMATION or i.get_animator().get_current_animation() != setPlayerAnimation:
+		if i.get_state() != PlayerChar.STATES.GIMMICK or i.get_animator().get_current_animation() != setPlayerAnimation:
 			i.set_state(PlayerChar.STATES.AIR)
 			i.play_animation(setPlayerAnimation)
 

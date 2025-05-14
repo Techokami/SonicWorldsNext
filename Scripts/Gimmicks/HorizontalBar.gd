@@ -255,7 +255,7 @@ func _process_player_monitoring(player, playerIndex):
 
 		# This is ok for now, but we need to clean it up.
 		player.animator.play("swingHorizontalBarMHZ", -1, 1, false)
-		player.set_state(player.STATES.ANIMATION)
+		player.set_state(player.STATES.GIMMICK)
 		player.global_position.y = get_global_position().y + 3
 		playersMode[playerIndex] = PLAYER_MODE.LAUNCH_UP
 		playersEntryVel[playerIndex] = player.movement.y
@@ -267,7 +267,7 @@ func _process_player_monitoring(player, playerIndex):
 		
 		# This is ok for now, but we need to clean it up.
 		player.animator.play("swingHorizontalBarMHZ", -1, 1, false)
-		player.set_state(player.STATES.ANIMATION)
+		player.set_state(player.STATES.GIMMICK)
 		
 		player.global_position.y = get_global_position().y + 3
 		playersMode[playerIndex] = PLAYER_MODE.LAUNCH_DOWN
@@ -277,7 +277,7 @@ func _process_player_monitoring(player, playerIndex):
 				
 	else:
 		player.sprite.flip_h = false
-		player.set_state(player.STATES.ANIMATION)
+		player.set_state(player.STATES.GIMMICK)
 		player.animator.play("hangShimmy", -1, shimmySpeed / 60.0, false)
 		player.movement.y = 0
 		player.global_position.y = get_global_position().y + 3
@@ -302,7 +302,7 @@ func process_game(_delta):
 			continue
 			
 		# Eject the player if their state has changed -- this makes the gimmick compatible with damage sources.
-		if i.get_state() != i.STATES.ANIMATION:
+		if i.get_state() != i.STATES.GIMMICK:
 			remove_player(i)
 			continue
 		
@@ -360,5 +360,5 @@ func remove_player(player):
 		players.erase(player)
 		playersMode.remove_at(getIndex)
 		playersEntryVel.remove_at(getIndex)
-		if player.get_state() == player.STATES.ANIMATION:
+		if player.get_state() == player.STATES.GIMMICK:
 			player.set_state(player.STATES.NORMAL)

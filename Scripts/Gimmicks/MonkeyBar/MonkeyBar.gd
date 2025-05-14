@@ -93,7 +93,7 @@ func connect_player(player : PlayerChar, allowSwap: bool = false) -> void:
 		
 	player_mounted.emit(player)
 
-	player.set_state(player.STATES.ANIMATION)
+	player.set_state(player.STATES.GIMMICK)
 	
 	if check_brachiate(player):
 		return
@@ -107,7 +107,7 @@ func connect_player(player : PlayerChar, allowSwap: bool = false) -> void:
 func disconnect_player(player : PlayerChar) -> void:
 	player.unset_active_gimmick()
 	
-	if player.get_state() == PlayerChar.STATES.ANIMATION:
+	if player.get_state() == PlayerChar.STATES.GIMMICK:
 		player.play_animation("roll")
 		player.set_state(player.STATES.JUMP)
 		

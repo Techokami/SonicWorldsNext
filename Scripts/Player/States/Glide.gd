@@ -147,7 +147,10 @@ func state_physics_process(delta: float) -> void:
 				parent.direction = sign(parent.movement.x)
 			parent.sprite.flip_h = (parent.direction < 0)
 			
-			parent.set_state(parent.STATES.WALLCLIMB,parent.get_predefined_hitbox(PlayerChar.HITBOXES.GLIDE))
+			parent.set_state(parent.STATES.CHARACTERACTION,
+			                 parent.get_predefined_hitbox(PlayerChar.HITBOXES.GLIDE),
+							 true,
+							 KnucklesAvatar.CHAR_STATES.KNUCKLES_CLIMB)
 			# play grab sound
 			parent.sfx[26].play()
 			parent.animator.play("climb")
@@ -174,7 +177,7 @@ func state_physics_process(delta: float) -> void:
 			parent.animator.play("glideGetUp")
 			# wait for animation to finish and check that the state is still the same
 			await parent.animator.animation_finished
-			if parent.get_state() == PlayerChar.STATES.GLIDE and sliding:
+			if parent.get_state() == PlayerChar.STATES.CHARACTERACTION and sliding:
 				parent.set_state(PlayerChar.STATES.NORMAL)
 		
 		# check if angle is default, if not then set movement to 0

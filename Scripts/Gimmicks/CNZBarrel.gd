@@ -125,7 +125,7 @@ func attach_player(player):
 	if find_player(player) >= 0:
 		return
 
-	player.set_state(PlayerChar.STATES.ANIMATION)	
+	player.set_state(PlayerChar.STATES.GIMMICK)	
 	var player_z_level = player.get_z_index()
 	var player_radius = clamp(player.global_position.x - global_position.x, -max_radius, max_radius)
 	var player_phase = 0
@@ -220,7 +220,7 @@ func _process(delta):
 			player.queue_redraw()
 			continue
 			
-		if player.get_state() != PlayerChar.STATES.ANIMATION:
+		if player.get_state() != PlayerChar.STATES.GIMMICK:
 			detach_player(player, index)
 	
 	for anim_body in bodies_to_update:

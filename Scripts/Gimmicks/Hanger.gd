@@ -226,9 +226,9 @@ func connect_grab(player: PlayerChar, index):
 
 	# lock player direction if that toggle is set.
 	if lockPlayerDirection:
-		player.stateList[PlayerChar.STATES.AIR].lockDir = true	
+		player.get_state_object(PlayerChar.STATES.AIR).lockDir = true	
 
-func disconnect_grab(player, index, deliberate, jumpUpwards=false):
+func disconnect_grab(player: PlayerChar, index: int, deliberate: bool, jumpUpwards=false):
 	# Don't bother disconnecting if they aren't already connected.
 	if get_player_contact(index) == null:
 		return
@@ -249,7 +249,7 @@ func disconnect_grab(player, index, deliberate, jumpUpwards=false):
 
 	# Unlock air direction if we previous locked it.
 	if lockPlayerDirection:
-		player.stateList[PlayerChar.STATES.AIR].lockDir = false
+		player.get_state_object(PlayerChar.STATES.AIR).lockDir = false
 
 	# unset player variable for pole XXX want to switch to dictionary later
 	player.unset_active_gimmick()

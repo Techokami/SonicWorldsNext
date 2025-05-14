@@ -7,7 +7,7 @@ extends Area2D
 @export var move_speed = 150.0 # player movement power
 
 ## If set to true, player will transition to the normal state on exiting (animation stays the same)
-## If set to false, player will remain in ANIMATION state and is subject to floating until freed
+## If set to false, player will remain in GIMMICK state and is subject to floating until freed
 ## by something else.
 @export var normal_state_on_exit = true
 
@@ -72,10 +72,10 @@ func _physics_process(_delta: float) -> void:
 			player.set_direction(PlayerChar.DIRECTIONS.LEFT)
 		
 		# force slide state if the player isn't currently on a gimmick
-		if player.get_state() != PlayerChar.STATES.ANIMATION and \
+		if player.get_state() != PlayerChar.STATES.GIMMICK and \
 				player.get_active_gimmick() == null:
 			player.set_hitbox(player.get_predefined_hitbox(PlayerChar.HITBOXES.HORIZONTAL))
-			player.set_state(PlayerChar.STATES.ANIMATION, player.get_predefined_hitbox(PlayerChar.HITBOXES.HORIZONTAL))
+			player.set_state(PlayerChar.STATES.GIMMICK, player.get_predefined_hitbox(PlayerChar.HITBOXES.HORIZONTAL))
 			player.play_animation("current")
 
 
@@ -88,7 +88,7 @@ func _on_current_body_entered(body: PlayerChar) -> void:
 func _on_current_body_exited(body: PlayerChar) -> void:
 	if body.get_gimmick_var("ActiveCurrent") == self:
 		body.unset_gimmick_var("ActiveCurrent")
-	if normal_state_on_exit and body.get_state() == PlayerChar.STATES.ANIMATION:
+	if normal_state_on_exit and body.get_state() == PlayerChar.STATES.GIMMICK:
 		body.set_state(PlayerChar.STATES.NORMAL, body.get_predefined_hitbox(PlayerChar.HITBOXES.HORIZONTAL))
 		
 	player_count -= 1

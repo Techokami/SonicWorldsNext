@@ -7,6 +7,17 @@ func _process(_delta):
 	if (!Engine.is_editor_hint()):
 		global_rotation = 0
 
+
+func _on_ShieldTimer_timeout():
+	match(animation):
+		"FireAction":
+			play("Fire")
+		"BubbleAction":
+			play("Bubble")
+		"BubbleBounce":
+			play("Bubble")
+
+
 # Shields have different effects so this is where you'll want to code your animations
 func _on_Shields_frame_changed():
 	match (animation):

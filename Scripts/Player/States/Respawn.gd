@@ -5,10 +5,6 @@ var targetPoint = Vector2.ZERO
 var spawnTicker = (1.0/64.0)*60.0
 
 
-func _ready():
-	invulnerability = true # ironic
-
-
 func state_activated():
 	targetPoint = parent.partner.global_position
 
@@ -82,7 +78,7 @@ func state_physics_process(delta: float) -> void:
 		# restore layer
 		parent.collision_layer = layerMemory
 		
-		match(parent.partner.currentState):
+		match(parent.partner.get_state()):
 			parent.STATES.NORMAL, parent.STATES.AIR, parent.STATES.JUMP:
 				parent.groundSpeed = 0
 				parent.animator.play("walk")

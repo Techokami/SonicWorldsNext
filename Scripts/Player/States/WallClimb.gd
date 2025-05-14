@@ -59,7 +59,8 @@ func state_physics_process(delta: float) -> void:
 		if !parent.horizontalSensor.is_colliding():
 			parent.movement = Vector2.ZERO
 			parent.animator.speed_scale = 1
-			parent.set_state(parent.STATES.GLIDE,parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL))
+			parent.set_character_action_state(KnucklesAvatar.CHAR_STATES.KNUCKLES_CLIMB,
+			                    parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL))
 			return
 		
 		# climbing edge

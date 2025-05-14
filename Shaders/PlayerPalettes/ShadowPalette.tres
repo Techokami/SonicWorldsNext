@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://eb1tnh10ipr5"]
+
+[ext_resource type="Shader" path="res://Shaders/PaletteSwapRow.gdshader" id="1_obcw2"]
+[ext_resource type="Texture2D" uid="uid://lv4qey45t23s" path="res://Graphics/Palettes/SuperSonicPal.png" id="2_q5sfo"]
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_obcw2")
+shader_parameter/amount = 4.0
+shader_parameter/palRows = 16.0
+shader_parameter/row = 0.0
+shader_parameter/approximation = 0.0
+shader_parameter/paletteTexture = ExtResource("2_q5sfo")

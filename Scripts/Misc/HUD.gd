@@ -71,6 +71,9 @@ func _ready():
 				return
 
 	# error prevention
+	if Engine.is_editor_hint():
+		return
+
 	if !Global.is_main_loaded:
 		return
 	
@@ -78,7 +81,11 @@ func _ready():
 	Global.timerActive = false
 	Global.hud = self
 	# Set character Icon
-	$LifeCounter/Icon.texture = lives_textures[Global.PlayerChar1]
+	var life_icon: Sprite2D = $LifeCounter/Icon
+	life_icon.texture = lives_textures[Global.PlayerChar1]
+	life_icon.material = Global.get_material_for_character(Global.PlayerChar1)
+
+		
 	
 	# play level card routine if level card is true
 	if playLevelCard:
@@ -126,6 +133,9 @@ func _ready():
 	$LevelClear/Act.frame = act-1
 
 func _process(delta):
+	if Engine.is_editor_hint():
+		return
+			
 	# set score string to match global score with leading 0s
 	scoreText.text = "%6d" % Global.score
 	

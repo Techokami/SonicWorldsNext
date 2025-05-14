@@ -1,4 +1,4 @@
-[gd_scene load_steps=194 format=3 uid="uid://cioq5saowvqxj"]
+[gd_scene load_steps=193 format=3 uid="uid://cioq5saowvqxj"]
 
 [ext_resource type="Script" path="res://Scripts/Player/Player.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://d1e4muavtnun6" path="res://Entities/PlayerAvatars/Sonic.tscn" id="2"]
@@ -18,7 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://d20jsqgat6iup" path="res://Graphics/Items/shield_fire.png" id="16"]
 [ext_resource type="Texture2D" uid="uid://dlgef7vglnii5" path="res://Graphics/Items/shield_bubble.png" id="17"]
 [ext_resource type="Texture2D" uid="uid://d34mlpdkwjuru" path="res://Graphics/Items/shield_lightning.png" id="18"]
-[ext_resource type="Script" path="res://Scripts/Player/States/AmyHammerSwing.gd" id="18_l6lpm"]
+[ext_resource type="Script" path="res://Scripts/Player/States/CharacterAction.gd" id="18_3ehlx"]
 [ext_resource type="Script" path="res://Scripts/Player/ShieldAnimations.gd" id="19"]
 [ext_resource type="Texture2D" uid="uid://frqq7h80cju8" path="res://Graphics/Items/shield_insta.png" id="20"]
 [ext_resource type="AudioStream" uid="uid://dg4gnjja2ce0s" path="res://Audio/SFX/Player/Shield.wav" id="21"]
@@ -55,13 +55,12 @@
 [ext_resource type="AudioStream" uid="uid://tgvfl6qbs7ec" path="res://Audio/SFX/Player/Drown.wav" id="53"]
 [ext_resource type="Script" path="res://Scripts/Player/States/Respawn.gd" id="54"]
 [ext_resource type="Script" path="res://Scripts/Player/TailsFlightHitArea.gd" id="55"]
-[ext_resource type="Script" path="res://Scripts/Player/States/Hang.gd" id="56"]
+[ext_resource type="Script" path="res://Scripts/Player/States/Gimmick.gd" id="56"]
 [ext_resource type="Script" path="res://Scripts/Gimmicks/Hanger.gd" id="57"]
 [ext_resource type="AudioStream" uid="uid://bfba871gfmv0s" path="res://Audio/SFX/Player/Grab.wav" id="58"]
 [ext_resource type="Script" path="res://Scripts/Player/States/Glide.gd" id="59"]
 [ext_resource type="AudioStream" uid="uid://78gy6s87pbbo" path="res://Audio/SFX/Player/Land.wav" id="60"]
 [ext_resource type="AudioStream" uid="uid://uaa5twt8odin" path="res://Audio/SFX/Player/Slide.wav" id="61"]
-[ext_resource type="Script" path="res://Scripts/Player/States/WallClimb.gd" id="62"]
 [ext_resource type="AudioStream" uid="uid://bmiq3qg6r81hw" path="res://Audio/SFX/Player/WaterRunV2.wav" id="64_04xna"]
 [ext_resource type="Texture2D" uid="uid://b1k615l251fu5" path="res://Graphics/Misc/WaterSurfaceSplash.png" id="64_ovmgw"]
 [ext_resource type="AudioStream" uid="uid://buu4anko53vx2" path="res://Audio/SFX/Objects/ChemJump.wav" id="65_7v2sx"]
@@ -71,7 +70,6 @@ resource_local_to_scene = true
 size = Vector2(18, 38)
 
 [sub_resource type="CanvasItemMaterial" id="2"]
-blend_mode = 5
 
 [sub_resource type="AtlasTexture" id="32"]
 atlas = ExtResource("17")
@@ -1225,9 +1223,10 @@ script = ExtResource("10")
 process_priority = 1
 script = ExtResource("44")
 
-[node name="Animation" type="Node" parent="States"]
+[node name="PathFollow" type="Node" parent="States"]
 process_priority = 1
 script = ExtResource("12")
+_hands_free = false
 
 [node name="Hit" type="Node" parent="States"]
 process_priority = 1
@@ -1256,18 +1255,14 @@ one_shot = true
 process_priority = 1
 script = ExtResource("54")
 
-[node name="Hang" type="Node" parent="States"]
+[node name="Gimmick" type="Node" parent="States"]
 script = ExtResource("56")
 
 [node name="Glide" type="Node" parent="States"]
 script = ExtResource("59")
 
-[node name="WallClimb" type="Node" parent="States"]
-script = ExtResource("62")
-
-[node name="AmyHammerSwing" type="Node" parent="States"]
-process_priority = 1
-script = ExtResource("18_l6lpm")
+[node name="CharacterAction" type="Node" parent="States"]
+script = ExtResource("18_3ehlx")
 
 [node name="PhysicsLookUp" type="Node" parent="."]
 script = ExtResource("4")
@@ -1288,8 +1283,7 @@ visible = false
 z_index = 6
 material = SubResource("2")
 sprite_frames = SubResource("57")
-animation = &"Insta"
-frame = 5
+animation = &"FireAction"
 script = ExtResource("19")
 
 [node name="ShieldTimer" type="Timer" parent="Shields"]
@@ -1330,6 +1324,7 @@ groundPickup = true
 [node name="HitBox" type="CollisionShape2D" parent="TailsCarryBox"]
 position = Vector2(0, -3.5)
 shape = SubResource("167")
+disabled = true
 
 [node name="Grab" type="AudioStreamPlayer" parent="TailsCarryBox"]
 stream = ExtResource("58")
@@ -1538,10 +1533,9 @@ offset = Vector2(-16, -8)
 
 [connection signal="timeout" from="States/Fly/FlyBugStop" to="States/Fly" method="_on_FlyBugStop_timeout"]
 [connection signal="timeout" from="SkidDustTimer" to="States/Normal" method="_on_SkidDustTimer_timeout"]
-[connection signal="timeout" from="SkidDustTimer" to="States/Glide" method="_on_SkidDustTimer_timeout"]
 [connection signal="timeout" from="SparkleTimer" to="." method="_on_SparkleTimer_timeout"]
 [connection signal="timeout" from="BubbleTimer" to="." method="_on_BubbleTimer_timeout"]
 [connection signal="frame_changed" from="Shields" to="Shields" method="_on_Shields_frame_changed"]
-[connection signal="timeout" from="Shields/ShieldTimer" to="States/Jump" method="_on_ShieldTimer_timeout"]
+[connection signal="timeout" from="Shields/ShieldTimer" to="Shields" method="_on_ShieldTimer_timeout"]
 [connection signal="body_entered" from="TailsCarryBox" to="TailsCarryBox" method="_on_Hanger_body_entered"]
 [connection signal="body_exited" from="TailsCarryBox" to="TailsCarryBox" method="_on_Hanger_body_exited"]

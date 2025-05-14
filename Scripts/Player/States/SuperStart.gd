@@ -30,13 +30,13 @@ func state_process(_delta: float) -> void:
 		Global.currentTheme = 0
 		Global.effectTheme.stream = Global.themes[Global.currentTheme]
 		Global.effectTheme.play()
-		# swap sprite if sonic
-		if parent.character == Global.CHARACTERS.SONIC:
-			parent.sprite.texture = parent.superSprite
+		
+		# Start graphics changes needed to go super
+		parent.get_avatar().go_super()
+		
 		# reset velocity to memory
 		parent.movement = remVel
 		parent.isSuper = true
-		print("isSuper set to true")
 		parent.switch_physics()
 		parent.supTime = 1
 	

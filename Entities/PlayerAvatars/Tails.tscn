@@ -1,14 +1,16 @@
-[gd_scene load_steps=81 format=3 uid="uid://by3kgbgiinm60"]
+[gd_scene load_steps=83 format=3 uid="uid://by3kgbgiinm60"]
 
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="1"]
 [ext_resource type="Script" path="res://Scripts/Player/PlayerAvatars/TailsAvatar.gd" id="1_ifxof"]
 [ext_resource type="Script" path="res://Entities/PlayerAvatars/PlayerAnimation.gd" id="1_q7n5h"]
 [ext_resource type="Texture2D" uid="uid://c05fsbnx0p7xf" path="res://Graphics/Players/Tails.png" id="2"]
 [ext_resource type="Texture2D" uid="uid://dlomjk6vm15ep" path="res://Graphics/Misc/DashDust.png" id="3"]
+[ext_resource type="Material" uid="uid://hxji3lmrri4m" path="res://Shaders/PlayerPalettes/TailsPalette.tres" id="3_jilda"]
 [ext_resource type="Script" path="res://Scripts/Player/TailsAnimator.gd" id="4"]
 [ext_resource type="Script" path="res://Scripts/Player/TailsSpriteSettings.gd" id="5"]
 [ext_resource type="Texture2D" uid="uid://dvqglf8dididc" path="res://Graphics/Items/shield_plain.png" id="6_kof51"]
 [ext_resource type="Texture2D" uid="uid://decpuepom6w1d" path="res://Graphics/Tools/bar_helper.png" id="9_ofppa"]
+[ext_resource type="Script" path="res://Scripts/Player/States/Fly.gd" id="11_amqcw"]
 
 [sub_resource type="Animation" id="86"]
 length = 0.001
@@ -1740,7 +1742,7 @@ script = ExtResource("1_q7n5h")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 5
-material = ExtResource("1")
+material = ExtResource("3_jilda")
 position = Vector2(0, -4)
 texture = ExtResource("2")
 offset = Vector2(0, -5)
@@ -1796,5 +1798,15 @@ visible = false
 z_index = 50
 texture = ExtResource("9_ofppa")
 
+[node name="CharacterStates" type="Node" parent="."]
+
+[node name="Fly" type="Node" parent="CharacterStates"]
+process_priority = 1
+script = ExtResource("11_amqcw")
+
+[node name="FlyBugStop" type="Timer" parent="CharacterStates/Fly"]
+one_shot = true
+
 [connection signal="animation_started" from="PlayerAnimation" to="Sprite2D" method="_on_PlayerAnimation_animation_started"]
 [connection signal="animation_started" from="PlayerAnimation" to="Sprite2D/Tails" method="_on_PlayerAnimation_animation_started"]
+[connection signal="timeout" from="CharacterStates/Fly/FlyBugStop" to="CharacterStates/Fly" method="_on_FlyBugStop_timeout"]

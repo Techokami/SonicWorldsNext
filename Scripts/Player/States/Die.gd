@@ -1,8 +1,5 @@
 extends PlayerState
 
-func _ready():
-	invulnerability = true # ironic
-
 
 func state_physics_process(delta: float) -> void:
 	# gravity

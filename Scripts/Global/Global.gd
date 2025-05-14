@@ -85,6 +85,19 @@ var waterScrollSpeed = 64 # used by other nodes for how fast to move the water t
 # characters (if you want more you should add one here, see the player script too for more settings)
 enum CHARACTERS {NONE,SONIC,TAILS,KNUCKLES,AMY,SHADOW}
 
+var _player_shaders := [
+	preload("res://Shaders/PlayerPalette.tres"), # NONE should never come into play
+	preload("res://Shaders/PlayerPalettes/SonicPalette.tres"),
+	preload("res://Shaders/PlayerPalettes/TailsPalette.tres"),
+	preload("res://Shaders/PlayerPalettes/KnucklesPalette.tres"),
+	preload("res://Shaders/PlayerPalettes/AmyPalette.tres"),
+	preload("res://Shaders/PlayerPalettes/ShadowPalette.tres"),
+]
+
+func get_material_for_character(character: CHARACTERS) -> Material:
+	print("getting %s" % _player_shaders[character])
+	return _player_shaders[character]
+
 ## Which multiplayer mode is in use alters some aspects of how the second (and on if that's ever
 ## implemented) works. Note that this is separate from concepts like split screen and it does not
 ## inherently set up a competitive 
@@ -112,8 +125,8 @@ var multiplayer_mode = MULTIMODE.NORMAL
 var character_names: Array = \
 	CHARACTERS.keys().map(func(char_name: String): return char_name.capitalize())
 
-var PlayerChar1 = CHARACTERS.SONIC
-var PlayerChar2 = CHARACTERS.TAILS
+var PlayerChar1: CHARACTERS = CHARACTERS.SONIC
+var PlayerChar2: CHARACTERS = CHARACTERS.TAILS
 
 # Level settings
 var hardBorderLeft   = -100000000

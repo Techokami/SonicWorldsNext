@@ -48,7 +48,7 @@ func connect_player(player: PlayerChar):
 		player.set_direction(PlayerChar.DIRECTIONS.LEFT)
 		player.play_animation("grabVerticalBarOffset")
 
-	player.set_state(PlayerChar.STATES.ANIMATION)
+	player.set_state(PlayerChar.STATES.GIMMICK)
 	player.set_gimmick_var("VerticalBarSpeedAtEntry", player.groundSpeed)
 			
 	# Drop all the speed values to 0 to prevent issues.
@@ -112,7 +112,7 @@ func check_grab(player: PlayerChar) -> bool:
 		return false
 		
 	# Skip if already in a special animation state or if the player is jumping
-	if (player.get_state() == PlayerChar.STATES.ANIMATION or player.get_state() == PlayerChar.STATES.JUMP):
+	if (player.get_state() == PlayerChar.STATES.GIMMICK or player.get_state() == PlayerChar.STATES.JUMP):
 		return false
 
 	# We never grab the bar unless the player is running fast enough

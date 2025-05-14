@@ -65,7 +65,7 @@ func activateBeam():
 	if !active:
 		active = true
 		$BeamAnimator.play("Beam")
-		Global.players[0].set_state(Global.players[0].STATES.ANIMATION)
+		Global.players[0].set_state(Global.players[0].STATES.GIMMICK)
 		Global.players[0].animator.play("idle")
 		Global.players[0].groundSpeed = 60*4
 		Global.players[0].movement.x = 0

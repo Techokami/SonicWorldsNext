@@ -1,4 +1,9 @@
-shader_type canvas_item;
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://dh6lceurc5knf"]
+
+[ext_resource type="Texture2D" uid="uid://bgolodi3or7cw" path="res://Graphics/Palettes/SuperAmy.png" id="2_f4svk"]
+
+[sub_resource type="Shader" id="Shader_kwqyd"]
+code = "shader_type canvas_item;
 uniform float amount : hint_range(1,255,1);
 uniform float palRows : hint_range(1,255,1);
 uniform float row : hint_range(0,999,1);
@@ -30,4 +35,12 @@ void fragment(){
 	} else {
 	COLOR = texture(TEXTURE,UV).rgba;
 	}
-}
+}"
+
+[resource]
+shader = SubResource("Shader_kwqyd")
+shader_parameter/amount = 4.0
+shader_parameter/palRows = 16.0
+shader_parameter/row = 1.0
+shader_parameter/approximation = 0.0
+shader_parameter/paletteTexture = ExtResource("2_f4svk")

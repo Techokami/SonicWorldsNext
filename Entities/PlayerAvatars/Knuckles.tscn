@@ -1,12 +1,13 @@
-[gd_scene load_steps=70 format=3 uid="uid://bdaih80dlev3f"]
+[gd_scene load_steps=71 format=3 uid="uid://bdaih80dlev3f"]
 
-[ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="1"]
 [ext_resource type="Script" path="res://Scripts/Player/PlayerAvatars/KnucklesAvatar.gd" id="1_qqybq"]
 [ext_resource type="Script" path="res://Entities/PlayerAvatars/PlayerAnimation.gd" id="1_xdgv8"]
 [ext_resource type="Texture2D" uid="uid://cndrds5482vh5" path="res://Graphics/Players/Knuckles.png" id="2"]
 [ext_resource type="Texture2D" uid="uid://dlomjk6vm15ep" path="res://Graphics/Misc/DashDust.png" id="3"]
+[ext_resource type="Material" uid="uid://cwdq6vrtybua5" path="res://Shaders/PlayerPalettes/KnucklesPalette.tres" id="3_jvrcy"]
 [ext_resource type="Texture2D" uid="uid://dvqglf8dididc" path="res://Graphics/Items/shield_plain.png" id="4_6hh3f"]
 [ext_resource type="Texture2D" uid="uid://decpuepom6w1d" path="res://Graphics/Tools/bar_helper.png" id="7_1jkva"]
+[ext_resource type="Script" path="res://Scripts/Player/States/WallClimb.gd" id="9_bduma"]
 
 [sub_resource type="Animation" id="86"]
 length = 0.001
@@ -1351,12 +1352,11 @@ script = ExtResource("1_xdgv8")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 5
-material = ExtResource("1")
+material = ExtResource("3_jvrcy")
 texture = ExtResource("2")
 offset = Vector2(0, -9)
 hframes = 16
 vframes = 18
-frame = 1
 
 [node name="DashDust" type="AnimatedSprite2D" parent="Sprite2D"]
 visible = false
@@ -1385,3 +1385,8 @@ hframes = 4
 visible = false
 z_index = 50
 texture = ExtResource("7_1jkva")
+
+[node name="CharacterStates" type="Node" parent="."]
+
+[node name="WallClimb" type="Node" parent="CharacterStates"]
+script = ExtResource("9_bduma")
