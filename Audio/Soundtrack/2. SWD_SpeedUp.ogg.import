@@ -13,7 +13,7 @@ dest_files=["res://.godot/imported/2. SWD_SpeedUp.ogg-524817b2b870bf74b8f2d5f20f
 [params]
 
 loop=true
-loop_offset=0
+loop_offset=1.412
 bpm=0
 beat_count=0
 bar_beats=4
