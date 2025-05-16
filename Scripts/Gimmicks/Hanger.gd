@@ -143,7 +143,7 @@ func physics_process_connected(_delta, player: PlayerChar, index):
 	# For some reason all the movement logic is in here?
 	# jump and air states don't change animation, so no need for a new state. Just
 	# set the animation and convert out of any unusual states into AIR.
-	player.play_animation("hang")
+	player.get_avatar().get_animator().play("hang")
 	player.set_state(PlayerChar.STATES.AIR)
 	player.set_air_control(true)
 	

@@ -16,7 +16,7 @@ func _physics_process(_delta):
 					i.movement.x = 2*sign(-1+(forceDirection*2))*60.0
 				if i.get_state() != PlayerChar.STATES.ROLL:
 					i.set_state(PlayerChar.STATES.ROLL)
-					i.play_animation("roll")
+					i.get_avatar().get_animator().play("roll")
 					i.sfx[1].play()
 
 func _on_ForceRoll_body_entered(body):

@@ -6,7 +6,7 @@ func state_process(_delta: float) -> void:
 		parent.action_jump()
 	
 	# if offset, flip around
-	if parent.animator.current_animation == "corkScrewOffset":
+	if parent.get_avatar().get_animator().current_animation == "corkScrewOffset":
 		parent.sprite.flip_v = true
 		parent.sprite.offset.y = 4
 
@@ -43,4 +43,4 @@ func state_physics_process(delta: float) -> void:
 			parent.set_state(parent.STATES.ROLL)
 		else:
 			parent.set_state(parent.STATES.NORMAL)
-			parent.animator.play("RESET")
+			parent.get_avatar().get_animator().play("RESET")

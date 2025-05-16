@@ -76,7 +76,7 @@ func _physics_process(_delta: float) -> void:
 				player.get_active_gimmick() == null:
 			player.set_hitbox(player.get_predefined_hitbox(PlayerChar.HITBOXES.HORIZONTAL))
 			player.set_state(PlayerChar.STATES.GIMMICK, player.get_predefined_hitbox(PlayerChar.HITBOXES.HORIZONTAL))
-			player.play_animation("current")
+			player.get_avatar().get_animator().play("current")
 
 
 func _on_current_body_entered(body: PlayerChar) -> void:

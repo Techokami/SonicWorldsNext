@@ -39,14 +39,18 @@ func connect_player(player: PlayerChar):
 	# attmept to connect to the gimmick. If failed, we give up this attempt.
 	if player.set_active_gimmick(self) == false:
 		return
+		
+	var animator = player.get_avatar().get_animator()
 
 	$Grab.play()
 	if player.movement.x > 0:
 		player.set_direction(PlayerChar.DIRECTIONS.RIGHT)
-		player.play_animation("grabVerticalBar")
+		animator.reset_loops() # We need to count loops, so it's time to reset them.
+		animator.play("grabVerticalBar")
 	else:
 		player.set_direction(PlayerChar.DIRECTIONS.LEFT)
-		player.play_animation("grabVerticalBarOffset")
+		animator.reset_loops() # We need to count loops, so it's time to reset them.
+		animator.play("grabVerticalBarOffset")
 
 	player.set_state(PlayerChar.STATES.GIMMICK)
 	player.set_gimmick_var("VerticalBarSpeedAtEntry", player.groundSpeed)
@@ -91,14 +95,14 @@ func disconnect_player(player: PlayerChar, do_launch: bool = true):
 
 ## Disconnects either on animation or when the player attempts to jump off
 func player_process(player : PlayerChar, _delta : float):
-	if player.get_animation_loops() >= rotations:
+	if player.get_avatar().get_animator().get_loops() >= rotations:
 		disconnect_player(player, true)
 	
 	if player.any_action_pressed():
 		# Whoa! JUMP!
 		disconnect_player(player, false)
 		var sprite: Sprite2D = player.sprite
-		player.position.x += (sprite.offset.x / 2.0)
+		player.position.x += (sprite.offset.x / 2.0) # TODO This gimmick should stop faking x position via offsets
 		player.action_jump("roll",true, false)
 
 ## Checks if the player should grab the bar

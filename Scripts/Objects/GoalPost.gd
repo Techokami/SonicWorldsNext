@@ -58,6 +58,7 @@ func _physics_process(_delta):
 		for i in stateCancelList:
 			if i == player.get_state():
 				player.set_state(player.STATES.AIR)
+				player.get_avatar().get_animator().play("walk")
 		# set inputs to right
 		player.inputs[player.INPUTS.XINPUT] = 1
 		player.inputs[player.INPUTS.YINPUT] = 0

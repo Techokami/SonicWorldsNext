@@ -236,3 +236,12 @@ func _on_SkidDustTimer_timeout() -> void:
 			dust.z_index = 10
 			parent.get_parent().add_child(dust)
 			parent.sfx[28].play()
+
+
+# Override so that we can connect to player's skid dust timer
+func _ready() -> void:
+	super()
+	var skid_dust_timer: Timer = parent.get_node("SkidDustTimer")
+	if skid_dust_timer != null:
+		skid_dust_timer.timeout.connect(_on_SkidDustTimer_timeout, CONNECT_DEFERRED)
+		

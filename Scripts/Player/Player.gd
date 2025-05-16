@@ -1196,7 +1196,7 @@ func _land_floor():
 # clean animation
 func _on_PlayerAnimation_animation_started(_anim_name):
 	if (sprite != null):
-		sprite.flip_v = false
+		sprite.flip_v = false # Won't this make reverse-gravity kind of impossible?
 		sprite.offset = defaultSpriteOffset
 		if animator.speed_scale < 0:
 			animator.speed_scale = abs(animator.speed_scale)
@@ -1657,42 +1657,6 @@ func set_shield(setShieldID: PlayerChar.SHIELDS) -> void:
 ## values of the SHIELDS enumerator for the player.
 func get_shield() -> PlayerChar.SHIELDS:
 	return self.shield
-
-
-## Gets the player animator -- this is a tad overkill most of the time, but
-## Sometimes you need to control an animation in a more robust way than simply
-## by using play.
-## XXX TODO Remove this in favor of getting the PlayerAvatar->Animator instead
-func get_animator() -> PlayerCharAnimationPlayer:
-	return self.animator
-
-
-## Sets the animation. No frills, just provides a hook to directly call AnimationPlayer.play()
-## for the player animator. Also resets the animation loop count to zero (only matters for
-## animations that count their own loops)
-## XXX TODO Remove this in favor of getting the PlayerAvatar->Animator instead
-func play_animation(anim_name: StringName = "", custom_blend: float = -1, custom_speed: float = 1.0,
-					from_end: bool = false) -> void:
-	self.animator.play_proxy(anim_name, custom_blend, custom_speed, from_end)
-
-
-## Gets the current count of animation loops that have happened so far in the
-## current animation (note that you will need to manually reset the loop count
-## if you go through the animator directly to queue your animation and need to
-## track the number of animation loops. Also only animations that are set up
-## to track their own loop count will do so. See the vertical bar swing
-## animations for an example)
-## XXX TODO Remove this in favor of getting the PlayerAvatar->Animator instead
-func get_animation_loops():
-	return self.animator.get_loops()
-
-
-## Resets the count of loop animations. Use this if you invoke an animation
-## change in a way that you need to reset the animation loop count for. You
-## probably won't need this.
-## XXX TODO Remove this in favor of getting the PlayerAvatar->Animator instead
-func reset_animation_loops():
-	self.animator.reset_loops()
 	
 
 ## Returns the current PlayerAvatar for the player. You should use this to get

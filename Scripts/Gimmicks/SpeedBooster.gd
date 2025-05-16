@@ -23,7 +23,7 @@ func _on_SpeedBooster_body_entered(body: PlayerChar):
 	$sfxSpring.play()
 	# exit out of state on certain states
 	match(body.get_state()):
-		PlayerChar.STATES.GLIDE:
+		PlayerChar.STATES.GLIDE: # DW's Note: Knuckles does *not* interact with these while gliding in Sonic 2.
 			if !body.ground:
-				body.play_animation("run")
+				body.get_avatar().get_animator().play("run")
 				body.set_state(PlayerChar.STATES.AIR)

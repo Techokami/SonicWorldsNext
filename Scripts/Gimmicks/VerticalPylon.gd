@@ -84,7 +84,7 @@ func connect_player(player: PlayerChar):
 	# XXX TODO: We need to clean up this hitbox setting stuff
 	player.set_state(PlayerChar.STATES.GIMMICK, player.get_predefined_hitbox(PlayerChar.HITBOXES.HORIZONTAL))
 	player.set_direction(PlayerChar.DIRECTIONS.RIGHT)
-	player.play_animation("swingVerticalBarManaged", -1, 0.0)
+	player.get_avatar().get_animator().play("swingVerticalBarManaged", -1, 0.0)
 	player.set_gimmick_var("VerticalPylonRotationTimer", 0.0)
 	player.set_gimmick_var("VerticalPylonYPos", global_position.y - player.global_position.y)
 	player.set_gimmick_var("VerticalPylonZIndex", player.z_index)
@@ -98,7 +98,7 @@ func disconnect_player(player: PlayerChar):
 	# when we got here.
 	if player.get_state() == PlayerChar.STATES.GIMMICK:
 		player.set_state(PlayerChar.STATES.JUMP)
-		player.play_animation("roll")
+		player.get_avatar().get_animator().play("roll")
 	
 	var unlock_func = func ():
 		player.clear_single_locked_gimmick(self)
@@ -149,7 +149,7 @@ func process_game(delta):
 		player.global_position.y = global_position.y - relative_y_pos
 			
 		# Animate the player based on their position in rotation.
-		player.get_animator().seek(player_rotation / rotate_time)
+		player.get_avatar().get_animator().seek(player_rotation / rotate_time)
 		
 		if fmod((player_rotation / rotate_time) - 0.25, 1.0) > 0.5:
 			player.set_z_index(get_z_index() - 100)

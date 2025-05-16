@@ -40,9 +40,7 @@ func get_character_state_object(index: int) -> PlayerState:
 	return null
 
 
-## Gets the player animator -- this is a tad overkill most of the time, but
-## Sometimes you need to control an animation in a more robust way than simply
-## by using play.
+## Gets the character animator
 func get_animator() -> PlayerCharAnimationPlayer:
 	return $PlayerAnimation
 

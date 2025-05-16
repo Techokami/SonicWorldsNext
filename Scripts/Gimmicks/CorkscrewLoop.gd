@@ -45,15 +45,16 @@ func _physics_process(_delta):
 		
 		# Set player sprites
 		for i: PlayerChar in playerList:
+			var animator = i.get_avatar().get_animator()
 			if (i.get_state() != i.STATES.CORKSCREW and i.get_state() != PlayerChar.STATES.JUMP):
 				# Set state
 				i.set_state(PlayerChar.STATES.CORKSCREW)
 				# Animation check
-				if i.get_animator().get_current_animation() != "roll":
+				if animator.get_current_animation() != "roll":
 					if (i.direction > 0):
-						i.animator.play("corkScrew")
+						animator.play("corkScrew")
 					else:
-						i.animator.play("corkScrewOffset")
+						animator.play("corkScrewOffset")
 			
 			# Set vertical movement to 0 so player doesn't fall off
 			elif (i.get_state() == PlayerChar.STATES.CORKSCREW):
@@ -68,7 +69,6 @@ func _physics_process(_delta):
 			i.cam_update()
 
 			# Animation
-			var animator = i.get_animator()
 			var cur_anim = animator.get_current_animation()
 			if cur_anim == "corkScrew" or cur_anim == "corkScrewOffset":
 				var animSize = animator.get_current_animation_length()
@@ -85,7 +85,7 @@ func _physics_process(_delta):
 					else:
 						# otherwise reset animation settings
 						var animMem = animator.get_current_animation()
-						i.play_animation("RESET")
+						animator.play("RESET")
 						animator.queue(animMem)
 					playerList.erase(i)
 

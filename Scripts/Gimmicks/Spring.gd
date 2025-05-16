@@ -79,8 +79,8 @@ func physics_collision(body: PlayerChar, hitVector: Vector2):
 					if(abs(body.groundSpeed) >= min(6*60,body.top)):
 						curAnim = "run"
 			# play player animation
-			body.play_animation("spring")
-			body.get_animator().queue(curAnim)
+			body.get_avatar().get_animator().play("spring")
+			body.get_avatar().get_animator().queue(curAnim)
 			# set vertical speed
 			body.movement.y = setMove.y
 			body.set_state(body.STATES.AIR)
@@ -91,7 +91,7 @@ func physics_collision(body: PlayerChar, hitVector: Vector2):
 			match(body.get_state()):
 				PlayerChar.STATES.GLIDE:
 					if !body.is_on_ground():
-						body.play_animation("run")
+						body.get_avatar().get_animator().play("run")
 						body.set_state(body.STATES.AIR)
 			# set horizontal speed
 			body.movement.x = setMove.x

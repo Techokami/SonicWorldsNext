@@ -92,8 +92,8 @@ func _physics_process(delta):
 					player.airTimer = player.defaultAirTime
 					player.sfx[23].play()
 					player.set_state(player.STATES.AIR)
-					player.play_animation("air")
-					player.get_animator().queue("walk")
+					player.get_avatar().get_animator().play("air")
+					player.get_avatar().get_animator().queue("walk")
 					player.movement = Vector2.ZERO
 					$Bubble.play("bigPop")
 					$BubbleCollect/CollisionShape2D.set_deferred("disabled", true)

@@ -43,7 +43,7 @@ func _physics_process(delta):
 						# check if gliding, if they are force them to fall
 						
 						if i.get_state() == PlayerChar.STATES.GLIDE:
-							i.play_animation("glideFall")
+							i.get_avatar().get_animator().play("glideFall")
 							# reset player hitbox
 							i.set_predefined_hitbox(PlayerChar.HITBOXES.NORMAL)
 							i.reflective = false

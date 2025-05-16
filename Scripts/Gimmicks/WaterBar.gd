@@ -94,7 +94,7 @@ func _process(delta):
 		$Grab.play()
 		player.set_hitbox(player.get_predefined_hitbox(PlayerChar.HITBOXES.HORIZONTAL))
 		player.set_state(PlayerChar.STATES.GIMMICK, player.get_predefined_hitbox(PlayerChar.HITBOXES.HORIZONTAL))
-		player.play_animation("clingVerticalBar")
+		player.get_avatar().get_animator().play("clingVerticalBar")
 		
 		player.set_movement(Vector2(0, 0))
 			
@@ -226,7 +226,7 @@ func check_grab(player: PlayerChar):
 
 func remove_player(player: PlayerChar):
 	# reset player animation
-	player.play_animation("current")
+	player.get_avatar().get_animator().play("current")
 	player.set_state(PlayerChar.STATES.AIR, player.get_predefined_hitbox(PlayerChar.HITBOXES.ROLL))
 	player.unset_active_gimmick()
 	player.timed_gimmick_lock(self, 0.5)

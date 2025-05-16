@@ -33,6 +33,8 @@ func _set_item_frame():
 		$Item.vframes = 1
 		$Item.frame = 0
 		$Item.texture = _1up_textures[0 if Engine.is_editor_hint() else Global.PlayerChar1]
+		if !Engine.is_editor_hint():
+			$Item.material = Global.get_material_for_character(Global.PlayerChar1)
 	else:
 		$Item.vframes = _orig_vframes
 		$Item.hframes = _orig_hframes

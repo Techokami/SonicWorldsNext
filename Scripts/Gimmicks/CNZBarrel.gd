@@ -152,7 +152,7 @@ func detach_player(player: PlayerChar, index):
 	players.remove_at(index)
 	
 	if player.get_state() == PlayerChar.STATES.DIE:
-		player.play_animation("die")
+		player.get_avatar().get_animator().play("die")
 
 	# Clamp position on exit to prevent zips on exit -- probably shouldn't use magic numbers though.
 	player.global_position.x = clamp(player.global_position.x, global_position.x - 22, global_position.x + 22)

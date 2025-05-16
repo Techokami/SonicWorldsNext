@@ -210,6 +210,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="121"]
 resource_name = "climbUp"
 length = 0.3
+step = 0.0166667
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true

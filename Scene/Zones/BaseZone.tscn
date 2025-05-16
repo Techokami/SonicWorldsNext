@@ -1,4 +1,4 @@
-[gd_scene load_steps=77 format=4 uid="uid://hj3tt0gklwba"]
+[gd_scene load_steps=80 format=4 uid="uid://hj3tt0gklwba"]
 
 [ext_resource type="Script" path="res://Scripts/Level/Level.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://bjavywoj00j1j" path="res://Scene/Zones/BaseZoneAct2.tscn" id="2_8ek7k"]
@@ -36,6 +36,7 @@
 [ext_resource type="PackedScene" uid="uid://cejf7f3r45h0c" path="res://Entities/Gimmicks/BubbleGenerator.tscn" id="33_wp2fi"]
 [ext_resource type="PackedScene" uid="uid://bkib68ja7giiv" path="res://Entities/Gimmicks/SetWaterLevel.tscn" id="34_5vad5"]
 [ext_resource type="PackedScene" uid="uid://c1ldunfxhq0he" path="res://Entities/Obstacles/ForceAngleSides.tscn" id="35_5yj8k"]
+[ext_resource type="Texture2D" uid="uid://lv4qey45t23s" path="res://Graphics/Palettes/SuperSonicPal.png" id="35_fob2u"]
 [ext_resource type="PackedScene" uid="uid://blwewyk2fnrew" path="res://Entities/Gimmicks/Shutter.tscn" id="36_0g2sp"]
 [ext_resource type="PackedScene" uid="uid://chyrwm1qwvlyt" path="res://Entities/Gimmicks/Switch.tscn" id="37_y7my3"]
 [ext_resource type="Script" path="res://Scripts/Misc/AltSpawn.gd" id="38_8ssba"]
@@ -130,6 +131,51 @@ size = Vector2(64, 8)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2ojop"]
 size = Vector2(256, 16)
 
+[sub_resource type="Shader" id="Shader_bv8jl"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+uniform float amount : hint_range(1,255,1);
+uniform float palRows : hint_range(1,255,1);
+uniform float row : hint_range(0,999,1);
+uniform float approximation : hint_range(0.0,5.0,0.01);
+uniform sampler2D paletteTexture : filter_nearest;
+
+
+void fragment(){
+	if (row > 1.0) {
+		vec3 pal = texture(paletteTexture,UV).rgb;
+		vec3 repal = pal;
+		vec3 color = texture(TEXTURE,UV).rgb;
+		
+		vec3 new_color = color;
+		
+		for (float i = 1.0; i<=amount; i++){
+			pal = texture(paletteTexture,vec2(i/(amount+1.0),0)).rgb;
+			repal = texture(paletteTexture,vec2(i/(amount+1.0),(row-1.0)/(palRows-1.0))).rgb;
+			
+			if (distance(pal,color) - distance(new_color, color) <= approximation) {
+				new_color = repal;
+				// set i to end loop if a match was already found
+				i = amount+1.0;
+			}
+		}
+		
+		COLOR.rgb = new_color;
+		COLOR.a  = texture(TEXTURE,UV).a;
+	} else {
+	COLOR = texture(TEXTURE,UV).rgba;
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nnlca"]
+resource_local_to_scene = true
+shader = SubResource("Shader_bv8jl")
+shader_parameter/amount = 4.0
+shader_parameter/palRows = 16.0
+shader_parameter/row = 9.0
+shader_parameter/approximation = 0.0
+shader_parameter/paletteTexture = ExtResource("35_fob2u")
+
 [node name="BaseZone" type="Node2D"]
 script = ExtResource("2")
 nextZone = ExtResource("2_8ek7k")
@@ -169,12 +215,16 @@ region_rect = Rect2(0, 0, 512, 512)
 [node name="Players" type="Node" parent="."]
 
 [node name="Player" parent="Players" instance=ExtResource("5_tgx6m")]
-position = Vector2(8046, 1240)
+position = Vector2(5642, 1494)
 
 [node name="AltSpawn" type="Node2D" parent="Players"]
 position = Vector2(896, 1486)
 script = ExtResource("38_8ssba")
 current_character = 3
+
+[node name="Monitor" parent="Players" instance=ExtResource("8_8svvy")]
+position = Vector2(1791, 1440)
+item = 7
 
 [node name="Default" type="TileMapLayer" parent="."]
 use_parent_material = true
@@ -870,6 +920,7 @@ position = Vector2(10656, 192)
 
 [node name="Capsule" parent="Entity" instance=ExtResource("32_af06c")]
 z_index = 1
+material = SubResource("ShaderMaterial_nnlca")
 position = Vector2(10240, 160)
 
 [node name="BubbleGenerator2" parent="Entity" instance=ExtResource("33_wp2fi")]
@@ -1040,13 +1091,11 @@ position = Vector2(6523, 1888)
 position = Vector2(7776, 1968)
 scale = Vector2(1, 11.0082)
 speed = 120.0
-touchActive = true
 
 [node name="Fan2" parent="Entity" instance=ExtResource("65_iomqv")]
 position = Vector2(7840, 1920)
 scale = Vector2(1, 8.00818)
 speed = 120.0
-touchActive = true
 
 [node name="Fan3" parent="Entity" instance=ExtResource("65_iomqv")]
 position = Vector2(8144, 1920)
@@ -1587,6 +1636,10 @@ item = 4
 position = Vector2(7448, 1712)
 
 [node name="Monitor12" parent="Monitors" instance=ExtResource("8_8svvy")]
+position = Vector2(9088, 1264)
+item = 7
+
+[node name="Monitor20" parent="Monitors" instance=ExtResource("8_8svvy")]
 position = Vector2(9136, 1264)
 item = 7
 
@@ -1827,9 +1880,8 @@ region_rect = Rect2(0, 16, 64, 80)
 [node name="DWDebugTool" parent="." instance=ExtResource("66_lhwlu")]
 position = Vector2(-157, 714)
 
-[node name="Spring" parent="." instance=ExtResource("15_sn1cn")]
-position = Vector2(7809, 2044)
-type = 1
+[node name="Spikes" parent="." instance=ExtResource("50_mtg26")]
+position = Vector2(8027, 1264)
 
 [connection signal="body_entered" from="Platforms/MCZCollapsePlatform" to="Platforms/MCZCollapsePlatform" method="_on_body_entered"]
 [connection signal="body_exited" from="Platforms/MCZCollapsePlatform" to="Platforms/MCZCollapsePlatform" method="_on_body_exited"]

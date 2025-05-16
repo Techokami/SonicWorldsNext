@@ -1231,6 +1231,7 @@ _hands_free = false
 [node name="Hit" type="Node" parent="States"]
 process_priority = 1
 script = ExtResource("14")
+_hands_free = false
 
 [node name="Die" type="Node" parent="States"]
 process_priority = 1
@@ -1533,7 +1534,6 @@ offset = Vector2(-16, -8)
 
 [connection signal="timeout" from="States/Fly/FlyBugStop" to="States/Fly" method="_on_FlyBugStop_timeout"]
 [connection signal="timeout" from="SkidDustTimer" to="States/Normal" method="_on_SkidDustTimer_timeout"]
-[connection signal="timeout" from="SkidDustTimer" to="States/Glide" method="_on_SkidDustTimer_timeout"]
 [connection signal="timeout" from="SparkleTimer" to="." method="_on_SparkleTimer_timeout"]
 [connection signal="timeout" from="BubbleTimer" to="." method="_on_BubbleTimer_timeout"]
 [connection signal="frame_changed" from="Shields" to="Shields" method="_on_Shields_frame_changed"]

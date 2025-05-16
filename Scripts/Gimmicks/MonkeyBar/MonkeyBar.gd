@@ -99,7 +99,7 @@ func connect_player(player : PlayerChar, allowSwap: bool = false) -> void:
 		return
 
 	reposition_player_static(player)
-	player.play_animation("hang")
+	player.get_avatar().get_animator().play("hang")
 
 	# Is there anything we need to track as far as variables go? Maybe later.
 	pass
@@ -108,7 +108,7 @@ func disconnect_player(player : PlayerChar) -> void:
 	player.unset_active_gimmick()
 	
 	if player.get_state() == PlayerChar.STATES.GIMMICK:
-		player.play_animation("roll")
+		player.get_avatar().get_animator().play("roll")
 		player.set_state(player.STATES.JUMP)
 		
 	player.unset_gimmick_var("brachiate_target_cur")
@@ -142,7 +142,7 @@ func get_collision_target(hitbox_offset : int) -> Vector2:
 ## This function repositions the player between the current connected brachiato
 ##   and the one the player is attempting to move to.
 func brachiate_reposition_player(player : PlayerChar, player_brachiation_target : Brachiatable):
-	var animator = player.get_animator()
+	var animator = player.get_avatar().get_animator()
 	var cur_anim = animator.get_current_animation()
 	
 	# Don't do anything if the player isn't in the brachiate animation
@@ -233,15 +233,17 @@ func brachiate_connect(player : PlayerChar, brachiate_target : Brachiatable) -> 
 
 	# Play the animation associated with your current brachiation arm
 	if next_arm == ARM_SELECTION.RIGHT:
-		player.play_animation("brachiateRight", -1, brachiate_target.brachiate_speed)
+		player.get_avatar().get_animator().play("brachiateRight", -1,
+		                                        brachiate_target.brachiate_speed)
 	else:
-		player.play_animation("brachiateLeft", -1, brachiate_target.brachiate_speed)
+		player.get_avatar().get_animator().play("brachiateLeft", -1,
+		                                        brachiate_target.brachiate_speed)
 
 ## Checks if the player can swing like a monkey from one monkeybar to another
 ## and if so, starts the process.
 func check_brachiate(player : PlayerChar):
 	# Don't allow check_brachiate while the player is brachiating already!
-	var cur_anim = player.get_animator().get_current_animation()
+	var cur_anim = player.get_avatar().get_animator().get_current_animation()
 	if cur_anim == "brachiateLeft" or cur_anim == "brachiateRight":
 		return false
 	

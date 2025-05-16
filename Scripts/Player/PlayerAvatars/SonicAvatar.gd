@@ -151,8 +151,8 @@ func sonic_jump_dropdash_callback(_state: PlayerState, player: PlayerChar, delta
 		drop_timer = 0
 		
 		# If the player released drop dash, it's time to put the jump back to normal
-		if player.get_animator().current_animation == "dropDash":
-			player.get_animator().play("roll")
+		if get_animator().current_animation == "dropDash":
+			get_animator().play("roll")
 		
 		# The rest of this function is for charging the jumpdash.
 		return true
@@ -162,8 +162,8 @@ func sonic_jump_dropdash_callback(_state: PlayerState, player: PlayerChar, delta
 		if drop_timer >= 1:
 			player.sfx[20].play()
 		else:
-			if player.get_animator().current_animation != "dropDash":
-				player.get_animator().play("dropDash")
+			if get_animator().current_animation != "dropDash":
+				get_animator().play("dropDash")
 	pass
 	
 	return true
@@ -219,7 +219,7 @@ func sonic_exit_jump_dropdash_callback(_exit_state: PlayerState,
 	player.movement.y = min(0,player.movement.y)
 	# Need to use a version of set_state that skips supplements or else we will lock up from a recursive shitstorm.
 	player.set_state(PlayerChar.STATES.ROLL, Vector2.ZERO, true)
-	player.get_animator().play("roll")
+	get_animator().play("roll")
 	# TODO - Move these sound effect into the PlayerAvatar object for Sonic.
 	player.sfx[20].stop()
 	player.sfx[3].play()
