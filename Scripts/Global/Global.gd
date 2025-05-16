@@ -20,8 +20,6 @@ var nextZone = load("res://Scene/Zones/BaseZone.tscn") # change this to the firs
 var stageInstanceMemory = null
 var stageLoadMemory = null
 
-# score instace for add_score()
-var Score = preload("res://Entities/Misc/Score.tscn")
 # order for score combo
 const SCORE_COMBO = [1,2,3,4,4,4,4,4,4,4,4,4,4,4,4,5]
 
@@ -64,13 +62,26 @@ var currentTheme = 0
 var soundChannel = AudioStreamPlayer.new()
 
 # Gameplay values
-var score = 0
+var score: int = 0
 var lives = 3
 var continues = 0
-# emeralds use bitwise flag operations, the equivelent for 7 emeralds would be 128
-var emeralds = 0
 # emerald bit flags
-enum EMERALD {RED = 1, BLUE = 2, GREEN = 4, YELLOW = 8, CYAN = 16, SILVER = 32, PURPLE = 64}
+enum EMERALDS {
+	RED    = 1 << 0,
+	BLUE   = 1 << 1,
+	GREEN  = 1 << 2,
+	YELLOW = 1 << 3,
+	CYAN   = 1 << 4,
+	SILVER = 1 << 5,
+	PURPLE = 1 << 6,
+	ALL = (1 << 7) - 1
+}
+# emeralds use bitwise flag operations, the equivalent for 7 emeralds would be 127
+var emeralds: int = (func() -> int:
+	# make sure EMERALDS.ALL holds a correct value
+	assert(EMERALDS.ALL == (1 << EMERALDS.size() - 1) - 1)
+	return 0
+).call()
 var specialStageID = 0
 var level = null # reference to the currently active level
 var levelTime = 0 # the timer that counts down while the level isn't completed or in a special ring
@@ -216,17 +227,9 @@ func play_sound(sound = null) -> void:
 		soundChannel.play()
 
 
-## add a score object, see res://Scripts/Misc/Score.gd for reference
-func add_score(position = Vector2.ZERO,value = 0) -> void:
-	var scoreObj = Score.instantiate()
-	scoreObj.scoreID = value
-	scoreObj.global_position = position
-	add_child(scoreObj)
-
-
 ## use a check function to see if a score increase would go above 50,000
-func check_score_life(scoreAdd: int = 0) -> void:
-	if fmod(score,50000) > fmod(score+scoreAdd,50000):
+func check_score_life(score_add: int = 0) -> void:
+	if score / 50000 < (score + score_add) / 50000:
 		life.play()
 		lives += 1
 		effectTheme.volume_db = -100

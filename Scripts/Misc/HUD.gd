@@ -67,8 +67,10 @@ func _ready():
 			lives_textures[i] = load("res://Graphics/HUD/hud_lives_%s.png" % char_names[i].to_lower()) as Texture2D
 			if in_editor:
 				$LifeCounter/Icon.texture = lives_textures[0]
-				self.set_process(false)
-				return
+				break
+	if in_editor:
+		set_process(false)
+		return
 
 	# error prevention
 	if Engine.is_editor_hint():
@@ -186,7 +188,7 @@ func _process(delta):
 							for j in get_tree().get_nodes_in_group("Enemy"):
 								if j.global_position.y >= Global.waterLevel and i.global_position.distance_to(j.global_position) <= 256:
 									if j.has_method("destroy"):
-										Global.add_score(j.global_position,Global.SCORE_COMBO[0])
+										Score.create(j.get_parent(), j.global_position, Global.SCORE_COMBO[0])
 										j.destroy()
 							# disable flash after a frame
 							await get_tree().process_frame

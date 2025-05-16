@@ -16,7 +16,7 @@ func physics_collision(body, hitVector):
 		body.ground = false
 		body.movement.y = -3*60
 		if score:
-			Global.add_score(global_position,Global.SCORE_COMBO[min(Global.SCORE_COMBO.size()-1,body.enemyCounter)])
+			Score.create(get_parent(), global_position, Global.SCORE_COMBO[min(Global.SCORE_COMBO.size()-1,body.enemyCounter)])
 		body.enemyCounter += 1
 		
 		# generate pieces of the block to scatter, use i and j to determine the velocity of each one
