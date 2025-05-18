@@ -684,7 +684,7 @@ func _physics_process(delta):
 		pushingWall -= sign(pushingWall)
 	
 	
-	
+	# TODO - DW's note - if we create a Camera2D subclass, we can move all this code over there.
 	# Camera settings
 	if (camera != null):
 		
