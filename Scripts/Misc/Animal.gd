@@ -1,4 +1,4 @@
-extends Node2D
+class_name Animal extends Node2D
 
 enum ANIM_TYPE {FLAP,CHANGE_ON_FALL}
 var anim_type: ANIM_TYPE = ANIM_TYPE.FLAP

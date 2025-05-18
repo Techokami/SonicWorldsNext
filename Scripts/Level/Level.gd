@@ -3,8 +3,8 @@ class_name Level extends Node2D
 @export var music = preload("res://Audio/Soundtrack/6. SWD_TLZa1.ogg")
 @export var nextZone = load("res://Scene/Zones/BaseZone.tscn")
 
-@export_enum("Bird", "Squirrel", "Rabbit", "Chicken", "Penguin", "Seal", "Pig", "Eagle", "Mouse", "Monkey", "Turtle", "Bear")var animal1 = 0
-@export_enum("Bird", "Squirrel", "Rabbit", "Chicken", "Penguin", "Seal", "Pig", "Eagle", "Mouse", "Monkey", "Turtle", "Bear")var animal2 = 1
+@export var animal1: Animal.ANIMAL_TYPE = Animal.ANIMAL_TYPE.BIRD
+@export var animal2: Animal.ANIMAL_TYPE = Animal.ANIMAL_TYPE.SQUIRREL
 
 # Boundries
 @export var setDefaultLeft = true
