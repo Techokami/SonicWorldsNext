@@ -51,8 +51,7 @@ func _on_body_entered(body):
 
 func _on_body_exited(body):
 	# remove from player list
-	if (playerHit.has(body)):
-		playerHit.erase(body)
+	playerHit.erase(body)
 
 func _on_DamageArea_area_entered(area):
 	# damage checking

@@ -65,8 +65,7 @@ func _on_body_entered(body):
 
 func _on_body_exited(body):
 	# remove from player list
-	if (playerHit.has(body)):
-		playerHit.erase(body)
+	playerHit.erase(body)
 
 
 func _on_DamageArea_area_entered(area):
@@ -80,5 +79,4 @@ func _on_DamageArea_area_entered(area):
 func _on_HitBox_area_exited(area):
 	# remove from damage area
 	if area.get("parent") != null:
-		if playerHit.has(area.parent):
-			playerHit.erase(area.parent)
+		playerHit.erase(area.parent)

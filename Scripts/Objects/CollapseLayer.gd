@@ -106,5 +106,4 @@ func _on_body_entered(body):
 		players.append(body)
 
 func _on_body_exited(body):
-	if players.has(body):
-		players.erase(body)
+	players.erase(body)

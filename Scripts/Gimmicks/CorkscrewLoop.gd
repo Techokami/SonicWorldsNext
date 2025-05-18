@@ -99,8 +99,7 @@ func _on_EnteranceL_body_entered(body):
 
 
 func _on_EnteranceL_body_exited(body):
-	if (playerListL.has(body)):
-		playerListL.erase(body)
+	playerListL.erase(body)
 
 func _on_EnteranceR_body_entered(body):
 	if !playerListR.has(body):
@@ -108,8 +107,7 @@ func _on_EnteranceR_body_entered(body):
 
 
 func _on_EnteranceR_body_exited(body):
-	if (playerListR.has(body)):
-		playerListR.erase(body)
+	playerListR.erase(body)
 
 # draw self several times based on length
 func _draw():

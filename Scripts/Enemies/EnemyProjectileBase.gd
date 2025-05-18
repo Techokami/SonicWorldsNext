@@ -56,8 +56,7 @@ func _on_body_entered(body):
 
 ## This usually indicates that a player has exited the damage collision for the bullet
 func _on_body_exited(body):
-	if entities_hit.has(body):
-		entities_hit.erase(body)
+	entities_hit.erase(body)
 
 
 func _on_DamageArea_area_entered(area):

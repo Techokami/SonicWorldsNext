@@ -25,5 +25,4 @@ func _on_body_entered(body):
 
 
 func _on_body_exited(body):
-	if (entities_hit.has(body)):
-		entities_hit.erase(body)
+	entities_hit.erase(body)
