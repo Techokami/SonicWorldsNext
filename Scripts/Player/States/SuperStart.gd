@@ -3,9 +3,10 @@ extends PlayerState
 var activated = true
 
 func state_process(_delta: float) -> void:
+	var animator: PlayerCharAnimationPlayer = parent.get_avatar().get_animator()
 	if activated and !parent.isSuper:
 		var remVel = parent.movement
-		var lastAnim = parent.animator.current_animation
+		var lastAnim = animator.current_animation
 		# hide shield
 		parent.shieldSprite.visible = false
 		# set movement to 0
@@ -14,14 +15,14 @@ func state_process(_delta: float) -> void:
 		
 		# play super animation
 		parent.sfx[18].play()
-		parent.animator.play("super")
+		animator.play("super")
 		# wait for aniamtion to finish before activating super completely
-		await parent.animator.animation_finished
+		await animator.animation_finished
 		
 		if parent.ground:
-			parent.animator.play(lastAnim)
+			animator.play(lastAnim)
 		else:
-			parent.animator.play("walk")
+			animator.play("walk")
 		# enable control again
 		parent.set_state(parent.STATES.AIR)
 		activated = true

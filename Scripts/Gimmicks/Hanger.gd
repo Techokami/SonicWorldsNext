@@ -236,7 +236,7 @@ func disconnect_grab(player: PlayerChar, index: int, deliberate: bool, jumpUpwar
 	#print("invoking set_player_disconnect_time")
 	set_player_disconnect_time(index)
 	
-	player.animator.play("roll")
+	player.get_avatar().get_animator().play("roll")
 	player.set_state(PlayerChar.STATES.JUMP)
 	
 	if deliberate:

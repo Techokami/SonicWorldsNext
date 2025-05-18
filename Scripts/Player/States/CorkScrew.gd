@@ -39,8 +39,9 @@ func state_physics_process(delta: float) -> void:
 	
 	# reset state
 	if parent.ground:
-		if parent.animator.current_animation == "roll":
+		var animator: PlayerCharAnimationPlayer = parent.get_avatar().get_animator()
+		if animator.current_animation == "roll":
 			parent.set_state(parent.STATES.ROLL)
 		else:
 			parent.set_state(parent.STATES.NORMAL)
-			parent.get_avatar().get_animator().play("RESET")
+			animator.play("RESET")

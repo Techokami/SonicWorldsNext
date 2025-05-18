@@ -5,6 +5,7 @@ var dashPower = 12
 func state_process(delta: float) -> void:
 	# dust sprite
 	var dash = parent.sprite.get_node("DashDust")
+	var animator: PlayerCharAnimationPlayer = parent.get_avatar().get_animator()
 	dash.visible = true
 	dash.flip_h = parent.sprite.flip_h
 	dash.offset.x = abs(dash.offset.x)*sign(-1+int(dash.flip_h)*2)
@@ -18,11 +19,11 @@ func state_process(delta: float) -> void:
 	
 	# animation based on speed
 	if(speedCalc < 6*60):
-		parent.animator.play("walk")
+		animator.play("walk")
 	elif(parent.spindashPower < dashPower):
-		parent.animator.play("run")
+		animator.play("run")
 	else:
-		parent.animator.play("peelOut")
+		animator.play("peelOut")
 
 
 	# release

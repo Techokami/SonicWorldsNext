@@ -10,11 +10,12 @@ func state_activated():
 
 
 func state_process(delta: float) -> void:
+	var animator: PlayerCharAnimationPlayer = parent.get_avatar().get_animator()
 	# Charging up (if your character does something different for button 2 or 3 you'll want to adjust this)
 	if parent.inputs[parent.INPUTS.ACTION] == 1 or parent.inputs[parent.INPUTS.ACTION2] == 1 or parent.inputs[parent.INPUTS.ACTION3] == 1:
 		# reset animation
-		parent.animator.stop()
-		parent.animator.play("spinDash")
+		animator.stop()
+		animator.play("spinDash")
 		# play rev sound
 		parent.sfx[2].play()
 		# increase dash power
@@ -39,7 +40,7 @@ func state_process(delta: float) -> void:
 		# Lock camera
 		parent.lock_camera((parent.spindashPower+8)/60.0)
 		
-		parent.animator.play("roll")
+		animator.play("roll")
 	
 	# decrease the dash power for next frame
 	parent.spindashPower -= ((parent.spindashPower / 0.125) / (256))*60*delta

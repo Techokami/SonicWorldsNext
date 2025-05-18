@@ -44,22 +44,24 @@ func _on_SkidDustTimer_timeout():
 			dust.global_position = parent.global_position+(Vector2.DOWN*16).rotated(deg_to_rad(parent.spriteRotation-90))
 			parent.get_parent().add_child(dust)
 
+# TODO Here's another function that is trying to do too many things. Break it up.
 func state_process(delta: float) -> void:
+	var animator: PlayerCharAnimationPlayer = parent.get_avatar().get_animator()
 	# jumping / rolling and more (note, you'll want to adjust the other actions if your character does something different)
 	if parent.any_action_pressed():
 		if (parent.movement.x == 0 and parent.inputs[parent.INPUTS.YINPUT] > 0):
-			parent.animator.play("spinDash")
+			animator.play("spinDash")
 			parent.sfx[2].play()
 			parent.sfx[2].pitch_scale = 1
 			parent.spindashPower = 0
-			parent.animator.play("spinDash")
+			animator.play("spinDash")
 			parent.set_state(parent.STATES.SPINDASH)
 		else:
 			# Player cannot jump unless a ceiling check fails. Also block jumping if not grounded in
 			# in case DW puts a character in the NORMAL state while they are airborne again.
 			if !parent.check_for_ceiling() and parent.is_on_ground():
 				# reset animations
-				parent.animator.play("RESET")
+				animator.play("RESET")
 				parent.action_jump()
 		return
 	
@@ -68,11 +70,11 @@ func state_process(delta: float) -> void:
 			if (parent.inputs[parent.INPUTS.YINPUT] > 0):
 				lookTimer = max(0,lookTimer+delta*0.5)
 				if parent.lastActiveAnimation != "crouch":
-					parent.animator.play("crouch")
+					animator.play("crouch")
 			elif (parent.inputs[parent.INPUTS.YINPUT] < 0):
 				lookTimer = min(0,lookTimer-delta*0.5)
 				if parent.lastActiveAnimation != "lookUp":
-					parent.animator.play("lookUp")
+					animator.play("lookUp")
 			else:
 				# Idle pose animation
 				
@@ -104,8 +106,8 @@ func state_process(delta: float) -> void:
 				# No edge detected
 				if getM or !parent.ground or parent.angle != parent.gravityAngle:
 					# Play default idle animation
-					if parent.isSuper and parent.animator.has_animation("idle_super"):
-						parent.animator.play("idle_super")
+					if parent.isSuper and animator.has_animation("idle_super"):
+						animator.play("idle_super")
 					else:
 						
 						# loop through idle animations to see if there is an idle match
@@ -114,11 +116,11 @@ func state_process(delta: float) -> void:
 							if parent.lastActiveAnimation == i:
 								matchIdleCheck = true
 						
-						if parent.lastActiveAnimation != "idle" and !matchIdleCheck or !parent.animator.is_playing():
-							parent.animator.play("idle")
+						if parent.lastActiveAnimation != "idle" and !matchIdleCheck or !animator.is_playing():
+							animator.play("idle")
 							# queue player specific idle animations
 							for i in playerIdles[parent.character-1]:
-								parent.animator.queue(i)
+								animator.queue(i)
 				
 				else:
 					match (parent.character):
@@ -126,52 +128,53 @@ func state_process(delta: float) -> void:
 						Global.CHARACTERS.TAILS:
 							if getR: # keep flipping until right sensor (relevent) isn't colliding
 								parent.direction = -parent.direction
-							parent.animator.play("edge1")
+							animator.play("edge1")
 						
 						Global.CHARACTERS.KNUCKLES:
 							if getR: # keep flipping until right sensor (relevent) isn't colliding
 								parent.direction = -parent.direction
-							if parent.animator.current_animation != "edge1" and parent.animator.current_animation != "edge2":
-								parent.animator.play("edge1")
-								parent.animator.queue("edge2")
+							if (animator.current_animation != "edge1" and
+							        animator.current_animation != "edge2"):
+								animator.play("edge1")
+								animator.queue("edge2")
 								
 						Global.CHARACTERS.AMY:
 							if getR: # keep flipping until right sensor (relevent) isn't colliding
 								parent.direction = -parent.direction
 							#far edge
 							if !getMEdge:
-								parent.animator.play("edge2")
+								animator.play("edge2")
 							#normal edge
 							else:
-								parent.animator.play("edge3")
+								animator.play("edge3")
 						
 						Global.CHARACTERS.SHADOW:
 							if getL: # keep flipping until left sensor (relevent) isn't colliding
 								parent.direction = -parent.direction
-							parent.animator.play("edge1")
+							animator.play("edge1")
 						
 						_: #default
 							# super edge
-							if parent.isSuper and parent.animator.has_animation("edge_super"):
-								parent.animator.play("edge_super")
+							if parent.isSuper and animator.has_animation("edge_super"):
+								animator.play("edge_super")
 							# reverse edge
 							elif !getL and getR:
-								parent.animator.play("edge3")
+								animator.play("edge3")
 							# far edge
 							elif !getMEdge:
-								parent.animator.play("edge2")
+								animator.play("edge2")
 							# normal edge
 							else:
-								parent.animator.play("edge1")
+								animator.play("edge1")
 					
 		elif sign(parent.pushingWall) == sign(parent.movement.x) and parent.pushingWall != 0:
-			parent.animator.play("push")
+			animator.play("push")
 		elif(abs(parent.movement.x) < 6*60):
-			parent.animator.play("walk")
+			animator.play("walk")
 		elif(abs(parent.movement.x) < 10*60):
-			parent.animator.play("run")
+			animator.play("run")
 		else:
-			parent.animator.play("peelOut")
+			animator.play("peelOut")
 	
 	if parent.lastActiveAnimation == "crouch":
 		parent.get_node("HitBox").shape.size = parent.get_predefined_hitbox(PlayerChar.HITBOXES.CROUCH)
@@ -190,10 +193,11 @@ func state_process(delta: float) -> void:
 	pass
 	
 func state_physics_process(delta: float) -> void:
+	var animator: PlayerCharAnimationPlayer = parent.get_avatar().get_animator()
 	# enter roll if player pushes down while at speed
 	if (parent.inputs[parent.INPUTS.YINPUT] == 1 and parent.inputs[parent.INPUTS.XINPUT] == 0 and abs(parent.movement.x) > 0.5*60):
 		parent.set_state(parent.STATES.ROLL)
-		parent.animator.play("roll")
+		animator.play("roll")
 		parent.sfx[1].play()
 		return
 	
@@ -207,17 +211,17 @@ func state_physics_process(delta: float) -> void:
 	if !skid and sign(parent.inputs[parent.INPUTS.XINPUT]) != sign(parent.movement.x) and abs(parent.movement.x) >= 5*60 and parent.inputs[parent.INPUTS.XINPUT] != 0 and parent.horizontalLockTimer <= 0:
 		skid = true
 		parent.sfx[19].play()
-		parent.animator.play("skid")
+		animator.play("skid")
 		$"../../SkidDustTimer".start(0.1)
 	
 	elif skid:
 		var inputX = parent.inputs[parent.INPUTS.XINPUT]
 		
 		if round(parent.movement.x/200) == 0 and sign(inputX) != sign(parent.movement.x):
-			if parent.animator.has_animation("skidTurn"):
-				parent.animator.play("skidTurn")
+			if animator.has_animation("skidTurn"):
+				animator.play("skidTurn")
 		
-		if !parent.animator.is_playing() or inputX == sign(parent.movement.x):
+		if !animator.is_playing() or inputX == sign(parent.movement.x):
 			skid = (round(parent.movement.x) != 0 and inputX != sign(parent.movement.x) and inputX != 0)
 		
 	parent.sprite.flip_h = (parent.direction < 0)

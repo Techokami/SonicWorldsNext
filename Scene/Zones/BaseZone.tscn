@@ -131,7 +131,7 @@ size = Vector2(64, 8)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2ojop"]
 size = Vector2(256, 16)
 
-[sub_resource type="Shader" id="Shader_bv8jl"]
+[sub_resource type="Shader" id="Shader_cocpf"]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 uniform float amount : hint_range(1,255,1);
@@ -169,7 +169,7 @@ void fragment(){
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nnlca"]
 resource_local_to_scene = true
-shader = SubResource("Shader_bv8jl")
+shader = SubResource("Shader_cocpf")
 shader_parameter/amount = 4.0
 shader_parameter/palRows = 16.0
 shader_parameter/row = 9.0
@@ -215,7 +215,7 @@ region_rect = Rect2(0, 0, 512, 512)
 [node name="Players" type="Node" parent="."]
 
 [node name="Player" parent="Players" instance=ExtResource("5_tgx6m")]
-position = Vector2(5642, 1494)
+position = Vector2(4255, 838)
 
 [node name="AltSpawn" type="Node2D" parent="Players"]
 position = Vector2(896, 1486)

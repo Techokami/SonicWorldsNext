@@ -4,6 +4,8 @@ extends Node2D
 # Mushroom Hill Zone Horizontal Bars
 # Author: DimensionWarped
 
+# TODO: Rework this from almost scratch using ConnectableGimmick
+
 # Warning: In its current implementation, this gimmick may interact poorly with
 # some other objects like moving crushers. Make sure you test the interactions of
 # anything in close proximity to one of these.
@@ -158,7 +160,7 @@ func process_tool():
 		resize()
 		previousWidth = width
 	
-func _process_player_x_movement(_delta, player, playerIndex, xInput):
+func _process_player_x_movement(_delta: float, player: PlayerChar, playerIndex: int, xInput: float):
 	if (xInput < 0 and player.global_position.x > global_position.x + 16):
 		player.movement.x = -shimmySpeed
 	elif (xInput > 0 and player.global_position.x < global_position.x + width - 16):
@@ -178,42 +180,46 @@ func _process_player_x_movement(_delta, player, playerIndex, xInput):
 			
 		player.groundSpeed = 0
 		player.set_state(player.STATES.JUMP)
-		player.animator.play("roll")
+		player.get_avatar().get_animator().play("roll")
 		playersMode[playerIndex] = PLAYER_MODE.MONITORING
 		remove_player(player)
 		return 1
 		
 	return 0
 		
-func _process_player_shimmy_animation(player):
+func _process_player_shimmy_animation(player: PlayerChar):
+	var animator: PlayerCharAnimationPlayer = player.get_avatar().get_animator()
 	if (player.movement.x == 0):
-		player.animator.seek(0)
-		player.animator.pause()
+		animator.seek(0)
+		animator.pause()
 	else:
-		player.animator.play("hangShimmy", -1, shimmySpeed / 60.0, false)
+		animator.play("hangShimmy", -1, shimmySpeed / 60.0, false)
 	
-func _process_player_launch_up(player, playerIndex):
+func _process_player_launch_up(player: PlayerChar, playerIndex: int):
+	var animator: PlayerCharAnimationPlayer = player.get_avatar().get_animator()
 	# If brakes are allowed, we want to allow slamming the breaks a little faster than the upwarda nimation normally plas out.
-	if (player.animator.get_current_animation_position() >= player.animator.get_current_animation_length() * 0.91)\
+	if (animator.get_current_animation_position() >= animator.get_current_animation_length() * 0.91)\
 		and (player.get_y_input() > 0) and (allowBrake):
 		playersMode[playerIndex] = PLAYER_MODE.SHIMMY
-		player.animator.play("hangShimmy", -1, shimmySpeed / 60.0, false)
+		animator.play("hangShimmy", -1, shimmySpeed / 60.0, false)
 
-	# Otherwise we just launch the player on out of the gimmick
-	if (player.animator.get_current_animation_position() >= player.animator.get_current_animation_length() * 0.99):
+	# Otherwise we just launch the player on out of the gimmick 
+	# DW's note -- this multiplication stuff with the length was stupid of me and I really should have
+	# been relying on signals.
+	if (animator.get_current_animation_position() >= animator.get_current_animation_length() * 0.97):
 		player.set_state(player.STATES.NORMAL)
 		# figure out the animation based on the players current animation
-		var curAnim = "walk"
-		match(player.animator.current_animation):
+		var cur_animation = "walk"
+		match(animator.current_animation):
 			"walk", "run", "peelOut":
-				curAnim = player.animator.current_animation
+				cur_animation = animator.current_animation
 			# if none of the animations match and speed is equal beyond the players top speed, set it to run (default is walk)
 			_:
 				if(abs(player.groundSpeed) >= min(6*60,player.top)):
-					curAnim = "run"
+					cur_animation = "run"
 		# play player animation
-		player.animator.play("spring", -1, 1, false)
-		player.animator.queue(curAnim)
+		animator.play("spring", -1, 1, false)
+		animator.queue(cur_animation)
 		
 		if launchSpeedMode == LAUNCH_SPEED_MODE.MULTIPLY:
 			player.movement.y = playersEntryVel[playerIndex] * multiplySwingSpeed
@@ -225,17 +231,18 @@ func _process_player_launch_up(player, playerIndex):
 			player.movement.y = -swingSpeedConstant
 		remove_player(player)
 		
-func _process_player_launch_down(player, playerIndex):
+func _process_player_launch_down(player: PlayerChar, playerIndex: int):
+	var animator: PlayerCharAnimationPlayer = player.get_avatar().get_animator()
 	# If brakes are allowed, we want to allow slamming the breaks a little faster than the upwarda nimation normally plas out.
-	if (player.animator.get_current_animation_position() >= player.animator.get_current_animation_length() * 0.91)\
+	if (animator.get_current_animation_position() >= animator.get_current_animation_length() * 0.91)\
 		and (player.get_y_input() < 0) and (allowBrake):
 		playersMode[playerIndex] = PLAYER_MODE.SHIMMY
-		player.animator.play("hangShimmy", -1, shimmySpeed / 60.0, false)
+		animator.play("hangShimmy", -1, shimmySpeed / 60.0, false)
 
 	# Otherwise we just launch the player on out of the gimmick
-	if (player.animator.get_current_animation_position() >= player.animator.get_current_animation_length() * 0.93):
+	if (animator.get_current_animation_position() >= animator.get_current_animation_length() * 0.93):
 		player.set_state(player.STATES.NORMAL)
-		player.animator.play("walk", -1, 1, false)
+		animator.play("walk", -1, 1, false)
 		if launchSpeedMode == LAUNCH_SPEED_MODE.MULTIPLY:
 			player.movement.y = playersEntryVel[playerIndex] * multiplySwingSpeed
 			if player.movement.y < minSwingSpeed:
@@ -246,7 +253,7 @@ func _process_player_launch_down(player, playerIndex):
 			player.movement.y = swingSpeedConstant
 		remove_player(player)
 		
-func _process_player_monitoring(player, playerIndex):
+func _process_player_monitoring(player: PlayerChar, playerIndex: int):
 	if (player.ground):
 		return
 	
@@ -254,7 +261,7 @@ func _process_player_monitoring(player, playerIndex):
 		player.sprite.flip_h = false
 
 		# This is ok for now, but we need to clean it up.
-		player.animator.play("swingHorizontalBarMHZ", -1, 1, false)
+		player.get_avatar().get_animator().play("swingHorizontalBarMHZ", -1, 1, false)
 		player.set_state(player.STATES.GIMMICK)
 		player.global_position.y = get_global_position().y + 3
 		playersMode[playerIndex] = PLAYER_MODE.LAUNCH_UP
@@ -266,7 +273,7 @@ func _process_player_monitoring(player, playerIndex):
 		player.sprite.flip_h = false
 		
 		# This is ok for now, but we need to clean it up.
-		player.animator.play("swingHorizontalBarMHZ", -1, 1, false)
+		player.get_avatar().get_animator().play("swingHorizontalBarMHZ", -1, 1, false)
 		player.set_state(player.STATES.GIMMICK)
 		
 		player.global_position.y = get_global_position().y + 3
@@ -278,14 +285,11 @@ func _process_player_monitoring(player, playerIndex):
 	else:
 		player.sprite.flip_h = false
 		player.set_state(player.STATES.GIMMICK)
-		player.animator.play("hangShimmy", -1, shimmySpeed / 60.0, false)
+		player.get_avatar().get_animator().play("hangShimmy", -1, shimmySpeed / 60.0, false)
 		player.movement.y = 0
 		player.global_position.y = get_global_position().y + 3
 		playersMode[playerIndex] = PLAYER_MODE.SHIMMY
 		
-		# terrible workaround to delayed center reference repositioning
-		#player.animator.advance(0)
-		#player.hitbox.position = player.centerReference.position
 		$Grab_Sound.play()
 	
 func process_game(_delta):

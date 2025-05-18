@@ -106,7 +106,6 @@ var _player_shaders := [
 ]
 
 func get_material_for_character(character: CHARACTERS) -> Material:
-	print("getting %s" % _player_shaders[character])
 	return _player_shaders[character]
 
 ## Which multiplayer mode is in use alters some aspects of how the second (and on if that's ever

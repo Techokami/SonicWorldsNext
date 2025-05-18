@@ -120,8 +120,10 @@ func impart_force(velocityChange):
 	_yVel += velocityChange
 	_yVel = clamp(_yVel, -maxVel, maxVel)
 
-func attach_player(player):
-	# If the player is already in the array, reject the attachment attempt
+func attach_player(player: PlayerChar):
+	var animator: PlayerCharAnimationPlayer = player.get_avatar().get_animator()
+	
+	# If the player is already in the array, reject the attachment attempt.
 	if find_player(player) >= 0:
 		return
 
@@ -129,11 +131,11 @@ func attach_player(player):
 	var player_z_level = player.get_z_index()
 	var player_radius = clamp(player.global_position.x - global_position.x, -max_radius, max_radius)
 	var player_phase = 0
-	player.animator.play("yRotation")
+	animator.play("yRotation")
 	if (player_radius < 0):
 		player_radius = player_radius * -1.0
 		player_phase = PI
-		player.animator.advance(animation_offset)
+		animator.advance(animation_offset)
 
 	players.append([player, player_phase, player_radius, player_z_level])
 
@@ -161,7 +163,8 @@ func detach_player(player: PlayerChar, index):
 		player.allowTranslate = false
 		
 func set_anim(player: PlayerChar, lookUp, lookDown):
-	var curAnim = player.animator.get_assigned_animation()
+	var animator = player.get_avatar().get_animator()
+	var curAnim = animator.get_assigned_animation()
 	var targetAnim
 	
 	if lookUp and !lookDown:
@@ -172,9 +175,9 @@ func set_anim(player: PlayerChar, lookUp, lookDown):
 		targetAnim = "yRotation"
 		
 	if targetAnim != curAnim:
-		var seekTime = player.animator.get_current_animation_position()
-		player.animator.play(targetAnim)
-		player.animator.advance(seekTime)
+		var seekTime = animator.get_current_animation_position()
+		animator.play(targetAnim)
+		animator.advance(seekTime)
 		if targetAnim == "yRotationLookDown":
 			player.set_predefined_hitbox(PlayerChar.HITBOXES.CROUCH)
 			player.get_node("HitBox").position = player.hitBoxOffset.crouch

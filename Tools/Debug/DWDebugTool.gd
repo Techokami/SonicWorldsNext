@@ -18,6 +18,7 @@
 ## m - Gives the player some rings
 ## , - Cycles through available shields
 ## . - Toggles physics slowdown to 1/8th scale
+## / - Forces the partner to 'respawn'
 
 extends Node2D
 
@@ -103,7 +104,12 @@ func try_cheat():
 			Engine.time_scale = 0.125
 			be_slow = true
 		return KEY_PERIOD
-		
+	
+	if Input.is_key_pressed(KEY_SLASH):
+		if Global.players[1] != null:
+			Global.players[1].respawn()
+	
+	
 	return 0
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

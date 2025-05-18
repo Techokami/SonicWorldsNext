@@ -131,7 +131,8 @@ var reflective = false # used for reflecting projectiles
 @onready var state_list = $States.get_children()
 
 # Animation related
-@onready var animator: PlayerCharAnimationPlayer = $Sonic/PlayerAnimation
+# XXX This will all be deprecated soon. Use get_avatar() to get at all the sprite/animation stuff instead.
+@onready var _animator: PlayerCharAnimationPlayer = $Sonic/PlayerAnimation 
 @onready var superAnimator = $Sonic/SuperPalette
 @onready var sprite = $Sonic/Sprite2D
 @onready var player_avatar: PlayerAvatar = $Sonic
@@ -139,6 +140,8 @@ var centerReference = null # center reference is a center reference point used f
 var lastActiveAnimation = ""
 var defaultSpriteOffset = Vector2.ZERO
 
+# TODO - Convert this to a Camera2D subclass that holds all the relevant data instead of keeping it
+#        with the player.
 var camera = Camera2D.new()
 var camDist = Vector2(32,64)
 var camLookDist = [-104,88] # Up and Down
@@ -325,8 +328,8 @@ func _ready():
 	add_child(new_avatar)
 	
 	sprite = new_avatar.get_node("Sprite2D")
-	animator = new_avatar.get_node("PlayerAnimation")
-	animator.animation_finished.connect(handle_animation_finished)
+	_animator = new_avatar.get_node("PlayerAnimation")
+	_animator.animation_finished.connect(handle_animation_finished)
 	superAnimator = new_avatar.get_node_or_null("SuperPalette")
 	player_avatar.queue_free()
 	new_avatar.register_state_modifications(self)
@@ -341,8 +344,8 @@ func _ready():
 	# Set hitbox
 	$HitBox.shape.size = player_avatar.get_hitbox(HITBOXES.NORMAL)
 	
-	# connect animator
-	animator.connect("animation_started",Callable(self,"_on_PlayerAnimation_animation_started"))
+	# connect _animator
+	_animator.connect("animation_started",Callable(self,"_on_PlayerAnimation_animation_started"))
 	defaultSpriteOffset = sprite.offset
 	
 	# set secondary hitboxes
@@ -468,7 +471,7 @@ func _process(delta):
 			spriteRotation = min(360,spriteRotation+(168.75*delta))
 	
 	# set the sprite to match the sprite rotation variable if it's in the rotatable Sprites list
-	if (rotatableSprites.has(animator.current_animation)):
+	if (rotatableSprites.has(_animator.current_animation)):
 		if (Global.smoothRotation):
 			sprite.rotation = deg_to_rad(spriteRotation-90)-rotation-gravityAngle
 		else:
@@ -567,8 +570,8 @@ func _process(delta):
 	else:
 		_handle_animation_speed(peelOutCharge)
 	
-	if animator.current_animation != "":
-		lastActiveAnimation = animator.current_animation
+	if _animator.current_animation != "":
+		lastActiveAnimation = _animator.current_animation
 		
 	# Time over
 	if Global.levelTime >= Global.maxTime:
@@ -622,8 +625,12 @@ func _physics_process(delta):
 			movement.x = 2*sign(-1+(forceDirection*2))*60.0
 		if current_state != STATES.ROLL:
 			set_state(STATES.ROLL)
-			animator.play("roll")
+			_animator.play("roll")
 			sfx[1].play()
+			
+	
+	# TODO - DW's Note - I feel like we should either let the state control whether the
+	#        player is 'attacking' rather than animation checks.
 	
 	# Attacking is for rolling type animations
 	var attacking = false
@@ -634,14 +641,14 @@ func _physics_process(delta):
 	var lastActiveAnimCheck = [
 	"glide","glideSlide"
 	]
+	
 	# if any animations match up turn on attacking flag
-	for i in currentAnimChecks:
-		if animator.current_animation == i:
+	if _animator.current_animation in currentAnimChecks:
 			attacking = true
 	
-	for i in lastActiveAnimCheck:
-		if lastActiveAnimation == i:
-			attacking = true
+	
+	if lastActiveAnimation in lastActiveAnimCheck:
+		attacking = true
 	
 	# physics sets
 	# collide with solids if not rolling layer
@@ -1111,14 +1118,14 @@ func kill():
 		water = false
 		switch_physics()
 		movement = Vector2(0,-7*60)
-		animator.play("die")
+		_animator.play("die")
 		sfx[6].play()
 	else:
 		if playerControl == 1:
 			Global.music.stop()
 			Global.effectTheme.stop()
 		movement = Vector2(0,0)
-		animator.play("drown")
+		_animator.play("drown")
 		sfx[25].play()
 
 	set_state(STATES.DIE,player_avatar.get_hitbox(HITBOXES.NORMAL))
@@ -1198,14 +1205,14 @@ func _on_PlayerAnimation_animation_started(_anim_name):
 	if (sprite != null):
 		sprite.flip_v = false # Won't this make reverse-gravity kind of impossible?
 		sprite.offset = defaultSpriteOffset
-		if animator.speed_scale < 0:
-			animator.speed_scale = abs(animator.speed_scale)
-		elif animator.speed_scale == 0:
-			animator.speed_scale = 1
+		if _animator.speed_scale < 0:
+			_animator.speed_scale = abs(_animator.speed_scale)
+		elif _animator.speed_scale == 0:
+			_animator.speed_scale = 1
 		# reset the center offset
 		if centerReference != null:
 			centerReference.position = Vector2.ZERO
-		animator.advance(0)
+		_animator.advance(0)
 
 
 # return the physics id variable, see physicsList array for reference
@@ -1388,8 +1395,8 @@ func action_move(delta):
 ## Makes the player jump with their standard jump strength
 func action_jump(animation = "roll", air_jump_control : bool = true, play_sound : bool = true):
 	if forceRoll <= 0: # check to prevent jumping in roll tubes
-		animator.play(animation)
-		animator.advance(0)
+		_animator.play(animation)
+		_animator.advance(0)
 		movement.y = -jmp
 		if play_sound:
 			sfx[0].play()
@@ -1442,28 +1449,28 @@ func action_water_run_handle():
 
 
 func _handle_animation_speed(gSpeed = groundSpeed):
-	match(animator.current_animation):
+	match(_animator.current_animation):
 		"walk", "run", "peelOut":
 			if character == Global.CHARACTERS.SHADOW:
 				var duration = floor(max(0,12.0-abs(gSpeed/60.0)))
-				animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
+				_animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
 			else:
 				var duration = floor(max(0,8.0-abs(gSpeed/60.0)))
-				animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
+				_animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
 		"roll":
 			var duration = floor(max(0,4.0-abs(gSpeed/60.0)))
-			animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
+			_animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
 		"push":
 			var duration = floor(max(0,8.0-abs(gSpeed/60.0)) * 4)
-			animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
+			_animator.speed_scale = (1.0/(duration+1.0))*(60.0/10.0)
 		"spinDash": #animate at 60fps (fps were animated at 0.1 seconds)
-			animator.speed_scale = 60.0/10.0
+			_animator.speed_scale = 60.0/10.0
 		"dropDash":
-			animator.speed_scale = 20.0/10.0
+			_animator.speed_scale = 20.0/10.0
 		"climb":
-			animator.speed_scale = -movement.y/(40.0*(1.0+float(isSuper)))
+			_animator.speed_scale = -movement.y/(40.0*(1.0+float(isSuper)))
 		_:
-			animator.speed_scale = 1
+			_animator.speed_scale = 1
 
 
 # Standard getters and setters -- for future code, please try to avoid direct

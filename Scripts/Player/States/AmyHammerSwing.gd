@@ -6,16 +6,17 @@ func state_process(_delta: float) -> void:
 	# handle jumping
 	if parent.any_action_pressed():
 		# reset animations
-		parent.animator.play("RESET")
+		parent.get_avatar().get_animator().play("RESET")
 		parent.action_jump()
 		parent.set_state(parent.STATES.JUMP)
 
 
 func state_physics_process(delta: float) -> void:
 	# if not on floor, set walk animation and return to normal or if hammer time runs out
-	if !parent.ground or hammerTime <= 0 or !parent.animator.is_playing() or parent.horizontalLockTimer > 0:
+	var animator: PlayerCharAnimationPlayer = parent.get_avatar().get_animator()
+	if !parent.ground or hammerTime <= 0 or !animator.is_playing() or parent.horizontalLockTimer > 0:
 		parent.set_state(parent.STATES.AIR)
-		parent.animator.play("walk")
+		animator.play("walk")
 		return
 	
 	# set direction

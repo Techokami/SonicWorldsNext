@@ -1,7 +1,7 @@
 extends PlayerState
 
 func state_physics_process(delta: float) -> void:
-	parent.animator.play("hurt")
+	parent.get_avatar().get_animator().play("hurt")
 	# gravity
 	parent.movement.y += parent.grv/GlobalFunctions.div_by_delta(delta)
 	

@@ -47,7 +47,7 @@ func amy_jump_hammer_callback(_state: PlayerState, player: PlayerChar, _delta: f
 	# play hammer sound
 	player.sfx[30].play()
 	# play dropDash sound
-	player.animator.play("dropDash")
+	get_animator().play("dropDash")
 	pass
 
 

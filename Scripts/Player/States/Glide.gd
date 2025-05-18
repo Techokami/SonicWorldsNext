@@ -9,7 +9,7 @@ var speedClamp = 24*60
 var turnTimer = 0
 var speedPreservation = 0
 
-var isFall = false
+var is_fall = false
 var landed = false
 var sliding = false
 
@@ -17,14 +17,15 @@ var sliding = false
 var groundBuffer = 0
 
 func state_activated():
+	var animator: PlayerCharAnimationPlayer = parent.get_avatar().get_animator()
 	groundBuffer = 0
 	# if no movement on the x axis then go into a fall immediately
 	if parent.movement.x == 0:
-		isFall = true
+		is_fall = true
 		landed = false
 		sliding = false
-		parent.animator.play("glideFall")
-		parent.animator.advance(1)
+		animator.play("glideFall")
+		animator.advance(1)
 		
 	else:
 		if parent.movement.x > 0:
@@ -32,10 +33,10 @@ func state_activated():
 		else:
 			turnTimer = 180
 		speedPreservation = abs(parent.movement.x)
-		parent.animator.play("glide")
+		animator.play("glide")
 		# work around for animation (needed for attacking flag)
 		parent.lastActiveAnimation = "glide"
-		isFall = false
+		is_fall = false
 		landed = false
 		sliding = false
 		parent.reflective = true
@@ -45,15 +46,16 @@ func state_exit():
 
 
 func state_process(_delta: float) -> void:
+	var animator: PlayerCharAnimationPlayer = parent.get_avatar().get_animator()
+
 	# Jump and Spindash cancel
-	if (parent.inputs[parent.INPUTS.ACTION] == 1 or parent.inputs[parent.INPUTS.ACTION2] == 1 or parent.inputs[parent.INPUTS.ACTION3] == 1) and parent.ground and (sliding or isFall):
+	if (parent.inputs[parent.INPUTS.ACTION] == 1 or parent.inputs[parent.INPUTS.ACTION2] == 1 or parent.inputs[parent.INPUTS.ACTION3] == 1) and parent.ground and (sliding or is_fall):
 		parent.movement.x = 0
 		if (parent.inputs[parent.INPUTS.YINPUT] > 0):
-			parent.animator.play("spinDash")
 			parent.sfx[2].play()
 			parent.sfx[2].pitch_scale = 1
 			parent.spindashPower = 0
-			parent.animator.play("spinDash")
+			animator.play("spinDash")
 			parent.set_state(parent.STATES.SPINDASH)
 			parent.cameraDragLerp = 1
 		else:
@@ -62,28 +64,34 @@ func state_process(_delta: float) -> void:
 			parent.set_state(parent.STATES.JUMP)
 		
 	# check if not falling, if not then do glide routine
-	if !isFall and !sliding:
+	if !is_fall and !sliding:
 		# Go into falling if action not held
 		if !parent.inputs[parent.INPUTS.ACTION] and !parent.inputs[parent.INPUTS.ACTION2] and !parent.inputs[parent.INPUTS.ACTION3]:
 			parent.movement.x *= 0.25
-			parent.animator.play("glideFall")
+			animator.play("glideFall")
 			parent.sprite.flip_h = (parent.direction < 0)
 			# reset hitbox
 			parent.set_hitbox(parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL))
-			isFall = true
+			is_fall = true
 			parent.reflective = false
 
 
+# TODO break this up into at least four different functions
+# 1 - The glide part of the glide
+# 2 - the glide fall
+# 3 - the glide slide
+# 4 - the core state_process_physics function.
+# This is a tad ridiculous right now. The way we are doing this we really need a substate instead
+# of this 'is_fall' / 'sliding' nonsense.
 func state_physics_process(delta: float) -> void:
+	var animator: PlayerCharAnimationPlayer = parent.get_avatar().get_animator()
+	
 	# Change parent direction
 	if parent.inputs[parent.INPUTS.XINPUT] != 0 and !sliding:
 		parent.direction = parent.inputs[parent.INPUTS.XINPUT]
 	
-	
-	
-	
 	# check if not falling, if not then do glide routine
-	if !isFall and !sliding:
+	if !is_fall and !sliding:
 		# Turning
 		# left
 		if parent.direction > 0:
@@ -103,11 +111,10 @@ func state_physics_process(delta: float) -> void:
 		turnTimer = clamp(turnTimer,0,180)
 		
 		# Animation
-		var animSize = parent.animator.current_animation_length
+		var animSize = animator.current_animation_length
 		var offset = turnTimer/180
 		
-		parent.animator.advance(-parent.animator.current_animation_position+(animSize*offset))
-		
+		animator.advance(-animator.current_animation_position+(animSize*offset))
 		
 		# set facing direction
 		parent.sprite.flip_h = false
@@ -124,7 +131,7 @@ func state_physics_process(delta: float) -> void:
 		
 		# Go into sliding if on ground
 		if parent.ground and !sliding and groundBuffer >= 1:
-			parent.animator.play("glideSlide")
+			animator.play("glideSlide")
 			if parent.movement.x != 0:
 				parent.direction = sign(parent.movement.x)
 			parent.sprite.flip_h = (parent.direction < 0)
@@ -153,7 +160,7 @@ func state_physics_process(delta: float) -> void:
 							 )
 			# play grab sound
 			parent.sfx[26].play()
-			parent.animator.play("climb")
+			animator.play("climb")
 			parent.movement = Vector2.ZERO
 		
 		# prevent getting stuck on corners
@@ -174,9 +181,9 @@ func state_physics_process(delta: float) -> void:
 		if parent.movement.x == 0 and parent.lastActiveAnimation != "glideGetUp" and parent.ground:
 			parent.cameraDragLerp = 1
 			parent.set_predefined_hitbox(PlayerChar.HITBOXES.NORMAL)
-			parent.animator.play("glideGetUp")
+			animator.play("glideGetUp")
 			# wait for animation to finish and check that the state is still the same
-			await parent.animator.animation_finished
+			await animator.animation_finished
 			if parent.get_state() == PlayerChar.STATES.GLIDE and sliding:
 				parent.set_state(PlayerChar.STATES.NORMAL)
 		
@@ -187,11 +194,11 @@ func state_physics_process(delta: float) -> void:
 		# check for ground, if not on ground go into falling
 		if !parent.ground and groundBuffer >= 1:
 			sliding = false
-			parent.animator.play("glideFall")
+			animator.play("glideFall")
 			parent.sprite.flip_h = (parent.direction < 0)
 			# reset hitbox
 			parent.set_predefined_hitbox(PlayerChar.HITBOXES.NORMAL)
-			isFall = true
+			is_fall = true
 		else:
 			# ground buffer's needed to prevent the player immediately disconecting
 			groundBuffer = 1
@@ -217,10 +224,10 @@ func state_physics_process(delta: float) -> void:
 			parent.sfx[27].play()
 			# set movement to nothign
 			parent.movement = Vector2.ZERO
-			parent.animator.play("land")
+			animator.play("land")
 			# wait for landing animation to finish and check that the state is still the same
-			await parent.animator.animation_finished
-			if parent.get_state() == PlayerChar.STATES.GLIDE and isFall:
+			await animator.animation_finished
+			if parent.get_state() == PlayerChar.STATES.GLIDE and is_fall:
 				parent.set_state(PlayerChar.STATES.NORMAL)
 
 

@@ -10,11 +10,12 @@ func state_activated():
 
 
 func state_process(_delta: float) -> void:
+	var animator: PlayerCharAnimationPlayer = parent.get_avatar().get_animator()
 	# Animation
 	if parent.water:
-		parent.animator.play("swim")
+		animator.play("swim")
 	else:
-		parent.animator.play("fly")
+		animator.play("fly")
 
 
 func state_physics_process(delta: float) -> void:
@@ -81,7 +82,7 @@ func state_physics_process(delta: float) -> void:
 		match(parent.partner.get_state()):
 			parent.STATES.NORMAL, parent.STATES.AIR, parent.STATES.JUMP:
 				parent.groundSpeed = 0
-				parent.animator.play("walk")
+				parent.get_avatar().get_animator().play("walk")
 				parent.allowTranslate = false
 				parent.collision_layer = parent.defaultLayer
 				parent.collision_mask = parent.defaultMask

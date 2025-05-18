@@ -71,16 +71,17 @@ func physics_collision(body: PlayerChar, hitVector: Vector2):
 		if setMove.y != 0:
 			# figure out the animation based on the players current animation
 			var curAnim = "walk"
-			match(body.animator.current_animation):
+			var animator = body.get_avatar().get_animator()
+			match(animator.current_animation):
 				"walk", "run", "peelOut":
-					curAnim = body.animator.current_animation
+					curAnim = animator.current_animation
 				# if none of the animations match and speed is equal beyond the players top speed, set it to run (default is walk)
 				_:
 					if(abs(body.groundSpeed) >= min(6*60,body.top)):
 						curAnim = "run"
 			# play player animation
-			body.get_avatar().get_animator().play("spring")
-			body.get_avatar().get_animator().queue(curAnim)
+			animator.play("spring")
+			animator.queue(curAnim)
 			# set vertical speed
 			body.movement.y = setMove.y
 			body.set_state(body.STATES.AIR)
@@ -110,7 +111,7 @@ func physics_collision(body: PlayerChar, hitVector: Vector2):
 		return true
 	
 
-func _on_Diagonal_body_entered(body):
+func _on_Diagonal_body_entered(body: PlayerChar):
 	# diagonal springs are pretty straightforward
 	body.angle = body.gravityAngle
 	body.movement = hitDirection.rotated(rotation).rotated(-body.rotation)*speed[type]*60
@@ -119,16 +120,17 @@ func _on_Diagonal_body_entered(body):
 		body.set_state(body.STATES.AIR)
 		# figure out the animation based on the players current animation
 		var curAnim = "walk"
-		match(body.animator.current_animation):
+		var animator = body.get_avatar().get_animator()
+		match(animator.current_animation):
 			"walk", "run", "peelOut":
-				curAnim = body.animator.current_animation
+				curAnim = animator.current_animation
 			# if none of the animations match and speed is equal beyond the players top speed, set it to run (default is walk)
 			_:
 				if(abs(body.groundSpeed) >= min(6*60,body.top)):
 					curAnim = "run"
 		# play player animation
-		body.animator.play("springScrew")
-		body.animator.queue(curAnim)
+		animator.play("springScrew")
+		animator.queue(curAnim)
 	Global.play_sound(springSound)
 	# Disable pole grabs
 	# body.poleGrabID = self

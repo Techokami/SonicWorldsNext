@@ -51,7 +51,7 @@ func _process(delta: float) -> void:
 				player.airTimer = player.defaultAirTime
 				
 				# check for partner
-				var partner = player.get_partner()
+				var partner: PlayerChar = player.get_partner()
 				if partner != null:
 					partner.global_position = global_position+Vector2(-32,0)
 					partner.direction = 1
@@ -60,7 +60,7 @@ func _process(delta: float) -> void:
 					# reset state
 					partner.set_state(player.partner.STATES.NORMAL)
 					# play idle
-					partner.animator.play("idle")
+					partner.get_avatar().get_animator().play("idle")
 					# reset the partners air, imagine if you came home and from another dimension and-
 					partner.airTimer = player.partner.defaultAirTime
 				
@@ -81,7 +81,7 @@ func _process(delta: float) -> void:
 				# reset state
 				player.set_state(player.STATES.NORMAL)
 				# play idle
-				player.animator.play("idle")
+				player.get_avatar().get_animator().play("idle")
 				
 				if maskMemory.size() > 0:
 					player.collision_layer = maskMemory[0]

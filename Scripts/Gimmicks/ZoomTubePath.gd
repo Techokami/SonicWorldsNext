@@ -64,7 +64,7 @@ func _on_hitbox_enter(body: PlayerChar):
 			player_state.pipe = self
 			player_state.pipePoint = 1
 			player_state.pipeDirection = 1
-			body.animator.play("roll")
+			body.get_avatar().get_animator().play("roll")
 			body.groundSpeed = 60*4
 			body.global_position = global_position+get_point_position(0)
 			body.movement = Vector2.ZERO

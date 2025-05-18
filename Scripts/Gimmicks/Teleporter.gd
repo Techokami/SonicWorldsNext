@@ -1,6 +1,23 @@
 @tool
 extends Node2D
 
+# TODO - turn into ConnectableGimmick
+# TODO - make useful in competitive multiplayer
+#        Goals:
+#        1. If multiplayer mode is set, any player can activate the beam
+#        2. If multiplayer mode is not set, only first player can activae the beam.
+#        3. Regardless of multiplayer mode, if a player enters the beam once started, they get
+#           put into the beam and sent upwards.
+#        4. Beam does not shut down until the last player is sent.
+#        5. Beam is only connectable at the base of the beam -- not at the place where the beam
+#           drops players off.
+#
+#        The only original in-game example of multiple characters being able to ride a teleporter
+#        is the one at the end of Hidden Palace that takes everyone to Sky Sanctuary, but that's
+#        still the ideal one to model off of even if it's just a cutscene.
+#
+# TODO - fix blinking on animation
+
 @export var travelDistance = 512
 
 var active = false
@@ -25,10 +42,11 @@ func _physics_process(delta):
 	if active:
 		Global.players[0].movement.y = -0.01 # set velocity.y to a negative so tail's tails rotate right
 		var animator = $BeamAnimator
+		var pl_animator: PlayerCharAnimationPlayer = Global.players[0].get_avatar().get_animator()
 		# if the animator is playing the beam animation then move the player (after 1 second in the timeline has passed)
 		if animator.current_animation == "Beam":
 			if animator.current_animation_position > 1.0:
-				Global.players[0].animator.play("roll")
+				pl_animator.play("roll")
 				# shift x and y poses seperately so that the movement's not normalized
 				Global.players[0].global_position.x = move_toward(Global.players[0].global_position.x,global_position.x,delta*60)
 				Global.players[0].global_position.y -= delta*30
@@ -63,11 +81,12 @@ func _physics_process(delta):
 func activateBeam():
 	# check that the beam isn't already active so this doesn't cause a weird loop
 	if !active:
+		var player1 = Global.players[0]
 		active = true
 		$BeamAnimator.play("Beam")
-		Global.players[0].set_state(Global.players[0].STATES.GIMMICK)
-		Global.players[0].animator.play("idle")
-		Global.players[0].groundSpeed = 60*4
-		Global.players[0].movement.x = 0
-		Global.players[0].airTimer = $BeamAnimator.current_animation_length + 30
+		player1.set_state(Global.players[0].STATES.GIMMICK)
+		player1.get_avatar().get_animator().play("idle")
+		player1.set_ground_speed(60*4)
+		player1.movement.x = 0
+		player1.reset_air()
 		

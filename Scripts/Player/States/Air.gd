@@ -66,7 +66,7 @@ func state_physics_process(delta: float) -> void:
 		# Check bounce reaction first (this kinda feels like character specific code, but maybe not)
 		if !bounce():
 			# reset animations (this is for shared animations like the corkscrews)
-			parent.animator.play("RESET")
+			parent.get_avatar().get_animator().play("RESET")
 			# return to normal state
 			parent.set_state(parent.STATES.NORMAL)
 		else:

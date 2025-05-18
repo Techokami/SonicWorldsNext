@@ -38,24 +38,25 @@ func state_exit():
 
 func state_process(_delta: float) -> void:
 	# Animation
+	var animator: PlayerCharAnimationPlayer = parent.get_avatar().get_animator()
 	if parent.water:
 		if carryBox.get_player_contacting_count() != 0:
-			parent.animator.play("swimCarry")
+			animator.play("swimCarry")
 		elif flightTime > 0:
-			parent.animator.play("swim")
+			animator.play("swim")
 		else:
-			parent.animator.play("swimTired")
+			animator.play("swimTired")
 	else:
 		if flightTime > 0:
 			if carryBox.get_player_contacting_count() == 0:
-				parent.animator.play("fly")
+				animator.play("fly")
 			else:
 				if parent.movement.y >= 0:
-					parent.animator.play("flyCarry")
+					animator.play("flyCarry")
 				else:
-					parent.animator.play("flyCarryUP")
+					animator.play("flyCarryUP")
 		else:
-			parent.animator.play("tired")
+			animator.play("tired")
 	
 	# flight sound (verify we are not underwater)
 	if !parent.water:
