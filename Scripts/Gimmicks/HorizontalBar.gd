@@ -358,11 +358,11 @@ func _on_bar_area_body_exited(body):
 	remove_player(body)
 	
 func remove_player(player):
-	if players.has(player):
+	var index: int = players.find(player)
+	if index != -1:
 		# Clean out the player from all player-linked arrays.
-		var getIndex = players.find(player)
 		players.erase(player)
-		playersMode.remove_at(getIndex)
-		playersEntryVel.remove_at(getIndex)
+		playersMode.remove_at(index)
+		playersEntryVel.remove_at(index)
 		if player.get_state() == player.STATES.GIMMICK:
 			player.set_state(player.STATES.NORMAL)

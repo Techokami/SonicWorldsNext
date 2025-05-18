@@ -67,9 +67,9 @@ func _on_ForceAngleSides_body_entered(body):
 
 
 func _on_ForceAngleSides_body_exited(body):
-	if players.has(body):
+	var index: int = players.find(body)
+	if index != -1:
 		# remove angle rotation index
-		var getIndex = players.find(body)
-		contactPoint.remove_at(getIndex)
+		contactPoint.remove_at(index)
 		
 		players.erase(body)
