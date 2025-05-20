@@ -121,7 +121,7 @@ func sonic_jump_shields_callback(state: PlayerState, player: PlayerChar, _delta:
 		return true
 
 	# Shields can only be activated while the player is moving slower than the jump release speed.
-	if player.movement.y < -player.releaseJmp * 60:
+	if player.movement.y < -player.get_physics().release_jump * 60:
 		return true
 		
 	if player.any_action_pressed() and !player.abilityUsed:

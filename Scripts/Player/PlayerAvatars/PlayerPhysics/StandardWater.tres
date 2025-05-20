@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PlayerPhysics" load_steps=2 format=3 uid="uid://iq3eke56wyo5"]
+
+[ext_resource type="Script" path="res://Scripts/Player/PlayerPhysicsAttr.gd" id="1_dl13e"]
+
+[resource]
+script = ExtResource("1_dl13e")
+acceleration = 0.023
+deceleration = 0.25
+friction = 0.023
+rolling_friction = 0.0234375
+rolling_deceleration = 0.063
+top_speed = 180.0
+rolling_top_speed = 960.0
+slope_factor = 0.125
+slope_factor_rolling_upwards = 0.078125
+slope_factor_rolling_downwards = 0.3125
+fall = 150.0
+air_acceleration = 0.047
+jump_strength = 210.0
+gravity = 0.063
+release_jump = 2.0

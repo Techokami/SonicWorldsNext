@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PlayerPhysics" load_steps=2 format=3 uid="uid://ccsk0spsusstm"]
+
+[ext_resource type="Script" path="res://Scripts/Player/PlayerPhysicsAttr.gd" id="1_e0eda"]
+
+[resource]
+script = ExtResource("1_e0eda")
+acceleration = 0.188
+deceleration = 1.0
+friction = 0.046875
+rolling_friction = 0.0234375
+rolling_deceleration = 0.125
+top_speed = 600.0
+rolling_top_speed = 960.0
+slope_factor = 0.125
+slope_factor_rolling_upwards = 0.078125
+slope_factor_rolling_downwards = 0.3125
+fall = 150.0
+air_acceleration = 0.375
+jump_acceleration = 480.0
+gravity = 0.21875
+release_jump = 4.0

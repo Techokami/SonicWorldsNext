@@ -13,6 +13,29 @@ var hitboxes: Array[Vector2] = [
 	Vector2(16,14)*2  # HORIZONTAL
 ]
 
+## Character's standard physics attributes
+@export var normal_physics: PlayerPhysics = preload(
+	"res://Scripts/Player/PlayerAvatars/PlayerPhysics/StandardNormal.tres"
+	)
+## Character's physics attributes while power sneakers are in effect
+@export var power_sneakers_physics: PlayerPhysics = preload(
+	"res://Scripts/Player/PlayerAvatars/PlayerPhysics/StandardShoes.tres"
+	)
+## Character's underwater physics attributes
+@export var water_physics: PlayerPhysics = preload(
+	"res://Scripts/Player/PlayerAvatars/PlayerPhysics/StandardWater.tres"
+	)
+	
+## Character's superform physics
+@export var super_physics: PlayerPhysics = preload(
+	"res://Scripts/Player/PlayerAvatars/PlayerPhysics/StandardSuper.tres"
+	)
+	
+## Character's superform physics while underwater
+@export var super_water_physics: PlayerPhysics = preload(
+	"res://Scripts/Player/PlayerAvatars/PlayerPhysics/StandardSuperWater.tres"
+	)
+
 var normal_sprite = preload("res://Graphics/Players/Sonic.png")
 var super_sprite = null # A super sprite isn't mandatory.
 
@@ -20,6 +43,26 @@ var super_sprite = null # A super sprite isn't mandatory.
 ## This swill slurp up CharacterStates from your PlayerAvatar and turn them into a list
 ## of states that your avatar can use via get_character_state()
 @onready var character_state_list = $CharacterStates.get_children()
+
+
+## Gets the physics list based on the requested parameters [br]
+## [param in_water] for player in water [br]
+## [param is_super] for player in superform [br]
+## [param has_shoes] for player with active power sneakers [br]
+## [retval] PlayerPhysics object with the character's physics for requested conditions. [br]
+func get_physics(in_water: bool = false,
+		         is_super: bool = false,
+		         has_shoes: bool = false) -> PlayerPhysics:
+	if !in_water:
+		if is_super:
+			return super_physics
+		if has_shoes:
+			return power_sneakers_physics
+		return normal_physics
+	else:
+		if is_super:
+			return super_water_physics
+		return water_physics
 
 
 ## Gets the character-specific PlayerState at the selected index. You should generally supply

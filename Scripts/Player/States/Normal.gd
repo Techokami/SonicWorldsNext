@@ -239,14 +239,14 @@ func state_physics_process(delta: float) -> void:
 	# Apply slope factor, Sonic 1/2/CD/Mania style
 	# If you want symmetry over Accuracy, the "46" in the line below should actually be "45"
 	if (calcAngle >= 46 and calcAngle <= 315) or parent.movement.x !=0:
-		parent.movement.x += (parent.slp*sin(parent.angle-parent.gravityAngle))/GlobalFunctions.div_by_delta(delta)
+		parent.movement.x += (parent.get_physics().slope_factor*sin(parent.angle-parent.gravityAngle))/GlobalFunctions.div_by_delta(delta)
 	
 	# Apply slope factor, Sonic 3 style
-		# parent.movement.x += (parent.slp*sin(parent.angle-parent.gravityAngle))/GlobalFunctions.div_by_delta(delta)
+		# parent.movement.x += (parent.get_physics().slop_factor*sin(parent.angle-parent.gravityAngle))/GlobalFunctions.div_by_delta(delta)
 	
 	# if speed below fall speed, slide down slopes and maybe also drop
 	# If you want symmetry over Accuracy, the "46" in the line below should actually be "45"
-	if (abs(parent.movement.x) < parent.fall and calcAngle >= 46 and calcAngle <= 315):
+	if (abs(parent.movement.x) < parent.get_physics().fall and calcAngle >= 46 and calcAngle <= 315):
 		if (round(calcAngle) >= 90 and round(calcAngle) <= 270):
 			parent.disconnect_from_floor()
 		parent.horizontalLockTimer = 30.0/60.0

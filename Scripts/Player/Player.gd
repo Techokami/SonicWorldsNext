@@ -4,29 +4,17 @@ class_name PlayerChar extends PhysicsObject
 ## Enumerator of the various hitbox types
 enum HITBOXES { NORMAL, ROLL, CROUCH, GLIDE, HORIZONTAL, NOCHANGE }
 
-#Sonic's Speed constants
-var acc = 0.046875			#acceleration
-var dec = 0.5				#deceleration
-var frc = 0.046875			#friction (same as acc)
-var rollfrc = frc*0.5		#roll friction
-var rolldec = 0.125			#roll deceleration
-var top = 6*60				#top horizontal speed
-var toproll = 16*60			#top horizontal speed rolling
-var slp = 0.125				#slope factor when walking/running
-var slprollup = 0.078125		#slope factor when rolling uphill
-var slprolldown = 0.3125		#slope factor when rolling downhill
-var fall = 2.5*60			#tolerance ground speed for sticking to walls and ceilings
+var active_physics = preload("res://Scripts/Player/PlayerAvatars/PlayerPhysics/StandardNormal.tres")
 
-#Sonic's Airborne Speed Constants
-var air = 0.09375			#air acceleration (2x acc)
-var jmp = 6.5*60			#jump force (6 for knuckles)
-var grv = 0.21875			#gravity
-var releaseJmp = 4			#jump release velocity
-
+# TODO move this to the Spindash state
 var spindashPower = 0.0
+# TODO Isn't this already in the peelout state?
 var peelOutCharge = 0.0
+# TODO Consider moving this to the jump state
 var abilityUsed = false
+# TODO Consider moving this the Air/Jump states
 var bounceReaction = 0 # for bubble shield
+
 var invTime = 0
 var supTime = 0
 var isSuper = false
@@ -54,56 +42,12 @@ var enemyCounter = 0
 # Which character is this player controlling?
 var character: Global.CHARACTERS = Global.CHARACTERS.SONIC
 
-# physics list
-# order
-# 0 Acceleration
-# 1 Deceleration
-# 2 Friction
-# 3 Top Speed
-# 4 Air Acceleration 
-# 5 Rolling Friction 
-# 6 Rolling Deceleration
-# 7 Gravity
-# 8 Jump release velocity
-
-enum PHYSICS_FLAGS {
-	NORMAL = 0,
-	UNDERWATER = 1,
-	SUPER = 2,
-	SUPER_UNDERWATER = 3
-}
-
-var physicsList = [
-# 0 Default Character properties
-[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125, 0.21875, 4],
-# 1 Shoes (remove *0.5 for original rolling friction)
-[0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875*0.5, 0.125, 0.21875, 4],
-# 2 Super Sonic
-[0.1875, 1, 0.046875, 10*60, 0.375, 0.0234375, 0.125, 0.21875, 4],
-# 3 Other Super forms
-[0.09375, 0.75, 0.046875, 8*60, 0.1875, 0.0234375, 0.125, 0.21875, 4],
-]
-
-var waterPhysicsList = [
-# 0 Deafult Character properties
-[0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6.0*60.0/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
-# 1 Shoes
-[0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6*60/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
-# 2 Super Sonic
-[0.09375, 0.5, 0.046875, 5*60, 0.1875, 0.046875, 0.125, 0.0625, 3.5*60, 2],
-# 3 Super Knuckles
-[0.046875, 0.375, 0.046875, 4*60, 0.09375, 0.0234375, 0.125, 0.0625, 3*60, 2],
-]
-
-# ================
-
 var Ring = preload("res://Entities/Items/Ring.tscn")
 var ringChannel = 0
 
 var Particle = preload("res://Entities/Misc/GenericParticle.tscn")
 var CountDown = preload("res://Entities/Misc/CountDownTimer.tscn")
 var RotatingParticle = preload("res://Entities/Misc/RotatingParticle.tscn")
-#var playerPal = preload("res://Shaders/PlayerPalette.tres")
 
 # ================
 
@@ -218,7 +162,7 @@ const INPUT_MEMORY_LENGTH = 20
 var Player = load("res://Entities/MainObjects/Player.tscn")
 
 # Arrays, in order of Global.CHARACTERS
-var playeravatars = [
+static var playeravatars = [
 	preload("res://Entities/PlayerAvatars/Sonic.tscn"),
 	preload("res://Entities/PlayerAvatars/Sonic.tscn"),
 	preload("res://Entities/PlayerAvatars/Tails.tscn"),
@@ -423,7 +367,13 @@ func _process(delta):
 						partner.inputs[INPUTS.XINPUT] = sign(0-direction)
 				
 				# Jump if pushing a wall, slower then half speed, on a flat surface and is either normal or jumping
-				if (partner.current_state == STATES.NORMAL or partner.current_state == STATES.JUMP) and abs(partner.movement.x) < top/2.0 and snap_angle(partner.angle) == 0 or (partner.pushingWall != 0 and pushingWall == 0):
+				var top_speed = active_physics.top_speed
+				# TODO This condition is a code smell
+				if ((partner.current_state == STATES.NORMAL or
+				    partner.current_state == STATES.JUMP) and
+					abs(partner.movement.x) < top_speed/2.0 and
+					snap_angle(partner.angle) == 0 or
+					(partner.pushingWall != 0 and pushingWall == 0)):
 					# check partners position, only jump ever 0.25 seconds (prevent jump spam)
 					if global_position.y+32 < partner.global_position.y and partner.inputs[INPUTS.ACTION] == 0 and partner.ground and ground and (fmod(Global.globalTimer+delta,0.25) < fmod(Global.globalTimer,0.25)):
 						partner.inputs[INPUTS.ACTION] = 1
@@ -1215,62 +1165,19 @@ func _on_PlayerAnimation_animation_started(_anim_name):
 		_animator.advance(0)
 
 
-# return the physics id variable, see physicsList array for reference
-func _determine_physics():
-	# get physics from character (if a character has unique properties)
-	match (character):
-		Global.CHARACTERS.SONIC:
-			if isSuper:
-				return 2 # Super Sonic
-	#Anyone who isn't a special case:
-	if isSuper:
-		return 3 # Super besides Sonic
-	elif shoeTime > 0:
-		return 1 # Shoes
-	return 0 #Default
-
-
-## Return a jump height for the respective context.
-## There are normally only 5 jump height values; 3 above water, with two under.
-## Super Sonic and Knuckles are the onlycharacters with unique jump height, Super sonic above
-## water only.
-func _get_jump_property():
-	if !water:
-		match (character):
-			Global.CHARACTERS.SONIC:
-				if isSuper:
-					return 8*60 # Super Sonic Jump Height
-			Global.CHARACTERS.KNUCKLES:
-				return 6*60 # Knuckles Jump Height
-		return 6.5*60 #Default Jump Height
-	else:
-		match (character):
-			Global.CHARACTERS.KNUCKLES:
-				return 3*60 # Knuckles Jump Height underwater
-		return 3.5*60 # Everyone else's Jump Height underwater
+## Gets the currently active physics table
+func get_physics() -> PlayerPhysics:
+	return active_physics
 
 
 ## Resets the PlayerChar's physics attributes based on their
 ## current status.
 func switch_physics() -> void:
-	var physicsID = _determine_physics()
-	var getList = physicsList[max(0,physicsID)]
-	if water:
-		getList = waterPhysicsList[max(0,physicsID)]
-	acc = getList[0]
-	dec = getList[1]
-	frc = getList[2]
-	top = getList[3]
-	air = getList[4] #This could also just be getList[0]*2
-	rollfrc = getList[5]
-	rolldec = getList[6]
-	grv = getList[7]
-	releaseJmp = getList[8]
-	jmp = _get_jump_property()
+	active_physics = get_avatar().get_physics(water, isSuper, shoeTime > 0)
 
 
 func _on_SparkleTimer_timeout() -> void:
-	if isSuper and abs(groundSpeed) >= top:
+	if isSuper and abs(groundSpeed) >= active_physics.top_speed:
 		var sparkle = Particle.instantiate()
 		sparkle.global_position = global_position
 		sparkle.play("Super")
@@ -1364,30 +1271,33 @@ func _on_BubbleTimer_timeout():
 
 
 ## Handles player's standard movement based on controller input -- you might call this if you are
-## programming either a state or a gimmick that uses the ANIMATION state and don't want to take
+## programming either a state or a gimmick that uses the GIMMICK state and don't want to take
 ## standard directional control away from the player.
 func action_move(delta):
 	# moving left and right, check if left or right is being pressed
 	if inputs[INPUTS.XINPUT] != 0:
 		if horizontalLockTimer <= 0: # skip logic if lock timer is around, friction gets skipped too since the original games worked like that
 			# check if movement is less then the top speed
-			if movement.x*inputs[INPUTS.XINPUT] < top:
+			var top_speed = active_physics.top_speed
+			if movement.x*inputs[INPUTS.XINPUT] < top_speed:
 				# check if the player is pressing the direction they're moving
 				if sign(movement.x) == inputs[INPUTS.XINPUT] or sign(movement.x) == 0:
-					if abs(movement.x) < top:
-						movement.x = move_toward(movement.x,top*inputs[INPUTS.XINPUT],acc/GlobalFunctions.div_by_delta(delta))
+					if abs(movement.x) < top_speed:
+						movement.x = move_toward(movement.x,top_speed*inputs[INPUTS.XINPUT],
+							active_physics.acceleration / GlobalFunctions.div_by_delta(delta))
 				else:
 					# reverse direction
-					movement.x += dec/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT]
+					movement.x += active_physics.deceleration/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT]
 					# implament weird turning quirk
-					if (sign(movement.x) != sign(movement.x-dec/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT])):
+					if (sign(movement.x) != sign(movement.x-active_physics.deceleration/GlobalFunctions.div_by_delta(delta)*inputs[INPUTS.XINPUT])):
 						movement.x = 0.5*60*sign(movement.x)
 	else:
 		# come to a stop if neither left or right is pressed
 		if (movement.x != 0):
 			# check that decreasing movement won't go too far
-			if (sign(movement.x - (frc/GlobalFunctions.div_by_delta(delta))*sign(movement.x)) == sign(movement.x)):
-				movement.x -= (frc/GlobalFunctions.div_by_delta(delta))*sign(movement.x)
+			var friction = active_physics.friction
+			if (sign(movement.x - (friction/GlobalFunctions.div_by_delta(delta))*sign(movement.x)) == sign(movement.x)):
+				movement.x -= (friction/GlobalFunctions.div_by_delta(delta))*sign(movement.x)
 			else:
 				movement.x -= movement.x
 
@@ -1397,7 +1307,7 @@ func action_jump(animation = "roll", air_jump_control : bool = true, play_sound 
 	if forceRoll <= 0: # check to prevent jumping in roll tubes
 		_animator.play(animation)
 		_animator.advance(0)
-		movement.y = -jmp
+		movement.y = -active_physics.jump_strength
 		if play_sound:
 			sfx[0].play()
 		airControl = air_jump_control
@@ -1448,6 +1358,7 @@ func action_water_run_handle():
 		sfx[29].stop()
 
 
+# TODO Move to PlayerAvatar
 func _handle_animation_speed(gSpeed = groundSpeed):
 	match(_animator.current_animation):
 		"walk", "run", "peelOut":

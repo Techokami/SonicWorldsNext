@@ -108,7 +108,7 @@ func physics_process_game(delta):
 			i.set_state(i.STATES.AIR)
 			i.movement.y += yVelocity * bounceFactor
 			animator.play("spring")
-			if(abs(i.groundSpeed) >= min(6*60,i.top)):
+			if(abs(i.groundSpeed) >= min(6*60,i.get_physics().top_speed)):
 				animator.queue("run")
 			else:
 				animator.queue("walk")
@@ -164,7 +164,10 @@ func draw_tool():
 		draw_at_pos_internal(Vector2(-ringsMargin - (n * ringsBetween), yOffset))
 		draw_at_pos_internal(Vector2(ringsMargin + (n * ringsBetween), yOffset))
 		
-	draw_texture(platformSprite, Vector2(0 - platformSprite.get_width() / 2.0 , 0 - (platformSprite.get_height() / 2.0) + platformOffset))
+	draw_texture(platformSprite, Vector2(0 - platformSprite.get_width() / 2.0,
+	                                     platformOffset - (platformSprite.get_height() / 2.0)
+	                                     )
+	            )
 
 	return
 

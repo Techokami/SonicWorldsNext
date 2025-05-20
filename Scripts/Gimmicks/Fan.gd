@@ -82,7 +82,7 @@ func _physics_process(delta):
 		# make sure player is in range
 		if abs(y_distance-i.global_position.y) <= abs(y_distance-global_position.y):
 			# move toward the top of the mask
-			i.movement.y = lerp(i.movement.y, sign(y_distance-i.global_position.y)*speed-i.grv, delta*30)
+			i.movement.y = lerp(i.movement.y, sign(y_distance-i.global_position.y)*speed-i.get_physics().gravity, delta*30)
 		
 		# force air state
 		var setPlayerAnimation = "corkScrew"

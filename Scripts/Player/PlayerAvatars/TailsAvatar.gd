@@ -24,7 +24,7 @@ func _ready() -> void:
 func tails_jump_fly_callback(_state: PlayerState, player: PlayerChar, _delta: float):
 	# If Tails is moving upwards faster than the release jump speed, he can't start flying.
 	# This prevents an overpowered flight.
-	if player.movement.y < -player.releaseJmp * 60:
+	if player.movement.y < -player.get_physics().release_jump * 60:
 		return true
 	
 	if player.any_action_pressed():

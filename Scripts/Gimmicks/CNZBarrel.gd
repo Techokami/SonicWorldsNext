@@ -215,7 +215,6 @@ func _process(delta):
 			player.action_jump("roll", true, false)
 			
 			# Jump should never go downwards
-			#player.movement.y = min(player.movement.y - _yVel * impartFactor, -player.jmp)
 			player.movement.y = min(player.movement.y + _yVel * impartFactor, 0)
 			# pop the player up a bit to make sure they don't make immediate contact again.
 			if _yVel > 0:

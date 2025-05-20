@@ -35,7 +35,7 @@ func amy_jump_hammer_callback(_state: PlayerState, player: PlayerChar, _delta: f
 		return true
 	
 	# Amy's hammer can only be moved if she's rising slower than the jump release speed
-	if player.movement.y < -player.releaseJmp * 60:
+	if player.movement.y < -player.get_physics().release_jump * 60:
 		return true
 	
 	# set ability used to true to prevent multiple uses

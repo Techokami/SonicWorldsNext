@@ -1,7 +1,8 @@
-[gd_scene load_steps=68 format=3 uid="uid://cy7p77qjddhqc"]
+[gd_scene load_steps=69 format=3 uid="uid://cy7p77qjddhqc"]
 
 [ext_resource type="Script" path="res://Scripts/Player/PlayerAvatars/ShadowAvatar.gd" id="1_ual21"]
-[ext_resource type="Script" path="res://Entities/PlayerAvatars/PlayerAnimation.gd" id="2_xh41g"]
+[ext_resource type="Resource" uid="uid://ccsk0spsusstm" path="res://Scripts/Player/PlayerAvatars/PlayerPhysics/SonicSuper.tres" id="2_jav52"]
+[ext_resource type="Script" path="res://Scripts/Player/PlayerAnimation.gd" id="2_xh41g"]
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="3_geguo"]
 [ext_resource type="Texture2D" uid="uid://ddeai00k1elsy" path="res://Graphics/Players/Shadow.png" id="4_0t11s"]
 [ext_resource type="Texture2D" uid="uid://dlomjk6vm15ep" path="res://Graphics/Misc/DashDust.png" id="5_8u7s4"]
@@ -1328,6 +1329,7 @@ _data = {
 
 [node name="Shadow" type="Node2D"]
 script = ExtResource("1_ual21")
+super_physics = ExtResource("2_jav52")
 metadata/_edit_horizontal_guides_ = [-18.0]
 metadata/_edit_vertical_guides_ = [-20.0]
 

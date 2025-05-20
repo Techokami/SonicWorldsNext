@@ -241,9 +241,11 @@ func disconnect_grab(player: PlayerChar, index: int, deliberate: bool, jumpUpwar
 	
 	if deliberate:
 		if (jumpUpwards):
-			player.movement.y = -player.jmp/2
+			# When we redo this, normalize this instead of using player jump
+			player.movement.y = -player.get_physics().jump_strength/2
 		else:
-			player.movement.y = player.jmp/16
+			# When we redo this, normalize this instead of using player jump
+			player.movement.y = player.get_physics().jump_strength/16
 		# set ground speed to 0 to stop rolling going nuts
 		player.set_ground_speed(0)
 

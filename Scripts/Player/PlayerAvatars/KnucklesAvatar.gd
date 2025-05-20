@@ -28,7 +28,7 @@ func _ready() -> void:
 
 func knuckles_jump_glide_callback(_state: PlayerState, player: PlayerChar, _delta: float):
 
-	if player.movement.y < -player.releaseJmp * 60:
+	if player.movement.y < -player.get_physics().release_jump * 60:
 		return true
 	
 	if player.any_action_pressed():

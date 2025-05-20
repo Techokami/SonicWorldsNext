@@ -13,27 +13,32 @@ func state_process(_delta: float) -> void:
 
 func state_physics_process(delta: float) -> void:
 	# gravity
-	parent.movement.y += parent.grv/GlobalFunctions.div_by_delta(delta)
+	parent.movement.y += parent.get_physics().gravity / GlobalFunctions.div_by_delta(delta)
 	
 	# determine flip based on the direction
 	parent.sprite.flip_h = (parent.direction < 0)
 	
 	# movement
+	var acceleration = parent.get_physics().acceleration
+	var deceleration = parent.get_physics().deceleration
+	var friction = parent.get_physics().friction
+	var top_speed = parent.get_physics().top_speed
+	
 	if (parent.inputs[parent.INPUTS.XINPUT] != 0):
-		if (parent.movement.x*parent.inputs[parent.INPUTS.XINPUT] < parent.top):
+		if (parent.movement.x*parent.inputs[parent.INPUTS.XINPUT] < top_speed):
 			if (sign(parent.movement.x) == parent.inputs[parent.INPUTS.XINPUT]):
-				if (abs(parent.movement.x) < parent.top):
-					parent.movement.x = clamp(parent.movement.x+parent.acc/GlobalFunctions.div_by_delta(delta)*parent.inputs[parent.INPUTS.XINPUT],-parent.top,parent.top)
+				if (abs(parent.movement.x) < top_speed):
+					parent.movement.x = clamp(parent.movement.x+acceleration/GlobalFunctions.div_by_delta(delta)*parent.inputs[parent.INPUTS.XINPUT],-top_speed,top_speed)
 			else:
 				# reverse direction
-				parent.movement.x += parent.dec/GlobalFunctions.div_by_delta(delta)*parent.inputs[parent.INPUTS.XINPUT]
+				parent.movement.x += deceleration/GlobalFunctions.div_by_delta(delta)*parent.inputs[parent.INPUTS.XINPUT]
 				# implament weird turning quirk
-				if (sign(parent.movement.x) != sign(parent.movement.x-parent.dec/GlobalFunctions.div_by_delta(delta)*parent.inputs[parent.INPUTS.XINPUT])):
+				if (sign(parent.movement.x) != sign(parent.movement.x-deceleration/GlobalFunctions.div_by_delta(delta)*parent.inputs[parent.INPUTS.XINPUT])):
 					parent.movement.x = 0.5*60*sign(parent.movement.x)
 	else:
 		if (parent.movement.x != 0):
-			if (sign(parent.movement.x - (parent.frc/GlobalFunctions.div_by_delta(delta))*sign(parent.movement.x)) == sign(parent.movement.x)):
-				parent.movement.x -= (parent.frc/GlobalFunctions.div_by_delta(delta))*sign(parent.movement.x)
+			if (sign(parent.movement.x - (friction/GlobalFunctions.div_by_delta(delta))*sign(parent.movement.x)) == sign(parent.movement.x)):
+				parent.movement.x -= (friction/GlobalFunctions.div_by_delta(delta))*sign(parent.movement.x)
 			else:
 				parent.movement.x -= parent.movement.x
 	

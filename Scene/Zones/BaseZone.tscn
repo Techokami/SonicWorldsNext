@@ -131,7 +131,7 @@ size = Vector2(64, 8)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2ojop"]
 size = Vector2(256, 16)
 
-[sub_resource type="Shader" id="Shader_cocpf"]
+[sub_resource type="Shader" id="Shader_65v5f"]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 uniform float amount : hint_range(1,255,1);
@@ -169,7 +169,7 @@ void fragment(){
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nnlca"]
 resource_local_to_scene = true
-shader = SubResource("Shader_cocpf")
+shader = SubResource("Shader_65v5f")
 shader_parameter/amount = 4.0
 shader_parameter/palRows = 16.0
 shader_parameter/row = 9.0

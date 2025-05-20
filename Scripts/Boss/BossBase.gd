@@ -48,7 +48,7 @@ func _physics_process(delta):
 							i.set_predefined_hitbox(PlayerChar.HITBOXES.NORMAL)
 							i.reflective = false
 							# XXX Modifying player state directly from another object seems a little odd to me
-							i.get_state_object(PlayerChar.STATES.GLIDE).isFall = true
+							i.get_state_object(PlayerChar.STATES.GLIDE).is_fall = true
 					# check if dead
 					if hp <= 0:
 						defeated.emit()

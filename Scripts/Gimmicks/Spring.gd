@@ -77,7 +77,7 @@ func physics_collision(body: PlayerChar, hitVector: Vector2):
 					curAnim = animator.current_animation
 				# if none of the animations match and speed is equal beyond the players top speed, set it to run (default is walk)
 				_:
-					if(abs(body.groundSpeed) >= min(6*60,body.top)):
+					if(abs(body.groundSpeed) >= min(6*60,body.get_physics().top_speed)):
 						curAnim = "run"
 			# play player animation
 			animator.play("spring")
@@ -126,7 +126,7 @@ func _on_Diagonal_body_entered(body: PlayerChar):
 				curAnim = animator.current_animation
 			# if none of the animations match and speed is equal beyond the players top speed, set it to run (default is walk)
 			_:
-				if(abs(body.groundSpeed) >= min(6*60,body.top)):
+				if(abs(body.groundSpeed) >= min(6*60,body.get_physics().top_speed)):
 					curAnim = "run"
 		# play player animation
 		animator.play("springScrew")

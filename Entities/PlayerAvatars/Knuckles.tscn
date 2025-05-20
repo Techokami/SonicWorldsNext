@@ -1,13 +1,104 @@
-[gd_scene load_steps=71 format=3 uid="uid://bdaih80dlev3f"]
+[gd_scene load_steps=77 format=3 uid="uid://bdaih80dlev3f"]
 
 [ext_resource type="Script" path="res://Scripts/Player/PlayerAvatars/KnucklesAvatar.gd" id="1_qqybq"]
-[ext_resource type="Script" path="res://Entities/PlayerAvatars/PlayerAnimation.gd" id="1_xdgv8"]
+[ext_resource type="Script" path="res://Scripts/Player/PlayerAnimation.gd" id="1_xdgv8"]
 [ext_resource type="Texture2D" uid="uid://cndrds5482vh5" path="res://Graphics/Players/Knuckles.png" id="2"]
+[ext_resource type="Script" path="res://Scripts/Player/PlayerPhysicsAttr.gd" id="2_cs05t"]
 [ext_resource type="Texture2D" uid="uid://dlomjk6vm15ep" path="res://Graphics/Misc/DashDust.png" id="3"]
-[ext_resource type="Material" uid="uid://cwdq6vrtybua5" path="res://Shaders/PlayerPalettes/KnucklesPalette.tres" id="3_jvrcy"]
+[ext_resource type="Material" uid="uid://cgms12xv1crqo" path="res://Shaders/PlayerPalettes/KnucklesPalette.tres" id="3_jvrcy"]
 [ext_resource type="Texture2D" uid="uid://dvqglf8dididc" path="res://Graphics/Items/shield_plain.png" id="4_6hh3f"]
 [ext_resource type="Texture2D" uid="uid://decpuepom6w1d" path="res://Graphics/Tools/bar_helper.png" id="7_1jkva"]
 [ext_resource type="Script" path="res://Scripts/Player/States/WallClimb.gd" id="9_bduma"]
+
+[sub_resource type="Resource" id="Resource_4bo31"]
+script = ExtResource("2_cs05t")
+acceleration = 0.046875
+deceleration = 0.5
+friction = 0.046875
+rolling_friction = 0.0234375
+rolling_deceleration = 0.125
+top_speed = 360.0
+rolling_top_speed = 960.0
+slope_factor = 0.125
+slope_factor_rolling_upwards = 0.078125
+slope_factor_rolling_downwards = 0.3125
+fall = 150.0
+air_acceleration = 0.09375
+jump_strength = 360.0
+gravity = 0.21875
+release_jump = 4.0
+
+[sub_resource type="Resource" id="Resource_euol4"]
+script = ExtResource("2_cs05t")
+acceleration = 0.094
+deceleration = 0.5
+friction = 0.094
+rolling_friction = 0.0234375
+rolling_deceleration = 0.125
+top_speed = 720.0
+rolling_top_speed = 960.0
+slope_factor = 0.125
+slope_factor_rolling_upwards = 0.078125
+slope_factor_rolling_downwards = 0.3125
+fall = 150.0
+air_acceleration = 0.188
+jump_strength = 360.0
+gravity = 0.21875
+release_jump = 4.0
+
+[sub_resource type="Resource" id="Resource_r4arn"]
+script = ExtResource("2_cs05t")
+acceleration = 0.023
+deceleration = 0.25
+friction = 0.023
+rolling_friction = 0.0234375
+rolling_deceleration = 0.063
+top_speed = 180.0
+rolling_top_speed = 960.0
+slope_factor = 0.125
+slope_factor_rolling_upwards = 0.078125
+slope_factor_rolling_downwards = 0.3125
+fall = 150.0
+air_acceleration = 0.047
+jump_strength = 180.0
+gravity = 0.063
+release_jump = 2.0
+
+[sub_resource type="Resource" id="Resource_b1qk1"]
+script = ExtResource("2_cs05t")
+acceleration = 0.188
+deceleration = 1.0
+friction = 0.046875
+rolling_friction = 0.0234375
+rolling_deceleration = 0.125
+top_speed = 600.0
+rolling_top_speed = 960.0
+slope_factor = 0.125
+slope_factor_rolling_upwards = 0.078125
+slope_factor_rolling_downwards = 0.3125
+fall = 150.0
+air_acceleration = 0.375
+jump_strength = 360.0
+gravity = 0.21875
+release_jump = 4.0
+
+[sub_resource type="Resource" id="Resource_b045f"]
+script = ExtResource("2_cs05t")
+acceleration = 0.046875
+deceleration = 0.5
+friction = 0.046875
+rolling_friction = 0.0234375
+rolling_deceleration = 0.047
+top_speed = 180.0
+rolling_top_speed = 960.0
+slope_factor = 0.125
+slope_factor_rolling_upwards = 0.078125
+slope_factor_rolling_downwards = 0.3125
+fall = 150.0
+air_acceleration = 0.047
+jump_strength = 180.0
+gravity = 0.063
+release_jump = 2.0
 
 [sub_resource type="Animation" id="86"]
 length = 0.001
@@ -909,7 +1000,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Knuckles/Sprite2D:material:shader_param/row")
+tracks/1/path = NodePath("Knuckles/Sprite2D:material:shader_parameter/row")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -1341,6 +1432,11 @@ _data = {
 
 [node name="Knuckles" type="Node2D"]
 script = ExtResource("1_qqybq")
+normal_physics = SubResource("Resource_4bo31")
+power_sneakers_physics = SubResource("Resource_euol4")
+water_physics = SubResource("Resource_r4arn")
+super_physics = SubResource("Resource_b1qk1")
+super_water_physics = SubResource("Resource_b045f")
 metadata/_edit_horizontal_guides_ = [-18.0]
 
 [node name="PlayerAnimation" type="AnimationPlayer" parent="."]

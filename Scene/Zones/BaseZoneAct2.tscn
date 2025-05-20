@@ -33,7 +33,7 @@
 [ext_resource type="PackedScene" uid="uid://bleoc0gltofoh" path="res://Entities/Gimmicks/Teleporter.tscn" id="30_hr13y"]
 [ext_resource type="PackedScene" uid="uid://di85tknpw5cf0" path="res://Entities/Gimmicks/HorizontalSlider.tscn" id="31_x0wx6"]
 [ext_resource type="AudioStream" uid="uid://ewf3mg6kdb4j" path="res://Audio/SFX/Gimmicks/ChainLift.wav" id="32_hp7tg"]
-[ext_resource type="Script" path="res://Scripts/Gimmicks/MonkeyBar/horizontal_slider.gd" id="33_8dlmw"]
+[ext_resource type="Script" path="res://Scripts/Gimmicks/MonkeyBar/HorizontalSlider.gd" id="33_8dlmw"]
 [ext_resource type="PackedScene" uid="uid://xpsg8eoppqbo" path="res://Entities/Gimmicks/MonkeyBar/Hook.tscn" id="33_ix8uv"]
 [ext_resource type="PackedScene" uid="uid://c2esop5orct10" path="res://Entities/MainObjects/GoalPost.tscn" id="34"]
 [ext_resource type="PackedScene" uid="uid://chyrwm1qwvlyt" path="res://Entities/Gimmicks/Switch.tscn" id="36_bann4"]

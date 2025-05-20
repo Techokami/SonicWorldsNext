@@ -30,22 +30,26 @@ func state_process(_delta: float) -> void:
 
 
 func state_physics_process(delta: float) -> void:
+	var physics = parent.get_physics()
+	var top_speed = physics.top_speed
+	var air_accel = physics.air_acceleration
+	var release_jump = physics.release_jump
+
 	# air movement
 	if (parent.inputs[parent.INPUTS.XINPUT] != 0 and parent.airControl):
-		
-		if (parent.movement.x*parent.inputs[parent.INPUTS.XINPUT] < parent.top):
-			if (abs(parent.movement.x) < parent.top):
-				parent.movement.x = clamp(parent.movement.x+parent.air/GlobalFunctions.div_by_delta(delta)*parent.inputs[parent.INPUTS.XINPUT],-parent.top,parent.top)
+		if (parent.movement.x*parent.inputs[parent.INPUTS.XINPUT] < top_speed):
+			if (abs(parent.movement.x) < top_speed):
+				parent.movement.x = clamp(parent.movement.x+air_accel/GlobalFunctions.div_by_delta(delta)*parent.inputs[parent.INPUTS.XINPUT],-top_speed,top_speed)
 				
 	# Air drag
-	if (parent.movement.y < 0 and parent.movement.y > -parent.releaseJmp*60):
+	if (parent.movement.y < 0 and parent.movement.y > -release_jump * 60):
 		parent.movement.x -= ((parent.movement.x / 0.125) / 256)*60*delta
 	
 	# Mechanics if jumping
 	if (isJump):
 		# Cut vertical movement if jump released
-		if !parent.any_action_held_or_pressed() and parent.movement.y < -parent.releaseJmp*60:
-			parent.movement.y = -parent.releaseJmp*60
+		if !parent.any_action_held_or_pressed() and parent.movement.y < -release_jump*60:
+			parent.movement.y = -release_jump*60
 		
 	# Change parent direction
 	# Check that lock direction isn't on
@@ -56,7 +60,7 @@ func state_physics_process(delta: float) -> void:
 	parent.sprite.flip_h = (parent.direction < 0)
 	
 	# Gravity
-	parent.movement.y += parent.grv/GlobalFunctions.div_by_delta(delta)
+	parent.movement.y += parent.get_physics().gravity / GlobalFunctions.div_by_delta(delta)
 	
 	# Reset state if on ground
 	if (parent.ground):

@@ -209,11 +209,13 @@ func state_physics_process(delta: float) -> void:
 		# regular movement
 		if !parent.ground:
 			# gravity
-			parent.movement.y += parent.grv/GlobalFunctions.div_by_delta(delta)
+			parent.movement.y += parent.get_physics().gravity / GlobalFunctions.div_by_delta(delta)
 			# movement (copied from air state)
-			if (parent.movement.x*parent.inputs[parent.INPUTS.XINPUT] < parent.top):
-				if (abs(parent.movement.x) < parent.top):
-					parent.movement.x = clamp(parent.movement.x+parent.air/GlobalFunctions.div_by_delta(delta)*parent.inputs[parent.INPUTS.XINPUT],-parent.top,parent.top)
+			var top_speed = parent.get_physics().top_speed
+			if (parent.movement.x*parent.inputs[parent.INPUTS.XINPUT] < top_speed):
+				if (abs(parent.movement.x) < top_speed):
+					var air_accel = parent.get_physics().air_acceleration
+					parent.movement.x = clamp(parent.movement.x + air_accel / GlobalFunctions.div_by_delta(delta) * parent.inputs[parent.INPUTS.XINPUT], -top_speed, top_speed)
 			# set direction
 			parent.sprite.flip_h = (parent.direction < 0)
 			

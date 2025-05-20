@@ -2,7 +2,7 @@
 
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="1"]
 [ext_resource type="Script" path="res://Scripts/Player/PlayerAvatars/TailsAvatar.gd" id="1_ifxof"]
-[ext_resource type="Script" path="res://Entities/PlayerAvatars/PlayerAnimation.gd" id="1_q7n5h"]
+[ext_resource type="Script" path="res://Scripts/Player/PlayerAnimation.gd" id="1_q7n5h"]
 [ext_resource type="Texture2D" uid="uid://c05fsbnx0p7xf" path="res://Graphics/Players/Tails.png" id="2"]
 [ext_resource type="Texture2D" uid="uid://dlomjk6vm15ep" path="res://Graphics/Misc/DashDust.png" id="3"]
 [ext_resource type="Material" uid="uid://hxji3lmrri4m" path="res://Shaders/PlayerPalettes/TailsPalette.tres" id="3_jilda"]

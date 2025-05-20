@@ -3,7 +3,7 @@ extends PlayerState
 
 func state_physics_process(delta: float) -> void:
 	# gravity
-	parent.movement.y += parent.grv/GlobalFunctions.div_by_delta(delta)
+	parent.movement.y += parent.get_physics().gravity / GlobalFunctions.div_by_delta(delta)
 	# do allowTranslate to avoid collision
 	parent.allowTranslate = true
 	
