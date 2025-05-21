@@ -287,7 +287,6 @@ region_enabled = true
 region_rect = Rect2(676, 205, 33, 35)
 
 [node name="TailsTails" type="Sprite2D" parent="UI/Labels/CharacterOrigin/Tails"]
-visible = false
 z_index = -1
 position = Vector2(-9, 7)
 texture = ExtResource("4")
