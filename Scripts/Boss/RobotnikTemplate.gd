@@ -123,9 +123,9 @@ func _physics_process(delta):
 # animation to play, time is how long the animation should play for until it stops
 func set_animation(animation = "default", time = 0.0):
 	# check that the animation exists in the animationPriority list
-	if animationPriority.has(animation):
+	var animID: int = animationPriority.find(animation)
+	if animID != -1:
 		# if the animation exists then compare the position
-		var animID = animationPriority.find(animation)
 		var currentAnimID = animationPriority.find($EggMobile/Robotnik.animation)
 		
 		# if the new animation ID is higher then the current one or the animation time isn't running then play the animation

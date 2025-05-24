@@ -73,8 +73,9 @@ func _process(delta: float) -> void:
 					if is_instance_valid(player.superAnimator):
 						player.superAnimator.play("PowerDown")
 				# reset super sonic texture
-				if player.character == Global.CHARACTERS.SONIC:
-					player.sprite.texture = player.normalSprite
+				var player_avatar: PlayerAvatar = player.get_avatar()
+				if player_avatar.super_sprite != null:
+					player.sprite.texture = player_avatar.normal_sprite
 				# reset physics
 				player.switch_physics()
 				player.visible = true

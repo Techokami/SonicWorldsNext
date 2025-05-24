@@ -71,8 +71,7 @@ func _on_playerChecker_body_entered(body):
 
 
 func _on_playerChecker_body_exited(body):
-	if players.has(body):
-		players.erase(body)
+	players.erase(body)
 
 
 # prevent unnecessary run time processing for object

@@ -13,7 +13,7 @@ dest_files=["res://.godot/imported/1. SWD_Invincible.ogg-c76450a96eddb43d7770920
 [params]
 
 loop=true
-loop_offset=0
+loop_offset=1.472
 bpm=0
 beat_count=0
 bar_beats=4

@@ -71,5 +71,4 @@ func _on_layer_switcher_body_entered(body):
 
 func _on_layer_switcher_body_exited(body):
 	if not Engine.is_editor_hint():
-		if playerList.has(body):
-			playerList.erase(body)
+		playerList.erase(body)

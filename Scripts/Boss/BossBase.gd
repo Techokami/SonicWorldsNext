@@ -1,6 +1,6 @@
 class_name BossBase extends CharacterBody2D
 
-@export_enum("Normal", "Fire", "Elec", "Water") var damageType = 0
+@export var damage_type: Global.HAZARDS = Global.HAZARDS.NORMAL
 var playerHit = []
 
 @export var hp = 8
@@ -54,7 +54,7 @@ func _physics_process(delta):
 						defeated.emit()
 				# if destroying the enemy fails and hit player exists then hit player
 				elif (i.has_method("hit_player")):
-					if i.hit_player(global_position,damageType):
+					if i.hit_player(global_position,damage_type):
 						hit_player.emit()
 
 func _on_body_entered(body):
@@ -65,8 +65,7 @@ func _on_body_entered(body):
 
 func _on_body_exited(body):
 	# remove from player list
-	if (playerHit.has(body)):
-		playerHit.erase(body)
+	playerHit.erase(body)
 
 
 func _on_DamageArea_area_entered(area):
@@ -80,5 +79,4 @@ func _on_DamageArea_area_entered(area):
 func _on_HitBox_area_exited(area):
 	# remove from damage area
 	if area.get("parent") != null:
-		if playerHit.has(area.parent):
-			playerHit.erase(area.parent)
+		playerHit.erase(area.parent)

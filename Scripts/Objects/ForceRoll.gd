@@ -28,5 +28,4 @@ func _on_ForceRoll_body_entered(body):
 
 func _on_ForceRoll_body_exited(body):
 	body.forceRoll -= 1
-	#if players.has(body):
-		#players.erase(body)
+	#players.erase(body)

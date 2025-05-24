@@ -1,6 +1,6 @@
 class_name EnemyBase extends CharacterBody2D
 
-@export_enum("Normal", "Fire", "Elec", "Water") var damageType = 0
+@export var damage_type: Global.HAZARDS = Global.HAZARDS.NORMAL
 var playerHit = []
 
 var Explosion = preload("res://Entities/Misc/BadnickSmoke.tscn")
@@ -38,7 +38,7 @@ func _process(delta):
 				return false
 			# if destroying the enemy fails and hit player exists then hit player
 			if (i.has_method("hit_player")):
-				i.hit_player(global_position,damageType)
+				i.hit_player(global_position,damage_type)
 	# move
 	if defaultMovement:
 		translate(velocity*delta)
@@ -51,8 +51,7 @@ func _on_body_entered(body):
 
 func _on_body_exited(body):
 	# remove from player list
-	if (playerHit.has(body)):
-		playerHit.erase(body)
+	playerHit.erase(body)
 
 func _on_DamageArea_area_entered(area):
 	# damage checking
