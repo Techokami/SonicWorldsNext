@@ -3,7 +3,6 @@ var getCam = null
 
 @onready var screenXSize = get_viewport_rect().size.x
 
-var Animal = preload("res://Entities/Misc/Animal.tscn")
 var animalTrackers = []
 var checkAnimals = false
 var timerActive = false
@@ -15,14 +14,7 @@ func _physics_process(delta):
 	if timerActive and timer > 0:
 			# every 8/60 steps spawn an animal in the animal ground with an alarm of 12/60
 			if wrapf(timer,0,8.0/60.0) < wrapf(timer-delta,0,8.0/60.0):
-				var animal = Animal.instantiate()
-				# set animal sprite
-				animal.animal = Global.animals[round(randf())]
-				# deactivate animal to stop movement
-				animal.active = false
-				# random directions
-				animal.forceDirection = false
-				get_parent().add_child(animal)
+				var animal: Animal = Animal.create(get_parent(), global_position, false, false)
 				animalTrackers.append(animal)
 				# set animal position, starting from -28 on the x position and increasing by 8 per animal
 				animal.global_position = global_position+Vector2(randf_range(-20,20),0)
@@ -66,14 +58,7 @@ func activate():
 func spawn_animals():
 	# create animals
 	for i in range(8):
-		var animal = Animal.instantiate()
-		# set animal sprite
-		animal.animal = Global.animals[round(randf())]
-		# deactivate animal to stop movement
-		animal.active = false
-		# random directions
-		animal.forceDirection = false
-		get_parent().add_child(animal)
+		var animal: Animal = Animal.create(get_parent(), global_position, false, false)
 		animalTrackers.append(animal)
 		# set animal position, starting from -28 on the x position and increasing by 8 per animal
 		animal.global_position = global_position+Vector2(-28+(7*i),0)

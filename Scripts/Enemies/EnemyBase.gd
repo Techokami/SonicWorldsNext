@@ -4,7 +4,6 @@ class_name EnemyBase extends CharacterBody2D
 var playerHit = []
 
 var Explosion = preload("res://Entities/Misc/BadnickSmoke.tscn")
-var Animal = preload("res://Entities/Misc/Animal.tscn")
 var forceDamage = false
 var defaultMovement = true
 
@@ -67,9 +66,6 @@ func destroy():
 	get_parent().add_child(explosion)
 	explosion.global_position = global_position
 	# create animal
-	var animal = Animal.instantiate()
-	animal.animal = Global.animals[round(randf())]
-	get_parent().add_child(animal)
-	animal.global_position = global_position
+	Animal.create(get_parent(), global_position)
 	# free node
 	queue_free()
