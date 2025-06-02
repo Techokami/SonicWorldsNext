@@ -22,9 +22,7 @@ func _process(delta: float) -> void:
 		if timer < 1 and timer+delta >= 1:
 			active = false
 			
-			Global.music.stop()
-			Global.effectTheme.stop()
-			Global.bossMusic.stop()
+			MusicController.reset_music_themes()
 			$Warp.play()
 			# set next zone to current zone (this will reset when the stage is loaded back in)
 			Global.nextZone = Global.main.lastScene

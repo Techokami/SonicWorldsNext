@@ -6,14 +6,6 @@ var lastScene = null
 
 # this gets emited when the scene fades, used to load in level details and data to hide it from the player
 signal scene_faded
-# signal that emits when volume fades
-signal volume_set
-
-# note: volumes can be set with set_volume(), these variables are just for volume control reference
-var startVolumeLevel = 0 # used as reference for when a volume change started
-var setVolumeLevel = 0 # where to fade the volume to
-var volumeLerp = 0 # current stage between start and set for volume level
-var volumeFadeSpeed = 1 # speed for volume changing
 
 # was paused enables menu control when the player pauses manually so they don't get stuck (get_tree().paused may want to be used by other intances)
 var wasPaused = false
@@ -23,37 +15,8 @@ var sceneCanPause = false
 func _ready():
 	# global object references
 	Global.main = self
-	Global.musicParent = get_node_or_null("Music")
-	Global.music = get_node_or_null("Music/Music")
-	Global.bossMusic = get_node_or_null("Music/BossTheme")
-	Global.effectTheme = get_node_or_null("Music/EffectTheme")
-	Global.drowning = get_node_or_null("Music/Drowning")
-	Global.life = get_node_or_null("Music/Life")
 	# initialize game data using global reset (it's better then assigning variables twice)
 	Global.reset_values()
-
-func _process(delta):
-	# verify scene isn't paused
-	if !get_tree().paused and Global.music != null:
-		# pause main music if effect theme, boss music or drowning songs are playing
-		Global.music.stream_paused = Global.effectTheme.playing or Global.drowning.playing or Global.bossMusic.playing
-		# pause boss music if drowning
-		Global.bossMusic.stream_paused = Global.drowning.playing
-		# pause effect music if drowning
-		Global.effectTheme.stream_paused = Global.drowning.playing or Global.bossMusic.playing
-		
-		# check that volume lerp isn't transitioned yet
-		if volumeLerp < 1:
-			# move volume lerp to 1
-			volumeLerp = move_toward(volumeLerp,1,delta*volumeFadeSpeed)
-			# use volume lerp to set the effect volume
-			Global.music.volume_db = lerp(float(startVolumeLevel),float(setVolumeLevel),float(volumeLerp))
-			# copy the volume to other songs (you'll want to add yours here if you add more)
-			Global.effectTheme.volume_db = Global.music.volume_db
-			Global.drowning.volume_db = Global.music.volume_db
-			Global.bossMusic.volume_db = Global.music.volume_db
-			if volumeLerp >= 1:
-				volume_set.emit()
 
 func _input(event):
 	# Pausing
@@ -174,30 +137,3 @@ func change_scene_to_file(scene = null, fadeOut = "", fadeIn = "", length = 1, s
 	# if fadeOut wasn't set either then just reset the fader
 	elif fadeOut != "":
 		$GUI/Fader.play("RESET")
-	
-	# stop life sound (if it's still playing)
-	if Global.life.is_playing():
-		Global.life.stop()
-		# set volume level to default
-		Global.music.volume_db = 0
-		# copy the volume to other songs (you'll want to add yours here if you add more)
-		Global.bossMusic.volume_db = Global.bossMusic.volume_db
-		Global.effectTheme.volume_db = Global.music.volume_db
-		Global.drowning.volume_db = Global.music.volume_db
-
-# executed when life sound has finished
-func _on_Life_finished():
-	# set volume level to default
-	set_volume()
-
-# set the volume level
-func set_volume(volume = 0, fadeSpeed = 1):
-	# set the start volume level to the curren volume
-	startVolumeLevel = Global.music.volume_db
-	# set the volume level to go to
-	setVolumeLevel = volume
-	# set volume transition
-	volumeLerp = 0
-	# set the speed for the transition
-	volumeFadeSpeed = fadeSpeed
-	# this is continued in _process() as it needs to run during gameplay

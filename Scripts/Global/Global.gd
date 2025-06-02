@@ -46,17 +46,6 @@ func is_in_any_stage_clear_phase() -> bool:
 func reset_stage_clear_phase() -> void:
 	set_stage_clear_phase(Global.STAGE_CLEAR_PHASES.NOT_STARTED)
 
-# Music
-var musicParent = null
-var music = null
-var bossMusic = null
-var effectTheme = null
-var drowning = null
-var life = null
-# song themes to play for things like invincibility and speed shoes
-var themes = [preload("res://Audio/Soundtrack/1. SWD_Invincible.ogg"),preload("res://Audio/Soundtrack/2. SWD_SpeedUp.ogg"),preload("res://Audio/Soundtrack/4. SWD_StageClear.ogg")]
-# index for current theme
-var currentTheme = 0
 
 # Sound, used for play_sound (used for a global sound, use this if multiple nodes use the same sound)
 var soundChannel = AudioStreamPlayer.new()
@@ -229,21 +218,15 @@ func play_sound(sound = null) -> void:
 ## use a check function to see if a score increase would go above 50,000
 func check_score_life(score_add: int = 0) -> void:
 	if score / 50000 < (score + score_add) / 50000:
-		life.play()
+		MusicController.play_music_theme(MusicController.MusicTheme._1UP)
 		lives += 1
-		effectTheme.volume_db = -100
-		music.volume_db = -100
-		bossMusic.volume_db = -100
 
 
 ## use this to set the stage clear theme, only runs if stage clear phase is NONE
 func stage_clear() -> void:
 	if !is_in_any_stage_clear_phase():
-		currentTheme = 2
-		music.stream = themes[currentTheme]
-		music.play()
-		effectTheme.stop()
-		bossMusic.stop()
+		MusicController.stop_music_theme(MusicController.MusicTheme.LEVEL_THEME)
+		MusicController.play_music_theme(MusicController.MusicTheme.STAGE_CLEAR)
 
 
 ## Emit the stage started signal

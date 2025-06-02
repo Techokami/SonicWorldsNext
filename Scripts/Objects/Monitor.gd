@@ -103,17 +103,13 @@ func destroy():
 			if !playerTouch.get("isSuper"):
 				playerTouch.shoeTime = 20
 				playerTouch.switch_physics()
-				Global.currentTheme = 1
-				Global.effectTheme.stream = Global.themes[Global.currentTheme]
-				Global.effectTheme.play()
+				MusicController.play_music_theme(MusicController.MusicTheme.SPEED_UP)
 		ITEMS.INVINCIBILITY:
 			if !playerTouch.get("isSuper"):
 				playerTouch.supTime = 20
 				playerTouch.shieldSprite.visible = false # turn off barrier for stars
 				playerTouch.get_node("InvincibilityBarrier").visible = true
-				Global.currentTheme = 0
-				Global.effectTheme.stream = Global.themes[Global.currentTheme]
-				Global.effectTheme.play()
+				MusicController.play_music_theme(MusicController.MusicTheme.INVINCIBLE)
 		ITEMS.SHIELD:
 			playerTouch.set_shield(playerTouch.SHIELDS.NORMAL)
 		ITEMS.ELEC_SHIELD:
@@ -127,10 +123,7 @@ func destroy():
 			if !playerTouch.get("isSuper"):
 				playerTouch.set_state(PlayerChar.STATES.SUPER)
 		ITEMS._1UP:
-			Global.life.play()
-			Global.lives += 1
-			Global.effectTheme.volume_db = -100
-			Global.music.volume_db = -100
+			MusicController.play_music_theme(MusicController.MusicTheme._1UP)
 		ITEMS.ROBOTNIK:
 			playerTouch.hit_player(playerTouch.global_position, Global.HAZARDS.NORMAL, 9)
 

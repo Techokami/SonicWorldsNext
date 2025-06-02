@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://c30uceea18q1w"]
+[gd_scene load_steps=31 format=3 uid="uid://c30uceea18q1w"]
 
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="2_xy7bp"]
 [ext_resource type="FontFile" uid="uid://cj70hn8i05uo5" path="res://Graphics/HUD/hud_lives_numerals.png" id="3_eauoj"]
@@ -16,7 +16,6 @@
 [ext_resource type="PackedScene" uid="uid://bass3w6af55vw" path="res://Tools/Timing/ProcessTimer.tscn" id="13_g84gd"]
 [ext_resource type="Texture2D" uid="uid://60ak1q0xrn1s" path="res://Graphics/HUD/hud_gametimeover.png" id="15_oja0m"]
 [ext_resource type="AudioStream" uid="uid://dh4rsaka62ph4" path="res://Audio/SFX/Gimmicks/Switch.wav" id="16"]
-[ext_resource type="AudioStream" uid="uid://dnyw7remih6op" path="res://Audio/Soundtrack/8. SWD_GameOver.ogg" id="16_vq3lx"]
 [ext_resource type="AudioStream" uid="uid://clgobastngtvy" path="res://Audio/SFX/Misc/Score.wav" id="17"]
 
 [sub_resource type="Animation" id="5"]
@@ -1000,10 +999,6 @@ frame = 2
 libraries = {
 "": SubResource("AnimationLibrary_dmnhc")
 }
-
-[node name="GameOverMusic" type="AudioStreamPlayer" parent="GameOver"]
-stream = ExtResource("16_vq3lx")
-bus = &"Music"
 
 [node name="Water" type="CanvasLayer" parent="."]
 

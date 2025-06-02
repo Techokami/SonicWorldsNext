@@ -21,6 +21,7 @@ config/icon="res://icon.png"
 
 Global="*res://Scripts/Global/Global.gd"
 GlobalFunctions="*res://Scripts/Global/GlobalFunctions.gd"
+MusicController="*res://Scripts/Global/MusicController.gd"
 
 [debug]
 
