@@ -19,31 +19,30 @@ func physics_collision(body, hitVector):
 			Score.create(get_parent(), global_position, Global.SCORE_COMBO[min(Global.SCORE_COMBO.size()-1,body.enemyCounter)])
 		body.enemyCounter += 1
 		
+		var sprite_width: int = $Sprite2D.texture.get_width()
+		var sprite_height: int = $Sprite2D.texture.get_height()
+		if $Sprite2D.region_enabled:
+			sprite_width = $Sprite2D.region_rect.size.x
+			sprite_height = $Sprite2D.region_rect.size.y
+		
 		# generate pieces of the block to scatter, use i and j to determine the velocity of each one
 		# and set the settings for each piece to match up with the $Sprite2D node
 		for i in range(pieces.x):
-			for j in range (pieces.y):
+			for j in range(pieces.y):
 				var piece = Piece.instantiate()
 				
 				piece.velocity = Vector2(
-				(pieces.y-j)*lerp(-1,1,i/(pieces.x-1)),
-				-pieces.y+j)*60
-				
-				var spriteWidth = $Sprite2D.texture.get_width()
-				var spriteHeight = $Sprite2D.texture.get_height()
-				if $Sprite2D.region_enabled:
-					spriteWidth = $Sprite2D.region_rect.size.x
-					spriteHeight = $Sprite2D.region_rect.size.y
+					(pieces.y-j)*lerp(-1,1,i/(pieces.x-1)),
+					-pieces.y+j)*60
 				
 				piece.global_position = global_position+Vector2(
-				spriteWidth/4*lerp(-1,1,i/(pieces.x-1)),
-				spriteHeight/4*lerp(-1,1,j/(pieces.y-1))
-				)
+					sprite_width/4*lerp(-1,1,i/(pieces.x-1)),
+					sprite_height/4*lerp(-1,1,j/(pieces.y-1)))
 				piece.texture = $Sprite2D.texture
 				piece.z_index = z_index
 				piece.region_rect = Rect2(
-				Vector2((spriteWidth/pieces.x)*i,(spriteHeight/pieces.y)*j),
-				Vector2(spriteWidth/pieces.x,spriteHeight/pieces.y))
+					Vector2((sprite_width/pieces.x)*i,(sprite_height/pieces.y)*j),
+					Vector2(sprite_width/pieces.x,sprite_height/pieces.y))
 				get_parent().add_child(piece)
 				
 	return true
