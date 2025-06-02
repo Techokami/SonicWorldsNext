@@ -9,7 +9,6 @@ func _physics_process(delta):
 	velocity.y += gravity/GlobalFunctions.div_by_delta(delta)
 	translate(velocity*delta)
 	# life time counter
-	if lifeTime > 0:
-		lifeTime -= delta
-	else:
+	lifeTime -= delta
+	if lifeTime <= 0:
 		queue_free()
