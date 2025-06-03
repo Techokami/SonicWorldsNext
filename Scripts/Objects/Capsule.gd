@@ -23,7 +23,8 @@ func _physics_process(delta):
 			
 			timer -= delta
 		
-	# after flickes are gone, set stage clear to 3 (2's for running off screen, see the goal post)
+	# after flickies are gone, set stage clear phase to SCORE_TALLY
+	# (GOALPOST_SPIN_END is for running off screen, see GoalPost.gd)
 	if checkAnimals and animalTrackers.size() > 0:
 		
 		for i in animalTrackers:
