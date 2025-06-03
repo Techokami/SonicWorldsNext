@@ -27,35 +27,33 @@ func _physics_process(delta):
 			flash_finished.emit()
 	# if not flashing do damage routine
 	elif hp > 0 and active:
-		# checks if player hit has players inside
-		if playerHit.size() > 0:
-			# loop through players as i
-			for i: PlayerChar in playerHit:
-				# check if damage entity is on or supertime is bigger then 0
-				if (i.get_collision_layer_value(20) or i.supTime > 0 or forceDamage):
-					i.movement = i.movement*-0.5
-					# hit
-					if hp > 0:
-						$Hit.play()
-						flashTimer = hitTime
-						got_hit.emit()
-						hp -= 1
-						# check if gliding, if they are force them to fall
-						
-						if i.get_state() == PlayerChar.STATES.GLIDE:
-							i.get_avatar().get_animator().play("glideFall")
-							# reset player hitbox
-							i.set_predefined_hitbox(PlayerChar.HITBOXES.NORMAL)
-							i.reflective = false
-							# XXX Modifying player state directly from another object seems a little odd to me
-							i.get_state_object(PlayerChar.STATES.GLIDE).is_fall = true
-					# check if dead
-					if hp <= 0:
-						defeated.emit()
-				# if destroying the enemy fails and hit player exists then hit player
-				elif (i.has_method("hit_player")):
-					if i.hit_player(global_position,damage_type):
-						hit_player.emit()
+		# loop through players as i
+		for i: PlayerChar in playerHit:
+			# check if damage entity is on or supertime is bigger then 0
+			if (i.get_collision_layer_value(20) or i.supTime > 0 or forceDamage):
+				i.movement = i.movement*-0.5
+				# hit
+				if hp > 0:
+					$Hit.play()
+					flashTimer = hitTime
+					got_hit.emit()
+					hp -= 1
+					# check if gliding, if they are force them to fall
+					
+					if i.get_state() == PlayerChar.STATES.GLIDE:
+						i.get_avatar().get_animator().play("glideFall")
+						# reset player hitbox
+						i.set_predefined_hitbox(PlayerChar.HITBOXES.NORMAL)
+						i.reflective = false
+						# XXX Modifying player state directly from another object seems a little odd to me
+						i.get_state_object(PlayerChar.STATES.GLIDE).is_fall = true
+				# check if dead
+				if hp <= 0:
+					defeated.emit()
+			# if destroying the enemy fails and hit player exists then hit player
+			elif (i.has_method("hit_player")):
+				if i.hit_player(global_position,damage_type):
+					hit_player.emit()
 
 func _on_body_entered(body):
 	# add to player list

@@ -173,28 +173,27 @@ func _process(delta):
 		$Water/WaterOverlay.visible = true
 		
 		# Water Overlay Elec flash
-		if (Global.players.size() > 0):
-			# loop through players
-			for i in Global.players:
-				# check if in water and has elec or fire shield
-				if i.water:
-					match (i.shield):
-						i.SHIELDS.ELEC:
-							# reset shield do flash
-							i.set_shield(i.SHIELDS.NONE)
-							$Water/WaterOverlay/ElecFlash.visible = true
-							# destroy all enemies in near player and below water
-							for j in get_tree().get_nodes_in_group("Enemy"):
-								if j.global_position.y >= Global.waterLevel and i.global_position.distance_to(j.global_position) <= 256:
-									if j.has_method("destroy"):
-										Score.create(j.get_parent(), j.global_position, Global.SCORE_COMBO[0])
-										j.destroy()
-							# disable flash after a frame
-							await get_tree().process_frame
-							$Water/WaterOverlay/ElecFlash.visible = false
-						i.SHIELDS.FIRE:
-							# clear shield
-							i.set_shield(i.SHIELDS.NONE)
+		# loop through players
+		for i in Global.players:
+			# check if in water and has elec or fire shield
+			if i.water:
+				match (i.shield):
+					i.SHIELDS.ELEC:
+						# reset shield do flash
+						i.set_shield(i.SHIELDS.NONE)
+						$Water/WaterOverlay/ElecFlash.visible = true
+						# destroy all enemies in near player and below water
+						for j in get_tree().get_nodes_in_group("Enemy"):
+							if j.global_position.y >= Global.waterLevel and i.global_position.distance_to(j.global_position) <= 256:
+								if j.has_method("destroy"):
+									Score.create(j.get_parent(), j.global_position, Global.SCORE_COMBO[0])
+									j.destroy()
+						# disable flash after a frame
+						await get_tree().process_frame
+						$Water/WaterOverlay/ElecFlash.visible = false
+					i.SHIELDS.FIRE:
+						# clear shield
+						i.set_shield(i.SHIELDS.NONE)
 	else:
 		# disable water overlay
 		$Water/WaterOverlay.visible = false

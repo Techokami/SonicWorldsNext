@@ -10,34 +10,32 @@ var defaultMovement = true
 signal destroyed
 
 func _process(delta):
-	# checks if player hit has players inside
-	if (playerHit.size() > 0):
-		# loop through players as i
-		for i in playerHit:
-			# check if damage entity is on or supertime is bigger then 0
-			if (i.get_collision_layer_value(20) or i.supTime > 0 or forceDamage):
-				# check player is not on floor
-				if !i.ground:
-					if i.movement.y > 0 and i.global_position.y < global_position.y:
-						# Inverse velocity is moving downward and hitting an enemy from above
-						i.movement.y = -i.movement.y
-					elif i.movement.y <= 0:
-						# Push down very slightly is hitting an enmy moving upward
-						i.movement.y += 100
-					else:
-						# If neither are true, just gain a little upward speed
-						i.movement.y -= 100
-					if i.shield == i.SHIELDS.BUBBLE:
-							i.emit_enemy_bounce()
-				# destroy
-				Score.create(get_parent(), global_position, Global.SCORE_COMBO[min(Global.SCORE_COMBO.size()-1,i.enemyCounter)])
-				i.enemyCounter += 1
-				destroy()
-				# cut the script short
-				return false
-			# if destroying the enemy fails and hit player exists then hit player
-			if (i.has_method("hit_player")):
-				i.hit_player(global_position,damage_type)
+	# loop through players as i
+	for i in playerHit:
+		# check if damage entity is on or supertime is bigger then 0
+		if (i.get_collision_layer_value(20) or i.supTime > 0 or forceDamage):
+			# check player is not on floor
+			if !i.ground:
+				if i.movement.y > 0 and i.global_position.y < global_position.y:
+					# Inverse velocity is moving downward and hitting an enemy from above
+					i.movement.y = -i.movement.y
+				elif i.movement.y <= 0:
+					# Push down very slightly is hitting an enmy moving upward
+					i.movement.y += 100
+				else:
+					# If neither are true, just gain a little upward speed
+					i.movement.y -= 100
+				if i.shield == i.SHIELDS.BUBBLE:
+						i.emit_enemy_bounce()
+			# destroy
+			Score.create(get_parent(), global_position, Global.SCORE_COMBO[min(Global.SCORE_COMBO.size()-1,i.enemyCounter)])
+			i.enemyCounter += 1
+			destroy()
+			# cut the script short
+			return false
+		# if destroying the enemy fails and hit player exists then hit player
+		if (i.has_method("hit_player")):
+			i.hit_player(global_position,damage_type)
 	# move
 	if defaultMovement:
 		translate(velocity*delta)

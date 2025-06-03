@@ -21,24 +21,22 @@ func _ready():
 		visible = false
 
 func _physics_process(_delta):
-	# check for players
-	if playerList.size() > 0:
-		for i in playerList:
-			# check that these variables exist in the player
-			if "collissionLayer" in i and "ground" in i:
-				# check if on the floor and if we're only check for grounded players
-				if i.ground or not onlyOnFloor:
-					match(orientation):
-						ORIENTATION.HORIZONTAL:
-							if (i.global_position.x > global_position.x):
-								i.collissionLayer = rightLayer
-							else:
-								i.collissionLayer = leftLayer
-						ORIENTATION.VERTICAL:
-							if (i.global_position.y > global_position.y):
-								i.collissionLayer = rightLayer
-							else:
-								i.collissionLayer = leftLayer
+	for i in playerList:
+		# check that these variables exist in the player
+		if "collissionLayer" in i and "ground" in i:
+			# check if on the floor and if we're only check for grounded players
+			if i.ground or not onlyOnFloor:
+				match(orientation):
+					ORIENTATION.HORIZONTAL:
+						if (i.global_position.x > global_position.x):
+							i.collissionLayer = rightLayer
+						else:
+							i.collissionLayer = leftLayer
+					ORIENTATION.VERTICAL:
+						if (i.global_position.y > global_position.y):
+							i.collissionLayer = rightLayer
+						else:
+							i.collissionLayer = leftLayer
 
 func _process(_delta):
 	# update for editor

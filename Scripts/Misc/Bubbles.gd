@@ -82,22 +82,20 @@ func _on_Bubble_animation_finished():
 func _physics_process(delta):
 	# check if the bubble is big and it collides with any players
 	if bubble_type == BUBBLE_TYPES.BIG and $Bubble.animation == "air" and $Bubble.frame >= 6:
-		var players: Array[Node2D] = $BubbleCollect.get_overlapping_bodies()
-		if players.size() != 0:
-			# get the first PlayerChar body the bubble collides with
-			for player: PlayerChar in players:
-				if !player.ground and player.get_shield() != player.SHIELDS.BUBBLE:
-					player.airTimer = player.defaultAirTime
-					player.sfx[23].play()
-					player.set_state(player.STATES.AIR)
-					player.get_avatar().get_animator().play("air")
-					player.get_avatar().get_animator().queue("walk")
-					player.movement = Vector2.ZERO
-					$Bubble.play("bigPop")
-					$BubbleCollect/CollisionShape2D.set_deferred("disabled", true)
-					set_physics_process(false)
-					inhaled.emit(player)
-					break
+		# get the first PlayerChar body the bubble collides with
+		for player: PlayerChar in $BubbleCollect.get_overlapping_bodies():
+			if !player.ground and player.get_shield() != player.SHIELDS.BUBBLE:
+				player.airTimer = player.defaultAirTime
+				player.sfx[23].play()
+				player.set_state(player.STATES.AIR)
+				player.get_avatar().get_animator().play("air")
+				player.get_avatar().get_animator().queue("walk")
+				player.movement = Vector2.ZERO
+				$Bubble.play("bigPop")
+				$BubbleCollect/CollisionShape2D.set_deferred("disabled", true)
+				set_physics_process(false)
+				inhaled.emit(player)
+				break
 	
 	# check if below water level and rise
 	if Global.waterLevel != null:
