@@ -30,7 +30,7 @@ func _physics_process(delta):
 			if !is_instance_valid(i):
 				animalTrackers.erase(i)
 		
-		if animalTrackers.size() <= 0:
+		if animalTrackers.is_empty():
 			# temporarily set stage clear to NOT_STARTED so that the music can play
 			Global.reset_stage_clear_phase()
 			Global.stage_clear()
