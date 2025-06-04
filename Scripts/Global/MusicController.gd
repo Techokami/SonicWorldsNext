@@ -82,6 +82,8 @@ var _music_theme_players: Dictionary = {
 	MusicTheme._1UP:        _create_music_theme(preload("res://Audio/Soundtrack/3. SWD_1Up.ogg"),        PriorityLevel._1UP_JINGLE,      false,            true,            false,              false,                true),
 	MusicTheme.GAME_OVER:   _create_music_theme(preload("res://Audio/Soundtrack/8. SWD_GameOver.ogg"),   PriorityLevel.GAME_OVER_THEME)
 }
+var _level_theme_alt_player:_MusicThemePlayer = _create_music_theme(null, PriorityLevel.LEVEL_THEME)
+var _crossfaded_to_alt: bool = false
 
 # contains the last played music theme of each priority
 var _last_played_music_by_priority: Array[_MusicThemePlayer] = []
@@ -163,7 +165,7 @@ func play_music_theme(theme_id: MusicTheme) -> void:
 	
 	# pick other music themes with lower priority, so we can fade them out
 	var other_themes: Array[_MusicThemePlayer] = []
-	for other_theme_id: int in MusicTheme.size():
+	for other_theme_id: MusicTheme in _music_theme_players:
 		var other_theme: _MusicThemePlayer = _music_theme_players[other_theme_id]
 		if other_theme.priority < priority:
 			other_themes.append(other_theme)
@@ -201,6 +203,8 @@ func play_music_theme(theme_id: MusicTheme) -> void:
 			prev_theme.stop()
 			prev_theme.play_status = _PlayStatus.STOPPED
 		theme.play()
+		if theme_id == MusicTheme.LEVEL_THEME:
+			_level_theme_alt_player.play()
 		theme.play_status = _PlayStatus.PLAYING
 		
 		# wait for the theme to finish playing
@@ -215,6 +219,8 @@ func play_music_theme(theme_id: MusicTheme) -> void:
 		# if the theme was stopped via `stop_music_theme()` (`POST_PLAY` status),
 		# we need to fade out the theme
 		if theme.fade_when_stopped and theme.play_status == _PlayStatus.POST_PLAY:
+			if theme_id == MusicTheme.LEVEL_THEME:
+				_fade_music_themes([_level_theme_alt_player], -1)
 			await _fade_music_themes([theme], -1)
 			# abort if `reset_music_themes()` was called
 			if _reset_music_themes_flag:
@@ -222,6 +228,9 @@ func play_music_theme(theme_id: MusicTheme) -> void:
 			# stop the theme and restore its volume
 			theme.stop()
 			theme.volume_level += 1.0
+			if theme_id == MusicTheme.LEVEL_THEME:
+				_level_theme_alt_player.stop()
+				_level_theme_alt_player.volume_level += 1.0
 
 	# remove the current theme from the list of last played themes
 	_last_played_music_by_priority[priority] = null
@@ -265,11 +274,15 @@ func stop_music_theme(theme_id: MusicTheme) -> void:
 	# `play_music_theme()` coroutine)
 	if not theme.fade_when_stopped:
 		theme.stop()
+		if theme_id == MusicTheme.LEVEL_THEME:
+			_level_theme_alt_player.stop()
 
 ## Restarts the specified music theme from position.
 ## Does nothing if music theme isn't played.
 func seek_music_theme(theme_id: MusicTheme, to_position: float) -> void:
 	_music_theme_players[theme_id].seek(to_position)
+	if theme_id == MusicTheme.LEVEL_THEME:
+		_level_theme_alt_player.seek(to_position)
 
 ## Returns [code]true[/code] if the specified music theme is playing, [code]false[/code] otherwise.
 func is_music_theme_playing(theme_id: MusicTheme) -> bool:
@@ -318,13 +331,26 @@ func get_music_theme_playback_position(theme_id: MusicTheme) -> float:
 
 ## Sets music theme for the current level.[br]
 ## [param music] - music to set as a level theme.[br]
+## [param music_alt] - alternative music stream (for crossfading with [param music]).[br]
 ## [param autoplay] - if [code]true[/code], start playing the music immediately.
-func set_level_music(music: AudioStream, autoplay: bool = true) -> void:
-	if music == null:
-		_music_theme_players[MusicTheme.LEVEL_THEME].stop()
+func set_level_music(music: AudioStream, music_alt: AudioStream = null, autoplay: bool = true) -> void:
+	_music_theme_players[MusicTheme.LEVEL_THEME].stop()
+	_level_theme_alt_player.stop()
 	_music_theme_players[MusicTheme.LEVEL_THEME].stream = music
+	_level_theme_alt_player.stream = music_alt
 	if autoplay:
 		play_music_theme(MusicTheme.LEVEL_THEME)
+
+## Crossfade level music from the primary theme to the alternative one or vice-versa.
+## [param to_alt] - if [code]true[/code], crossfading goes from primary to alternative, otherwise vice-versa.
+func crossfade_level_music(to_alt: bool) -> void:
+	var level_theme: _MusicThemePlayer = _music_theme_players[MusicTheme.LEVEL_THEME]
+	# quit if we already crossfaded in this direction
+	if to_alt == _crossfaded_to_alt:
+		return
+	_crossfaded_to_alt = to_alt
+	_fade_music_themes([level_theme], -1 if to_alt else 1)
+	_fade_music_themes([_level_theme_alt_player], 1 if to_alt else -1)
 
 ## Resets all music.
 func reset_music_themes() -> void:
@@ -334,6 +360,9 @@ func reset_music_themes() -> void:
 		theme.stop()
 		theme.play_status = _PlayStatus.STOPPED
 		theme.volume_level = 1.0
+	_level_theme_alt_player.stop()
+	_level_theme_alt_player.volume_level = 0.0
+	_crossfaded_to_alt = false
 	_last_played_music_by_priority.fill(null)
 	_reset_music_themes_flag = true
 
@@ -354,8 +383,14 @@ func _create_music_theme(
 
 func _ready() -> void:
 	assert(MusicTheme.values() == _music_theme_players.keys())
+	
+	# add an extra slot for the alternative level theme so `play_music_theme()`
+	# will be able to automatically fade it in/out when needed
+	_music_theme_players[-1] = _level_theme_alt_player
+	
 	_music_theme_players.make_read_only()
 	_last_played_music_by_priority.resize(PriorityLevel.size())
+	_level_theme_alt_player.volume_level = 0.0 # the alt level theme is silent by default
 
 func _physics_process(_delta: float) -> void:
 	# music playing coroutines update before this flag is set
