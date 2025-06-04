@@ -1,9 +1,6 @@
 extends Node
 
 
-# amount of decibels to fade the music in/out for
-const _FADE_AMOUNT: float = 80.0
-
 # amount of time (in milliseconds) to fade all the other music out (or back in)
 # after playing a music theme
 const _FADE_SPEED: int = 1*1000
@@ -27,10 +24,10 @@ enum _PlayStatus {
 }
 
 class _MusicThemePlayer extends AudioStreamPlayer:
-	var volume_db_proxy: float: # we'll use this to accumulate the effect from multiple simultaneous fades
-		set(value):				# (apparently, the actual `volume_db` can't be set lower than `-80.0`)
-			volume_db_proxy = value
-			volume_db = value
+	var volume_level: float: # we'll use this to accumulate the effect from multiple simultaneous fades
+		set(value):
+			volume_level = value
+			volume_db = linear_to_db(value)
 	var play_status: _PlayStatus
 	var priority: PriorityLevel
 	var fade_out_other_themes: bool # if true, themes with lower priority are faded out gradually,
@@ -52,7 +49,7 @@ class _MusicThemePlayer extends AudioStreamPlayer:
 		p_allow_replay: bool = false
 	) -> void:
 		bus = &"Music"
-		self.volume_db_proxy = 0.0 # the use of `self` is intended, no need to invoke the setter here
+		volume_level = 1.0
 		play_status = _PlayStatus.STOPPED
 		stream = p_stream
 		priority = p_priority
@@ -115,21 +112,21 @@ func _fade_music_themes(themes: Array[_MusicThemePlayer], _sign: int) -> void:
 		# calculate time passed since the previous frame and total time
 		delta = cur_time - prev_time
 		# calculate the amount of volume to change at the current step
-		volume_step = _FADE_AMOUNT * delta / _FADE_SPEED
+		volume_step = 1.0 * delta / _FADE_SPEED
 		# due to the way how `physics_process` works, the fading process
 		# may take slightly more time than specified in `_FADE_SPEED`,
 		# which is why we need to compensate for the "overflow"
 		# that might happen on the last iteration by clamping
 		# the amount of volume changed at the current step
 		total_volume_change += volume_step
-		if total_volume_change >= _FADE_AMOUNT:
+		if total_volume_change >= 1.0:
 			keep_fading = false # this will be the last iteration
-			volume_step -= total_volume_change - _FADE_AMOUNT # compensate for the "overflow"
+			volume_step -= total_volume_change - 1.0 # compensate for the "overflow"
 		volume_step *= _sign
 		# change the voulme for all themes with lower priority
 		for theme: _MusicThemePlayer in themes:
-			theme.volume_db_proxy += volume_step
-	
+			theme.volume_level += volume_step
+
 
 ## Plays the specified music theme while muting out (either instantly,
 ## or by gradually fading out) all the other themes that have lower priority,
@@ -181,7 +178,7 @@ func play_music_theme(theme_id: MusicTheme) -> void:
 		# if there's no fadeout, then we can simply mute
 		# all the other music that has lower priority
 		for other_theme: _MusicThemePlayer in other_themes:
-			other_theme.volume_db_proxy -= _FADE_AMOUNT
+			other_theme.volume_level -= 1.0
 	else:
 		# otherwise we need to gradually fade out
 		# all the other music themes with lower priority
@@ -224,7 +221,7 @@ func play_music_theme(theme_id: MusicTheme) -> void:
 				return
 			# stop the theme and restore its volume
 			theme.stop()
-			theme.volume_db_proxy += _FADE_AMOUNT
+			theme.volume_level += 1.0
 
 	# remove the current theme from the list of last played themes
 	_last_played_music_by_priority[priority] = null
@@ -232,7 +229,7 @@ func play_music_theme(theme_id: MusicTheme) -> void:
 	# fade all the other music back in
 	if not theme.fade_in_other_themes:
 		for other_theme: _MusicThemePlayer in other_themes:
-			other_theme.volume_db_proxy += _FADE_AMOUNT
+			other_theme.volume_level += 1.0
 	else:
 		theme.play_status = _PlayStatus.POST_PLAY
 		await _fade_music_themes(other_themes, 1)
@@ -336,7 +333,7 @@ func reset_music_themes() -> void:
 		theme = _music_theme_players[theme_id]
 		theme.stop()
 		theme.play_status = _PlayStatus.STOPPED
-		theme.volume_db_proxy = 0.0
+		theme.volume_level = 1.0
 	_last_played_music_by_priority.fill(null)
 	_reset_music_themes_flag = true
 
