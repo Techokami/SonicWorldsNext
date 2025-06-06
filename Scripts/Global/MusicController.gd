@@ -27,7 +27,7 @@ class _MusicThemePlayer extends AudioStreamPlayer:
 	var volume_level: float: # we'll use this to accumulate the effect from multiple simultaneous fades
 		set(value):
 			volume_level = value
-			volume_db = linear_to_db(value)
+			volume_db = linear_to_db(maxf(0.0, value))
 	var play_status: _PlayStatus
 	var priority: PriorityLevel
 	var fade_out_other_themes: bool # if true, themes with lower priority are faded out gradually,
