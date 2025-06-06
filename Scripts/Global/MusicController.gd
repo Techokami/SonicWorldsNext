@@ -92,44 +92,6 @@ var _last_played_music_by_priority: Array[_MusicThemePlayer] = []
 var _reset_music_themes_flag: bool = false
 
 
-func _fade_music_themes(themes: Array[_MusicThemePlayer], _sign: int) -> void:
-	var tree: SceneTree = get_tree()
-	var physics_frame: Signal = tree.physics_frame
-	var volume_step: float
-	var total_volume_change: float = 0.0
-	var delta: int
-	var prev_time: int
-	var cur_time: int = Time.get_ticks_msec()
-	var keep_fading: bool = true
-	while keep_fading:
-		await physics_frame
-		prev_time = cur_time
-		cur_time = Time.get_ticks_msec()
-		# abort if `reset_music_themes()` was called while we're fading out/in
-		if _reset_music_themes_flag:
-			return
-		# skip fading while the game is paused
-		if tree.paused:
-			continue
-		# calculate time passed since the previous frame and total time
-		delta = cur_time - prev_time
-		# calculate the amount of volume to change at the current step
-		volume_step = 1.0 * delta / _FADE_SPEED
-		# due to the way how `physics_process` works, the fading process
-		# may take slightly more time than specified in `_FADE_SPEED`,
-		# which is why we need to compensate for the "overflow"
-		# that might happen on the last iteration by clamping
-		# the amount of volume changed at the current step
-		total_volume_change += volume_step
-		if total_volume_change >= 1.0:
-			keep_fading = false # this will be the last iteration
-			volume_step -= total_volume_change - 1.0 # compensate for the "overflow"
-		volume_step *= _sign
-		# change the voulme for all specified themes
-		for theme: _MusicThemePlayer in themes:
-			theme.volume_level += volume_step
-
-
 ## Plays the specified music theme while muting out (either instantly,
 ## or by gradually fading out) all the other themes that have lower priority,
 ## then fading them back in after the specified theme ended playing.[br]
@@ -381,6 +343,43 @@ func _create_music_theme(
 		fade_when_stopped, restart_level_theme, allow_replay)
 	add_child(theme)
 	return theme
+
+func _fade_music_themes(themes: Array[_MusicThemePlayer], _sign: int) -> void:
+	var tree: SceneTree = get_tree()
+	var physics_frame: Signal = tree.physics_frame
+	var volume_step: float
+	var total_volume_change: float = 0.0
+	var delta: int
+	var prev_time: int
+	var cur_time: int = Time.get_ticks_msec()
+	var keep_fading: bool = true
+	while keep_fading:
+		await physics_frame
+		prev_time = cur_time
+		cur_time = Time.get_ticks_msec()
+		# abort if `reset_music_themes()` was called while we're fading out/in
+		if _reset_music_themes_flag:
+			return
+		# skip fading while the game is paused
+		if tree.paused:
+			continue
+		# calculate time passed since the previous frame and total time
+		delta = cur_time - prev_time
+		# calculate the amount of volume to change at the current step
+		volume_step = 1.0 * delta / _FADE_SPEED
+		# due to the way how `physics_process` works, the fading process
+		# may take slightly more time than specified in `_FADE_SPEED`,
+		# which is why we need to compensate for the "overflow"
+		# that might happen on the last iteration by clamping
+		# the amount of volume changed at the current step
+		total_volume_change += volume_step
+		if total_volume_change >= 1.0:
+			keep_fading = false # this will be the last iteration
+			volume_step -= total_volume_change - 1.0 # compensate for the "overflow"
+		volume_step *= _sign
+		# change the voulme for all specified themes
+		for theme: _MusicThemePlayer in themes:
+			theme.volume_level += volume_step
 
 func _ready() -> void:
 	assert(MusicTheme.values() == _music_theme_players.keys())
