@@ -82,7 +82,7 @@ var _music_theme_players: Dictionary = {
 	MusicTheme._1UP:        _create_music_theme(preload("res://Audio/Soundtrack/3. SWD_1Up.ogg"),        PriorityLevel._1UP_JINGLE,      false,            true,            false,              false,                true),
 	MusicTheme.GAME_OVER:   _create_music_theme(preload("res://Audio/Soundtrack/8. SWD_GameOver.ogg"),   PriorityLevel.GAME_OVER_THEME)
 }
-var _level_theme_alt_player:_MusicThemePlayer = _create_music_theme(null, PriorityLevel.LEVEL_THEME)
+var _level_theme_alt_player: _MusicThemePlayer = _create_music_theme(null, PriorityLevel.LEVEL_THEME)
 var _crossfaded_to_alt: bool = false
 
 # contains the last played music theme of each priority
@@ -125,7 +125,7 @@ func _fade_music_themes(themes: Array[_MusicThemePlayer], _sign: int) -> void:
 			keep_fading = false # this will be the last iteration
 			volume_step -= total_volume_change - 1.0 # compensate for the "overflow"
 		volume_step *= _sign
-		# change the voulme for all themes with lower priority
+		# change the voulme for all specified themes
 		for theme: _MusicThemePlayer in themes:
 			theme.volume_level += volume_step
 
@@ -300,6 +300,7 @@ func is_music_theme_playing_or_fading(theme_id: MusicTheme) -> bool:
 func is_music_theme_with_priority_playing(priority: PriorityLevel) -> bool:
 	var theme: _MusicThemePlayer = _last_played_music_by_priority[priority]
 	return theme != null and theme.play_status == _PlayStatus.PLAYING
+
 ## Returns [code]true[/code] if any music theme with the specified priority is playing,
 ## preparing to play (fading out other music themes with lower priority),
 ## or just finished playing and now all the other themes with lower priority
