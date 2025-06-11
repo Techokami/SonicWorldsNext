@@ -2,8 +2,8 @@ extends Node
 
 
 # amount of time (in milliseconds) to fade all the other music out (or back in)
-# after playing a music theme
-const _FADE_SPEED: int = 1*1000
+# before/after playing a music theme
+const _FADE_DURATION: int = 2*1000
 
 ## Level music has the lowest priority, and the Game Over theme has the highest.
 enum PriorityLevel {
@@ -366,9 +366,9 @@ func _fade_music_themes(themes: Array[_MusicThemePlayer], _sign: int) -> void:
 		# calculate time passed since the previous frame and total time
 		delta = cur_time - prev_time
 		# calculate the amount of volume to change at the current step
-		volume_step = 1.0 * delta / _FADE_SPEED
+		volume_step = 1.0 * delta / _FADE_DURATION
 		# due to the way how `physics_process` works, the fading process
-		# may take slightly more time than specified in `_FADE_SPEED`,
+		# may take slightly more time than specified in `_FADE_DURATION`,
 		# which is why we need to compensate for the "overflow"
 		# that might happen on the last iteration by clamping
 		# the amount of volume changed at the current step
