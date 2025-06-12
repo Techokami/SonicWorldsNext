@@ -9,13 +9,15 @@ func _process(delta):
 func activate():
 	if (activated):
 		return
-		
+	
+	$Shutter.play()
 	$BigFan.play()
 	activated = true
 
 func deactivate():
 	if (!activated):
 		return
-		
+	
+	$Shutter.play()
 	$BigFan.stop()
 	activated = false
