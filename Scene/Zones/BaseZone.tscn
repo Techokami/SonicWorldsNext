@@ -1046,6 +1046,7 @@ position = Vector2(4608, 1342)
 [node name="WindCurrent" parent="Entity" instance=ExtResource("44_6t7a0")]
 position = Vector2(6352, 1888)
 scale = Vector2(47, 12)
+activated = false
 
 [node name="GiantFan" parent="Entity" instance=ExtResource("45_r8otc")]
 z_index = -1
@@ -1898,8 +1899,10 @@ position = Vector2(8027, 1264)
 [connection signal="body_entered" from="Platforms/WidePlatform" to="Platforms/WidePlatform" method="_on_body_entered"]
 [connection signal="body_exited" from="Platforms/WidePlatform" to="Platforms/WidePlatform" method="_on_body_exited"]
 [connection signal="pressed" from="Entity/Switch" to="Entity/Switch/Shutter2" method="force_open"]
+[connection signal="all_players_exited" from="Entity/WindCurrent" to="Entity/WindCurrent" method="deactivate"]
 [connection signal="all_players_exited" from="Entity/WindCurrent" to="Entity/GiantFan" method="deactivate"]
 [connection signal="player_entered" from="Entity/WindCurrent" to="Entity/GiantFan" method="activate"]
+[connection signal="deployed" from="Entity/GiantFan" to="Entity/WindCurrent" method="activate"]
 
 [editable path="Platforms/Platform"]
 [editable path="Platforms/Platform13"]

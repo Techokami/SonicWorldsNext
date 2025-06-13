@@ -13,19 +13,27 @@ extends Area2D
 
 var player_count = 0
 
+# this isn't the same as player_count, because if the parent object is a fan,
+# the variable is only set to true after waiting for the fan to start working
+@export var activated: bool = true
+
 signal player_entered
 signal all_players_exited
+
 
 func _ready():
 	visible = false
 
-
 func _physics_process(_delta: float) -> void:
+	# skip if the wind current isn't activated yet
+	if not activated:
+		return
+	
 	for player: PlayerChar in get_overlapping_bodies():
 		# ignore if player is dead or hit
-		if player.get_state() == PlayerChar.STATES.DIE or \
-			player.get_state() == PlayerChar.STATES.HIT:
-			continue
+		match player.get_state():
+			PlayerChar.STATES.DIE, PlayerChar.STATES.HIT:
+				continue
 		
 		# Ignore if the player is on a gimmick (such as a water bar
 		if player.get_active_gimmick() != null:
@@ -46,9 +54,9 @@ func _physics_process(_delta: float) -> void:
 		# Linear algebra is scary, but this basically just makes it so that if the current is moving
 		# right, then up/down motion works and if the current is moving up, left/right movement works...
 		# Then for everything in between, you get a mix of both.
-		var move_dir = Vector2(mod_dir.dot(Vector2(0, player.get_x_input())),
-		                       mod_dir.dot(Vector2(player.get_y_input(), 0))
-		                      )
+		var move_dir = Vector2(
+			mod_dir.dot(Vector2(0, player.get_x_input())),
+			mod_dir.dot(Vector2(player.get_y_input(), 0)))
 		
 		player.movement = current_vector+(move_dir*move_speed)
 		
@@ -66,10 +74,7 @@ func _physics_process(_delta: float) -> void:
 		player.push_vertical()
 		
 		# force player direction
-		if current_vector.x > 0.0:
-			player.set_direction(PlayerChar.DIRECTIONS.RIGHT)
-		else:
-			player.set_direction(PlayerChar.DIRECTIONS.LEFT)
+		player.set_direction(PlayerChar.DIRECTIONS.RIGHT if current_vector.x > 0.0 else PlayerChar.DIRECTIONS.LEFT)
 		
 		# force slide state if the player isn't currently on a gimmick
 		if player.get_state() != PlayerChar.STATES.GIMMICK and \
@@ -94,3 +99,13 @@ func _on_current_body_exited(body: PlayerChar) -> void:
 	player_count -= 1
 	if player_count == 0:
 		all_players_exited.emit()
+
+func activate() -> void:
+	if activated:
+		return
+	activated = true
+
+func deactivate() -> void:
+	if not activated:
+		return
+	activated = false
