@@ -2,19 +2,17 @@
 extends Area2D
 
 
-@export_enum("left", "right") var boostDirection = 0
-var dirMemory = boostDirection
+enum DIRECTION { LEFT, RIGHT }
+@export var boostDirection: DIRECTION = DIRECTION.LEFT:
+	set(value):
+		boostDirection = value
+		$Booster.flip_h = (boostDirection == DIRECTION.RIGHT)
+
 @export var speed = 16
 
 func _ready():
 	# set direction
-	$Booster.flip_h = bool(boostDirection)
-
-func _process(_delta):
-	if Engine.is_editor_hint():
-		if (boostDirection != dirMemory):
-			$Booster.flip_h = bool(boostDirection)
-			dirMemory = boostDirection
+	$Booster.flip_h = (boostDirection == DIRECTION.RIGHT)
 
 func _on_SpeedBooster_body_entered(body: PlayerChar):
 	# DO THE BOOST, WHOOOOOSH!!!!!!!
