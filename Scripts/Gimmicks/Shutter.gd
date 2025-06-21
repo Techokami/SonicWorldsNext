@@ -62,13 +62,13 @@ func _update_areas() -> void:
 		$CloseArea2/Mask.shape = door_shape
 		var side_sign: float = -1 if side == SIDE.LEFT else 1
 		var door_width: float = door_shape.size.x
-		var open_area_width: float = OPEN_AREA_DEFAULT_WIDTH - door_width / 2.0
+		var open_area_width: float = OPEN_AREA_DEFAULT_WIDTH - door_width / 2.0 + (door_width if currently_open else 0.0)
 		$OpenArea/Mask.shape.size = Vector2(open_area_width, door_shape.size.y)
-		var open_area_pos_x = (OPEN_AREA_DEFAULT_WIDTH + door_width / 2.0) / 2.0
+		var open_area_pos_x = (open_area_width + door_width) / 2.0 - (door_width if currently_open else 0.0)
 		$OpenArea.position.x = open_area_pos_x * side_sign
 		var close_area_offset: float = (open_area_width + door_width) / 2.0
 		$CloseArea.position.x = (open_area_pos_x + close_area_offset) * side_sign
-		$CloseArea2.position.x = (open_area_pos_x - close_area_offset - door_width) * side_sign
+		$CloseArea2.position.x = (open_area_pos_x - close_area_offset - (0.0 if currently_open else door_width)) * side_sign
 
 func _ready() -> void:
 	$Shutter.texture = texture
