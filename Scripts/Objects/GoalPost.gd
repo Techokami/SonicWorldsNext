@@ -18,8 +18,8 @@ func _ready():
 		# overwrite the texture in each 4'th frame (3, 7, 11, ..., 123) with a character-specific one,
 		# but don't touch frame 127 yet, in case the player character will be changed mid-level
 		# (this relies on Robotnik's frame position being (0,0) in the texture file)
-		for i in 128 / 4 - 1:
-			$Sprite.sprite_frames.set_frame("spinner", 3 + i * 4, char_textures[(i + 1) % num_textures])
+		for i: int in range(3, 124, 4):
+			$Sprite.sprite_frames.set_frame("spinner", i, char_textures[((i + 1) >> 2) % num_textures])
 
 func _physics_process(_delta):
 	var player: PlayerChar = Global.players[0]
