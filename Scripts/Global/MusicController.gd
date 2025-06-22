@@ -5,6 +5,7 @@ extends Node
 # before/after playing a music theme
 const _FADE_DURATION: int = 2*1000
 
+## Defines priority for each music group, in ascending order.
 ## Level music has the lowest priority, and the Game Over theme has the highest.
 enum PriorityLevel {
 	LEVEL_THEME,
@@ -59,6 +60,7 @@ class _MusicThemePlayer extends AudioStreamPlayer:
 		restart_level_theme = p_restart_level_theme
 		allow_replay = p_allow_replay
 
+## Defines music groups for in-game music themes.
 enum MusicTheme {
 	LEVEL_THEME,
 	INVINCIBLE,
@@ -99,8 +101,8 @@ var _reset_music_themes_flag: bool = false
 ## * [param time] - time (in milliseconds) to play the [param theme], if the latter is looped.[br]
 ## NOTES:[br]
 ## * If [code]theme_id == MusicTheme.LEVEL[/code] and level theme wasn't previously
-##   set (which can be done either via the `level_music_theme` property in
-##   the editor, or via [member set_level_music]), this function does nothing.
+##   set (which can be done either via the [member Level.music] property in the editor,
+##   or via [member set_level_music]), this function does nothing.
 func play_music_theme(theme_id: MusicTheme) -> void:
 	var theme: _MusicThemePlayer = _music_theme_players[theme_id]
 
@@ -294,8 +296,8 @@ func get_music_theme_playback_position(theme_id: MusicTheme) -> float:
 
 ## Sets music theme for the current level.[br]
 ## [param music] - music to set as a level theme.[br]
-## [param music_alt] - alternative music stream (for crossfading with [param music]).[br]
-## [param autoplay] - if [code]true[/code], start playing the music immediately.
+## [param music_alt] - (optional) alternative music stream (for crossfading with [param music]).[br]
+## [param autoplay] - (optional) if [code]true[/code], start playing the music immediately (default behavior).
 func set_level_music(music: AudioStream, music_alt: AudioStream = null, autoplay: bool = true) -> void:
 	_music_theme_players[MusicTheme.LEVEL_THEME].stop()
 	_level_theme_alt_player.stop()
@@ -304,8 +306,8 @@ func set_level_music(music: AudioStream, music_alt: AudioStream = null, autoplay
 	if autoplay:
 		play_music_theme(MusicTheme.LEVEL_THEME)
 
-## Crossfade level music from the primary theme to the alternative one or vice-versa.
-## [param to_alt] - if [code]true[/code], crossfading goes from primary to alternative, otherwise vice-versa.
+## Crossfades level music from the primary theme to the alternative one or vice-versa.[br]
+## [param to_alt] - if [code]true[/code], crossfading goes from primary to alternative, otherwise from alternative to primary.
 func crossfade_level_music(to_alt: bool) -> void:
 	var level_theme: _MusicThemePlayer = _music_theme_players[MusicTheme.LEVEL_THEME]
 	# quit if we already crossfaded in this direction
@@ -315,7 +317,7 @@ func crossfade_level_music(to_alt: bool) -> void:
 	_fade_music_themes([level_theme], -1 if to_alt else 1)
 	_fade_music_themes([_level_theme_alt_player], 1 if to_alt else -1)
 
-## Resets all music.
+## Stops and resets the state of all music.
 func reset_music_themes() -> void:
 	var theme: _MusicThemePlayer
 	for theme_id: MusicTheme in _music_theme_players:
