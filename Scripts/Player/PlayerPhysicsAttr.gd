@@ -16,7 +16,7 @@ class_name PlayerPhysics extends Resource
 @export var rolling_deceleration: float = 0.125
 ## Top speed a player can achieve while moving normally
 @export var top_speed: float = 6*60
-## Top speed a plery can achieve while rolling
+## Top speed a player can achieve while rolling
 @export var rolling_top_speed: float = 16*60
 
 ## Needs a better descriptor, but this is sort of like a multiplier for how much
