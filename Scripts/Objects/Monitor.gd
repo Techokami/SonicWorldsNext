@@ -19,7 +19,7 @@ enum ITEMS {
 	# when adding new item types, please make sure
 	# 1up is the last item in the list
 	RING, SPEED_SHOES, INVINCIBILITY, SHIELD, ELEC_SHIELD, FIRE_SHIELD,
-	BUBBLE_SHIELD, SUPER, _1UP, ROBOTNIK
+	BUBBLE_SHIELD, SUPER, _1UP, ROBOTNIK, HYPER_RING
 }
 @export var item: ITEMS = ITEMS.RING:
 	set(value):
@@ -126,6 +126,8 @@ func destroy():
 			MusicController.play_music_theme(MusicController.MusicTheme._1UP)
 		ITEMS.ROBOTNIK:
 			playerTouch.hit_player(playerTouch.global_position, Global.HAZARDS.NORMAL, 9)
+		ITEMS.HYPER_RING:
+			playerTouch.hyper_ring = true
 
 func _physics_process(delta):
 	# if physics are on make em fall

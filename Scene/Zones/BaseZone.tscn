@@ -1599,6 +1599,10 @@ item = 4
 [node name="Monitor2" parent="Monitors" instance=ExtResource("8_8svvy")]
 position = Vector2(408, 672)
 
+[node name="Monitor3" parent="Monitors" instance=ExtResource("8_8svvy")]
+position = Vector2(1200, 336)
+item = 10
+
 [node name="Monitor4" parent="Monitors" instance=ExtResource("8_8svvy")]
 position = Vector2(3136, 368)
 item = 8

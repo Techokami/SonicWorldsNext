@@ -1,0 +1,96 @@
+[gd_scene load_steps=13 format=3 uid="uid://bfh812sfnsg66"]
+
+[ext_resource type="Script" path="res://Scripts/Objects/Ring.gd" id="1_6ff7w"]
+[ext_resource type="Texture2D" uid="uid://dd5w4k780vuop" path="res://Graphics/Items/big_ring.png" id="2_hoyhl"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sknf7"]
+atlas = ExtResource("2_hoyhl")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0pr6h"]
+atlas = ExtResource("2_hoyhl")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4do3f"]
+atlas = ExtResource("2_hoyhl")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dn0vu"]
+atlas = ExtResource("2_hoyhl")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v2sjc"]
+atlas = ExtResource("2_hoyhl")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jmjrx"]
+atlas = ExtResource("2_hoyhl")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_knc7v"]
+atlas = ExtResource("2_hoyhl")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7qygs"]
+atlas = ExtResource("2_hoyhl")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sknf7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0pr6h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4do3f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dn0vu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v2sjc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jmjrx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_knc7v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7qygs")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(29, 29)
+
+[node name="HyperRing" type="Node2D"]
+z_index = 1
+script = ExtResource("1_6ff7w")
+
+[node name="RingSprite" type="AnimatedSprite2D" parent="."]
+process_mode = 1
+z_index = 4
+sprite_frames = SubResource("2")
+autoplay = "default"
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4096
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+modulate = Color(1, 0, 0.819608, 1)
+shape = SubResource("1")
+
+[node name="FloorCheck" type="RayCast2D" parent="."]
+target_position = Vector2(0, 16)
+
+[connection signal="area_shape_entered" from="Hitbox" to="." method="_on_Hitbox_area_shape_entered"]
+[connection signal="body_entered" from="Hitbox" to="." method="_on_Hitbox_body_entered"]
+[connection signal="body_exited" from="Hitbox" to="." method="_on_Hitbox_body_exited"]

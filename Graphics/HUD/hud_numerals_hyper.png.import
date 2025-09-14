@@ -1,0 +1,25 @@
+[remap]
+
+importer="font_data_image"
+type="FontFile"
+uid="uid://3dtk7ug486gi"
+path="res://.godot/imported/hud_numerals_hyper.png-710daa2f4b822a4a3a3dc0a0d25c0980.fontdata"
+
+[deps]
+
+source_file="res://Graphics/HUD/hud_numerals_hyper.png"
+dest_files=["res://.godot/imported/hud_numerals_hyper.png-710daa2f4b822a4a3a3dc0a0d25c0980.fontdata"]
+
+[params]
+
+character_ranges=PackedStringArray("48-57", "65", "66", "32")
+kerning_pairs=PackedStringArray()
+columns=13
+rows=1
+image_margin=Rect2i(0, 0, 0, 0)
+character_margin=Rect2i(0, 0, 0, 0)
+ascent=0
+descent=0
+fallbacks=[]
+compress=true
+scaling_mode=0

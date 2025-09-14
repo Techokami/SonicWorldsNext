@@ -152,9 +152,21 @@ func _process(delta):
 			var hud_time_hundredths: int = int(hud_time * 100) % 100
 			timeText.text = "%2d'%02d\"%02d" % [hud_time_minutes,hud_time_seconds,hud_time_hundredths]
 	
-	# cehck that there's player, if there is then track the focus players ring count
+	# check that there's player, if there is then track the focus players ring count
 	if (Global.players.size() > 0):
-		ringText.text = "%3d" % Global.players[focusPlayer].rings
+		var hyper_ring: bool = Global.players[focusPlayer].hyper_ring
+		$Counters/Text/BlueRings.visible = hyper_ring
+		$Counters/Text/BlueRingCount.visible = hyper_ring
+		$Counters/Text/RingCount.visible = not hyper_ring
+		if hyper_ring:
+			# The extra "%4s" is needed to left-pad the text with 1 whitespace
+			# if the number of rings is a single-digit number, so the text
+			# won't warp when switching from the normal font to the blue one.
+			# The "AB" part is the ring icon that had to be divided into two parts
+			# ('A' and 'B'), as it was too wide and didn't fit into a single symbol.
+			$Counters/Text/BlueRingCount.text = "%4s" % ("AB%d" % Global.players[focusPlayer].rings)
+		else:
+			$Counters/Text/RingCount.text = "%3d" % Global.players[focusPlayer].rings
 	
 	# track lives with leading 0s
 	lifeText.text = "%2d" % Global.lives
