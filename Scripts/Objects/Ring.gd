@@ -40,16 +40,16 @@ func _physics_process(delta):
 			velocity.y *= -0.75
 	elif (magnet):
 		#relative positions
-		var sx = sign(magnet.global_position.x - global_position.x)
-		var sy = sign(magnet.global_position.y - global_position.y)
+		var pos_sign: Vector2 = (magnet.global_position-global_position).sign()
 		
 		#check relative movement
-		var tx = int(sign(velocity.x) == sx)
-		var ty = int(sign(velocity.y) == sy)
+		var vel_sign: Vector2 = velocity.sign()
 		
 		#add to speed
-		velocity.x += (ringacceleration[tx] * sx)/GlobalFunctions.div_by_delta(delta)
-		velocity.y += (ringacceleration[ty] * sy)/GlobalFunctions.div_by_delta(delta)
+		velocity += Vector2(
+				ringacceleration[int(vel_sign.x == pos_sign.x)],
+				ringacceleration[int(vel_sign.y == pos_sign.y)]
+			) * pos_sign / GlobalFunctions.div_by_delta(delta)
 		translate(velocity*delta)
 		if magnetShape.disabled:
 			scattered = true
