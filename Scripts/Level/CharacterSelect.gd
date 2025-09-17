@@ -5,19 +5,25 @@ extends Node2D
 @export var nextZone = load("res://Scene/Zones/BaseZone.tscn")
 var selected = false
 
-# character labels, the amount of labels in here determines the total amount of options, see the set character option at the end for settings
-var characterLabels = ["Sonic and Tails", "Sonic", "Tails", "Knuckles", "Amy", "Shadow"]
-# level labels, the amount of labels in here determines the total amount of options, see set level option at the end for settings
-var levelLabels = ["Base Zone Act 1", "Base Zone Act 2"]#, "Chunk Zone Act 1"]
-# character id lines up with characterLabels
-enum CHARACTER_ID { SONIC_AND_TAILS, SONIC, TAILS, KNUCKLES, AMY, SHADOW }
-var characterID = CHARACTER_ID.SONIC_AND_TAILS
-# level id lines up with levelLabels
-var levelID = 0
+const characters: Array[Dictionary] = [
+	{ label="Sonic and Tails", char1=Global.CHARACTERS.SONIC,    char2=Global.CHARACTERS.TAILS },
+	{ label="Sonic",           char1=Global.CHARACTERS.SONIC,    char2=Global.CHARACTERS.NONE },
+	{ label="Tails",           char1=Global.CHARACTERS.TAILS,    char2=Global.CHARACTERS.NONE },
+	{ label="Knuckles",        char1=Global.CHARACTERS.KNUCKLES, char2=Global.CHARACTERS.NONE },
+	{ label="Amy",             char1=Global.CHARACTERS.AMY,      char2=Global.CHARACTERS.NONE },
+	{ label="Shadow",          char1=Global.CHARACTERS.SHADOW,   char2=Global.CHARACTERS.NONE },
+]
+var characterID = 0
 # Used to toggle visibility of character sprites (initialized in `_ready()`)
 var characterSprites = []
+
+# level labels, the amount of labels in here determines the total amount of options, see set level option at the end for settings
+var levelLabels = ["Base Zone Act 1", "Base Zone Act 2"]#, "Chunk Zone Act 1"]
+# level id lines up with levelLabels
+var levelID = 0
+
 # Used to avoid repeated detection of inputs with analog stick
-var lastInput = Vector2.ZERO
+var lastInput: Vector2i = Vector2i.ZERO
 # Used to avoid repeated ditection of inputs from buttons
 var action_was_pressed_last_frame = false
 
@@ -25,7 +31,7 @@ var action_was_pressed_last_frame = false
 func _ready():
 	MusicController.reset_music_themes()
 	MusicController.set_level_music(music)
-	$UI/Labels/Control/Character.text = characterLabels[characterID]
+	$UI/Labels/Control/Character.text = characters[characterID].label
 	$UI/Labels/Control/MutliplayerMode.text = Global.MULTIMODE.find_key(Global.get_multimode())
 	if nextZone != null:
 		Global.nextZone = nextZone
@@ -33,33 +39,29 @@ func _ready():
 	for child in $UI/Labels/CharacterOrigin.get_children():
 		if child is Node2D or child is Sprite2D:
 			characterSprites.append(child)
-	assert(characterLabels.size() == characterSprites.size())
-	assert(characterLabels.size() == CHARACTER_ID.size())
+	assert(characters.size() == characterSprites.size())
 
 func _input(event):
 	
 	if !selected:
-		var inputCue = Input.get_vector("gm_left","gm_right","gm_up","gm_down")
-		inputCue.x = round(inputCue.x)
-		inputCue.y = round(inputCue.y)
+		# get inputs and round them to the nearest integer,
+		# so X and Y are either, 1, 0 or -1
+		var inputCue: Vector2i = Vector2i(Input.get_vector("gm_left","gm_right","gm_up","gm_down").round())
 		if inputCue.x != lastInput.x and inputCue.x != 0:
 			# select character rotation
-			if inputCue.x < 0:
-				characterID = wrapi(characterID-1,0,characterLabels.size()) as CHARACTER_ID
-			else: # inputCue.x > 0
-				characterID = wrapi(characterID+1,0,characterLabels.size()) as CHARACTER_ID
+			# `inputCue.x` is either 1 or -1, so `characterID+inputCue.x` will effectively
+			# result in the previous/next character ID when the player presses left/right
+			characterID = wrapi(characterID+inputCue.x,0,characters.size())
+			$UI/Labels/Control/Character.text = characters[characterID].label
 			$Switch.play()
 		if inputCue.y != lastInput.y and inputCue.y != 0:
-			if inputCue.y > 0:
-				levelID = wrapi(levelID+1,0,levelLabels.size())
-			else: # inputCue.y < 0
-				levelID = wrapi(levelID-1,0,levelLabels.size())
+			# `inputCue.y` is either 1 or -1, so `levelID+inputCue.y` will effectively
+			# result in the previous/next level ID when the player presses up/down
+			levelID = wrapi(levelID+inputCue.y,0,levelLabels.size())
+			$UI/Labels/Control/Level.text = levelLabels[levelID]
 			$Switch.play()
 		#Save previous input for next read
 		lastInput = inputCue
-		
-		$UI/Labels/Control/Character.text = characterLabels[characterID]
-		$UI/Labels/Control/Level.text = levelLabels[levelID]
 		
 		# turn on and off visibility of the characters based on the current selection
 		for i in characterSprites.size():
@@ -80,21 +82,9 @@ func _input(event):
 			Global.PlayerChar2 = Global.CHARACTERS.NONE
 			
 			# set the character
-			match(characterID):
-				CHARACTER_ID.SONIC_AND_TAILS:
-					Global.PlayerChar1 = Global.CHARACTERS.SONIC
-					Global.PlayerChar2 = Global.CHARACTERS.TAILS
-				CHARACTER_ID.SONIC:
-					Global.PlayerChar1 = Global.CHARACTERS.SONIC
-				CHARACTER_ID.TAILS:
-					Global.PlayerChar1 = Global.CHARACTERS.TAILS
-				CHARACTER_ID.KNUCKLES:
-					Global.PlayerChar1 = Global.CHARACTERS.KNUCKLES
-				CHARACTER_ID.AMY:
-					Global.PlayerChar1 = Global.CHARACTERS.AMY
-				CHARACTER_ID.SHADOW:
-					Global.PlayerChar1 = Global.CHARACTERS.SHADOW
-					
+			Global.PlayerChar1 = characters[characterID].char1
+			Global.PlayerChar2 = characters[characterID].char2
+			
 			# set the level
 			match(levelID):
 				0: # Base Zone Act 1
