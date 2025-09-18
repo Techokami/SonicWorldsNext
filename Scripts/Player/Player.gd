@@ -21,6 +21,12 @@ var isSuper = false
 var shoeTime = 0
 var ringDisTime = 0 # ring collecting disable timer
 
+var hyper_ring = false:
+	set(value):
+		if not hyper_ring and value:
+			sfx[31].play()
+		hyper_ring = value
+
 # water settings
 var water = false
 var defaultAirTime = 30 # 30 seconds
@@ -43,6 +49,7 @@ var enemyCounter = 0
 var character: Global.CHARACTERS = Global.CHARACTERS.SONIC
 
 var Ring = preload("res://Entities/Items/Ring.tscn")
+var BigRing = preload("res://Entities/Items/BigRing.tscn")
 var ringChannel = 0
 
 var Particle = preload("res://Entities/Misc/GenericParticle.tscn")
@@ -932,34 +939,67 @@ func hit_player(damagePoint:Vector2 = global_position, damageType: Global.HAZARD
 		force_detach()
 		disconnect_from_floor()
 		set_state(STATES.HIT)
-		invTime = 120 # Ivulnerable for 2 seconds. Starts counting *after* landing.
+		invTime = 2.0*60 # Invulnerable for 2 seconds. Starts counting *after* landing.
 		# Ring loss
 		if (shield == SHIELDS.NONE and rings > 0 and is_independent()):
 			sfx[9].play()
 			ringDisTime = 30.0/60.0 # ignore rings for 30 frames after landing
-			var ringCount = 0
-			var ringAngle = 101.25
-			var ringAlt = false
-			var ringSpeed = 4
-			while (ringCount < min(rings,32)):
+			const RING_STARTING_ANGLE: float = deg_to_rad(101.25)
+			const RING_ANGLE_STEP: float = deg_to_rad(22.5)
+			var ring_angle: float = RING_STARTING_ANGLE
+			var ring_angle_step: float = RING_ANGLE_STEP
+			var ring_speed: float = 4.0*60
+			var ring_count: int = 0
+			var max_count: int = 32
+			var phase_2_count: int = 16
+			var ring_class: PackedScene = Ring
+			var accumulated_value: float = 0.0
+			var ring_velocity: Vector2
+			if hyper_ring:
+				ring_class = BigRing
+				max_count = 8
+				phase_2_count = 4
+				# adjust the angle step accordingly, as we generate 4 times less rings
+				ring_angle_step = RING_ANGLE_STEP * 4
+			var num_generated_rings: int = min(rings, max_count)
+			var value_per_hyper_ring: float = (float(rings) / num_generated_rings) if hyper_ring else 0.0
+			while ring_count < num_generated_rings:
 				# Create ring
-				var ring = Ring.instantiate()
+				var ring = ring_class.instantiate()
 				ring.global_position = global_position
 				ring.scattered = true
-				ring.velocity.y = -sin(deg_to_rad(ringAngle))*ringSpeed*60
-				ring.velocity.x = cos(deg_to_rad(ringAngle))*ringSpeed*60
 
-				if (ringAlt):
-					ring.velocity.x *= -1
-					ringAngle += 22.5
-				ringAlt = !ringAlt
-				ringCount += 1
+				if hyper_ring:
+					# In Sonic Mania, Hyper Ring generates up to 8 large rings, each worth a fraction
+					# of the player's total amount of rings. In our implementation, instead of
+					# naively rounding down the value of each ring when converting from float to int,
+					# we'll accumulate the fractional part of the value in `accumulated_value`,
+					# so if the total number of rings does not divide by 8 entirely, we'd still
+					# be able to get back the same amount when collecting the scattered rings.
+					# For example, if there was 84 rings, we'd still get all 84 of them
+					# (10+11+10+11+10+11+10+11), instead of just 80 (10+10+10+10+10+10+10+10)
+					# if we were simply rounding down.
+					accumulated_value += value_per_hyper_ring
+					ring.value = floori(accumulated_value)
+					accumulated_value -= ring.value
+
+				if ring_count % 2 == 0:
+					ring_velocity = Vector2(cos(ring_angle), -sin(ring_angle)) * ring_speed
+				else:
+					# reuse the velocity of the previous ring, but flip it by the X axis
+					ring_velocity.x *= -1
+					# proceed to another angle for the next pair of rings
+					ring_angle += ring_angle_step
+				ring.velocity = ring_velocity
+				ring_count += 1
+
 				# if we're on the second circle, decrease the speed
-				if (ringCount == 16):
-					ringSpeed = 2
-					ringAngle = 101.25 # Reset angle
+				if (ring_count == phase_2_count):
+					ring_speed = 2.0*60
+					ring_angle = RING_STARTING_ANGLE # Reset angle
 				get_parent().add_child(ring)
 			rings = 0
+			hyper_ring = false
 		elif shield == SHIELDS.NONE and is_independent():
 			kill()
 		else:

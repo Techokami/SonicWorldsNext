@@ -1,4 +1,4 @@
-[gd_scene load_steps=193 format=3 uid="uid://cioq5saowvqxj"]
+[gd_scene load_steps=194 format=3 uid="uid://cioq5saowvqxj"]
 
 [ext_resource type="Script" path="res://Scripts/Player/Player.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://d1e4muavtnun6" path="res://Entities/PlayerAvatars/Sonic.tscn" id="2"]
@@ -61,6 +61,7 @@
 [ext_resource type="Script" path="res://Scripts/Player/States/Glide.gd" id="59"]
 [ext_resource type="AudioStream" uid="uid://78gy6s87pbbo" path="res://Audio/SFX/Player/Land.wav" id="60"]
 [ext_resource type="AudioStream" uid="uid://uaa5twt8odin" path="res://Audio/SFX/Player/Slide.wav" id="61"]
+[ext_resource type="AudioStream" uid="uid://q300fm5apt0f" path="res://Audio/SFX/Objects/HyperRing.wav" id="64_3rplp"]
 [ext_resource type="AudioStream" uid="uid://bmiq3qg6r81hw" path="res://Audio/SFX/Player/WaterRunV2.wav" id="64_04xna"]
 [ext_resource type="Texture2D" uid="uid://b1k615l251fu5" path="res://Graphics/Misc/WaterSurfaceSplash.png" id="64_ovmgw"]
 [ext_resource type="AudioStream" uid="uid://buu4anko53vx2" path="res://Audio/SFX/Objects/ChemJump.wav" id="65_7v2sx"]
@@ -1489,6 +1490,10 @@ bus = &"SFX"
 [node name="AmyHammer" type="AudioStreamPlayer" parent="SFX"]
 stream = ExtResource("65_7v2sx")
 volume_db = 15.0
+bus = &"SFX"
+
+[node name="HyperRing" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("64_3rplp")
 bus = &"SFX"
 
 [node name="CrushSensorLeft" type="Area2D" parent="."]

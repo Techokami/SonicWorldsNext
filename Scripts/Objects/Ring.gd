@@ -7,6 +7,7 @@ var player
 var magnet = null
 var magnetShape = null
 var ringacceleration = [0.75,0.1875]
+var value: int = 1
 var Particle = preload("res://Entities/Misc/GenericParticle.tscn")
 
 
@@ -15,8 +16,11 @@ func _process(delta):
 	if (scattered):
 		z_index = 7
 		$RingSprite.speed_scale = lifetime / MAX_LIFETIME + 1
-		if (lifetime > 0):
+		if lifetime > 0.0:
 			lifetime -= delta
+			# make the ring blink at the end of its lifetime
+			if lifetime <= 1.0:
+				visible = !visible
 		else:
 			queue_free()
 	if (player):
@@ -24,7 +28,7 @@ func _process(delta):
 		if (player.ringDisTime <= 0 and (player.invTime*60 <= 90 or scattered)):
 			z_index = 1
 			# get ring to player
-			player.give_ring()
+			player.give_ring(value)
 			var part = Particle.instantiate()
 			get_parent().add_child(part)
 			part.global_position = global_position
