@@ -14,12 +14,12 @@ func _physics_process(delta):
 	if timerActive and timer > 0:
 			# every 8/60 steps spawn an animal in the animal ground with an alarm of 12/60
 			if wrapf(timer,0,8.0/60.0) < wrapf(timer-delta,0,8.0/60.0):
-				var animal: Animal = Animal.create(get_parent(), global_position, false, false)
-				animalTrackers.append(animal)
-				# set animal position, starting from -28 on the x position and increasing by 8 per animal
-				animal.global_position = global_position+Vector2(randf_range(-20,20),0)
+				# set a random position within a (-20,20) range
+				var pos: Vector2 = global_position+Vector2(randf_range(-20.0,20.0),0)
 				# set alarms, starting at 12.0/60.0 (converting the original timer)
-				animal.get_node("ActivationTimer").start(12.0/60.0)
+				const time: float = 12.0/60.0
+				var animal: Animal = Animal.create(get_parent(), pos, time, false)
+				animalTrackers.append(animal)
 			
 			timer -= delta
 		
@@ -59,12 +59,12 @@ func activate():
 func spawn_animals():
 	# create animals
 	for i in range(8):
-		var animal: Animal = Animal.create(get_parent(), global_position, false, false)
-		animalTrackers.append(animal)
-		# set animal position, starting from -28 on the x position and increasing by 8 per animal
-		animal.global_position = global_position+Vector2(-28+(7*i),0)
+		# set animal position, starting from -28 on the x position and increasing by 7 per animal
+		var pos: Vector2 = global_position+Vector2(7.0*(i-4), 0.0)
 		# set alarms, starting at 154.0/60.0 (converting the original timer) and counting down by 8.0/60.0 for each animal
-		animal.get_node("ActivationTimer").start((154.0/60.0)-((8.0/60.0)*i))
+		var time: float = float(154-8*i)/60.0
+		var animal: Animal = Animal.create(get_parent(), pos, time, false)
+		animalTrackers.append(animal)
 	
 	checkAnimals = true
 	timerActive = true

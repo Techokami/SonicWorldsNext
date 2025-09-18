@@ -45,17 +45,19 @@ var active = true
 ## [param parent] - parent object the animal will be attached to.[br]
 ## [param _global_position] - coordinates to create the animal at
 ##                            ([b]not[/b] relative to the [param parent]'s coordinates).[br]
-## [param _active] - if [code]true[/code], the animal doesn't move (deactivated).[br]
+## [param time] - time (in seconds) the animal doesn't move (deactivated) after being created.[br]
 ## [param fixed_direction] - if [code]true[/code], the animal runs to the left (usual logic),
 ##                           otherwise it runs in a random direction (capsule logic).[br]
 ## [param _type] - type of the newly created animal.
-static func create(parent: Node, _global_position: Vector2, _active: bool = true, fixed_direction: bool = true, _type: ANIMAL_TYPE = Global.animals[round(randf())]) -> Animal:
+static func create(parent: Node, _global_position: Vector2, time: float = 0.0, fixed_direction: bool = true, _type: ANIMAL_TYPE = Global.animals[round(randf())]) -> Animal:
 	var animal: Animal = preload("res://Entities/Misc/Animal.tscn").instantiate()
-	animal.active = _active
+	animal.active = (time == 0.0)
 	animal.forceDirection = fixed_direction
 	animal.type = _type
 	parent.add_child(animal)
 	animal.global_position = _global_position
+	if time != 0.0:
+		animal.get_node("ActivationTimer").start(time)
 	return animal
 
 func _ready():
