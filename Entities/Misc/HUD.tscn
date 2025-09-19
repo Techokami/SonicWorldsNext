@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://c30uceea18q1w"]
+[gd_scene load_steps=32 format=3 uid="uid://c30uceea18q1w"]
 
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="2_xy7bp"]
 [ext_resource type="FontFile" uid="uid://cj70hn8i05uo5" path="res://Graphics/HUD/hud_lives_numerals.png" id="3_eauoj"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://Scripts/Misc/HUD.gd" id="6"]
 [ext_resource type="FontFile" uid="uid://cticydrc4dda2" path="res://Graphics/HUD/hud_numerals.png" id="6_synv7"]
 [ext_resource type="Texture2D" uid="uid://gswo6rq3uyy8" path="res://Graphics/HUD/LevelCards/Banner.png" id="7_ccygi"]
+[ext_resource type="FontFile" uid="uid://3dtk7ug486gi" path="res://Graphics/HUD/hud_numerals_hyper.png" id="7_fiwnx"]
 [ext_resource type="FontFile" uid="uid://v4hx32xo1ema" path="res://Graphics/HUD/LevelCards/font/largefont4.png" id="7_uj3el"]
 [ext_resource type="Texture2D" uid="uid://c7a17v25ap4ow" path="res://Graphics/HUD/LevelCards/ActCards.png" id="9_3i4aq"]
 [ext_resource type="FontFile" uid="uid://qan4ss21y5gp" path="res://Graphics/HUD/LevelCards/font/smallfont3.png" id="10_8dyi8"]
@@ -737,6 +738,15 @@ offset_right = 56.0
 offset_bottom = 51.0
 theme_override_fonts/font = ExtResource("6_synv7")
 text = "0"
+
+[node name="BlueRingCount" type="Label" parent="Counters/Text"]
+visible = false
+offset_left = 40.0
+offset_top = 32.0
+offset_right = 64.0
+offset_bottom = 51.0
+theme_override_fonts/font = ExtResource("7_fiwnx")
+text = "AB0"
 
 [node name="Time" type="Sprite2D" parent="Counters/Text"]
 visible = false
