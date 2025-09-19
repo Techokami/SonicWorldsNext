@@ -21,26 +21,23 @@ func physics_collision(body, hitVector):
 		body.enemyCounter += 1
 		
 		var sprite_texture: Texture2D = $Sprite2D.texture
-		var sprite_width: int = sprite_texture.get_width()
-		var sprite_height: int = sprite_texture.get_height()
+		var sprite_size: Vector2 = sprite_texture.get_size()
 		if $Sprite2D.region_enabled:
-			sprite_width = $Sprite2D.region_rect.size.x
-			sprite_height = $Sprite2D.region_rect.size.y
+			sprite_size = $Sprite2D.region_rect.size
 		
 		# generate pieces of the block to scatter, use i and j to determine the velocity of each one
 		# and set the settings for each piece to match up with the $Sprite2D node
+		var piece_size: Vector2 = sprite_size/pieces
 		for i: float in range(pieces.x):
 			for j: float in range(pieces.y):
 				BreakableBlockPiece.create(
 					parent,
-					global_position+Vector2(
-						sprite_width/4*lerp(-1,1,i/(pieces.x-1)),
-						sprite_height/4*lerp(-1,1,j/(pieces.y-1))),
+					global_position+sprite_size/4.0*Vector2(
+						lerp(-1,1,i/(pieces.x-1)),
+						lerp(-1,1,j/(pieces.y-1))),
 					Vector2((pieces.y-j)*lerp(-1,1,i/(pieces.x-1)),-pieces.y+j)*60,
 					sprite_texture,
-					Rect2(
-						Vector2((sprite_width/pieces.x)*i,(sprite_height/pieces.y)*j),
-						Vector2(sprite_width/pieces.x,sprite_height/pieces.y)),
+					Rect2(piece_size*Vector2(i,j),piece_size),
 					z_index)
 				
 	return true
