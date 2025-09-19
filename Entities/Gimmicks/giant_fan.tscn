@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://bbnywgk4cq5cq"]
+[gd_scene load_steps=11 format=3 uid="uid://bbnywgk4cq5cq"]
 
 [ext_resource type="Script" path="res://Scripts/Objects/GiantFan.gd" id="1_k2y5a"]
 [ext_resource type="Texture2D" uid="uid://b8j0jkbmfrt2u" path="res://Graphics/Gimmicks/large_turbine.png" id="2_3e6h0"]
 [ext_resource type="AudioStream" uid="uid://bvb5adxlfhcxl" path="res://Audio/SFX/Gimmicks/BigFan.wav" id="3_s1t6n"]
+[ext_resource type="AudioStream" uid="uid://idw7ykg4p5x" path="res://Audio/SFX/Gimmicks/Shutter.wav" id="4_55ikm"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kmscp"]
 atlas = ExtResource("2_3e6h0")
@@ -57,5 +58,10 @@ frame_progress = 0.199508
 
 [node name="BigFan" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_s1t6n")
+volume_db = 4.0
+max_distance = 1000.0
+
+[node name="Shutter" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_55ikm")
 volume_db = 4.0
 max_distance = 1000.0

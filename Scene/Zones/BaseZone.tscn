@@ -131,7 +131,7 @@ size = Vector2(64, 8)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2ojop"]
 size = Vector2(256, 16)
 
-[sub_resource type="Shader" id="Shader_65v5f"]
+[sub_resource type="Shader" id="Shader_t3rst"]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 uniform float amount : hint_range(1,255,1);
@@ -169,7 +169,7 @@ void fragment(){
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nnlca"]
 resource_local_to_scene = true
-shader = SubResource("Shader_65v5f")
+shader = SubResource("Shader_t3rst")
 shader_parameter/amount = 4.0
 shader_parameter/palRows = 16.0
 shader_parameter/row = 9.0
@@ -999,8 +999,12 @@ position = Vector2(5712, 1848)
 position = Vector2(-160, -56)
 side = 2
 
-[node name="Shutter3" parent="Entity/Switch" instance=ExtResource("36_0g2sp")]
-position = Vector2(3704, 72)
+[node name="Shutter3" parent="Entity" instance=ExtResource("36_0g2sp")]
+position = Vector2(9416, 1920)
+
+[node name="Shutter4" parent="Entity" instance=ExtResource("36_0g2sp")]
+position = Vector2(7192, 1888)
+open = true
 
 [node name="ConveyorBelt" parent="Entity" instance=ExtResource("39_8a2xw")]
 position = Vector2(4864, 880)
@@ -1042,6 +1046,7 @@ position = Vector2(4608, 1342)
 [node name="WindCurrent" parent="Entity" instance=ExtResource("44_6t7a0")]
 position = Vector2(6352, 1888)
 scale = Vector2(47, 12)
+activated = false
 
 [node name="GiantFan" parent="Entity" instance=ExtResource("45_r8otc")]
 z_index = -1
@@ -1898,8 +1903,10 @@ position = Vector2(8027, 1264)
 [connection signal="body_entered" from="Platforms/WidePlatform" to="Platforms/WidePlatform" method="_on_body_entered"]
 [connection signal="body_exited" from="Platforms/WidePlatform" to="Platforms/WidePlatform" method="_on_body_exited"]
 [connection signal="pressed" from="Entity/Switch" to="Entity/Switch/Shutter2" method="force_open"]
+[connection signal="all_players_exited" from="Entity/WindCurrent" to="Entity/WindCurrent" method="deactivate"]
 [connection signal="all_players_exited" from="Entity/WindCurrent" to="Entity/GiantFan" method="deactivate"]
 [connection signal="player_entered" from="Entity/WindCurrent" to="Entity/GiantFan" method="activate"]
+[connection signal="deployed" from="Entity/GiantFan" to="Entity/WindCurrent" method="activate"]
 
 [editable path="Platforms/Platform"]
 [editable path="Platforms/Platform13"]
