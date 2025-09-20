@@ -28,6 +28,9 @@ func break_wall(player: PlayerChar, hitVector):
 	Global.play_sound(sound)
 	
 	# generate brekable pieces depending on the pieces vector
+	var sprite_size: Vector2 = \
+		$Sprite2D.region_rect.size if $Sprite2D.region_enabled else $Sprite2D.texture.size()
+	var piece_size: Vector2 = sprite_size/pieces
 	for i in range(pieces.x):
 		for j in range (pieces.y):
 			var piece = Piece.instantiate()
@@ -36,21 +39,13 @@ func break_wall(player: PlayerChar, hitVector):
 			lerp(1,2,i/(max(1,pieces.x-1)))*hitVector.x*(4+abs(player.movement.x)/60),
 			-pieces.y+j)*60
 			
-			var spriteWidth = $Sprite2D.texture.get_width()
-			var spriteHeight = $Sprite2D.texture.get_height()
-			if $Sprite2D.region_enabled:
-				spriteWidth = $Sprite2D.region_rect.size.x
-				spriteHeight = $Sprite2D.region_rect.size.y
-			
-			piece.global_position = global_position+Vector2(
-			spriteWidth/4*lerp(-1,1,i/(max(1,pieces.x-1))),
-			spriteHeight/4*lerp(-1,1,j/(max(1,pieces.y-1)))
+			piece.global_position = global_position+sprite_size/4.0*Vector2(
+				lerp(-1,1,i/(max(1,pieces.x-1))),
+				lerp(-1,1,j/(max(1,pieces.y-1)))
 			)
 			piece.texture = $Sprite2D.texture
 			piece.z_index = z_index
-			piece.region_rect = Rect2(
-			Vector2((spriteWidth/pieces.x)*i,(spriteHeight/pieces.y)*j),
-			Vector2(spriteWidth/pieces.x,spriteHeight/pieces.y))
+			piece.region_rect = Rect2(piece_size*Vector2(i,j),piece_size)
 			get_parent().add_child(piece)
 
 ## Checks if the player can break the wall.
