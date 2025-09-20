@@ -3,9 +3,6 @@ extends StaticBody2D
 ## How many pieces make up the wall (affects splitting).
 @export var pieces = Vector2(1,4)
 
-## Each broken piece will use this scene.
-var Piece = preload("res://Entities/Misc/BlockPiece.tscn")
-
 ## Sound to play when breaking the wall.
 @export var sound = preload("res://Audio/SFX/Gimmicks/Collapse.wav")
 
@@ -33,20 +30,16 @@ func break_wall(player: PlayerChar, hitVector):
 	var piece_size: Vector2 = sprite_size/pieces
 	for i in range(pieces.x):
 		for j in range (pieces.y):
-			var piece = Piece.instantiate()
-	
-			piece.velocity = Vector2(
-			lerp(1,2,i/(max(1,pieces.x-1)))*hitVector.x*(4+abs(player.movement.x)/60),
-			-pieces.y+j)*60
-			
-			piece.global_position = global_position+sprite_size/4.0*Vector2(
-				lerp(-1,1,i/(max(1,pieces.x-1))),
-				lerp(-1,1,j/(max(1,pieces.y-1)))
-			)
-			piece.texture = $Sprite2D.texture
-			piece.z_index = z_index
-			piece.region_rect = Rect2(piece_size*Vector2(i,j),piece_size)
-			get_parent().add_child(piece)
+			BreakableBlockPiece.create(
+				get_parent(),
+				global_position+sprite_size/4.0*Vector2(
+					lerp(-1,1,i/(max(1,pieces.x-1))),
+					lerp(-1,1,j/(max(1,pieces.y-1)))),
+				Vector2(lerp(1,2,i/(max(1,pieces.x-1)))*hitVector.x*(4+abs(player.movement.x)/60.0),
+					-pieces.y+j)*60.0,
+				$Sprite2D.texture,
+				Rect2(piece_size*Vector2(i,j),piece_size),
+				z_index)
 
 ## Checks if the player can break the wall.
 func physics_collision(body: PlayerChar, hitVector):
