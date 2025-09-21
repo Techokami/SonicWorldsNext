@@ -47,16 +47,14 @@ func state_process(_delta: float) -> void:
 		else:
 			animator.play("swimTired")
 	else:
-		if flightTime > 0:
-			if carryBox.get_player_contacting_count() == 0:
-				animator.play("fly")
-			else:
-				if parent.movement.y >= 0:
-					animator.play("flyCarry")
-				else:
-					animator.play("flyCarryUP")
-		else:
+		if flightTime <= 0.0:
 			animator.play("tired")
+		elif carryBox.get_player_contacting_count() == 0:
+			animator.play("fly")
+		elif parent.movement.y >= 0.0:
+			animator.play("flyCarry")
+		else:
+			animator.play("flyCarryUP")
 	
 	# flight sound (verify we are not underwater)
 	if !parent.water:
