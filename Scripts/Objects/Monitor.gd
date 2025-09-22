@@ -125,7 +125,7 @@ func destroy():
 		ITEMS._1UP:
 			MusicController.play_music_theme(MusicController.MusicTheme._1UP)
 		ITEMS.ROBOTNIK:
-			playerTouch.hit_player(playerTouch.global_position, Global.HAZARDS.NORMAL, 9)
+			playerTouch.hit_player(playerTouch.global_position, Global.HAZARDS.NORMAL, 9, true)
 		ITEMS.HYPER_RING:
 			playerTouch.hyper_ring = true
 

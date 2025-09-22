@@ -21,12 +21,11 @@ var score_id: int = 0
 var y_speed: float = -3.0
 
 ## Creates a Score object.[br]
-## [param parent] - parent object the score will be attached to. If this parameter is [code]null[/code],
-##                  the newly created Score object will be attached to the scene tree.[br]
+## [param parent] - parent object the score will be attached to.[br]
 ## [param global_pos] - coordinates to create the Score object at
 ##                      ([b]not[/b] relative to the [param parent]'s coordinates).[br]
 ## [param _score_id] - index for the score value in the [constant SCORE] array.
-static func create(parent: Node, global_pos: Vector2 = Vector2.ZERO, _score_id: int = 0) -> Score:
+static func create(parent: Node, global_pos: Vector2 = parent.global_position, _score_id: int = 0) -> Score:
 	var score: Score = preload("res://Entities/Misc/Score.tscn").instantiate()
 	score.score_id = _score_id
 	parent.add_child(score)

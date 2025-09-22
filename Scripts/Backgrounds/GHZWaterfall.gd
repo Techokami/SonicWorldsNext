@@ -78,7 +78,7 @@ func advance_frame_top():
 	$WaterfallTop.set_region_rect(Rect2(0, curFrame * topTexture.get_height() / float(topFrames), topTexture.get_width() * width, topTexture.get_height() / float(topFrames)))
 	
 func advance_frame_body():
-	if bodyTextures.size() == 0:
+	if bodyTextures.is_empty():
 		# No body textures! Abort!
 		return
 	$WaterfallBody.set_texture(bodyTextures[curFrame % bodyTextures.size()])

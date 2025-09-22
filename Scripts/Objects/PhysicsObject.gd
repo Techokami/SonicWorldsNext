@@ -98,7 +98,7 @@ func update_sensors():
 	
 	# calculate how far down to look if on the floor, the sensor extends more if the objects is moving, if the objects moving up then it's ignored,
 	# if you want behaviour similar to sonic 1, replace "min(abs(movement.x/60)+4,groundLookDistance)" with "groundLookDistance"
-	var extendFloorLook = min(abs(movement.x/60)+4,groundLookDistance)*(int(movement.y >= 0)*int(ground))
+	var extendFloorLook = min(abs(movement.x/60)+4,groundLookDistance)*float(movement.y >= 0 and ground)
 	
 	verticalSensorLeft.target_position.y = ((shape.y+extendFloorLook)*(int(movement.y >= 0)-int(movement.y < 0)))+yGroundDiff
 	

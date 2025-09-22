@@ -35,9 +35,6 @@ var rotate_time = (32.0 / 60.0)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	if Engine.is_editor_hint():
-		last_size = vert_size
-		
 	var mainSprite = $FBZ_Pylon_Sprite
 	var topSprite = $FBZ_Pylon_Top
 	var bottomSprite = $FBZ_Pylon_Bottom

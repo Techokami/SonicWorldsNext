@@ -125,29 +125,24 @@ func _input(event):
 
 func do_lateral_input():
 
-	var inputCue = Input.get_vector("gm_left","gm_right","gm_up","ui_down")
-	inputCue.x = round(inputCue.x)
-	inputCue.y = round(inputCue.y)
+	var inputCue: Vector2i = Vector2i(Input.get_vector("gm_left","gm_right","gm_up","ui_down").round())
 	
 	if inputCue.x != 0 and subSoundStep == 0:
 		subSoundStep = 5.0
 		soundStepDelay = 0
 	
 	# change menu options
-	if inputCue.y != lastInput.y:
-		if inputCue.y > 0:
-			choose_option(option+1)
-		elif inputCue.y < 0:
-			choose_option(option-1)
+	if inputCue.y != lastInput.y and inputCue.y != 0:
+		# `inputCue.y` is either 1 or -1, so `option+inputCue.y` will effectively
+		# result in the previous/next option when the player presses up/down
+		choose_option(option+inputCue.y)
 	
 	# Volume controls
 	elif inputCue.x != 0 and menu == MENUS.OPTIONS:
 		var inputDir = inputCue.x
 		
 		# set audio busses
-		var getBus = "SFX"
-		if option > 0:
-			getBus = "Music"
+		var getBus: String = "SFX" if option == 0 else "Music"
 		var soundExample = [$MenuVert,$MenuMusicVolume]
 		
 		match(option):

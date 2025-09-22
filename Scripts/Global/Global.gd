@@ -134,7 +134,7 @@ var hardBorderTop    = -100000000
 var hardBorderBottom =  100000000
 
 # Animal spawn type reference, see the level script for more information on the types
-var animals = [0,1]
+var animals: Array[Animal.ANIMAL_TYPE] = [Animal.ANIMAL_TYPE.BIRD, Animal.ANIMAL_TYPE.SQUIRREL]
 
 # emited when a stage gets started
 signal stage_started
@@ -203,7 +203,7 @@ func reset_values():
 	checkPoints = []
 	checkPointTime = 0
 	currentCheckPoint = -1
-	animals = [0,1]
+	animals = [Animal.ANIMAL_TYPE.BIRD, Animal.ANIMAL_TYPE.SQUIRREL]
 	nodeMemory = []
 	nextZone = load("res://Scene/Zones/BaseZone.tscn")
 

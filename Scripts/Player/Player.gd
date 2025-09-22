@@ -377,7 +377,7 @@ func _process(delta):
 				var top_speed = active_physics.top_speed
 				# TODO This condition is a code smell
 				if ((partner.current_state == STATES.NORMAL or
-				    partner.current_state == STATES.JUMP) and
+					partner.current_state == STATES.JUMP) and
 					abs(partner.movement.x) < top_speed/2.0 and
 					snap_angle(partner.angle) == 0 or
 					(partner.pushingWall != 0 and pushingWall == 0)):
@@ -910,24 +910,25 @@ func is_right_held():
 	return inputs[INPUTS.XINPUT] > 0
 
 
-## Hits the player. This usually causes loss of shield, loss of rings, or
-## death.
-## @param damagePoint  A position vector that can be included to indicate where the hit came from
-##                     this affects knockback of the player, but only in the sense that if the hit
-##                     comes from the right the player will be knocked back left
-##                     and if the hit comes from the left, the player will be knocked back right.
-## @param damageType   Defines the hit as belonging to an element. Elemental hits will be ignored if
-##                     the player being hit has a shield that would block that element.
-## @param soundID      If set, changes which of the player sounds is used for the hit. Note that the
-##                     alternate hit sound is only played if ring loss wouldn't be played instead.
-##                     The main use for this is when the player interacts with spikes in which case
-##                     the spike sound is used instead. To know which sounds are available, check the
-##                     SFX object in the Player.tscn -- streamers in there are indexed in order of their
-##                     position in the list starting from 0.
-func hit_player(damagePoint:Vector2 = global_position, damageType: Global.HAZARDS = Global.HAZARDS.NORMAL, soundID:int = 6):
-	if damageType != 0 and shield == damageType+1:
+## Hits the player. This usually causes loss of shield, loss of rings, or death.[br]
+## [param damagePoint] - a position vector that can be included to indicate where the hit came from
+##                       this affects knockback of the player, but only in the sense that if the hit
+##                       comes from the right the player will be knocked back left
+##                       and if the hit comes from the left, the player will be knocked back right.[br]
+## [param damageType] - defines the hit as belonging to an element. Elemental hits will be ignored if
+##                      the player being hit has a shield that would block that element.[br]
+## [param soundID] - if set, changes which of the player sounds is used for the hit. Note that the
+##                   alternate hit sound is only played if ring loss wouldn't be played instead.
+##                   The main use for this is when the player interacts with spikes in which case
+##                   the spike sound is used instead. To know which sounds are available, check the
+##                   SFX object in the Player.tscn -- streamers in there are indexed in order of their
+##                   position in the list starting from 0.[br]
+## [param ignoreInstaShield] - if true, ignores Sonic's Insta-Shield.
+func hit_player(damagePoint:Vector2 = global_position, damageType: Global.HAZARDS = Global.HAZARDS.NORMAL, soundID:int = 6, ignoreInstaShield: bool = false):
+	if damageType != Global.HAZARDS.NORMAL and shield == damageType+1:
 		return false
-	if (current_state != STATES.HIT and invTime <= 0 and supTime <= 0 and (shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled or character != Global.CHARACTERS.SONIC)):
+	if current_state != STATES.HIT and invTime <= 0 and supTime <= 0 and \
+	   (shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled or character != Global.CHARACTERS.SONIC or ignoreInstaShield):
 		movement.x = sign(global_position.x-damagePoint.x)*2*60
 		movement.y = -4*60
 		if (movement.x == 0):
