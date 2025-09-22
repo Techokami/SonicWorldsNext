@@ -473,8 +473,9 @@ func _process(delta):
 	#Rotating stars
 	if ($InvincibilityBarrier.visible):
 		var stars = $InvincibilityBarrier.get_children()
+		var rot_angle: float = deg_to_rad(360.0*delta*4.0)
 		for i in stars:
-			i.position = i.position.rotated(deg_to_rad(360*delta*4))
+			i.position = i.position.rotated(rot_angle)
 			i.visible = visible
 
 		if (fmod(Global.globalTimer,0.1)+delta > 0.1) and visible:
