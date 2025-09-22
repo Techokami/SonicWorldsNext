@@ -104,9 +104,10 @@ func _process(delta):
 		player.set_active_gimmick(self)
 		players_on_gimmick += 1
 		
-		player.global_position.x = global_position.x - offset.x
-		player.global_position.y = min(player.global_position.y, global_position.y + height / 2.0 - 8)
-		player.global_position.y = max(player.global_position.y, global_position.y - height / 2.0 + 8)
+		var max_y_offset: float = height / 2.0 - 8.0
+		player.global_position = Vector2(
+			global_position.x - offset.x,
+			clampf(player.global_position.y, global_position.y - max_y_offset, global_position.y + max_y_offset))
 
 	if players_on_gimmick > 0:
 		strain += delta
