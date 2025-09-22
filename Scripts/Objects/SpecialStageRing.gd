@@ -24,6 +24,11 @@ func _process(delta: float) -> void:
 			
 			MusicController.reset_music_themes()
 			$Warp.play()
+			
+			# reset the air timer to prevent the drowning theme from playing
+			# when entering special stage
+			player.airTimer = player.defaultAirTime
+			
 			# set next zone to current zone (this will reset when the stage is loaded back in)
 			Global.nextZone = Global.main.lastScene
 			

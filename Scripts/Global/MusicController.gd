@@ -1,13 +1,11 @@
 extends Node
 
 
-# amount of decibels to fade the music in/out for
-const _FADE_AMOUNT: float = 80.0
-
 # amount of time (in milliseconds) to fade all the other music out (or back in)
-# after playing a music theme
-const _FADE_SPEED: int = 1*1000
+# before/after playing a music theme
+const _FADE_DURATION: int = 2*1000
 
+## Defines priority for each music group, in ascending order.
 ## Level music has the lowest priority, and the Game Over theme has the highest.
 enum PriorityLevel {
 	LEVEL_THEME,
@@ -27,10 +25,10 @@ enum _PlayStatus {
 }
 
 class _MusicThemePlayer extends AudioStreamPlayer:
-	var volume_db_proxy: float: # we'll use this to accumulate the effect from multiple simultaneous fades
-		set(value):				# (apparently, the actual `volume_db` can't be set lower than `-80.0`)
-			volume_db_proxy = value
-			volume_db = value
+	var volume_level: float: # we'll use this to accumulate the effect from multiple simultaneous fades
+		set(value):
+			volume_level = value
+			volume_db = linear_to_db(maxf(0.0, value))
 	var play_status: _PlayStatus
 	var priority: PriorityLevel
 	var fade_out_other_themes: bool # if true, themes with lower priority are faded out gradually,
@@ -52,7 +50,7 @@ class _MusicThemePlayer extends AudioStreamPlayer:
 		p_allow_replay: bool = false
 	) -> void:
 		bus = &"Music"
-		self.volume_db_proxy = 0.0 # the use of `self` is intended, no need to invoke the setter here
+		volume_level = 1.0
 		play_status = _PlayStatus.STOPPED
 		stream = p_stream
 		priority = p_priority
@@ -62,6 +60,7 @@ class _MusicThemePlayer extends AudioStreamPlayer:
 		restart_level_theme = p_restart_level_theme
 		allow_replay = p_allow_replay
 
+## Defines music groups for in-game music themes.
 enum MusicTheme {
 	LEVEL_THEME,
 	INVINCIBLE,
@@ -85,6 +84,8 @@ var _music_theme_players: Dictionary = {
 	MusicTheme._1UP:        _create_music_theme(preload("res://Audio/Soundtrack/3. SWD_1Up.ogg"),        PriorityLevel._1UP_JINGLE,      false,            true,            false,              false,                true),
 	MusicTheme.GAME_OVER:   _create_music_theme(preload("res://Audio/Soundtrack/8. SWD_GameOver.ogg"),   PriorityLevel.GAME_OVER_THEME)
 }
+var _level_theme_alt_player: _MusicThemePlayer = _create_music_theme(null, PriorityLevel.LEVEL_THEME)
+var _crossfaded_to_alt: bool = false
 
 # contains the last played music theme of each priority
 var _last_played_music_by_priority: Array[_MusicThemePlayer] = []
@@ -93,44 +94,6 @@ var _last_played_music_by_priority: Array[_MusicThemePlayer] = []
 var _reset_music_themes_flag: bool = false
 
 
-func _fade_music_themes(themes: Array[_MusicThemePlayer], _sign: int) -> void:
-	var tree: SceneTree = get_tree()
-	var physics_frame: Signal = tree.physics_frame
-	var volume_step: float
-	var total_volume_change: float = 0.0
-	var delta: int
-	var prev_time: int
-	var cur_time: int = Time.get_ticks_msec()
-	var keep_fading: bool = true
-	while keep_fading:
-		await physics_frame
-		prev_time = cur_time
-		cur_time = Time.get_ticks_msec()
-		# abort if `reset_music_themes()` was called while we're fading out/in
-		if _reset_music_themes_flag:
-			return
-		# skip fading while the game is paused
-		if tree.paused:
-			continue
-		# calculate time passed since the previous frame and total time
-		delta = cur_time - prev_time
-		# calculate the amount of volume to change at the current step
-		volume_step = _FADE_AMOUNT * delta / _FADE_SPEED
-		# due to the way how `physics_process` works, the fading process
-		# may take slightly more time than specified in `_FADE_SPEED`,
-		# which is why we need to compensate for the "overflow"
-		# that might happen on the last iteration by clamping
-		# the amount of volume changed at the current step
-		total_volume_change += volume_step
-		if total_volume_change >= _FADE_AMOUNT:
-			keep_fading = false # this will be the last iteration
-			volume_step -= total_volume_change - _FADE_AMOUNT # compensate for the "overflow"
-		volume_step *= _sign
-		# change the voulme for all themes with lower priority
-		for theme: _MusicThemePlayer in themes:
-			theme.volume_db_proxy += volume_step
-	
-
 ## Plays the specified music theme while muting out (either instantly,
 ## or by gradually fading out) all the other themes that have lower priority,
 ## then fading them back in after the specified theme ended playing.[br]
@@ -138,8 +101,8 @@ func _fade_music_themes(themes: Array[_MusicThemePlayer], _sign: int) -> void:
 ## * [param time] - time (in milliseconds) to play the [param theme], if the latter is looped.[br]
 ## NOTES:[br]
 ## * If [code]theme_id == MusicTheme.LEVEL[/code] and level theme wasn't previously
-##   set (which can be done either via the `level_music_theme` property in
-##   the editor, or via [member set_level_music]), this function does nothing.
+##   set (which can be done either via the [member Level.music] property in the editor,
+##   or via [member set_level_music]), this function does nothing.
 func play_music_theme(theme_id: MusicTheme) -> void:
 	var theme: _MusicThemePlayer = _music_theme_players[theme_id]
 
@@ -166,7 +129,7 @@ func play_music_theme(theme_id: MusicTheme) -> void:
 	
 	# pick other music themes with lower priority, so we can fade them out
 	var other_themes: Array[_MusicThemePlayer] = []
-	for other_theme_id: int in MusicTheme.size():
+	for other_theme_id: MusicTheme in _music_theme_players:
 		var other_theme: _MusicThemePlayer = _music_theme_players[other_theme_id]
 		if other_theme.priority < priority:
 			other_themes.append(other_theme)
@@ -181,7 +144,7 @@ func play_music_theme(theme_id: MusicTheme) -> void:
 		# if there's no fadeout, then we can simply mute
 		# all the other music that has lower priority
 		for other_theme: _MusicThemePlayer in other_themes:
-			other_theme.volume_db_proxy -= _FADE_AMOUNT
+			other_theme.volume_level -= 1.0
 	else:
 		# otherwise we need to gradually fade out
 		# all the other music themes with lower priority
@@ -204,6 +167,8 @@ func play_music_theme(theme_id: MusicTheme) -> void:
 			prev_theme.stop()
 			prev_theme.play_status = _PlayStatus.STOPPED
 		theme.play()
+		if theme_id == MusicTheme.LEVEL_THEME:
+			_level_theme_alt_player.play()
 		theme.play_status = _PlayStatus.PLAYING
 		
 		# wait for the theme to finish playing
@@ -218,13 +183,18 @@ func play_music_theme(theme_id: MusicTheme) -> void:
 		# if the theme was stopped via `stop_music_theme()` (`POST_PLAY` status),
 		# we need to fade out the theme
 		if theme.fade_when_stopped and theme.play_status == _PlayStatus.POST_PLAY:
+			if theme_id == MusicTheme.LEVEL_THEME:
+				_fade_music_themes([_level_theme_alt_player], -1)
 			await _fade_music_themes([theme], -1)
 			# abort if `reset_music_themes()` was called
 			if _reset_music_themes_flag:
 				return
 			# stop the theme and restore its volume
 			theme.stop()
-			theme.volume_db_proxy += _FADE_AMOUNT
+			theme.volume_level += 1.0
+			if theme_id == MusicTheme.LEVEL_THEME:
+				_level_theme_alt_player.stop()
+				_level_theme_alt_player.volume_level += 1.0
 
 	# remove the current theme from the list of last played themes
 	_last_played_music_by_priority[priority] = null
@@ -232,7 +202,7 @@ func play_music_theme(theme_id: MusicTheme) -> void:
 	# fade all the other music back in
 	if not theme.fade_in_other_themes:
 		for other_theme: _MusicThemePlayer in other_themes:
-			other_theme.volume_db_proxy += _FADE_AMOUNT
+			other_theme.volume_level += 1.0
 	else:
 		theme.play_status = _PlayStatus.POST_PLAY
 		await _fade_music_themes(other_themes, 1)
@@ -268,11 +238,15 @@ func stop_music_theme(theme_id: MusicTheme) -> void:
 	# `play_music_theme()` coroutine)
 	if not theme.fade_when_stopped:
 		theme.stop()
+		if theme_id == MusicTheme.LEVEL_THEME:
+			_level_theme_alt_player.stop()
 
 ## Restarts the specified music theme from position.
 ## Does nothing if music theme isn't played.
 func seek_music_theme(theme_id: MusicTheme, to_position: float) -> void:
 	_music_theme_players[theme_id].seek(to_position)
+	if theme_id == MusicTheme.LEVEL_THEME:
+		_level_theme_alt_player.seek(to_position)
 
 ## Returns [code]true[/code] if the specified music theme is playing, [code]false[/code] otherwise.
 func is_music_theme_playing(theme_id: MusicTheme) -> bool:
@@ -290,6 +264,7 @@ func is_music_theme_playing_or_fading(theme_id: MusicTheme) -> bool:
 func is_music_theme_with_priority_playing(priority: PriorityLevel) -> bool:
 	var theme: _MusicThemePlayer = _last_played_music_by_priority[priority]
 	return theme != null and theme.play_status == _PlayStatus.PLAYING
+
 ## Returns [code]true[/code] if any music theme with the specified priority is playing,
 ## preparing to play (fading out other music themes with lower priority),
 ## or just finished playing and now all the other themes with lower priority
@@ -321,22 +296,38 @@ func get_music_theme_playback_position(theme_id: MusicTheme) -> float:
 
 ## Sets music theme for the current level.[br]
 ## [param music] - music to set as a level theme.[br]
-## [param autoplay] - if [code]true[/code], start playing the music immediately.
-func set_level_music(music: AudioStream, autoplay: bool = true) -> void:
-	if music == null:
-		_music_theme_players[MusicTheme.LEVEL_THEME].stop()
+## [param music_alt] - (optional) alternative music stream (for crossfading with [param music]).[br]
+## [param autoplay] - (optional) if [code]true[/code], start playing the music immediately (default behavior).
+func set_level_music(music: AudioStream, music_alt: AudioStream = null, autoplay: bool = true) -> void:
+	_music_theme_players[MusicTheme.LEVEL_THEME].stop()
+	_level_theme_alt_player.stop()
 	_music_theme_players[MusicTheme.LEVEL_THEME].stream = music
+	_level_theme_alt_player.stream = music_alt
 	if autoplay:
 		play_music_theme(MusicTheme.LEVEL_THEME)
 
-## Resets all music.
+## Crossfades level music from the primary theme to the alternative one or vice-versa.[br]
+## [param to_alt] - if [code]true[/code], crossfading goes from primary to alternative, otherwise from alternative to primary.
+func crossfade_level_music(to_alt: bool) -> void:
+	var level_theme: _MusicThemePlayer = _music_theme_players[MusicTheme.LEVEL_THEME]
+	# quit if we already crossfaded in this direction
+	if to_alt == _crossfaded_to_alt:
+		return
+	_crossfaded_to_alt = to_alt
+	_fade_music_themes([level_theme], -1 if to_alt else 1)
+	_fade_music_themes([_level_theme_alt_player], 1 if to_alt else -1)
+
+## Stops and resets the state of all music.
 func reset_music_themes() -> void:
 	var theme: _MusicThemePlayer
 	for theme_id: MusicTheme in _music_theme_players:
 		theme = _music_theme_players[theme_id]
 		theme.stop()
 		theme.play_status = _PlayStatus.STOPPED
-		theme.volume_db_proxy = 0.0
+		theme.volume_level = 1.0
+	_level_theme_alt_player.stop()
+	_level_theme_alt_player.volume_level = 0.0
+	_crossfaded_to_alt = false
 	_last_played_music_by_priority.fill(null)
 	_reset_music_themes_flag = true
 
@@ -355,10 +346,53 @@ func _create_music_theme(
 	add_child(theme)
 	return theme
 
+func _fade_music_themes(themes: Array[_MusicThemePlayer], _sign: int) -> void:
+	var tree: SceneTree = get_tree()
+	var physics_frame: Signal = tree.physics_frame
+	var volume_step: float
+	var total_volume_change: float = 0.0
+	var delta: int
+	var prev_time: int
+	var cur_time: int = Time.get_ticks_msec()
+	var keep_fading: bool = true
+	while keep_fading:
+		await physics_frame
+		prev_time = cur_time
+		cur_time = Time.get_ticks_msec()
+		# abort if `reset_music_themes()` was called while we're fading out/in
+		if _reset_music_themes_flag:
+			return
+		# skip fading while the game is paused
+		if tree.paused:
+			continue
+		# calculate time passed since the previous frame and total time
+		delta = cur_time - prev_time
+		# calculate the amount of volume to change at the current step
+		volume_step = 1.0 * delta / _FADE_DURATION
+		# due to the way how `physics_process` works, the fading process
+		# may take slightly more time than specified in `_FADE_DURATION`,
+		# which is why we need to compensate for the "overflow"
+		# that might happen on the last iteration by clamping
+		# the amount of volume changed at the current step
+		total_volume_change += volume_step
+		if total_volume_change >= 1.0:
+			keep_fading = false # this will be the last iteration
+			volume_step -= total_volume_change - 1.0 # compensate for the "overflow"
+		volume_step *= _sign
+		# change the voulme for all specified themes
+		for theme: _MusicThemePlayer in themes:
+			theme.volume_level += volume_step
+
 func _ready() -> void:
 	assert(MusicTheme.values() == _music_theme_players.keys())
+	
+	# add an extra slot for the alternative level theme so `play_music_theme()`
+	# will be able to automatically fade it in/out when needed
+	_music_theme_players[-1] = _level_theme_alt_player
+	
 	_music_theme_players.make_read_only()
 	_last_played_music_by_priority.resize(PriorityLevel.size())
+	_level_theme_alt_player.volume_level = 0.0 # the alt level theme is silent by default
 
 func _physics_process(_delta: float) -> void:
 	# music playing coroutines update before this flag is set
