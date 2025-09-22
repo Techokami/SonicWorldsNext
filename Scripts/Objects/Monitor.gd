@@ -143,7 +143,7 @@ func set_destroyed():
 func _physics_process(delta):
 	# if physics are on make em fall
 	if physics:
-		var collide = move_and_collide(Vector2(0,yspeed)*delta)
+		var collide = move_and_collide(Vector2(0.0,yspeed*delta))
 		yspeed += grv/GlobalFunctions.div_by_delta(delta)
 		if collide and yspeed > 0:
 			physics = false
