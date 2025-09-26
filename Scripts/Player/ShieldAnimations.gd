@@ -32,7 +32,7 @@ func _on_Shields_frame_changed():
 			offset = Vector2.ZERO
 			scale.x = 1
 			# flip vertically if frame is odd and greater then 30
-			if (fmod(frame,2) == 1 and frame > 30):
+			if frame % 2 != 0 and frame > 30:
 				scale.y = -1
 			else:
 				scale.y = 1
@@ -55,7 +55,7 @@ func _on_Shields_frame_changed():
 				material.blend_mode = CanvasItemMaterial.BlendMode.BLEND_MODE_MIX
 		"Fire":
 			# if frame is odd, make it in front
-			if (fmod(frame,2) == 1):
+			if frame % 2 != 0:
 				z_index = 6
 			else:
 				z_index = 4
