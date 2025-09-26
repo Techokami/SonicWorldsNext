@@ -59,10 +59,8 @@ func _ready():
 		# load textures for character-specific frames
 		# (if we are in the editor, only load the icon for the 1'st character
 		# from the list, as the other icons won't be shown in the editor anyway)
-		for i: int in num_characters:
+		for i: int in (1 if in_editor else num_characters):
 			_1up_textures[i] = load("res://Graphics/Items/monitor_icon_%s.png" % char_names[i].to_lower()) as Texture2D
-			if in_editor:
-				break
 
 	# when in the editor, frame 0 in the monitor sprite sheet overlaps the item icon
 	# with static, which is why we need to set the 1'st frame for the monitor sprite,
