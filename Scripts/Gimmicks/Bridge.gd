@@ -104,6 +104,5 @@ func _on_PlayerCheck_body_exited(body):
 # draw logs
 func _draw():
 	if Engine.is_editor_hint():
-		for i in length:
-			if i > 0:
-				draw_texture($log.texture,Vector2(($log.texture.get_width()*i)-$log.texture.get_width()/2,-$log.texture.get_height()/2))
+		for i in range(1,length):
+			draw_texture($log.texture,Vector2(($log.texture.get_width()*i)-$log.texture.get_width()/2,-$log.texture.get_height()/2))
