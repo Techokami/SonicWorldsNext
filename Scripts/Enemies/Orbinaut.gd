@@ -55,8 +55,9 @@ func _physics_process(delta):
 				var player = Global.players[0]
 				
 				# set scale based on direction
-				if sign(global_position.x-player.global_position.x) != 0:
-					$orbinaut.scale.x = sign(global_position.x-player.global_position.x)
+				var direction: float = signf(global_position.x-player.global_position.x)
+				if direction != 0:
+					$orbinaut.scale.x = direction
 				
 				# do movement
 				velocity.x = moveSpeed*$orbinaut.scale.x*abs(sign(player.movement.x*int(player.ground)))
