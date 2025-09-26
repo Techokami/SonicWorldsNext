@@ -12,9 +12,7 @@ func _on_ShieldTimer_timeout():
 	match(animation):
 		"FireAction":
 			play("Fire")
-		"BubbleAction":
-			play("Bubble")
-		"BubbleBounce":
+		"BubbleAction", "BubbleBounce":
 			play("Bubble")
 
 
