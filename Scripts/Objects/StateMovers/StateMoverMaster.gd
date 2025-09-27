@@ -64,7 +64,6 @@ func _physics_process(delta):
 		
 	var activeState = states[state]
 	activeState.statePhysicsProcess(delta)
-	position.x = floor(realPosition.x)
-	position.y = floor(realPosition.y)
+	position = realPosition.floor()
 	
 	
