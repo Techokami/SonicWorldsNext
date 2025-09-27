@@ -34,12 +34,12 @@ var states = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	realPosition = Vector2(position.x, position.y)
+	realPosition = position
 	for i in get_children():
 		if i is StateMover:
 			states.append(i)
 	
-	origin = Vector2(position)
+	origin = position
 	
 	if states.size() > 0:
 		setState(0)
