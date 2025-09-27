@@ -281,8 +281,7 @@ func _physics_process(delta):
 		player.global_position.x = floor(body.global_position.x + get_player_radius(index) * cos(get_player_phase(index)))
 		player.global_position.y = floor(body.global_position.y - player.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL).y / 2.0 - 1)
 		if player.get_state() != PlayerChar.STATES.DIE:
-			player.movement.x = 0
-			player.movement.y = 0
+			player.movement = Vector2.ZERO
 		# XXX need to figure out why player 2 is mispositioned while this gimmick is moving quickly
 		player.get_camera().update()
 	

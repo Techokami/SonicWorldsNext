@@ -57,8 +57,7 @@ func connect_player(player: PlayerChar):
 			
 	# Drop all the speed values to 0 to prevent issues.
 	player.groundSpeed = 0
-	player.movement.x = 0
-	player.movement.y = 0
+	player.movement = Vector2.ZERO
 	player.get_camera().update()
 	player.global_position.x = get_global_position().x
 	
