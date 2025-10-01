@@ -211,6 +211,7 @@ func _ready():
 	
 	# verify that we are player 1
 	if playerControl == 1:
+		character = Global.PlayerChar1
 		# input memory
 		for _i in range(INPUT_MEMORY_LENGTH):
 			inputMemory.append(inputs.duplicate(true))
@@ -224,9 +225,6 @@ func _ready():
 			partner.partner = self
 			partner.character = Global.PlayerChar2
 			partner.inputActions = INPUTACTIONS_P2
-		
-		# set my character - Uh... isn't this going to work on player 2 as well?
-		character = Global.PlayerChar1
 	
 	# Checkpoints
 	await get_tree().process_frame
