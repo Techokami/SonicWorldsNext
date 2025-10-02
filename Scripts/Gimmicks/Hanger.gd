@@ -156,7 +156,7 @@ func physics_process_connected(_delta, player: PlayerChar, index):
 		player.global_position = getPose
 		player.movement = Vector2.ZERO
 				
-	player.cam_update()
+	player.camera.update()
 	
 func physics_process_disconnected(_delta: float, player: PlayerChar, index: int):
 	# we use parent only for picking up off ground
@@ -222,7 +222,7 @@ func connect_grab(player: PlayerChar, index):
 	player.global_position = getPose
 	player.movement = Vector2.ZERO
 				
-	player.cam_update()
+	player.camera.update()
 
 	# lock player direction if that toggle is set.
 	if lockPlayerDirection:

@@ -87,7 +87,7 @@ func activate_fireshield(_state: PlayerState, player: PlayerChar):
 	# change orientation to match the movement
 	player.shieldSprite.flip_h = (player.get_direction() != PlayerChar.DIRECTIONS.RIGHT)
 		# lock camera for a short time
-	player.lock_camera(16.0/60.0)
+	player.camera.lock(16.0/60.0)
 
 
 # Bubble Shield double-jump ability
@@ -225,7 +225,7 @@ func sonic_exit_jump_dropdash_callback(_exit_state: PlayerState,
 	player.sfx[3].play()
 
 	# Lag camera
-	player.lock_camera(16.0/60.0)
+	player.camera.lock(16.0/60.0)
 	
 	# drop dash dust
 	var dust = player.Particle.instantiate()

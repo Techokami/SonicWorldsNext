@@ -91,28 +91,7 @@ var centerReference = null # center reference is a center reference point used f
 var lastActiveAnimation = ""
 var defaultSpriteOffset = Vector2.ZERO
 
-# TODO - Convert this to a Camera2D subclass that holds all the relevant data instead of keeping it
-#        with the player.
-var camera = Camera2D.new()
-var camDist = Vector2(32,64)
-var camLookDist = [-104,88] # Up and Down
-var camLookAmount = 0
-var camLookOff = 0
-var camAdjust = Vector2.ZERO
-var cameraDragLerp = 0
-var camLockTime = 0
-
-# boundries
-var limitLeft = 0
-var limitRight = 0
-var limitTop = 0
-var limitBottom = 0
-
-# screen scroll locking as the camera scrolls
-var rachetScrollLeft = false
-var rachetScrollRight = false
-var rachetScrollTop = false
-var rachetScrollBottom = false
+@onready var camera: PlayerCamera = PlayerCamera.new(self)
 
 var rotatableSprites = ["walk", "run", "peelOut", "hammerSwing"]
 var direction = scale.x
@@ -227,19 +206,6 @@ func _ready():
 	var _con = connect("connectFloor",Callable(self,"_land_floor"))
 	_con = connect("connectCeiling",Callable(self,"_touch_ceiling"))
 	
-	# Camera settings
-	get_parent().call_deferred("add_child", (camera))
-	camera.enabled = (playerControl == 1)
-	var viewSize = get_viewport_rect().size
-	camera.drag_left_margin =   camDist.x/viewSize.x
-	camera.drag_right_margin =  camDist.x/viewSize.x
-	camera.drag_top_margin =    camDist.y/viewSize.y
-	camera.drag_bottom_margin = camDist.y/viewSize.y
-	camera.drag_horizontal_enabled = true
-	camera.drag_vertical_enabled = true
-	_con = connect("positionChanged",Callable(self,"_on_position_changed"))
-	camera.global_position = global_position
-	
 	# verify that we are player 1
 	if playerControl == 1:
 		# input memory
@@ -323,13 +289,6 @@ func _ready():
 	# hide reference
 	if centerReference:
 		centerReference.visible = false
-	
-	# reset camera limits
-	limitLeft = Global.hardBorderLeft
-	limitRight = Global.hardBorderRight
-	limitTop = Global.hardBorderTop
-	limitBottom = Global.hardBorderBottom
-	_snap_camera_to_limits()
 	
 	# set partner sounds to share players (prevents sound overlap)
 	if playerControl == 0:
@@ -649,96 +608,18 @@ func _physics_process(delta):
 		# count down pushingwall
 		pushingWall -= sign(pushingWall)
 	
-	
-	# TODO - DW's note - if we create a Camera2D subclass, we can move all this code over there.
 	# Camera settings
-	if (camera != null):
-		
-		# Lerp camera scroll based on if on floor
-		var playerOffset = ((abs(global_position.y-camera.get_target_position().y)*2)/camDist.y)
-		var scrollSpeed = 4.0*60.0*delta
-		
-		cameraDragLerp = max(int(!ground),min(cameraDragLerp,playerOffset)-6*delta)
-		
-		# Looking/Lag
-		# camLookDist is the distance, 0 is up, 1 is down
-		camLookAmount = clamp(camLookAmount,-1,1)
-		camLookOff = lerp(0,camLookDist[0],min(0,-camLookAmount))+lerp(0,camLookDist[1],min(0,camLookAmount))
-		
-		
-		if camLookAmount != 0:
-			var tmpScrollSpeed = sign(camLookAmount)*delta*2
-			if sign(camLookAmount - tmpScrollSpeed) == sign(camLookAmount):
-				camLookAmount -= sign(camLookAmount)*delta*2
-			else:
-				camLookAmount = 0
-		
-		# Camera Lock
-		
-		if camLockTime > 0:
-			camLockTime -= delta
-		
-		# Boundry handling
-		# Pan camera limits to boundries
-		
-		var viewSize = get_viewport_rect().size
-		var viewPos = camera.get_screen_center_position()
-		
-		# Left
-		# snap the limit to the edge of the camera if snap out of range
-		if limitLeft > viewPos.x-viewSize.x*0.5:
-			camera.limit_left = max(viewPos.x-viewSize.x*0.5,camera.limit_left)
-		# if limit is inside the camera then pan over
-		if abs(camera.limit_left-(viewPos.x-viewSize.x*0.5)) <= viewSize.x*0.5:
-			camera.limit_left = move_toward(camera.limit_left,limitLeft,scrollSpeed)
-		# else just snap the camera limit since it's not going to move the camera
-		else:
-			camera.limit_left = limitLeft
-		
-
-		# Right
-		# snap the limit to the edge of the camera if snap out of range
-		if limitRight < viewPos.x+viewSize.x*0.5:
-			camera.limit_right = min(viewPos.x+viewSize.x*0.5,camera.limit_right)
-		# if limit is inside the camera then pan over
-		if abs(camera.limit_right-(viewPos.x+viewSize.x*0.5)) <= viewSize.x*0.5:
-			camera.limit_right = move_toward(camera.limit_right,limitRight,scrollSpeed)
-		# else just snap the camera limit since it's not going to move the camera
-		else:
-			camera.limit_right = limitRight
-
-		# Top
-		# snap the limit to the edge of the camera if snap out of range
-		if limitTop > viewPos.y-viewSize.y*0.5:
-			camera.limit_top = max(viewPos.y-viewSize.y*0.5,camera.limit_top)
-		# if limit is inside the camera then pan over
-		if abs(camera.limit_top-(viewPos.y-viewSize.y*0.5)) <= viewSize.y*0.5:
-			camera.limit_top = move_toward(camera.limit_top,limitTop,scrollSpeed)
-		# else just snap the camera limit since it's not going to move the camera
-		else:
-			camera.limit_top = limitTop
-		
-
-		# Bottom
-		# snap the limit to the edge of the camera if snap out of range
-		if limitBottom < viewPos.y+viewSize.y*0.5:
-			camera.limit_bottom = min(viewPos.y+viewSize.y*0.5,camera.limit_bottom)
-		# if limit is inside the camera then pan over
-		if abs(camera.limit_bottom-(viewPos.y+viewSize.y*0.5)) <= viewSize.y*0.5:
-			camera.limit_bottom = move_toward(camera.limit_bottom,limitBottom,scrollSpeed)
-		# else just snap the camera limit since it's not going to move the camera
-		else:
-			camera.limit_bottom = limitBottom
-		
-		# Death at border bottom
-		if global_position.y > limitBottom:
-			kill()
+	camera.finalize(delta)
+	
+	# Death at border bottom
+	if global_position.y > camera.target_limit_bottom:
+		kill()
 	
 	# Stop movement at borders
-	if (global_position.x < limitLeft+cameraMargin or global_position.x > limitRight-cameraMargin):
+	if (global_position.x < camera.target_limit_left+cameraMargin or global_position.x > camera.target_limit_right-cameraMargin):
 		movement.x = 0
 	# Clamp position
-	global_position.x = clamp(global_position.x,limitLeft+cameraMargin,limitRight-cameraMargin)
+	global_position.x = clampf(global_position.x,camera.target_limit_left+cameraMargin,camera.target_limit_right-cameraMargin)
 	
 	
 	# center offsets (only moves hitbox if the centers moved)
@@ -1150,11 +1031,11 @@ func respawn() -> void:
 	# update physics (prevents player having water physics on respawn)
 	switch_physics()
 	global_position = partner.global_position+Vector2(0,-get_viewport_rect().size.y)
-	limitLeft = partner.limitLeft
-	limitRight = partner.limitRight
-	limitTop = partner.limitTop
-	limitBottom = partner.limitBottom
-		
+	camera.target_limit_left = partner.camera.target_limit_left
+	camera.target_limit_right = partner.camera.target_limit_right
+	camera.target_limit_top = partner.camera.target_limit_top
+	camera.target_limit_bottom = partner.camera.target_limit_bottom
+	
 	set_state(STATES.RESPAWN)
 
 
@@ -1230,78 +1111,6 @@ func _on_SparkleTimer_timeout() -> void:
 		get_parent().add_child(sparkle)
 
 
-func _on_position_changed():
-	cam_update(true)
-
-
-## Repositions the player camera per normal camera movement rules
-## @param force_move Ignores camera locking mechanics if true
-func cam_update(forceMove = false) -> void:
-	# Cancel camera movement
-	if current_state == STATES.DIE:
-		return
-		
-	# Camera vertical drag
-	var viewSize = get_viewport_rect().size
-	
-	camera.drag_top_margin =    lerp(0.0,float(camDist.y/viewSize.y),float(cameraDragLerp))
-	camera.drag_bottom_margin = camera.drag_top_margin
-	
-	# Extra drag margin for rolling
-	match(character):
-		Global.CHARACTERS.TAILS:
-			if get_state() == STATES.ROLL:
-				camAdjust = Vector2(0,-1)
-			else:
-				camAdjust = Vector2.ZERO
-		_: # default
-			if get_state() == STATES.ROLL:
-				camAdjust = Vector2(0,-5)
-			else:
-				camAdjust = Vector2.ZERO
-	
-	# Camera lock
-	# remove round() if you are not making a pixel perfect game
-	var getPos = (global_position+Vector2(0,camLookOff)+camAdjust).round()
-	if camLockTime <= 0 and (forceMove or camera.global_position.distance_to(getPos) <= 16):
-		# limit_length speed camera
-		camera.global_position.x = move_toward(camera.global_position.x,getPos.x,16*60*get_physics_process_delta_time())
-		camera.global_position.y = move_toward(camera.global_position.y,getPos.y,16*60*get_physics_process_delta_time())
-		# clamp to region
-		camera.global_position.x = clamp(camera.global_position.x,limitLeft,limitRight)
-		camera.global_position.y = clamp(camera.global_position.y,limitTop,limitBottom)
-		#camera.global_position = camera.global_position.move_toward(getPos,16*60*get_physics_process_delta_time())
-		# uncomment below for immediate camera
-		#camera.global_position = getPos
-	
-	# Ratchet camera scrolling (locks the camera behind the player)
-	if rachetScrollLeft:
-		limitLeft = max(limitLeft,camera.get_screen_center_position().x-viewSize.x/2)
-	if rachetScrollRight:
-		limitRight = max(limitRight,camera.get_screen_center_position().x+viewSize.x/2)
-	
-	if rachetScrollTop:
-		limitTop = max(limitTop,camera.get_screen_center_position().y-viewSize.y/2)
-	if rachetScrollBottom:
-		limitBottom = max(limitBottom,camera.get_screen_center_position().y+viewSize.y/2)
-
-
-## Locks the position of the camera for a while
-## @param time how long (in seconds) to lock the camera for
-## Note: If the camera is already locked, this function can raise
-## the locked time up to time, but it can't go below the current
-## remaining lock time.
-func lock_camera(time: float = 1.0):
-	camLockTime = max(time,camLockTime)
-
-
-func _snap_camera_to_limits():
-	camera.limit_left = max(limitLeft,Global.hardBorderLeft)
-	camera.limit_right = min(limitRight,Global.hardBorderRight)
-	camera.limit_top = max(limitTop,Global.hardBorderTop)
-	camera.limit_bottom = min(limitBottom,Global.hardBorderBottom)
-
-
 # Water bubble timer
 func _on_BubbleTimer_timeout():
 	if water:
@@ -1357,7 +1166,7 @@ func action_jump(animation = "roll", air_jump_control : bool = true, play_sound 
 		if play_sound:
 			sfx[0].play()
 		airControl = air_jump_control
-		cameraDragLerp = 1
+		camera.drag_lerp = 1.0
 		disconnect_from_floor()
 		set_state(STATES.JUMP)
 

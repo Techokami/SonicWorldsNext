@@ -69,7 +69,7 @@ func _physics_process(_delta):
 		i.global_position.y = global_position.y+((cos(clamp((i.global_position.x-global_position.x)/(192*scale.x),-1,2*length)*PI)*yDistance))*scale.y
 			
 		# Make player camera update as this change is applied after player movement
-		i.cam_update()
+		i.camera.update()
 
 		# Animation
 		var cur_anim = animator.get_current_animation()

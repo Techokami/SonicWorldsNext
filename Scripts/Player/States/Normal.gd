@@ -230,7 +230,7 @@ func state_physics_process(delta: float) -> void:
 	
 	# Camera look
 	if abs(lookTimer) >= 1:
-		parent.camLookAmount += delta*4*sign(lookTimer)
+		parent.camera.look_amount += delta*4.0*signf(lookTimer)
 	
 	# Get the player's relative angle.
 	var calcAngle = rad_to_deg(parent.angle-parent.gravityAngle)

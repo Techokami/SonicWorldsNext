@@ -284,7 +284,7 @@ func _physics_process(delta):
 			player.movement.x = 0
 			player.movement.y = 0
 		# XXX need to figure out why player 2 is mispositioned while this gimmick is moving quickly
-		player.cam_update()
+		player.camera.update()
 	
 	for anim_body in bodies_to_update:
 		anim_body.global_position = body.global_position

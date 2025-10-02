@@ -59,7 +59,7 @@ func state_physics_process(delta: float) -> void:
 			parent.global_position.y = min(parent.global_position.y,Global.waterLevel-16)
 		else:
 			#Block Tails from going out of bounds, in case Sonic is dead.
-			parent.global_position.y = min(parent.global_position.y,parent.limitBottom-16)
+			parent.global_position.y = minf(parent.global_position.y,parent.camera.target_limit_bottom-16.0)
 		
 		var distance = targetPoint.x-parent.global_position.x
 		# if far then fly by distance
@@ -90,7 +90,7 @@ func state_physics_process(delta: float) -> void:
 				parent.movement = Vector2.ZERO
 				parent.collissionLayer = parent.partner.collissionLayer
 				# copy limits to avoid out of bounds errors
-				parent.limitLeft = parent.partner.limitLeft
-				parent.limitRight = parent.partner.limitRight
-				parent.limitTop = parent.partner.limitTop
-				parent.limitBottom = parent.partner.limitBottom
+				parent.camera.target_limit_left = parent.partner.camera.target_limit_left
+				parent.camera.target_limit_right = parent.partner.camera.target_limit_right
+				parent.camera.target_limit_top = parent.partner.camera.target_limit_top
+				parent.camera.target_limit_bottom = parent.partner.camera.target_limit_bottom
