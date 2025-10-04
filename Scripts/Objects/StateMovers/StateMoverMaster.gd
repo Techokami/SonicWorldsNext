@@ -32,6 +32,12 @@ var realPosition
 var origin
 var states = []
 
+
+func setState(stateIndex):
+	var activeState = states[stateIndex]
+	activeState.enterState()
+	state = stateIndex
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	realPosition = position
@@ -45,12 +51,6 @@ func _ready():
 		setState(0)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func setState(stateIndex):
-	var activeState = states[stateIndex]
-	activeState.enterState()
-	state = stateIndex
-	
-	
 func _process(delta):
 	if state == -1:
 		return
