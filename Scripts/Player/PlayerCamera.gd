@@ -19,8 +19,6 @@ var look_amount: float = 0.0
 ## Camera offset when the player is looking up/down.
 var look_offset: float = 0.0
 
-var adjust: Vector2 = Vector2.ZERO
-
 ## Multiplier for [code]dist.y[/code].[br]
 ## See also: [member dist].
 var drag_lerp: float = 0.0
@@ -89,7 +87,7 @@ func update(force_move: bool = false) -> void:
 	drag_bottom_margin = drag_top_margin
 	
 	# Extra drag margin for rolling
-	adjust = Vector2.ZERO
+	var adjust: Vector2 = Vector2.ZERO
 	match player.character:
 		Global.CHARACTERS.TAILS:
 			if player_state == PlayerChar.STATES.ROLL:
