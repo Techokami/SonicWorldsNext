@@ -3,10 +3,13 @@ class_name PlayerAfterimages extends Node
 ## Number of afterimages displayed after the player.
 const NUM_AFTERIMAGES: int = 3
 
-## Number of physics updates between two afterimages.
-## For example, [code]UPDATES_PER_AFTERIMAGE = 2[/code]
-## means that afterimages appear on each 2'nd physics tick.
-const UPDATES_PER_AFTERIMAGE: int = 2
+## Number of afterimages generated per second.
+const AFTERIMAGES_PER_SECOND: int = 30
+
+## Number of physics updates between two displayed afterimages.[br]
+## [b]NOTE:[/b] This value is calculated automatically based on
+## [member Engine.physics_ticks_per_second] and [member AFTERIMAGES_PER_SECOND].
+var UPDATES_PER_AFTERIMAGE: int = Engine.physics_ticks_per_second/AFTERIMAGES_PER_SECOND
 
 class _Afterimage extends Sprite2D:
 	var tails_sprite: Sprite2D = Sprite2D.new()
