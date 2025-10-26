@@ -27,10 +27,6 @@ func _copy_sprite_properties(dest: Sprite2D, source: Sprite2D, tails: bool = fal
 		dest.flip_h = source.flip_h
 		dest.flip_v = source.flip_v
 
-func _hide_all_afterimages() -> void:
-	for afterimage: Sprite2D in afterimages:
-		afterimage.visible = false
-
 func _init() -> void:
 	(func() -> void:
 		var player: PlayerChar = get_parent()
@@ -59,7 +55,8 @@ func _process(_delta: float) -> void:
 		return
 	
 	# hide everything by default
-	_hide_all_afterimages()
+	for afterimage: Sprite2D in afterimages:
+		afterimage.visible = false
 	
 	# fade afterimages out during the last remaining second
 	var fadeout_multiplier: float = min(1.0,get_parent().shoeTime)
@@ -88,13 +85,14 @@ func _physics_process(_delta: float) -> void:
 	var player: PlayerChar = get_parent()
 	if (player.shoeTime <= 0.0 and !player.isSuper) or !player.sprite.visible:
 		if current_idx != -1:
-			_hide_all_afterimages()
+			for afterimage: Sprite2D in afterimages:
+				afterimage.texture = null
+				afterimage.visible = false
 			current_idx = -1
 		return
 	
 	current_idx = (current_idx+1) % afterimages.size()
 	var afterimage: Sprite2D = afterimages[current_idx]
-	afterimage.visible = true
 	_copy_sprite_properties(afterimage,player.sprite)
 	
 	# also copy Tails' tails
