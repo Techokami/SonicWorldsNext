@@ -84,8 +84,20 @@ func _physics_process(_delta: float) -> void:
 		return
 	active = true
 	
-	# copy the properties of the player's current sprite into the first slot
+	# pick the first element to overwrite the afterimage in it later
 	var afterimage: _Afterimage = afterimages[0]
+	
+	# shift all elements back by 1 and move the first element into the last slot
+	afterimages.append(afterimages.pop_front())
+	
+	# don't display the afterimage if the player is invisible
+	# (e.g. entered a Giant Ring)
+	if !player.visible:
+		afterimage.texture = null
+		afterimage.tails_sprite.visible = false
+		return
+	
+	# copy the properties of the player's current sprite into the picked afterimage
 	_copy_sprite_properties(afterimage,player.sprite)
 	
 	# also copy Tails' tails
@@ -96,6 +108,3 @@ func _physics_process(_delta: float) -> void:
 			_copy_sprite_properties(afterimage.tails_sprite,player_tails,true)
 	else:
 		afterimage.tails_sprite.visible = false
-	
-	# shift all elements back by 1 and move the first element into the last slot
-	afterimages.append(afterimages.pop_front())
