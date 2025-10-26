@@ -162,24 +162,38 @@ func play_music_theme(theme_id: MusicTheme) -> void:
 	# while we were fading out all the other music (if the music was stopped,
 	# then we can skip playing it and proceed to fading all the other music back in)
 	if theme.play_status != _PlayStatus.POST_PLAY:
+		var replaced_prev_theme: bool = false
 		# stop the previous theme and play the current one
 		if prev_theme != null and (prev_theme.play_status == _PlayStatus.PLAYING or prev_theme.play_status == _PlayStatus.PRE_PLAY):
 			prev_theme.stop()
 			prev_theme.play_status = _PlayStatus.STOPPED
+			replaced_prev_theme = true
 		theme.play()
 		if theme_id == MusicTheme.LEVEL_THEME:
 			_level_theme_alt_player.play()
 		theme.play_status = _PlayStatus.PLAYING
+		# if we replaced another music theme with the same priority, then
+		# we can quit and leave the rest to the coroutine of the previous theme
+		# (it will continue playing the new theme)
+		if replaced_prev_theme:
+			return
 		
 		# wait for the theme to finish playing
 		var tree: SceneTree = get_tree()
 		var physics_frame: Signal = tree.physics_frame
-		while (theme.playing or tree.paused) and theme.play_status == _PlayStatus.PLAYING:
-			await physics_frame
-			# abort if `reset_music_themes()` was called
-			if _reset_music_themes_flag:
-				return
-	
+		while true:
+			while (theme.playing or tree.paused) and theme.play_status == _PlayStatus.PLAYING:
+				await physics_frame
+				# abort if `reset_music_themes()` was called
+				if _reset_music_themes_flag:
+					return
+			# if the theme haven't been replaced by another theme with the same
+			# priority, then we can proceed to post-play logic
+			if theme == _last_played_music_by_priority[priority]:
+				break
+			# otherwise continue waiting until the new theme stops playing
+			theme = _last_played_music_by_priority[priority]
+		
 		# if the theme was stopped via `stop_music_theme()` (`POST_PLAY` status),
 		# we need to fade out the theme
 		if theme.fade_when_stopped and theme.play_status == _PlayStatus.POST_PLAY:
@@ -195,7 +209,7 @@ func play_music_theme(theme_id: MusicTheme) -> void:
 			if theme_id == MusicTheme.LEVEL_THEME:
 				_level_theme_alt_player.stop()
 				_level_theme_alt_player.volume_level += 1.0
-
+	
 	# remove the current theme from the list of last played themes
 	_last_played_music_by_priority[priority] = null
 	
