@@ -94,8 +94,10 @@ func _physics_process(_delta: float) -> void:
 	afterimages.append(afterimages.pop_front())
 	
 	# don't display the afterimage if the player is invisible
-	# (e.g. entered a Giant Ring)
-	if !player.visible:
+	# (e.g. entered a Giant Ring) or if they're interacting with a gimmick
+	if !player.visible or \
+	   player.get_state() == PlayerChar.STATES.GIMMICK or \
+	   player.get_active_gimmick() != null:
 		afterimage.texture = null
 		afterimage.tails_sprite.visible = false
 		return
