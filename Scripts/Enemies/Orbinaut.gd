@@ -13,6 +13,7 @@ var spinOffset = 0
 
 func _ready():
 	if !Engine.is_editor_hint():
+		super()
 		# make frame use the correct Orbinaut design
 		$orbinaut.frame = int(classicOrbi)*2
 		$Orb/orb.frame = 1+int(classicOrbi)*2

@@ -19,6 +19,7 @@ var coolDown = 0
 var fire = null
 
 func _ready():
+	super()
 	# clear fire if destroyed before shooting
 	var _con = connect("destroyed",Callable(self,"clear_fire"))
 

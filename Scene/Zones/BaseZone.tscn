@@ -1,7 +1,6 @@
-[gd_scene load_steps=76 format=4 uid="uid://hj3tt0gklwba"]
+[gd_scene load_steps=75 format=4 uid="uid://hj3tt0gklwba"]
 
 [ext_resource type="Script" path="res://Scripts/Level/Level.gd" id="2"]
-[ext_resource type="PackedScene" uid="uid://bjavywoj00j1j" path="res://Scene/Zones/BaseZoneAct2.tscn" id="2_8ek7k"]
 [ext_resource type="PackedScene" uid="uid://c30uceea18q1w" path="res://Entities/Misc/HUD.tscn" id="3_hkybi"]
 [ext_resource type="Texture2D" uid="uid://bemwlrblbgn23" path="res://Graphics/Backgrounds/WorldsBackground.png" id="4_ich6n"]
 [ext_resource type="PackedScene" uid="uid://cioq5saowvqxj" path="res://Entities/MainObjects/Player.tscn" id="5_tgx6m"]
@@ -131,7 +130,7 @@ size = Vector2(256, 16)
 
 [node name="BaseZone" type="Node2D"]
 script = ExtResource("2")
-nextZone = ExtResource("2_8ek7k")
+nextZone = "res://Scene/Zones/BaseZoneAct2.tscn"
 animal1 = 2
 animal2 = 3
 defaultLeftBoundry = 0

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://darixrlrcc3tg"
-path="res://.godot/imported/EHZ_AniTiles.png-683ab665b2764e0f0694fcb2b6290062.ctex"
+uid="uid://bmwj34rjk7fax"
+path="res://.godot/imported/EHZ_BG_B.png-ab4ff022155c8b9d565fbf94a8b479f0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Graphics/Tiles/EmeraldHill/EHZ_AniTiles.png"
-dest_files=["res://.godot/imported/EHZ_AniTiles.png-683ab665b2764e0f0694fcb2b6290062.ctex"]
+source_file="res://Graphics/Backgrounds/EHZ_Parallax/EHZ_BG_B.png"
+dest_files=["res://.godot/imported/EHZ_BG_B.png-ab4ff022155c8b9d565fbf94a8b479f0.ctex"]
 
 [params]
 

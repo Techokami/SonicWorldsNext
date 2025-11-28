@@ -15,9 +15,10 @@ func _physics_process(delta):
 		if parent.movement.y > 1000 and Global.lives > 0 and !Global.gameOver:
 			parent.movement = Vector2.ZERO
 			Global.lives -= 1
+			Global.checkPointRings = 0
 			# check if lives are remaining or death was a time over
 			if Global.lives > 0 and Global.levelTime < Global.maxTime:
-				Global.main.change_scene_to_file(null,"FadeOut")
+				Main.change_scene(Global.currentZone,"FadeOut")
 				parent.process_mode = PROCESS_MODE_PAUSABLE
 			else:
 				Global.gameOver = true

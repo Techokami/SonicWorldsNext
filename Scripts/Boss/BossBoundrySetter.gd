@@ -46,9 +46,9 @@ func _on_BoundrySetter_body_entered(body):
 						if lockBottom:
 							i.limitBottom = min(global_position.y+screenSize.y/2,Global.hardBorderBottom)
 					
-					Global.main.set_volume(-50)
-					await Global.main.volume_set
-					Global.main.set_volume(0,100)
+					Main.set_volume(-50)
+					await Main.volume_set
+					Main.set_volume(0,100)
 					
 					Global.bossMusic.play()
 					boss.active = true

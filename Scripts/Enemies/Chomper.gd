@@ -4,6 +4,7 @@ extends EnemyBase
 var animFrame = 0.0
 
 func _ready():
+	super()
 	# initial velocity
 	velocity.y = -7
 	set_physics_process(false)

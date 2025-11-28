@@ -1,9 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://qs5dmtxxf1w1"]
+[gd_scene load_steps=14 format=3 uid="uid://qs5dmtxxf1w1"]
 
 [ext_resource type="Script" path="res://Scripts/Level/Title.gd" id="2"]
 [ext_resource type="Texture2D" uid="uid://cbloyreqnle13" path="res://Graphics/title/Sonic_Worlds_Next_Logo.png" id="2_qt26u"]
 [ext_resource type="FontFile" uid="uid://ml62eqfe7avn" path="res://Graphics/Fonts/small_font.png" id="3_yuhp3"]
-[ext_resource type="Texture2D" uid="uid://dt51ojxk80oqh" path="res://Graphics/Items/Rings/Ring.tres" id="4_vmy7g"]
 
 [sub_resource type="Animation" id="2"]
 length = 0.001
@@ -173,6 +172,29 @@ _data = {
 "RESET": SubResource("2"),
 "TitleAssemble": SubResource("1")
 }
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_unkqb"]
+load_path = "res://.godot/imported/Ring1.png-fb5ab0cce1bd26a39f572b6418b429cd.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_g1k1f"]
+load_path = "res://.godot/imported/Ring2.png-ea83b0052bbb253e7263642c4ec7295e.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_hov1m"]
+load_path = "res://.godot/imported/Ring3.png-77b461c632ba98d299b05a2c6f223303.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_babdn"]
+load_path = "res://.godot/imported/Ring4.png-73ec6bdb945f68af0e854d6bb69ea7cd.ctex"
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_qqjlq"]
+frames = 4
+speed_scale = 10.0
+frame_0/texture = SubResource("CompressedTexture2D_unkqb")
+frame_1/texture = SubResource("CompressedTexture2D_g1k1f")
+frame_1/duration = 1.0
+frame_2/texture = SubResource("CompressedTexture2D_hov1m")
+frame_2/duration = 1.0
+frame_3/texture = SubResource("CompressedTexture2D_babdn")
+frame_3/duration = 1.0
 
 [sub_resource type="Curve" id="Curve_x626m"]
 _data = [Vector2(0, 0), 0.0, 1.4, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -365,7 +387,7 @@ position = Vector2(152, 112)
 emitting = false
 amount = 32
 preprocess = 0.5
-texture = ExtResource("4_vmy7g")
+texture = SubResource("AnimatedTexture_qqjlq")
 emission_shape = 2
 emission_sphere_radius = 128.0
 direction = Vector2(0, -1)

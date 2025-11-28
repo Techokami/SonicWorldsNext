@@ -72,10 +72,10 @@ func _input(event):
 			MENUS.MAIN: # main menu
 				match(option): # Options
 					0: # continue
-						if Global.main.wasPaused:
+						if Main.wasPaused:
 							# give frame so game doesn't immedaitely unpause
 							await get_tree().process_frame
-							Global.main.wasPaused = false
+							Main.wasPaused = false
 							get_tree().paused = false
 							visible = false
 					_: # Set menu to option
@@ -96,7 +96,7 @@ func _input(event):
 						set_menu(0)
 						$"../ControllerMenu".visible = true
 						visible = false
-						Global.main.wasPaused = false
+						Main.wasPaused = false
 						get_tree().paused = true
 					7: # back
 						Global.save_settings()
@@ -107,22 +107,26 @@ func _input(event):
 						set_menu(0)
 					1: # ok
 						set_menu(0)
-						Global.main.wasPaused = false
+						Main.wasPaused = false
 						visible = false
 						Global.checkPointTime = 0
 						Global.currentCheckPoint = -1
-						Global.main.change_scene_to_file(null,"FadeOut")
-						#await Global.main.scene_faded
+						Global.checkPointPosition = Vector2.ZERO
+						Global.checkPointRings = 0
+						Main.change_scene(Global.currentZone,"FadeOut",1,true)
+						await Global.main.scene_faded
 						Global.effectTheme.stop()
 						Global.bossMusic.stop()
-						Global.main.set_volume(0)
+						Global.music.stop()
+						Main.set_volume(0)
 			MENUS.QUIT: # quit option
 				match(option): # Options
 					0: # cancel
 						set_menu(0)
 					1: # ok
 						await get_tree().process_frame
-						Global.main.reset_game()
+						Main.reset_game()
+						set_menu(0)
 
 func do_lateral_input():
 
