@@ -892,9 +892,9 @@ size_flags_vertical = 2
 [node name="Passed" type="Label" parent="LevelClear"]
 layout_mode = 0
 offset_left = -256.0
-offset_top = 56.0
+offset_top = 64.0
 offset_right = -103.0
-offset_bottom = 82.0
+offset_bottom = 90.0
 theme_override_fonts/font = ExtResource("10_8dyi8")
 text = "SONIC got"
 uppercase = true
@@ -902,9 +902,9 @@ uppercase = true
 [node name="Through" type="Label" parent="LevelClear"]
 layout_mode = 0
 offset_left = -256.0
-offset_top = 80.0
+offset_top = 108.0
 offset_right = -137.0
-offset_bottom = 106.0
+offset_bottom = 134.0
 theme_override_fonts/font = ExtResource("10_8dyi8")
 text = "through"
 uppercase = true

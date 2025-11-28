@@ -9,6 +9,7 @@ var animTime = 0
 var Particle = preload("res://Entities/Misc/GenericParticle.tscn")
 
 func _ready():
+	super()
 	defaultMovement = false
 	direction = -sign(scale.x)
 

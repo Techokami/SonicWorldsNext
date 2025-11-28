@@ -9,6 +9,9 @@ var magnetShape = null
 var ringacceleration = [0.75,0.1875]
 var Particle = preload("res://Entities/Misc/GenericParticle.tscn")
 
+func _ready():
+	if Global.nodeMemory.has(get_path()):
+		queue_free()
 
 func _process(delta):
 	# scattered logic
@@ -25,6 +28,8 @@ func _process(delta):
 			z_index = 1
 			# get ring to player
 			player.get_ring()
+			if !scattered:
+				Global.nodeMemory.append(get_path())
 			var part = Particle.instantiate()
 			get_parent().add_child(part)
 			part.global_position = global_position
