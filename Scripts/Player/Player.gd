@@ -1064,6 +1064,7 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 		if water:
 			movement = movement*0.5
 
+		angle = 0
 		force_detach()
 		disconect_from_floor()
 		set_state(STATES.HIT)
