@@ -19,6 +19,8 @@ func activate():
 	active = true
 	Global.currentCheckPoint = checkPointID
 	Global.checkPointTime = Global.levelTime
+	Global.checkPointRings = Global.players[0].rings
+	Global.checkPointPosition = global_position
 	
 	# set checkpoint to self (and set any checkpoitns with a lower ID to active)
 	for i in Global.checkPoints:

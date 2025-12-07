@@ -10,6 +10,10 @@ var defaultMovement = true
 
 signal destroyed
 
+func _ready() -> void:
+	if Global.nodeMemory.has(self):
+		queue_free()
+
 func _process(delta):
 	# checks if player hit has players inside
 	if (playerHit.size() > 0):

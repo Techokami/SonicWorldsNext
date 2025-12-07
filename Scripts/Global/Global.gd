@@ -1,21 +1,26 @@
 extends Node
 
-# player pointers (0 is usually player 1)
+## player pointers (0 is usually player 1)
 var players: Array[PlayerChar] = []
-# main object reference
-var main = null
-# hud object reference
+## hud object reference
 var hud = null
-# checkpoint memory
-var checkPoints = []
-# reference for the current checkpoint
-var currentCheckPoint = -1
-# the current level time from when the checkpoint got hit
-var checkPointTime = 0
+## checkpoint memory
+var checkPoints: Array = []
+## reference for the current checkpoint
+var currentCheckPoint: int = -1
+## the current level time when touching a Checkpoint or special ring
+var checkPointTime: float = 0
+## Ring count when touching a Checkpoint or special ring
+var checkPointRings: int = 0
+## Saved position when touching a Checkpoint or special ring
+var checkPointPosition: Vector2 = Vector2.ZERO
 
-# the starting room, this is loaded on game resets, you may want to change this
-var startScene = preload("res://Scene/Presentation/Title.tscn")
-var nextZone = load("res://Scene/Zones/BaseZone.tscn") # change this to the first level in the game (also set in "reset_values")
+## the starting room, this is loaded on game resets, you may want to change this
+var startScene: String = "res://Scene/Presentation/Title.tscn"
+## Path to the current level, for returning from special stages.
+var currentZone: String = ""
+## Path to the first level in the game (set in "reset_game_values")
+var nextZone: String = "res://Scene/Zones/BaseZone.tscn"
 # use this to store the current state of the room, changing scene will clear everythin
 var stageInstanceMemory = null
 var stageLoadMemory = null
@@ -35,6 +40,9 @@ var gameOver = false
 # res://Scripts/Objects/GoalPost.gd
 var stageClearPhase = 0
 
+# TODO: There's not much point in having seperate music, bossMusic, and effectThemes,
+# These seperate sound banks can never play at the same time, so should be unified.
+# life having its own bank is fine as the position of the previous track needs to be recalled.
 # Music
 var musicParent = null
 var music = null
@@ -42,8 +50,12 @@ var bossMusic = null
 var effectTheme = null
 var drowning = null
 var life = null
-# song themes to play for things like invincibility and speed shoes
-var themes = [preload("res://Audio/Soundtrack/1. SWD_Invincible.ogg"),preload("res://Audio/Soundtrack/2. SWD_SpeedUp.ogg"),preload("res://Audio/Soundtrack/4. SWD_StageClear.ogg")]
+# TODO: Normal Level theme, boss theme, and Super theme could be here too.
+## song themes to play for things like invincibility and speed shoes
+var themes = [
+	preload("res://Audio/Soundtrack/1. SWD_Invincible.ogg"),
+	preload("res://Audio/Soundtrack/2. SWD_SpeedUp.ogg"),
+	preload("res://Audio/Soundtrack/4. SWD_StageClear.ogg")]
 # index for current theme
 var currentTheme = 0
 
@@ -51,45 +63,50 @@ var currentTheme = 0
 var soundChannel = AudioStreamPlayer.new()
 
 # Gameplay values
+## Current Score.
 var score = 0
+## The current Life Count of the player
 var lives = 3
+## Not actually implimented.
 var continues = 0
-# emeralds use bitwise flag operations, the equivelent for 7 emeralds would be 128
+## Chaos emeralds use bitwise flag operations, the equivelent for 7 emeralds would be 128
 var emeralds = 0
-# emerald bit flags
+## emerald bit flags
 enum EMERALD {RED = 1, BLUE = 2, GREEN = 4, YELLOW = 8, CYAN = 16, SILVER = 32, PURPLE = 64}
+## ID of the upcoming special stage.
 var specialStageID = 0
-var levelTime = 0 # the timer that counts down while the level isn't completed or in a special ring
-var globalTimer = 0 # global timer, used as reference for animations
-var maxTime = 60*10
+## the timer that counts down while the level isn't completed or in a special ring
+var levelTime: float = 0
+## global timer, used as reference for animations
+var globalTimer: float = 0
+## Time limit in levels
+const maxTime: int = 60*10
 
-# water level of the current level, setting this to null will disable the water
+## water level of the current level, setting this to null will disable the water
 var waterLevel = null
-var setWaterLevel = 0 # used by other nodes to change the water level
-var waterScrollSpeed = 64 # used by other nodes for how fast to move the water to different levels
+## used by other nodes to change the water level
+var setWaterLevel = 0
+## How fast to move the water to different levels
+var waterScrollSpeed = 64
 
-# characters (if you want more you should add one here, see the player script too for more settings)
+## Characters (if you want more you should add one here, see the player script too for more settings)
 enum CHARACTERS {NONE,SONIC,TAILS,KNUCKLES,AMY}
 var PlayerChar1 = CHARACTERS.SONIC
 var PlayerChar2 = CHARACTERS.TAILS
 
-# Level settings
+## Level settings
 var hardBorderLeft   = -100000000
 var hardBorderRight  =  100000000
 var hardBorderTop    = -100000000
 var hardBorderBottom =  100000000
 
-# Animal spawn type reference, see the level script for more information on the types
+## Animal spawn type reference, see the level script for more information on the types
 var animals = [0,1]
 
-# emited when a stage gets started
+## emited when a stage gets started
 signal stage_started
 
-# Level memory
-# this value contains node paths and can be used for nodes to know if it's been collected from previous playthroughs
-# the only way to reset permanent memory is to reset the game, this is used primarily for special stage rings
-# Note: make sure you're not naming your level nodes the same thing, it's good practice but if the node's
-# share the same paths there can be some overlap and some nodes may not spawn when they're meant to
+## Memory of interacted objects from the current zone saved zone.
 var nodeMemory = []
 
 # Game settings
@@ -104,29 +121,13 @@ enum HAZARDS {NORMAL, FIRE, ELEC, WATER}
 # Layers references
 enum LAYERS {LOW, HIGH}
 
-# Debugging
-var is_main_loaded = false
-
 func _ready():
 	# set sound settings
 	add_child(soundChannel)
 	soundChannel.bus = "SFX"
 	# load game data
 	load_settings()
-	
-	# check if main scene is root (prevents crashing if you started from another scene)
-	if !(get_tree().current_scene is MainGameScene):
-		get_tree().paused = true
-		# change scene root to main scene, keep current scene in memory
-		var loadNode = get_tree().current_scene.scene_file_path
-		var mainScene = load("res://Scene/Main.tscn").instantiate()
-		get_tree().root.call_deferred("remove_child",get_tree().current_scene)
-		#get_tree().root.current_scene.call_deferred("queue_free")
-		get_tree().root.call_deferred("add_child",mainScene)
-		mainScene.get_node("SceneLoader").get_child(0).nextScene = load(loadNode)
-		await get_tree().process_frame
-		get_tree().paused = false
-	is_main_loaded = true
+	get_tree().paused = false
 
 func _process(delta):
 	# do a check for certain variables, if it's all clear then count the level timer up
@@ -137,7 +138,7 @@ func _process(delta):
 		globalTimer += delta
 	
 # reset values, self explanatory, put any variables to their defaults in here
-func reset_values():
+func reset_game_values():
 	lives = 3
 	score = 0
 	continues = 0
@@ -148,8 +149,8 @@ func reset_values():
 	checkPointTime = 0
 	currentCheckPoint = -1
 	animals = [0,1]
-	nodeMemory = []
-	nextZone = load("res://Scene/Zones/BaseZone.tscn")
+	nodeMemory.clear()
+	nextZone = "res://Scene/Zones/BaseZone.tscn"
 
 # use this to play a sound globally, use load("res:..") or a preloaded sound
 func play_sound(sound = null):

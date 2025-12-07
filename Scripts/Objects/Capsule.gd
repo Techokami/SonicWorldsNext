@@ -10,8 +10,6 @@ var timerActive = false
 var timer = 180.0/60.0
 
 func _physics_process(delta):
-	
-	
 	if timerActive and timer > 0:
 			# every 8/60 steps spawn an animal in the animal ground with an alarm of 12/60
 			if wrapf(timer,0,8.0/60.0) < wrapf(timer-delta,0,8.0/60.0):
@@ -54,6 +52,7 @@ func activate():
 		$Explode.play()
 		# set global stage clear phase to 1, 1 is used to stop the timer (see HUD script)
 		Global.stageClearPhase = 1
+		Main.sceneCanPause = false
 		
 		# set player camera limits
 		for i in Global.players:
