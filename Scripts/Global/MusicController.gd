@@ -125,6 +125,7 @@ func play_music_theme(theme_id: MusicTheme) -> void:
 		# and then we can have a quick exit
 		if prev_theme != theme:
 			prev_theme.play_status = _PlayStatus.STOPPED
+			theme.play_status = _PlayStatus.PRE_PLAY
 		return
 	
 	# pick other music themes with lower priority, so we can fade them out
