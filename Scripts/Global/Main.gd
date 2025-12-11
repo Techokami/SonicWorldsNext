@@ -1,9 +1,6 @@
 class_name MainGameScene
 extends Node2D
 
-# last scene is used for referencing the current scene (this is used for stage restarting)
-var lastScene = null
-
 # this gets emited when the scene fades, used to load in level details and data to hide it from the player
 signal scene_faded
 # signal that emits when volume fades
@@ -22,7 +19,6 @@ var sceneCanPause = false
 
 func _ready():
 	# global object references
-	Global.main = self
 	Global.musicParent = get_node_or_null("Music")
 	Global.music = get_node_or_null("Music/Music")
 	Global.bossMusic = get_node_or_null("Music/BossTheme")
@@ -30,7 +26,7 @@ func _ready():
 	Global.drowning = get_node_or_null("Music/Drowning")
 	Global.life = get_node_or_null("Music/Life")
 	# initialize game data using global reset (it's better then assigning variables twice)
-	Global.reset_values()
+	Global.reset_game_values()
 
 func _process(delta):
 	# verify scene isn't paused
@@ -70,120 +66,66 @@ func _input(event):
 			# Do the unpause
 			wasPaused = false
 			get_tree().paused = false
-		
-		
-	
 	# reset game if F2 is pressed (this button can be changed in project settings)
 	if event.is_action_pressed("ui_reset"):
 		reset_game()
 
-# reset game function
+## Reset Game
 func reset_game():
 	# remove the was paused check
 	wasPaused = false
+	sceneCanPause = false
 	# reset game values
-	Global.reset_values()
+	Global.reset_game_values()
 	# unpause scene (if it was)
 	get_tree().paused = false
+	Global.effectTheme.stop()
+	Global.bossMusic.stop()
+	Global.music.stop()
 	# Godot doesn't like returning values with empty variables so create a dummy variable for it to assign
-	var _con = get_tree().reload_current_scene()
+	change_scene("res://Scene/Presentation/PoweredByWorlds.tscn")
 
-# change scene function
-# scene = the scene instance to load (load("res...")
-# fadeOut = the fade out animation to play from the Fader animation node (set to "" for instant)
-# fadeIn = the fade in animation to play from the Fader animation node after a scene has finished it's fading out (set to "" for instant)
-# setType = play an animation before either fades, this is mostly used for setting up blending modes. this is mostly used for setting to either blend add colours or blend remove but you can put whatever animation you want here
-# length = time in seconds for the fade animations to play
-# storeScene = should the current scene be storred? (not the new one being loaded)
-# NOTE: if there's already a scene saved then the next time storeScene is called then the stored scene will be loaded instead before it gets removed
-# resetData = should the level data be reset between scenes (this is needed for storeScene if you're storing a level so that level times and object references don't get reset)
-func change_scene_to_file(scene = null, fadeOut = "", fadeIn = "", length = 1, storeScene = false, resetData = true):
-	# stop pausing
-	sceneCanPause = false
-	# set fader speed
+## New Scene Change function. Args: Scene path, fade animation, time of transition, reset data
+func change_scene(scene: String, fade_anim: String = "FadeOut", length: float = 1.0, resetData:bool = true):
 	$GUI/Fader.speed_scale = 1.0/float(length)
-	
 	# if fadeOut isn't blank, play the fade out animation and then wait, otherwise skip this
-	if fadeOut != "":
-		$GUI/Fader.queue(fadeOut)
+	if fade_anim != "":
+		$GUI/Fader.queue(fade_anim)
 		await $GUI/Fader.animation_finished
-	
 	# error prevention
-	scene_faded.emit()
-	
-	# use restoreScene to tell if we're restoring a scene
-	var restoreScene = false
-	# storeScene will only remember the first child of scene loader, this will be referenced later
-	if storeScene:
-		# clear memory if it's already occupied
-		if is_instance_valid(Global.stageInstanceMemory):
-			# we're restoring a scene so set restoreScene to true so the scene can be loaded after fading
-			restoreScene = true
-		# if stage memory is empty, add current scene
-		else:
-			Global.stageInstanceMemory = $SceneLoader.get_child(0)
-			$SceneLoader.remove_child(Global.stageInstanceMemory)
-	
-	# clear scene
-	for i in $SceneLoader.get_children():
-		i.queue_free()
-	
+	emit_signal("scene_faded")
 	await get_tree().process_frame
+	get_tree().paused = false
+	$GUI/Pause.hide()
+	Global.music.stop()
+	get_tree().change_scene_to_file(scene)
 	# reset data level data, if reset data is true
 	if resetData:
-		Global.players = []
-		Global.checkPoints = []
-		Global.waterLevel = null
-		Global.gameOver = false
-		if Global.stageClearPhase != 0:
-			Global.currentCheckPoint = -1
-			Global.levelTime = 0
-			Global.timerActive = false
-		Global.globalTimer = 0
-		Global.stageClearPhase = 0
-	
-	# check if to restore scene
-	if restoreScene:
-		# add stored scene to scene loader
-		$SceneLoader.add_child(Global.stageInstanceMemory)
-		# check if the scene has a function called "level_reset_data"
-		# if it does then execute it so the level can run any scripts it needs to for a level start
-		# this is mostly used in the level manager to play the title card again
-		if Global.stageInstanceMemory.has_method("level_reset_data"):
-			Global.stageInstanceMemory.level_reset_data()
-		# set last scene to the stage load memory path
-		lastScene = Global.stageLoadMemory
-		# reset stageInstanceMemory
-		Global.stageInstanceMemory = null
+		clear_dynamic_level_variables()
 	else:
-	# create new scene
-		if scene == null:
-			if lastScene != null:
-				$SceneLoader.add_child(lastScene.instantiate())
-		else:
-			$SceneLoader.add_child(scene.instantiate())
-			lastScene = scene
-			# don't know if the current scene is gonna be stored in memory so store last scene to global state load memory
-			# check there's not a stored scene first
-			if !is_instance_valid(Global.stageInstanceMemory):
-				Global.stageLoadMemory = lastScene
-	
-	# play fade in animation if it's not blank
-	if fadeIn != "":
-		$GUI/Fader.play_backwards(fadeIn)
-	# if fadeOut wasn't set either then just reset the fader
-	elif fadeOut != "":
-		$GUI/Fader.play("RESET")
-	
-	# stop life sound (if it's still playing)
-	if Global.life.is_playing():
-		Global.life.stop()
-		# set volume level to default
-		Global.music.volume_db = 0
-		# copy the volume to other songs (you'll want to add yours here if you add more)
-		Global.bossMusic.volume_db = Global.bossMusic.volume_db
-		Global.effectTheme.volume_db = Global.music.volume_db
-		Global.drowning.volume_db = Global.music.volume_db
+		Global.players.clear()
+		Global.checkPoints.clear()
+	# play fade in animation back if it's not blank
+	if fade_anim != "":
+		$GUI/Fader.play_backwards(fade_anim)
+
+
+func clear_dynamic_level_variables():
+	Global.players.clear()
+	Global.checkPoints.clear()
+	Global.waterLevel = null
+	Global.gameOver = false
+	if Global.stageClearPhase != 0:
+		Global.currentCheckPoint = -1
+		Global.levelTime = 0
+		Global.timerActive = false
+	Global.checkPointPosition = Vector2.ZERO
+	Global.checkPointRings = 0
+	Global.checkPointTime = 0
+	Global.globalTimer = 0
+	Global.stageClearPhase = 0
+	Global.nodeMemory.clear()
+
 
 # executed when life sound has finished
 func _on_Life_finished():

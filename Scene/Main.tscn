@@ -1,9 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://byje3iiukvt4p"]
+[gd_scene load_steps=15 format=3 uid="uid://byje3iiukvt4p"]
 
 [ext_resource type="AudioStream" uid="uid://dec4ik84l88go" path="res://Audio/Soundtrack/2. SWD_SpeedUp.ogg" id="1"]
 [ext_resource type="Script" path="res://Scripts/Global/Main.gd" id="2"]
 [ext_resource type="AudioStream" uid="uid://b30ai1lqlh32u" path="res://Audio/Soundtrack/3. SWD_1Up.ogg" id="3"]
-[ext_resource type="PackedScene" uid="uid://c58ontqoxjuti" path="res://Scene/Presentation/PoweredByWorlds.tscn" id="4"]
 [ext_resource type="AudioStream" uid="uid://o4f15hnb5thp" path="res://Audio/Soundtrack/7. SWD_Drowning.ogg" id="5"]
 [ext_resource type="PackedScene" uid="uid://b2xskcomtpo2x" path="res://Entities/Misc/ControllerMenu.tscn" id="6"]
 [ext_resource type="PackedScene" uid="uid://c1xhc4uh26inb" path="res://Entities/Misc/PauseMenu.tscn" id="7"]
@@ -135,11 +134,6 @@ _data = {
 
 [node name="Main" type="Node2D"]
 script = ExtResource("2")
-
-[node name="SceneLoader" type="Node" parent="."]
-process_mode = 1
-
-[node name="PoweredByWorlds" parent="SceneLoader" instance=ExtResource("4")]
 
 [node name="Music" type="Node" parent="."]
 process_mode = 1

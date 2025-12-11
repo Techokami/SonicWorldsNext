@@ -44,9 +44,6 @@ func _ready():
 	# and set loop parameters, but don't enable looping yet
 	$LevelClear/Counter.stream = $LevelClear/Counter.stream.duplicate()
 	$LevelClear/Counter.stream.loop_end = roundi($LevelClear/Counter.stream.mix_rate / (60.0 / 4))
-	# error prevention
-	if !Global.is_main_loaded:
-		return false
 	
 	# stop timer from counting during stage start up and set global hud to self
 	Global.timerActive = false
@@ -97,7 +94,11 @@ func _ready():
 	# replace "sonic" in stage clear to match the player clear string
 	$LevelClear/Passed.text = $LevelClear/Passed.text.replace("SONIC",characterNames[Global.PlayerChar1-1])
 	# set the act clear frame
-	$LevelClear/Act.frame = act-1
+	if act:
+		$LevelClear/Act.frame = act-1
+	else:
+		$LevelClear/Act.hide()
+		$LevelClear/Through.text += " zone"
 
 func _process(delta):
 	# set score string to match global score with leading 0s
@@ -116,7 +117,7 @@ func _process(delta):
 			timeText.text = "%2d'%02d\"%02d" % [hud_time_minutes,hud_time_seconds,hud_time_hundredths]
 	
 	# cehck that there's player, if there is then track the focus players ring count
-	if (Global.players.size() > 0):
+	if (Global.players):
 		ringText.text = "%3d" % Global.players[focusPlayer].rings
 	
 	# track lives with leading 0s
@@ -228,8 +229,9 @@ func _process(delta):
 			# wait 2 seconds (reuse timer)
 			$LevelClear/CounterWait.start(2)
 			await $LevelClear/CounterWait.timeout
-			# after clear, change to next level in Global.nextZone (you can set the next zone in the level script node)
-			Global.main.change_scene_to_file(Global.nextZone,"FadeOut","FadeOut",1)
+			# after clear, change to next level to Global.nextZone
+			Global.currentZone = Global.nextZone
+			Main.change_scene(Global.nextZone)
 	
 	# game over sequence
 	elif Global.gameOver and !gameOver:
@@ -250,12 +252,12 @@ func _process(delta):
 		await $GameOver/GameOver.animation_finished
 		# reset game
 		if Global.levelTime < Global.maxTime or Global.lives <= 0:
-			Global.main.change_scene_to_file(Global.startScene,"FadeOut")
-			await Global.main.scene_faded
-			Global.reset_values()
+			Main.change_scene(Global.startScene)
+			await Main.scene_faded
+			Global.reset_game_values()
 		# reset level (if time over and lives aren't out)
 		else:
-			Global.main.change_scene_to_file(null,"FadeOut")
+			Global.main.change_scene(null)
 			await Global.main.scene_faded
 			Global.levelTime = 0
 
