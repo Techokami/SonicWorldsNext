@@ -269,6 +269,17 @@ func _ready():
 		else:
 			Global.levelTime = 0
 	
+	if Global.bonusStageSavedTime:
+		# if bonusStageSavedTime is not 0, set player's stats to memory
+		global_position = Global.bonusStageSavedPosition
+		camera.global_position = global_position
+		rings = Global.bonusStageSavedRings
+		Global.levelTime = Global.bonusStageSavedTime
+		# Clear the memory
+		Global.bonusStageSavedPosition = Vector2.ZERO
+		Global.bonusStageSavedRings = 0
+		Global.bonusStageSavedTime = 0.0
+	
 	# Character settings
 	var avatar = playeravatars[0]
 	if character != Global.CHARACTERS.NONE:
@@ -1116,7 +1127,7 @@ func kill():
 	set_state(STATES.DIE,player_avatar.get_hitbox(HITBOXES.NORMAL))
 		
 	#if playerControl == 1:
-		#Global.main.sceneCanPause = false # stop the ability to pause
+		#Main.sceneCanPause = false # stop the ability to pause
 
 
 ## Makes a partner character re-enter the scene

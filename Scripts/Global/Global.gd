@@ -1,24 +1,34 @@
 extends Node
 
-# player pointers (0 is usually player 1)
+## player pointers (0 is usually player 1)
 var players: Array[PlayerChar] = []
-# main object reference
-var main = null
-# hud object reference
+## hud object reference
 var hud = null
-# checkpoint memory
-var checkPoints = []
-# reference for the current checkpoint
-var currentCheckPoint = -1
-# the current level time from when the checkpoint got hit
-var checkPointTime = 0
 
-# the starting room, this is loaded on game resets, you may want to change this
-var startScene = preload("res://Scene/Presentation/Title.tscn")
-var nextZone = load("res://Scene/Zones/BaseZone.tscn") # change this to the first level in the game (also set in "reset_values")
-# use this to store the current state of the room, changing scene will clear everythin
-var stageInstanceMemory = null
-var stageLoadMemory = null
+## checkpoint memory
+var checkPoints: Array = []
+## reference for the current checkpoint
+var currentCheckPoint: int = -1
+## the current level time when touching a Checkpoint
+var checkPointTime: float = 0
+
+## Special Stage/Bonus Stage room preservation
+## Saved position when touching a special ring
+var bonusStageSavedPosition: Vector2 = Vector2.ZERO
+## Ring count when touching a special ring
+var bonusStageSavedRings: int = 0
+## Saved time when touching a special ring
+var bonusStageSavedTime: float = 0
+## Memory of interacted objects from the current saved zone.
+var nodeMemory = []
+## TODO: Seperate memory for the special rings, they should not come back after dying.
+
+## the starting room, this is loaded on game resets, you may want to change this
+var startScene: String = "res://Scene/Presentation/Title.tscn"
+## Path to the current level, for returning from special stages.
+var currentZone: String = ""
+## Path to the first level in the game (set in "reset_game_values")
+var nextZone: String = ""
 
 # order for score combo
 const SCORE_COMBO = [1,2,3,4,4,4,4,4,4,4,4,4,4,4,4,5]
@@ -125,7 +135,7 @@ var character_names: Array = \
 	CHARACTERS.keys().map(func(char_name: String): return char_name.capitalize())
 
 var PlayerChar1: CHARACTERS = CHARACTERS.SONIC
-var PlayerChar2: CHARACTERS = CHARACTERS.TAILS
+var PlayerChar2: CHARACTERS = CHARACTERS.NONE
 
 # Level settings
 var hardBorderLeft   = -100000000
@@ -133,18 +143,11 @@ var hardBorderRight  =  100000000
 var hardBorderTop    = -100000000
 var hardBorderBottom =  100000000
 
-# Animal spawn type reference, see the level script for more information on the types
+## Animal spawn type reference, see the level script for more information on the types
 var animals: Array[Animal.ANIMAL_TYPE] = [Animal.ANIMAL_TYPE.BIRD, Animal.ANIMAL_TYPE.SQUIRREL]
 
-# emited when a stage gets started
+## emited when a stage gets started
 signal stage_started
-
-# Level memory
-# this value contains node paths and can be used for nodes to know if it's been collected from previous playthroughs
-# the only way to reset permanent memory is to reset the game, this is used primarily for special stage rings
-# Note: make sure you're not naming your level nodes the same thing, it's good practice but if the node's
-# share the same paths there can be some overlap and some nodes may not spawn when they're meant to
-var nodeMemory = []
 
 # Game settings
 var zoom_size = 1.0
@@ -167,21 +170,7 @@ func _ready():
 	soundChannel.bus = "SFX"
 	# load game data
 	load_settings()
-	
-	# check if main scene is root (prevents crashing if you started from another scene)
-	if !(get_tree().current_scene is MainGameScene):
-		get_tree().paused = true
-		# change scene root to main scene, keep current scene in memory
-		var loadNode = get_tree().current_scene.scene_file_path
-		var mainScene = load("res://Scene/Main.tscn").instantiate()
-		get_tree().root.call_deferred("remove_child",get_tree().current_scene)
-		#get_tree().root.current_scene.call_deferred("queue_free")
-		get_tree().root.call_deferred("add_child",mainScene)
-		mainScene.get_node("SceneLoader").get_child(0).nextScene = load(loadNode)
-		await get_tree().process_frame
-		get_tree().paused = false
-	is_main_loaded = true
-	
+
 
 func _process(delta):
 	# do a check for certain variables, if it's all clear then count the level timer up
@@ -191,21 +180,6 @@ func _process(delta):
 	if !get_tree().paused:
 		globalTimer += delta
 	
-
-## reset values, self explanatory, put any variables to their defaults in here
-func reset_values():
-	lives = 3
-	score = 0
-	continues = 0
-	levelTime = 0
-	emeralds = 0
-	specialStageID = 0
-	checkPoints = []
-	checkPointTime = 0
-	currentCheckPoint = -1
-	animals = [Animal.ANIMAL_TYPE.BIRD, Animal.ANIMAL_TYPE.SQUIRREL]
-	nodeMemory = []
-	nextZone = load("res://Scene/Zones/BaseZone.tscn")
 
 
 ## use this to play a sound globally, use load("res:..") or a preloaded sound

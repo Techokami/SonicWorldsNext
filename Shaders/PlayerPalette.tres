@@ -1,6 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://bveqi5m5ihsgj"]
-
-[ext_resource type="Texture2D" uid="uid://lv4qey45t23s" path="res://Graphics/Palettes/SuperSonicPal.png" id="2"]
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bveqi5m5ihsgj"]
 
 [sub_resource type="Shader" id="Shader_kwqyd"]
 code = "shader_type canvas_item;
@@ -44,4 +42,3 @@ shader_parameter/amount = 4.0
 shader_parameter/palRows = 16.0
 shader_parameter/row = 1.0
 shader_parameter/approximation = 0.0
-shader_parameter/paletteTexture = ExtResource("2")

@@ -65,5 +65,12 @@ func destroy():
 	explosion.global_position = global_position
 	# create animal
 	Animal.create(get_parent(), global_position)
+	# Remember I died. RIP.
+	Global.nodeMemory.append(get_path())
 	# free node
 	queue_free()
+
+## Check if the badnik was previously destroyed.
+func check_if_destroyed():
+	if Global.nodeMemory.has(get_path()):
+		queue_free()

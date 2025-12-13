@@ -2,7 +2,18 @@ extends Node2D
 
 
 @export var music: AudioStream = preload("res://Audio/Soundtrack/10. SWD_CharacterSelect.ogg")
-@export var nextZone = load("res://Scene/Zones/BaseZone.tscn")
+## level labels, the amount of labels here determines the total amount of options
+@export var levelLabels: Array[String] = [
+	"Base Zone Act 1",
+	"Base Zone Act 2",
+	"Emerald Hill Zone"
+]
+## The path to each zone in the Filesystem.
+@export var levelPaths: Array[String] = [
+	"res://Scene/Zones/BaseZone.tscn",
+	"res://Scene/Zones/BaseZoneAct2.tscn",
+	"res://Scene/Zones/emerald_hill_zone.tscn",
+]
 var selected = false
 
 const characters: Array[Dictionary] = [
@@ -16,9 +27,6 @@ const characters: Array[Dictionary] = [
 var characterID = 0
 # Used to toggle visibility of character sprites (initialized in `_ready()`)
 var characterSprites = []
-
-# level labels, the amount of labels in here determines the total amount of options, see set level option at the end for settings
-var levelLabels = ["Base Zone Act 1", "Base Zone Act 2"]#, "Chunk Zone Act 1"]
 # level id lines up with levelLabels
 var levelID = 0
 
@@ -33,8 +41,6 @@ func _ready():
 	MusicController.set_level_music(music)
 	$UI/Labels/Control/Character.text = characters[characterID].label
 	$UI/Labels/Control/MutliplayerMode.text = Global.MULTIMODE.find_key(Global.get_multimode())
-	if nextZone != null:
-		Global.nextZone = nextZone
 
 	for child in $UI/Labels/CharacterOrigin.get_children():
 		if child is Node2D or child is Sprite2D:
@@ -85,16 +91,10 @@ func _input(event):
 			Global.PlayerChar1 = characters[characterID].char1
 			Global.PlayerChar2 = characters[characterID].char2
 			
-			# set the level
-			match(levelID):
-				0: # Base Zone Act 1
-					Global.nextZone = load("res://Scene/Zones/BaseZone.tscn") # unnecessary since it's arleady set
-				1: # Base Zone Act 2
-					Global.nextZone = load("res://Scene/Zones/BaseZoneAct2.tscn") # Replace me! I don't exist yet!
-				#2: # Chunk Zone Act 1
-				#	Global.nextZone = load("res://Scene/Zones/ChunkZone.tscn")
 			
-			Global.main.change_scene_to_file(Global.nextZone,"FadeOut","FadeOut",1)
+			## Save the selected zone ID
+			Global.currentZone = levelPaths[levelID]
+			Main.change_scene(Global.currentZone,"FadeOut",1.0,true)
 			
 func change_multiplayer_mode():
 	Global.cycle_multimode()

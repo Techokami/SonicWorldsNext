@@ -1,7 +1,7 @@
 extends Node2D
 
 # next scene
-@export var nextScene = preload("res://Scene/Presentation/Title.tscn")
+@export var nextScene: String = "res://Scene/Presentation/Title.tscn"
 # already changed is used to check that the powered by isn't already being skipped
 var alreadyChanged = false
 
@@ -18,11 +18,11 @@ func _ready():
 		if !alreadyChanged:
 			alreadyChanged = true
 			$Warp.play()
-			Global.main.change_scene_to_file(nextScene,"FadeOut","FadeOut",1)
+			Main.change_scene(nextScene,"WhiteOut",1,false)
 
 func _input(event):
 	# check if start gets pressed
 	if event.is_action_pressed("gm_pause") and !alreadyChanged:
 		alreadyChanged = true # used so that room skipping isn't doubled
 		$Warp.play()
-		Global.main.change_scene_to_file(nextScene,"FadeOut","FadeOut",1)
+		Main.change_scene(nextScene,"WhiteOut",1,false)

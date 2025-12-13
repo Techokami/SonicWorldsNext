@@ -19,6 +19,8 @@ var coolDown = 0
 var fire = null
 
 func _ready():
+	# Check if the badnik was previously destroyed.
+	check_if_destroyed()
 	# clear fire if destroyed before shooting
 	var _con = connect("destroyed",Callable(self,"clear_fire"))
 

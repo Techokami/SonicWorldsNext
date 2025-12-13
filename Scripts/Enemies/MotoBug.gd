@@ -9,6 +9,8 @@ var animTime = 0
 var Particle = preload("res://Entities/Misc/GenericParticle.tscn")
 
 func _ready():
+	# Check if the badnik was previously destroyed.
+	check_if_destroyed()
 	defaultMovement = false
 	direction = -sign(scale.x)
 
