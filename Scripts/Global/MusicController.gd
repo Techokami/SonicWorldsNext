@@ -129,11 +129,11 @@ func play_music_theme(theme_id: MusicTheme) -> void:
 		return
 	
 	# pick other music themes with lower priority, so we can fade them out
-	var other_themes: Array[_MusicThemePlayer] = []
+	var lower_priority_themes: Array[_MusicThemePlayer] = []
 	for other_theme_id: MusicTheme in _music_theme_players:
 		var other_theme: _MusicThemePlayer = _music_theme_players[other_theme_id]
 		if other_theme.priority < priority:
-			other_themes.append(other_theme)
+			lower_priority_themes.append(other_theme)
 	
 	if prev_theme != null and prev_theme.play_status == _PlayStatus.PLAYING:
 		# this can be one of the following sitiations:
@@ -144,13 +144,13 @@ func play_music_theme(theme_id: MusicTheme) -> void:
 	elif not theme.fade_out_other_themes:
 		# if there's no fadeout, then we can simply mute
 		# all the other music that has lower priority
-		for other_theme: _MusicThemePlayer in other_themes:
+		for other_theme: _MusicThemePlayer in lower_priority_themes:
 			other_theme.volume_level -= 1.0
 	else:
 		# otherwise we need to gradually fade out
 		# all the other music themes with lower priority
 		theme.play_status = _PlayStatus.PRE_PLAY
-		await _fade_music_themes(other_themes, -1)
+		await _fade_music_themes(lower_priority_themes, -1)
 		# abort if `reset_music_themes()` was called
 		if _reset_music_themes_flag:
 			return
@@ -216,11 +216,11 @@ func play_music_theme(theme_id: MusicTheme) -> void:
 	
 	# fade all the other music back in
 	if not theme.fade_in_other_themes:
-		for other_theme: _MusicThemePlayer in other_themes:
+		for other_theme: _MusicThemePlayer in lower_priority_themes:
 			other_theme.volume_level += 1.0
 	else:
 		theme.play_status = _PlayStatus.POST_PLAY
-		await _fade_music_themes(other_themes, 1)
+		await _fade_music_themes(lower_priority_themes, 1)
 		# abort if `reset_music_themes()` was called
 		if _reset_music_themes_flag:
 			return
