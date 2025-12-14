@@ -13,6 +13,8 @@ var spinOffset = 0
 
 func _ready():
 	if !Engine.is_editor_hint():
+		# Check if the badnik was previously destroyed.
+		check_if_destroyed()
 		# make frame use the correct Orbinaut design
 		$orbinaut.frame = int(classicOrbi)*2
 		$Orb/orb.frame = 1+int(classicOrbi)*2

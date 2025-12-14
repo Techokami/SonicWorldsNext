@@ -1,6 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://hxji3lmrri4m"]
-
-[ext_resource type="Texture2D" uid="uid://dh6fghheeip4i" path="res://Graphics/Palettes/SuperTails.png" id="2_21ejt"]
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://hxji3lmrri4m"]
 
 [sub_resource type="Shader" id="Shader_kwqyd"]
 code = "shader_type canvas_item;
@@ -43,4 +41,3 @@ shader_parameter/amount = 8.0
 shader_parameter/palRows = 16.0
 shader_parameter/row = 1.0
 shader_parameter/approximation = 0.0
-shader_parameter/paletteTexture = ExtResource("2_21ejt")

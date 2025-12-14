@@ -1,0 +1,199 @@
+[gd_scene load_steps=16 format=3 uid="uid://d4chq0jb35u6n"]
+
+[ext_resource type="Texture2D" uid="uid://c6ryasbv2ai4j" path="res://Graphics/Backgrounds/EHZ_Parallax/EHZ_BG_A.png" id="1_npaq8"]
+[ext_resource type="Texture2D" uid="uid://bmwj34rjk7fax" path="res://Graphics/Backgrounds/EHZ_Parallax/EHZ_BG_B.png" id="2_xgb6m"]
+[ext_resource type="Texture2D" uid="uid://c563upleto6tq" path="res://Graphics/Backgrounds/EHZ_Parallax/EHZ_BG_C.png" id="3_5g6t2"]
+[ext_resource type="Texture2D" uid="uid://1lk6epl2ldi0" path="res://Graphics/Backgrounds/EHZ_Parallax/EHZ_BG_D.png" id="4_o14y8"]
+[ext_resource type="Texture2D" uid="uid://d1nr3hf6jmky0" path="res://Graphics/Backgrounds/EHZ_Parallax/EHZ_BG_E.png" id="5_0geg8"]
+[ext_resource type="Texture2D" uid="uid://borqbrsqplutu" path="res://Graphics/Backgrounds/EHZ_Parallax/EHZ_BG_F.png" id="6_11mpl"]
+[ext_resource type="Texture2D" uid="uid://bnjhsc0qdl5y5" path="res://Graphics/Backgrounds/EHZ_Parallax/EHZ_BG_G.png" id="7_7s307"]
+[ext_resource type="Texture2D" uid="uid://c5xhvlmk0uoec" path="res://Graphics/Backgrounds/EHZ_Parallax/EHZ_BG_H.png" id="8_hvu78"]
+[ext_resource type="Texture2D" uid="uid://cy20mcq6cmagk" path="res://Graphics/Backgrounds/EHZ_Parallax/EHZ_BG_I.png" id="9_je0l6"]
+[ext_resource type="Texture2D" uid="uid://n6p1b1elaxbt" path="res://Graphics/Backgrounds/EHZ_Parallax/EHZ_BG_J.png" id="10_mse8f"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yb4tg"]
+atlas = ExtResource("2_xgb6m")
+region = Rect2(0, 0, 512, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tp0qf"]
+atlas = ExtResource("2_xgb6m")
+region = Rect2(0, 48, 512, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jvrtk"]
+atlas = ExtResource("2_xgb6m")
+region = Rect2(0, 96, 512, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dsmtw"]
+atlas = ExtResource("2_xgb6m")
+region = Rect2(0, 144, 512, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_yj1oj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yb4tg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tp0qf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jvrtk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dsmtw")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="EHZ_Parallax" type="ParallaxBackground"]
+scroll_base_scale = Vector2(1, 0.05)
+scroll_limit_end = Vector2(0, 256)
+
+[node name="ParallaxLayerAB" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.01, 1)
+motion_mirroring = Vector2(512, 0)
+
+[node name="SkyBox" type="TextureRect" parent="ParallaxLayerAB"]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_npaq8")
+stretch_mode = 1
+
+[node name="AnimatedLake" type="AnimatedSprite2D" parent="ParallaxLayerAB"]
+position = Vector2(256, 104)
+sprite_frames = SubResource("SpriteFrames_yj1oj")
+autoplay = "default"
+frame_progress = 0.405603
+
+[node name="ParallaxLayerC" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.25, 1)
+motion_mirroring = Vector2(512, 0)
+
+[node name="RollingHills" type="TextureRect" parent="ParallaxLayerC"]
+offset_top = 120.0
+offset_right = 512.0
+offset_bottom = 152.0
+texture = ExtResource("3_5g6t2")
+stretch_mode = 1
+
+[node name="ParallaxLayerD" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.3, 1)
+motion_mirroring = Vector2(512, 0)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxLayerD"]
+offset_top = 152.0
+offset_right = 512.0
+offset_bottom = 160.0
+texture = ExtResource("4_o14y8")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="ParallaxLayerE" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.325, 1)
+motion_mirroring = Vector2(512, 0)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxLayerE"]
+offset_top = 160.0
+offset_right = 512.0
+offset_bottom = 168.0
+texture = ExtResource("5_0geg8")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="ParallaxLayerF" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.35, 1)
+motion_mirroring = Vector2(512, 0)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxLayerF"]
+offset_top = 168.0
+offset_right = 512.0
+offset_bottom = 176.0
+texture = ExtResource("6_11mpl")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="ParallaxLayerG" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.4, 1)
+motion_mirroring = Vector2(512, 0)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxLayerG"]
+offset_top = 176.0
+offset_right = 512.0
+offset_bottom = 184.0
+texture = ExtResource("7_7s307")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="ParallaxLayerH" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.45, 1)
+motion_mirroring = Vector2(512, 0)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxLayerH"]
+offset_top = 184.0
+offset_right = 512.0
+offset_bottom = 192.0
+texture = ExtResource("8_hvu78")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="ParallaxLayerI" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.5, 1)
+motion_mirroring = Vector2(512, 0)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxLayerI"]
+offset_top = 192.0
+offset_right = 512.0
+offset_bottom = 200.0
+texture = ExtResource("9_je0l6")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="ParallaxLayerJ" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.55, 1)
+motion_mirroring = Vector2(512, 0)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxLayerJ"]
+offset_top = 200.0
+offset_right = 512.0
+offset_bottom = 216.0
+texture = ExtResource("10_mse8f")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="ParallaxLayerJ2" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.6, 1)
+motion_mirroring = Vector2(512, 0)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxLayerJ2"]
+offset_top = 216.0
+offset_right = 512.0
+offset_bottom = 232.0
+texture = ExtResource("10_mse8f")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="ParallaxLayerJ3" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.7, 1)
+motion_mirroring = Vector2(512, 0)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxLayerJ3"]
+offset_top = 232.0
+offset_right = 512.0
+offset_bottom = 248.0
+texture = ExtResource("10_mse8f")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="ParallaxLayerJ4" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.8, 1)
+motion_mirroring = Vector2(512, 0)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxLayerJ4"]
+offset_top = 248.0
+offset_right = 512.0
+offset_bottom = 264.0
+texture = ExtResource("10_mse8f")
+expand_mode = 1
+stretch_mode = 1

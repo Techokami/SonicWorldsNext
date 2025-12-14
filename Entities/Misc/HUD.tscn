@@ -831,7 +831,8 @@ vframes = 2
 [node name="PatternLeft" type="Control" parent="LevelCard"]
 anchors_preset = 0
 anchor_bottom = 1.0
-offset_bottom = 14816.0
+offset_top = -32.0
+offset_bottom = 14784.0
 
 [node name="PatternLeft" type="TextureRect" parent="LevelCard/PatternLeft"]
 layout_mode = 1
@@ -866,7 +867,7 @@ anchor_right = 1.0
 anchor_bottom = 0.003
 offset_left = -32.0
 offset_top = -12.352
-offset_right = 5152.0
+offset_right = 5216.0
 offset_bottom = 243.648
 grow_horizontal = 0
 grow_vertical = 2
@@ -874,11 +875,11 @@ texture = ExtResource("10_xpi0a")
 stretch_mode = 1
 
 [node name="CardMover" type="AnimationPlayer" parent="LevelCard"]
+process_mode = 1
 libraries = {
 "": SubResource("AnimationLibrary_15hsr")
 }
 autoplay = "Slider"
-speed_scale = 4.0
 
 [node name="CardPlayer" type="AnimationPlayer" parent="LevelCard"]
 libraries = {

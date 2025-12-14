@@ -5,7 +5,6 @@ var timer = 0
 var active = false
 
 var player: PlayerChar = null
-var maskMemory = []
 
 func _ready() -> void:
 	# check that the current ring hasn't already been collected and all 7 emeralds aren't collected
@@ -29,69 +28,17 @@ func _process(delta: float) -> void:
 			# when entering special stage
 			player.airTimer = player.defaultAirTime
 			
-			# set next zone to current zone (this will reset when the stage is loaded back in)
-			Global.nextZone = Global.main.lastScene
+			Global.bonusStageSavedPosition = global_position
+			Global.bonusStageSavedRings = player.rings
+			Global.bonusStageSavedTime = Global.levelTime
 			
-			# add ring to node memory so you can't farm the ring
+			# Mark as destroyed
 			Global.nodeMemory.append(get_path())
 			
 			# fade to new scene
-			Global.main.change_scene_to_file(load("res://Scene/SpecialStage/SpecialStageResult.tscn"),"WhiteOut","WhiteOut",1,true,false)
+			Main.change_scene("res://Scene/SpecialStage/SpecialStageResult.tscn","WhiteOut",1,false)
 			# wait for scene to fade
-			await Global.main.scene_faded
-			
-			if player != null:
-				# set player's position to rings (and player 2)
-				# helps sell the illusion that we reset the room
-				player.global_position = global_position
-				player.direction = 1
-				# Remember to give the player's air back, they might have been under water
-				# imagine if you were underwater and got sucked into another dimension only for when
-				# you get back you immediately drown.
-				# That's happened in real life plenty of times they just never tell you about it
-				# mostly because the people this has happened to have drowned.
-				# But this is Sonic the Hedgehog and not real life so this unrealistic change is fine
-				player.airTimer = player.defaultAirTime
-				
-				# check for partner
-				var partner: PlayerChar = player.get_partner()
-				if partner != null:
-					partner.global_position = global_position+Vector2(-32,0)
-					partner.direction = 1
-					partner.movement = Vector2.ZERO
-					partner.velocity = Vector2.ZERO
-					# reset state
-					partner.set_state(player.partner.STATES.NORMAL)
-					# play idle
-					partner.get_avatar().get_animator().play("idle")
-					# reset the partners air, imagine if you came home and from another dimension and-
-					partner.airTimer = player.partner.defaultAirTime
-				
-				# reset invincibility and shoes (or super low so they player can exit these states normally)
-				player.supTime = min(player.supTime,0.01)
-				player.shoeTime = min(player.supTime,0.01)
-				# reset super phase
-				if player.isSuper:
-					player.isSuper = false
-					if is_instance_valid(player.superAnimator):
-						player.superAnimator.play("PowerDown")
-				# reset super sonic texture
-				var player_avatar: PlayerAvatar = player.get_avatar()
-				if player_avatar.super_sprite != null:
-					player.sprite.texture = player_avatar.normal_sprite
-				# reset physics
-				player.switch_physics()
-				player.visible = true
-				# reset state
-				player.set_state(player.STATES.NORMAL)
-				# play idle
-				player.get_avatar().get_animator().play("idle")
-				
-				if maskMemory.size() > 0:
-					player.collision_layer = maskMemory[0]
-					player.collision_mask = maskMemory[1]
-				Global.timerActive = true
-				queue_free()
+			await Main.scene_faded
 	# Spinning ring logic
 	else:
 		# loop the spawn animation
@@ -111,9 +58,6 @@ func _on_Hitbox_body_entered(player_entered: PlayerChar) -> void:
 			player_entered.movement = Vector2.ZERO
 			# set players state to animation so nothing takes them out of it
 			player_entered.set_state(player_entered.STATES.GIMMICK)
-			# set player collision layer and mask to nothing to avoid collissions
-			maskMemory.append(player_entered.collision_layer)
-			maskMemory.append(player_entered.collision_mask)
 			player_entered.collision_layer = 0
 			player_entered.collision_mask = 0
 			self.player = player_entered

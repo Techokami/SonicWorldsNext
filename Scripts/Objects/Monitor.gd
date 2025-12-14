@@ -74,6 +74,9 @@ func _ready():
 
 	# set item frame
 	_set_item_frame()
+	#Outside of Editor mode, if the monitor was already broken, set as destroyed.
+	if !in_editor and Global.nodeMemory.has(get_path()):
+		set_destroyed()
 
 func destroy():
 	# skip if not activated
@@ -87,6 +90,8 @@ func destroy():
 	# deactivate
 	isActive = false
 	physics = false
+	# Mark as destroyed
+	Global.nodeMemory.append(get_path())
 	
 	# set item to have a high Z index so it overlays a lot
 	$Item.z_index += 1000
@@ -128,6 +133,12 @@ func destroy():
 			playerTouch.hit_player(playerTouch.global_position, Global.HAZARDS.NORMAL, 9, true)
 		ITEMS.HYPER_RING:
 			playerTouch.hyper_ring = true
+
+func set_destroyed():
+	# deactivate
+	isActive = false
+	physics = false
+	$Animator.play("DestroyMonitor")
 
 func _physics_process(delta):
 	# if physics are on make em fall

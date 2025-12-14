@@ -1,4 +1,3 @@
-@tool
 extends CanvasLayer
 
 static var tick_looped: AudioStreamWAV = null
@@ -41,23 +40,21 @@ var accumulatedDelta = 0.0
 signal tally_clear
 
 func _ready():
-	var in_editor: bool = Engine.is_editor_hint()
-	if !in_editor:
-		# create a new stream for the tick sound (so the original stream
-		# will remain unchanged, as it's also used by the switch gimmick),
-		# and set loop parameters, but don't enable looping yet
-		if tick_looped == null:
-			assert($LevelClear/Counter.stream is AudioStreamWAV)
-			tick_looped = $LevelClear/Counter.stream.duplicate()
-			tick_looped.loop_end = roundi(tick_looped.mix_rate / (60.0 / 4))
-		$LevelClear/Counter.stream = tick_looped
+	# create a new stream for the tick sound (so the original stream
+	# will remain unchanged, as it's also used by the switch gimmick),
+	# and set loop parameters, but don't enable looping yet
+	if tick_looped == null:
+		assert($LevelClear/Counter.stream is AudioStreamWAV)
+		tick_looped = $LevelClear/Counter.stream.duplicate()
+		tick_looped.loop_end = roundi(tick_looped.mix_rate / (60.0 / 4))
+	$LevelClear/Counter.stream = tick_looped
 	# load character icons
 	# (if we are in the editor, only load the icon for the 1'st character
 	# from the list, as the other icons won't be shown in the editor anyway)
 	if lives_textures.is_empty():
 		var char_names: Array = Global.CHARACTERS.keys()
 		var num_characters: int = char_names.size()
-		lives_textures.resize(1 if in_editor else num_characters)
+		lives_textures.resize(num_characters)
 		# replace "NONE" with the name of the 1'st character from the list,
 		# for development purposes (e.g. when we implement a new game mode
 		# and PlayerChar1 is not set, so Godot won't throw a ton of errors)
@@ -65,19 +62,8 @@ func _ready():
 		# load the icons
 		for i: int in num_characters:
 			lives_textures[i] = load("res://Graphics/HUD/hud_lives_%s.png" % char_names[i].to_lower()) as Texture2D
-			if in_editor:
-				$LifeCounter/Icon.texture = lives_textures[0]
-				break
-	if in_editor:
-		set_process(false)
-		return
-
-	# error prevention
-	if Engine.is_editor_hint():
-		return
-
-	if !Global.is_main_loaded:
-		return
+			$LifeCounter/Icon.texture = lives_textures[0]
+			
 	
 	# stop timer from counting during stage start up and set global hud to self
 	Global.timerActive = false
@@ -87,8 +73,6 @@ func _ready():
 	life_icon.texture = lives_textures[Global.PlayerChar1]
 	life_icon.material = Global.get_material_for_character(Global.PlayerChar1)
 
-		
-	
 	# play level card routine if level card is true
 	if playLevelCard:
 		# set level card
@@ -134,9 +118,6 @@ func _ready():
 	$LevelClear/Act.frame = act-1
 
 func _process(delta):
-	if Engine.is_editor_hint():
-		return
-			
 	# set score string to match global score with leading 0s
 	scoreText.text = "%6d" % Global.score
 	
@@ -233,6 +214,7 @@ func _process(delta):
 		# initialize stage clear sequence
 		if !isStageEnding:
 			isStageEnding = true
+			Global.currentZone = Global.nextZone
 
 			# reset air in case we are under water
 			_reset_air()
@@ -277,7 +259,7 @@ func _process(delta):
 			$LevelClear/CounterWait.start(2)
 			await $LevelClear/CounterWait.timeout
 			# after clear, change to next level in Global.nextZone (you can set the next zone in the level script node)
-			Global.main.change_scene_to_file(Global.nextZone,"FadeOut","FadeOut",1)
+			Main.change_scene(Global.nextZone)
 	
 	# game over sequence
 	elif Global.gameOver and !gameOver:
@@ -295,13 +277,13 @@ func _process(delta):
 		await $GameOver/GameOver.animation_finished
 		# reset game
 		if Global.levelTime < Global.maxTime or Global.lives <= 0:
-			Global.main.change_scene_to_file(Global.startScene,"FadeOut")
-			await Global.main.scene_faded
-			Global.reset_values()
+			Main.change_scene(Global.startScene,"FadeOut")
+			await Main.scene_faded
+			Main.reset_values()
 		# reset level (if time over and lives aren't out)
 		else:
-			Global.main.change_scene_to_file(null,"FadeOut")
-			await Global.main.scene_faded
+			Main.change_scene(Global.currentZone,"FadeOut")
+			await Main.scene_faded
 			Global.levelTime = 0
 
 func _reset_air():

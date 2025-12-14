@@ -1,7 +1,6 @@
-[gd_scene load_steps=80 format=4 uid="uid://hj3tt0gklwba"]
+[gd_scene load_steps=79 format=4 uid="uid://hj3tt0gklwba"]
 
 [ext_resource type="Script" path="res://Scripts/Level/Level.gd" id="2"]
-[ext_resource type="PackedScene" uid="uid://bjavywoj00j1j" path="res://Scene/Zones/BaseZoneAct2.tscn" id="2_8ek7k"]
 [ext_resource type="PackedScene" uid="uid://c30uceea18q1w" path="res://Entities/Misc/HUD.tscn" id="3_hkybi"]
 [ext_resource type="Texture2D" uid="uid://bemwlrblbgn23" path="res://Graphics/Backgrounds/WorldsBackground.png" id="4_ich6n"]
 [ext_resource type="PackedScene" uid="uid://cioq5saowvqxj" path="res://Entities/MainObjects/Player.tscn" id="5_tgx6m"]
@@ -131,7 +130,7 @@ size = Vector2(64, 8)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2ojop"]
 size = Vector2(256, 16)
 
-[sub_resource type="Shader" id="Shader_t3rst"]
+[sub_resource type="Shader" id="Shader_t4wxw"]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 uniform float amount : hint_range(1,255,1);
@@ -169,7 +168,7 @@ void fragment(){
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nnlca"]
 resource_local_to_scene = true
-shader = SubResource("Shader_t3rst")
+shader = SubResource("Shader_t4wxw")
 shader_parameter/amount = 4.0
 shader_parameter/palRows = 16.0
 shader_parameter/row = 9.0
@@ -178,7 +177,7 @@ shader_parameter/paletteTexture = ExtResource("35_fob2u")
 
 [node name="BaseZone" type="Node2D"]
 script = ExtResource("2")
-nextZone = ExtResource("2_8ek7k")
+nextZone = "res://Scene/Zones/BaseZoneAct2.tscn"
 animal1 = 2
 animal2 = 3
 defaultLeftBoundry = 0
@@ -215,7 +214,7 @@ region_rect = Rect2(0, 0, 512, 512)
 [node name="Players" type="Node" parent="."]
 
 [node name="Player" parent="Players" instance=ExtResource("5_tgx6m")]
-position = Vector2(4255, 838)
+position = Vector2(120, 744)
 
 [node name="AltSpawn" type="Node2D" parent="Players"]
 position = Vector2(896, 1486)

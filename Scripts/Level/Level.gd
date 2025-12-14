@@ -2,7 +2,7 @@ class_name Level extends Node2D
 
 @export var music: AudioStream = preload("res://Audio/Soundtrack/6. SWD_TLZa1.ogg")
 @export var music_alt: AudioStream = null
-@export var nextZone = load("res://Scene/Zones/BaseZone.tscn")
+@export var nextZone: String = "res://Scene/Zones/BaseZone.tscn"
 
 @export var animal1: Animal.ANIMAL_TYPE = Animal.ANIMAL_TYPE.BIRD
 @export var animal2: Animal.ANIMAL_TYPE = Animal.ANIMAL_TYPE.SQUIRREL
@@ -18,17 +18,7 @@ class_name Level extends Node2D
 @export var setDefaultBottom = true
 @export var defaultBottomBoundry = 100000000
 
-# was loaded is used for room loading, this can prevent overwriting global information, see Global.gd for more information on scene loading
-var wasLoaded = false
-
 func _ready():
-	# debuging
-	if !Global.is_main_loaded:
-		return false
-	# skip if scene was loaded
-	if wasLoaded:
-		return false
-	
 	if setDefaultLeft:
 		Global.hardBorderLeft  = defaultLeftBoundry
 	if setDefaultRight:
@@ -39,9 +29,6 @@ func _ready():
 		Global.hardBorderBottom  = defaultBottomBoundry
 	
 	level_reset_data(false)
-	
-	wasLoaded = true
-	
 	Global.set_level(self)
 
 # used for stage starts, also used for returning from special stages
@@ -51,12 +38,10 @@ func level_reset_data(playCard = true):
 	if music != null:
 		MusicController.set_level_music(music, music_alt)
 	# set next zone
-	if nextZone != null:
-		Global.nextZone = nextZone
+	Global.nextZone = nextZone
 	
 	# set pausing to true
-	if Global.main != null:
-		Global.main.sceneCanPause = true
+	Main.sceneCanPause = true
 	# set animals
 	Global.animals = [animal1,animal2]
 	# if global hud and play card, run hud ready script
