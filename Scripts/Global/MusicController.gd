@@ -150,7 +150,7 @@ func play_music_theme(theme_id: MusicTheme) -> void:
 		# otherwise we need to gradually fade out
 		# all the other music themes with lower priority
 		theme.play_status = _PlayStatus.PRE_PLAY
-		await _fade_music_themes(lower_priority_themes, -1)
+		await _fade_music_themes(lower_priority_themes, -1.0)
 		# abort if `reset_music_themes()` was called
 		if _reset_music_themes_flag:
 			return
@@ -199,8 +199,8 @@ func play_music_theme(theme_id: MusicTheme) -> void:
 		# we need to fade out the theme
 		if theme.fade_when_stopped and theme.play_status == _PlayStatus.POST_PLAY:
 			if theme_id == MusicTheme.LEVEL_THEME:
-				_fade_music_themes([_level_theme_alt_player], -1)
-			await _fade_music_themes([theme], -1)
+				_fade_music_themes([_level_theme_alt_player], -1.0)
+			await _fade_music_themes([theme], -1.0)
 			# abort if `reset_music_themes()` was called
 			if _reset_music_themes_flag:
 				return
@@ -220,7 +220,7 @@ func play_music_theme(theme_id: MusicTheme) -> void:
 			other_theme.volume_level += 1.0
 	else:
 		theme.play_status = _PlayStatus.POST_PLAY
-		await _fade_music_themes(lower_priority_themes, 1)
+		await _fade_music_themes(lower_priority_themes, 1.0)
 		# abort if `reset_music_themes()` was called
 		if _reset_music_themes_flag:
 			return
@@ -361,7 +361,7 @@ func _create_music_theme(
 	add_child(theme)
 	return theme
 
-func _fade_music_themes(themes: Array[_MusicThemePlayer], _sign: int) -> void:
+func _fade_music_themes(themes: Array[_MusicThemePlayer], direction: float) -> void:
 	var tree: SceneTree = get_tree()
 	var physics_frame: Signal = tree.physics_frame
 	var volume_step: float
@@ -393,7 +393,7 @@ func _fade_music_themes(themes: Array[_MusicThemePlayer], _sign: int) -> void:
 		if total_volume_change >= 1.0:
 			keep_fading = false # this will be the last iteration
 			volume_step -= total_volume_change - 1.0 # compensate for the "overflow"
-		volume_step *= _sign
+		volume_step *= direction
 		# change the voulme for all specified themes
 		for theme: _MusicThemePlayer in themes:
 			theme.volume_level += volume_step
