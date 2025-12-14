@@ -55,13 +55,18 @@ func _physics_process(delta):
 				var player = Global.players[0]
 				
 				# set scale based on direction
-				if sign(global_position.x-player.global_position.x) != 0:
-					$orbinaut.scale.x = sign(global_position.x-player.global_position.x)
+				var direction: float = signf(global_position.x-player.global_position.x)
+				if direction != 0:
+					$orbinaut.scale.x = direction
 				
 				# do movement
-				velocity.x = moveSpeed*$orbinaut.scale.x*abs(sign(player.movement.x*int(player.ground)))
+				velocity.x = moveSpeed*$orbinaut.scale.x if (player.movement.x != 0.0 and player.ground) else 0.0
 				
-				spinOffset += speed*5*delta*sign(abs(velocity.x))*$orbinaut.scale.x
-				for i in range(orbList.size()):
-					var getOrb = orbList[i]
-					getOrb.position = (Vector2.RIGHT*distance).rotated(deg_to_rad(spinOffset+((360.0/orbs)*i)))
+				# update orb positions, but only if the player is on ground and moving
+				# (velocity.x != 0.0), or if the orbs are at their initial position
+				# (which means they were never updated since their creation)
+				if velocity.x != 0.0 or orbList[0].position == orbList[1].position:
+					spinOffset += speed*5*delta*sign(abs(velocity.x))*$orbinaut.scale.x
+					for i in range(orbList.size()):
+						var getOrb = orbList[i]
+						getOrb.position = (Vector2.RIGHT*distance).rotated(deg_to_rad(spinOffset+((360.0/orbs)*i)))

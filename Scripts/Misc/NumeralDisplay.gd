@@ -34,4 +34,4 @@ func _draw():
 		if charID != -1:
 			draw_texture_rect_region(texture,
 				Rect2(Vector2(getRes.x*i,0),getRes),
-				Rect2(Vector2(fmod(charID,hframes)*getRes.x,floor(charID/hframes)*getRes.y),getRes))
+				Rect2(Vector2(fmod(charID,hframes),floor(charID/hframes))*getRes,getRes))

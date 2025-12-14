@@ -242,6 +242,7 @@ func _ready():
 	
 	# verify that we are player 1
 	if playerControl == 1:
+		character = Global.PlayerChar1
 		# input memory
 		for _i in range(INPUT_MEMORY_LENGTH):
 			inputMemory.append(inputs.duplicate(true))
@@ -255,19 +256,17 @@ func _ready():
 			partner.partner = self
 			partner.character = Global.PlayerChar2
 			partner.inputActions = INPUTACTIONS_P2
-		
-		# set my character - Uh... isn't this going to work on player 2 as well?
-		character = Global.PlayerChar1
 	
 	# Checkpoints
 	await get_tree().process_frame
+	Global.levelTime = 0.0
 	for i in Global.checkPoints:
 		if Global.currentCheckPoint == i.checkPointID:
-			global_position = i.global_position+Vector2(0,8)
-			camera.global_position = i.global_position+Vector2(0,8)
+			var pos: Vector2 = i.global_position+Vector2(0.0,8.0)
+			global_position = pos
+			camera.global_position = pos
 			Global.levelTime = Global.checkPointTime
-		else:
-			Global.levelTime = 0
+			break
 	
 	if Global.bonusStageSavedTime:
 		# if bonusStageSavedTime is not 0, set player's stats to memory
@@ -511,8 +510,9 @@ func _process(delta):
 	#Rotating stars
 	if ($InvincibilityBarrier.visible):
 		var stars = $InvincibilityBarrier.get_children()
+		var rot_angle: float = deg_to_rad(360.0*delta*4.0)
 		for i in stars:
-			i.position = i.position.rotated(deg_to_rad(360*delta*4))
+			i.position = i.position.rotated(rot_angle)
 			i.visible = visible
 
 		if (fmod(Global.globalTimer,0.1)+delta > 0.1) and visible:

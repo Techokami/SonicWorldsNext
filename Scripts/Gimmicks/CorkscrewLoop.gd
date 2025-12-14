@@ -17,14 +17,13 @@ func _ready():
 	# set initial positions for arrays
 	$EnteranceR.position.x += $Corkscrew.texture.get_width()*(length-1)
 	if !Engine.is_editor_hint():
-		for i in length:
-			if i > 0:
-				var corkBG = $Corkscrew.duplicate()
-				var corkFG = $CorkscrewFG.duplicate()
-				add_child(corkBG)
-				add_child(corkFG)
-				corkBG.position.x += corkBG.texture.get_width()*i
-				corkFG.position.x += corkFG.texture.get_width()*i
+		for i in range(1,length):
+			var corkBG = $Corkscrew.duplicate()
+			var corkFG = $CorkscrewFG.duplicate()
+			add_child(corkBG)
+			add_child(corkFG)
+			corkBG.position.x += corkBG.texture.get_width()*i
+			corkFG.position.x += corkFG.texture.get_width()*i
 
 func _process(_delta):
 	if Engine.is_editor_hint():
