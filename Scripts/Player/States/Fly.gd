@@ -127,14 +127,14 @@ func state_physics_process(delta: float) -> void:
 	
 	flightTime -= delta
 	# Button press
-	if parent.movement.y >= -1.0*60.0 and flightTime > 0.0 and !parent.roof and parent.position.y >= parent.camera.target_limit_top+16.0:
+	if parent.movement.y >= -1.0*60.0 and flightTime > 0.0 and !parent.roof and parent.position.y >= parent.get_camera().target_limit_top+16.0:
 		if parent.any_action_held_or_pressed() and (!actionPressed or parent.get_y_input() < 0) and (carryBox.get_player_contacting_count() == 0 or !parent.water):
 			flyGrav = -0.125
 	# return gravity to normal after velocity is less then -1
 	else:
 		flyGrav = 0.03125
 	
-	if parent.position.y < parent.camera.target_limit_top+16.0:
+	if parent.position.y < parent.get_camera().target_limit_top+16.0:
 		parent.movement.y = max(0,parent.movement.y)
 	
 	# set actionPressed to prevent input repeats

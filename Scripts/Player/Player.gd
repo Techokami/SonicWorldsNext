@@ -91,7 +91,10 @@ var centerReference = null # center reference is a center reference point used f
 var lastActiveAnimation = ""
 var defaultSpriteOffset = Vector2.ZERO
 
-@onready var camera: PlayerCamera = PlayerCamera.new(self)
+@onready var _camera: PlayerCamera = PlayerCamera.new(self):
+	get = get_camera
+func get_camera() -> PlayerCamera:
+	return _camera
 
 var rotatableSprites = ["walk", "run", "peelOut", "hammerSwing"]
 var direction = scale.x
@@ -230,7 +233,7 @@ func _ready():
 	for i in Global.checkPoints:
 		if Global.currentCheckPoint == i.checkPointID:
 			global_position = i.global_position+Vector2(0,8)
-			camera.global_position = i.global_position+Vector2(0,8)
+			_camera.global_position = i.global_position+Vector2(0.0,8.0)
 			Global.levelTime = Global.checkPointTime
 		else:
 			Global.levelTime = 0
@@ -238,7 +241,7 @@ func _ready():
 	if Global.bonusStageSavedTime:
 		# if bonusStageSavedTime is not 0, set player's stats to memory
 		global_position = Global.bonusStageSavedPosition
-		camera.global_position = global_position
+		_camera.global_position = global_position
 		rings = Global.bonusStageSavedRings
 		Global.levelTime = Global.bonusStageSavedTime
 		# Clear the memory
@@ -609,17 +612,17 @@ func _physics_process(delta):
 		pushingWall -= sign(pushingWall)
 	
 	# Camera settings
-	camera.finalize(delta)
+	_camera.finalize(delta)
 	
 	# Death at border bottom
-	if global_position.y > camera.target_limit_bottom:
+	if global_position.y > _camera.target_limit_bottom:
 		kill()
 	
 	# Stop movement at borders
-	if (global_position.x < camera.target_limit_left+cameraMargin or global_position.x > camera.target_limit_right-cameraMargin):
+	if (global_position.x < _camera.target_limit_left+cameraMargin or global_position.x > _camera.target_limit_right-cameraMargin):
 		movement.x = 0
 	# Clamp position
-	global_position.x = clampf(global_position.x,camera.target_limit_left+cameraMargin,camera.target_limit_right-cameraMargin)
+	global_position.x = clampf(global_position.x,_camera.target_limit_left+cameraMargin,_camera.target_limit_right-cameraMargin)
 	
 	
 	# center offsets (only moves hitbox if the centers moved)
@@ -1031,10 +1034,10 @@ func respawn() -> void:
 	# update physics (prevents player having water physics on respawn)
 	switch_physics()
 	global_position = partner.global_position+Vector2(0,-get_viewport_rect().size.y)
-	camera.target_limit_left = partner.camera.target_limit_left
-	camera.target_limit_right = partner.camera.target_limit_right
-	camera.target_limit_top = partner.camera.target_limit_top
-	camera.target_limit_bottom = partner.camera.target_limit_bottom
+	_camera.target_limit_left = partner._camera.target_limit_left
+	_camera.target_limit_right = partner._camera.target_limit_right
+	_camera.target_limit_top = partner._camera.target_limit_top
+	_camera.target_limit_bottom = partner._camera.target_limit_bottom
 	
 	set_state(STATES.RESPAWN)
 
@@ -1166,7 +1169,7 @@ func action_jump(animation = "roll", air_jump_control : bool = true, play_sound 
 		if play_sound:
 			sfx[0].play()
 		airControl = air_jump_control
-		camera.drag_lerp = 1.0
+		_camera.drag_lerp = 1.0
 		disconnect_from_floor()
 		set_state(STATES.JUMP)
 

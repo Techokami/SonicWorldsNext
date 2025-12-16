@@ -38,7 +38,7 @@ func state_process(delta: float) -> void:
 		parent.set_state(parent.STATES.ROLL)
 		
 		# Lock camera
-		parent.camera.lock((parent.spindashPower+8.0)/60.0)
+		parent.get_camera().lock((parent.spindashPower+8.0)/60.0)
 		
 		animator.play("roll")
 	

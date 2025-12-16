@@ -57,7 +57,7 @@ func state_process(_delta: float) -> void:
 			parent.spindashPower = 0
 			animator.play("spinDash")
 			parent.set_state(parent.STATES.SPINDASH)
-			parent.camera.drag_lerp = 1.0
+			parent.get_camera().drag_lerp = 1.0
 		else:
 			# reset animations
 			parent.action_jump()
@@ -179,7 +179,7 @@ func state_physics_process(delta: float) -> void:
 		# set direction
 		parent.sprite.flip_h = (parent.direction < 0)
 		if parent.movement.x == 0 and parent.lastActiveAnimation != "glideGetUp" and parent.ground:
-			parent.camera.drag_lerp = 1.0
+			parent.get_camera().drag_lerp = 1.0
 			parent.set_predefined_hitbox(PlayerChar.HITBOXES.NORMAL)
 			animator.play("glideGetUp")
 			# wait for animation to finish and check that the state is still the same

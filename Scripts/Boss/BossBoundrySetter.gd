@@ -36,13 +36,13 @@ func _on_BoundrySetter_body_entered(_body: PlayerChar):
 				# Check if set boundry is true, if it is then set the camera's boundries for each player
 				for i in Global.players:
 					if lockLeft:
-						i.camera.target_limit_left = maxf(global_position.x-screenSize.x/2.0,Global.hardBorderLeft)
+						i.get_camera().target_limit_left = maxf(global_position.x-screenSize.x/2.0,Global.hardBorderLeft)
 					if lockTop:
-						i.camera.target_limit_top = maxf(global_position.y-screenSize.y/2.0,Global.hardBorderTop)
+						i.get_camera().target_limit_top = maxf(global_position.y-screenSize.y/2.0,Global.hardBorderTop)
 					if lockRight:
-						i.camera.target_limit_right = minf(global_position.x+screenSize.x/2.0,Global.hardBorderRight)
+						i.get_camera().target_limit_right = minf(global_position.x+screenSize.x/2.0,Global.hardBorderRight)
 					if lockBottom:
-						i.camera.target_limit_bottom = minf(global_position.y+screenSize.y/2.0,Global.hardBorderBottom)
+						i.get_camera().target_limit_bottom = minf(global_position.y+screenSize.y/2.0,Global.hardBorderBottom)
 				
 				
 				MusicController.play_music_theme(MusicController.MusicTheme.BOSS_THEME)
@@ -65,7 +65,8 @@ func boss_completed():
 			if !keepBottomLocked:
 				i.camera.target_limit_bottom = Global.hardBorderBottom
 			# set ratchetScrolling
-			i.camera.ratchet_scroll_left = ratchetScrollLeft
-			i.camera.ratchet_scroll_top = ratchetScrollTop
-			i.camera.ratchet_scroll_right = ratchetScrollRight
-			i.camera.ratchet_scroll_bottom = ratchetScrollBottom
+			var camera: PlayerCamera = i.get_camera()
+			camera.ratchet_scroll_left = ratchetScrollLeft
+			camera.ratchet_scroll_top = ratchetScrollTop
+			camera.ratchet_scroll_right = ratchetScrollRight
+			camera.ratchet_scroll_bottom = ratchetScrollBottom

@@ -85,7 +85,7 @@ func state_physics_process(delta: float) -> void:
 	else:
 		# climb up
 		# give camera time to follow so it doesn't snap
-		parent.camera.drag_lerp = 1.0
+		parent.get_camera().drag_lerp = 1.0
 		climbTimer += delta
 		# stop current animations and play climb up
 		animator.stop()

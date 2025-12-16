@@ -29,7 +29,7 @@ func state_process(delta: float) -> void:
 	# release
 	if (parent.inputs[parent.INPUTS.YINPUT] >= 0):
 		# Lock camera
-		parent.camera.lock((parent.spindashPower+4.0)/60.0)
+		parent.get_camera().lock((parent.spindashPower+4.0)/60.0)
 		
 		# Release
 		parent.movement.x = speedCalc*parent.direction
