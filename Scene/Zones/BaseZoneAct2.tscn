@@ -1086,10 +1086,10 @@ travelDistance = 252
 [connection signal="pressed" from="HookSliderAssembly/MiddleSwitch" to="HookSliderAssembly/HookSlider" method="send_to_target" binds= [0]]
 [connection signal="pressed" from="HookSliderAssembly/MiddleSwitch" to="HookSliderAssembly/HookSlider/MobileHook/RetractibleChain" method="send_to_height" binds= [120]]
 [connection signal="target_reached" from="HookSliderAssembly/HookSlider/MobileHook/RetractibleChain" to="HookSliderAssembly/HookSlider" method="send_to_target" binds= [615]]
-[connection signal="pressed" from="Switch" to="ChainedMonkeyBar/RetractibleChain" method="set_default_target" binds= [170]]
 [connection signal="pressed" from="Switch" to="ChainedMonkeyBar/RetractibleChain" method="send_to_height" binds= [609]]
-[connection signal="pressed" from="Switch2" to="ChainedMonkeyBar/RetractibleChain" method="set_default_target" binds= [0]]
+[connection signal="pressed" from="Switch" to="ChainedMonkeyBar/RetractibleChain" method="set_default_target" binds= [170]]
 [connection signal="pressed" from="Switch2" to="ChainedMonkeyBar/RetractibleChain" method="send_to_height" binds= [170]]
+[connection signal="pressed" from="Switch2" to="ChainedMonkeyBar/RetractibleChain" method="set_default_target" binds= [0]]
 [connection signal="pressed" from="Switch2" to="ChainedMonkeyBar/RetractibleChain" method="set_home_height" binds= [170]]
 
 [editable path="ChainedMonkeyBar2"]

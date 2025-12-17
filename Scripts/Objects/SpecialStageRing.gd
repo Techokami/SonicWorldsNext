@@ -28,9 +28,9 @@ func _process(delta):
 			
 			# add ring to node memory so you can't farm the ring
 			Global.nodeMemory.append(get_path())
-			Global.checkPointPosition = global_position
-			Global.checkPointRings = Global.players[0].rings
-			Global.checkPointTime = Global.levelTime
+			Global.bonus_stage_saved_position = global_position
+			Global.bonus_stage_saved_rings = Global.players[0].rings
+			Global.bonus_stage_saved_time = Global.levelTime
 			
 			# fade to new scene
 			Main.change_scene("res://Scene/SpecialStage/SpecialStageResult.tscn","WhiteOut",1,false)

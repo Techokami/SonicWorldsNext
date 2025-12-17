@@ -338,21 +338,25 @@ func _ready():
 	await get_tree().process_frame
 	for i in Global.checkPoints:
 		if Global.currentCheckPoint == i.checkPointID:
-			if !Global.checkPointPosition:
-				global_position = i.global_position+Vector2(0,8)
-				camera.global_position = i.global_position+Vector2(0,8)
+			global_position = i.global_position+Vector2(0,8)
+			camera.global_position = i.global_position+Vector2(0,8)
 		else:
 			Global.levelTime = 0
 	
-	if Global.checkPointPosition:
-		global_position = Global.checkPointPosition
+	if Global.bonus_stage_saved_position:
+		global_position = Global.bonus_stage_saved_position
 		camera.global_position = global_position
-		Global.checkPointPosition = Vector2.ZERO
-	if Global.checkPointRings:
-		rings = Global.checkPointRings
-		Global.checkPointRings = 0
-	if Global.currentCheckPoint >= 0 or Global.checkPointPosition:
+		Global.bonus_stage_saved_position = Vector2.ZERO
+		rings = Global.bonus_stage_saved_rings
+		Global.bonus_stage_saved_rings = 0
 		Global.levelTime = Global.checkPointTime
+		
+		while ring1upCounter < rings:
+			ring1upCounter += 100
+		
+		Global.bonus_stage_saved_time = 0
+		Global.bonus_stage_saved_position = Vector2.ZERO
+		Global.bonus_stage_saved_rings = 0
 	
 	# Character settings
 	var skin = playerskins[max(min(character-1,playerskins.size()),0)]

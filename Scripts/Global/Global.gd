@@ -10,10 +10,13 @@ var checkPoints: Array = []
 var currentCheckPoint: int = -1
 ## the current level time when touching a Checkpoint or special ring
 var checkPointTime: float = 0
-## Ring count when touching a Checkpoint or special ring
-var checkPointRings: int = 0
-## Saved position when touching a Checkpoint or special ring
-var checkPointPosition: Vector2 = Vector2.ZERO
+
+## Saved position when accessing a special stage
+var bonus_stage_saved_position: Vector2 = Vector2.ZERO
+## Ring count when accessing a special stage
+var bonus_stage_saved_rings: int = 0
+## Time when accessing a special stage
+var bonus_stage_saved_time: float = 0.0
 
 ## the starting room, this is loaded on game resets, you may want to change this
 var startScene: String = "res://Scene/Presentation/Title.tscn"
@@ -136,21 +139,6 @@ func _process(delta):
 	# count global timer if game isn't paused
 	if !get_tree().paused:
 		globalTimer += delta
-	
-# reset values, self explanatory, put any variables to their defaults in here
-func reset_game_values():
-	lives = 3
-	score = 0
-	continues = 0
-	levelTime = 0
-	emeralds = 0
-	specialStageID = 0
-	checkPoints = []
-	checkPointTime = 0
-	currentCheckPoint = -1
-	animals = [0,1]
-	nodeMemory.clear()
-	nextZone = "res://Scene/Zones/BaseZone.tscn"
 
 # use this to play a sound globally, use load("res:..") or a preloaded sound
 func play_sound(sound = null):

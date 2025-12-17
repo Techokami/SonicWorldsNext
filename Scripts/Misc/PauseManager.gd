@@ -111,8 +111,6 @@ func _input(event):
 						visible = false
 						Global.checkPointTime = 0
 						Global.currentCheckPoint = -1
-						Global.checkPointPosition = Vector2.ZERO
-						Global.checkPointRings = 0
 						Main.change_scene(Global.currentZone,"FadeOut",1,true)
 						await Main.scene_faded
 						Global.effectTheme.stop()

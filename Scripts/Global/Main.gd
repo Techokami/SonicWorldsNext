@@ -26,7 +26,7 @@ func _ready():
 	Global.drowning = get_node_or_null("Music/Drowning")
 	Global.life = get_node_or_null("Music/Life")
 	# initialize game data using global reset (it's better then assigning variables twice)
-	Global.reset_game_values()
+	reset_game_values()
 
 func _process(delta):
 	# verify scene isn't paused
@@ -76,7 +76,7 @@ func reset_game():
 	wasPaused = false
 	sceneCanPause = false
 	# reset game values
-	Global.reset_game_values()
+	reset_game_values()
 	# unpause scene (if it was)
 	get_tree().paused = false
 	Global.effectTheme.stop()
@@ -119,12 +119,29 @@ func clear_dynamic_level_variables():
 		Global.currentCheckPoint = -1
 		Global.levelTime = 0
 		Global.timerActive = false
-	Global.checkPointPosition = Vector2.ZERO
-	Global.checkPointRings = 0
+	Global.bonus_stage_saved_position = Vector2.ZERO
+	Global.bonus_stage_saved_rings = 0
+	Global.bonus_stage_saved_time = 0.0
 	Global.checkPointTime = 0
 	Global.globalTimer = 0
 	Global.stageClearPhase = 0
 	Global.nodeMemory.clear()
+
+
+# reset values, self explanatory, put any variables to their defaults in here
+func reset_game_values():
+	Global.lives = 3
+	Global.score = 0
+	Global.continues = 0
+	Global.levelTime = 0
+	Global.emeralds = 0
+	Global.specialStageID = 0
+	Global.checkPoints = []
+	Global.checkPointTime = 0
+	Global.currentCheckPoint = -1
+	Global.animals = [0,1]
+	Global.nodeMemory.clear()
+	Global.nextZone = "res://Scene/Zones/BaseZone.tscn"
 
 
 # executed when life sound has finished
