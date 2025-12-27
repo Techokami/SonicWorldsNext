@@ -49,10 +49,12 @@ func activate():
 		Global.set_stage_clear_phase(Global.STAGE_CLEAR_PHASES.STARTED)
 		
 		# set player camera limits
+		var camera: PlayerCamera
 		for i in Global.players:
+			camera = i.get_camera()
 			# Camera limit set
-			i.limitLeft = global_position.x -screenXSize/2
-			i.limitRight = global_position.x +screenXSize/2
+			camera.target_limit_left = global_position.x-screenXSize/2.0
+			camera.target_limit_right = global_position.x+screenXSize/2.0
 
 
 

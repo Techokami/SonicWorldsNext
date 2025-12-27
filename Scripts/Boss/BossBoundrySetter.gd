@@ -25,33 +25,31 @@ extends Area2D
 
 var bossActive = false
 
-func _on_BoundrySetter_body_entered(body):
+func _on_BoundrySetter_body_entered(_body: PlayerChar):
 	if !Engine.is_editor_hint():
 		$CollisionShape2D.set.call_deferred("disabled",true)
 		# set boundry settings
 		if !bossActive:
-			# Check body has a camera variable
-			if (body.get("camera") != null):
-				var boss = get_node_or_null(bossPath)
-				if boss != null:
-					bossActive = true
-					# Check if set boundry is true, if it is then set the camera's boundries for each player
-					for i in Global.players:
-						if lockLeft:
-							i.limitLeft = max(global_position.x-screenSize.x/2,Global.hardBorderLeft)
-						if lockTop:
-							i.limitTop = max(global_position.y-screenSize.y/2,Global.hardBorderTop)
-						if lockRight:
-							i.limitRight = min(global_position.x+screenSize.x/2,Global.hardBorderRight)
-						if lockBottom:
-							i.limitBottom = min(global_position.y+screenSize.y/2,Global.hardBorderBottom)
-					
-					
-					MusicController.play_music_theme(MusicController.MusicTheme.BOSS_THEME)
-					boss.active = true
-					
-					if boss.has_signal("boss_over"):
-						boss.connect("boss_over",Callable(self,"boss_completed"))
+			var boss = get_node_or_null(bossPath)
+			if boss != null:
+				bossActive = true
+				# Check if set boundry is true, if it is then set the camera's boundries for each player
+				for i in Global.players:
+					if lockLeft:
+						i.get_camera().target_limit_left = maxf(global_position.x-screenSize.x/2.0,Global.hardBorderLeft)
+					if lockTop:
+						i.get_camera().target_limit_top = maxf(global_position.y-screenSize.y/2.0,Global.hardBorderTop)
+					if lockRight:
+						i.get_camera().target_limit_right = minf(global_position.x+screenSize.x/2.0,Global.hardBorderRight)
+					if lockBottom:
+						i.get_camera().target_limit_bottom = minf(global_position.y+screenSize.y/2.0,Global.hardBorderBottom)
+				
+				
+				MusicController.play_music_theme(MusicController.MusicTheme.BOSS_THEME)
+				boss.active = true
+				
+				if boss.has_signal("boss_over"):
+					boss.connect("boss_over",Callable(self,"boss_completed"))
 
 func boss_completed():
 	MusicController.stop_music_theme(MusicController.MusicTheme.BOSS_THEME)
@@ -59,15 +57,16 @@ func boss_completed():
 	for i in Global.players:
 		if is_instance_valid(i):
 			if !keepLeftLocked:
-				i.limitLeft = Global.hardBorderLeft
+				i.camera.target_limit_left = Global.hardBorderLeft
 			if !keepTopLocked:
-				i.limitTop = Global.hardBorderTop
+				i.camera.target_limit_top = Global.hardBorderTop
 			if !keepRightLocked:
-				i.limitRight = Global.hardBorderRight
+				i.camera.target_limit_right = Global.hardBorderRight
 			if !keepBottomLocked:
-				i.limitBottom = Global.hardBorderBottom
+				i.camera.target_limit_bottom = Global.hardBorderBottom
 			# set ratchetScrolling
-			i.rachetScrollLeft = ratchetScrollLeft
-			i.rachetScrollTop = ratchetScrollTop
-			i.rachetScrollRight = ratchetScrollRight
-			i.rachetScrollBottom = ratchetScrollBottom
+			var camera: PlayerCamera = i.get_camera()
+			camera.ratchet_scroll_left = ratchetScrollLeft
+			camera.ratchet_scroll_top = ratchetScrollTop
+			camera.ratchet_scroll_right = ratchetScrollRight
+			camera.ratchet_scroll_bottom = ratchetScrollBottom
