@@ -29,8 +29,9 @@ func _physics_process(_delta):
 		
 		# Camera limit set
 		var screen_width: float = GlobalFunctions.get_screen_size().x
-		player.limitLeft = global_position.x - screen_width/2
-		player.limitRight = global_position.x + (screen_width/2) + 48
+		var camera: PlayerCamera = player.get_camera()
+		camera.target_limit_left = global_position.x - screen_width/2.0
+		camera.target_limit_right = global_position.x + (screen_width/2.0) + 48.0
 
 		# set the texture for frame 127 to the one that corresponds to the player character
 		# (this is not done in _ready, in case the character was changed mid-level)
@@ -72,7 +73,7 @@ func _physics_process(_delta):
 	# stage clear settings
 	if Global.is_in_any_stage_clear_phase() and $Sprite.animation == "spinner":
 		# lock camera to self
-		player.camera.global_position.x = global_position.x
+		player.get_camera().global_position.x = global_position.x
 		# if player greater then screen and stage clear phase is GOALPOST_SPIN_END then activate the stage clear sequence
 		if player.global_position.x > global_position.x+(GlobalFunctions.get_screen_size().x/2) and \
 		   player.movement.x >= 0 and Global.get_stage_clear_phase() == Global.STAGE_CLEAR_PHASES.GOALPOST_SPIN_END:

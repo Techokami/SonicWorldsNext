@@ -19,17 +19,15 @@ extends Area2D
 func _on_BoundrySetter_body_entered(body):
 	# set boundry settings
 	if (!Engine.is_editor_hint()):
-		# Check body has a camera variable
-		if (body.get("camera") != null):
-			# Check if set boundry is true, if it is then set the camera's boundries
-			if (setLeft):
-				body.limitLeft = max(leftBoundry,Global.hardBorderLeft)
-			if (setTop):
-				body.limitTop = max(topBoundry,Global.hardBorderTop)
-			if (setRight):
-				body.limitRight = min(rightBoundry,Global.hardBorderRight)
-			if (setBottom):
-				body.limitBottom = min(bottomBoundry,Global.hardBorderBottom)
+		# Check if set boundry is true, if it is then set the camera's boundries
+		if (setLeft):
+			body.get_camera().target_limit_left = maxf(leftBoundry,Global.hardBorderLeft)
+		if (setTop):
+			body.get_camera().target_limit_top = maxf(topBoundry,Global.hardBorderTop)
+		if (setRight):
+			body.get_camera().target_limit_right = minf(rightBoundry,Global.hardBorderRight)
+		if (setBottom):
+			body.get_camera().target_limit_bottom = minf(bottomBoundry,Global.hardBorderBottom)
 
 
 func _process(_delta):
