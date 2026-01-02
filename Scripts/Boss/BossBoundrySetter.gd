@@ -56,16 +56,16 @@ func boss_completed():
 	# set boundries for players
 	for i in Global.players:
 		if is_instance_valid(i):
-			if !keepLeftLocked:
-				i.camera.target_limit_left = Global.hardBorderLeft
-			if !keepTopLocked:
-				i.camera.target_limit_top = Global.hardBorderTop
-			if !keepRightLocked:
-				i.camera.target_limit_right = Global.hardBorderRight
-			if !keepBottomLocked:
-				i.camera.target_limit_bottom = Global.hardBorderBottom
-			# set ratchetScrolling
 			var camera: PlayerCamera = i.get_camera()
+			if !keepLeftLocked:
+				camera.target_limit_left = Global.hardBorderLeft
+			if !keepTopLocked:
+				camera.target_limit_top = Global.hardBorderTop
+			if !keepRightLocked:
+				camera.target_limit_right = Global.hardBorderRight
+			if !keepBottomLocked:
+				camera.target_limit_bottom = Global.hardBorderBottom
+			# set ratchetScrolling
 			camera.ratchet_scroll_left = ratchetScrollLeft
 			camera.ratchet_scroll_top = ratchetScrollTop
 			camera.ratchet_scroll_right = ratchetScrollRight
