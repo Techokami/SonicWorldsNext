@@ -94,6 +94,7 @@ var defaultSpriteOffset = Vector2.ZERO
 
 @onready var _camera: PlayerCamera = PlayerCamera.new(self):
 	get = get_camera
+## Returns the camera object attached to the player.
 func get_camera() -> PlayerCamera:
 	return _camera
 
