@@ -13,19 +13,20 @@ var activePlayers = []
 var fall = false
 var fallSpeed = 100
 
-func _ready():
-	scale.x = float(right_movement)*abs(scale.x)
-	$ScrewPipe.region_rect = Rect2($ScrewPipe.region_rect.position,Vector2($ScrewPipe.region_rect.size.x,(top*8)+(bottom*8)))
-	$ScrewPipe.position = Vector2(0,(bottom*4)-(top*4))
-	$ScrewBottom.position.y = (bottom*8)+4
+func _set_sprite_positions() -> void:
+	scale.x = absf(scale.x) * float(right_movement)
+	$ScrewPipe.region_rect = Rect2(
+		$ScrewPipe.region_rect.position,
+		Vector2($ScrewPipe.region_rect.size.x,(bottom + top) * 8.0))
+	$ScrewPipe.position = Vector2(0,(bottom - top) * 4.0)
+	$ScrewBottom.position.y = (bottom * 8.0) + 4.0
 
+func _ready() -> void:
+	_set_sprite_positions()
 
 func _process(_delta):
 	if Engine.is_editor_hint():
-		scale.x = float(right_movement)*abs(scale.x)
-		$ScrewPipe.region_rect = Rect2($ScrewPipe.region_rect.position,Vector2($ScrewPipe.region_rect.size.x,(top*8)+(bottom*8)))
-		$ScrewPipe.position = Vector2(0,(bottom*4)-(top*4))
-		$ScrewBottom.position.y = (bottom*8)+4
+		_set_sprite_positions()
 
 func _physics_process(delta):
 	if !Engine.is_editor_hint():
