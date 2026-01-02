@@ -59,12 +59,12 @@ func _physics_process(delta):
 			
 			# increase move offset by how fast hte player is moving
 			moveOffset += -goDirection
-			
-			if $Screw.position.y > bottom*8:
-				fall = true
-				$Screw/DeathTimer.start(5)
 		
 		$Screw.position.y = max($Screw.position.y+moveOffset,(-top*8)+12)
+		
+		if $Screw.position.y > bottom * 8.0:
+			fall = true
+			$Screw/DeathTimer.start(5.0)
 
 func _on_playerChecker_body_entered(body):
 	if !players.has(body):
