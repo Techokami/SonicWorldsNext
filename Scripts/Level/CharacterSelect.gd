@@ -84,8 +84,6 @@ func _input(event):
 		# finish character select if start is pressed
 		if event.is_action_pressed("gm_pause"):
 			selected = true
-			# set player 2 to none to prevent redundant code
-			Global.PlayerChar2 = Global.CHARACTERS.NONE
 			
 			# set the character
 			Global.PlayerChar1 = characters[characterID].char1
