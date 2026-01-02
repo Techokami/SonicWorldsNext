@@ -89,8 +89,7 @@ func _input(event):
 			Global.PlayerChar1 = characters[characterID].char1
 			Global.PlayerChar2 = characters[characterID].char2
 			
-			
-			## Save the selected zone ID
+			# Save the selected zone ID
 			Global.currentZone = levelPaths[levelID]
 			Main.change_scene(Global.currentZone,"FadeOut",1.0,true)
 			
