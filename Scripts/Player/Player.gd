@@ -70,7 +70,8 @@ var current_state = STATES.AIR
 @onready var defaultHitBoxPos = $HitBox.position
 var crouchBox = null
 
-## Shield enumerator - keep COUNT as the last entry since it is used to know how
+## Shield enumerator.[br]
+## Note: Keep [constant COUNT] as the last entry since it is used to know how
 ## many options there are.
 enum SHIELDS {NONE, NORMAL, FIRE, ELEC, BUBBLE, COUNT}
 var shield = SHIELDS.NONE
@@ -175,12 +176,12 @@ var cameraMargin = 16
 var poleGrabID = null # Please don't use this anymore, use active_gimmick instead
 
 ## The current gimmick the player is interacting with if that player is interacting with one.
-## Otherwise NULL. If this gimmick is set, the player will call a secondary process function and a
-## pleyer hysics process function as part of that player's process/phsyics process functions.
+## Otherwise [code]null[/code]. If this gimmick is set, the player will call a secondary process function
+## and a player physics process function as part of that player's process/phsyics process functions.
 var active_gimmick : ConnectableGimmick = null
 
 ## Dictionary of Variables related to the active gimmick (you probably don't need to proactively
-## clear these)
+## clear these).
 var gimmick_variables = {}
 
 ## A list of up to max_locked_gimmicks gimmick references that are used to tell that gimmick not to
@@ -190,10 +191,10 @@ var gimmick_variables = {}
 var locked_gimmicks: Array[ConnectableGimmick] = [null, null, null]
 
 ## Constrain the size of the locked gimmicks list to ensure that checking for the presence of a specific
-## locked gimmick within the list remains performant. Make sure this size is in sync with the locked_gimmicks declaration.
+## locked gimmick within the list remains performant. Make sure this size is in sync with the [member locked_gimmicks] declaration.
 var max_locked_gimmicks: int = 3
 
-## Tracks the position that the lost lockedGimmick as added to the locked_gimmicks list.
+## Tracks the position that the lost [member lockedGimmick] as added to the [member locked_gimmicks] list.
 var locked_gimmicks_index: int = 0
 
 
@@ -725,7 +726,7 @@ func _set_inputs():
 
 
 # Controller scan functions -- so you don't have to dig into the inputs to check controller state
-## Returns true if any of the three action buttons were just pressed this frame
+## Returns [code]true[/code] if any of the three action buttons were just pressed this frame.
 func any_action_pressed():
 	if (inputs[INPUTS.ACTION] == 1
 	or inputs[INPUTS.ACTION2] == 1 or
@@ -734,7 +735,7 @@ func any_action_pressed():
 	return false
 
 
-## Returns true if any of the action buttons have been held for more than one frame
+## Returns [code]true[/code] if any of the action buttons have been held for more than one frame.
 func any_action_held():
 	if inputs[INPUTS.ACTION] == 2:
 		return true
@@ -744,7 +745,7 @@ func any_action_held():
 		return true
 	return false
 
-## Returns true if any of the three action buttons are currently held/pressed
+## Returns [code]true[/code] if any of the three action buttons are currently held/pressed.
 func any_action_held_or_pressed():
 	if inputs[INPUTS.ACTION] > 0:
 		return true
@@ -756,7 +757,7 @@ func any_action_held_or_pressed():
 
 
 ## This probably seems really niche, but it's useful to prevent
-## Certain jump actions from instantly turning into player specific double
+## certain jump actions from instantly turning into player specific double
 ## jump abilities.
 func convert_pressed_action_btns_to_held():
 	if inputs[INPUTS.ACTION] == 1:
@@ -767,58 +768,58 @@ func convert_pressed_action_btns_to_held():
 		inputs[INPUTS.ACTION2] = 2
 
 
-## Check the y input of the player's controller
+## Check the Y input of the player's controller.
 func get_y_input():
 	return inputs[INPUTS.YINPUT]
 
 
-## Check the if the player is holding up on their controller
-## Note: a press and a hold are the same thing for directions -- no effort is made to track the
+## Check the if the player is holding [kbd]Up[/kbd] on their controller.[br]
+## Note: a press and a hold are the same thing for directions — no effort is made to track the
 ## difference for these.
 func is_up_held():
 	return inputs[INPUTS.YINPUT] < 0
 
 
-## Check the if the player is holding dow on their controller	
-## Note: a press and a hold are the same thing for directions -- no effort is made to track the
+## Check the if the player is holding [kbd]Down[/kbd] on their controller.[br]
+## Note: a press and a hold are the same thing for directions — no effort is made to track the
 ## difference for these.
 func is_down_held():
 	return inputs[INPUTS.YINPUT] > 0
 
 
-## Check the x input of the player's controller
+## Check the X input of the player's controller.
 func get_x_input():
 	return inputs[INPUTS.XINPUT]
 
 
-## Check the if the player is holding left on their controller
-## Note: a press and a hold are the same thing for directions -- no effort is made to track the
+## Check the if the player is holding [kbd]Left[/kbd] on their controller.[br]
+## Note: a press and a hold are the same thing for directions — no effort is made to track the
 ## difference for these.
 func is_left_held():
 	return inputs[INPUTS.XINPUT] < 0
 
 
-## Check the if the player is holding right on their controller	
-## Note: a press and a hold are the same thing for directions -- no effort is made to track the
+## Check the if the player is holding [kbd]Right[/kbd] on their controller.[br]
+## Note: a press and a hold are the same thing for directions — no effort is made to track the
 ## difference for these.
 func is_right_held():
 	return inputs[INPUTS.XINPUT] > 0
 
 
 ## Hits the player. This usually causes loss of shield, loss of rings, or death.[br]
-## [param damagePoint] - a position vector that can be included to indicate where the hit came from
+## [param damagePoint] — a position vector that can be included to indicate where the hit came from
 ##                       this affects knockback of the player, but only in the sense that if the hit
 ##                       comes from the right the player will be knocked back left
 ##                       and if the hit comes from the left, the player will be knocked back right.[br]
-## [param damageType] - defines the hit as belonging to an element. Elemental hits will be ignored if
+## [param damageType] — defines the hit as belonging to an element. Elemental hits will be ignored if
 ##                      the player being hit has a shield that would block that element.[br]
-## [param soundID] - if set, changes which of the player sounds is used for the hit. Note that the
+## [param soundID] — if set, changes which of the player sounds is used for the hit. Note that the
 ##                   alternate hit sound is only played if ring loss wouldn't be played instead.
 ##                   The main use for this is when the player interacts with spikes in which case
 ##                   the spike sound is used instead. To know which sounds are available, check the
-##                   SFX object in the Player.tscn -- streamers in there are indexed in order of their
+##                   SFX object in the Player.tscn — streamers in there are indexed in order of their
 ##                   position in the list starting from 0.[br]
-## [param ignoreInstaShield] - if true, ignores Sonic's Insta-Shield.
+## [param ignoreInstaShield] — if true, ignores Sonic's Insta-Shield.
 func hit_player(damagePoint:Vector2 = global_position, damageType: Global.HAZARDS = Global.HAZARDS.NORMAL, soundID:int = 6, ignoreInstaShield: bool = false):
 	if damageType != Global.HAZARDS.NORMAL and shield == damageType+1:
 		return false
@@ -907,8 +908,8 @@ func hit_player(damagePoint:Vector2 = global_position, damageType: Global.HAZARD
 
 
 ## Determines whether the player should be treated like player 1 for the purpose of gimmicks and
-## similar things. This is determined by a combination of whether or not they actually *are* player
-## 1 and if the game mode is in one of the more multiplayer centric modes.
+## similar things. This is determined by a combination of whether or not they actually [i]are[/i] player
+## 1 and if the game mode is in one of the more multiplayer-centric modes.
 func is_independent()->bool:
 	# First player is always indepdent
 	if Global.get_first_player() == self:
@@ -921,16 +922,15 @@ func is_independent()->bool:
 	return false
 
 
-## Gives the player a ring by default, overridable to any requested number.
-##
-## @param num_rings - one by default. This may be negative to take away rings,
-##                    but doing so won't make rings to negative or kill the
-##                    player
-## @param play_sound - optional parameter. If set to false, the ring acquisition
-##                     sound will not be played. Particularly useful if you
-##                     either want to play a different sound like with the loss
-##                     state in a slot machine or just no sound at all like with
-##                     the gassed status effect that toxomister gives you.
+## Gives the player a ring by default, overridable to any requested number.[br]
+## [param num_rings] — one by default. This may be negative to take away rings,
+##                     but doing so won't make rings to negative or kill the player.[br]
+## [param play_sound] — optional parameter. If set to [code]false[/code],
+##                      the ring acquisition sound will not be played.
+##                      Particularly useful if you either want to play
+##                      a different sound like with the loss state
+##                      in a slot machine or just no sound at all like with
+##                      the gassed status effect that Toxomister gives you.
 func give_ring(num_rings: int = 1, play_sound: bool = true) -> void:
 	# We should come back to this after we decouple player from playerchar
 	# so that we can let a player 2 character get rings if the game is in versus
@@ -961,12 +961,12 @@ func give_ring(num_rings: int = 1, play_sound: bool = true) -> void:
 		Global.lives += 1
 
 
-## Resets the player's air timer to the default air time value
+## Resets the player's air timer to the default air time value.
 func reset_air()->void:
 	airTimer = defaultAirTime
 
 
-## Murders the player instantly
+## Murders the player instantly.
 func kill():
 	# Already dying
 	if current_state == STATES.DIE:
@@ -1014,8 +1014,8 @@ func kill():
 		#Main.sceneCanPause = false # stop the ability to pause
 
 
-## Makes a partner character re-enter the scene
-## TODO: Make this compatible with partners other than Tails
+## Makes a partner character re-enter the scene.
+## TODO: Make this compatible with partners other than Tails.
 func respawn() -> void:
 	if partner == null:
 		return
@@ -1042,7 +1042,7 @@ func respawn() -> void:
 	set_state(STATES.RESPAWN)
 
 
-## Gets the character's partner (note that in the current to player setup, each player character is
+## Gets the character's partner (note that in the current two-player setup, each player character is
 ## the other's partner, so calling get_partner on Sonic in Sonic and Tails mode gets Tails and
 ## calling it on Tails gets Sonic.
 func get_partner() -> PlayerChar:
@@ -1095,7 +1095,7 @@ func _on_PlayerAnimation_animation_started(_anim_name):
 		_animator.advance(0)
 
 
-## Gets the currently active physics table
+## Gets the currently active physics table.
 func get_physics() -> PlayerPhysics:
 	return active_physics
 
@@ -1128,8 +1128,8 @@ func _on_BubbleTimer_timeout():
 			$BubbleTimer.start(max(randf()*3,0.5))
 
 
-## Handles player's standard movement based on controller input -- you might call this if you are
-## programming either a state or a gimmick that uses the GIMMICK state and don't want to take
+## Handles player's standard movement based on controller input — you might call this if you are
+## programming either a state or a gimmick that uses the [constant GIMMICK] state and don't want to take
 ## standard directional control away from the player.
 func action_move(delta):
 	# moving left and right, check if left or right is being pressed
@@ -1160,7 +1160,7 @@ func action_move(delta):
 				movement.x -= movement.x
 
 
-## Makes the player jump with their standard jump strength
+## Makes the player jump with their standard jump strength.
 func action_jump(animation = "roll", air_jump_control : bool = true, play_sound : bool = true):
 	if forceRoll <= 0: # check to prevent jumping in roll tubes
 		_animator.play(animation)
@@ -1180,12 +1180,12 @@ func reset_double_jump_action() -> void:
 	abilityUsed = false
 
 
-## Makes the player emit the enemy_bounced signal
+## Makes the player emit the [signal enemy_bounced] signal.
 func emit_enemy_bounce():
 	enemy_bounced.emit()
 
 
-## Makes the player emit the player_bounced signal - only if the player bounces off the ground
+## Makes the player emit the [signal player_bounce] signal — only if the player bounces off the ground
 ## for some reason.
 ## TODO - does this occur for anything other than bubble shield in the air state?
 func emit_player_bounce():
@@ -1193,7 +1193,7 @@ func emit_player_bounce():
 
 
 ## Makes the player perform water run actions if applicable. Only really has an impact if
-## the player is in contact iwth the water's surface. You invoke this in any action that
+## the player is in contact with the water's surface. You invoke this in any action that
 ## water running is allowed from.
 func action_water_run_handle():
 	var dash = $WaterSurface
@@ -1245,12 +1245,12 @@ func _handle_animation_speed(gSpeed = groundSpeed):
 # Standard getters and setters -- for future code, please try to avoid direct
 # access of player variables. Use getters/setters instead. This aids in easing
 # refactoring.
-## Gets the current state value of the player
-## Note: gets the enum value only, not the actual state object
+## Gets the current state value of the player.[br]
+## Note: Gets the enum value only, not the actual state object.
 func get_state()->PlayerChar.STATES:
 	return current_state
 
-## Use this variant of get_state when you want to check character actions and not standard states.
+## Use this variant of [method get_state] when you want to check character actions and not standard states.
 func get_state_character_action()->int:
 	if current_state != STATES.CHARACTERACTION:
 		return -1
@@ -1261,32 +1261,30 @@ func get_state_character_action()->int:
 
 
 
-## Gets a player state object
+## Gets a player state object.[br]
 ## I don't recommend using this function, but we have some code in the codebase
-## that uses this approach so I'm exposing it anyway. The preferred way to read/
-## manipulate a player's state value is usually going to be to add a new function
-## to the player that does it for you.
-##
-## @param for_state - which state you want to get the state object for
-## @retval PlayerState object that the for_state value represents
+## that uses this approach so I'm exposing it anyway. The preferred way
+## to read/manipulate a player's state value is usually going to be to add
+## a new function to the player that does it for you.[br]
+## [param for_state] — which state you want to get the state object for.[br]
+## Returns a [code]PlayerState[/code] object that the [param for_state] value represents.
 func get_state_object(for_state: PlayerChar.STATES) -> PlayerState:
 	return state_list[for_state]
 
 
-## Sets the player's state while performing normal state change operations
+## Sets the player's state while performing normal state change operations.[br]
 ## Always use this to set the player's state. Don't try to change the player's
-## state directly.
-##
-## @param new_state - State player is changing to
-## @param force_mask - Vector2 for a mask change. Note that ZERO is the default, but it implies
-##                     change. This needs work.
-## @param skip_supplements - If this is enabled (and if set_state is called from a supplement, it
-##                           should be), we won't run supplements.
-## @param new_character_state - Should only be used if setting the state to CHARACTERACTION.
-##                              This value is used to set up the CHARACTERACTION state to make it
-##                              proxy to the new character action state as well as to engage
-##                              enter/exit for the character-specific state and to run supplements
-##                              that might affect that state.
+## state directly.[br]
+## [param new_state] — state player is changing to.[br]
+## [param force_mask] — [Vector2] for a mask change. Note that [constant Vector2.ZERO]
+##                      is the default, but it implies change. This needs work.[br]
+## [param skip_supplements] — if this is enabled (and if [method set_state] is called from
+##                            a supplement, it should be), we won't run supplements.[br]
+## [param new_character_state] — should only be used if setting the state to [constant CHARACTERACTION].
+##                               This value is used to set up the [constant CHARACTERACTION] state
+##                               to make it proxy to the new character action state as well
+##                               as to engage enter/exit for the character-specific state and
+##                               to run supplements that might affect that state.
 func set_state(new_state: PlayerChar.STATES,
 		force_mask:Vector2 = Vector2.ZERO,
 		skip_supplements:bool = false,
@@ -1359,7 +1357,7 @@ func set_state(new_state: PlayerChar.STATES,
 
 
 ## Shorthand for setting the character state to character action while also providing
-## a new_character_state. Generally this is preferable to use over the full form version when
+## a [param new_character_state]. Generally this is preferable to use over the full form version when
 ## switching to a character-specific state.
 func set_character_action_state(new_character_state: int,
 		force_mask:Vector2 = Vector2.ZERO,
@@ -1368,9 +1366,9 @@ func set_character_action_state(new_character_state: int,
 		set_state(STATES.CHARACTERACTION, force_mask, skip_supplements, new_character_state)
 
 
-## sets the hitbox mask shape, referenced in other states
-## @param size - new hitbox size
-## @param force_pose_change normally if the player's hitbox size changes
+## Sets the hitbox mask shape, referenced in other states.[br]
+## [param size] — new hitbox size.[br]
+## [param force_pose_change] — normally if the player's hitbox size changes
 ##        and they are on the ground, the player's hitbox will be repositioned to
 ##        maintain the same bottom position. Using force_pose_change causes this
 ##        behavior to be used with this set_hitbox operation even if the player isn't
@@ -1383,25 +1381,25 @@ func set_hitbox(size = Vector2.ZERO, force_pose_change = false):
 	$HitBox.shape.size = size
 
 
-## Gets the size of the current hitbox
+## Gets the size of the current hitbox.
 func get_hitbox() -> Vector2:
 	return $HitBox.shape.size
 
 
 ## Gets the predefined hitbox dimensions for a predefined hitbox.
-## predefined hitboxes are listed in the PlayerChar.HITBOXES enum.
+## predefined hitboxes are listed in the [enum HITBOXES] enum.[br]
 ## TODO -> Just get the avatar and use get_hitbox instead.
 func get_predefined_hitbox(which: PlayerChar.HITBOXES) -> Vector2:
 	return player_avatar.get_hitbox(which)
 
 
-## sets the hitbox mask shape to one of the predefined shapes.
+## Sets the hitbox mask shape to one of the predefined shapes.
 func set_predefined_hitbox(which: PlayerChar.HITBOXES, force_pose_change: bool = false):
 	return set_hitbox(get_predefined_hitbox(which), force_pose_change)
 
 
-## Sets the player's shield
-## @param setShieldID - Which shield the player should get
+## Sets the player's shield.[br]
+## [param setShieldID] — which shield the player should get.
 func set_shield(setShieldID: PlayerChar.SHIELDS) -> void:
 	magnetShape.disabled = true
 	# verify not in water and shield compatible
@@ -1430,22 +1428,22 @@ func set_shield(setShieldID: PlayerChar.SHIELDS) -> void:
 
 
 ## Gets the value of the player's current shield. The value will be one of the
-## values of the SHIELDS enumerator for the player.
+## values of the [enum SHIELDS] enumerator for the player.
 func get_shield() -> PlayerChar.SHIELDS:
 	return self.shield
 	
 
-## Returns the current PlayerAvatar for the player. You should use this to get
+## Returns the current [code]PlayerAvatar[/code] for the player. You should use this to get
 ## to character-specific properties and the animator.
 func get_avatar() -> PlayerAvatar:
 	return self.player_avatar
 
 
-## Available directions for the player to use when using set_direction
+## Available directions for the player to use when using [method set_direction].
 enum DIRECTIONS {LEFT, RIGHT} # I'd wager there is already something more appropriate
 
 
-## Sets the direction of the player's sprite and direction value
+## Sets the direction of the player's sprite and direction value.
 func set_direction(new_direction: PlayerChar.DIRECTIONS) -> void:
 	if new_direction == DIRECTIONS.LEFT:
 		direction = -1.0
@@ -1455,7 +1453,7 @@ func set_direction(new_direction: PlayerChar.DIRECTIONS) -> void:
 	sprite.flip_h = false
 
 
-## Gets the player's direction using the PlayerChar.DIRECTIONS enum
+## Gets the player's direction using the [enum DIRECTIONS] enum.
 func get_direction() -> PlayerChar.DIRECTIONS:
 	if direction < 0:
 		return DIRECTIONS.LEFT
@@ -1463,36 +1461,35 @@ func get_direction() -> PlayerChar.DIRECTIONS:
 		return DIRECTIONS.RIGHT
 
 
-## Gets the players direction in a way that is useful for calculations
-## @retval -1.0 if left
-## @retval 1.0 if right
+## Gets the player's direction in a way that is useful for calculations.[br]
+## Returns [code]-1.0[/code] if left, or [code]1.0[/code] if right.
 func get_direction_multiplier() -> float:
 	return direction
 
 
-## Gets the player's ground speed
+## Gets the player's ground speed.
 func get_ground_speed() -> float:
 	return groundSpeed
 
 
-## Sets the player's ground speed
+## Sets the player's ground speed.
 func set_ground_speed(new_ground_speed: float) -> void:
 	self.groundSpeed = new_ground_speed
 
 
-## Gets whether or not the player is in water
+## Gets whether or not the player is in water.
 func is_in_water() -> bool:
 	return self.water
 
 
-## Sets the player's horizontal lock timer
+## Sets the player's horizontal lock timer.[br]
 ## Note that the horizontal lock timer being above zero will temporarily prevent
-## the player's left/right controls from have an impact.
+## the player's left/right controls from having an impact.
 func set_horizontal_lock_timer(lock_time: float) -> void:
 	self.horizontalLockTimer = lock_time
 
 
-## Sets whether or not the player currently has air control
+## Sets whether or not the player currently has air control.
 func set_air_control(control: bool) -> void:
 	self.airControl = control
 
@@ -1518,13 +1515,12 @@ func set_air_control(control: bool) -> void:
 # Also be aware that failing to disconnect a gimmick when you should is going to cause lots of
 # problems with other gimmick interactions.
 
-## Binds the player to the requested gimmick
-## @param gimmick gimmick to bind the player to
-## @param allowSwap enable to make the new gimmick execute its on force detach callback and to
-##        allow the new gimmick to replace one that is already attached.
-## @retval true if gimmick was able to be connected
-## @retval false otherwise
-## note: Never returns false if allowSwap is set
+## Binds the player to the requested gimmick.[br]
+## [param gimmick] — gimmick to bind the player to.[br]
+## [param allowSwap] — enable to make the new gimmick execute its on force detach callback and to
+##        allow the new gimmick to replace one that is already attached.[br]
+## Returns [code]true[/code] if gimmick was able to be connected, [code]false[/code] otherwise.[br]
+## Note: Never returns [code]false[/code] if [param allowSwap] is set.
 func set_active_gimmick(gimmick : ConnectableGimmick, allowSwap : bool=false) -> bool:
 	if allowSwap:
 		if active_gimmick != null: # if there is already an active gimmick, we need to run that
@@ -1542,13 +1538,13 @@ func set_active_gimmick(gimmick : ConnectableGimmick, allowSwap : bool=false) ->
 	return true
 
 
-## Unbinds the gimmick from the player (you could just use null on set_active_gimmick too)
+## Unbinds the gimmick from the player (you could just use [code]null[/code]
+## on [method set_active_gimmick] too).
 func unset_active_gimmick() -> void:
 	active_gimmick = null
 
 
-## Unbinds the player from its current gimmick, but only after running its force detach
-## callback
+## Unbinds the player from its current gimmick, but only after running its force detach callback.
 func force_detach() -> void:
 	if active_gimmick == null:
 		return
@@ -1564,7 +1560,7 @@ func get_active_gimmick() -> ConnectableGimmick:
 	return active_gimmick
 
 
-## Sets a value in the player's gimmick variable dictionary. Uses a key value pair.
+## Sets a value in the player's gimmick variable dictionary. Uses a key-value pair.
 func set_gimmick_var(gimmickVarName: String, gimmickVarValue) -> void:
 	gimmick_variables[gimmickVarName] = gimmickVarValue
 
@@ -1579,16 +1575,16 @@ func get_gimmick_var(gimmickVarName, default: Variant = null):
 	return gimmick_variables.get(gimmickVarName, default)
 
 
-## Removes all currently locked gimmicks from the Player's locked gimmick list.
+## Removes all currently locked gimmicks from the player's locked gimmick list.
 func clear_locked_gimmicks():
 	for i in range(max_locked_gimmicks):
 		locked_gimmicks[i] = null
 	locked_gimmicks_index = 0
 
 
-## Locks a gimmick for the player using a timer to unlock it
-## @param gimmick - which gimmick should be locked
-## @param lock_time - how long should the gimmick be locked in seconds
+## Locks a gimmick for the player using a timer to unlock it.[br]
+## [param gimmick] — which gimmick should be locked.[br]
+## [param lock_time] — how long should the gimmick be locked in seconds.
 func timed_gimmick_lock(gimmick: ConnectableGimmick, lock_time: float) -> void:
 	var unlock_func = func ():
 		clear_single_locked_gimmick(gimmick)
@@ -1617,21 +1613,21 @@ func add_locked_gimmick(gimmick):
 	locked_gimmicks_index = (locked_gimmicks_index + 1) % max_locked_gimmicks
 
 
-## Removes a locked gimmick from the locked gimmicks list for the player
+## Removes a locked gimmick from the locked gimmicks list for the player.
 ## You can still use this even if the gimmick is no longer in the player's
 ## locked gimmicks list, it'll just not actually do anything in that case.
 func remove_locked_gimmick(gimmick):
 	locked_gimmicks.erase(gimmick)
 
 
-## Checks if the gimmick is locked for the player
+## Checks if the gimmick is locked for the player.
 func is_gimmick_locked_for_player(gimmick):
 	if gimmick in locked_gimmicks:
 		return true
 	return false
 
 
-## Invokes the handle_animation_finished callback for the attached gimmick.
+## Invokes the [code]handle_animation_finished[/code] callback for the attached gimmick.
 func handle_animation_finished(animation):
 	if active_gimmick != null:
 		active_gimmick.handle_animation_finished(self, animation)
