@@ -172,7 +172,7 @@ func _process(delta):
 		for i in Global.players:
 			# check if in water and has elec or fire shield
 			if i.water:
-				match (i.shield):
+				match (i.get_shield()):
 					i.SHIELDS.ELEC:
 						# reset shield do flash
 						i.set_shield(i.SHIELDS.NONE)

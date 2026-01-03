@@ -6,7 +6,7 @@ var spawnTicker = (1.0/64.0)*60.0
 
 
 func state_activated():
-	targetPoint = parent.partner.global_position
+	targetPoint = parent.get_partner().global_position
 
 
 func state_process(_delta: float) -> void:
@@ -19,17 +19,18 @@ func state_process(_delta: float) -> void:
 
 
 func state_physics_process(delta: float) -> void:
+	var partner: PlayerChar = parent.get_partner()
 	parent.allowTranslate = true
 	# slowly move the target point towards the player based on distance
-	targetPoint = targetPoint.lerp(parent.partner.global_position,(targetPoint.distance_to(parent.partner.global_position)/32)*delta)
+	targetPoint = targetPoint.lerp(partner.global_position,(targetPoint.distance_to(partner.global_position)/32)*delta)
 	
 	# If player is in range or in a valid state, return to normal
 	var is_close_to_target = parent.global_position.distance_to(targetPoint) <= 64
 	var is_aligned_vertically = round(parent.global_position.y) == round(targetPoint.y)
 
-	var is_partner_nearby = parent.global_position.distance_to(parent.partner.global_position) <= 16
+	var is_partner_nearby = parent.global_position.distance_to(partner.global_position) <= 16.0
 
-	var partner_state = parent.partner.get_state()
+	var partner_state = partner.get_state()
 	var is_partner_in_valid_state = (
 		partner_state == parent.STATES.NORMAL or
 		partner_state == parent.STATES.AIR or
@@ -79,7 +80,7 @@ func state_physics_process(delta: float) -> void:
 		# restore layer
 		parent.collision_layer = layerMemory
 		
-		match(parent.partner.get_state()):
+		match(partner.get_state()):
 			parent.STATES.NORMAL, parent.STATES.AIR, parent.STATES.JUMP:
 				parent.groundSpeed = 0
 				parent.get_avatar().get_animator().play("walk")
@@ -88,10 +89,10 @@ func state_physics_process(delta: float) -> void:
 				parent.collision_mask = parent.defaultMask
 				parent.set_state(parent.STATES.AIR)
 				parent.movement = Vector2.ZERO
-				parent.collissionLayer = parent.partner.collissionLayer
+				parent.collissionLayer = partner.collissionLayer
 				# copy limits to avoid out of bounds errors
 				var camera: PlayerCamera = parent.get_camera()
-				var partner_camera: PlayerCamera = parent.partner.get_camera()
+				var partner_camera: PlayerCamera = partner.get_camera()
 				camera.target_limit_left = partner_camera.target_limit_left
 				camera.target_limit_right = partner_camera.target_limit_right
 				camera.target_limit_top = partner_camera.target_limit_top

@@ -65,10 +65,11 @@ func _physics_process(_delta):
 		player.inputs[player.INPUTS.YINPUT] = 0
 		player.inputs[player.INPUTS.ACTION] = 0
 		# make partner move too
-		if player.get("partner") != null:
-			player.partner.inputs[player.INPUTS.XINPUT] = 1
-			player.partner.inputs[player.INPUTS.YINPUT] = 0
-			player.partner.inputs[player.INPUTS.ACTION] = 0
+		var partner: PlayerChar = player.get_partner()
+		if partner != null:
+			partner.inputs[player.INPUTS.XINPUT] = 1
+			partner.inputs[player.INPUTS.YINPUT] = 0
+			partner.inputs[player.INPUTS.ACTION] = 0
 	
 	# stage clear settings
 	if Global.is_in_any_stage_clear_phase() and $Sprite.animation == "spinner":

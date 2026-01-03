@@ -69,7 +69,7 @@ func activate_elecshield(_state: PlayerState, player: PlayerChar):
 # Flame Shield double-jump ability
 func activate_fireshield(_state: PlayerState, player: PlayerChar):
 	# partner check (so you don't flame boost when you're trying to fly with tails
-	if player.get_y_input() < 0 and player.partner != null:
+	if player.get_y_input() < 0 and player.get_partner() != null:
 		return true
 	
 	player.abilityUsed = true

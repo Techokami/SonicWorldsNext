@@ -69,7 +69,7 @@ func try_cheat():
 			Global.players[0].set_shield(PlayerChar.SHIELDS.BUBBLE)
 		else:
 			# Otherwise cycle the shields in order
-			Global.players[0].set_shield((Global.players[0].shield + 1) % Global.players[0].SHIELDS.COUNT)
+			Global.players[0].set_shield((Global.players[0].get_shield() + 1) % PlayerChar.SHIELDS.COUNT)
 		return KEY_COMMA
 		
 	# Place the test block below the player and make it move upwards
