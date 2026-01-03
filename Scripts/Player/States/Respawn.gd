@@ -82,7 +82,7 @@ func state_physics_process(delta: float) -> void:
 		
 		match(partner.get_state()):
 			parent.STATES.NORMAL, parent.STATES.AIR, parent.STATES.JUMP:
-				parent.groundSpeed = 0
+				parent.set_ground_speed(0.0)
 				parent.get_avatar().get_animator().play("walk")
 				parent.allowTranslate = false
 				parent.collision_layer = parent.defaultLayer

@@ -53,10 +53,10 @@ func connect_player(player: PlayerChar):
 		animator.play("grabVerticalBarOffset")
 
 	player.set_state(PlayerChar.STATES.GIMMICK)
-	player.set_gimmick_var("VerticalBarSpeedAtEntry", player.groundSpeed)
+	player.set_gimmick_var("VerticalBarSpeedAtEntry", player.get_ground_speed())
 			
 	# Drop all the speed values to 0 to prevent issues.
-	player.groundSpeed = 0
+	player.set_ground_speed(0.0)
 	player.movement = Vector2.ZERO
 	player.get_camera().update()
 	player.global_position.x = get_global_position().x

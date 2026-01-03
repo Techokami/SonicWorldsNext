@@ -50,7 +50,7 @@ func state_physics_process(delta: float) -> void:
 		# go to normal if on floor
 		if parent.ground:
 			animator.play("walk")
-			parent.groundSpeed = 1
+			parent.set_ground_speed(1.0)
 			parent.disconnect_from_floor()
 			parent.set_state(parent.STATES.AIR,parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL))
 			return
@@ -67,7 +67,7 @@ func state_physics_process(delta: float) -> void:
 			parent.movement = Vector2.ZERO
 			animator.speed_scale = 1
 			parent.set_character_action_state(KnucklesAvatar.CHAR_STATES.KNUCKLES_CLIMB,
-			                    parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL))
+								parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL))
 			return
 		
 		# climbing edge
