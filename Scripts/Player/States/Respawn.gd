@@ -73,9 +73,7 @@ func state_physics_process(delta: float) -> void:
 		if abs(distance)/16 > abs(parent.movement.x/60):
 			parent.movement.x = (distance/16)*60
 		
-		if distance != 0:
-			parent.direction = sign(distance)
-		parent.sprite.flip_h = (parent.direction < 0)
+		parent.set_direction_signed(signf(distance))
 	else: # Go back to normal
 		# restore layer
 		parent.collision_layer = layerMemory

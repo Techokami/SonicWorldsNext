@@ -31,7 +31,7 @@ func state_process(delta: float) -> void:
 	
 	# release
 	if (parent.inputs[parent.INPUTS.YINPUT] <= 0):
-		parent.movement.x = (8+(floor(parent.spindashPower) / 2))*60*parent.direction
+		parent.movement.x = (8.0+(floorf(parent.spindashPower)/2.0))*60*parent.get_direction_multiplier()
 		parent.sfx[3].play()
 		parent.sfx[2].stop()
 		parent.sfx[2].pitch_scale = 1

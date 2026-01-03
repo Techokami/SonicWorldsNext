@@ -143,8 +143,7 @@ func attach_player(player: PlayerChar):
 		# Believe it or not, it really is this simple.
 		impart_force(110.0)
 
-	player.direction = 1
-	player.sprite.flip_h = false
+	player.set_direction(PlayerChar.DIRECTIONS.RIGHT)
 
 	# Prevents player from clipping on walls while they are on the fringes of the gimmick
 	player.allowTranslate = true
@@ -276,7 +275,7 @@ func _physics_process(delta):
 
 	for index in range(players.size()):
 		var player: PlayerChar = get_player(index)
-		player.direction = 1
+		player.set_direction_signed(1.0, false)
 		set_player_phase(index, get_player_phase(index) + (delta / spinning_period) * 2.0 * PI)
 		player.global_position.x = floor(body.global_position.x + get_player_radius(index) * cos(get_player_phase(index)))
 		player.global_position.y = floor(body.global_position.y - player.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL).y / 2.0 - 1)

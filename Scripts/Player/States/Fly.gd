@@ -84,8 +84,7 @@ func state_physics_process(delta: float) -> void:
 			carriedPlayer.movement = parent.movement
 			carriedPlayer.get_state_object(parent.STATES.AIR).lockDir = true
 			# set carried player direction
-			carriedPlayer.direction = parent.direction
-			carriedPlayer.sprite.flip_h = (parent.direction < 0)
+			carriedPlayer.set_direction_signed(parent.get_direction_multiplier(),false)
 		
 		# set immediate inputs if ai
 		if parent.playerControl == 0:
@@ -112,13 +111,11 @@ func state_physics_process(delta: float) -> void:
 		parent.movement.x -= ((parent.movement.x / 0.125) / 256)*60*delta
 	
 	# Change parent direction
-	if (parent.get_x_input() != 0):
-		parent.direction = parent.get_x_input()
+	var x_input: float = parent.get_x_input()
+	if (x_input != 0.0):
+		parent.set_direction_signed(x_input)
 		if carriedPlayer != null:
-			carriedPlayer.direction = parent.direction
-	
-	# set facing direction
-	parent.sprite.flip_h = (parent.direction < 0)
+			carriedPlayer.set_direction_signed(parent.get_direction_multiplier(),false)
 	
 	# Flight logic
 	parent.movement.y += flyGrav/GlobalFunctions.div_by_delta(delta)

@@ -16,7 +16,7 @@ func state_physics_process(delta: float) -> void:
 	parent.movement.y += parent.get_physics().gravity / GlobalFunctions.div_by_delta(delta)
 	
 	# determine flip based on the direction
-	parent.sprite.flip_h = (parent.direction < 0)
+	parent.sprite.flip_h = (parent.get_direction_multiplier() < 0.0)
 	
 	# movement
 	var acceleration = parent.get_physics().acceleration

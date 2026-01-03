@@ -32,7 +32,7 @@ func state_process(delta: float) -> void:
 		parent.get_camera().lock((parent.spindashPower+4.0)/60.0)
 		
 		# Release
-		parent.movement.x = speedCalc*parent.direction
+		parent.movement.x = speedCalc*parent.get_direction_multiplier()
 		parent.sfx[3].play()
 		parent.sfx[2].stop()
 		parent.peelOutCharge = 0.0

@@ -100,7 +100,7 @@ func state_process(delta: float) -> void:
 				parent.verticalSensorRight.collision_mask = maskMemory[1]
 				
 				# flip sensors
-				if parent.direction < 0:
+				if parent.get_direction_multiplier() < 0.0:
 					getL = getR
 					getR = parent.verticalSensorLeft.is_colliding()
 				# No edge detected
@@ -127,20 +127,20 @@ func state_process(delta: float) -> void:
 						
 						Global.CHARACTERS.TAILS:
 							if getR: # keep flipping until right sensor (relevent) isn't colliding
-								parent.direction = -parent.direction
+								parent.flip_movement_direction()
 							animator.play("edge1")
 						
 						Global.CHARACTERS.KNUCKLES:
 							if getR: # keep flipping until right sensor (relevent) isn't colliding
-								parent.direction = -parent.direction
+								parent.flip_movement_direction()
 							if (animator.current_animation != "edge1" and
-							        animator.current_animation != "edge2"):
+									animator.current_animation != "edge2"):
 								animator.play("edge1")
 								animator.queue("edge2")
 								
 						Global.CHARACTERS.AMY:
 							if getR: # keep flipping until right sensor (relevent) isn't colliding
-								parent.direction = -parent.direction
+								parent.flip_movement_direction()
 							#far edge
 							if !getMEdge:
 								animator.play("edge2")
@@ -150,7 +150,7 @@ func state_process(delta: float) -> void:
 						
 						Global.CHARACTERS.SHADOW:
 							if getL: # keep flipping until left sensor (relevent) isn't colliding
-								parent.direction = -parent.direction
+								parent.flip_movement_direction()
 							animator.play("edge1")
 						
 						_: #default
@@ -184,9 +184,9 @@ func state_process(delta: float) -> void:
 		parent.get_node("HitBox").position = parent.hitBoxOffset.normal
 	
 	if parent.inputs[parent.INPUTS.XINPUT] != 0 and !skid:
-		parent.direction = parent.inputs[parent.INPUTS.XINPUT]
+		parent.set_direction_signed(parent.inputs[parent.INPUTS.XINPUT], false)
 	elif parent.movement.x != 0 and skid:
-		parent.direction = sign(parent.movement.x)
+		parent.set_direction_signed(signf(parent.movement.x), false)
 	
 	# water running
 	parent.action_water_run_handle()
@@ -224,7 +224,7 @@ func state_physics_process(delta: float) -> void:
 		if !animator.is_playing() or inputX == sign(parent.movement.x):
 			skid = (round(parent.movement.x) != 0 and inputX != sign(parent.movement.x) and inputX != 0)
 		
-	parent.sprite.flip_h = (parent.direction < 0)
+	parent.sprite.flip_h = (parent.get_direction_multiplier() < 0.0)
 	
 	parent.movement.y = min(parent.movement.y,0)
 	
