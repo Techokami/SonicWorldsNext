@@ -99,7 +99,7 @@ func get_camera() -> PlayerCamera:
 	return _camera
 
 var rotatableSprites = ["walk", "run", "peelOut", "hammerSwing"]
-var direction = scale.x
+var _direction: float = scale.x
 
 # Ground speed is mostly used for timing and animations, there isn't any functionality to it.
 var _ground_speed: float = 0.0
@@ -223,7 +223,7 @@ func _ready():
 			_partner.playerControl = 0
 			_partner.z_index = z_index-1
 			get_parent().call_deferred("add_child", _partner)
-			_partner.global_position = global_position+Vector2(-24.0,0.0)
+			_partner.global_position = global_position+Vector2(-24,0)
 			_partner._partner = self
 			_partner.character = Global.PlayerChar2
 			_partner.inputActions = INPUTACTIONS_P2
@@ -327,7 +327,7 @@ func _process(delta):
 			# Check if partner panic
 			if partnerPanic <= 0:
 				if _partner.playerControl == 0:
-					for i: int in _partner.inputs.size():
+					for i in _partner.inputs.size():
 						# Copy the frame of input from the oldest written portion of the inputMemory
 						# Array into the partner's input for the current frame
 						_partner.inputs[i] = inputMemory[memoryPosition][i]
@@ -337,35 +337,35 @@ func _process(delta):
 				
 				# x distance difference check, try to go to the partner
 				if (_partner.inputs[INPUTS.XINPUT] == 0 and _partner.inputs[INPUTS.YINPUT] == 0
-					or global_position.distance_to(_partner.global_position) > 48.0 and roundf(movement.x/300.0) == 0.0
-					) and absf(global_position.x-_partner.global_position.x) >= 32.0:
-					_partner.inputs[INPUTS.XINPUT] = signf(global_position.x - _partner.global_position.x)
+					or global_position.distance_to(_partner.global_position) > 48 and round(movement.x/300) == 0
+					) and abs(global_position.x-_partner.global_position.x) >= 32:
+					_partner.inputs[INPUTS.XINPUT] = sign(global_position.x - _partner.global_position.x)
 				
 				#If more than 64 pixels away on X, override AI control to come back.
-				if absf(global_position.x-_partner.global_position.x) <= 64.0:
-					var testPos = round(global_position.x + (0-direction))
-					if signf((_partner.global_position.x - testPos)*direction) > 0.0:
-						_partner.inputs[INPUTS.XINPUT] = sign(0-direction)
+				if abs(global_position.x-_partner.global_position.x) <= 64:
+					var testPos = roundf(global_position.x + (0.0-_direction))
+					if signf((_partner.global_position.x - testPos)*_direction) > 0.0:
+						_partner.inputs[INPUTS.XINPUT] = sign(0-_direction)
 				
 				# Jump if pushing a wall, slower then half speed, on a flat surface and is either normal or jumping
 				var top_speed = active_physics.top_speed
 				# TODO This condition is a code smell
 				if ((_partner.current_state == STATES.NORMAL or
 					_partner.current_state == STATES.JUMP) and
-					absf(_partner.movement.x) < top_speed/2.0 and
-					snap_angle(_partner.angle) == 0.0 or
-					(_partner.pushingWall != 0.0 and pushingWall == 0.0)):
+					abs(_partner.movement.x) < top_speed/2.0 and
+					snap_angle(_partner.angle) == 0 or
+					(_partner.pushingWall != 0 and pushingWall == 0)):
 					# check partners position, only jump ever 0.25 seconds (prevent jump spam)
-					if global_position.y+32.0 < _partner.global_position.y and _partner.inputs[INPUTS.ACTION] == 0 and _partner.ground and ground and (fmod(Global.globalTimer+delta,0.25) < fmod(Global.globalTimer,0.25)):
+					if global_position.y+32 < _partner.global_position.y and _partner.inputs[INPUTS.ACTION] == 0 and _partner.ground and ground and (fmod(Global.globalTimer+delta,0.25) < fmod(Global.globalTimer,0.25)):
 						_partner.inputs[INPUTS.ACTION] = 1
 					elif global_position.y < _partner.global_position.y and ground and !_partner.ground:
 						_partner.inputs[INPUTS.ACTION] = 2
 			# panic
 			else:
-				if global_position.distance_to(_partner.global_position) <= 48.0 or _partner.direction != signf(global_position.x - _partner.global_position.x):
+				if global_position.distance_to(_partner.global_position) <= 48.0 or _partner._direction != signf(global_position.x - _partner.global_position.x):
 					partnerPanic = 0
 				_partner.inputs[INPUTS.XINPUT] = 0
-				if roundf(_partner.movement.x) == 0.0:
+				if round(_partner.movement.x) == 0:
 					partnerPanic -= delta
 					_partner.inputs[INPUTS.YINPUT] = 1
 					# press action every 0.3 ticks
@@ -377,7 +377,7 @@ func _process(delta):
 			# Panic
 			# if partner is locked, and stopped then do a spindash
 			# panic for 128 frames before letting go of spindash
-			if _partner.horizontalLockTimer > 0.0 and _partner.current_state == STATES.NORMAL and global_position.distance_to(_partner.global_position) > 48.0:
+			if _partner.horizontalLockTimer > 0 and _partner.current_state == STATES.NORMAL and global_position.distance_to(_partner.global_position) > 48:
 				partnerPanic = 128/60.0
 
 	# respawn mechanics
@@ -484,7 +484,7 @@ func _process(delta):
 			var starPart = star.get_node("GenericParticle")
 			star.global_position = global_position
 			starPart.getTarget = self
-			starPart.direction = -direction
+			starPart.direction = -_direction
 			get_parent().add_child(star)
 			var options = ["StarSingle","StarSinglePat2","default"]
 			starPart.play(options[round(randf()*2)])
@@ -517,7 +517,7 @@ func _process(delta):
 					var count = CountDown.instantiate()
 					get_parent().add_child(count)
 					count.countTime = clamp(round(airTimer/1.8)-2,0,5)
-					count.global_position = global_position+Vector2(8*direction,0)
+					count.global_position = global_position+Vector2(8.0*_direction,0.0)
 			airTimer -= delta
 		elif current_state != STATES.DIE: # Drown (kill checks if air timer is greater then 0)
 			$BubbleTimer.start(0.1)
@@ -1034,7 +1034,7 @@ func respawn() -> void:
 	water = false
 	# update physics (prevents player having water physics on respawn)
 	switch_physics()
-	global_position = _partner.global_position+Vector2(0.0,-get_viewport_rect().size.y)
+	global_position = _partner.global_position+Vector2(0,-get_viewport_rect().size.y)
 	_camera.target_limit_left = _partner._camera.target_limit_left
 	_camera.target_limit_right = _partner._camera.target_limit_right
 	_camera.target_limit_top = _partner._camera.target_limit_top
@@ -1120,7 +1120,7 @@ func _on_BubbleTimer_timeout():
 	if water:
 		# Generate Bubble
 		if airTimer > 0:
-			Bubble.create_small_bubble(get_parent().get_parent(),global_position+Vector2(8*direction,0),Vector2.ZERO,0.0,z_index+3)
+			Bubble.create_small_bubble(get_parent().get_parent(),global_position+Vector2(8.0*_direction,0.0),Vector2.ZERO,0.0,z_index+3)
 			$BubbleTimer.start(max(randf()*3,0.5))
 		elif movement.y < 250:
 			Bubble.create_small_or_medium_bubble(get_parent().get_parent(),global_position+Vector2(0,-8),Vector2.ZERO,0.0,z_index+3)
@@ -1447,10 +1447,10 @@ enum DIRECTIONS {LEFT, RIGHT} # I'd wager there is already something more approp
 ## Sets the direction of the player's sprite and direction value.
 func set_direction(new_direction: PlayerChar.DIRECTIONS) -> void:
 	if new_direction == DIRECTIONS.LEFT:
-		direction = -1.0
+		_direction = -1.0
 		sprite.flip_h = true
 		return
-	direction = 1.0
+	_direction = 1.0
 	sprite.flip_h = false
 
 
@@ -1464,30 +1464,27 @@ func set_direction(new_direction: PlayerChar.DIRECTIONS) -> void:
 ## [param change_sprite_direction] - if [code]false[/code], only the movement direction
 ## is changed, and the sprite direction ([code]sprite.flip_h[/code]) is kept the same.
 func set_direction_signed(new_direction: float, change_sprite_direction: bool = true) -> void:
-	direction = signf(new_direction)
+	_direction = signf(new_direction)
 	if change_sprite_direction:
-		sprite.flip_h = (direction < 0.0)
+		sprite.flip_h = (_direction < 0.0)
 
 
 ## Flips player's movement direction.[br]
 ## [b]Note: This function doesn't change the direction of the player's sprite
 ## ([code]sprite.flip_h[/code]).[/b]
 func flip_movement_direction() -> void:
-	direction = -direction
+	_direction = -_direction
 
 
 ## Gets the player's direction using the [enum DIRECTIONS] enum.
 func get_direction() -> PlayerChar.DIRECTIONS:
-	if direction < 0:
-		return DIRECTIONS.LEFT
-	else:
-		return DIRECTIONS.RIGHT
+	return DIRECTIONS.RIGHT if _direction > 0.0 else DIRECTIONS.LEFT
 
 
 ## Gets the player's direction in a way that is useful for calculations.[br]
 ## Returns [code]-1.0[/code] if left, or [code]1.0[/code] if right.
 func get_direction_multiplier() -> float:
-	return direction
+	return _direction
 
 
 ## Gets the player's ground speed.
