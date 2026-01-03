@@ -602,7 +602,7 @@ func _physics_process(delta):
 	var attacking = false
 	# lists to check through for attack animations
 	var currentAnimChecks = [
-	"roll","dropDash","spinDash","glide"
+	"roll","dropDash","spinDash","glide","stomp"
 	]
 	var lastActiveAnimCheck = [
 	"glide","glideSlide"
