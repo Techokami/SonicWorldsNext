@@ -8,4 +8,4 @@ extends Node2D
 func _ready():
 	if current_character == Global.PlayerChar1 and Global.currentCheckPoint == -1:
 		Global.players[0].global_position = global_position
-		Global.players[0].camera.global_position = global_position
+		Global.players[0].get_camera().global_position = global_position

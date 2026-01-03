@@ -59,7 +59,7 @@ func connect_player(player: PlayerChar):
 	player.groundSpeed = 0
 	player.movement.x = 0
 	player.movement.y = 0
-	player.cam_update()
+	player.get_camera().update()
 	player.global_position.x = get_global_position().x
 	
 	player.set_active_gimmick(self)

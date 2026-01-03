@@ -158,7 +158,7 @@ func brachiate_reposition_player(player : PlayerChar, player_brachiation_target 
 
 	player.set_global_position(truePose)
 	player.set_movement(Vector2.ZERO)
-	player.cam_update()
+	player.get_camera().update()
 
 ## Used when repositioning the player while not brachiating
 func reposition_player_static(player : PlayerChar):
@@ -170,7 +170,7 @@ func reposition_player_static(player : PlayerChar):
 			player.set_global_position(getPose)
 		
 		player.set_movement(Vector2.ZERO)
-		player.cam_update()	
+		player.get_camera().update()
 	
 func _physics_process(_delta: float) -> void:
 	for player : PlayerChar in Global.get_players_on_gimmick(self):

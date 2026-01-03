@@ -177,7 +177,7 @@ func player_physics_process(player: PlayerChar, _delta : float):
 	player.set_ground_speed(0)
 	player.movement.x = 0
 	
-	player.cam_update()
+	player.get_camera().update()
 
 
 func player_process(player: PlayerChar, _delta : float):
