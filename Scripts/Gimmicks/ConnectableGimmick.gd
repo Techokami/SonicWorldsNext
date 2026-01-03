@@ -1,3 +1,7 @@
+# TODO: This may be an ideal candidate for using the `@abstract` annotation
+# once we upgrade to Godot 4.5 or higher.
+# https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_basics.html#abstract-classes-and-methods
+
 ## Abstract connectable gimmick class — use this on all gimmicks that you want
 ## to bind the player to exclusively. Exclusive binding is usually going to
 ## be more reliable than attempting to bind via a gimmick specific player list.
