@@ -114,7 +114,7 @@ const INPUTACTIONS_P2 = [["gm_left_P2","gm_right_P2"],["gm_up_P2","gm_down_P2"],
 var inputActions = INPUTACTIONS_P1
 # 0 = ai, 1 = player 1, 2 = player 2
 var playerControl = 1
-var partner = null
+var _partner: PlayerChar = null
 var partnerPanic = 0
 
 const RESPAWN_DEFAULT_TIME = 5
@@ -219,14 +219,14 @@ func _ready():
 			inputMemory.append(inputs.duplicate(true))
 		# Partner (if player character 2 isn't none)
 		if Global.PlayerChar2 != Global.CHARACTERS.NONE:
-			partner = Player.instantiate()
-			partner.playerControl = 0
-			partner.z_index = z_index-1
-			get_parent().call_deferred("add_child", (partner))
-			partner.global_position = global_position+Vector2(-24,0)
-			partner.partner = self
-			partner.character = Global.PlayerChar2
-			partner.inputActions = INPUTACTIONS_P2
+			_partner = Player.instantiate()
+			_partner.playerControl = 0
+			_partner.z_index = z_index-1
+			get_parent().call_deferred("add_child", _partner)
+			_partner.global_position = global_position+Vector2(-24.0,0.0)
+			_partner._partner = self
+			_partner.character = Global.PlayerChar2
+			_partner.inputActions = INPUTACTIONS_P2
 	
 	# Checkpoints
 	await get_tree().process_frame
@@ -296,7 +296,7 @@ func _ready():
 	
 	# set partner sounds to share players (prevents sound overlap)
 	if playerControl == 0:
-		partner.sfx = sfx
+		_partner.sfx = sfx
 
 
 ## Returns the input for a button as a numerical value
@@ -323,61 +323,61 @@ func _process(delta):
 		memoryPosition = (memoryPosition + 1) % INPUT_MEMORY_LENGTH
 
 		# Partner ai logic
-		if partner != null:
+		if _partner != null:
 			# Check if partner panic
 			if partnerPanic <= 0:
-				if partner.playerControl == 0:
-					for i in partner.inputs.size():
+				if _partner.playerControl == 0:
+					for i: int in _partner.inputs.size():
 						# Copy the frame of input from the oldest written portion of the inputMemory
 						# Array into the partner's input for the current frame
-						partner.inputs[i] = inputMemory[memoryPosition][i]
+						_partner.inputs[i] = inputMemory[memoryPosition][i]
 				
 				#TODO: This current implimentation is better than what we had before,
 				#but it's still a little clunky. Will clean up this clode block later. - Ikey Ilex
 				
 				# x distance difference check, try to go to the partner
-				if (partner.inputs[INPUTS.XINPUT] == 0 and partner.inputs[INPUTS.YINPUT] == 0
-					or global_position.distance_to(partner.global_position) > 48 and round(movement.x/300) == 0
-					) and abs(global_position.x-partner.global_position.x) >= 32:
-					partner.inputs[INPUTS.XINPUT] = sign(global_position.x - partner.global_position.x)
+				if (_partner.inputs[INPUTS.XINPUT] == 0 and _partner.inputs[INPUTS.YINPUT] == 0
+					or global_position.distance_to(_partner.global_position) > 48.0 and roundf(movement.x/300.0) == 0.0
+					) and absf(global_position.x-_partner.global_position.x) >= 32.0:
+					_partner.inputs[INPUTS.XINPUT] = signf(global_position.x - _partner.global_position.x)
 				
 				#If more than 64 pixels away on X, override AI control to come back.
-				if abs(global_position.x-partner.global_position.x) <= 64:
+				if absf(global_position.x-_partner.global_position.x) <= 64.0:
 					var testPos = round(global_position.x + (0-direction))
-					if sign((partner.global_position.x - testPos)*direction) > 0:
-						partner.inputs[INPUTS.XINPUT] = sign(0-direction)
+					if signf((_partner.global_position.x - testPos)*direction) > 0.0:
+						_partner.inputs[INPUTS.XINPUT] = sign(0-direction)
 				
 				# Jump if pushing a wall, slower then half speed, on a flat surface and is either normal or jumping
 				var top_speed = active_physics.top_speed
 				# TODO This condition is a code smell
-				if ((partner.current_state == STATES.NORMAL or
-					partner.current_state == STATES.JUMP) and
-					abs(partner.movement.x) < top_speed/2.0 and
-					snap_angle(partner.angle) == 0 or
-					(partner.pushingWall != 0 and pushingWall == 0)):
+				if ((_partner.current_state == STATES.NORMAL or
+					_partner.current_state == STATES.JUMP) and
+					absf(_partner.movement.x) < top_speed/2.0 and
+					snap_angle(_partner.angle) == 0.0 or
+					(_partner.pushingWall != 0.0 and pushingWall == 0.0)):
 					# check partners position, only jump ever 0.25 seconds (prevent jump spam)
-					if global_position.y+32 < partner.global_position.y and partner.inputs[INPUTS.ACTION] == 0 and partner.ground and ground and (fmod(Global.globalTimer+delta,0.25) < fmod(Global.globalTimer,0.25)):
-						partner.inputs[INPUTS.ACTION] = 1
-					elif global_position.y < partner.global_position.y and ground and !partner.ground:
-						partner.inputs[INPUTS.ACTION] = 2
+					if global_position.y+32.0 < _partner.global_position.y and _partner.inputs[INPUTS.ACTION] == 0 and _partner.ground and ground and (fmod(Global.globalTimer+delta,0.25) < fmod(Global.globalTimer,0.25)):
+						_partner.inputs[INPUTS.ACTION] = 1
+					elif global_position.y < _partner.global_position.y and ground and !_partner.ground:
+						_partner.inputs[INPUTS.ACTION] = 2
 			# panic
 			else:
-				if global_position.distance_to(partner.global_position) <= 48 or partner.direction != sign(global_position.x - partner.global_position.x):
+				if global_position.distance_to(_partner.global_position) <= 48.0 or _partner.direction != signf(global_position.x - _partner.global_position.x):
 					partnerPanic = 0
-				partner.inputs[INPUTS.XINPUT] = 0
-				if round(partner.movement.x) == 0:
+				_partner.inputs[INPUTS.XINPUT] = 0
+				if roundf(_partner.movement.x) == 0.0:
 					partnerPanic -= delta
-					partner.inputs[INPUTS.YINPUT] = 1
+					_partner.inputs[INPUTS.YINPUT] = 1
 					# press action every 0.3 ticks
 					if fmod(partnerPanic+delta,0.3) < fmod(partnerPanic,0.3):
-						partner.inputs[INPUTS.ACTION] = 1
+						_partner.inputs[INPUTS.ACTION] = 1
 					else:
-						partner.inputs[INPUTS.ACTION] = 0
+						_partner.inputs[INPUTS.ACTION] = 0
 
 			# Panic
 			# if partner is locked, and stopped then do a spindash
 			# panic for 128 frames before letting go of spindash
-			if partner.horizontalLockTimer > 0 and partner.current_state == STATES.NORMAL and global_position.distance_to(partner.global_position) > 48:
+			if _partner.horizontalLockTimer > 0.0 and _partner.current_state == STATES.NORMAL and global_position.distance_to(_partner.global_position) > 48.0:
 				partnerPanic = 128/60.0
 
 	# respawn mechanics
@@ -987,10 +987,10 @@ func kill():
 		MusicController.stop_music_theme_with_priority(MusicController.PriorityLevel.EFFECT_THEME)
 			
 	# If Player 1 dies and a partner exists, initiate respawn flying from current position.
-	if playerControl == 1 and partner:
-		var savedPos = partner.global_position
-		partner.respawn()
-		partner.global_position = savedPos
+	if playerControl == 1 and _partner:
+		var savedPos = _partner.global_position
+		_partner.respawn()
+		_partner.global_position = savedPos
 			
 	collision_layer = 0
 	collision_mask = 0
@@ -1018,11 +1018,11 @@ func kill():
 ## Makes a partner character re-enter the scene.
 ## TODO: Make this compatible with partners other than Tails.
 func respawn() -> void:
-	if partner == null:
+	if _partner == null:
 		return
 	
 	# cancel function if partner is dead or ai controlled
-	if partner.current_state == STATES.DIE || partner.playerControl != 1:
+	if _partner.current_state == STATES.DIE || _partner.playerControl != 1:
 		return
 		
 	airTimer = 1
@@ -1034,11 +1034,11 @@ func respawn() -> void:
 	water = false
 	# update physics (prevents player having water physics on respawn)
 	switch_physics()
-	global_position = partner.global_position+Vector2(0,-get_viewport_rect().size.y)
-	_camera.target_limit_left = partner._camera.target_limit_left
-	_camera.target_limit_right = partner._camera.target_limit_right
-	_camera.target_limit_top = partner._camera.target_limit_top
-	_camera.target_limit_bottom = partner._camera.target_limit_bottom
+	global_position = _partner.global_position+Vector2(0.0,-get_viewport_rect().size.y)
+	_camera.target_limit_left = _partner._camera.target_limit_left
+	_camera.target_limit_right = _partner._camera.target_limit_right
+	_camera.target_limit_top = _partner._camera.target_limit_top
+	_camera.target_limit_bottom = _partner._camera.target_limit_bottom
 	
 	set_state(STATES.RESPAWN)
 
@@ -1047,7 +1047,7 @@ func respawn() -> void:
 ## the other's partner, so calling get_partner on Sonic in Sonic and Tails mode gets Tails and
 ## calling it on Tails gets Sonic.
 func get_partner() -> PlayerChar:
-	return partner
+	return _partner
 
 
 func _touch_ceiling():
