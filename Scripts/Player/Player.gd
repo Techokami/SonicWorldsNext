@@ -102,7 +102,7 @@ var rotatableSprites = ["walk", "run", "peelOut", "hammerSwing"]
 var direction = scale.x
 
 # Ground speed is mostly used for timing and animations, there isn't any functionality to it.
-var groundSpeed = 0
+var _ground_speed: float = 0.0
 
 enum INPUTS {XINPUT, YINPUT, ACTION, ACTION2, ACTION3, SUPER, PAUSE}
 # Input control, 0 = 0ff, 1 = pressed, 2 = held
@@ -590,10 +590,10 @@ func _physics_process(delta):
 	# damage mask bit
 	set_collision_layer_value(20,attacking)
 	# water surface running
-	set_collision_mask_value(23,ground and abs(groundSpeed) >= 7*60 and !water)
+	set_collision_mask_value(23,ground and absf(_ground_speed) >= 7.0*60 and !water)
 	
 	if (ground):
-		groundSpeed = movement.x
+		_ground_speed = movement.x
 		
 	# wall detection
 	if horizontalSensor.is_colliding() or is_on_wall():
@@ -1108,7 +1108,7 @@ func switch_physics() -> void:
 
 
 func _on_SparkleTimer_timeout() -> void:
-	if isSuper and abs(groundSpeed) >= active_physics.top_speed:
+	if isSuper and absf(_ground_speed) >= active_physics.top_speed:
 		var sparkle = Particle.instantiate()
 		sparkle.global_position = global_position
 		sparkle.play("Super")
@@ -1218,7 +1218,7 @@ func action_water_run_handle():
 
 
 # TODO Move to PlayerAvatar
-func _handle_animation_speed(gSpeed = groundSpeed):
+func _handle_animation_speed(gSpeed = _ground_speed):
 	match(_animator.current_animation):
 		"walk", "run", "peelOut":
 			if character == Global.CHARACTERS.SHADOW:
@@ -1470,12 +1470,12 @@ func get_direction_multiplier() -> float:
 
 ## Gets the player's ground speed.
 func get_ground_speed() -> float:
-	return groundSpeed
+	return _ground_speed
 
 
 ## Sets the player's ground speed.
 func set_ground_speed(new_ground_speed: float) -> void:
-	self.groundSpeed = new_ground_speed
+	_ground_speed = new_ground_speed
 
 
 ## Gets whether or not the player is in water.
