@@ -74,7 +74,7 @@ var crouchBox = null
 ## Note: Keep [constant COUNT] as the last entry since it is used to know how
 ## many options there are.
 enum SHIELDS {NONE, NORMAL, FIRE, ELEC, BUBBLE, COUNT}
-var shield = SHIELDS.NONE
+var _shield: SHIELDS = SHIELDS.NONE
 @onready var magnetShape = $RingMagnet/CollisionShape2D
 @onready var shieldSprite: AnimatedSprite2D = $Shields
 var reflective = false # used for reflecting projectiles
@@ -441,7 +441,7 @@ func _process(delta):
 				player_avatar.end_super()
 		
 		if (supTime <= 0):
-			if (shield != SHIELDS.NONE):
+			if (_shield != SHIELDS.NONE):
 				shieldSprite.visible = true
 			$InvincibilityBarrier.visible = false
 			# turn off super palette and physics (if super)
@@ -506,7 +506,7 @@ func _process(delta):
 		kill()
 		
 	# Water timer
-	if water and shield != SHIELDS.BUBBLE:
+	if water and _shield != SHIELDS.BUBBLE:
 		if airTimer > 0:
 			if playerControl == 1:
 				if snapped(airTimer,airWarning) != snapped(airTimer-delta,airWarning) and airTimer > panicTime:
@@ -822,7 +822,7 @@ func is_right_held():
 ##                   position in the list starting from 0.[br]
 ## [param ignoreInstaShield] — if true, ignores Sonic's Insta-Shield.
 func hit_player(damagePoint:Vector2 = global_position, damageType: Global.HAZARDS = Global.HAZARDS.NORMAL, soundID:int = 6, ignoreInstaShield: bool = false):
-	if damageType != Global.HAZARDS.NORMAL and shield == damageType+1:
+	if damageType != Global.HAZARDS.NORMAL and _shield == damageType+1:
 		return false
 	if current_state != STATES.HIT and invTime <= 0 and supTime <= 0 and \
 	   (shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled or character != Global.CHARACTERS.SONIC or ignoreInstaShield):
@@ -839,7 +839,7 @@ func hit_player(damagePoint:Vector2 = global_position, damageType: Global.HAZARD
 		set_state(STATES.HIT)
 		invTime = 2.0*60 # Invulnerable for 2 seconds. Starts counting *after* landing.
 		# Ring loss
-		if (shield == SHIELDS.NONE and rings > 0 and is_independent()):
+		if (_shield == SHIELDS.NONE and rings > 0 and is_independent()):
 			sfx[9].play()
 			ringDisTime = 30.0/60.0 # ignore rings for 30 frames after landing
 			const RING_STARTING_ANGLE: float = deg_to_rad(101.25)
@@ -898,7 +898,7 @@ func hit_player(damagePoint:Vector2 = global_position, damageType: Global.HAZARD
 				get_parent().add_child(ring)
 			rings = 0
 			hyper_ring = false
-		elif shield == SHIELDS.NONE and is_independent():
+		elif _shield == SHIELDS.NONE and is_independent():
 			kill()
 		else:
 			sfx[soundID].play()
@@ -1407,10 +1407,10 @@ func set_shield(setShieldID: PlayerChar.SHIELDS) -> void:
 	if water and (setShieldID == SHIELDS.FIRE or setShieldID == SHIELDS.ELEC):
 		return
 	
-	shield = setShieldID
+	_shield = setShieldID
 	# make shield visible if not super and the invincibility barrier isn't going
 	shieldSprite.visible = !isSuper and !$InvincibilityBarrier.visible
-	match (shield):
+	match (_shield):
 		SHIELDS.NORMAL:
 			shieldSprite.play("Default")
 			sfx[5].play()
@@ -1431,7 +1431,7 @@ func set_shield(setShieldID: PlayerChar.SHIELDS) -> void:
 ## Gets the value of the player's current shield. The value will be one of the
 ## values of the [enum SHIELDS] enumerator for the player.
 func get_shield() -> PlayerChar.SHIELDS:
-	return self.shield
+	return _shield
 	
 
 ## Returns the current [code]PlayerAvatar[/code] for the player. You should use this to get
