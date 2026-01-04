@@ -80,10 +80,12 @@ func _ready():
 		# set level name strings
 		$LevelCard/Banner/LevelName.text = zoneName
 		$LevelCard/Banner/Zone.text = zone
-		# set act graphic
-		$LevelCard/Banner/Act.frame = act-1
-		# make visible if act isn't 0 (0 will just be zone)
-		$LevelCard/Banner/Act.visible = (act > 0)
+		# set act graphic and make it visible if act isn't 0 (0 will just be zone)
+		if act > 0:
+			$LevelCard/Banner/Act.frame = act - 1
+			$LevelCard/Banner/Act.visible = true
+		else:
+			$LevelCard/Banner/Act.visible = false
 		# make sure level card isn't paused so it can keep playing
 		$LevelCard/CardPlayer.process_mode = PROCESS_MODE_ALWAYS
 		# temporarily let music play during pauses
@@ -170,7 +172,7 @@ func _process(delta):
 		for i in Global.players:
 			# check if in water and has elec or fire shield
 			if i.water:
-				match (i.shield):
+				match (i.get_shield()):
 					i.SHIELDS.ELEC:
 						# reset shield do flash
 						i.set_shield(i.SHIELDS.NONE)

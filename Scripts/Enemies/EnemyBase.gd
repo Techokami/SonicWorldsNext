@@ -25,8 +25,8 @@ func _process(delta):
 				else:
 					# If neither are true, just gain a little upward speed
 					i.movement.y -= 100
-				if i.shield == i.SHIELDS.BUBBLE:
-						i.emit_enemy_bounce()
+				if i.get_shield() == PlayerChar.SHIELDS.BUBBLE:
+					i.emit_enemy_bounce()
 			# destroy
 			Score.create(get_parent(), global_position, Global.SCORE_COMBO[min(Global.SCORE_COMBO.size()-1,i.enemyCounter)])
 			i.enemyCounter += 1

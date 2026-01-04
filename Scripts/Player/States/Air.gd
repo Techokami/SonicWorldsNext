@@ -54,10 +54,7 @@ func state_physics_process(delta: float) -> void:
 	# Change parent direction
 	# Check that lock direction isn't on
 	if !lockDir and parent.inputs[parent.INPUTS.XINPUT] != 0:
-			parent.direction = parent.inputs[parent.INPUTS.XINPUT]
-	
-	# set facing direction
-	parent.sprite.flip_h = (parent.direction < 0)
+		parent.set_direction_signed(parent.inputs[parent.INPUTS.XINPUT])
 	
 	# Gravity
 	parent.movement.y += parent.get_physics().gravity / GlobalFunctions.div_by_delta(delta)

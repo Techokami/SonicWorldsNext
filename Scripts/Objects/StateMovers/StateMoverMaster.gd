@@ -32,25 +32,25 @@ var realPosition
 var origin
 var states = []
 
+
+func setState(stateIndex):
+	var activeState = states[stateIndex]
+	activeState.enterState()
+	state = stateIndex
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	realPosition = Vector2(position.x, position.y)
+	realPosition = position
 	for i in get_children():
 		if i is StateMover:
 			states.append(i)
 	
-	origin = Vector2(position)
+	origin = position
 	
 	if states.size() > 0:
 		setState(0)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func setState(stateIndex):
-	var activeState = states[stateIndex]
-	activeState.enterState()
-	state = stateIndex
-	
-	
 func _process(delta):
 	if state == -1:
 		return
@@ -64,7 +64,6 @@ func _physics_process(delta):
 		
 	var activeState = states[state]
 	activeState.statePhysicsProcess(delta)
-	position.x = floor(realPosition.x)
-	position.y = floor(realPosition.y)
+	position = realPosition.floor()
 	
 	

@@ -84,15 +84,12 @@ func _input(event):
 		# finish character select if start is pressed
 		if event.is_action_pressed("gm_pause"):
 			selected = true
-			# set player 2 to none to prevent redundant code
-			Global.PlayerChar2 = Global.CHARACTERS.NONE
 			
 			# set the character
 			Global.PlayerChar1 = characters[characterID].char1
 			Global.PlayerChar2 = characters[characterID].char2
 			
-			
-			## Save the selected zone ID
+			# Save the selected zone ID
 			Global.currentZone = levelPaths[levelID]
 			Main.change_scene(Global.currentZone,"FadeOut",1.0,true)
 			

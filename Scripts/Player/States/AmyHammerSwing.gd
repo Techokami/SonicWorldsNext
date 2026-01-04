@@ -21,15 +21,12 @@ func state_physics_process(delta: float) -> void:
 	
 	# set direction
 	if parent.inputs[parent.INPUTS.XINPUT] != 0:
-		parent.direction = parent.inputs[parent.INPUTS.XINPUT]
+		parent.set_direction_signed(parent.inputs[parent.INPUTS.XINPUT])
 	elif parent.movement.x != 0:
-		parent.direction = sign(parent.movement.x)
+		parent.set_direction_signed(signf(parent.movement.x))
 	
 	# set to max speed based on direction
-	parent.movement.x = parent.top*parent.direction
-	
-	# flip sprite based on direction
-	parent.sprite.flip_h = (parent.direction < 0)
+	parent.movement.x = parent.top*parent.get_direction_multiplier()
 	
 	# decrease hammer time
 	if hammerTime > 0:

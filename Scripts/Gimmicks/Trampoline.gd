@@ -108,7 +108,7 @@ func physics_process_game(delta):
 			i.set_state(i.STATES.AIR)
 			i.movement.y += yVelocity * bounceFactor
 			animator.play("spring")
-			if(abs(i.groundSpeed) >= min(6*60,i.get_physics().top_speed)):
+			if(absf(i.get_ground_speed()) >= minf(6.0*60,i.get_physics().top_speed)):
 				animator.queue("run")
 			else:
 				animator.queue("walk")

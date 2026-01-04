@@ -23,10 +23,7 @@ func _physics_process(delta):
 				i.movement.x = getDir*speed
 			
 			# force player direction
-			if getDir != 0:
-				i.direction = getDir
-				# set flipping on sprite
-				i.sprite.flip_h = (i.direction < 0)
+			i.set_direction_signed(getDir)
 			
 			# force slide state
 			if (i.get_state() != PlayerChar.STATES.ROLL or

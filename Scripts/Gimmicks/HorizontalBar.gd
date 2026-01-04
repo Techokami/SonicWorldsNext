@@ -178,7 +178,7 @@ func _process_player_x_movement(_delta: float, player: PlayerChar, playerIndex: 
 		else:
 			player.movement.y = -2 * (player.get_physics().jump_strength / 3.0)
 			
-		player.groundSpeed = 0
+		player.set_ground_speed(0.0)
 		player.set_state(player.STATES.JUMP)
 		player.get_avatar().get_animator().play("roll")
 		playersMode[playerIndex] = PLAYER_MODE.MONITORING
@@ -214,9 +214,8 @@ func _process_player_launch_up(player: PlayerChar, playerIndex: int):
 			"walk", "run", "peelOut":
 				cur_animation = animator.current_animation
 			# if none of the animations match and speed is equal beyond the players top speed, set it to run (default is walk)
-			_:
-				if(abs(player.groundSpeed) >= min(6*60,player.get_physics().top_speed)):
-					cur_animation = "run"
+			_ when abs(player.get_ground_speed()) >= min(6.0*60,player.get_physics().top_speed):
+				cur_animation = "run"
 		# play player animation
 		animator.play("spring", -1, 1, false)
 		animator.queue(cur_animation)

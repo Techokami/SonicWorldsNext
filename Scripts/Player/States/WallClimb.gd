@@ -20,8 +20,8 @@ func state_process(_delta: float) -> void:
 	# jumping off
 	if (parent.inputs[parent.INPUTS.ACTION] == 1 or parent.inputs[parent.INPUTS.ACTION2] == 1 or parent.inputs[parent.INPUTS.ACTION3] == 1) and !climbUp:
 		var animator: PlayerCharAnimationPlayer = parent.get_avatar().get_animator()
-		parent.movement = Vector2(-4*60*parent.direction,-4*60)
-		parent.direction *= -1
+		parent.movement = Vector2(-4.0*60.0*parent.get_direction_multiplier(),-4.0*60.0)
+		parent.flip_movement_direction()
 		animator.play("roll")
 		animator.advance(0)
 		parent.set_state(parent.STATES.JUMP)
@@ -50,7 +50,7 @@ func state_physics_process(delta: float) -> void:
 		# go to normal if on floor
 		if parent.ground:
 			animator.play("walk")
-			parent.groundSpeed = 1
+			parent.set_ground_speed(1.0)
 			parent.disconnect_from_floor()
 			parent.set_state(parent.STATES.AIR,parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL))
 			return
@@ -58,7 +58,7 @@ func state_physics_process(delta: float) -> void:
 		# check for wall using the wall sensors
 
 		var velMem = parent.velocity
-		parent.velocity = Vector2(parent.direction,-1)
+		parent.velocity = Vector2(parent.get_direction_multiplier(),-1.0)
 		parent.update_sensors()
 		parent.velocity = velMem
 		
@@ -67,7 +67,7 @@ func state_physics_process(delta: float) -> void:
 			parent.movement = Vector2.ZERO
 			animator.speed_scale = 1
 			parent.set_character_action_state(KnucklesAvatar.CHAR_STATES.KNUCKLES_CLIMB,
-			                    parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL))
+								parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL))
 			return
 		
 		# climbing edge
@@ -94,9 +94,9 @@ func state_physics_process(delta: float) -> void:
 		var offset = (climbTimer/animator.current_animation_length)*shiftPoses.size()
 		
 		animator.advance(floor(offset)*0.1)
-		parent.global_position = climbPosition+(shiftPoses[min(floor(offset),shiftPoses.size()-1)]*Vector2(parent.direction,1))
+		parent.global_position = climbPosition+(shiftPoses[mini(floori(offset),shiftPoses.size()-1)]*Vector2(parent.get_direction_multiplier(),1.0))
 		# if timer greater then animator then exit climb
 		if climbTimer > animator.current_animation_length:
 			parent.set_state(parent.STATES.NORMAL,parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL))
 			climbUp = false
-			parent.global_position = climbPosition+(shiftPoses[shiftPoses.size()-1]*Vector2(parent.direction,1))
+			parent.global_position = climbPosition+(shiftPoses[shiftPoses.size()-1]*Vector2(parent.get_direction_multiplier(),1.0))

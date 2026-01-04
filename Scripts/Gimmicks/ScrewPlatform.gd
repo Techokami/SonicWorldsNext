@@ -4,7 +4,8 @@ extends Node2D
 
 @export var top = 2
 @export var bottom = 2
-@export_enum("up", "down") var rightMovement = 0
+enum DIRECTION { UP = 1, DOWN = -1 }
+@export var right_movement: DIRECTION = DIRECTION.UP
 
 var players = []
 var playerPosX = []
@@ -12,19 +13,20 @@ var activePlayers = []
 var fall = false
 var fallSpeed = 100
 
-func _ready():
-	scale.x = sign(1-(rightMovement*2))*abs(scale.x)
-	$ScrewPipe.region_rect = Rect2($ScrewPipe.region_rect.position,Vector2($ScrewPipe.region_rect.size.x,(top*8)+(bottom*8)))
-	$ScrewPipe.position = Vector2(0,(bottom*4)-(top*4))
-	$ScrewBottom.position.y = (bottom*8)+4
+func _set_sprite_positions() -> void:
+	scale.x = absf(scale.x) * float(right_movement)
+	$ScrewPipe.region_rect = Rect2(
+		$ScrewPipe.region_rect.position,
+		Vector2($ScrewPipe.region_rect.size.x,(bottom + top) * 8.0))
+	$ScrewPipe.position = Vector2(0,(bottom - top) * 4.0)
+	$ScrewBottom.position.y = (bottom * 8.0) + 4.0
 
+func _ready() -> void:
+	_set_sprite_positions()
 
 func _process(_delta):
 	if Engine.is_editor_hint():
-		scale.x = sign(1-(rightMovement*2))*abs(scale.x)
-		$ScrewPipe.region_rect = Rect2($ScrewPipe.region_rect.position,Vector2($ScrewPipe.region_rect.size.x,(top*8)+(bottom*8)))
-		$ScrewPipe.position = Vector2(0,(bottom*4)-(top*4))
-		$ScrewBottom.position.y = (bottom*8)+4
+		_set_sprite_positions()
 
 func _physics_process(delta):
 	if !Engine.is_editor_hint():
@@ -58,12 +60,13 @@ func _physics_process(delta):
 			
 			# increase move offset by how fast hte player is moving
 			moveOffset += -goDirection
-			
-			if $Screw.position.y > bottom*8:
-				fall = true
-				$Screw/DeathTimer.start(5)
 		
-		$Screw.position.y = max($Screw.position.y+moveOffset,(-top*8)+12)
+		if moveOffset != 0.0:
+			$Screw.position.y = maxf($Screw.position.y + moveOffset, (-top * 8.0) + 12.0)
+			
+			if $Screw.position.y > bottom * 8.0:
+				fall = true
+				$Screw/DeathTimer.start(5.0)
 
 func _on_playerChecker_body_entered(body):
 	if !players.has(body):

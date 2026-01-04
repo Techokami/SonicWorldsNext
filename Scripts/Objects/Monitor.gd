@@ -59,10 +59,8 @@ func _ready():
 		# load textures for character-specific frames
 		# (if we are in the editor, only load the icon for the 1'st character
 		# from the list, as the other icons won't be shown in the editor anyway)
-		for i: int in num_characters:
+		for i: int in (1 if in_editor else num_characters):
 			_1up_textures[i] = load("res://Graphics/Items/monitor_icon_%s.png" % char_names[i].to_lower()) as Texture2D
-			if in_editor:
-				break
 
 	# when in the editor, frame 0 in the monitor sprite sheet overlaps the item icon
 	# with static, which is why we need to set the 1'st frame for the monitor sprite,
@@ -129,6 +127,7 @@ func destroy():
 				playerTouch.set_state(PlayerChar.STATES.SUPER)
 		ITEMS._1UP:
 			MusicController.play_music_theme(MusicController.MusicTheme._1UP)
+			Global.lives += 1
 		ITEMS.ROBOTNIK:
 			playerTouch.hit_player(playerTouch.global_position, Global.HAZARDS.NORMAL, 9, true)
 		ITEMS.HYPER_RING:
@@ -143,7 +142,7 @@ func set_destroyed():
 func _physics_process(delta):
 	# if physics are on make em fall
 	if physics:
-		var collide = move_and_collide(Vector2(0,yspeed)*delta)
+		var collide = move_and_collide(Vector2(0.0,yspeed*delta))
 		yspeed += grv/GlobalFunctions.div_by_delta(delta)
 		if collide and yspeed > 0:
 			physics = false
