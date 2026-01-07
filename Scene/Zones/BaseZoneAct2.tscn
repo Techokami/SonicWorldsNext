@@ -1057,6 +1057,9 @@ position = Vector2(-134, 546)
 
 [node name="Catapult" parent="." instance=ExtResource("41_w8bgu")]
 position = Vector2(96, 768)
+vert_launch_velocity = 384.0
+launch_velocity = Vector2(960, -384)
+allow_jumping_out = true
 
 [connection signal="body_entered" from="Entities/AdvancedPlatform" to="Entities/AdvancedPlatform" method="_on_body_entered"]
 [connection signal="body_exited" from="Entities/AdvancedPlatform" to="Entities/AdvancedPlatform" method="_on_body_exited"]

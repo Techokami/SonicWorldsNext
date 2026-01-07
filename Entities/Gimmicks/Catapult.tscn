@@ -9,7 +9,7 @@ size = Vector2(32, 2)
 
 [node name="Catapult" type="Node2D"]
 script = ExtResource("1_mqn1c")
-launch_speed = 960.0
+allow_jumping_out = null
 
 [node name="Platform" type="StaticBody2D" parent="."]
 collision_layer = 8192
