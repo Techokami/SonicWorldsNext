@@ -33,7 +33,7 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
 	$BigMovingBrick.global_position += brick_movement
 	
-func try_cheat():
+func try_cheat() -> Key:
 	# Hurt the player tool
 	if Input.is_key_pressed(KEY_K):
 		Global.players[0].hit_player()
@@ -51,7 +51,7 @@ func try_cheat():
 		
 	if Input.is_key_pressed(KEY_SEMICOLON):
 		if teleport_location == null:
-			return 0
+			return KEY_NONE
 		
 		Global.players[0].global_position = teleport_location
 		if Global.players.size() > 1:
@@ -105,25 +105,18 @@ func try_cheat():
 			be_slow = true
 		return KEY_PERIOD
 	
-	if Input.is_key_pressed(KEY_SLASH):
-		if Global.players[1] != null:
-			Global.players[1].respawn()
+	if Input.is_key_pressed(KEY_SLASH) and Global.players.size() > 1:
+		Global.players[1].respawn()
+		return KEY_SLASH
 	
 	
-	return 0
+	return KEY_NONE
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-var just_pressed = null
+var just_pressed: Key = KEY_NONE
 func _process(_delta: float) -> void:
 	
-	if just_pressed != null and Input.is_key_pressed(just_pressed):
+	if just_pressed != KEY_NONE and Input.is_key_pressed(just_pressed):
 		return
 		
-	just_pressed = null
-	
-	var got_back = try_cheat()
-	
-	if got_back != 0:
-		just_pressed = got_back
-	
-	pass
+	just_pressed = try_cheat()
