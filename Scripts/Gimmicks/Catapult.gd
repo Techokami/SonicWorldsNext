@@ -33,7 +33,7 @@ class_name Catapult extends ConnectableGimmick
 		if _allow_launch_velocity_change:
 			launch_velocity = value
 
-## The speed of catapult retracting back to the initial position.
+## The speed of catapult moving back to the initial position.
 @export var retract_speed: float = 60.0 # ~1 px / frame
 
 ## Defines if jumping out of the gimmick is allowed (Sonic 2 behavior)
@@ -107,15 +107,18 @@ func _physics_process(delta: float) -> void:
 				# Lock for 15 frames
 				player.set_horizontal_lock_timer(15.0 / 60.0)
 			
-			# Unset the launching state, so the catapult can retract
-			# back to the initial position
+			# Unset the launching state, so the catapult
+			# can move back to the initial position
 			_launching = false
 			_abort_launch = false
 			_velocity = 0.0
 			_players.clear()
+			$Platform/CollisionShape2D.disabled = true
 	elif platform.position.x != 0.0:
 		# Move toward the initial position
 		platform.position.x = move_toward(platform.position.x, 0.0, retract_speed * delta)
+		if platform.position.x == 0.0:
+			$Platform/CollisionShape2D.disabled = false
 
 func player_physics_process(player: PlayerChar, _delta: float) -> void:
 	# Set player's position and reset their movement
@@ -142,8 +145,7 @@ func player_force_detach_callback(player: PlayerChar) -> void:
 	_players.erase(player)
 
 func _player_collision(player: PlayerChar) -> void:
-	# Don't interact with any players when
-	# retracting back to the initial position
+	# Don't interact with any players when moving back to the initial position
 	if not _launching and $Platform.position.x != 0.0:
 		return
 	
