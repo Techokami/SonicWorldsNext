@@ -92,21 +92,21 @@ func _process(delta):
 		#       for the sake of determining an offset before connecting
 		
 		$Grab.play()
-		player.set_hitbox(player.get_predefined_hitbox(PlayerChar.HITBOXES.HORIZONTAL))
-		player.set_state(PlayerChar.STATES.GIMMICK, player.get_predefined_hitbox(PlayerChar.HITBOXES.HORIZONTAL))
-		player.get_avatar().get_animator().play("clingVerticalBar")
 		
-		player.set_movement(Vector2(0, 0))
-			
 		var avatar: PlayerAvatar = player.get_avatar()
-		var offset = avatar.get_hands_offset()
+		var horizontal_hitbox: Vector2 = player.get_predefined_hitbox(PlayerChar.HITBOXES.HORIZONTAL)
+		player.set_hitbox(horizontal_hitbox)
+		player.set_state(PlayerChar.STATES.GIMMICK, horizontal_hitbox)
+		player.avatar.get_animator().play(&"clingVerticalBar")
+		
+		player.set_movement(Vector2(0.0, 0.0))
 		
 		player.set_active_gimmick(self)
 		players_on_gimmick += 1
 		
 		var max_y_offset: float = height / 2.0 - 8.0
 		player.global_position = Vector2(
-			global_position.x - offset.x,
+			global_position.x - avatar.get_hands_offset().x,
 			clampf(player.global_position.y, global_position.y - max_y_offset, global_position.y + max_y_offset))
 
 	if players_on_gimmick > 0:
