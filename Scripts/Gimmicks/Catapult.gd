@@ -1,5 +1,5 @@
-## Catapult gimmick from Flying Battery Zone.
-## Author: Stanislav Gromov
+## Catapult gimmick from Flying Battery Zone.[br]
+## Author: Stanislav Gromov (with help and guidance from DimensionWarped).
 @tool
 class_name Catapult extends ConnectableGimmick
 
@@ -47,6 +47,7 @@ class _CatapultCollider extends StaticBody2D:
 
 var _players: Array[PlayerChar] = []
 var _launching: bool = false
+var _abort_launch: bool = false
 var _velocity: float = 0.0
 var _allow_launch_velocity_change: bool = true
 
@@ -70,23 +71,32 @@ func _physics_process(delta: float) -> void:
 	
 	var platform: StaticBody2D = $Platform
 	if _launching:
-		# Add acceleration, but make sure the resulting velocity
-		# doesn't exceed the final launch speed
-		_velocity = minf(_velocity + (acceleration * delta), launch_velocity.x)
-		
-		# Move towards the destination point
-		platform.position.x = move_toward(platform.position.x, path_length, _velocity * delta)
+		if not _abort_launch:
+			# Add acceleration, but make sure the resulting velocity
+			# doesn't exceed the final launch speed
+			_velocity = minf(_velocity + (acceleration * delta), launch_velocity.x)
+			
+			# Move towards the destination point
+			platform.position.x = move_toward(platform.position.x, path_length, _velocity * delta)
 		
 		# If we are at the destination point, then we need
 		# to launch all affected players forward
-		if platform.position.x == path_length:
+		if _abort_launch or platform.position.x == path_length:
 			# Loop through all affected players
 			for player: PlayerChar in _players:
 				if player.get_active_gimmick() != self:
 					continue
 				
-				# Throw the player forward
+				# Detach the player from the catapult
 				player.unset_active_gimmick()
+				
+				# Abort launching and simply set the normal state
+				# if any of the players collided with an obstacle
+				if _abort_launch:
+					player.set_state(PlayerChar.STATES.NORMAL)
+					continue
+					
+				# Throw the player forward
 				player.movement = launch_velocity
 				if vert_launch_velocity == 0.0:
 					player.set_state(PlayerChar.STATES.NORMAL)
@@ -100,6 +110,7 @@ func _physics_process(delta: float) -> void:
 			# Unset the launching state, so the catapult can retract
 			# back to the initial position
 			_launching = false
+			_abort_launch = false
 			_velocity = 0.0
 			_players.clear()
 	elif platform.position.x != 0.0:
@@ -108,8 +119,15 @@ func _physics_process(delta: float) -> void:
 
 func player_physics_process(player: PlayerChar, _delta: float) -> void:
 	# Set player's position and reset their movement
+	var old_position: Vector2 = player.global_position
 	player.global_position = $Platform.global_position + Vector2(
 		4.0, -(player.get_hitbox().y / 2.0 + $Platform/CollisionShape2D.shape.size.y))
+	
+	# Abort launch and make the catapult go back to its initial position
+	# if the player collides with something
+	if player.check_for_ceiling() or player.check_for_front_wall() or player.check_for_back_wall():
+		_abort_launch = true
+		player.global_position = old_position
 	
 	# If jumping out is allowed, check if it's player 1 and a jump button is pressed
 	if allow_jumping_out and player.playerControl == 1 and player.any_action_pressed():
