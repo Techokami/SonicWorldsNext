@@ -98,11 +98,8 @@ func _physics_process(delta: float) -> void:
 					
 				# Throw the player forward
 				player.movement = launch_velocity
-				if vert_launch_velocity == 0.0:
-					player.set_state(PlayerChar.STATES.NORMAL)
-				else:
-					player.disconnect_from_floor()
-					player.set_state(PlayerChar.STATES.AIR)
+				player.set_ground_speed(launch_velocity.x)
+				player.set_state(PlayerChar.STATES.NORMAL)
 				
 				# Lock for 15 frames
 				player.set_horizontal_lock_timer(15.0 / 60.0)
