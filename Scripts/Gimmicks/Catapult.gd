@@ -1,7 +1,7 @@
 ## Catapult gimmick from Flying Battery Zone.[br]
 ## Author: Stanislav Gromov (with help and guidance from DimensionWarped).
 @tool
-class_name Catapult extends ConnectableGimmick
+class_name CatapultGimmick extends ConnectableGimmick
 
 
 ## Direction the catapult faces and launches the player in.
@@ -11,14 +11,14 @@ class_name Catapult extends ConnectableGimmick
 		scale.x = 1.0 if value == _DIRECTIONS.RIGHT else -1.0
 		_calculate_launch_velocity()
 
-## Length of the path the catapult goes before releasing the player forward.
+## Length of the path the catapult goes before launching the player forward.
 @export var path_length: float = 128.0:
 	set(value):
 		path_length = value
 		_calculate_launch_velocity()
 
 ## Defines by how many units per second the catapult accelerates
-## in its launching state.
+## while it moves forward.
 @export var acceleration: float = 60.0 * 60.0:
 	set(value):
 		acceleration = value
@@ -32,9 +32,10 @@ class_name Catapult extends ConnectableGimmick
 		_calculate_launch_velocity()
 
 ## Velocity at which the player is supposed to be launched.[br]
-## [b]Note:[/b] This variable is actually immutable and its value
-## is calculated automatically based on [member path_length] and
-## [member acceleration], and is there for informational purposes only.
+## [b]Note:[/b] DO NOT try to change this variable - its value
+## is calculated automatically based on [member path_length],
+## [member acceleration], [member vert_launch_velocity] and
+## [member direction], and is there for informational purposes only.
 @export var launch_velocity: Vector2 = Vector2.ZERO:
 	set(value):
 		if _allow_launch_velocity_change:
@@ -43,9 +44,9 @@ class_name Catapult extends ConnectableGimmick
 ## The speed of catapult moving back to the initial position.
 @export var retract_speed: float = 60.0 # ~1 px / frame
 
-## Defines if jumping out of the gimmick is allowed (Sonic 2 behavior)
-## or not (the controls are blocked until the player is launched, a-la Sonic 3).
-@export var allow_jumping_out: bool = false
+## Defines if jumping out of the gimmick is allowed (original behavior)
+## or not (the controls are blocked until the player is launched).
+@export var allow_jumping: bool = true
 
 
 # TODO: Maybe move this enum into `Global` and reuse it for `PlayerChar` and other gimmicks?
@@ -57,7 +58,6 @@ class _CatapultCollider extends StaticBody2D:
 
 var _players: Array[PlayerChar] = []
 var _launching: bool = false
-var _abort_launch: bool = false
 var _velocity: float = 0.0
 var _allow_launch_velocity_change: bool = true
 
@@ -81,16 +81,41 @@ func _physics_process(delta: float) -> void:
 	
 	var platform: StaticBody2D = $Platform
 	if _launching:
-		if not _abort_launch:
-			# Add acceleration, but make sure the resulting velocity
-			# doesn't exceed the final launch speed
-			_velocity = minf(_velocity + (acceleration * delta), absf(launch_velocity.x))
-			
-			# Move towards the destination point
-			platform.position.x = move_toward(platform.position.x, path_length, _velocity * delta)
+		var _abort_launch: bool = false
 		
-		# If we are at the destination point, then we need
-		# to launch all affected players forward
+		# Add acceleration and move towards the destination point
+		_velocity += acceleration * delta
+		platform.position.x = move_toward(platform.position.x, path_length, _velocity * delta)
+		
+		# Loop through all affected players
+		for player: PlayerChar in _players:
+			if player.get_active_gimmick() != self:
+				continue
+			
+			# Set player's position and reset their movement
+			var old_position: Vector2 = player.global_position
+			player.global_position = $Platform.global_position + Vector2(
+				4.0 * scale.x,
+				-(player.get_hitbox().y / 2.0 + $Platform/CollisionShape2D.shape.size.y))
+			
+			# Abort launch and make the catapult go back to its initial position
+			# if the player collides with something
+			if player.check_for_ceiling() or player.check_for_front_wall() or player.check_for_back_wall():
+				_abort_launch = true
+				player.global_position = old_position
+			
+			# If jumping out is allowed, check if it's player 1 and a jump button is pressed
+			if allow_jumping and player.playerControl == 1 and player.any_action_pressed():
+				_players.erase(player)
+				player.unset_active_gimmick()
+				player.action_jump()
+				player.movement.x = _velocity
+		
+		# If we are at the destination point, then we need to launch
+		# all affected players forward.
+		# Alternatively, if at least one of the players has collided
+		# into something along the way (`_abort_launch == true`),
+		# we need to abort the launch.
 		if _abort_launch or platform.position.x == path_length:
 			# Loop through all affected players
 			for player: PlayerChar in _players:
@@ -105,8 +130,8 @@ func _physics_process(delta: float) -> void:
 				if _abort_launch:
 					player.set_state(PlayerChar.STATES.NORMAL)
 					continue
-					
-				# Throw the player forward
+				
+				# Launch the player forward
 				player.movement = launch_velocity
 				player.set_ground_speed(launch_velocity.x)
 				player.set_state(PlayerChar.STATES.NORMAL)
@@ -114,37 +139,26 @@ func _physics_process(delta: float) -> void:
 				# Lock for 15 frames
 				player.set_horizontal_lock_timer(15.0 / 60.0)
 			
+			# Remove all players from the array
+			_players.clear()
+			
 			# Unset the launching state, so the catapult
 			# can move back to the initial position
 			_launching = false
 			_abort_launch = false
 			_velocity = 0.0
-			_players.clear()
+			
+			# Temporarily disable the collision until the platform
+			# returns to its initial position
 			$Platform/CollisionShape2D.disabled = true
 	elif platform.position.x != 0.0:
 		# Move toward the initial position
 		platform.position.x = move_toward(platform.position.x, 0.0, retract_speed * delta)
+		
+		# Re-enable the collision if the platform has returned
+		# to its initial position
 		if platform.position.x == 0.0:
 			$Platform/CollisionShape2D.disabled = false
-
-func player_physics_process(player: PlayerChar, _delta: float) -> void:
-	# Set player's position and reset their movement
-	var old_position: Vector2 = player.global_position
-	player.global_position = $Platform.global_position + Vector2(
-		4.0 * scale.x, -(player.get_hitbox().y / 2.0 + $Platform/CollisionShape2D.shape.size.y))
-	
-	# Abort launch and make the catapult go back to its initial position
-	# if the player collides with something
-	if player.check_for_ceiling() or player.check_for_front_wall() or player.check_for_back_wall():
-		_abort_launch = true
-		player.global_position = old_position
-	
-	# If jumping out is allowed, check if it's player 1 and a jump button is pressed
-	if allow_jumping_out and player.playerControl == 1 and player.any_action_pressed():
-		_players.erase(player)
-		player.unset_active_gimmick()
-		player.action_jump()
-		player.movement.x = _velocity
 
 func player_force_detach_callback(player: PlayerChar) -> void:
 	# Remove the player from the array, so the catapult
@@ -152,10 +166,6 @@ func player_force_detach_callback(player: PlayerChar) -> void:
 	_players.erase(player)
 
 func _player_collision(player: PlayerChar) -> void:
-	# Don't interact with any players when moving back to the initial position
-	if not _launching and $Platform.position.x != 0.0:
-		return
-	
 	# Add player into the list, so the gimmick
 	# can enforce their position at every frame
 	_players.append(player)
@@ -164,21 +174,15 @@ func _player_collision(player: PlayerChar) -> void:
 	# or from Tails (if being carried)
 	player.force_detach()
 	
-	# Make sure we can safely convert from `_DIRECTIONS` to `PlayerChar.DIRECTIONS`
-	# by simply using operator `as`, without any extra runtime costs.
-	# If the condition is `false`, Godot will give a "division by zero" error.
-	const _static_assert_direction_conversion: bool = \
-		 1 / int(_DIRECTIONS == PlayerChar.DIRECTIONS)
-	
 	# Attach the player to the gimmick
-	player.set_direction(direction as PlayerChar.DIRECTIONS)
+	player.set_direction_signed(scale.x)
 	player.get_avatar().get_animator().play(&"idle")
 	player.set_state(PlayerChar.STATES.GIMMICK)
 	player.set_active_gimmick(self)
 	player.movement = Vector2.ZERO
 	
 	# Check if we aren't in the launching state, so the sound won't play twice
-	# if a second player interacts with the catapult during launching
+	# if a second player interacts with the catapult while it moves forward
 	if not _launching:
 		$Platform/Launch.play()
 		_launching = true # Set the launching state
