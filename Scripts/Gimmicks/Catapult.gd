@@ -4,6 +4,13 @@
 class_name Catapult extends ConnectableGimmick
 
 
+## Direction the catapult faces and launches the player in.
+@export var direction: _DIRECTIONS = _DIRECTIONS.RIGHT:
+	set(value):
+		direction = value
+		scale.x = 1.0 if value == _DIRECTIONS.RIGHT else -1.0
+		_calculate_launch_velocity()
+
 ## Length of the path the catapult goes before releasing the player forward.
 @export var path_length: float = 128.0:
 	set(value):
@@ -41,6 +48,9 @@ class_name Catapult extends ConnectableGimmick
 @export var allow_jumping_out: bool = false
 
 
+# TODO: Maybe move this enum into `Global` and reuse it for `PlayerChar` and other gimmicks?
+enum _DIRECTIONS { LEFT, RIGHT }
+
 class _CatapultCollider extends StaticBody2D:
 	func physics_collision(body: PlayerChar, _hit_vector: Vector2) -> void:
 		get_parent()._player_collision(body)
@@ -54,7 +64,7 @@ var _allow_launch_velocity_change: bool = true
 
 func _calculate_launch_velocity() -> void:
 	_allow_launch_velocity_change = true
-	launch_velocity = Vector2(sqrt(2.0 * acceleration * path_length), -vert_launch_velocity)
+	launch_velocity = Vector2(sqrt(2.0 * acceleration * path_length) * scale.x, -vert_launch_velocity)
 	_allow_launch_velocity_change = false
 
 func _ready() -> void:
@@ -74,7 +84,7 @@ func _physics_process(delta: float) -> void:
 		if not _abort_launch:
 			# Add acceleration, but make sure the resulting velocity
 			# doesn't exceed the final launch speed
-			_velocity = minf(_velocity + (acceleration * delta), launch_velocity.x)
+			_velocity = minf(_velocity + (acceleration * delta), absf(launch_velocity.x))
 			
 			# Move towards the destination point
 			platform.position.x = move_toward(platform.position.x, path_length, _velocity * delta)
@@ -121,7 +131,7 @@ func player_physics_process(player: PlayerChar, _delta: float) -> void:
 	# Set player's position and reset their movement
 	var old_position: Vector2 = player.global_position
 	player.global_position = $Platform.global_position + Vector2(
-		4.0, -(player.get_hitbox().y / 2.0 + $Platform/CollisionShape2D.shape.size.y))
+		4.0 * scale.x, -(player.get_hitbox().y / 2.0 + $Platform/CollisionShape2D.shape.size.y))
 	
 	# Abort launch and make the catapult go back to its initial position
 	# if the player collides with something
@@ -154,8 +164,14 @@ func _player_collision(player: PlayerChar) -> void:
 	# or from Tails (if being carried)
 	player.force_detach()
 	
+	# Make sure we can safely convert from `_DIRECTIONS` to `PlayerChar.DIRECTIONS`
+	# by simply using operator `as`, without any extra runtime costs.
+	# If the condition is `false`, Godot will give a "division by zero" error.
+	const _static_assert_direction_conversion: bool = \
+		 1 / int(_DIRECTIONS == PlayerChar.DIRECTIONS)
+	
 	# Attach the player to the gimmick
-	player.set_direction(PlayerChar.DIRECTIONS.RIGHT)
+	player.set_direction(direction as PlayerChar.DIRECTIONS)
 	player.get_avatar().get_animator().play(&"idle")
 	player.set_state(PlayerChar.STATES.GIMMICK)
 	player.set_active_gimmick(self)
