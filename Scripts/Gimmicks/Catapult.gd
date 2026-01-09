@@ -4,6 +4,14 @@
 class_name CatapultGimmick extends ConnectableGimmick
 
 
+## Velocity the catapult starts moving with.
+## In Sonic 3 it's [code]0.0[/code] (the catapult starts from rest),
+## and in Sonic 2 it's [code]720.0[/code] (~12 px/frame).
+@export var initial_velocity: float = 0.0:
+	set(value):
+		initial_velocity = value
+		_calculate_launch_velocity()
+
 ## Direction the catapult faces and launches the player in.
 @export var direction: _DIRECTIONS = _DIRECTIONS.RIGHT:
 	set(value):
@@ -44,9 +52,13 @@ class_name CatapultGimmick extends ConnectableGimmick
 ## The speed of catapult moving back to the initial position.
 @export var retract_speed: float = 60.0 # ~1 px / frame
 
-## Defines if jumping out of the gimmick is allowed (original behavior)
+## Defines if jumping out of the catapult is allowed (original behavior)
 ## or not (the controls are blocked until the player is launched).
 @export var allow_jumping: bool = true
+
+## Defines if horizontal motion is applied to the player when jumping
+## out of the catapult (Sonic 3 behavior) or not (Sonic 2 behavior).
+@export var jump_imparts_motion: bool = true
 
 
 # TODO: Maybe move this enum into `Global` and reuse it for `PlayerChar` and other gimmicks?
@@ -64,7 +76,9 @@ var _allow_launch_velocity_change: bool = true
 
 func _calculate_launch_velocity() -> void:
 	_allow_launch_velocity_change = true
-	launch_velocity = Vector2(sqrt(2.0 * acceleration * path_length) * scale.x, -vert_launch_velocity)
+	launch_velocity = Vector2(
+		initial_velocity + sqrt(2.0 * acceleration * path_length) * scale.x,
+		-vert_launch_velocity)
 	_allow_launch_velocity_change = false
 
 func _ready() -> void:
@@ -83,8 +97,15 @@ func _physics_process(delta: float) -> void:
 	if _launching:
 		var _abort_launch: bool = false
 		
-		# Add acceleration and move towards the destination point
-		_velocity += acceleration * delta
+		if initial_velocity != 0.0 and platform.position.x == 0.0:
+			# Don't add acceleration if the initial velocity is not 0 and this is
+			# the 1's frame the catapult is moving forward. That way on the 1'st
+			# frame the catapult would move with its initial velocity only
+			pass # Do nothing
+		else:
+			_velocity += acceleration * delta
+		
+		# Move towards the destination point
 		platform.position.x = move_toward(platform.position.x, path_length, _velocity * delta)
 		
 		# Loop through all affected players
@@ -109,7 +130,8 @@ func _physics_process(delta: float) -> void:
 				_players.erase(player)
 				player.unset_active_gimmick()
 				player.action_jump()
-				player.movement.x = _velocity
+				if jump_imparts_motion:
+					player.movement.x = _velocity
 		
 		# If we are at the destination point, then we need to launch
 		# all affected players forward.
@@ -146,7 +168,6 @@ func _physics_process(delta: float) -> void:
 			# can move back to the initial position
 			_launching = false
 			_abort_launch = false
-			_velocity = 0.0
 			
 			# Temporarily disable the collision until the platform
 			# returns to its initial position
@@ -186,3 +207,4 @@ func _player_collision(player: PlayerChar) -> void:
 	if not _launching:
 		$Platform/Launch.play()
 		_launching = true # Set the launching state
+		_velocity = initial_velocity
