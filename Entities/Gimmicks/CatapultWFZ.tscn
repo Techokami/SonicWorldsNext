@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://cbix8ljuynffp"]
+
+[ext_resource type="Script" path="res://Scripts/Gimmicks/Catapult.gd" id="1_gmwfs"]
+[ext_resource type="Texture2D" uid="uid://b64r47ff5gjkq" path="res://Graphics/Gimmicks/CatapultWFZ.png" id="2_gmwfs"]
+[ext_resource type="AudioStream" uid="uid://284id50pxbon" path="res://Audio/SFX/Gimmicks/Launch.wav" id="3_r6tyh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dt3rk"]
+size = Vector2(32, 1)
+
+[node name="Catapult" type="Node2D"]
+script = ExtResource("1_gmwfs")
+initial_velocity = 720.0
+path_length = 240.0
+acceleration = 0.0
+vert_launch_velocity = 384.0
+launch_velocity = Vector2(720, -384)
+jump_imparts_motion = false
+
+[node name="Platform" type="StaticBody2D" parent="."]
+collision_layer = 8192
+collision_mask = 8192
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_dt3rk")
+
+[node name="Sprite2D" type="Sprite2D" parent="Platform"]
+position = Vector2(0, -18)
+texture = ExtResource("2_gmwfs")
+offset = Vector2(0, 10)
+
+[node name="Launch" type="AudioStreamPlayer" parent="Platform"]
+stream = ExtResource("3_r6tyh")
+
+[node name="AttachmentPivot" type="Node2D" parent="Platform"]
+position = Vector2(0, -1)

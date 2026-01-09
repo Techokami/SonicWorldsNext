@@ -4,14 +4,8 @@
 class_name CatapultGimmick extends ConnectableGimmick
 
 
-## Velocity the catapult starts moving with.
-## In Sonic 3 & Knuckles it's [code]0.0[/code] (the catapult starts from rest),
-## and in Sonic 2 it's [code]720.0[/code] (~12 px/frame).
-@export var initial_velocity: float = 0.0:
-	set(value):
-		initial_velocity = value
-		_calculate_launch_velocity()
-
+# TODO: Maybe move this enum into `Global` and reuse it for `PlayerChar` and other gimmicks?
+enum _DIRECTIONS { LEFT, RIGHT }
 ## Direction the catapult faces and launches the player in.
 @export var direction: _DIRECTIONS = _DIRECTIONS.RIGHT:
 	set(value):
@@ -19,14 +13,25 @@ class_name CatapultGimmick extends ConnectableGimmick
 		scale.x = 1.0 if value == _DIRECTIONS.RIGHT else -1.0
 		_calculate_launch_velocity()
 
-## Length of the path the catapult goes before launching the player forward.
+## Velocity the catapult starts moving with.[br]
+## In Sonic 3 & Knuckles it's [code]0[/code] (the catapult starts from rest),
+## and in Sonic 2 it's [code]720[/code] (~12 px/frame).
+@export var initial_velocity: float = 0.0:
+	set(value):
+		initial_velocity = value
+		_calculate_launch_velocity()
+
+## Length of the path the catapult goes before launching the player forward.[br]
+## In Sonic 3 & Knuckles it's [code]128[/code], and in Sonic 2 it's [code]240[/code].
 @export var path_length: float = 128.0:
 	set(value):
 		path_length = value
 		_calculate_launch_velocity()
 
 ## Defines by how many units per second the catapult accelerates
-## while it moves forward.
+## while it moves forward.[br]
+## In Sonic 3 & Knuckles it's [code]3600[/code] (the catapult accelerates
+## by 1 px/frame) and in Sonic 2 it's [code]0[/code] (no acceleration).
 @export var acceleration: float = 60.0 * 60.0:
 	set(value):
 		acceleration = value
@@ -43,7 +48,7 @@ class_name CatapultGimmick extends ConnectableGimmick
 ## [b]Note:[/b] DO NOT try to change this variable - its value
 ## is calculated automatically based on [member initial_velocity],
 ## [member path_length], [member acceleration], [member vert_launch_velocity]
-## and [member direction], and is there for informational purposes only.
+## and [member direction], and it's there for informational purposes only.
 @export var launch_velocity: Vector2 = Vector2.ZERO:
 	set(value):
 		if _allow_launch_velocity_change:
@@ -60,9 +65,6 @@ class_name CatapultGimmick extends ConnectableGimmick
 ## out of the catapult (Sonic 3 & Knuckles behavior) or not (Sonic 2 behavior).
 @export var jump_imparts_motion: bool = true
 
-
-# TODO: Maybe move this enum into `Global` and reuse it for `PlayerChar` and other gimmicks?
-enum _DIRECTIONS { LEFT, RIGHT }
 
 class _CatapultCollider extends StaticBody2D:
 	func physics_collision(body: PlayerChar, _hit_vector: Vector2) -> void:
@@ -108,6 +110,11 @@ func _physics_process(delta: float) -> void:
 		# Move towards the destination point
 		platform.position.x = move_toward(platform.position.x, path_length, _velocity * delta)
 		
+		# Cache the coordinates for the attachment point before using them
+		# in a loop (`$Path` is a shorthand for `get_node("Path")`,
+		# and we don't want to call the same function multiple times)
+		var attachment_pivot_pos: Vector2 = $Platform/AttachmentPivot.global_position
+		
 		# Loop through all affected players
 		for player: PlayerChar in _players:
 			if player.get_active_gimmick() != self:
@@ -115,9 +122,7 @@ func _physics_process(delta: float) -> void:
 			
 			# Set player's position and reset their movement
 			var old_position: Vector2 = player.global_position
-			player.global_position = $Platform.global_position + Vector2(
-				4.0 * scale.x,
-				-(player.get_hitbox().y / 2.0 + $Platform/CollisionShape2D.shape.size.y))
+			player.global_position = attachment_pivot_pos + Vector2(0.0, -(player.get_hitbox().y / 2.0))
 			
 			# Abort launch and make the catapult go back to its initial position
 			# if the player collides with something
