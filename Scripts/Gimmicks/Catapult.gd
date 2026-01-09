@@ -5,7 +5,7 @@ class_name CatapultGimmick extends ConnectableGimmick
 
 
 ## Velocity the catapult starts moving with.
-## In Sonic 3 it's [code]0.0[/code] (the catapult starts from rest),
+## In Sonic 3 & Knuckles it's [code]0.0[/code] (the catapult starts from rest),
 ## and in Sonic 2 it's [code]720.0[/code] (~12 px/frame).
 @export var initial_velocity: float = 0.0:
 	set(value):
@@ -41,9 +41,9 @@ class_name CatapultGimmick extends ConnectableGimmick
 
 ## Velocity at which the player is supposed to be launched.[br]
 ## [b]Note:[/b] DO NOT try to change this variable - its value
-## is calculated automatically based on [member path_length],
-## [member acceleration], [member vert_launch_velocity] and
-## [member direction], and is there for informational purposes only.
+## is calculated automatically based on [member initial_velocity],
+## [member path_length], [member acceleration], [member vert_launch_velocity]
+## and [member direction], and is there for informational purposes only.
 @export var launch_velocity: Vector2 = Vector2.ZERO:
 	set(value):
 		if _allow_launch_velocity_change:
@@ -57,7 +57,7 @@ class_name CatapultGimmick extends ConnectableGimmick
 @export var allow_jumping: bool = true
 
 ## Defines if horizontal motion is applied to the player when jumping
-## out of the catapult (Sonic 3 behavior) or not (Sonic 2 behavior).
+## out of the catapult (Sonic 3 & Knuckles behavior) or not (Sonic 2 behavior).
 @export var jump_imparts_motion: bool = true
 
 
@@ -131,7 +131,7 @@ func _physics_process(delta: float) -> void:
 				player.unset_active_gimmick()
 				player.action_jump()
 				if jump_imparts_motion:
-					player.movement.x = _velocity
+					player.movement.x = _velocity * scale.x
 		
 		# If we are at the destination point, then we need to launch
 		# all affected players forward.
