@@ -87,9 +87,21 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 	
+	# We don't need to display the destination ghost outside of the editor
+	$Platform/DestinationGhost.queue_free()
+	
 	# Set the collider subclass as a script for the moving part of the catapult,
 	# so it could catch collision events and initiate launching
 	$Platform.set_script(_CatapultCollider)
+
+func _process(_delta: float) -> void:
+	if not Engine.is_editor_hint():
+		return
+	var ghost_sprite: Sprite2D = $Platform/DestinationGhost
+	ghost_sprite.texture = $Platform/Sprite2D.texture
+	ghost_sprite.position.x = path_length
+	$Platform/DestinationGhost/Line2D.set_point_position(
+		0, Vector2(-path_length + ghost_sprite.texture.get_width() + 2.0, 0.0))
 
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint():

@@ -35,3 +35,18 @@ stream = ExtResource("3_r6tyh")
 
 [node name="AttachmentPivot" type="Node2D" parent="Platform"]
 position = Vector2(0, -1)
+
+[node name="DestinationGhost" type="Sprite2D" parent="Platform"]
+modulate = Color(1, 1, 1, 0.501961)
+position = Vector2(240, -18)
+texture = ExtResource("2_gmwfs")
+offset = Vector2(0, 10)
+
+[node name="Line2D" type="Line2D" parent="Platform/DestinationGhost"]
+position = Vector2(-18, 12)
+points = PackedVector2Array(-206, 0, 0, 0)
+width = 2.0
+
+[node name="Line2D2" type="Line2D" parent="Platform/DestinationGhost/Line2D"]
+points = PackedVector2Array(-4, -4, 0, 0, -4, 4)
+width = 2.0
