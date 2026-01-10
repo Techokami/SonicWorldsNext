@@ -10,10 +10,11 @@ size = Vector2(32, 1)
 [node name="Catapult" type="Node2D"]
 script = ExtResource("1_gmwfs")
 initial_velocity = 720.0
-path_length = 240.0
-acceleration = 0.0
+path_length = 384.0
+acceleration = 1536.0
 vert_launch_velocity = 384.0
-launch_velocity = Vector2(720, -384)
+launch_velocity = Vector2(1806.12, -384)
+retract_speed = 240.0
 jump_imparts_motion = false
 
 [node name="Platform" type="StaticBody2D" parent="."]
@@ -38,13 +39,13 @@ position = Vector2(0, -1)
 
 [node name="DestinationGhost" type="Sprite2D" parent="Platform"]
 modulate = Color(1, 1, 1, 0.501961)
-position = Vector2(240, -18)
+position = Vector2(384, -18)
 texture = ExtResource("2_gmwfs")
 offset = Vector2(0, 10)
 
 [node name="Line2D" type="Line2D" parent="Platform/DestinationGhost"]
 position = Vector2(-18, 12)
-points = PackedVector2Array(-206, 0, 0, 0)
+points = PackedVector2Array(-350, 0, 0, 0)
 width = 2.0
 
 [node name="Line2D2" type="Line2D" parent="Platform/DestinationGhost/Line2D"]
