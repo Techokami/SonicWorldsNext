@@ -92,7 +92,7 @@ class _CatapultCollider extends StaticBody2D:
 func _calculate_launch_velocity() -> void:
 	_allow_launch_velocity_change = true
 	launch_velocity = Vector2(
-		initial_velocity + sqrt(2.0 * acceleration * path_length) * scale.x,
+		(initial_velocity + sqrt(2.0 * acceleration * path_length)) * scale.x,
 		-vert_launch_velocity)
 	_allow_launch_velocity_change = false
 
