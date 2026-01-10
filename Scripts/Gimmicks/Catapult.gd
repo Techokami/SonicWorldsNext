@@ -22,7 +22,8 @@ enum _DIRECTIONS { LEFT, RIGHT }
 		_calculate_launch_velocity()
 
 ## Length of the path the catapult goes before launching the player forward.[br]
-## In Sonic 3 & Knuckles it's [code]128[/code], and in Sonic 2 it's [code]240[/code].
+## In Sonic 3 & Knuckles it's [code]127[/code] (rounded to [code]128[/code] in
+## this implementation for convenience), and in Sonic 2 it's [code]384[/code].
 @export var path_length: float = 128.0:
 	set(value):
 		path_length = value
@@ -31,7 +32,7 @@ enum _DIRECTIONS { LEFT, RIGHT }
 ## Defines by how many units per second the catapult accelerates
 ## while it moves forward.[br]
 ## In Sonic 3 & Knuckles it's [code]3600[/code] (the catapult accelerates
-## by 1 px/frame) and in Sonic 2 it's [code]0[/code] (no acceleration).
+## by 1 px/frame) and in Sonic 2 it's around [code]1536[/code].
 @export var acceleration: float = 60.0 * 60.0:
 	set(value):
 		acceleration = value
@@ -66,14 +67,26 @@ enum _DIRECTIONS { LEFT, RIGHT }
 @export var jump_imparts_motion: bool = true
 
 
+# List of affected players
+var _players: Array[PlayerChar] = []
+
+# Is the catapult moving forward?
+var _launching: bool = false
+
+# Current velocity the catapult moves forward at
+var _velocity: float = 0.0
+
+# Used internally to allow changing the value in `launch_velocity`,
+# so the user would be able to see the value of that variable
+# in the editor, but wouldn't be able to tamper with it
+var _allow_launch_velocity_change: bool = true
+
+# This class is assigned to the $Platform node via `set_script()`,
+# so the latter could detect a player colliding with it
+# (by having a `physics_collision()` callback)
 class _CatapultCollider extends StaticBody2D:
 	func physics_collision(body: PlayerChar, _hit_vector: Vector2) -> void:
 		get_parent()._player_collision(body)
-
-var _players: Array[PlayerChar] = []
-var _launching: bool = false
-var _velocity: float = 0.0
-var _allow_launch_velocity_change: bool = true
 
 
 func _calculate_launch_velocity() -> void:
