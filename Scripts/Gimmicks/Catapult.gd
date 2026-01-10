@@ -141,14 +141,6 @@ func _physics_process(delta: float) -> void:
 			if player.check_for_ceiling() or player.check_for_front_wall() or player.check_for_back_wall():
 				_abort_launch = true
 				player.global_position = old_position
-			
-			# If jumping out is allowed, check if it's player 1 and a jump button is pressed
-			if allow_jumping and player.playerControl == 1 and player.any_action_pressed():
-				_players.erase(player)
-				player.unset_active_gimmick()
-				player.action_jump()
-				if jump_imparts_motion:
-					player.movement.x = _velocity * scale.x
 		
 		# If we are at the destination point, then we need to launch
 		# all affected players forward.
@@ -198,12 +190,28 @@ func _physics_process(delta: float) -> void:
 		if platform.position.x == 0.0:
 			$Platform/CollisionShape2D.disabled = false
 
+func player_process(player: PlayerChar, _delta : float) -> void:
+	# If jumping out is allowed, check if it's player 1 and a jump button is pressed.
+	# Don't erase the player from the `_players` array so we can ignore them
+	# if they hit the catapult's hitbox again after jumping out
+	if allow_jumping and player.playerControl == 1 and player.any_action_pressed():
+		player.unset_active_gimmick()
+		player.action_jump()
+		if jump_imparts_motion:
+			player.movement.x = _velocity * scale.x
+
 func player_force_detach_callback(player: PlayerChar) -> void:
 	# Remove the player from the array, so the catapult
 	# would stop dragging them forward (e.g. when they're hit).
 	_players.erase(player)
 
 func _player_collision(player: PlayerChar) -> void:
+	# If the player is already in the list, this means they already interacted
+	# with the catapult (jumped out and hit its collision box again),
+	# so we'll have to ignore them
+	if player in _players:
+		return
+	
 	# Add player into the list, so the gimmick
 	# can enforce their position at every frame
 	_players.append(player)
