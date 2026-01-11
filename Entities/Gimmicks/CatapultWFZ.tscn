@@ -1,0 +1,51 @@
+[gd_scene load_steps=4 format=3 uid="uid://cbix8ljuynffp"]
+
+[ext_resource type="Script" path="res://Scripts/Gimmicks/Catapult.gd" id="1_gmwfs"]
+[ext_resource type="Texture2D" uid="uid://b64r47ff5gjkq" path="res://Graphics/Gimmicks/CatapultWFZ.png" id="2_gmwfs"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dt3rk"]
+size = Vector2(32, 1)
+
+[node name="Catapult" type="Node2D"]
+script = ExtResource("1_gmwfs")
+initial_velocity = 720.0
+path_length = 384.0
+acceleration = 370.0
+vert_launch_velocity = 384.0
+launch_velocity = Vector2(1253.07, -384)
+retract_speed = 240.0
+jump_imparts_motion = false
+
+[node name="Platform" type="StaticBody2D" parent="."]
+collision_layer = 8192
+collision_mask = 8192
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform"]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_dt3rk")
+
+[node name="Sprite2D" type="Sprite2D" parent="Platform"]
+position = Vector2(0, -18)
+texture = ExtResource("2_gmwfs")
+offset = Vector2(0, 10)
+
+[node name="Launch" type="AudioStreamPlayer" parent="Platform"]
+
+[node name="AttachmentPivot" type="Node2D" parent="Platform"]
+position = Vector2(0, -1)
+
+[node name="DestinationGhost" type="Sprite2D" parent="Platform"]
+modulate = Color(1, 1, 1, 0.501961)
+position = Vector2(384, -18)
+texture = ExtResource("2_gmwfs")
+offset = Vector2(0, 10)
+
+[node name="Line2D" type="Line2D" parent="Platform/DestinationGhost"]
+position = Vector2(-18, 12)
+points = PackedVector2Array(-350, 0, 0, 0)
+width = 2.0
+
+[node name="Line2D2" type="Line2D" parent="Platform/DestinationGhost/Line2D"]
+points = PackedVector2Array(-4, -4, 0, 0, -4, 4)
+width = 2.0
