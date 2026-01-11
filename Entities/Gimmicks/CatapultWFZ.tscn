@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cbix8ljuynffp"]
+[gd_scene load_steps=4 format=3 uid="uid://cbix8ljuynffp"]
 
 [ext_resource type="Script" path="res://Scripts/Gimmicks/Catapult.gd" id="1_gmwfs"]
 [ext_resource type="Texture2D" uid="uid://b64r47ff5gjkq" path="res://Graphics/Gimmicks/CatapultWFZ.png" id="2_gmwfs"]
-[ext_resource type="AudioStream" uid="uid://284id50pxbon" path="res://Audio/SFX/Gimmicks/Launch.wav" id="3_r6tyh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dt3rk"]
 size = Vector2(32, 1)
@@ -11,9 +10,9 @@ size = Vector2(32, 1)
 script = ExtResource("1_gmwfs")
 initial_velocity = 720.0
 path_length = 384.0
-acceleration = 1536.0
+acceleration = 370.0
 vert_launch_velocity = 384.0
-launch_velocity = Vector2(1806.12, -384)
+launch_velocity = Vector2(1253.07, -384)
 retract_speed = 240.0
 jump_imparts_motion = false
 
@@ -32,7 +31,6 @@ texture = ExtResource("2_gmwfs")
 offset = Vector2(0, 10)
 
 [node name="Launch" type="AudioStreamPlayer" parent="Platform"]
-stream = ExtResource("3_r6tyh")
 
 [node name="AttachmentPivot" type="Node2D" parent="Platform"]
 position = Vector2(0, -1)
