@@ -70,6 +70,11 @@ enum _DIRECTIONS { LEFT, RIGHT }
 # List of affected players
 var _players: Array[PlayerChar] = []
 
+# Set to true when the player is attached to the catapult. This is used
+# to ignore the collision if the player was colliding with a wall
+# starting from the 1'st frame
+var _colliding_from_1st_frame: Array[bool] = []
+
 # Is the catapult moving forward?
 var _launching: bool = false
 
@@ -141,7 +146,8 @@ func _physics_process(delta: float) -> void:
 		var attachment_pivot_pos: Vector2 = $Platform/AttachmentPivot.global_position
 		
 		# Loop through all affected players
-		for player: PlayerChar in _players:
+		for i: int in _players.size():
+			var player = _players[i]
 			if player.get_active_gimmick() != self:
 				continue
 			
@@ -152,8 +158,14 @@ func _physics_process(delta: float) -> void:
 			# Abort launch and make the catapult go back to its initial position
 			# if the player collides with something
 			if player.check_for_ceiling() or player.check_for_front_wall() or player.check_for_back_wall():
-				_abort_launch = true
-				player.global_position = old_position
+				# Don't abort if the player was colliding starting from the 1'st frame
+				if _colliding_from_1st_frame[i]:
+					pass # Do nothing
+				else:
+					_abort_launch = true
+					player.global_position = old_position
+			else:
+				_colliding_from_1st_frame[i] = false
 		
 		# If we are at the destination point, then we need to launch
 		# all affected players forward.
@@ -183,8 +195,9 @@ func _physics_process(delta: float) -> void:
 				# Lock for 15 frames
 				player.set_horizontal_lock_timer(15.0 / 60.0)
 			
-			# Remove all players from the array
+			# Clear player arrays
 			_players.clear()
+			_colliding_from_1st_frame.clear()
 			
 			# Unset the launching state, so the catapult
 			# can move back to the initial position
@@ -225,13 +238,18 @@ func _player_collision(player: PlayerChar) -> void:
 	if player in _players:
 		return
 	
-	# Add player into the list, so the gimmick
-	# can enforce their position at every frame
-	_players.append(player)
-	
 	# Detach the player from the current gimmick (if any)
 	# or from Tails (if being carried)
 	player.force_detach()
+	
+	# Add player into the list, so the gimmick
+	# can enforce their position at every frame
+	_players.append(player)
+
+	# Assume the player to be colliding with a wall from the start,
+	# so this can be ignored for the first few frames until the player
+	# doesn't collide with anything
+	_colliding_from_1st_frame.append(true)
 	
 	# Attach the player to the gimmick
 	player.set_direction_signed(scale.x)
