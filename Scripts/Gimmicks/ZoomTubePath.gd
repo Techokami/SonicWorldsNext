@@ -8,8 +8,8 @@ extends Line2D
 @export var split = false
 @export_range(0, 100)var splitChance = 100
 
-var enteranceArea = Area2D.new()
-var exitArea = Area2D.new()
+var enteranceArea: Area2D
+var exitArea: Area2D
 
 # Active dir, determines the direction of pipe movement
 var activeDir = 0
@@ -25,10 +25,11 @@ func _ready():
 	var shape = RectangleShape2D.new()
 	shape.size = hitBoxSize
 	hitbox.set_shape(shape)
-	enteranceArea.add_child(hitbox)
 	
 	# create enterance area
+	enteranceArea = Area2D.new()
 	add_child(enteranceArea)
+	enteranceArea.add_child(hitbox)
 	enteranceArea.collision_layer = 0
 	enteranceArea.collision_mask = 0
 	enteranceArea.set_collision_mask_value(13,true)
@@ -38,6 +39,7 @@ func _ready():
 	# check if two way
 	if (twoWay):
 		# create exit area collider
+		exitArea = Area2D.new()
 		exitArea.add_child(hitbox)
 		add_child(exitArea)
 		exitArea.collision_layer = enteranceArea.collision_layer

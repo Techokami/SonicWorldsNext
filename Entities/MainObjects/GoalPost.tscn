@@ -425,7 +425,6 @@ script = ExtResource("1_5xdxm")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_a1ehi")
-animation = &"spinner"
 autoplay = "default"
 offset = Vector2(0, -24)
 
