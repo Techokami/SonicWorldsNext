@@ -148,7 +148,29 @@ func state_physics_process(delta: float) -> void:
 		parent.horizontalSensor.force_raycast_update()
 		if parent.horizontalSensor.is_colliding() and !parent.ground:
 			# set direction
-			parent.set_direction_signed(signf(parent.movement.x))
+			# DW's note:
+			# This seems ridiculous... but set_direction_signed causes problems if the player
+			# is holding in the direction they are flying while hitting a wall. The player's
+			# direction gets set with set_direction_signed to zero and this seems to cause the
+			# ray tracing for Knuckles climbing state to track unconstrained (which leads to
+			# teleportation if the ray tracing gets above the current wall). This does not
+			# happen when the controller is left in the neutral position when Knuckles hits the
+			# wall because the player's movement.x value will not be zero'd out in that case. I
+			# believe this has something to do with core physics code, but I'm not sure and I'm
+			# not keen to investigate this right now since this was just something that
+			# sidetracked me from other work.
+			#
+			# For some reason, when moving left in particular, Knuckles gets his sprite turned
+			# to the right when hitting the wall. The direction itself does not change and
+			# simply setting the direction to what it already is mitigates this. This category
+			# of bugs was also causing a failure to jump off the walls properly as well as a
+			# failure to climb up walls.
+			#
+			# This modification will be revisited later.
+			if (parent.movement.x != 0.0):
+				parent.set_direction_signed(signf(parent.movement.x))
+			else:
+				parent.set_direction(parent.get_direction())
 			
 			parent.set_character_action_state(KnucklesAvatar.CHAR_STATES.KNUCKLES_CLIMB,
 							 parent.get_predefined_hitbox(PlayerChar.HITBOXES.GLIDE),
