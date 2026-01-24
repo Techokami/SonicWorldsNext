@@ -41,9 +41,8 @@ func amy_jump_hammer_callback(_state: PlayerState, player: PlayerChar, _delta: f
 	# set ability used to true to prevent multiple uses
 	player.abilityUsed = true
 	# enable insta shield hitbox if hammer drop dashing
-	player.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = (
-		get_animator().current_animation == "dropDash"
-	)
+	player.shieldSprite.get_node(^"InstaShieldHitbox/HitBox").set_deferred(
+		&"disabled", (get_animator().current_animation == "dropDash"))
 	# play hammer sound
 	player.sfx[30].play()
 	# play dropDash sound
@@ -90,7 +89,7 @@ func amy_exit_jump_dropdash_callback(_exit_state: PlayerState,
 ):
 	
 	# Need to disable instashield hitbox on state exit regardless of other factors
-	player.shieldSprite.get_node("InstaShieldHitbox/HitBox").disabled = true
+	player.shieldSprite.get_node(^"InstaShieldHitbox/HitBox").set_deferred(&"disabled", true)
 
 	# If we haven't been charging the drop dash long enough, we bail here.
 	if drop_timer <= 1:
