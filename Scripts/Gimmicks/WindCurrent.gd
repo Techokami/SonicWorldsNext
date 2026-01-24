@@ -76,7 +76,7 @@ func _physics_process(_delta: float) -> void:
 		player.push_vertical()
 		
 		# force player direction
-		player.set_direction(PlayerChar.DIRECTIONS.RIGHT if current_vector.x > 0.0 else PlayerChar.DIRECTIONS.LEFT)
+		player.set_direction_signed(current_vector.x)
 		
 		# force slide state if the player isn't currently on a gimmick
 		if player.get_state() != PlayerChar.STATES.GIMMICK and \
