@@ -23,7 +23,7 @@ func state_physics_process(delta: float) -> void:
 	if parent.inputs[parent.INPUTS.XINPUT] != 0:
 		parent.set_direction_signed(parent.inputs[parent.INPUTS.XINPUT])
 	elif parent.movement.x != 0:
-		parent.set_direction_signed(signf(parent.movement.x))
+		parent.set_direction_signed(parent.movement.x)
 	
 	# set to max speed based on direction
 	parent.movement.x = parent.top*parent.get_direction_multiplier()

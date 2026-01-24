@@ -1464,9 +1464,10 @@ func set_direction(new_direction: PlayerChar.DIRECTIONS) -> void:
 ## [param change_sprite_direction] - if [code]false[/code], only the movement direction
 ## is changed, and the sprite direction ([code]sprite.flip_h[/code]) is kept the same.
 func set_direction_signed(new_direction: float, change_sprite_direction: bool = true) -> void:
-	_direction = signf(new_direction)
-	if change_sprite_direction:
-		sprite.flip_h = (_direction < 0.0)
+	if new_direction != 0.0:
+		_direction = signf(new_direction)
+		if change_sprite_direction:
+			sprite.flip_h = (_direction < 0.0)
 
 
 ## Flips player's movement direction.[br]
