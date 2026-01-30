@@ -73,14 +73,11 @@ enum EMERALDS {
 	CYAN   = 1 << 4,
 	SILVER = 1 << 5,
 	PURPLE = 1 << 6,
-	ALL = (1 << 7) - 1
+	_END,
+	ALL = ((_END - 1) << 1) - 1
 }
 # emeralds use bitwise flag operations, the equivalent for 7 emeralds would be 127
-var emeralds: int = (func() -> int:
-	# make sure EMERALDS.ALL holds a correct value
-	assert(EMERALDS.ALL == (1 << EMERALDS.size() - 1) - 1)
-	return 0
-).call()
+var emeralds: int = 0
 var specialStageID = 0
 var level = null # reference to the currently active level
 var levelTime = 0 # the timer that counts down while the level isn't completed or in a special ring
