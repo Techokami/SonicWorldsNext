@@ -1,18 +1,23 @@
-[gd_scene load_steps=89 format=3 uid="uid://cy7p77qjddhqc"]
+[gd_scene load_steps=94 format=3 uid="uid://cy7p77qjddhqc"]
 
 [ext_resource type="Script" path="res://Scripts/Player/PlayerAvatars/ShadowAvatar.gd" id="1_ual21"]
 [ext_resource type="Resource" uid="uid://ccsk0spsusstm" path="res://Scripts/Player/PlayerAvatars/PlayerPhysics/SonicSuper.tres" id="2_jav52"]
 [ext_resource type="Script" path="res://Scripts/Player/PlayerAnimation.gd" id="2_xh41g"]
-[ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="3_geguo"]
 [ext_resource type="Texture2D" uid="uid://ddeai00k1elsy" path="res://Graphics/Players/Shadow.png" id="4_0t11s"]
+[ext_resource type="Material" uid="uid://dfidtfw31fmyg" path="res://Shaders/PlayerPalettes/ShadowPalette.tres" id="4_qjmby"]
 [ext_resource type="Texture2D" uid="uid://dlomjk6vm15ep" path="res://Graphics/Misc/DashDust.png" id="5_8u7s4"]
 [ext_resource type="Texture2D" uid="uid://dvqglf8dididc" path="res://Graphics/Items/shield_plain.png" id="6_rhsep"]
-[ext_resource type="Texture2D" uid="uid://ceub52t2upxxu" path="res://Graphics/Players/shadow_jets.png" id="7_ivx2r"]
+[ext_resource type="Texture2D" uid="uid://ceub52t2upxxu" path="res://Graphics/Players/ShadowExtras/shadow_jets.png" id="7_ivx2r"]
 [ext_resource type="Texture2D" uid="uid://decpuepom6w1d" path="res://Graphics/Tools/bar_helper.png" id="7_ns0fd"]
-[ext_resource type="Texture2D" uid="uid://drvu6rwlso1xk" path="res://Graphics/Players/shadow_boost.png" id="8_vjqok"]
+[ext_resource type="Texture2D" uid="uid://drvu6rwlso1xk" path="res://Graphics/Players/ShadowExtras/shadow_boost.png" id="8_vjqok"]
 [ext_resource type="Script" path="res://Scripts/Player/States/ShadowStomp.gd" id="11_a2jww"]
+[ext_resource type="Script" path="res://Scripts/Player/States/HomingAttack.gd" id="12_qhrcq"]
 [ext_resource type="AudioStream" uid="uid://ms0cbotiss1p" path="res://Audio/SFX/Player/Shadow/stomp_air.wav" id="12_ydhbc"]
 [ext_resource type="AudioStream" uid="uid://cl0afy6fc1j8i" path="res://Audio/SFX/Player/Shadow/stomp_land.wav" id="13_26i4f"]
+[ext_resource type="AudioStream" uid="uid://cuodr6qahgq3s" path="res://Audio/SFX/Player/Shadow/jump_dash.wav" id="14_3ul15"]
+[ext_resource type="Script" path="res://Scripts/Misc/TargetTracker.gd" id="14_avulw"]
+[ext_resource type="PackedScene" uid="uid://bi4okf7cbr0d3" path="res://Entities/UI/HomingAttackReticle.tscn" id="15_806ya"]
+[ext_resource type="AudioStream" uid="uid://pq5cxs3tixms" path="res://Audio/SFX/Player/Shadow/homing_attack.wav" id="15_qsnqb"]
 
 [sub_resource type="Animation" id="86"]
 length = 0.001
@@ -921,6 +926,23 @@ tracks/0/keys = {
 "values": [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59]
 }
 
+[sub_resource type="Animation" id="Animation_30nsp"]
+resource_name = "stomp"
+length = 0.400002
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Shadow/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [138, 139, 140, 141]
+}
+
 [sub_resource type="Animation" id="97"]
 resource_name = "super"
 length = 0.5
@@ -1215,23 +1237,6 @@ tracks/0/keys = {
 "values": [256, 267, 266, 265, 264, 263, 262, 261, 260, 259, 258, 257]
 }
 
-[sub_resource type="Animation" id="Animation_30nsp"]
-resource_name = "stomp"
-length = 0.400002
-step = 0.0166667
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Shadow/Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [138, 139, 140, 141]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_36uej"]
 _data = {
 "RESET": SubResource("86"),
@@ -1283,10 +1288,8 @@ _data = {
 "yRotationLookUp": SubResource("128")
 }
 
-[sub_resource type="Animation" id="Animation_tchkh"]
-resource_name = "disable"
-length = 0.0166683
-step = 0.0166667
+[sub_resource type="Animation" id="Animation_djvi4"]
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -1300,8 +1303,10 @@ tracks/0/keys = {
 "values": [false]
 }
 
-[sub_resource type="Animation" id="Animation_djvi4"]
-length = 0.001
+[sub_resource type="Animation" id="Animation_tchkh"]
+resource_name = "disable"
+length = 0.0166683
+step = 0.0166667
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -1454,6 +1459,58 @@ tracks/2/keys = {
 "values": [false]
 }
 
+[sub_resource type="Animation" id="Animation_lnoi1"]
+resource_name = "boost"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("BoostFire:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
 [sub_resource type="Animation" id="Animation_q2n8i"]
 resource_name = "stomp"
 length = 0.001
@@ -1506,58 +1563,6 @@ tracks/3/keys = {
 "args": [0, 0.0],
 "method": &"set_frame_and_progress"
 }]
-}
-
-[sub_resource type="Animation" id="Animation_lnoi1"]
-resource_name = "boost"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".:rotation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("BoostFire:frame")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_36ni7"]
@@ -1681,7 +1686,7 @@ libraries = {
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 5
-material = ExtResource("3_geguo")
+material = ExtResource("4_qjmby")
 texture = ExtResource("4_0t11s")
 offset = Vector2(0, -5)
 hframes = 16
@@ -1712,7 +1717,6 @@ visible = false
 modulate = Color(1, 1, 1, 0.501961)
 sprite_frames = SubResource("SpriteFrames_rn1r6")
 autoplay = "default"
-frame_progress = 0.79604
 offset = Vector2(-8, 0)
 
 [node name="CrouchBox" type="CollisionShape2D" parent="."]
@@ -1743,6 +1747,11 @@ texture = ExtResource("7_ns0fd")
 [node name="ShadowStomp" type="Node" parent="CharacterStates"]
 script = ExtResource("11_a2jww")
 
+[node name="ShadowHomingAttack" type="Node" parent="CharacterStates"]
+script = ExtResource("12_qhrcq")
+
+[node name="ShadowWallCling" type="Node" parent="CharacterStates"]
+
 [node name="SFX" type="Node" parent="."]
 
 [node name="StompAir" type="AudioStreamPlayer" parent="SFX"]
@@ -1753,5 +1762,28 @@ bus = &"SFX"
 stream = ExtResource("13_26i4f")
 bus = &"SFX"
 
+[node name="JumpDash" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("14_3ul15")
+bus = &"SFX"
+
+[node name="HomingAttack" type="AudioStreamPlayer" parent="SFX"]
+stream = ExtResource("15_qsnqb")
+
+[node name="HomingAttackReticle" parent="." instance=ExtResource("15_806ya")]
+
+[node name="HomingAttackArea" type="Area2D" parent="."]
+position = Vector2(0, -5)
+collision_layer = 0
+collision_mask = 8388608
+script = ExtResource("14_avulw")
+incumbent_bonus_points = 20.0
+target_tags = 3
+
+[node name="HomingAttackPolygon" type="CollisionPolygon2D" parent="HomingAttackArea"]
+position = Vector2(20, -8)
+polygon = PackedVector2Array(0, 0, 102, -59, 192, -28, 192, 62, 102, 112, 0, 27)
+
 [connection signal="animation_started" from="PlayerAnimation" to="." method="_on_player_animation_animation_started"]
 [connection signal="animation_finished" from="FlameAnimator" to="." method="_on_flame_animator_animation_finished"]
+[connection signal="body_entered" from="HomingAttackArea" to="HomingAttackArea" method="_on_body_entered"]
+[connection signal="body_exited" from="HomingAttackArea" to="HomingAttackArea" method="_on_body_exited"]

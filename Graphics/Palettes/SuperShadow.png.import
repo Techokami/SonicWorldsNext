@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://drvu6rwlso1xk"
-path="res://.godot/imported/shadow_boost.png-8b81b35fbf40ef5ef5cb1d7825750efa.ctex"
+uid="uid://cay7nworq686l"
+path="res://.godot/imported/SuperShadow.png-cfab73a34b8e70c072347800713399c5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Graphics/Players/shadow_boost.png"
-dest_files=["res://.godot/imported/shadow_boost.png-8b81b35fbf40ef5ef5cb1d7825750efa.ctex"]
+source_file="res://Graphics/Palettes/SuperShadow.png"
+dest_files=["res://.godot/imported/SuperShadow.png-cfab73a34b8e70c072347800713399c5.ctex"]
 
 [params]
 

@@ -40,5 +40,5 @@ resource_local_to_scene = true
 shader = SubResource("Shader_kwqyd")
 shader_parameter/amount = 4.0
 shader_parameter/palRows = 16.0
-shader_parameter/row = 1.0
+shader_parameter/row = 9.0
 shader_parameter/approximation = 0.0

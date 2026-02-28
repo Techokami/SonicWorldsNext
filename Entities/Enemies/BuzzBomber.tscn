@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://ds7bmlo2s41ji"]
+[gd_scene load_steps=13 format=3 uid="uid://dggiaxhfs5k1m"]
 
 [ext_resource type="Texture2D" uid="uid://c5mhr5w1s4w8y" path="res://Graphics/Enemies/buzzBomber.png" id="1"]
 [ext_resource type="Script" path="res://Scripts/Enemies/BuzzBomber.gd" id="2"]
+[ext_resource type="Script" path="res://Scripts/Misc/Targetable.gd" id="3_dxjcx"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(48, 24)
@@ -65,6 +66,8 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="8"]
 size = Vector2(80, 192)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_nhult"]
+
 [node name="BuzzBomber" type="CharacterBody2D" groups=["Enemy"]]
 collision_layer = 16384
 collision_mask = 0
@@ -117,6 +120,15 @@ shape = SubResource("8")
 scale = Vector2(2.7, 2.7)
 
 [node name="Timer" type="Timer" parent="."]
+
+[node name="HomingAttackTarget" type="StaticBody2D" parent="."]
+collision_layer = 8388608
+collision_mask = 0
+script = ExtResource("3_dxjcx")
+target_tags = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HomingAttackTarget"]
+shape = SubResource("CircleShape2D_nhult")
 
 [connection signal="area_entered" from="DamageArea" to="." method="_on_DamageArea_area_entered"]
 [connection signal="body_entered" from="DamageArea" to="." method="_on_body_entered"]

@@ -15,6 +15,8 @@ var playerTouch: PlayerChar = null
 var isActive = true
 var Explosion = preload("res://Entities/Misc/BadnickSmoke.tscn")
 
+@onready var tracker_target: Targetable = $HomingAttackTarget
+
 enum ITEMS {
 	# when adding new item types, please make sure
 	# 1up is the last item in the list
@@ -96,6 +98,7 @@ func destroy():
 	# play destruction animation
 	$Animator.play("DestroyMonitor")
 	$SFX/Destroy.play()
+	tracker_target.set_deferred("collision_layer", 0) # Disable the homing attack target
 	# wait for animation to finish
 	await $Animator.animation_changed
 	# enable effect
@@ -137,6 +140,7 @@ func set_destroyed():
 	# deactivate
 	isActive = false
 	physics = false
+	tracker_target.set_deferred("collision_layer", 0) # Disable the homing attack target
 	$Animator.play("DestroyMonitor")
 
 func _physics_process(delta):
@@ -157,6 +161,7 @@ func physics_collision(body: PlayerChar, hitVector):
 			body.movement.y *= -1
 	# check that player has the rolling layer bit set
 	elif body.get_collision_layer_value(20):
+		body.player_bounce(self, PlayerChar.BOUNCE_MODES.GIMMICK)
 		# Bounce from below
 		if hitVector.x != 0:
 			# check conditions for interaction (and the player is the first player)
@@ -185,5 +190,6 @@ func physics_collision(body: PlayerChar, hitVector):
 func _on_InstaArea_area_entered(area):
 	if area.get("parent") != null and isActive:
 		playerTouch = area.parent
-		area.parent.movement.y *= -1
+		playerTouch.movement.y *= -1
+		playerTouch.player_bounce(self, PlayerChar.BOUNCE_MODES.GIMMICK)
 		destroy()

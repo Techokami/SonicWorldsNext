@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cioq5saowvqxj" path="res://Entities/MainObjects/Player.tscn" id="5_tgx6m"]
 [ext_resource type="TileSet" uid="uid://b52aenq8bhfsf" path="res://Tileset/Worlds/WorldsTileMap.tres" id="6_xw1le"]
 [ext_resource type="PackedScene" uid="uid://dasp221fqgrno" path="res://Entities/Obstacles/Platform.tscn" id="7_rjmim"]
-[ext_resource type="PackedScene" uid="uid://gklj3ebdwveu" path="res://Entities/Items/Monitor.tscn" id="8_8svvy"]
+[ext_resource type="PackedScene" uid="uid://6jcbvra64ero" path="res://Entities/Items/Monitor.tscn" id="8_8svvy"]
 [ext_resource type="PackedScene" uid="uid://cma2mtbqjiqdc" path="res://Entities/Gimmicks/HangingBar.tscn" id="9_twpre"]
 [ext_resource type="Texture2D" uid="uid://8h0afsnvb01o" path="res://Graphics/Tiles/WorldsTiles/PlatformSmall.png" id="10_m5ppr"]
 [ext_resource type="PackedScene" uid="uid://7k14xkpjguop" path="res://Entities/Obstacles/SwingingPlatform.tscn" id="11_wdcc0"]
@@ -14,7 +14,7 @@
 [ext_resource type="Script" path="res://Scripts/Objects/CollapsePlatform.gd" id="12_ri3yl"]
 [ext_resource type="TileSet" uid="uid://dn42tsjf760q0" path="res://Graphics/Tiles/MCZPlatform.tres" id="13_biut5"]
 [ext_resource type="PackedScene" uid="uid://dkn7hhll7o4or" path="res://Entities/MainObjects/LayerSwitcher.tscn" id="14_wjddb"]
-[ext_resource type="PackedScene" uid="uid://4q0hpddgto2k" path="res://Entities/Gimmicks/Spring.tscn" id="15_sn1cn"]
+[ext_resource type="PackedScene" uid="uid://bm2mgssk56vtn" path="res://Entities/Gimmicks/Spring.tscn" id="15_sn1cn"]
 [ext_resource type="PackedScene" uid="uid://dwybbnboecmkw" path="res://Entities/Obstacles/Bumper.tscn" id="16_opp4y"]
 [ext_resource type="PackedScene" uid="uid://bgodeg4oddje6" path="res://Entities/MainObjects/BoundrySetter.tscn" id="17_vgt3l"]
 [ext_resource type="PackedScene" uid="uid://bg66ofhfkxsx6" path="res://Entities/Gimmicks/Bridge.tscn" id="18_4828w"]
@@ -56,8 +56,8 @@
 [ext_resource type="PackedScene" uid="uid://bnv0qhju3sj1a" path="res://Entities/Hazards/Crusher.tscn" id="53_7lge8"]
 [ext_resource type="PackedScene" uid="uid://msycxndhmuin" path="res://Entities/Obstacles/InvisibleBarrier.tscn" id="54_2efay"]
 [ext_resource type="PackedScene" uid="uid://c155bdyqqmmpl" path="res://Entities/Enemies/Orbinaut.tscn" id="55_3kngs"]
-[ext_resource type="PackedScene" uid="uid://b4oxfl2msl6e6" path="res://Entities/Enemies/Chomper.tscn" id="56_7s7ub"]
-[ext_resource type="PackedScene" uid="uid://ds7bmlo2s41ji" path="res://Entities/Enemies/BuzzBomber.tscn" id="57_8cmqq"]
+[ext_resource type="PackedScene" uid="uid://c2j8kgggjlrt8" path="res://Entities/Enemies/Chomper.tscn" id="56_7s7ub"]
+[ext_resource type="PackedScene" uid="uid://dggiaxhfs5k1m" path="res://Entities/Enemies/BuzzBomber.tscn" id="57_8cmqq"]
 [ext_resource type="PackedScene" uid="uid://cqcgjcw101xxo" path="res://Entities/Enemies/MotoBug.tscn" id="58_oq07j"]
 [ext_resource type="PackedScene" uid="uid://vh0ailk0432j" path="res://Entities/Boss/BossBoundrySetter.tscn" id="59_g4kjd"]
 [ext_resource type="PackedScene" uid="uid://bcoqgftnr4isn" path="res://Entities/Boss/RobotnikTemplate.tscn" id="60_x068e"]
@@ -130,7 +130,7 @@ size = Vector2(64, 8)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2ojop"]
 size = Vector2(256, 16)
 
-[sub_resource type="Shader" id="Shader_t4wxw"]
+[sub_resource type="Shader" id="Shader_anl10"]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 uniform float amount : hint_range(1,255,1);
@@ -168,7 +168,7 @@ void fragment(){
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nnlca"]
 resource_local_to_scene = true
-shader = SubResource("Shader_t4wxw")
+shader = SubResource("Shader_anl10")
 shader_parameter/amount = 4.0
 shader_parameter/palRows = 16.0
 shader_parameter/row = 9.0
@@ -214,7 +214,7 @@ region_rect = Rect2(0, 0, 512, 512)
 [node name="Players" type="Node" parent="."]
 
 [node name="Player" parent="Players" instance=ExtResource("5_tgx6m")]
-position = Vector2(120, 744)
+position = Vector2(77, 712)
 
 [node name="AltSpawn" type="Node2D" parent="Players"]
 position = Vector2(896, 1486)
@@ -1676,6 +1676,10 @@ item = 9
 
 [node name="Monitor23" parent="Monitors" instance=ExtResource("8_8svvy")]
 position = Vector2(1791, 1440)
+item = 7
+
+[node name="Monitor24" parent="Monitors" instance=ExtResource("8_8svvy")]
+position = Vector2(201, 752)
 item = 7
 
 [node name="Hazards" type="Node2D" parent="."]

@@ -1064,8 +1064,7 @@ func _touch_ceiling():
 
 
 func _land_floor():
-	
-	abilityUsed = false
+	reset_double_jump_action()
 	# landing movement calculation
 	
 	# recalculate ground angle
@@ -1179,6 +1178,7 @@ func action_jump(animation = "roll", air_jump_control : bool = true, play_sound 
 ## has to be in a state where it is available in the first place to do so.
 func reset_double_jump_action() -> void:
 	abilityUsed = false
+	player_avatar.reset_air_abilities()
 
 
 ## Makes the player emit the [signal enemy_bounced] signal.
@@ -1297,25 +1297,26 @@ func set_state(new_state: PlayerChar.STATES,
 	defaultHitBoxPos = hitBoxOffset.normal
 	$HitBox.position = defaultHitBoxPos
 	
+	# IF the old state is character action, we need to proxy to the real state
+	if current_state == STATES.CHARACTERACTION:
+		var char_state_obj : CharacterActionState = get_state_object(STATES.CHARACTERACTION)
+		var char_action_index := char_state_obj.get_character_action_state_index()
+		old_state_obj = player_avatar.get_character_state_object(char_action_index)
+	
 	if new_state == STATES.CHARACTERACTION:
 		new_state_obj = player_avatar.get_character_state_object(new_character_state)
-		if new_state_obj == null:
-			push_error("Attempted to set CHARACTERACTION with invalid new_character_state")
-			return
 	else:
 		new_state_obj = state_list[new_state]
 	
 	# reset the center offset
 	if centerReference != null:
 		centerReference.position = Vector2.ZERO
-
+		
 	# Run the state exit supplements unless we were told not to. If we are told to bail, do so.
 	if !skip_supplements and old_state_obj.state_exit_entry(new_state, new_character_state) == false:
 		return
-	
+		
 	# Enter the new state. If a supplement tells us to abandon the state change, do so.
-	# TODO XXX Coming later
-	
 	new_state_obj.state_activated()
 	
 	# If we are using a CharacterAction state, we need to set the proxy to the new character action
@@ -1474,6 +1475,27 @@ func set_direction_signed(new_direction: float, change_sprite_direction: bool = 
 ## ([code]sprite.flip_h[/code]).[/b]
 func flip_movement_direction() -> void:
 	_direction = -_direction
+
+
+enum BOUNCE_MODES {
+	NORMAL,   ## For a normal aerial bounce, player will go through the enemy if hit from below,
+	          ## bounce off the top of the enemy if hit from above
+	BOSS,     ## Bouncing off of a boss normally means the player bounces back in the direction they
+	          ## came from regardless if it's from above or below.
+	GIMMICK,  ## Let the gimmick decide the motion of the bounce, any animations, while the state is
+	          ## responsible for whatever other cleanup is involved (like resetting abilities in the
+	          ## case of Shadow's homing attack
+}
+## Invokes the current bounce behavior of the player (state dependent) -- used to handle
+## the behaviors associated with the player jumping on top of enemies and monitors, possibly some
+## others.
+## [param source] - What enemy or similar object did the player kill to trigger this bounce check
+## [param bounce_mode] - What the bounce mode should be - see BOUNCE_MODES enum for list of available modes
+##                Note that not every state is necessarily going to care what the bounce mode is.
+func player_bounce(source: Node2D, bounce_mode: PlayerChar.BOUNCE_MODES) -> void:
+	var current_state: PlayerState = get_state_object(current_state)
+	player_avatar.handle_bounce()
+	current_state.state_player_bounce(source, bounce_mode)
 
 
 ## Gets the player's direction using the [enum DIRECTIONS] enum.

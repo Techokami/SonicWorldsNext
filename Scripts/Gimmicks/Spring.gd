@@ -85,6 +85,7 @@ func physics_collision(body: PlayerChar, hitVector: Vector2):
 			body.movement.y = setMove.y
 			body.set_state(body.STATES.AIR)
 			body.disconnect_from_floor()
+			body.player_bounce(self, PlayerChar.BOUNCE_MODES.GIMMICK)
 		# horizontal movement
 		else:
 			# exit out of state on certain states
@@ -130,5 +131,6 @@ func _on_Diagonal_body_entered(body: PlayerChar):
 		animator.play("springScrew")
 		animator.queue(curAnim)
 	Global.play_sound(springSound)
+	body.player_bounce(self, PlayerChar.BOUNCE_MODES.GIMMICK)
 	# Disable pole grabs
 	# body.poleGrabID = self

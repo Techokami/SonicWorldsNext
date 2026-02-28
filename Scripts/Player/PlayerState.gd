@@ -31,7 +31,7 @@ func state_process_entry(delta: float) -> void:
 	# Run the process supplements in order of addition
 	for supplement: Callable in process_supplements:
 		if !supplement.call(self, parent, delta):
-			# First supplement in the chain to returnf false results in the chain stopping early
+			# First supplement in the chain to return false results in the chain stopping early
 			# and the main state process function not being ran
 			return
 			
@@ -136,6 +136,35 @@ func state_process(_delta: float) -> void:
 ## Override this when creating your state if you need this funcitonality
 func state_physics_process(_delta: float) -> void:
 	pass
+
+
+## Handles the behavior for a player bouncing off of an enemy, monitor, possibly
+## some other destructibles. May be overridden to provide unique handling for
+## bouncing (such as in homing attack)
+func state_player_bounce(source: Node2D, bounce_mode: PlayerChar.BOUNCE_MODES):
+	if parent.ground:
+		return
+		
+	if parent.get_shield() == PlayerChar.SHIELDS.BUBBLE:
+				parent.emit_enemy_bounce()
+	
+	match(bounce_mode):
+		PlayerChar.BOUNCE_MODES.NORMAL:
+			if parent.movement.y > 0 and parent.global_position.y < source.global_position.y:
+				# Inverse velocity is moving downward and hitting an enemy from above
+				parent.movement.y = -parent.movement.y
+			elif parent.movement.y <= 0:
+				# Push down very slightly is hitting an enmy moving upward
+				parent.movement.y += 100
+			else:
+				# If neither are true, just gain a little upward speed
+				parent.movement.y -= 100
+			
+		PlayerChar.BOUNCE_MODES.BOSS:
+			parent.movement.y = -parent.movement.y
+			parent.movement.x = -parent.movement.x
+		PlayerChar.BOUNCE_MODES.GIMMICK:
+			pass
 
 
 ## Each state is assigned a hand_free value indicating whether or not the

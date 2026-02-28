@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bcoqgftnr4isn"]
+[gd_scene load_steps=19 format=3 uid="uid://bcoqgftnr4isn"]
 
 [ext_resource type="Script" path="res://Scripts/Boss/RobotnikTemplate.gd" id="1"]
 [ext_resource type="AudioStream" uid="uid://bvhfglhmpystw" path="res://Audio/SFX/Boss/Hit.wav" id="2"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://d0i06mnbra5yc" path="res://Graphics/Boss/Robotnik.png" id="5"]
 [ext_resource type="Texture2D" uid="uid://dam0q6u1k8paq" path="res://Graphics/Boss/Jet.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://bf0ytf63vlq5c" path="res://Graphics/Boss/EggmobileFlash.png" id="7"]
+[ext_resource type="Script" path="res://Scripts/Misc/Targetable.gd" id="8_8ogxm"]
 
 [sub_resource type="AtlasTexture" id="6"]
 atlas = ExtResource("5")
@@ -88,6 +89,8 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="5"]
 size = Vector2(48, 48)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_vrt7j"]
+
 [node name="Robotnik" type="CharacterBody2D"]
 z_index = 1
 collision_layer = 16384
@@ -145,6 +148,15 @@ wait_time = 0.1
 
 [node name="AnimationTime" type="Timer" parent="."]
 one_shot = true
+
+[node name="HomingAttackTarget" type="StaticBody2D" parent="."]
+collision_layer = 8388608
+collision_mask = 0
+script = ExtResource("8_8ogxm")
+target_tags = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HomingAttackTarget"]
+shape = SubResource("CircleShape2D_vrt7j")
 
 [connection signal="defeated" from="." to="." method="_on_boss_defeated"]
 [connection signal="area_entered" from="HitBox" to="." method="_on_DamageArea_area_entered"]
