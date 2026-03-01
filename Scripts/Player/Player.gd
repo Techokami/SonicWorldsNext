@@ -63,7 +63,7 @@ var spriteRotation = 0
 var airControl = true
 
 # States
-enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, PATHFOLLOW, HIT, DIE, CORKSCREW, 
+enum STATES {NORMAL, AIR, JUMP, ROLL, SPINDASH, PEELOUT, HIT, DIE, CORKSCREW,
 SUPER, FLY, RESPAWN, GIMMICK, GLIDE, CHARACTERACTION}
 var current_state = STATES.AIR
 @onready var hitBoxOffset = {normal = $HitBox.position, crouch = $HitBox.position}

@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://dhnjridwjtpek"]
+
+[ext_resource type="Script" path="res://Scripts/Gimmicks/ZoomTube/ZoomTube.gd" id="1_antjk"]
+[ext_resource type="Texture2D" uid="uid://dv1hbrfnqs0pn" path="res://Graphics/Gimmicks/Tube.png" id="2_of24p"]
+
+[node name="ZoomTube" type="Path2D"]
+z_index = 11
+script = ExtResource("1_antjk")
+texture = ExtResource("2_of24p")

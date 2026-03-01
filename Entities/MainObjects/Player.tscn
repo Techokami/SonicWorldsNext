@@ -1,4 +1,4 @@
-[gd_scene load_steps=194 format=3 uid="uid://cioq5saowvqxj"]
+[gd_scene load_steps=193 format=3 uid="uid://cioq5saowvqxj"]
 
 [ext_resource type="Script" path="res://Scripts/Player/Player.gd" id="1"]
 [ext_resource type="PackedScene" uid="uid://d1e4muavtnun6" path="res://Entities/PlayerAvatars/Sonic.tscn" id="2"]
@@ -11,7 +11,6 @@
 [ext_resource type="AudioStream" uid="uid://tldp1etm5kwa" path="res://Audio/SFX/Player/Roll.wav" id="9"]
 [ext_resource type="Script" path="res://Scripts/Player/States/SpinDash.gd" id="10"]
 [ext_resource type="AudioStream" uid="uid://r5rwjr88mqvn" path="res://Audio/SFX/Player/SpindashRelease.wav" id="11"]
-[ext_resource type="Script" path="res://Scripts/Player/States/Animation.gd" id="12"]
 [ext_resource type="AudioStream" uid="uid://56lyekv8guny" path="res://Audio/SFX/Player/Spike.wav" id="13"]
 [ext_resource type="Script" path="res://Scripts/Player/States/Hit.gd" id="14"]
 [ext_resource type="Texture2D" uid="uid://dvqglf8dididc" path="res://Graphics/Items/shield_plain.png" id="15"]
@@ -1223,11 +1222,6 @@ script = ExtResource("10")
 [node name="PeelOut" type="Node" parent="States"]
 process_priority = 1
 script = ExtResource("44")
-
-[node name="PathFollow" type="Node" parent="States"]
-process_priority = 1
-script = ExtResource("12")
-_hands_free = false
 
 [node name="Hit" type="Node" parent="States"]
 process_priority = 1
