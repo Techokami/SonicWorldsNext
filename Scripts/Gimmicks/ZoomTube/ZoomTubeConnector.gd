@@ -37,9 +37,8 @@ static var _rng_instance: RandomNumberGenerator = RandomNumberGenerator.new()
 ## Tube this node is connected to from the northern side.
 @export var connected_to_north: ZoomTube:
 	set(tube):
-		if tube == null:
-			split_chance_north = 0.0
 		connected_to_north = _handle_connection_change(connected_to_north, tube)
+		_update_hints()
 ## Chance of randomly getting out from the northern side.
 @export var split_chance_north: float = 50.0:
 	set(value):
@@ -50,9 +49,8 @@ static var _rng_instance: RandomNumberGenerator = RandomNumberGenerator.new()
 ## Tube this node is connected to from the southern side.
 @export var connected_to_south: ZoomTube:
 	set(tube):
-		if tube == null:
-			split_chance_south = 0.0
 		connected_to_south = _handle_connection_change(connected_to_south, tube)
+		_update_hints()
 ## Chance of randomly getting out from the southern side.
 @export var split_chance_south: float = 50.0:
 	set(value):
@@ -63,9 +61,8 @@ static var _rng_instance: RandomNumberGenerator = RandomNumberGenerator.new()
 ## Tube this node is connected to from the eastern side.
 @export var connected_to_east: ZoomTube:
 	set(tube):
-		if tube == null:
-			split_chance_east = 0.0
 		connected_to_east = _handle_connection_change(connected_to_east, tube)
+		_update_hints()
 ## Chance of randomly getting out from the eastern side.
 @export var split_chance_east: float = 50.0:
 	set(value):
@@ -76,9 +73,8 @@ static var _rng_instance: RandomNumberGenerator = RandomNumberGenerator.new()
 ## Tube this node is connected to from the western side.
 @export var connected_to_west: ZoomTube:
 	set(tube):
-		if tube == null:
-			split_chance_west = 0.0
 		connected_to_west = _handle_connection_change(connected_to_west, tube)
+		_update_hints()
 ## Chance of randomly getting out from the western side.
 @export var split_chance_west: float = 50.0:
 	set(value):
