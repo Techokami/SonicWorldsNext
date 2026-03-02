@@ -62,9 +62,6 @@ class _ZoomTubeWorker extends ZoomTubeBase:
 		player.set_gimmick_var(_TRAVEL_DIRECTION_GIMMICK_VAR, not end_idx)
 	
 	func player_physics_process(player: PlayerChar, delta: float) -> void:
-		if player.get_state() != PlayerChar.STATES.GIMMICK:
-			return # the player is exiting the tube (see the `await` part below)
-		
 		var tube: ZoomTube = get_parent() as ZoomTube
 		var follower: PathFollow2D = player.get_gimmick_var(_PATH_FOLLOWER_GIMMICK_VAR)
 		var direction: int = player.get_gimmick_var(_TRAVEL_DIRECTION_GIMMICK_VAR)
