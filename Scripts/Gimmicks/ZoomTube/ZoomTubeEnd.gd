@@ -92,4 +92,7 @@ func _get_configuration_warnings() -> PackedStringArray:
 func _on_hitbox_enter(player: PlayerChar) -> void:
 	if (allow_entry and player.get_active_gimmick() == null and
 		player.get_gimmick_var(_TRAVEL_DIRECTION_GIMMICK_VAR) == null):
+		player.set_state(PlayerChar.STATES.GIMMICK)
+		player.get_avatar().get_animator().play("roll")
+		player.set_ground_speed(4.0 * 60.0)
 		connected_to.accept_player_from_joint(player, self)

@@ -140,9 +140,6 @@ func disconnect_from_joint(joint: ZoomTubeJoint) -> void:
 func accept_player_from_joint(player: PlayerChar, joint: ZoomTubeJoint, play_sound: bool = true) -> void:
 	var end_idx: int = _connected_to.find(joint)
 	assert(end_idx != -1)
-	player.set_state(PlayerChar.STATES.GIMMICK)
-	player.get_avatar().get_animator().play("roll")
-	player.set_ground_speed(4.0 * 60.0)
 	player.global_position = \
 		to_global(curve.get_point_position(0 if end_idx == 0 else curve.point_count - 1))
 	player.movement = Vector2.ZERO
