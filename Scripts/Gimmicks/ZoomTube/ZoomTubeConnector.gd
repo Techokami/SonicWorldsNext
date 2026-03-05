@@ -36,9 +36,7 @@ static var _rng_instance: RandomNumberGenerator = RandomNumberGenerator.new()
 @export_group("North side")
 ## Tube this node is connected to from the northern side.
 @export var connected_to_north: ZoomTube:
-	set(tube):
-		connected_to_north = _handle_connection_change(connected_to_north, tube)
-		_update_hints()
+	set(tube): connected_to_north = _handle_connection_change(connected_to_north, tube)
 ## Chance of randomly getting out from the northern side.
 @export var split_chance_north: float = 50.0:
 	set(value):
@@ -48,9 +46,7 @@ static var _rng_instance: RandomNumberGenerator = RandomNumberGenerator.new()
 @export_group("South side")
 ## Tube this node is connected to from the southern side.
 @export var connected_to_south: ZoomTube:
-	set(tube):
-		connected_to_south = _handle_connection_change(connected_to_south, tube)
-		_update_hints()
+	set(tube): connected_to_south = _handle_connection_change(connected_to_south, tube)
 ## Chance of randomly getting out from the southern side.
 @export var split_chance_south: float = 50.0:
 	set(value):
@@ -60,9 +56,7 @@ static var _rng_instance: RandomNumberGenerator = RandomNumberGenerator.new()
 @export_group("East side")
 ## Tube this node is connected to from the eastern side.
 @export var connected_to_east: ZoomTube:
-	set(tube):
-		connected_to_east = _handle_connection_change(connected_to_east, tube)
-		_update_hints()
+	set(tube): connected_to_east = _handle_connection_change(connected_to_east, tube)
 ## Chance of randomly getting out from the eastern side.
 @export var split_chance_east: float = 50.0:
 	set(value):
@@ -72,9 +66,7 @@ static var _rng_instance: RandomNumberGenerator = RandomNumberGenerator.new()
 @export_group("West side")
 ## Tube this node is connected to from the western side.
 @export var connected_to_west: ZoomTube:
-	set(tube):
-		connected_to_west = _handle_connection_change(connected_to_west, tube)
-		_update_hints()
+	set(tube): connected_to_west = _handle_connection_change(connected_to_west, tube)
 ## Chance of randomly getting out from the western side.
 @export var split_chance_west: float = 50.0:
 	set(value):
@@ -227,6 +219,10 @@ func _update_hints() -> void:
 			assert(n is Sprite2D)
 			n.visible = (split_type == SPLIT_TYPES.PLAYER_INPUT) and get("connected_to_" + n.name.to_lower()) != null
 	).call_deferred()
+
+func _handle_connection_change(old_value: ZoomTube, new_value: ZoomTube) -> ZoomTube:
+	_update_hints()
+	return super(old_value, new_value)
 
 func _get_configuration_warnings() -> PackedStringArray:
 	var warnings: PackedStringArray = PackedStringArray()
