@@ -198,7 +198,7 @@ func _count_connected_ends() -> int:
 	return 4 - [connected_to_north, connected_to_south, connected_to_east, connected_to_west].count(null)
 
 func _update_hints() -> void:
-	if _is_opened_as_scene():
+	if Engine.is_editor_hint() or _is_opened_as_scene():
 		return
 	
 	# deferred call, in case this code is executed before the node is ready
