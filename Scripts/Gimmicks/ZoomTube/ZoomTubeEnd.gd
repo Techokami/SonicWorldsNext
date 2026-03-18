@@ -10,7 +10,7 @@ class_name ZoomTubeEnd extends ZoomTubeJoint
 
 ## Tube this end node is connected to.
 @export var connected_to: ZoomTube = null:
-	set(tube): connected_to = _handle_connection_change(connected_to, tube)
+	set(tube): connected_to = _handle_connection_change("", connected_to, tube)
 
 ## If [code]true[/code], the player can enter the linked tube,
 ## otherwise it's exit-only.
@@ -19,6 +19,8 @@ class_name ZoomTubeEnd extends ZoomTubeJoint
 		allow_entry = value
 		if not Engine.is_editor_hint():
 			return
+		
+		# deferred call, in case this setter is called before the node is ready
 		(func() -> void:
 			$DirectionArrow/EntryArrow.visible = allow_entry
 		).call_deferred()
@@ -27,7 +29,10 @@ class_name ZoomTubeEnd extends ZoomTubeJoint
 @export var hitbox_size: Vector2 = Vector2(4.0, 4.0)
 
 
+var _connected_end_idx: int = 0
 var _connected_to_mem: ZoomTube = null
+var _offset_mem: Vector2 = Vector2.ZERO
+var _rotation_mem: float = 0.0
 
 
 ## See [method ZoomTubeJoint.accept_player_from_tube].
@@ -63,6 +68,12 @@ func _ready() -> void:
 		$DirectionArrow.queue_free()
 		set_process(false)
 
+func _get_connection_point(_end_name: String) -> Vector2:
+	# Godot bug: need to use `as Sprite2D`, because otherwise in-editor
+	# code suggestions would stop working after the `get_rect()` part
+	return global_position - Vector2(($Sprite2D as Sprite2D).get_rect().size.x / 2.0, 0.0).rotated(rotation)
+	
+
 func _process(_delta: float) -> void:
 	# Apparently the tube node stays valid even after it's removed in the editor
 	# (probably because the user can still undo the removal), and the value
@@ -79,6 +90,14 @@ func _process(_delta: float) -> void:
 	# pressed "Undo" (Ctrl+Z), we'll have to restore the connection.
 	if _connected_to_mem != null and connected_to == null and _connected_to_mem.is_inside_tree():
 		connected_to = _connected_to_mem
+	
+	# Redraw the tube if the node's relative position towards it or rotation changes
+	if connected_to != null:
+		var offset: Vector2 = global_position - connected_to.global_position
+		if rotation != _rotation_mem or offset != _offset_mem:
+			_offset_mem = offset
+			_rotation_mem = rotation
+			connected_to.set_end_position(_connected_end_idx, global_position, _get_connection_point(""))
 
 func _get_configuration_warnings() -> PackedStringArray:
 	var warnings: PackedStringArray = PackedStringArray()
@@ -94,4 +113,4 @@ func _on_hitbox_enter(player: PlayerChar) -> void:
 		player.set_state(PlayerChar.STATES.GIMMICK)
 		player.get_avatar().get_animator().play("roll")
 		player.set_ground_speed(4.0 * 60.0)
-		connected_to.accept_player_from_joint(player, self)
+		connected_to.accept_player(player, _connected_end_idx)

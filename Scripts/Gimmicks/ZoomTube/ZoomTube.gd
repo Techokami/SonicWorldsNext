@@ -95,9 +95,11 @@ var _worker: _ZoomTubeWorker = null
 ## for connection. Otherwise, if both ends are connected or both are free,
 ## the closest one to the joint is picked.[br]
 ## * [param joint] - joint to connect to.
-func connect_to_joint(joint: ZoomTubeJoint) -> void:
+## * [param connection_point] - global position of the point the tube should be
+## connected to.
+## Returns: The index of the tube's end that got connected.
+func connect_to_joint(joint: ZoomTubeJoint, connection_point: Vector2) -> int:
 	var end_points: Array[Vector2] = _get_end_points()
-	var joint_pos: Vector2 = joint.global_position
 	var closest_end_idx: int
 	
 	if (_connected_to[0] != null) != (_connected_to[1] != null):
@@ -107,20 +109,25 @@ func connect_to_joint(joint: ZoomTubeJoint) -> void:
 	else:
 		# otherwise both ends are connected (or both are unoccupied),
 		# so we have to pick the closest one
-		closest_end_idx = int(joint_pos.distance_to(end_points[0]) > joint_pos.distance_to(end_points[1]))
+		closest_end_idx = int(connection_point.distance_to(end_points[0]) > connection_point.distance_to(end_points[1]))
 	
 	# connect the new joint
 	if _connected_to[closest_end_idx] != null:
 		_connected_to[closest_end_idx].disconnect_from_tube(self)
 	_connected_to[closest_end_idx] = joint
 	
-	# update the in and out coordinates of the first and last points respectively
-	curve.set_point_position(
-		0 if closest_end_idx == 0 else (curve.point_count - 1),
-		to_local(_connected_to[closest_end_idx].global_position))
+	# don't rebuild child Path2D and Line2D nodes in-game,
+	# so it won't affect level loading time
+	if Engine.is_editor_hint():
+		# update the in and out coordinates of the first and last points respectively
+		curve.set_point_position(
+			0 if closest_end_idx == 0 else (curve.point_count - 1),
+			to_local(joint.global_position))
 	
 	# update custom warnings
 	_force_configuration_warnings_update()
+	
+	return closest_end_idx
 
 ## Disconnects the tube from a previously connected joint.[br]
 ## * [param joint] - joint to disconnect from.
@@ -130,13 +137,25 @@ func disconnect_from_joint(joint: ZoomTubeJoint) -> void:
 	_connected_to[end_idx] = null
 	_force_configuration_warnings_update()
 
-## Accepts the player from the specified joint the tube is connected to.[br]
+## Sets the position of the specified end of the tube.[br]
+## * [param end_idx] - index of the end.[br]
+## * [param point1] - desired global position of the end point.[br]
+## * [param point2] - desired global position of the point that comes before the end point.
+func set_end_position(end_idx: int, point1: Vector2, point2: Vector2) -> void:
+	point1 = to_local(point1)
+	point2 = to_local(point2)
+	if end_idx == 0:
+		curve.set_point_position(0, point1)
+		curve.set_point_position(1, point2)
+	else:
+		curve.set_point_position(curve.point_count - 1, point1)
+		curve.set_point_position(curve.point_count - 2, point2)
+
+## Accepts the player from a joint the tube is connected to.[br]
 ## * [param player] - player to accept into the tube.[br]
-## * [param joint] - joint to accept the player from.[br]
-## * [param play_sound] - specifies whether to play the spin sound.
-func accept_player_from_joint(player: PlayerChar, joint: ZoomTubeJoint, play_sound: bool = true) -> void:
-	var end_idx: int = _connected_to.find(joint)
-	assert(end_idx != -1)
+## * [param end_idx] - index of the tube end the player starts traveling from.[br]
+## * [param play_sound] - whether to play the spin sound.
+func accept_player(player: PlayerChar, end_idx: int, play_sound: bool = true) -> void:
 	player.global_position = \
 		to_global(curve.get_point_position(0 if end_idx == 0 else curve.point_count - 1))
 	player.movement = Vector2.ZERO
@@ -202,13 +221,6 @@ func _process(_delta: float) -> void:
 	if need_rebuild_line:
 		_rebuild_line()
 		_force_configuration_warnings_update()
-	
-	var end_points: Array[Vector2] = _get_end_points()
-	for i: int in 2:
-		if (_connected_to[i] != null and _connected_to[i].global_position != end_points[i]):
-			curve.set_point_position(
-				0 if i == 0 else (curve.point_count - 1),
-				to_local(_connected_to[i].global_position))
 
 func _enter_tree() -> void:
 	_recreate_curve(true)
@@ -259,7 +271,7 @@ func _recreate_curve(from_enter_tree: bool = false) -> void:
 		curve = Curve2D.new()
 	
 	
-	for i in 2 - curve.point_count:
+	for i in 4 - curve.point_count:
 		curve.add_point(Vector2.ZERO)
 
 func _rebuild_line() -> void:
@@ -274,7 +286,14 @@ func _rebuild_line() -> void:
 	
 	_line.texture_mode = Line2D.LINE_TEXTURE_TILE
 	_line.width = _line.texture.get_height()
+	var last_point_idx: int = curve.point_count - 1
+	var start_point_mem: Vector2 = curve.get_point_position(0)
+	var end_point_mem: Vector2 = curve.get_point_position(last_point_idx)
+	curve.set_point_position(0, curve.get_point_position(1))
+	curve.set_point_position(last_point_idx, curve.get_point_position(last_point_idx - 1))
 	var points: PackedVector2Array = curve.tessellate(tesselation_max_stages, tesselation_tolerance)
+	curve.set_point_position(0, start_point_mem)
+	curve.set_point_position(last_point_idx, end_point_mem)
 	_line.clear_points()
 	for i: int in points.size():
 		_line.add_point(points[i])

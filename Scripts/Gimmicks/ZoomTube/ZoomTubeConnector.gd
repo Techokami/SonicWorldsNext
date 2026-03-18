@@ -8,9 +8,12 @@
 class_name ZoomTubeConnector extends ZoomTubeJoint
 
 
-# Name of the gimmick variable that stores the tube
-# the player has entered the connector node from.
-const _PREVIOUS_TUBE_GIMMICK_VAR: String = "zoom_tube_connector_previous_tube"
+# Name of the gimmick variable that stores the direction the player has entered from
+const _ENTRANCE_DIRECTION_GIMMICK_VAR: String = "zoom_tube_connector_previous_tube"
+
+const _END_NAMES: Array[String] = [ "north", "south", "east", "west" ]
+const _END_DIRECTIONS: Dictionary = \
+	{ north = -Vector2.UP, south = -Vector2.DOWN, east = -Vector2.RIGHT, west = -Vector2.LEFT }
 
 ## Defines types of logic for handling player getting out of the connector.
 enum SPLIT_TYPES {
@@ -36,7 +39,7 @@ static var _rng_instance: RandomNumberGenerator = RandomNumberGenerator.new()
 @export_group("North side")
 ## Tube this node is connected to from the northern side.
 @export var connected_to_north: ZoomTube:
-	set(tube): connected_to_north = _handle_connection_change(connected_to_north, tube)
+	set(tube): connected_to_north = _handle_connection_change("north", connected_to_north, tube)
 ## Chance of randomly getting out from the northern side.
 @export var split_chance_north: float = 50.0:
 	set(value):
@@ -46,7 +49,7 @@ static var _rng_instance: RandomNumberGenerator = RandomNumberGenerator.new()
 @export_group("South side")
 ## Tube this node is connected to from the southern side.
 @export var connected_to_south: ZoomTube:
-	set(tube): connected_to_south = _handle_connection_change(connected_to_south, tube)
+	set(tube): connected_to_south = _handle_connection_change("south", connected_to_south, tube)
 ## Chance of randomly getting out from the southern side.
 @export var split_chance_south: float = 50.0:
 	set(value):
@@ -56,7 +59,7 @@ static var _rng_instance: RandomNumberGenerator = RandomNumberGenerator.new()
 @export_group("East side")
 ## Tube this node is connected to from the eastern side.
 @export var connected_to_east: ZoomTube:
-	set(tube): connected_to_east = _handle_connection_change(connected_to_east, tube)
+	set(tube): connected_to_east = _handle_connection_change("east", connected_to_east, tube)
 ## Chance of randomly getting out from the eastern side.
 @export var split_chance_east: float = 50.0:
 	set(value):
@@ -66,7 +69,7 @@ static var _rng_instance: RandomNumberGenerator = RandomNumberGenerator.new()
 @export_group("West side")
 ## Tube this node is connected to from the western side.
 @export var connected_to_west: ZoomTube:
-	set(tube): connected_to_west = _handle_connection_change(connected_to_west, tube)
+	set(tube): connected_to_west = _handle_connection_change("west", connected_to_west, tube)
 ## Chance of randomly getting out from the western side.
 @export var split_chance_west: float = 50.0:
 	set(value):
@@ -89,7 +92,17 @@ static var _rng_instance: RandomNumberGenerator = RandomNumberGenerator.new()
 ## Size of entrance and exit areas.
 @export var hitbox_size: Vector2 = Vector2(4.0, 4.0)
 
+# These variables are used indirectly via `Object.get()` and `Object.set()`
+@warning_ignore("unused_private_class_variable") var _connected_end_idx_north: int = 0
+@warning_ignore("unused_private_class_variable") var _connected_end_idx_south: int = 0
+@warning_ignore("unused_private_class_variable") var _connected_end_idx_east: int = 0
+@warning_ignore("unused_private_class_variable") var _connected_end_idx_west: int = 0
+@warning_ignore("unused_private_class_variable") var _offset_mem_north: Vector2 = Vector2.ZERO
+@warning_ignore("unused_private_class_variable") var _offset_mem_south: Vector2 = Vector2.ZERO
+@warning_ignore("unused_private_class_variable") var _offset_mem_east: Vector2 = Vector2.ZERO
+@warning_ignore("unused_private_class_variable") var _offset_mem_west: Vector2 = Vector2.ZERO
 
+var _rotation_mem: float = 0.0
 var _timer: Timer
 
 
@@ -101,62 +114,65 @@ func accept_player_from_tube(player: PlayerChar, tube: ZoomTube) -> void:
 	# remember the previous pipe - we'll need it later to make sure
 	# the player won't randomly re-enter that pipe
 	if split_type == SPLIT_TYPES.RANDOM:
-		player.set_gimmick_var(_PREVIOUS_TUBE_GIMMICK_VAR, tube)
+		var end_idx: int = player.get_gimmick_var(_TRAVEL_DIRECTION_GIMMICK_VAR)
+		for end_name in _END_NAMES:
+			if get("connected_to_" + end_name) == tube and get("_connected_end_idx_" + end_name) == end_idx:
+				player.set_gimmick_var(_ENTRANCE_DIRECTION_GIMMICK_VAR, end_name)
+				break
 	
 	player.set_active_gimmick(self)
 	_add_player(player)
 
 ## See [method ZoomTubeJoint.disconnect_from_tube].
 func disconnect_from_tube(tube: ZoomTube) -> void:
-	if tube == connected_to_north:
-		connected_to_north = null
-	elif tube == connected_to_south:
-		connected_to_south = null
-	elif tube == connected_to_east:
-		connected_to_east = null
-	elif tube == connected_to_west:
-		connected_to_west = null
-	else:
-		@warning_ignore("assert_always_false") assert(false)
+	for end_name: String in _END_NAMES:
+		if get("connected_to_" + end_name) == tube:
+			set("connected_to_" + end_name, null)
+			return
 
 func player_physics_process(player: PlayerChar, _delta: float) -> void:
 	var tube: ZoomTube = null
+	var end_idx: int = 0
 	match split_type:
-		
 		SPLIT_TYPES.PLAYER_INPUT:
-			if player.is_up_held() and connected_to_north != null:
+			if connected_to_north != null and player.is_up_held():
 				tube = connected_to_north
-			elif player.is_down_held() and connected_to_south != null:
+				end_idx = _connected_end_idx_north
+			elif connected_to_south != null and player.is_down_held():
 				tube = connected_to_south
-			elif player.is_right_held() and connected_to_east != null:
+				end_idx = _connected_end_idx_south
+			elif connected_to_east != null and player.is_right_held():
 				tube = connected_to_east
-			elif player.is_left_held() and connected_to_west != null:
+				end_idx = _connected_end_idx_east
+			elif connected_to_west != null and player.is_left_held():
 				tube = connected_to_west
+				end_idx = _connected_end_idx_west
 		
 		_: # SPLIT_TYPES.RANDOM - perform a weighted random selection
-			var options: Dictionary = { # TODO: Use a typed dictionary when we upgrade to Godot 4.4 or later
-				connected_to_north: split_chance_north,
-				connected_to_south: split_chance_south,
-				connected_to_east:  split_chance_east,
-				connected_to_west:  split_chance_west
-			}
-			options.erase(null)
-			options.erase(player.get_gimmick_var(_PREVIOUS_TUBE_GIMMICK_VAR))
+			var options: Dictionary = {} # TODO: Use a typed dictionary when we upgrade to Godot 4.4 or later
+			var connected_to: ZoomTube
+			var entrance_end_name: String = player.get_gimmick_var(_ENTRANCE_DIRECTION_GIMMICK_VAR)
+			for end_name in _END_NAMES:
+				connected_to = get("connected_to_" + end_name) if end_name != entrance_end_name else null
+				if connected_to != null:
+					options[end_name] = get("split_chance_" + end_name)
 			var r: int = _rng_instance.rand_weighted(options.values())
 			if r != -1:
-				tube = options.keys()[r]
+				var end_name: String = options.keys()[r]
+				tube = get("connected_to_" + end_name)
+				end_idx = get("_connected_end_idx_" + end_name)
 	
 	if tube != null:
 		_remove_player(player)
-		player.unset_gimmick_var(_PREVIOUS_TUBE_GIMMICK_VAR)
-		tube.accept_player_from_joint(player, self, split_type != SPLIT_TYPES.RANDOM)
+		player.unset_gimmick_var(_ENTRANCE_DIRECTION_GIMMICK_VAR)
+		tube.accept_player(player, end_idx, split_type != SPLIT_TYPES.RANDOM)
 	else:
 		player.global_position = global_position
 
 func player_force_detach_callback(player: PlayerChar) -> void:
 	super(player)
 	_remove_player(player)
-	player.unset_gimmick_var(_PREVIOUS_TUBE_GIMMICK_VAR)
+	player.unset_gimmick_var(_ENTRANCE_DIRECTION_GIMMICK_VAR)
 
 
 func _ready() -> void:
@@ -168,8 +184,9 @@ func _ready() -> void:
 			var labels: Node2D = $Hints/Labels
 			var arrows: Node2D = $Hints/Arrows
 			var connected: bool
-			for end_name: String in [ "North", "South", "East", "West" ]:
-				connected = (get("connected_to_" + end_name.to_lower()) != null)
+			for end_name: String in _END_NAMES:
+				connected = (get("connected_to_" + end_name) != null)
+				end_name = end_name.to_pascal_case()
 				(labels.get_node(end_name) as Label).visible = connected
 				(arrows.get_node(end_name) as Sprite2D).visible = connected
 			
@@ -180,6 +197,27 @@ func _ready() -> void:
 		
 		else:
 			$Hints.queue_free()
+		
+		set_process(false)
+
+func _process(_delta: float) -> void:
+	# redraw the tubes if the node's rotation or relative position towards
+	# at least one of the tubes has changed
+	var rotation_cnanged: bool = rotation != _rotation_mem
+	var offset: Vector2
+	var connected_to: ZoomTube
+	if rotation_cnanged:
+		_rotation_mem = rotation
+	for end_name: String in _END_NAMES:
+		connected_to = get("connected_to_" + end_name)
+		if connected_to != null:
+			offset = global_position - connected_to.global_position
+			if rotation_cnanged or offset != get("_offset_mem_" + end_name) or rotation != _rotation_mem:
+				set("_offset_mem_" + end_name, offset)
+				connected_to.set_end_position(
+					get("_connected_end_idx_" + end_name),
+					global_position,
+					_get_connection_point(end_name))
 
 func _add_player(player: PlayerChar) -> void:
 	if show_hint_arrows and player == Global.players[0]:
@@ -198,7 +236,7 @@ func _count_connected_ends() -> int:
 	return 4 - [connected_to_north, connected_to_south, connected_to_east, connected_to_west].count(null)
 
 func _update_hints() -> void:
-	if Engine.is_editor_hint() or _is_opened_as_scene():
+	if not Engine.is_editor_hint() or _is_opened_as_scene():
 		return
 	
 	# deferred call, in case this code is executed before the node is ready
@@ -213,16 +251,22 @@ func _update_hints() -> void:
 		for n: Node in $Hints/Labels.get_children():
 			assert(n is Label)
 			n.text = ("%.f" % get("split_chance_" + n.name.to_lower())) if split_type == SPLIT_TYPES.RANDOM else ""
-			n.visible = display_labels and get("connected_to_" + n.name.to_lower()) != null
+			n.visible = (display_labels and get("connected_to_" + n.name.to_lower()) != null)
 		
 		for n: Node in $Hints/Arrows.get_children():
 			assert(n is Sprite2D)
-			n.visible = (split_type == SPLIT_TYPES.PLAYER_INPUT) and get("connected_to_" + n.name.to_lower()) != null
+			n.visible = (split_type == SPLIT_TYPES.PLAYER_INPUT and get("connected_to_" + n.name.to_lower()) != null)
 	).call_deferred()
 
-func _handle_connection_change(old_value: ZoomTube, new_value: ZoomTube) -> ZoomTube:
-	_update_hints()
-	return super(old_value, new_value)
+func _get_connection_point(end_name: String) -> Vector2:
+	# Godot bug: need to use `as Sprite2D`, because otherwise in-editor
+	# code suggestions would stop working after the `get_rect()` part
+	return global_position - (_END_DIRECTIONS[end_name] * ($Sprite2D as Sprite2D).get_rect().size.x / 2.0).rotated(rotation)
+
+func _handle_connection_change(end_name: String, old_value: ZoomTube, new_value: ZoomTube) -> ZoomTube:
+	if super(end_name, old_value, new_value) != null:
+		_update_hints()
+	return new_value
 
 func _get_configuration_warnings() -> PackedStringArray:
 	var warnings: PackedStringArray = PackedStringArray()

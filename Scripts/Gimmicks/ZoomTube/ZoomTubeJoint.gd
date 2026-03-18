@@ -7,12 +7,16 @@
 class_name ZoomTubeJoint extends ZoomTubeBase
 
 
-func _handle_connection_change(old_value: ZoomTube, new_value: ZoomTube) -> ZoomTube:
+func _handle_connection_change(end_name: String, old_value: ZoomTube, new_value: ZoomTube) -> ZoomTube:
 	if old_value != null:
 		old_value.disconnect_from_joint(self)
+	var var_postfix: String = ("_" + end_name) if end_name != "" else ""
 	if new_value != null:
-		new_value.connect_to_joint(self)
+		set("_connected_end_idx" + var_postfix, new_value.connect_to_joint(self, _get_connection_point(end_name)))
+	
+	# deferred call, so the function is called after `_connected_to_*` is set
 	_force_configuration_warnings_update.call_deferred()
+	
 	return new_value
 
 func _is_opened_as_scene() -> bool:
@@ -36,3 +40,6 @@ func accept_player_from_tube(_player: PlayerChar, _tube: ZoomTube) -> void:
 ## Disconnects this [ZoomTubeJoint] node from a [ZoomTube].
 func disconnect_from_tube(_tube: ZoomTube) -> void:
 	pass
+
+func _get_connection_point(end_name: String) -> Vector2:
+	return Vector2.ZERO
