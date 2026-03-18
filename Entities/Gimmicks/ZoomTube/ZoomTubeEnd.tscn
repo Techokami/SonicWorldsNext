@@ -9,6 +9,7 @@ size = Vector2(4, 4)
 [node name="ZoomTubeEnd" type="Node2D"]
 z_index = 12
 script = ExtResource("1_8rhqi")
+texture = ExtResource("2_vjtpx")
 metadata/_global_pos_mem = Vector2(0, 0)
 
 [node name="DirectionArrow" type="Line2D" parent="."]
@@ -26,8 +27,6 @@ joint_mode = 2
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_vjtpx")
-region_enabled = true
-region_rect = Rect2(16, 0, 16, 32)
 
 [node name="Area2D" type="Area2D" parent="."]
 position = Vector2(8, 0)

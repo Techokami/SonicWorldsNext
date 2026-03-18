@@ -8,6 +8,9 @@
 class_name ZoomTubeConnector extends ZoomTubeJoint
 
 
+## The texture used for the connector's sprite.
+@export var texture: Texture2D = null
+
 # Name of the gimmick variable that stores the direction the player has entered from
 const _ENTRANCE_DIRECTION_GIMMICK_VAR: String = "zoom_tube_connector_previous_tube"
 
@@ -176,6 +179,8 @@ func player_force_detach_callback(player: PlayerChar) -> void:
 
 
 func _ready() -> void:
+	$Sprite2D.texture = texture
+	
 	if Engine.is_editor_hint():
 		_update_hints()
 	else:

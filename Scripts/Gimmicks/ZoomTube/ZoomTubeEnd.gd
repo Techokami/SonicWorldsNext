@@ -8,6 +8,9 @@
 class_name ZoomTubeEnd extends ZoomTubeJoint
 
 
+## The texture used for the end node's sprite.
+@export var texture: Texture2D = null
+
 ## Tube this end node is connected to.
 @export var connected_to: ZoomTube = null:
 	set(tube): connected_to = _handle_connection_change("", connected_to, tube)
@@ -62,6 +65,8 @@ func disconnect_from_tube(tube: ZoomTube) -> void:
 
 
 func _ready() -> void:
+	$Sprite2D.texture = texture
+	
 	if not Engine.is_editor_hint():
 		$Area2D/CollisionShape2D.shape.size = hitbox_size
 		$Area2D.connect(&"body_entered", _on_hitbox_enter)

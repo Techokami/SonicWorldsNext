@@ -10,10 +10,10 @@ bg_color = Color(0.498039, 0.498039, 0.498039, 1)
 [node name="ZoomTubeConnector" type="Node2D"]
 z_index = 12
 script = ExtResource("1_fftkf")
+texture = ExtResource("2_v486b")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 12
-texture = ExtResource("2_v486b")
 
 [node name="Hints" type="Node2D" parent="."]
 
