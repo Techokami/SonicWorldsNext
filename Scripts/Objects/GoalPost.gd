@@ -53,8 +53,7 @@ func _physics_process(_delta):
 		# put states under player in here if the state could end up getting the player soft locked
 		var state_cancel_list: Array[PlayerChar.STATES] = [
 			PlayerChar.STATES.CHARACTERACTION,
-			PlayerChar.STATES.GIMMICK,
-			PlayerChar.STATES.PATHFOLLOW
+			PlayerChar.STATES.GIMMICK
 		]
 		var partner: PlayerChar = player.get_partner()
 		for i: PlayerChar in [ player, partner ] if partner != null else [ player ]:

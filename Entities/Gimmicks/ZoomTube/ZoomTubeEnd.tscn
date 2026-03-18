@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3 uid="uid://brw4758vlo8t"]
+
+[ext_resource type="Script" path="res://Scripts/Gimmicks/ZoomTube/ZoomTubeEnd.gd" id="1_8rhqi"]
+[ext_resource type="Texture2D" uid="uid://buev0ity81n7o" path="res://Graphics/Gimmicks/TubeEnd.png" id="2_vjtpx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j3gsb"]
+size = Vector2(4, 4)
+
+[node name="ZoomTubeEnd" type="Node2D"]
+z_index = 12
+script = ExtResource("1_8rhqi")
+texture = ExtResource("2_vjtpx")
+metadata/_global_pos_mem = Vector2(0, 0)
+
+[node name="DirectionArrow" type="Line2D" parent="."]
+position = Vector2(9, 0)
+points = PackedVector2Array(0, 0, 25, 0, 17, -8, 25, 0, 17, 8, 25, 0)
+closed = true
+width = 2.0
+joint_mode = 2
+
+[node name="EntryArrow" type="Line2D" parent="DirectionArrow"]
+points = PackedVector2Array(0, 0, 8, -8, 0, 0, 8, 8)
+closed = true
+width = 2.0
+joint_mode = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_vjtpx")
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(8, 0)
+collision_layer = 0
+collision_mask = 4096
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_j3gsb")

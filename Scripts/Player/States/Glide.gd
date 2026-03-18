@@ -93,15 +93,16 @@ func state_physics_process(delta: float) -> void:
 	# check if not falling, if not then do glide routine
 	if !is_fall and !sliding:
 		# Turning
+		var direction: float = parent.get_direction_multiplier()
 		# left
-		if parent.get_direction_multiplier() > 0.0:
+		if direction > 0.0:
 			if turnTimer >= 180:
 				speedPreservation = abs(parent.movement.x)
 			if turnTimer > 0:
 				turnTimer -= 2.8125*delta*60
 				parent.movement.x = speedPreservation*cos(deg_to_rad(turnTimer))
 		# right
-		elif parent.get_direction_multiplier() < 0.0:
+		elif direction < 0.0:
 			if turnTimer <= 0:
 				speedPreservation = abs(parent.movement.x)
 			if turnTimer < 180:
@@ -132,7 +133,7 @@ func state_physics_process(delta: float) -> void:
 		# Go into sliding if on ground
 		if parent.ground and !sliding and groundBuffer >= 1:
 			animator.play("glideSlide")
-			parent.set_direction_signed(signf(parent.movement.x))
+			parent.set_direction_signed(parent.movement.x)
 			sliding = true
 			parent.reflective = false
 			$"../../SkidDustTimer".start(0.1)
@@ -167,10 +168,8 @@ func state_physics_process(delta: float) -> void:
 			# failure to climb up walls.
 			#
 			# This modification will be revisited later.
-			if (parent.movement.x != 0.0):
-				parent.set_direction_signed(signf(parent.movement.x))
-			else:
-				parent.set_direction(parent.get_direction())
+			parent.set_direction_signed(parent.movement.x)
+			parent.sprite.flip_h = (parent.get_direction_multiplier() < 0.0)
 			
 			parent.set_character_action_state(KnucklesAvatar.CHAR_STATES.KNUCKLES_CLIMB,
 							 parent.get_predefined_hitbox(PlayerChar.HITBOXES.GLIDE),
@@ -190,7 +189,7 @@ func state_physics_process(delta: float) -> void:
 	# if sliding then do sliding routine
 	elif sliding:
 		
-		parent.set_direction_signed(signf(parent.movement.x))
+		parent.set_direction_signed(parent.movement.x)
 		parent.movement.x = move_toward(parent.movement.x,0,friction/GlobalFunctions.div_by_delta(delta))
 		
 		# set direction

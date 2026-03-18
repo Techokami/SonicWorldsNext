@@ -1,0 +1,108 @@
+[gd_scene load_steps=5 format=3 uid="uid://bix1ixys7j1k"]
+
+[ext_resource type="Script" path="res://Scripts/Gimmicks/ZoomTube/ZoomTubeConnector.gd" id="1_fftkf"]
+[ext_resource type="Texture2D" uid="uid://brmyeoxycvj5j" path="res://Graphics/Gimmicks/TubeConnector.png" id="2_v486b"]
+[ext_resource type="Texture2D" uid="uid://dhygmoxun35w1" path="res://Graphics/Fonts/arrows_small_font.png" id="3_v486b"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fftkf"]
+bg_color = Color(0.498039, 0.498039, 0.498039, 1)
+
+[node name="ZoomTubeConnector" type="Node2D"]
+z_index = 12
+script = ExtResource("1_fftkf")
+texture = ExtResource("2_v486b")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 12
+
+[node name="Hints" type="Node2D" parent="."]
+
+[node name="Labels" type="Node2D" parent="Hints"]
+
+[node name="North" type="Label" parent="Hints/Labels"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -5.0
+offset_top = -24.0
+offset_right = 5.0
+offset_bottom = -16.0
+grow_horizontal = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_fftkf")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="South" type="Label" parent="Hints/Labels"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -5.0
+offset_top = 16.0
+offset_right = 5.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_fftkf")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="East" type="Label" parent="Hints/Labels"]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 16.0
+offset_top = -5.0
+offset_right = 24.0
+offset_bottom = 5.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_fftkf")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1
+
+[node name="West" type="Label" parent="Hints/Labels"]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -5.0
+offset_right = -16.0
+offset_bottom = 5.0
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_fftkf")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1
+
+[node name="Arrows" type="Node2D" parent="Hints"]
+
+[node name="North" type="Sprite2D" parent="Hints/Arrows"]
+position = Vector2(0, -20)
+texture = ExtResource("3_v486b")
+hframes = 2
+frame = 1
+
+[node name="South" type="Sprite2D" parent="Hints/Arrows"]
+position = Vector2(0, 20)
+texture = ExtResource("3_v486b")
+hframes = 2
+
+[node name="East" type="Sprite2D" parent="Hints/Arrows"]
+position = Vector2(20, 0)
+rotation = 1.57079
+texture = ExtResource("3_v486b")
+flip_v = true
+hframes = 2
+
+[node name="West" type="Sprite2D" parent="Hints/Arrows"]
+position = Vector2(-20, 0)
+rotation = 1.57079
+texture = ExtResource("3_v486b")
+flip_v = true
+hframes = 2
+frame = 1

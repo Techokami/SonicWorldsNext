@@ -30,14 +30,15 @@ func state_process(_delta: float) -> void:
 func state_physics_process(delta: float) -> void:
 	# do climb logic if climbUp is false
 	var animator: PlayerCharAnimationPlayer = parent.get_avatar().get_animator()
+	var camera: PlayerCamera = parent.get_camera()
 	if !climbUp:
 		
 		# climbing
 		parent.movement.y = (parent.inputs[parent.INPUTS.YINPUT]+int(parent.isSuper)*sign(parent.inputs[parent.INPUTS.YINPUT]))*60
 		#Prevent player from leaving play area via climbing.
 		parent.global_position.y = clampf(parent.global_position.y,
-		                                  parent.get_camera().target_limit_top+16,
-										  parent.get_camera().target_limit_bottom)
+										  camera.target_limit_top+16.0,
+										  camera.target_limit_bottom)
 		
 		# check vertically (sometimes clinging can cause clipping)
 		if parent.movement.y == 0:
@@ -87,7 +88,7 @@ func state_physics_process(delta: float) -> void:
 	else:
 		# climb up
 		# give camera time to follow so it doesn't snap
-		parent.get_camera().drag_lerp = 1.0
+		camera.drag_lerp = 1.0
 		climbTimer += delta
 		# stop current animations and play climb up
 		animator.stop()
