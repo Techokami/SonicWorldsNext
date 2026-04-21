@@ -43,4 +43,3 @@ func _on_DamageArea_area_entered(area):
 
 func _on_VisibilityNotifier2D_screen_exited():
 	queue_free()
-
