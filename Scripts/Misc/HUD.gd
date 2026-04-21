@@ -59,7 +59,7 @@ func _ready():
 		$LevelCard/Banner/LevelName.text = zoneName
 		$LevelCard/Banner/Zone.text = zone
 		# set act graphic
-		$LevelCard/Banner/Act.frame = act-1
+		$LevelCard/Banner/Act.frame = wrapi(act-1,0,4)
 		# make visible if act isn't 0 (0 will just be zone)
 		$LevelCard/Banner/Act.visible = (act > 0)
 		# make sure level card isn't paused so it can keep playing

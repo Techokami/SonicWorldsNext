@@ -1,25 +1,40 @@
+@tool
 extends EnemyBase
+
+
+@onready var sprite = $Chomper
 
 # Original Code RefCounted translated by VAdaPEGA
 var animFrame = 0.0
+var jump_height: float = -7.0
 
 func _ready():
+	if Engine.is_editor_hint():
+		return
 	# initial velocity
-	velocity.y = -7
+	jump_height = abs(get_parent().jump_height)
+	sprite.texture = get_parent().sprite_image
+	velocity.y = 0-jump_height
 	set_physics_process(false)
 	set_process(false)
 
 
 func _physics_process(delta):
+	if Engine.is_editor_hint():
+		sprite.texture = get_parent().sprite_image
+		return
+	
 	# gravity
 	velocity.y += 0.09375/GlobalFunctions.div_by_delta(delta)
 	position.y = min(position.y,0)
 	
 	# reset velocity
 	if position.y >= 0:
-		velocity.y = -7*60
+		velocity.y = 0-jump_height*60
 
 func _process(delta):
+	if Engine.is_editor_hint():
+		return
 	super(delta)
 	# animation states
 	if position.y > -192:

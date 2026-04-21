@@ -27,6 +27,8 @@ func _ready():
 	Global.life = get_node_or_null("Music/Life")
 	# initialize game data using global reset (it's better then assigning variables twice)
 	reset_game_values()
+	# Warning prevention.
+	scene_faded.connect(_on_scene_faded)
 
 func _process(delta):
 	# verify scene isn't paused
@@ -143,6 +145,8 @@ func reset_game_values():
 	Global.nodeMemory.clear()
 	Global.nextZone = "res://Scene/Zones/BaseZone.tscn"
 
+func _on_scene_faded():
+	pass
 
 # executed when life sound has finished
 func _on_Life_finished():

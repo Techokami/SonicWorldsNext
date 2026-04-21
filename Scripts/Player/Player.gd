@@ -1119,11 +1119,15 @@ func get_ring():
 	elif partner != null:
 		if partner.playerControl == 1: # error prevention
 			partner.get_ring()
-	
+
+# "Always" here means "even in debug mode". In the original Sonic games,
+# in debug mode, only pits, crushing, or timeout would kill players.
+# replace this "false == true" with a different condition to impliment
+# this behaviour.
 func kill(always = true):
-	#if !(get_tree().current_scene is MainGameScene) and always == false:
-	#	sfx[6].play()
-	#	return false
+	if (always == false and false == true):
+		sfx[6].play()
+		return false
 	if currentState != STATES.DIE:
 		disconect_from_floor()
 		supTime = 0

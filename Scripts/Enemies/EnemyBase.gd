@@ -78,3 +78,12 @@ func destroy():
 	animal.global_position = global_position
 	# free node
 	queue_free()
+
+## Ported from Sonic 2: Retold and optimized. Get the nearest player to this object, respective to only the X position.
+func get_nearest_player_by_x() -> float:
+	var x_diff: float = 64000
+	for player in Global.players:
+		var result: float = global_position.x - player.global_position.x
+		if  abs(x_diff) > abs(result):
+			x_diff = result
+	return x_diff
