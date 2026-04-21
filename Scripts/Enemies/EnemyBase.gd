@@ -76,6 +76,7 @@ func destroy():
 	# We don't want to free the node... that's unnecessary and complicates some interactions that
 	# revolve around collision.
 	# free node
+
 	#queue_free()
 	
 	# Turn off visibility of object
@@ -92,3 +93,12 @@ func destroy():
 		#print("disabling %s" % area)
 		area.set_deferred("collision_layer", 0)
 		area.set_deferred("collision_mask", 0)
+
+## Ported from Sonic 2: Retold and optimized. Get the nearest player to this object, respective to only the X position.
+func get_nearest_player_by_x() -> float:
+	var x_diff: float = 64000
+	for player in Global.players:
+		var result: float = global_position.x - player.global_position.x
+		if  abs(x_diff) > abs(result):
+			x_diff = result
+	return x_diff
