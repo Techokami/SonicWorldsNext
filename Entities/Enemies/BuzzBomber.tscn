@@ -116,6 +116,10 @@ modulate = Color(1, 1, 1, 0.352941)
 position = Vector2(-40, 86)
 shape = SubResource("8")
 
+[node name="BulletPoint" type="Node2D" parent="Sprite2D"]
+unique_name_in_owner = true
+position = Vector2(-16, 23)
+
 [node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
 scale = Vector2(2.7, 2.7)
 
