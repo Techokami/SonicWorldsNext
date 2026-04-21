@@ -1,0 +1,78 @@
+[gd_scene load_steps=9 format=3 uid="uid://c0lafv2mxvarc"]
+
+[ext_resource type="Script" path="res://Scripts/Enemies/EnemyProjectileBase.gd" id="1_vg5l2"]
+[ext_resource type="Texture2D" uid="uid://clin7es885cuw" path="res://Graphics/Enemies/BuzzerS2BR_Bullet.png" id="2_a31i3"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(4, 4)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eagak"]
+atlas = ExtResource("2_a31i3")
+region = Rect2(0, 0, 8, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x1c8n"]
+atlas = ExtResource("2_a31i3")
+region = Rect2(8, 0, 8, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uq5t6"]
+atlas = ExtResource("2_a31i3")
+region = Rect2(0, 0, 8, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nxjm8"]
+atlas = ExtResource("2_a31i3")
+region = Rect2(8, 0, 8, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_663jt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eagak")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x1c8n")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uq5t6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nxjm8")
+}],
+"loop": true,
+"name": &"fire",
+"speed": 8.0
+}]
+
+[node name="BuzzerProjectile" type="CharacterBody2D"]
+collision_layer = 16384
+collision_mask = 0
+script = ExtResource("1_vg5l2")
+damageType = 1
+
+[node name="CollissionMask" type="CollisionShape2D" parent="."]
+shape = SubResource("1")
+
+[node name="DamageArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 528384
+
+[node name="HitBox" type="CollisionShape2D" parent="DamageArea"]
+modulate = Color(1, 0, 0, 1)
+shape = SubResource("1")
+
+[node name="projectile" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_663jt")
+frame = 1
+frame_progress = 0.639921
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+scale = Vector2(2.1, 2.1)
+
+[connection signal="area_entered" from="DamageArea" to="." method="_on_DamageArea_area_entered"]
+[connection signal="body_entered" from="DamageArea" to="." method="_on_body_entered"]
+[connection signal="body_exited" from="DamageArea" to="." method="_on_body_exited"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]

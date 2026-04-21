@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=4 uid="uid://c4rueg1m78f3o"]
+[gd_scene load_steps=23 format=4 uid="uid://c4rueg1m78f3o"]
 
 [ext_resource type="Script" path="res://Scripts/Level/Level.gd" id="1_n16vo"]
 [ext_resource type="PackedScene" uid="uid://cioq5saowvqxj" path="res://Entities/MainObjects/Player.tscn" id="1_pnju3"]
@@ -21,6 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://bbaayty1jgegk" path="res://Entities/Enemies/Coconuts.tscn" id="15_cp1bx"]
 [ext_resource type="PackedScene" uid="uid://b4oxfl2msl6e6" path="res://Entities/Enemies/Chomper.tscn" id="17_qi0hv"]
 [ext_resource type="Texture2D" uid="uid://js02e51lkwhp" path="res://Graphics/Enemies/Masher.png" id="18_0htxr"]
+[ext_resource type="PackedScene" uid="uid://beuvy68prxg4t" path="res://Entities/Enemies/Buzzer.tscn" id="22_hgcj5"]
 
 [node name="EmeraldHill" type="Node2D"]
 script = ExtResource("1_n16vo")
@@ -410,6 +411,36 @@ position = Vector2(8664, 376)
 
 [node name="Coconuts8" parent="Badniks" instance=ExtResource("15_cp1bx")]
 position = Vector2(9768, 736)
+
+[node name="Buzzer" parent="Badniks" instance=ExtResource("22_hgcj5")]
+position = Vector2(688, 504)
+
+[node name="Buzzer2" parent="Badniks" instance=ExtResource("22_hgcj5")]
+position = Vector2(2096, 480)
+
+[node name="Buzzer3" parent="Badniks" instance=ExtResource("22_hgcj5")]
+position = Vector2(3728, 768)
+
+[node name="Buzzer4" parent="Badniks" instance=ExtResource("22_hgcj5")]
+position = Vector2(4032, 792)
+
+[node name="Buzzer5" parent="Badniks" instance=ExtResource("22_hgcj5")]
+position = Vector2(6144, 296)
+
+[node name="Buzzer6" parent="Badniks" instance=ExtResource("22_hgcj5")]
+position = Vector2(6504, 348)
+
+[node name="Buzzer7" parent="Badniks" instance=ExtResource("22_hgcj5")]
+position = Vector2(8384, 464)
+
+[node name="Buzzer8" parent="Badniks" instance=ExtResource("22_hgcj5")]
+position = Vector2(8560, 496)
+
+[node name="Buzzer9" parent="Badniks" instance=ExtResource("22_hgcj5")]
+position = Vector2(8976, 824)
+
+[node name="Buzzer10" parent="Badniks" instance=ExtResource("22_hgcj5")]
+position = Vector2(9056, 800)
 
 [node name="Items" type="Node" parent="."]
 

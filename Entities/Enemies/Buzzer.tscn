@@ -1,107 +1,70 @@
-[gd_scene load_steps=11 format=3 uid="uid://ds7bmlo2s41ji"]
+[gd_scene load_steps=10 format=3 uid="uid://beuvy68prxg4t"]
 
-[ext_resource type="Texture2D" uid="uid://c5mhr5w1s4w8y" path="res://Graphics/Enemies/buzzBomber.png" id="1"]
-[ext_resource type="Script" path="res://Scripts/Enemies/BuzzBomber.gd" id="2"]
+[ext_resource type="Script" path="res://Scripts/Enemies/BuzzBomber.gd" id="1_jkoex"]
+[ext_resource type="Texture2D" uid="uid://dj0xvl7ecd2i" path="res://Graphics/Enemies/Buzzer.png" id="2_0qhx5"]
+[ext_resource type="PackedScene" uid="uid://c0lafv2mxvarc" path="res://Entities/Enemies/Projectiles/BuzzerProjectile.tscn" id="2_jbv3q"]
+[ext_resource type="Texture2D" uid="uid://oo72kvvoi0uv" path="res://Graphics/Enemies/BuzzerFlame.png" id="3_u6qps"]
 
 [sub_resource type="RectangleShape2D" id="1"]
-size = Vector2(48, 24)
+size = Vector2(48, 16)
 
-[sub_resource type="AtlasTexture" id="2"]
-atlas = ExtResource("1")
-region = Rect2(0, 70, 48, 35)
+[sub_resource type="AtlasTexture" id="AtlasTexture_5vqtt"]
+atlas = ExtResource("3_u6qps")
+region = Rect2(0, 0, 8, 8)
 
-[sub_resource type="AtlasTexture" id="3"]
-atlas = ExtResource("1")
-region = Rect2(48, 70, 48, 35)
+[sub_resource type="AtlasTexture" id="AtlasTexture_u1m6s"]
+atlas = ExtResource("3_u6qps")
+region = Rect2(8, 0, 8, 8)
 
-[sub_resource type="AtlasTexture" id="6"]
-atlas = ExtResource("1")
-region = Rect2(48, 35, 48, 35)
-
-[sub_resource type="AtlasTexture" id="4"]
-atlas = ExtResource("1")
-region = Rect2(0, 35, 48, 35)
-
-[sub_resource type="AtlasTexture" id="5"]
-atlas = ExtResource("1")
-region = Rect2(48, 35, 48, 35)
-
-[sub_resource type="SpriteFrames" id="7"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_fq87f"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("2")
+"texture": SubResource("AtlasTexture_5vqtt")
 }, {
 "duration": 1.0,
-"texture": SubResource("3")
+"texture": SubResource("AtlasTexture_u1m6s")
 }],
 "loop": true,
 "name": &"default",
 "speed": 30.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("6")
-}, {
-"duration": 1.0,
-"texture": null
-}],
-"loop": true,
-"name": &"fireWings",
-"speed": 60.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("4")
-}, {
-"duration": 1.0,
-"texture": SubResource("5")
-}],
-"loop": true,
-"name": &"wing",
-"speed": 60.0
 }]
 
 [sub_resource type="RectangleShape2D" id="8"]
 size = Vector2(80, 192)
 
-[node name="BuzzBomber" type="CharacterBody2D" groups=["Enemy"]]
+[node name="Buzzer" type="CharacterBody2D" groups=["Enemy"]]
 collision_layer = 16384
 collision_mask = 0
-script = ExtResource("2")
-flyDirection = 0
-speed = 192
+script = ExtResource("1_jkoex")
+projectile = ExtResource("2_jbv3q")
+travelDistance = 128
+speed = 60
 
 [node name="CollissionMask" type="CollisionShape2D" parent="."]
-position = Vector2(0, -3)
 shape = SubResource("1")
 
 [node name="DamageArea" type="Area2D" parent="."]
+position = Vector2(0, 8)
 collision_layer = 0
 collision_mask = 528384
 
 [node name="HitBox" type="CollisionShape2D" parent="DamageArea"]
 modulate = Color(1, 0, 0, 1)
-position = Vector2(0, -3)
+position = Vector2(0, -8)
 shape = SubResource("1")
 
 [node name="Sprite2D" type="Node2D" parent="."]
 
-[node name="Wings" type="AnimatedSprite2D" parent="Sprite2D"]
-sprite_frames = SubResource("7")
-animation = &"wing"
-autoplay = "wing"
-frame_progress = 0.24432
-
 [node name="BuzzBomber" type="Sprite2D" parent="Sprite2D"]
-texture = ExtResource("1")
+position = Vector2(0, 8)
+texture = ExtResource("2_0qhx5")
 hframes = 2
-vframes = 3
 
 [node name="Fire" type="AnimatedSprite2D" parent="Sprite2D"]
-sprite_frames = SubResource("7")
+position = Vector2(9, -6)
+sprite_frames = SubResource("SpriteFrames_fq87f")
 autoplay = "default"
-frame_progress = 0.33304
 
 [node name="PlayerCheck" type="Area2D" parent="Sprite2D"]
 z_index = -1
@@ -115,7 +78,7 @@ shape = SubResource("8")
 
 [node name="BulletPoint" type="Node2D" parent="Sprite2D"]
 unique_name_in_owner = true
-position = Vector2(-16, 23)
+position = Vector2(8, 24)
 
 [node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
 scale = Vector2(2.7, 2.7)

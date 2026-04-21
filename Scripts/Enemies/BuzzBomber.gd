@@ -1,21 +1,27 @@
 @tool
 extends EnemyBase
 # Thanks to VAdaPEGA for accuracy testing
+# Buzzer badnik reuses this scripte. Tweaked by Ikey Ilex.
 
-var Projectile = preload("res://Entities/Enemies/Projectiles/BuzzBomberProjectile.tscn")
-
+@export var projectile: PackedScene = preload("res://Entities/Enemies/Projectiles/BuzzBomberProjectile.tscn")
 @export var flyDirection = 0.0 # (float,-180.0,180.0)
 @export var travelDistance = 512
 @export var speed = 240
+
 @onready var origin = global_position
+@onready var wing_sprite: AnimatedSprite2D = get_node_or_null("Sprite2D/Wings")
+
 var side = -1
 
-var editorOffset = 1
+var editorOffset: float = 1
 
-var isFiring = false
+## TODO: This could be totally rewritten to be more optimized.
+var isFiring: bool = false
+## TODO: Is this even used at all?
 var fireTime = 0
 var coolDown = 0
 
+## TODO: This entire situation can be made redundant by simply making the projectile a child of this with top_level set to true.
 var fire = null
 
 func _ready():
@@ -107,7 +113,7 @@ func _on_PlayerCheck_body_entered(_body):
 		
 		# set sprites to 
 		$Sprite2D/BuzzBomber.frame = 1
-		$Sprite2D/Wings.play("fireWings")
+		if wing_sprite: wing_sprite.play("fireWings")
 		fireTime = 1
 		
 		# start firing timer
@@ -115,11 +121,11 @@ func _on_PlayerCheck_body_entered(_body):
 		await $Timer.timeout
 		
 		# fire projectile
-		fire = Projectile.instantiate()
+		fire = projectile.instantiate()
 		get_parent().add_child(fire)
 		
 		# set position with offset
-		fire.global_position = global_position+Vector2(25*side,25)
+		fire.global_position = %BulletPoint.global_position
 		fire.scale.x = -side
 		
 		# create a weakref to verify projectile hasn't been deleted later
@@ -141,7 +147,7 @@ func _on_PlayerCheck_body_entered(_body):
 		await $Timer.timeout
 		# reset sprites and resume movement
 		$Sprite2D/BuzzBomber.frame = 0
-		$Sprite2D/Wings.play("wing")
+		if wing_sprite: wing_sprite.play("wing")
 		isFiring = false
 		$Sprite2D/Fire.visible = true
 		coolDown = 1 # add cooldown to prevent rapid fire
