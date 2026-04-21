@@ -29,7 +29,8 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_mu05b"]
 resource_name = "Idle"
-step = 0.5
+length = 0.5
+step = 0.25
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -37,7 +38,7 @@ tracks/0/path = NodePath("Coconuts:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
+"times": PackedFloat32Array(0, 0.25),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [2, 0]
@@ -85,8 +86,10 @@ shape = SubResource("RectangleShape2D_3jww8")
 [node name="Coconuts" type="Sprite2D" parent="."]
 texture = ExtResource("2_65kps")
 hframes = 3
+frame = 2
 
 [node name="ThrowPoint" type="Node2D" parent="Coconuts"]
+unique_name_in_owner = true
 position = Vector2(7, -20)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -101,10 +104,6 @@ wait_time = 0.5
 one_shot = true
 autostart = true
 
-[node name="ThrowTimer" type="Timer" parent="Timers"]
-wait_time = 0.25
-one_shot = true
-
 [node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
 position = Vector2(2.27374e-13, -2.27374e-13)
 scale = Vector2(6.4, 6.4)
@@ -113,4 +112,3 @@ scale = Vector2(6.4, 6.4)
 [connection signal="body_entered" from="DamageArea" to="." method="_on_body_entered"]
 [connection signal="body_exited" from="DamageArea" to="." method="_on_body_exited"]
 [connection signal="timeout" from="Timers/StateTimer" to="." method="_on_state_timer_timeout"]
-[connection signal="timeout" from="Timers/ThrowTimer" to="." method="_on_throw_timer_timeout"]
