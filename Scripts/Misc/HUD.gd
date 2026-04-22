@@ -254,7 +254,7 @@ func _process(delta):
 		if Global.levelTime < Global.maxTime or Global.lives <= 0:
 			Main.change_scene(Global.startScene)
 			await Main.scene_faded
-			Global.reset_game_values()
+			Main.reset_game_values()
 		# reset level (if time over and lives aren't out)
 		else:
 			Global.main.change_scene(null)

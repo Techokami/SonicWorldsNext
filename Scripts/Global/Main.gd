@@ -100,7 +100,10 @@ func change_scene(scene: String, fade_anim: String = "FadeOut", length: float = 
 	get_tree().paused = false
 	$GUI/Pause.hide()
 	Global.music.stop()
-	get_tree().change_scene_to_file(scene)
+	if scene:
+		get_tree().change_scene_to_file(scene)
+	else:
+		get_tree().reload_current_scene()
 	# reset data level data, if reset data is true
 	if resetData:
 		clear_dynamic_level_variables()
