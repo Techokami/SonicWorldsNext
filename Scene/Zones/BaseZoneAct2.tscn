@@ -96,7 +96,7 @@ size = Vector2(128, 24)
 
 [node name="BaseZoneAct2" type="Node2D"]
 script = ExtResource("2")
-nextZone = "res://Scene/Zones/emerald_hill_zone.tscn"
+nextZone = "res://Scene/Zones/EmeraldHillZone.tscn"
 animal1 = 2
 animal2 = 3
 defaultLeftBoundry = 0

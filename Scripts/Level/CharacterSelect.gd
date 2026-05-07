@@ -6,13 +6,13 @@ extends Node2D
 @export var levelLabels: Array[String] = [
 	"Base Zone Act 1",
 	"Base Zone Act 2",
-	"Emerald Hill Zone"
+	"Emerald Hill Zone 1"
 ]
 ## The path to each zone in the Filesystem.
 @export var levelPaths: Array[String] = [
 	"res://Scene/Zones/BaseZone.tscn",
 	"res://Scene/Zones/BaseZoneAct2.tscn",
-	"res://Scene/Zones/emerald_hill_zone.tscn",
+	"res://Scene/Zones/EmeraldHillZone.tscn",
 ]
 var selected = false
 
