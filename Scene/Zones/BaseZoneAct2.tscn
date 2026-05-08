@@ -1111,11 +1111,11 @@ position = Vector2(4480, 400)
 
 [connection signal="body_entered" from="Entities/AdvancedPlatform" to="Entities/AdvancedPlatform" method="_on_body_entered"]
 [connection signal="body_exited" from="Entities/AdvancedPlatform" to="Entities/AdvancedPlatform" method="_on_body_exited"]
-[connection signal="pressed" from="Entities/Switch" to="Gimmicks/ChainedMonkeyBar/RetractibleChain" method="send_to_height" binds= [609]]
 [connection signal="pressed" from="Entities/Switch" to="Gimmicks/ChainedMonkeyBar/RetractibleChain" method="set_default_target" binds= [170]]
+[connection signal="pressed" from="Entities/Switch" to="Gimmicks/ChainedMonkeyBar/RetractibleChain" method="send_to_height" binds= [609]]
 [connection signal="pressed" from="Entities/Switch2" to="Gimmicks/ChainedMonkeyBar/RetractibleChain" method="set_home_height" binds= [170]]
-[connection signal="pressed" from="Entities/Switch2" to="Gimmicks/ChainedMonkeyBar/RetractibleChain" method="send_to_height" binds= [170]]
 [connection signal="pressed" from="Entities/Switch2" to="Gimmicks/ChainedMonkeyBar/RetractibleChain" method="set_default_target" binds= [0]]
+[connection signal="pressed" from="Entities/Switch2" to="Gimmicks/ChainedMonkeyBar/RetractibleChain" method="send_to_height" binds= [170]]
 [connection signal="target_reached" from="Gimmicks/ChainedMonkeyBar9/RetractibleChain" to="Gimmicks/ChainedMonkeyBar9/SwitchPlayer" method="do_play"]
 [connection signal="target_reached" from="Gimmicks/ChainedMonkeyBar9/RetractibleChain" to="Gimmicks/HookSliderAssembly/HookSlider/MobileHook/RetractibleChain" method="send_home"]
 [connection signal="target_reached" from="Gimmicks/ChainedMonkeyBar9/RetractibleChain" to="Gimmicks/HookSliderAssembly/HookSlider" method="send_to_target" binds= [-313]]

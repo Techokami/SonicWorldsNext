@@ -24,7 +24,7 @@ func _process(delta):
 			queue_free()
 	if (player):
 		# collect ring
-		if (player.ringDisTime <= 0 and (player.invTime*60 <= 90 or scattered)):
+		if player.ringDisTime <= 0.0:
 			z_index = 1
 			# get ring to player
 			player.get_ring()
