@@ -36,7 +36,6 @@ defaultBottomBoundry = 1024
 [node name="HUD" parent="." instance=ExtResource("3_quqc3")]
 zoneName = "Emerald"
 zone = "Hill"
-act = 0
 
 [node name="EHZ_Parallax" parent="." instance=ExtResource("4_er424")]
 
