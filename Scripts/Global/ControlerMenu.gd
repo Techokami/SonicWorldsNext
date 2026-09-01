@@ -125,10 +125,9 @@ func _on_SaveInputs_pressed():
 
 # load config data
 func load_data():
-	var file = ConfigFile.new()
-	var err = file.load("user://Config.cfg")
-	if err != OK:
-		return false # Return false as an error
+	var file: ConfigFile = ConfigFile.new()
+	if file.load("user://Config.cfg") != OK:
+		return
 	
 	# load inputs
 	var actionCount = 0
