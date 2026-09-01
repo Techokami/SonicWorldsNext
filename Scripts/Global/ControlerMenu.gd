@@ -18,12 +18,12 @@ var joyAxisNameList = [
 "Axis max",
 ]
 
-var defaultMap = []
+var default_map: Dictionary = {}
 
 func _ready():
 	# get defaults before loading inputs
-	for i in InputMap.get_actions():
-		defaultMap.append(InputMap.action_get_events(i))
+	for action_name: StringName in InputMap.get_actions():
+		default_map[action_name] = InputMap.action_get_events(action_name)
 	# load config data
 	load_data()
 
@@ -186,8 +186,7 @@ func load_data():
 
 # reset to defaults
 func _on_Defaults_pressed():
-	var getActions = InputMap.get_actions()
-	for i in getActions.size():
-		InputMap.action_erase_events(getActions[i])
-		for j in defaultMap[i]:
-			InputMap.action_add_event(getActions[i],j)
+	for action_name: StringName in InputMap.get_actions():
+		InputMap.action_erase_events(action_name)
+		for action: InputEvent in default_map[action_name]:
+			InputMap.action_add_event(action_name, action)
