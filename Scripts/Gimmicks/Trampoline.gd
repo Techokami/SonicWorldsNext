@@ -159,7 +159,7 @@ func draw_tool():
 			yOffset = platformOffset - platformOffset * pow(1.0 * n / (ringsPerSide - 1), 2)
 		else:
 			# This shouldn't be possible.
-			pass
+			assert(false)
 
 		draw_at_pos_internal(Vector2(-ringsMargin - (n * ringsBetween), yOffset))
 		draw_at_pos_internal(Vector2(ringsMargin + (n * ringsBetween), yOffset))
@@ -193,7 +193,7 @@ func _draw():
 			yOffset = platformOffset - platformOffset * pow(1.0 * n / (ringsPerSide - 1), 2)
 		else:
 			# This shouldn't be possible.
-			pass
+			assert(false)
 
 		draw_at_pos_internal(Vector2(-ringsMargin - (n * ringsBetween), yOffset))
 		draw_at_pos_internal(Vector2( ringsMargin + (n * ringsBetween), yOffset))
