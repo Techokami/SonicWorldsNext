@@ -33,7 +33,7 @@ func _process(delta):
 			i.enemyCounter += 1
 			destroy()
 			# cut the script short
-			return false
+			return
 		
 		# if destroying the enemy fails and hit player exists then hit player
 		# NOTE: Isn't hit_player always going to exist? We are talkign about PlayerChar objects only.

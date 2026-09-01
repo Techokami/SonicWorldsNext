@@ -35,7 +35,7 @@ func _physics_process(delta):
 			fallSpeed += 900*delta
 			$Screw.position.y += fallSpeed*delta
 			# stop processing
-			return null
+			return
 		
 		# check if to lock player
 		for i in players:
