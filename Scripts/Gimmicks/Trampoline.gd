@@ -173,7 +173,8 @@ func draw_tool():
 
 func _draw():
 	if Engine.is_editor_hint():
-		return draw_tool()
+		draw_tool()
+		return
 
 	# Can't draw rings if there aren't enough for the anchors
 	if (ringsPerSide < 2):

@@ -189,7 +189,8 @@ func process_editor():
 	
 func _process(delta):
 	if Engine.is_editor_hint():
-		return process_editor()
+		process_editor()
+		return
 
 	process_game(delta)
 
