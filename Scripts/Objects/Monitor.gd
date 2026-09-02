@@ -134,7 +134,7 @@ func destroy():
 		ITEMS.ROBOTNIK:
 			playerTouch.hit_player(playerTouch.global_position, Global.HAZARDS.NORMAL, 9, true)
 		ITEMS.HYPER_RING:
-			playerTouch.hyper_ring = true
+			playerTouch.set_hyper_ring(true)
 
 func set_destroyed():
 	# deactivate

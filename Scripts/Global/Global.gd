@@ -21,6 +21,8 @@ var bonusStageSavedRings: int = 0
 var bonusStageSavedTime: float = 0
 ## Saved shield type when entering the special stage
 var bonus_stage_saved_shield: PlayerChar.SHIELDS = PlayerChar.SHIELDS.NONE
+## Saved Hyper Ring status when entering the special stage
+var bonus_stage_hyper_ring: bool = false
 ## Memory of interacted objects from the current saved zone.
 var nodeMemory = []
 ## TODO: Seperate memory for the special rings, they should not come back after dying.

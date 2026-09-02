@@ -21,11 +21,7 @@ var isSuper = false
 var shoeTime = 0
 var ringDisTime = 0 # ring collecting disable timer
 
-var hyper_ring = false:
-	set(value):
-		if not hyper_ring and value:
-			sfx[31].play()
-		hyper_ring = value
+var _hyper_ring = false
 
 # water settings
 var water = false
@@ -246,6 +242,7 @@ func _ready():
 		rings = Global.bonusStageSavedRings
 		Global.levelTime = Global.bonusStageSavedTime
 		set_shield(Global.bonus_stage_saved_shield, false)
+		_hyper_ring = Global.bonus_stage_hyper_ring
 		# Clear the memory
 		Global.bonusStageSavedPosition = Vector2.ZERO
 		Global.bonusStageSavedRings = 0
@@ -855,21 +852,21 @@ func hit_player(damagePoint:Vector2 = global_position, damageType: Global.HAZARD
 			var ring_class: PackedScene = Ring
 			var accumulated_value: float = 0.0
 			var ring_velocity: Vector2
-			if hyper_ring:
+			if _hyper_ring:
 				ring_class = BigRing
 				max_count = 8
 				phase_2_count = 4
 				# adjust the angle step accordingly, as we generate 4 times less rings
 				ring_angle_step = RING_ANGLE_STEP * 4
 			var num_generated_rings: int = min(rings, max_count)
-			var value_per_hyper_ring: float = (float(rings) / num_generated_rings) if hyper_ring else 0.0
+			var value_per_hyper_ring: float = (float(rings) / num_generated_rings) if _hyper_ring else 0.0
 			while ring_count < num_generated_rings:
 				# Create ring
 				var ring = ring_class.instantiate()
 				ring.global_position = global_position
 				ring.scattered = true
 
-				if hyper_ring:
+				if _hyper_ring:
 					# In Sonic Mania, Hyper Ring generates up to 8 large rings, each worth a fraction
 					# of the player's total amount of rings. In our implementation, instead of
 					# naively rounding down the value of each ring when converting from float to int,
@@ -899,7 +896,7 @@ func hit_player(damagePoint:Vector2 = global_position, damageType: Global.HAZARD
 					ring_angle = RING_STARTING_ANGLE # Reset angle
 				get_parent().add_child(ring)
 			rings = 0
-			hyper_ring = false
+			_hyper_ring = false
 		elif _shield == SHIELDS.NONE and is_independent():
 			kill()
 		else:
@@ -1436,7 +1433,20 @@ func set_shield(setShieldID: PlayerChar.SHIELDS, play_sound: bool = true) -> voi
 ## values of the [enum SHIELDS] enumerator for the player.
 func get_shield() -> PlayerChar.SHIELDS:
 	return _shield
-	
+
+
+## Gives the player a Hyper Ring. Plays the acquisition sound if [param status]
+## is [code]true[/code] and the player didn't previously have that item.
+func set_hyper_ring(status: bool) -> void:
+	if status and not _hyper_ring:
+		sfx[31].play()
+	_hyper_ring = status
+
+
+## Returns [code]true[/code] if the player has a Hyper Ring, [code]false[/code] otherwise.
+func has_hyper_ring() -> bool:
+	return _hyper_ring
+
 
 ## Returns the current [code]PlayerAvatar[/code] for the player. You should use this to get
 ## to character-specific properties and the animator.

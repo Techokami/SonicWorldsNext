@@ -32,6 +32,7 @@ func _process(delta: float) -> void:
 			Global.bonusStageSavedRings = player.rings
 			Global.bonusStageSavedTime = Global.levelTime
 			Global.bonus_stage_saved_shield = player.get_shield()
+			Global.bonus_stage_hyper_ring = player.has_hyper_ring()
 			
 			# Mark as destroyed
 			Global.nodeMemory.append(get_path())
