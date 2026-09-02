@@ -19,6 +19,8 @@ var bonusStageSavedPosition: Vector2 = Vector2.ZERO
 var bonusStageSavedRings: int = 0
 ## Saved time when touching a special ring
 var bonusStageSavedTime: float = 0
+## Saved shield type when entering the special stage
+var bonus_stage_saved_shield: PlayerChar.SHIELDS = PlayerChar.SHIELDS.NONE
 ## Memory of interacted objects from the current saved zone.
 var nodeMemory = []
 ## TODO: Seperate memory for the special rings, they should not come back after dying.

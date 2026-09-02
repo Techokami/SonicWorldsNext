@@ -239,16 +239,18 @@ func _ready():
 			Global.levelTime = Global.checkPointTime
 			break
 	
-	if Global.bonusStageSavedTime:
+	if Global.bonusStageSavedTime != 0:
 		# if bonusStageSavedTime is not 0, set player's stats to memory
 		global_position = Global.bonusStageSavedPosition
 		_camera.global_position = global_position
 		rings = Global.bonusStageSavedRings
 		Global.levelTime = Global.bonusStageSavedTime
+		set_shield(Global.bonus_stage_saved_shield, false)
 		# Clear the memory
 		Global.bonusStageSavedPosition = Vector2.ZERO
 		Global.bonusStageSavedRings = 0
 		Global.bonusStageSavedTime = 0.0
+		Global.bonus_stage_saved_shield = SHIELDS.NONE
 	
 	# Character settings
 	var avatar = playeravatars[0]
@@ -1402,7 +1404,8 @@ func set_predefined_hitbox(which: PlayerChar.HITBOXES, force_pose_change: bool =
 
 ## Sets the player's shield.[br]
 ## [param setShieldID] — which shield the player should get.
-func set_shield(setShieldID: PlayerChar.SHIELDS) -> void:
+## [param play_sound] — whether to play the corresponding sound.
+func set_shield(setShieldID: PlayerChar.SHIELDS, play_sound: bool = true) -> void:
 	magnetShape.disabled = true
 	# verify not in water and shield compatible
 	if water and (setShieldID == SHIELDS.FIRE or setShieldID == SHIELDS.ELEC):
@@ -1414,17 +1417,17 @@ func set_shield(setShieldID: PlayerChar.SHIELDS) -> void:
 	match (_shield):
 		SHIELDS.NORMAL:
 			shieldSprite.play("Default")
-			sfx[5].play()
+			if play_sound: sfx[5].play()
 		SHIELDS.ELEC:
 			shieldSprite.play("Elec")
-			sfx[10].play()
+			if play_sound: sfx[10].play()
 			magnetShape.disabled = false
 		SHIELDS.FIRE:
 			shieldSprite.play("Fire")
-			sfx[11].play()
+			if play_sound: sfx[11].play()
 		SHIELDS.BUBBLE:
 			shieldSprite.play("Bubble")
-			sfx[12].play()
+			if play_sound: sfx[12].play()
 		_: # disable
 			shieldSprite.visible = false
 
