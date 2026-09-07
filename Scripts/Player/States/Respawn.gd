@@ -84,4 +84,3 @@ func _physics_process(delta):
 				parent.limitRight = parent.partner.limitRight
 				parent.limitTop = parent.partner.limitTop
 				parent.limitBottom = parent.partner.limitBottom
-

@@ -257,8 +257,8 @@ func _process(delta):
 			Main.reset_game_values()
 		# reset level (if time over and lives aren't out)
 		else:
-			Global.main.change_scene(null)
-			await Global.main.scene_faded
+			Main.change_scene(Global.currentZone)
+			await Main.scene_faded
 			Global.levelTime = 0
 
 func _reset_air():
