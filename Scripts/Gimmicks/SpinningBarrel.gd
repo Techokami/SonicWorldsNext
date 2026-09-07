@@ -82,4 +82,3 @@ func physics_floor_override(body,caster):
 func _on_PlayerCheck_body_exited(body):
 	if (playerList.has(body)):
 		playerList.erase(body)
-
