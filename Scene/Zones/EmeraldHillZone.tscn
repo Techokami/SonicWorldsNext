@@ -27,7 +27,7 @@
 [node name="EmeraldHillZone" type="Node2D"]
 script = ExtResource("1_vi8tr")
 music = ExtResource("2_yufhm")
-nextZone = "res://Scene/Presentation/Title.tscn"
+nextZone = "res://Scene/Zones/EmeraldHillZone2.tscn"
 defaultLeftBoundry = 0
 defaultTopBoundry = 0
 defaultRightBoundry = 11264

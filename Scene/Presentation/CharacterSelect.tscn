@@ -218,6 +218,8 @@ _data = {
 
 [node name="CharacterSelect" type="Node2D"]
 script = ExtResource("5")
+levelLabels = Array[String](["Base Zone Act 1", "Base Zone Act 2", "Emerald Hill Zone 1", "Emerald Hill Zone 2"])
+levelPaths = Array[String](["res://Scene/Zones/BaseZone.tscn", "res://Scene/Zones/BaseZoneAct2.tscn", "res://Scene/Zones/EmeraldHillZone.tscn", "res://Scene/Zones/EmeraldHillZone2.tscn"])
 
 [node name="UI" type="CanvasLayer" parent="."]
 layer = -1
