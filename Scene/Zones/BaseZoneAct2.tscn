@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://Scripts/Objects/StateMovers/StateMoverMaster.gd" id="5"]
 [ext_resource type="Script" path="res://Tools/Editor/disposal.gd" id="5_bdrgf"]
 [ext_resource type="Script" path="res://Scripts/Objects/StateMovers/StateMoverPathFollower.gd" id="6"]
-[ext_resource type="TileSet" uid="uid://b52aenq8bhfsf" path="res://Tileset/Worlds/WorldsTileMap.tres" id="6_1cyhs"]
+[ext_resource type="TileSet" uid="uid://b52aenq8bhfsf" path="res://Tileset/Levels/WorldsTileMap.tres" id="6_1cyhs"]
 [ext_resource type="FontFile" uid="uid://db34gx0mhx148" path="res://Graphics/Fonts/JetBrainsMono-Regular.ttf" id="6_owcub"]
 [ext_resource type="PackedScene" uid="uid://cxxmrbgw17gnw" path="res://Entities/Gimmicks/CNZBarrel.tscn" id="7"]
 [ext_resource type="Script" path="res://Scripts/Objects/StateMovers/StateMoverTranslational.gd" id="8"]
