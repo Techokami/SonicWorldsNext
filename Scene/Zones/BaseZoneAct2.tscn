@@ -352,10 +352,10 @@ scale = Vector2(2, 9)
 [node name="HorizontalBar" parent="." instance=ExtResource("22_ethvu")]
 position = Vector2(864, 235)
 width = 320
-allowBrake = true
-allowDownwardDetach = true
-drawLeftAnchor = false
-drawRightAnchor = false
+draw_left_anchor = false
+draw_right_anchor = false
+allow_brake = true
+allow_downward_detach = true
 
 [node name="Spring" parent="." instance=ExtResource("23_n1r7l")]
 z_index = -99
@@ -364,54 +364,54 @@ position = Vector2(938, 360)
 [node name="HorizontalBar2" parent="." instance=ExtResource("22_ethvu")]
 position = Vector2(3044, 893)
 width = 60
-allowBrake = true
-drawRightAnchor = false
-maxSwingSpeed = 900
-multiplySwingSpeed = 1.4
+draw_right_anchor = false
+allow_brake = true
+max_swing_speed = 900.0
+multiply_swing_speed = 1.4
 
 [node name="HorizontalBar3" parent="." instance=ExtResource("22_ethvu")]
 position = Vector2(2864, 667)
-spriteTexture = ExtResource("24_ipqgj")
+sprite_texture = ExtResource("24_ipqgj")
 width = 240
-shimmySpeed = 120.0
-drawRightAnchor = false
-swingContactSpeed = 2000.0
-launchSpeedMode = 1
-swingSpeedConstant = 0
+draw_right_anchor = false
+shimmy_speed = 120.0
+swing_contact_speed = 2000.0
+launch_speed_mode = 1
+swing_speed_constant = 0.0
 
 [node name="Spring2" parent="." instance=ExtResource("23_n1r7l")]
 position = Vector2(3088, 1048)
 
 [node name="HorizontalBar4" parent="." instance=ExtResource("22_ethvu")]
 position = Vector2(2720, 799)
-spriteTexture = ExtResource("24_ipqgj")
+sprite_texture = ExtResource("24_ipqgj")
 width = 59
-shimmySpeed = 120.0
-drawLeftAnchor = false
-swingContactSpeed = 3000.0
+draw_left_anchor = false
+shimmy_speed = 120.0
+swing_contact_speed = 3000.0
 
 [node name="Spring3" parent="." instance=ExtResource("23_n1r7l")]
 position = Vector2(2368, 824)
 
 [node name="HorizontalBar5" parent="." instance=ExtResource("22_ethvu")]
 position = Vector2(2324, 705)
-allowBrake = true
+allow_brake = true
 
 [node name="HorizontalBar6" parent="." instance=ExtResource("22_ethvu")]
 position = Vector2(2325, 599)
-allowBrake = true
+allow_brake = true
 
 [node name="HorizontalBar7" parent="." instance=ExtResource("22_ethvu")]
 position = Vector2(2325, 501)
-allowBrake = true
+allow_brake = true
 
 [node name="HorizontalBar8" parent="." instance=ExtResource("22_ethvu")]
 position = Vector2(2984, 442)
-spriteTexture = ExtResource("24_ipqgj")
+sprite_texture = ExtResource("24_ipqgj")
 width = 120
-shimmySpeed = 180.0
-drawRightAnchor = false
-swingContactSpeed = 3000.0
+draw_right_anchor = false
+shimmy_speed = 180.0
+swing_contact_speed = 3000.0
 
 [node name="ChainedMonkeyBar2" parent="." instance=ExtResource("27_obgon")]
 z_index = 5
