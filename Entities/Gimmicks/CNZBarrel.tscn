@@ -1,7 +1,6 @@
-[gd_scene load_steps=11 format=3 uid="uid://cxxmrbgw17gnw"]
+[gd_scene load_steps=10 format=3 uid="uid://cxxmrbgw17gnw"]
 
 [ext_resource type="Texture2D" uid="uid://d1cdsc21qx80t" path="res://Graphics/Gimmicks/CNZBarrel.png" id="1"]
-[ext_resource type="Script" path="res://Scripts/Gimmicks/CNZBarrelChild.gd" id="2"]
 [ext_resource type="Script" path="res://Scripts/Gimmicks/CNZBarrel.gd" id="3"]
 
 [sub_resource type="AtlasTexture" id="1"]
@@ -57,19 +56,18 @@ sprite_frames = SubResource("5")
 autoplay = "default"
 frame = 1
 
-[node name="CNZBarrelActiveBody" type="AnimatableBody2D" parent="Bodies"]
+[node name="ActiveBody" type="AnimatableBody2D" parent="Bodies"]
 collision_layer = 2105359
 collision_mask = 0
-script = ExtResource("2")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Bodies/CNZBarrelActiveBody"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bodies/ActiveBody"]
 position = Vector2(0, 4.5)
 shape = SubResource("RectangleShape2D_3347u")
 
-[node name="CNZBarrelInactiveBody" type="AnimatableBody2D" parent="Bodies"]
+[node name="InactiveBody" type="AnimatableBody2D" parent="Bodies"]
 collision_layer = 2105359
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Bodies/CNZBarrelInactiveBody"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bodies/InactiveBody"]
 position = Vector2(0, 36.5)
 shape = SubResource("RectangleShape2D_3dimk")
