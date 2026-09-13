@@ -1573,7 +1573,8 @@ func set_air_control(control: bool) -> void:
 
 ## Binds the player to the requested gimmick.[br]
 ## [param gimmick] — gimmick to bind the player to.[br]
-## [param allowSwap] — enable to make the new gimmick execute its on force detach callback and to
+## [param allowSwap] — enable to make the old gimmick execute its own
+##        [method ConnectableGimmick.player_force_detach_callback] and to
 ##        allow the new gimmick to replace one that is already attached.[br]
 ## Returns [code]true[/code] if gimmick was able to be connected, [code]false[/code] otherwise.[br]
 ## Note: Never returns [code]false[/code] if [param allowSwap] is set.
