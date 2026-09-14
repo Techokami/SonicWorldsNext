@@ -51,8 +51,8 @@ var super_sprite = null # A super sprite isn't mandatory.
 ## [param has_shoes] for player with active power sneakers [br]
 ## [retval] PlayerPhysics object with the character's physics for requested conditions. [br]
 func get_physics(in_water: bool = false,
-		         is_super: bool = false,
-		         has_shoes: bool = false) -> PlayerPhysics:
+				 is_super: bool = false,
+				 has_shoes: bool = false) -> PlayerPhysics:
 	if !in_water:
 		if is_super:
 			return super_physics

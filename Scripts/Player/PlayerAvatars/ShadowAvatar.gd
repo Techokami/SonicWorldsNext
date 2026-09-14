@@ -139,7 +139,7 @@ func get_break_power(player: PlayerChar) -> int:
 ## Jumping is either A or C on Genesis layout
 func shadow_any_jump_pressed(player: PlayerChar) -> bool:
 	if (player.inputs[PlayerChar.INPUTS.ACTION] == 1 or
-	    player.inputs[PlayerChar.INPUTS.ACTION3] == 1):
+		player.inputs[PlayerChar.INPUTS.ACTION3] == 1):
 		return true
 	return false
 
