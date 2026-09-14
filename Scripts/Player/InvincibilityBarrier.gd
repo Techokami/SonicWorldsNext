@@ -5,7 +5,6 @@ extends Node2D
 ## The number of stars.
 const STAR_NUM: int = 8
 ## This array stores the increments to each angle variant in [member star_angles].
-## Its size must be the same to [member star_angles].
 const ANGLE_INCREMENTS: Array[float] = [101.25, 11.25]
 ## An array of values used to offset the rotation angle of the stars for each pair.
 const ANGLE_OFFSETS: Array[float] = [0.0, 118.125, 0.0, 81.5625]
@@ -13,8 +12,9 @@ const ANGLE_OFFSETS: Array[float] = [0.0, 118.125, 0.0, 81.5625]
 const ROTATION_RADIUS: float = 16.0
 ## The length of the circular queue used to store the player's position.
 const POSITION_QUEUE_LENGTH: int = 12
-## This array stores the different sizes of arrays in the [member star_frame_arr] array.
-## It must be the same size as [member star_frames].
+## This array stores the unique sizes of arrays in the [member star_frame_arr] array.
+## Here, for example, all arrays in [member star_frame_arr] currently contain 12 elements except
+## one which contains 10, so this array stores the sizes of 12 and 10
 const FRAME_ARR_SIZES: Array[int] = [12, 10]
 ## The region rects of each star frame.
 const REGIONS: Array[Rect2] = [
@@ -46,12 +46,10 @@ var memory_index: int
 var star_position_arr: PackedVector2Array
 ## An array that stores angles used to rotate the stars.
 ## The size of the array determines how many variations of angles that can be stored.
-## Right here, it has two variants.
-var star_angles: Array[float] = [0.0, 0.0]
+var star_angles: Array[float]
 ## An array that stores frame indices used to animate the stars.
 ## The size of the array determines how many variations of frames that can be stored.
-## Right here, it has two variants.
-var star_frames: Array[int] = [0, 0]
+var star_frames: Array[int]
 
 ## The player that owns this barrier.
 @onready var player: PlayerChar = get_parent()
@@ -62,6 +60,8 @@ func _ready() -> void:
 	# Resize some arrays.
 	player_position_queue.resize(POSITION_QUEUE_LENGTH)
 	star_position_arr.resize(ceili(STAR_NUM / 2))
+	star_frames.resize(FRAME_ARR_SIZES.size())
+	star_angles.resize(ANGLE_INCREMENTS.size())
 
 
 # Run some calculations used to draw the stars later, aka positions, angles and frames.
@@ -99,7 +99,7 @@ func _physics_process(delta: float) -> void:
 		var direction_multiplier: float = player.get_direction_multiplier() * delta * 60.0
 		# Increment the angles and rotate based on the player's direction.
 		for i: int in star_angles.size():
-			star_angles[0] = fmod(star_angles[0] + ANGLE_INCREMENTS[i] * direction_multiplier, 360.0)
+			star_angles[i] = fmod(star_angles[i] + ANGLE_INCREMENTS[i] * direction_multiplier, 360.0)
 		
 		# Draw the stars every frame.
 		queue_redraw()
@@ -144,11 +144,11 @@ func _draw() -> void:
 		# The increment of the angle.
 		# It just increments the star by 180 if its index is even, and offsets the rotation of the star
 		# by the angle offset respective to the current pair.
-		var angle_increment: float = 180.0 * float(is_index_even) + ANGLE_OFFSETS[star_pair_num]
+		var angle_offset: float = 180.0 * float(is_index_even) + ANGLE_OFFSETS[star_pair_num]
 		# The rotation of the star.
 		# It's set to the angle value plus the increment.
 		# And since we were dealing with the angles in degrees, convert em to radians..
-		var star_rotation: float = deg_to_rad(star_angles[angle_index] + angle_increment)
+		var star_rotation: float = deg_to_rad(star_angles[angle_index] + angle_offset)
 		# The position of the star relative to the player.
 		# It just rotates the star around the center, multiplied by the radius to offset it away with a set radius.
 		var star_relative_position: Vector2 = Vector2.from_angle(star_rotation) * ROTATION_RADIUS
