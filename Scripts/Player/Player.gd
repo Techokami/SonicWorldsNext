@@ -1053,7 +1053,7 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 		# Ring loss
 		if (shield == SHIELDS.NONE and rings > 0 and playerControl == 1):
 			sfx[9].play()
-			ringDisTime = 30.0/60.0 # ignore rings for 30 frames after landing
+			ringDisTime = 0.5 # ignore rings for 1/2 second
 			var ringCount = 0
 			var ringAngle = 101.25
 			var ringAlt = false
