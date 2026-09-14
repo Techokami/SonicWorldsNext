@@ -1459,12 +1459,12 @@ func flip_movement_direction() -> void:
 
 enum BOUNCE_MODES {
 	NORMAL,   ## For a normal aerial bounce, player will go through the enemy if hit from below,
-	          ## bounce off the top of the enemy if hit from above
+			  ## bounce off the top of the enemy if hit from above
 	BOSS,     ## Bouncing off of a boss normally means the player bounces back in the direction they
-	          ## came from regardless if it's from above or below.
+			  ## came from regardless if it's from above or below.
 	GIMMICK,  ## Let the gimmick decide the motion of the bounce, any animations, while the state is
-	          ## responsible for whatever other cleanup is involved (like resetting abilities in the
-	          ## case of Shadow's homing attack
+			  ## responsible for whatever other cleanup is involved (like resetting abilities in the
+			  ## case of Shadow's homing attack
 }
 ## Invokes the current bounce behavior of the player (state dependent) -- used to handle
 ## the behaviors associated with the player jumping on top of enemies and monitors, possibly some
