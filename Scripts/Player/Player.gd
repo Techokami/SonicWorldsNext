@@ -29,12 +29,12 @@ var releaseJmp = 4			#jump release velocity
 var spindashPower = 0.0
 var peelOutCharge = 0.0
 var abilityUsed = false
-var bounceReaction = 0 # for bubble shield
-var invTime = 0
-var supTime = 0
-var isSuper = false
-var shoeTime = 0
-var ringDisTime = 0 # ring collecting disable timer
+var bounceReaction: float = 0 # Bound intensity for bubble shield
+var invTime: float = 0 # Invulnerability time after taking damage.
+var supTime:float = 0 # Invincibility time, for stars or Super Sonic.
+var isSuper: bool = false # Super Status flag
+var shoeTime:float = 0 # Speed Shoes time
+var ringDisTime:float = 0 # ring collecting disable timer
 
 # water settings
 var water = false
@@ -560,16 +560,12 @@ func _process(delta):
 	
 	# Invulnerability timer
 	if (invTime > 0 and currentState != STATES.HIT and currentState != STATES.DIE):
-		var mod_inv_time = (int(invTime)) % 2
-		if mod_inv_time == 0:
-			visible = false
-		else:
-			visible = true
-		invTime -= delta*60
+		visible = fmod(roundi(invTime*10),2)
+		invTime -= delta
 		if (invTime <= 0):
 			invTime = 0
 			visible = true
-	if (ringDisTime > 0) and currentState != STATES.HIT:
+	if currentState != STATES.HIT:
 		ringDisTime -= delta
 
 	# Rings 1up
@@ -1049,7 +1045,7 @@ func hit_player(damagePoint = global_position, damageType = 0, soundID = 6):
 		force_detach()
 		disconect_from_floor()
 		set_state(STATES.HIT)
-		invTime = 120 # Ivulnerable for 2 seconds. Starts counting *after* landing.
+		invTime = 2.0 # Ivulnerable for 2 seconds. Starts counting *after* landing.
 		# Ring loss
 		if (shield == SHIELDS.NONE and rings > 0 and playerControl == 1):
 			sfx[9].play()
