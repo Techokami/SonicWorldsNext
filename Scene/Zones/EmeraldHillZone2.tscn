@@ -493,7 +493,7 @@ position = Vector2(3872, 512)
 position = Vector2(4320, 592)
 
 [node name="Buzzer5" parent="Badniks" instance=ExtResource("17_47utm")]
-position = Vector2(4944, 792)
+position = Vector2(4880, 792)
 
 [node name="Buzzer6" parent="Badniks" instance=ExtResource("17_47utm")]
 position = Vector2(5448, 560)
