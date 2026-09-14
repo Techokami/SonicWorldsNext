@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://beuvy68prxg4t"]
+[gd_scene load_steps=12 format=3 uid="uid://beuvy68prxg4t"]
 
 [ext_resource type="Script" path="res://Scripts/Enemies/BuzzBomber.gd" id="1_jkoex"]
 [ext_resource type="Texture2D" uid="uid://dj0xvl7ecd2i" path="res://Graphics/Enemies/Buzzer.png" id="2_0qhx5"]
 [ext_resource type="PackedScene" uid="uid://c0lafv2mxvarc" path="res://Entities/Enemies/Projectiles/BuzzerProjectile.tscn" id="2_jbv3q"]
 [ext_resource type="Texture2D" uid="uid://oo72kvvoi0uv" path="res://Graphics/Enemies/BuzzerFlame.png" id="3_u6qps"]
+[ext_resource type="Script" path="res://Scripts/Misc/Targetable.gd" id="5_c4t23"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(48, 16)
@@ -32,6 +33,8 @@ animations = [{
 
 [sub_resource type="RectangleShape2D" id="8"]
 size = Vector2(80, 192)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wl1ko"]
 
 [node name="Buzzer" type="CharacterBody2D" groups=["Enemy"]]
 collision_layer = 16384
@@ -84,6 +87,16 @@ position = Vector2(8, 24)
 scale = Vector2(2.7, 2.7)
 
 [node name="Timer" type="Timer" parent="."]
+
+[node name="HomingAttackTarget" type="StaticBody2D" parent="."]
+visible = false
+collision_layer = 8388608
+collision_mask = 0
+script = ExtResource("5_c4t23")
+target_tags = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HomingAttackTarget"]
+shape = SubResource("CircleShape2D_wl1ko")
 
 [connection signal="area_entered" from="DamageArea" to="." method="_on_DamageArea_area_entered"]
 [connection signal="body_entered" from="DamageArea" to="." method="_on_body_entered"]

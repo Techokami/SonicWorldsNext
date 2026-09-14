@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://bbaayty1jgegk"]
+[gd_scene load_steps=11 format=3 uid="uid://bbaayty1jgegk"]
 
 [ext_resource type="Script" path="res://Scripts/Enemies/coconuts.gd" id="1_papcx"]
 [ext_resource type="Texture2D" uid="uid://hv7jpthygh4g" path="res://Graphics/Enemies/Coconuts.png" id="2_65kps"]
+[ext_resource type="Script" path="res://Scripts/Misc/Targetable.gd" id="3_00no0"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(8, 8)
@@ -66,6 +67,8 @@ _data = {
 "Wait": SubResource("Animation_fc17l")
 }
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_yydn1"]
+
 [node name="Coconuts" type="CharacterBody2D" groups=["Enemy"]]
 collision_layer = 16384
 collision_mask = 0
@@ -107,6 +110,16 @@ autostart = true
 [node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
 position = Vector2(2.27374e-13, -2.27374e-13)
 scale = Vector2(6.4, 6.4)
+
+[node name="HomingAttackTarget" type="StaticBody2D" parent="."]
+position = Vector2(0, -13)
+collision_layer = 8388608
+collision_mask = 0
+script = ExtResource("3_00no0")
+target_tags = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HomingAttackTarget"]
+shape = SubResource("CircleShape2D_yydn1")
 
 [connection signal="area_entered" from="DamageArea" to="." method="_on_DamageArea_area_entered"]
 [connection signal="body_entered" from="DamageArea" to="." method="_on_body_entered"]

@@ -1,11 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://b4oxfl2msl6e6"]
+[gd_scene load_steps=7 format=3 uid="uid://b4oxfl2msl6e6"]
 
 [ext_resource type="Script" path="res://Scripts/Enemies/Chomper.gd" id="1"]
 [ext_resource type="Script" path="res://Scripts/Enemies/chopper_variables.gd" id="1_8kkuf"]
 [ext_resource type="Texture2D" uid="uid://bmiileofyj6xf" path="res://Graphics/Enemies/chomper.png" id="2"]
+[ext_resource type="Script" path="res://Scripts/Misc/Targetable.gd" id="4_h7rqq"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(8, 16)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ilgy4"]
 
 [node name="Chomper" type="Node2D" groups=["Enemy"]]
 script = ExtResource("1_8kkuf")
@@ -29,6 +32,16 @@ shape = SubResource("1")
 [node name="Chomper" type="Sprite2D" parent="Chomper"]
 texture = ExtResource("2")
 hframes = 2
+
+[node name="HomingAttackTarget" type="StaticBody2D" parent="Chomper"]
+position = Vector2(0, -5)
+collision_layer = 8388608
+collision_mask = 0
+script = ExtResource("4_h7rqq")
+target_tags = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Chomper/HomingAttackTarget"]
+shape = SubResource("CircleShape2D_ilgy4")
 
 [node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="Chomper"]
 z_index = -100
