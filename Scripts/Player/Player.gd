@@ -8,23 +8,23 @@ var currentHitbox = HITBOXESSONIC
 #Knuckles' hitboxes are the same as Sonic's.
 
 #Sonic's Speed constants
-var acc = 0.046875			#acceleration
-var dec = 0.5				#deceleration
-var frc = 0.046875			#friction (same as acc)
-var rollfrc = frc*0.5		#roll friction
-var rolldec = 0.125			#roll deceleration
-var top = 6*60				#top horizontal speed
-var toproll = 16*60			#top horizontal speed rolling
-var slp = 0.125				#slope factor when walking/running
-var slprollup = 0.078125		#slope factor when rolling uphill
-var slprolldown = 0.3125		#slope factor when rolling downhill
-var fall = 2.5*60			#tolerance ground speed for sticking to walls and ceilings
+var acc: float = 0.046875			#acceleration
+var dec: float = 0.5				#deceleration
+var frc: float = 0.046875			#friction (same as acc)
+var rollfrc: float = frc*0.5		#roll friction
+var rolldec: float = 0.125			#roll deceleration
+var top: float = 6*60				#top horizontal speed
+var toproll: float = 16*60			#top horizontal speed rolling
+var slp: float = 0.125				#slope factor when walking/running
+var slprollup: float = 0.078125		#slope factor when rolling uphill
+var slprolldown: float = 0.3125		#slope factor when rolling downhill
+var fall: float = 2.5*60			#tolerance ground speed for sticking to walls and ceilings
 
 #Sonic's Airborne Speed Constants
-var air = 0.09375			#air acceleration (2x acc)
-var jmp = 6.5*60			#jump force (6 for knuckles)
-var grv = 0.21875			#gravity
-var releaseJmp = 4			#jump release velocity
+var air: float = 0.09375			#air acceleration (2x acc)
+var jmp: float = 6.5*60			#jump force (6 for knuckles)
+var grv: float = 0.21875			#gravity
+var releaseJmp: float = 4			#jump release velocity
 
 var spindashPower = 0.0
 var peelOutCharge = 0.0
@@ -54,40 +54,54 @@ var enemyCounter = 0
 
 var character = Global.CHARACTERS.SONIC
 
-# physics list
-# order
-# 0 Acceleration
-# 1 Deceleration
-# 2 Friction
-# 3 Top Speed
-# 4 Air Acceleration 
-# 5 Rolling Friction 
-# 6 Rolling Deceleration
-# 7 Gravity
-# 8 Jump release velocity
+## Physics update info
+enum PHYSICS{NORMAL,SPEED_SHOES,SUPER_SONIC,SUPER_CHARACTER}
+const physics_list: Dictionary = {
+	PHYSICS.NORMAL: {
+		acc = 0.046875, dec = 0.5, frc = 0.046875,
+		top = 6*60, air = 0.09375,
+		rollfrc = 0.0234375, rolldec = 0.125
+		},
+	PHYSICS.SPEED_SHOES: {
+		acc = 0.09375, dec = 0.5, frc = 0.09375,
+		top = 12*60, air = 0.1875,
+		rollfrc = 0.0234375, rolldec = 0.125
+		},
+	PHYSICS.SUPER_SONIC: {
+		acc = 0.1875, dec = 1.0, frc = 0.046875,
+		top = 10*60, air = 0.375,
+		rollfrc = 0.0234375, rolldec = 0.125
+		},
+	PHYSICS.SUPER_CHARACTER: {
+		acc = 0.09375, dec = 0.75, frc = 0.046875,
+		top = 8*60, air = 0.1875,
+		rollfrc = 0.0234375, rolldec = 0.125
+		},
+}
 
-var physicsList = [
-# 0 Deafult Character properties
-[0.046875, 0.5, 0.046875, 6*60, 0.09375, 0.046875*0.5, 0.125, 0.21875, 4],
-# 1 Shoes (remove *0.5 for original rolling friction)
-[0.09375, 0.5, 0.09375, 12*60, 0.1875, 0.046875*0.5, 0.125, 0.21875, 4],
-# 2 Super Sonic
-[0.1875, 1, 0.046875, 10*60, 0.375, 0.0234375, 0.125, 0.21875, 4],
-# 3 Other Super forms
-[0.09375, 0.75, 0.046875, 8*60, 0.1875, 0.0234375, 0.125, 0.21875, 4],
-]
-
-var waterPhysicsList = [
-# 0 Deafult Character properties
-[0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6.0*60.0/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
-# 1 Shoes
-[0.046875/2.0, 0.5/2.0, 0.046875/2.0, 6*60/2.0, 0.09375/2.0, 0.046875*0.5, 0.125, 0.0625, 3.5*60, 2],
-# 2 Super Sonic
-[0.09375, 0.5, 0.046875, 5*60, 0.1875, 0.046875, 0.125, 0.0625, 3.5*60, 2],
-# 3 Super Knuckles
-[0.046875, 0.375, 0.046875, 4*60, 0.09375, 0.0234375, 0.125, 0.0625, 3*60, 2],
-]
-
+const water_physics_list: Dictionary = {
+	PHYSICS.NORMAL: {
+		acc = 0.046875/2.0, dec = 0.25, frc = 0.046875/2.0,
+		top = 6*60/2.0, air = 0.09375/2.0,
+		rollfrc = 0.046875/2.0, rolldec = 0.125
+		},
+	# In the original games, Speed shoes did not account for water at all, so these are just ballpark values
+	PHYSICS.SPEED_SHOES: {
+		acc = 0.046875, dec = 0.25, frc = 0.046875,
+		top = 6*60, air = 0.09375,
+		rollfrc = 0.046875/2.0, rolldec = 0.125
+		},
+	PHYSICS.SUPER_SONIC: {
+		acc = 0.09375, dec = 0.5, frc = 0.046875,
+		top = 5*60, air = 0.1875,
+		rollfrc = 0.046875, rolldec = 0.125
+		},
+	PHYSICS.SUPER_CHARACTER: {
+		acc = 0.046875, dec = 0.375, frc = 0.046875,
+		top = 4*60, air = 0.09375,
+		rollfrc = 0.0234375,rolldec = 0.125
+		},
+}
 # ================
 
 var Ring = preload("res://Entities/Items/Ring.tscn")
@@ -1212,23 +1226,23 @@ func _on_PlayerAnimation_animation_started(_anim_name):
 
 
 # return the physics id variable, see physicsList array for reference
-func determine_physics():
+func determine_physics() -> PHYSICS:
 	# get physics from character (if a character has unique properties)
 	match (character):
 		Global.CHARACTERS.SONIC:
 			if isSuper:
-				return 2 # Super Sonic
+				return PHYSICS.SUPER_SONIC # Super Sonic
 	#Anyone who isn't a special case:
 	if isSuper:
-		return 3 # Super besides Sonic
+		return PHYSICS.SUPER_CHARACTER # Super besides Sonic
 	elif shoeTime > 0:
-		return 1 # Shoes
-	return 0 #Default
+		return PHYSICS.SPEED_SHOES # Shoes
+	return PHYSICS.NORMAL #Default
 
 # Return a jump height for the respective context.
 # There are normally only 5 jump height values; 3 above water, with two under.
 # Super Sonic and Knuckles are the onlycharacters with unique jump height, Super sonic above water only.
-func get_jump_property():
+func get_jump_property() -> float:
 	if !water:
 		match (character):
 			Global.CHARACTERS.SONIC:
@@ -1243,21 +1257,16 @@ func get_jump_property():
 				return 3*60 # Knuckles Jump Height underwater
 		return 3.5*60 # Everyone else's Jump Height underwater
 
-
-func switch_physics():
-	var physicsID = determine_physics()
-	var getList = physicsList[max(0,physicsID)]
-	if water:
-		getList = waterPhysicsList[max(0,physicsID)]
-	acc = getList[0]
-	dec = getList[1]
-	frc = getList[2]
-	top = getList[3]
-	air = getList[4] #This could also just be getList[0]*2
-	rollfrc = getList[5]
-	rolldec = getList[6]
-	grv = getList[7]
-	releaseJmp = getList[8]
+func switch_physics() -> void:
+	var physics_set_id: PHYSICS = determine_physics()
+	#Get the dictionary from the resulting physics type
+	var got_list: Dictionary = physics_list.get(physics_set_id)
+	if water: got_list = water_physics_list.get(physics_set_id)
+	#incriment through each variable in sequence
+	for key in got_list: set(key,got_list[key])
+	# The below don't really blong in the main physics list.
+	grv = 0.21875 if !water else 0.0625
+	releaseJmp = 4.0 if !water else 2.0
 	jmp = get_jump_property()
 
 
