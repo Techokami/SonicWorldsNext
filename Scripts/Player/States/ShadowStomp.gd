@@ -61,6 +61,5 @@ func state_exit():
 	
 	parent.poleGrabID = null
 	parent.enemyCounter = 0
-	print("resetting stomp animator")
 	shadow_avatar.vfx_animator.play("RESET")
 	lockDir = false

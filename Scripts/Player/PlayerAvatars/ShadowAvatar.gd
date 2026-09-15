@@ -51,7 +51,7 @@ var ability_lock_timer := 0.0
 
 var homing_attack_cur_target: Node2D = null
 
-var burst = preload("uid://qoi31pj80g6r") #ShadowExtras/ShadowBurst.tscn
+var burst = preload("res://Entities/PlayerAvatars/ShadowExtras/ShadowBurst.tscn") #ShadowExtras/ShadowBurst.tscn
 
 # All attributes for this base class are used by Shadow
 func get_hitbox(hitbox_type: PlayerChar.HITBOXES):
@@ -185,6 +185,9 @@ func shadow_jump_dash(player: PlayerChar):
 	player.movement = Vector2(6 * player.get_direction_multiplier() * 60, -2 * 60)
 	homing_attack_available = false
 	
+	# Mostly only needed in case we have to cancel the stomp state
+	player.set_state(PlayerChar.STATES.JUMP)
+	
 	# Set animation
 	$PlayerAnimation.play("roll")
 
@@ -203,7 +206,6 @@ func shadow_homing_attack(player: PlayerChar):
 #region action_callbacks
 func shadow_jump_actions_callback(_state: PlayerState, player: PlayerChar, _delta: float) -> bool:
 	if shadow_boost_pressed(player):
-		print("Engage Boost!")
 		return true
 	
 	# Don't allow Shadow to use homing attack or stomp if his ability lock has time on it
@@ -219,7 +221,6 @@ func shadow_jump_actions_callback(_state: PlayerState, player: PlayerChar, _delt
 			return true
 		
 	if stomp_available and shadow_stomp_attack_pressed(player) :
-		print("Engage Stomp!")
 		stomp_available = false # prevent stomp until next landing or reset triggered
 		
 		$PlayerAnimation.play("stomp")

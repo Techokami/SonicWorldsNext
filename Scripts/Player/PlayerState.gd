@@ -24,7 +24,6 @@ var process_supplements = []
 
 # Stores supplements that take place when exiting this state
 var exit_supplements = []
-
 ## Player invokes this to handle the state process. Not meant to be overridden (at least when
 ## creating actual states and not proxy states)
 func state_process_entry(delta: float) -> void:
@@ -34,7 +33,6 @@ func state_process_entry(delta: float) -> void:
 			# First supplement in the chain to return false results in the chain stopping early
 			# and the main state process function not being ran
 			return
-			
 	state_process(delta)
 
 ## Player invokes this to handle state exiting. Not meant to be overridden (at least when creating
