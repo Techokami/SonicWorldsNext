@@ -16,6 +16,6 @@ slope_factor_rolling_upwards = 0.078125
 slope_factor_rolling_downwards = 0.3125
 fall = 150.0
 air_acceleration = 0.375
-jump_acceleration = 480.0
+jump_strength = 390.0
 gravity = 0.21875
 release_jump = 4.0
