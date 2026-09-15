@@ -106,6 +106,7 @@ enum _LAUNCH_SPEED_MODE { MULTIPLY, CONSTANT }
 const _GIMMICK_VAR_MODE: String = "mode"
 const _GIMMICK_VAR_ENTRY_VEL: String = "entry_vel"
 const _GIMMICK_VAR_MOVING: String = "moving"
+const _GIMMICK_VAR_JUMP_OFF: String = "jump_off"
 
 var _grab_sound_player: AudioStreamPlayer = null
 var _half_height: float = 0.0
@@ -122,9 +123,11 @@ func _add_player(player: PlayerChar) -> void:
 	player.set_gimmick_var(_GIMMICK_VAR_MODE, _PLAYER_MODE.MONITORING)
 	player.set_gimmick_var(_GIMMICK_VAR_ENTRY_VEL, 0.0)
 	player.set_gimmick_var(_GIMMICK_VAR_MOVING, false)
+	player.set_gimmick_var(_GIMMICK_VAR_JUMP_OFF, false)
 
 func _remove_player(player: PlayerChar) -> void:
 	# clean up
+	player.unset_gimmick_var(_GIMMICK_VAR_JUMP_OFF)
 	player.unset_gimmick_var(_GIMMICK_VAR_MOVING)
 	player.unset_gimmick_var(_GIMMICK_VAR_ENTRY_VEL)
 	player.unset_gimmick_var(_GIMMICK_VAR_MODE)
@@ -238,7 +241,7 @@ func _process_player_x_movement(player: PlayerChar, x_input: float) -> bool:
 		_clamp_player_position(player)
 	
 	# While shimmy is allowed, we are also allowed to jump off the gimmick at any time.
-	if player.any_action_pressed():
+	if player.get_gimmick_var(_GIMMICK_VAR_JUMP_OFF) == true:
 		
 		# If down is held and downward detach is allowed, fall down instead.
 		if (allow_downward_detach and player.get_y_input() > 0.0):
@@ -302,6 +305,10 @@ func _process_player_monitoring(player: PlayerChar) -> void:
 	player.global_position.y = global_position.y + _half_height
 	player.set_state(player.STATES.GIMMICK)
 	_grab_sound_player.play()
+
+func player_process(player: PlayerChar, _delta: float) -> void:
+	if player.any_action_pressed():
+		player.set_gimmick_var(_GIMMICK_VAR_JUMP_OFF, true)
 
 func player_physics_process(player: PlayerChar, _delta: float) -> void:
 	var x_input: float = player.get_x_input()
