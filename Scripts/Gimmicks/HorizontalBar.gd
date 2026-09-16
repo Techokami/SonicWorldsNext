@@ -142,6 +142,7 @@ func _remove_player(player: PlayerChar, eject: bool = false, upwards: bool = fal
 	if eject:
 		var animator: PlayerCharAnimationPlayer = player.get_avatar().get_animator()
 		player.set_state(player.STATES.NORMAL)
+		player.set_direction(player.get_direction())
 		if upwards:
 			# figure out the animation based on the players current animation
 			var next_animation: StringName = &"walk"
