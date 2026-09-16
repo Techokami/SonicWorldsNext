@@ -103,10 +103,10 @@ enum _LAUNCH_SPEED_MODE { MULTIPLY, CONSTANT }
 ## When [member launch_speed_mode] is [code]MULTIPLY[/code], this is the value that multiplies against the player's entry speed.
 @export var multiply_swing_speed: float = 1.2
 
+const _GIMMICK_VAR_ENTRY_VELOCITY: String = "entry_velocity"
 const _GIMMICK_VAR_IS_SWINGING: String = "is_swinging"
-const _GIMMICK_VAR_ENTRY_VEL: String = "entry_vel"
-const _GIMMICK_VAR_MOVING: String = "moving"
-const _GIMMICK_VAR_JUMP_OFF: String = "jump_off"
+const _GIMMICK_VAR_IS_MOVING: String = "is_moving"
+const _GIMMICK_VAR_IS_JUMP_OFF_PRESSED: String = "is_jump_off_pressed"
 
 var _grab_sound_player: AudioStreamPlayer = null
 var _half_height: float = 0.0
@@ -116,20 +116,20 @@ var _monitored_players: Dictionary = {}
 
 func _add_player(player: PlayerChar) -> void:
 	player.set_active_gimmick(self)
-	player.set_gimmick_var(_GIMMICK_VAR_MOVING, false)
-	player.set_gimmick_var(_GIMMICK_VAR_JUMP_OFF, false)
+	player.set_gimmick_var(_GIMMICK_VAR_IS_MOVING, false)
+	player.set_gimmick_var(_GIMMICK_VAR_IS_JUMP_OFF_PRESSED, false)
 	
 	var animator: PlayerCharAnimationPlayer = player.get_avatar().get_animator()
 	if absf(player.movement.y) >= swing_contact_speed:
 		# This is ok for now, but we need to clean it up.
 		animator.play(&"swingHorizontalBarMHZ", -1.0, 1.0, false)
 		player.set_gimmick_var(_GIMMICK_VAR_IS_SWINGING, true)
-		player.set_gimmick_var(_GIMMICK_VAR_ENTRY_VEL, player.movement.y)
+		player.set_gimmick_var(_GIMMICK_VAR_ENTRY_VELOCITY, player.movement.y)
 	
 	else:
 		animator.play(&"hangShimmy", -1.0, shimmy_speed / 60.0, false)
 		player.set_gimmick_var(_GIMMICK_VAR_IS_SWINGING, false)
-		player.set_gimmick_var(_GIMMICK_VAR_ENTRY_VEL, 0.0)
+		player.set_gimmick_var(_GIMMICK_VAR_ENTRY_VELOCITY, 0.0)
 	
 	_clamp_player_x_position(player)
 	player.sprite.flip_h = false
@@ -159,9 +159,9 @@ func _remove_player(player: PlayerChar, eject: bool = false, upwards: bool = fal
 			animator.play(&"walk", -1.0, 1.0, false)
 	
 	# clean up
-	player.unset_gimmick_var(_GIMMICK_VAR_JUMP_OFF)
-	player.unset_gimmick_var(_GIMMICK_VAR_MOVING)
-	player.unset_gimmick_var(_GIMMICK_VAR_ENTRY_VEL)
+	player.unset_gimmick_var(_GIMMICK_VAR_IS_JUMP_OFF_PRESSED)
+	player.unset_gimmick_var(_GIMMICK_VAR_IS_MOVING)
+	player.unset_gimmick_var(_GIMMICK_VAR_ENTRY_VELOCITY)
 	player.unset_gimmick_var(_GIMMICK_VAR_IS_SWINGING)
 	player.unset_active_gimmick()
 
@@ -227,7 +227,7 @@ func _resize() -> void:
 	collision2.position = collision.position
 
 func _process_player_x_movement(player: PlayerChar, x_input: float) -> bool:
-	var moved_last_frame: bool = player.get_gimmick_var(_GIMMICK_VAR_MOVING)
+	var moved_last_frame: bool = player.get_gimmick_var(_GIMMICK_VAR_IS_MOVING)
 	var moving: bool = false
 	player.movement.x = 0.0
 	if x_input != 0.0:
@@ -240,7 +240,7 @@ func _process_player_x_movement(player: PlayerChar, x_input: float) -> bool:
 			if player.global_position.x < global_position.x + width - half_hitbox_width:
 				player.movement.x = shimmy_speed
 				moving = true
-	player.set_gimmick_var(_GIMMICK_VAR_MOVING, moving)
+	player.set_gimmick_var(_GIMMICK_VAR_IS_MOVING, moving)
 	
 	# Setting `player.movement.x` (see above) makes the player move during the
 	# next frame, but they can go out of bounds (e.g. if the distance to the
@@ -254,7 +254,7 @@ func _process_player_x_movement(player: PlayerChar, x_input: float) -> bool:
 		_clamp_player_x_position(player)
 	
 	# While shimmy is allowed, we are also allowed to jump off the gimmick at any time.
-	if player.get_gimmick_var(_GIMMICK_VAR_JUMP_OFF) == true:
+	if player.get_gimmick_var(_GIMMICK_VAR_IS_JUMP_OFF_PRESSED):
 		
 		# If down is held and downward detach is allowed, fall down instead.
 		if allow_downward_detach and player.get_y_input() > 0.0:
@@ -273,7 +273,7 @@ func _process_player_x_movement(player: PlayerChar, x_input: float) -> bool:
 
 func _process_player_shimmy_animation(player: PlayerChar) -> void:
 	var animator: PlayerCharAnimationPlayer = player.get_avatar().get_animator()
-	if player.get_gimmick_var(_GIMMICK_VAR_MOVING):
+	if player.get_gimmick_var(_GIMMICK_VAR_IS_MOVING):
 		animator.play()
 	else:
 		animator.pause()
@@ -281,7 +281,7 @@ func _process_player_shimmy_animation(player: PlayerChar) -> void:
 func _process_player_launch(player: PlayerChar) -> void:
 	var animator: PlayerCharAnimationPlayer = player.get_avatar().get_animator()
 	var anim_pos: float = animator.get_current_animation_position() / animator.get_current_animation_length()
-	var entry_vel: float = player.get_gimmick_var(_GIMMICK_VAR_ENTRY_VEL)
+	var entry_vel: float = player.get_gimmick_var(_GIMMICK_VAR_ENTRY_VELOCITY)
 	
 	# If brakes are allowed, we want to allow slamming the breaks
 	# a little faster than the upward animation normally plays out.
@@ -301,7 +301,7 @@ func _process_player_launch(player: PlayerChar) -> void:
 
 func player_process(player: PlayerChar, _delta: float) -> void:
 	if player.any_action_pressed():
-		player.set_gimmick_var(_GIMMICK_VAR_JUMP_OFF, true)
+		player.set_gimmick_var(_GIMMICK_VAR_IS_JUMP_OFF_PRESSED, true)
 
 func player_physics_process(player: PlayerChar, _delta: float) -> void:
 	var x_input: float = player.get_x_input()
