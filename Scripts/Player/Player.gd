@@ -1595,8 +1595,7 @@ func set_active_gimmick(gimmick : ConnectableGimmick, allowSwap : bool=false) ->
 	return true
 
 
-## Unbinds the gimmick from the player (you could just use [code]null[/code]
-## on [method set_active_gimmick] too).
+## Unbinds the gimmick from the player.
 func unset_active_gimmick() -> void:
 	active_gimmick = null
 
