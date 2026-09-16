@@ -103,7 +103,7 @@ enum _LAUNCH_SPEED_MODE { MULTIPLY, CONSTANT }
 ## When [member launch_speed_mode] is [code]MULTIPLY[/code], this is the value that multiplies against the player's entry speed.
 @export var multiply_swing_speed: float = 1.2
 
-const _GIMMICK_VAR_MODE: String = "mode"
+const _GIMMICK_VAR_IS_SWINGING: String = "is_swinging"
 const _GIMMICK_VAR_ENTRY_VEL: String = "entry_vel"
 const _GIMMICK_VAR_MOVING: String = "moving"
 const _GIMMICK_VAR_JUMP_OFF: String = "jump_off"
@@ -114,45 +114,58 @@ var _half_height: float = 0.0
 # TODO: Use `Dictionary[PlayerChar, bool]` when we upgrade to Godot 4.4.
 var _monitored_players: Dictionary = {}
 
-# If player enters with low absolute velocity, enter shimmy mode (unless turned off).
-# If player enters from above/below with high enough velocity, enter launch mode.
-enum _PLAYER_MODE { MONITORING, SHIMMY, LAUNCH }
-
 func _add_player(player: PlayerChar) -> void:
 	player.set_active_gimmick(self)
-	player.set_gimmick_var(_GIMMICK_VAR_MODE, _PLAYER_MODE.MONITORING)
-	player.set_gimmick_var(_GIMMICK_VAR_ENTRY_VEL, 0.0)
 	player.set_gimmick_var(_GIMMICK_VAR_MOVING, false)
 	player.set_gimmick_var(_GIMMICK_VAR_JUMP_OFF, false)
+	
+	var animator: PlayerCharAnimationPlayer = player.get_avatar().get_animator()
+	if absf(player.movement.y) >= swing_contact_speed:
+		# This is ok for now, but we need to clean it up.
+		animator.play(&"swingHorizontalBarMHZ", -1.0, 1.0, false)
+		player.set_gimmick_var(_GIMMICK_VAR_IS_SWINGING, true)
+		player.set_gimmick_var(_GIMMICK_VAR_ENTRY_VEL, player.movement.y)
+	
+	else:
+		animator.play(&"hangShimmy", -1.0, shimmy_speed / 60.0, false)
+		player.set_gimmick_var(_GIMMICK_VAR_IS_SWINGING, false)
+		player.set_gimmick_var(_GIMMICK_VAR_ENTRY_VEL, 0.0)
+	
+	_clamp_player_x_position(player)
+	player.sprite.flip_h = false
+	player.movement.y = 0.0
+	player.global_position.y = global_position.y + _half_height
+	player.set_state(player.STATES.GIMMICK)
+	_grab_sound_player.play()
 
-func _remove_player(player: PlayerChar) -> void:
+func _remove_player(player: PlayerChar, eject: bool = false, upwards: bool = false) -> void:
+	if eject:
+		var animator: PlayerCharAnimationPlayer = player.get_avatar().get_animator()
+		player.set_state(player.STATES.NORMAL)
+		if upwards:
+			# figure out the animation based on the players current animation
+			var next_animation: StringName = &"walk"
+			match animator.current_animation:
+				"walk", "run", "peelOut":
+					next_animation = StringName(animator.current_animation)
+				# if none of the animations match and speed is equal or beyond
+				# the players top speed, set it to run (default is walk)
+				_ when absf(player.get_ground_speed()) >= minf(6.0 * 60.0, player.get_physics().top_speed):
+					next_animation = &"run"
+			# play player animation
+			animator.play(&"spring", -1.0, 1.0, false)
+			animator.queue(next_animation)
+		else:
+			animator.play(&"walk", -1.0, 1.0, false)
+	
 	# clean up
 	player.unset_gimmick_var(_GIMMICK_VAR_JUMP_OFF)
 	player.unset_gimmick_var(_GIMMICK_VAR_MOVING)
 	player.unset_gimmick_var(_GIMMICK_VAR_ENTRY_VEL)
-	player.unset_gimmick_var(_GIMMICK_VAR_MODE)
+	player.unset_gimmick_var(_GIMMICK_VAR_IS_SWINGING)
 	player.unset_active_gimmick()
 
-func _eject_player(player: PlayerChar, upwards: bool = false) -> void:
-	var animator: PlayerCharAnimationPlayer = player.get_avatar().get_animator()
-	player.set_state(player.STATES.NORMAL)
-	if upwards:
-		# figure out the animation based on the players current animation
-		var next_animation: StringName = &"walk"
-		match animator.current_animation:
-			"walk", "run", "peelOut":
-				next_animation = StringName(animator.current_animation)
-			# if none of the animations match and speed is equal or beyond
-			# the players top speed, set it to run (default is walk)
-			_ when absf(player.get_ground_speed()) >= minf(6.0 * 60.0, player.get_physics().top_speed):
-				next_animation = &"run"
-		# play player animation
-		animator.play(&"spring", -1.0, 1.0, false)
-		animator.queue(next_animation)
-	else:
-		animator.play(&"walk", -1.0, 1.0, false)
-
-func _clamp_player_position(player: PlayerChar) -> void:
+func _clamp_player_x_position(player: PlayerChar) -> void:
 	var half_hitbox_width: float = player.get_predefined_hitbox(PlayerChar.HITBOXES.HORIZONTAL).x * 0.5
 	player.global_position.x = clampf(
 		player.global_position.x,
@@ -238,13 +251,13 @@ func _process_player_x_movement(player: PlayerChar, x_input: float) -> bool:
 	# happen at every frame, and this would prevent horizontally moving crushers
 	# from pushing the player off the bar ‒ we don't want that.
 	if moved_last_frame and not moving:
-		_clamp_player_position(player)
+		_clamp_player_x_position(player)
 	
 	# While shimmy is allowed, we are also allowed to jump off the gimmick at any time.
 	if player.get_gimmick_var(_GIMMICK_VAR_JUMP_OFF) == true:
 		
 		# If down is held and downward detach is allowed, fall down instead.
-		if (allow_downward_detach and player.get_y_input() > 0.0):
+		if allow_downward_detach and player.get_y_input() > 0.0:
 			player.movement.y = 40.0
 		# Otherwise the player jumps upward.
 		else:
@@ -273,38 +286,18 @@ func _process_player_launch(player: PlayerChar) -> void:
 	# If brakes are allowed, we want to allow slamming the breaks
 	# a little faster than the upward animation normally plays out.
 	if anim_pos >= 0.91 and player.get_y_input() * entry_vel < 0.0 and allow_brake:
-		player.set_gimmick_var(_GIMMICK_VAR_MODE, _PLAYER_MODE.SHIMMY)
+		player.set_gimmick_var(_GIMMICK_VAR_IS_SWINGING, false)
 		animator.play(&"hangShimmy", -1.0, shimmy_speed / 60.0, false)
 	
 	# Otherwise we just launch the player on out of the gimmick.
 	# DW's note ‒ this multiplication stuff with the length was stupid of me
 	# and I really should have been relying on signals.
 	if anim_pos >= 0.97:
-		_eject_player(player, entry_vel < 0.0)
-		
+		_remove_player(player, true, entry_vel < 0.0)
 		player.movement.y = (
 				swing_speed_constant if launch_speed_mode == _LAUNCH_SPEED_MODE.CONSTANT else
 				clampf(absf(entry_vel) * multiply_swing_speed, min_swing_speed, max_swing_speed)
 			) * signf(entry_vel)
-		_remove_player(player)
-
-func _process_player_monitoring(player: PlayerChar) -> void:
-	var animator: PlayerCharAnimationPlayer = player.get_avatar().get_animator()
-	if absf(player.movement.y) >= swing_contact_speed:
-		# This is ok for now, but we need to clean it up.
-		animator.play(&"swingHorizontalBarMHZ", -1.0, 1.0, false)
-		player.set_gimmick_var(_GIMMICK_VAR_MODE, _PLAYER_MODE.LAUNCH)
-		player.set_gimmick_var(_GIMMICK_VAR_ENTRY_VEL, player.movement.y)
-	
-	else:
-		animator.play(&"hangShimmy", -1.0, shimmy_speed / 60.0, false)
-		player.set_gimmick_var(_GIMMICK_VAR_MODE, _PLAYER_MODE.SHIMMY)
-	
-	player.sprite.flip_h = false
-	player.movement.y = 0.0
-	player.global_position.y = global_position.y + _half_height
-	player.set_state(player.STATES.GIMMICK)
-	_grab_sound_player.play()
 
 func player_process(player: PlayerChar, _delta: float) -> void:
 	if player.any_action_pressed():
@@ -313,16 +306,11 @@ func player_process(player: PlayerChar, _delta: float) -> void:
 func player_physics_process(player: PlayerChar, _delta: float) -> void:
 	var x_input: float = player.get_x_input()
 	
-	# If the player is in monitoring mode, we check for when to stick them to the bar
-	if player.get_gimmick_var(_GIMMICK_VAR_MODE) == _PLAYER_MODE.MONITORING:
-		_process_player_monitoring(player)
-	
 	# Eject the player if something like a platform picks them up from below,
 	# or if something pushes them from above.
 	if player.ground or player.check_for_ceiling():
 		player.global_position.y = global_position.y + player.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL).y
-		_eject_player(player)
-		_remove_player(player)
+		_remove_player(player, true)
 		return
 	
 	# As long as shimmying is allowed, shimmying is allowed in all active modes.
@@ -334,11 +322,10 @@ func player_physics_process(player: PlayerChar, _delta: float) -> void:
 	player.movement.y = 0.0
 	player.global_position.y = global_position.y + _half_height
 	
-	match player.get_gimmick_var(_GIMMICK_VAR_MODE):
-		_PLAYER_MODE.SHIMMY:
-			_process_player_shimmy_animation(player)
-		_PLAYER_MODE.LAUNCH:
-			_process_player_launch(player)
+	if player.get_gimmick_var(_GIMMICK_VAR_IS_SWINGING):
+		_process_player_launch(player)
+	else:
+		_process_player_shimmy_animation(player)
 
 func player_force_detach_callback(player: PlayerChar) -> void:
 	_remove_player(player)
@@ -346,7 +333,6 @@ func player_force_detach_callback(player: PlayerChar) -> void:
 func _on_bar_area_body_entered(player: PlayerChar) -> void:
 	if player in _monitored_players and not player.ground:
 		_add_player(player)
-		_clamp_player_position(player)
 		
 		# Prevent the player from re-entering the gimmick
 		# until they leave and re-enter the outer Area2D first.
@@ -361,5 +347,4 @@ func _on_bar_outer_area_body_exited(player: PlayerChar) -> void:
 	# Remove the player if something like a moving crusher pushes them out.
 	if player.get_active_gimmick() == self:
 		player.global_position.y = global_position.y + 26.0
-		_eject_player(player)
-		_remove_player(player)
+		_remove_player(player, true)
