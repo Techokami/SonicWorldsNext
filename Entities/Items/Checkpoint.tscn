@@ -5,7 +5,7 @@
 [ext_resource type="AudioStream" uid="uid://dydspge4asiqv" path="res://Audio/SFX/Objects/Checkpoint.wav" id="3"]
 
 [sub_resource type="RectangleShape2D" id="1"]
-size = Vector2(16, 48)
+size = Vector2(16, 64)
 
 [sub_resource type="Animation" id="3"]
 length = 0.001
@@ -104,6 +104,7 @@ collision_mask = 4096
 script = ExtResource("2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -8)
 shape = SubResource("1")
 
 [node name="Post" type="Sprite2D" parent="."]
