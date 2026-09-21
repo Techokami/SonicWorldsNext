@@ -137,7 +137,7 @@ func _process(delta):
 	
 	# check that there's player, if there is then track the focus players ring count
 	if (Global.players.size() > 0):
-		var hyper_ring: bool = Global.players[focusPlayer].hyper_ring
+		var hyper_ring: bool = Global.players[focusPlayer].has_hyper_ring()
 		$Counters/Text/BlueRings.visible = hyper_ring
 		$Counters/Text/BlueRingCount.visible = hyper_ring
 		$Counters/Text/RingCount.visible = not hyper_ring

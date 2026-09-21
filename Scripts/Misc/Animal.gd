@@ -71,7 +71,7 @@ func _ready():
 func _physics_process(delta):
 	# check if active, if not then stop processing physics
 	if !active:
-		return false
+		return
 	# gravity
 	velocity.y += gravity*60
 	

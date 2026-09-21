@@ -2,18 +2,12 @@ class_name Score extends Node2D
 
 const SCORE: Array[int] = [10,100,200,500,1000,10000]
 const RECTS: Array[Rect2] = [
-# 10
-	Rect2(Vector2(0, 0),  Vector2(10, 8)),
-# 100
-	Rect2(Vector2(0, 0),  Vector2(15, 8)),
-# 200
-	Rect2(Vector2(0, 8),  Vector2(15, 8)),
-# 500
-	Rect2(Vector2(0, 18), Vector2(15, 8)),
-# 1000
-	Rect2(Vector2(0, 0),  Vector2(20, 8)),
-# 10000
-	Rect2(Vector2(0, 0),  Vector2(25, 8))
+	Rect2(0.0,  0.0,  10.0, 8.0), # 10
+	Rect2(0.0,  0.0,  15.0, 8.0), # 100
+	Rect2(0.0,  8.0,  15.0, 8.0), # 200
+	Rect2(0.0,  18.0, 15.0, 8.0), # 500
+	Rect2(0.0,  0.0,  20.0, 8.0), # 1000
+	Rect2(0.0,  0.0,  25.0, 8.0)  # 10000
 ]
 
 var score_id: int = 0

@@ -58,13 +58,13 @@ func _ready():
 func _process(_delta):
 	# check if paused and visible, otherwise cancel it out
 	if !get_tree().paused or !visible:
-		return null
+		return
 	do_lateral_input()
 
 func _input(event):
 	# check if paused and visible, otherwise cancel it out
 	if !get_tree().paused or !visible:
-		return null
+		return
 
 	# menu button activate
 	if event.is_action_pressed("gm_pause") or event.is_action_pressed("gm_action"):

@@ -21,11 +21,7 @@ var isSuper = false
 var shoeTime = 0
 var ringDisTime = 0 # ring collecting disable timer
 
-var hyper_ring = false:
-	set(value):
-		if not hyper_ring and value:
-			sfx[31].play()
-		hyper_ring = value
+var _hyper_ring = false
 
 # water settings
 var water = false
@@ -239,16 +235,19 @@ func _ready():
 			Global.levelTime = Global.checkPointTime
 			break
 	
-	if Global.bonusStageSavedTime:
+	if Global.bonusStageSavedTime != 0:
 		# if bonusStageSavedTime is not 0, set player's stats to memory
 		global_position = Global.bonusStageSavedPosition
 		_camera.global_position = global_position
 		rings = Global.bonusStageSavedRings
 		Global.levelTime = Global.bonusStageSavedTime
+		set_shield(Global.bonus_stage_saved_shield, false)
+		_hyper_ring = Global.bonus_stage_hyper_ring
 		# Clear the memory
 		Global.bonusStageSavedPosition = Vector2.ZERO
 		Global.bonusStageSavedRings = 0
 		Global.bonusStageSavedTime = 0.0
+		Global.bonus_stage_saved_shield = SHIELDS.NONE
 	
 	# Character settings
 	var avatar = playeravatars[0]
@@ -853,21 +852,21 @@ func hit_player(damagePoint:Vector2 = global_position, damageType: Global.HAZARD
 			var ring_class: PackedScene = Ring
 			var accumulated_value: float = 0.0
 			var ring_velocity: Vector2
-			if hyper_ring:
+			if _hyper_ring:
 				ring_class = BigRing
 				max_count = 8
 				phase_2_count = 4
 				# adjust the angle step accordingly, as we generate 4 times less rings
 				ring_angle_step = RING_ANGLE_STEP * 4
 			var num_generated_rings: int = min(rings, max_count)
-			var value_per_hyper_ring: float = (float(rings) / num_generated_rings) if hyper_ring else 0.0
+			var value_per_hyper_ring: float = (float(rings) / num_generated_rings) if _hyper_ring else 0.0
 			while ring_count < num_generated_rings:
 				# Create ring
 				var ring = ring_class.instantiate()
 				ring.global_position = global_position
 				ring.scattered = true
 
-				if hyper_ring:
+				if _hyper_ring:
 					# In Sonic Mania, Hyper Ring generates up to 8 large rings, each worth a fraction
 					# of the player's total amount of rings. In our implementation, instead of
 					# naively rounding down the value of each ring when converting from float to int,
@@ -897,7 +896,7 @@ func hit_player(damagePoint:Vector2 = global_position, damageType: Global.HAZARD
 					ring_angle = RING_STARTING_ANGLE # Reset angle
 				get_parent().add_child(ring)
 			rings = 0
-			hyper_ring = false
+			_hyper_ring = false
 		elif _shield == SHIELDS.NONE and is_independent():
 			kill()
 		else:
@@ -1402,7 +1401,8 @@ func set_predefined_hitbox(which: PlayerChar.HITBOXES, force_pose_change: bool =
 
 ## Sets the player's shield.[br]
 ## [param setShieldID] — which shield the player should get.
-func set_shield(setShieldID: PlayerChar.SHIELDS) -> void:
+## [param play_sound] — whether to play the corresponding sound.
+func set_shield(setShieldID: PlayerChar.SHIELDS, play_sound: bool = true) -> void:
 	magnetShape.disabled = true
 	# verify not in water and shield compatible
 	if water and (setShieldID == SHIELDS.FIRE or setShieldID == SHIELDS.ELEC):
@@ -1414,17 +1414,17 @@ func set_shield(setShieldID: PlayerChar.SHIELDS) -> void:
 	match (_shield):
 		SHIELDS.NORMAL:
 			shieldSprite.play("Default")
-			sfx[5].play()
+			if play_sound: sfx[5].play()
 		SHIELDS.ELEC:
 			shieldSprite.play("Elec")
-			sfx[10].play()
+			if play_sound: sfx[10].play()
 			magnetShape.disabled = false
 		SHIELDS.FIRE:
 			shieldSprite.play("Fire")
-			sfx[11].play()
+			if play_sound: sfx[11].play()
 		SHIELDS.BUBBLE:
 			shieldSprite.play("Bubble")
-			sfx[12].play()
+			if play_sound: sfx[12].play()
 		_: # disable
 			shieldSprite.visible = false
 
@@ -1433,7 +1433,20 @@ func set_shield(setShieldID: PlayerChar.SHIELDS) -> void:
 ## values of the [enum SHIELDS] enumerator for the player.
 func get_shield() -> PlayerChar.SHIELDS:
 	return _shield
-	
+
+
+## Gives the player a Hyper Ring. Plays the acquisition sound if [param status]
+## is [code]true[/code] and the player didn't previously have that item.
+func set_hyper_ring(status: bool) -> void:
+	if status and not _hyper_ring:
+		sfx[31].play()
+	_hyper_ring = status
+
+
+## Returns [code]true[/code] if the player has a Hyper Ring, [code]false[/code] otherwise.
+func has_hyper_ring() -> bool:
+	return _hyper_ring
+
 
 ## Returns the current [code]PlayerAvatar[/code] for the player. You should use this to get
 ## to character-specific properties and the animator.
@@ -1465,9 +1478,10 @@ func set_direction(new_direction: PlayerChar.DIRECTIONS) -> void:
 ## [param change_sprite_direction] - if [code]false[/code], only the movement direction
 ## is changed, and the sprite direction ([code]sprite.flip_h[/code]) is kept the same.
 func set_direction_signed(new_direction: float, change_sprite_direction: bool = true) -> void:
-	_direction = signf(new_direction)
-	if change_sprite_direction:
-		sprite.flip_h = (_direction < 0.0)
+	if new_direction != 0.0:
+		_direction = signf(new_direction)
+		if change_sprite_direction:
+			sprite.flip_h = (_direction < 0.0)
 
 
 ## Flips player's movement direction.[br]
@@ -1559,7 +1573,8 @@ func set_air_control(control: bool) -> void:
 
 ## Binds the player to the requested gimmick.[br]
 ## [param gimmick] — gimmick to bind the player to.[br]
-## [param allowSwap] — enable to make the new gimmick execute its on force detach callback and to
+## [param allowSwap] — enable to make the old gimmick execute its own
+##        [method ConnectableGimmick.player_force_detach_callback] and to
 ##        allow the new gimmick to replace one that is already attached.[br]
 ## Returns [code]true[/code] if gimmick was able to be connected, [code]false[/code] otherwise.[br]
 ## Note: Never returns [code]false[/code] if [param allowSwap] is set.
@@ -1580,8 +1595,7 @@ func set_active_gimmick(gimmick : ConnectableGimmick, allowSwap : bool=false) ->
 	return true
 
 
-## Unbinds the gimmick from the player (you could just use [code]null[/code]
-## on [method set_active_gimmick] too).
+## Unbinds the gimmick from the player.
 func unset_active_gimmick() -> void:
 	active_gimmick = null
 

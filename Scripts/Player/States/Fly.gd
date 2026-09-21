@@ -84,7 +84,7 @@ func state_physics_process(delta: float) -> void:
 			carriedPlayer.movement = parent.movement
 			carriedPlayer.get_state_object(parent.STATES.AIR).lockDir = true
 			# set carried player direction
-			carriedPlayer.set_direction_signed(parent.get_direction_multiplier(),false)
+			carriedPlayer.set_direction_signed(parent.get_direction_multiplier())
 		
 		# set immediate inputs if ai
 		if parent.playerControl == 0:

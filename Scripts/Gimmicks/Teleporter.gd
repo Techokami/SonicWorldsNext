@@ -37,7 +37,7 @@ func _process(_delta):
 
 func _physics_process(delta):
 	if Engine.is_editor_hint():
-		return false
+		return
 	# run movement codes when the beam is active
 	if active:
 		Global.players[0].movement.y = -0.01 # set velocity.y to a negative so tail's tails rotate right
