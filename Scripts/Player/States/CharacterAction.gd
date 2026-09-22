@@ -36,6 +36,13 @@ func state_physics_process(delta: float) -> void:
 	return _character_action_state.state_physics_process(delta)
 
 
+## Handles the behavior for a player bouncing off of an enemy, monitor, possibly
+## some other destructibles. May be overridden to provide unique handling for
+## bouncing (such as in homing attack)
+func state_player_bounce(source: Node2D, bounce_mode: PlayerChar.BOUNCE_MODES):
+	return _character_action_state.state_player_bounce(source, bounce_mode)
+
+
 ## Proxies to the character-specific state's state_exit_entry function
 func state_exit_entry(new_state: PlayerChar.STATES, new_character_state: int = -1) -> bool:
 	var ret: bool = _character_action_state.state_exit_entry(new_state, new_character_state)

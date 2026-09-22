@@ -53,7 +53,7 @@ func state_physics_process(delta: float) -> void:
 		
 	# Change parent direction
 	# Check that lock direction isn't on
-	if !lockDir and parent.inputs[parent.INPUTS.XINPUT] != 0:
+	if !lockDir:
 		parent.set_direction_signed(parent.inputs[parent.INPUTS.XINPUT])
 	
 	# Gravity

@@ -159,7 +159,7 @@ func draw_tool():
 			yOffset = platformOffset - platformOffset * pow(1.0 * n / (ringsPerSide - 1), 2)
 		else:
 			# This shouldn't be possible.
-			pass
+			assert(false)
 
 		draw_at_pos_internal(Vector2(-ringsMargin - (n * ringsBetween), yOffset))
 		draw_at_pos_internal(Vector2(ringsMargin + (n * ringsBetween), yOffset))
@@ -173,7 +173,8 @@ func draw_tool():
 
 func _draw():
 	if Engine.is_editor_hint():
-		return draw_tool()
+		draw_tool()
+		return
 
 	# Can't draw rings if there aren't enough for the anchors
 	if (ringsPerSide < 2):
@@ -192,7 +193,7 @@ func _draw():
 			yOffset = platformOffset - platformOffset * pow(1.0 * n / (ringsPerSide - 1), 2)
 		else:
 			# This shouldn't be possible.
-			pass
+			assert(false)
 
 		draw_at_pos_internal(Vector2(-ringsMargin - (n * ringsBetween), yOffset))
 		draw_at_pos_internal(Vector2( ringsMargin + (n * ringsBetween), yOffset))

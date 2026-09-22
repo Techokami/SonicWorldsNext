@@ -1,11 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://b6p1ravqsug31"]
+[gd_scene load_steps=7 format=3 uid="uid://b6p1ravqsug31"]
 
 [ext_resource type="Script" path="res://Scripts/Boss/BossBase.gd" id="1"]
 [ext_resource type="AudioStream" uid="uid://bvhfglhmpystw" path="res://Audio/SFX/Boss/Hit.wav" id="2"]
 [ext_resource type="Texture2D" uid="uid://6ds1jcc8jmyf" path="res://Graphics/Boss/Eggmobile.png" id="3"]
+[ext_resource type="Script" path="res://Scripts/Misc/Targetable.gd" id="4_cvsbr"]
 
 [sub_resource type="RectangleShape2D" id="5"]
 size = Vector2(24, 24)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0sd7d"]
 
 [node name="Boss" type="CharacterBody2D"]
 collision_layer = 16384
@@ -31,6 +34,15 @@ collision_mask = 528384
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
 modulate = Color(1, 0, 0, 1)
 shape = SubResource("5")
+
+[node name="HomingAttackTarget" type="StaticBody2D" parent="."]
+collision_layer = 8388608
+collision_mask = 0
+script = ExtResource("4_cvsbr")
+target_tags = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HomingAttackTarget"]
+shape = SubResource("CircleShape2D_0sd7d")
 
 [connection signal="area_entered" from="HitBox" to="." method="_on_DamageArea_area_entered"]
 [connection signal="area_exited" from="HitBox" to="." method="_on_HitBox_area_exited"]

@@ -1,10 +1,11 @@
-[gd_scene load_steps=16 format=3 uid="uid://gklj3ebdwveu"]
+[gd_scene load_steps=18 format=3 uid="uid://6jcbvra64ero"]
 
 [ext_resource type="Texture2D" uid="uid://bf6cekji71vif" path="res://Graphics/Items/monitor_icons.png" id="1"]
 [ext_resource type="Texture2D" uid="uid://c8qtrmw44es3g" path="res://Graphics/Items/monitors.png" id="2"]
 [ext_resource type="Script" path="res://Scripts/Objects/Monitor.gd" id="3"]
 [ext_resource type="AudioStream" uid="uid://ivlmvt8mk3u4" path="res://Audio/SFX/Objects/DestroyObject.wav" id="4"]
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="6"]
+[ext_resource type="Script" path="res://Scripts/Misc/Targetable.gd" id="6_mhkhg"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(30, 30)
@@ -223,6 +224,8 @@ _data = {
 "fadeIcon": SubResource("9")
 }
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_51g2p"]
+
 [node name="Monitor" type="CharacterBody2D"]
 collision_layer = 98304
 script = ExtResource("3")
@@ -260,5 +263,14 @@ collision_mask = 524288
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InstaArea"]
 visible = false
 shape = SubResource("1")
+
+[node name="HomingAttackTarget" type="StaticBody2D" parent="."]
+collision_layer = 8388608
+collision_mask = 0
+script = ExtResource("6_mhkhg")
+target_tags = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HomingAttackTarget"]
+shape = SubResource("CircleShape2D_51g2p")
 
 [connection signal="area_entered" from="InstaArea" to="." method="_on_InstaArea_area_entered"]

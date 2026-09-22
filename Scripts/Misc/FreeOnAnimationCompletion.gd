@@ -6,7 +6,7 @@ enum TYPE {NORMAL, FOLLOW_WATER_SURFACE}
 
 func _ready():
 	if !is_playing():
-		play("default")
+		play(get_autoplay())
 	if behaviour == 0:
 		set_process(false)
 

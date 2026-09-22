@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ceub52t2upxxu"
-path="res://.godot/imported/shadow_jets.png-b00559692919983d5a5004735c43be27.ctex"
+uid="uid://js02e51lkwhp"
+path="res://.godot/imported/Masher.png-67b47286acd8a00470644cf0101c0169.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Graphics/Players/shadow_jets.png"
-dest_files=["res://.godot/imported/shadow_jets.png-b00559692919983d5a5004735c43be27.ctex"]
+source_file="res://Graphics/Enemies/Masher.png"
+dest_files=["res://.godot/imported/Masher.png-67b47286acd8a00470644cf0101c0169.ctex"]
 
 [params]
 

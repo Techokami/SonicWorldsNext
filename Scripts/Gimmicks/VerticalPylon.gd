@@ -189,13 +189,10 @@ func process_editor():
 	
 func _process(delta):
 	if Engine.is_editor_hint():
-		return process_editor()
+		process_editor()
+		return
 
 	process_game(delta)
-
-func _draw():
-	if Engine.is_editor_hint():
-		pass
 
 ## This will usually only be invoked if the player gets hit or another object
 ## forces the player off

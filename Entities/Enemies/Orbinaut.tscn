@@ -1,11 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://c155bdyqqmmpl"]
+[gd_scene load_steps=7 format=3 uid="uid://c155bdyqqmmpl"]
 
 [ext_resource type="Script" path="res://Scripts/Enemies/Orbinaut.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://ca8c5sryvf1j2" path="res://Graphics/Enemies/orbinaut.png" id="2"]
 [ext_resource type="Script" path="res://Scripts/Objects/Hazard.gd" id="3"]
+[ext_resource type="Script" path="res://Scripts/Misc/Targetable.gd" id="4_wmcqe"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(16, 16)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_px4be"]
 
 [node name="Orbinaut" type="CharacterBody2D" groups=["Enemy"]]
 collision_layer = 16384
@@ -49,6 +52,16 @@ frame = 2
 z_index = -100
 position = Vector2(-1.90735e-06, -1.90735e-06)
 scale = Vector2(3.2, 3.2)
+
+[node name="HomingAttackTarget" type="StaticBody2D" parent="."]
+position = Vector2(0, -4)
+collision_layer = 8388608
+collision_mask = 0
+script = ExtResource("4_wmcqe")
+target_tags = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HomingAttackTarget"]
+shape = SubResource("CircleShape2D_px4be")
 
 [connection signal="area_entered" from="DamageArea" to="." method="_on_DamageArea_area_entered"]
 [connection signal="body_entered" from="DamageArea" to="." method="_on_body_entered"]

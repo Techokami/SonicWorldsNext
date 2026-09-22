@@ -1,37 +1,48 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=3 uid="uid://nxkh848r38b0"]
 
-[ext_resource path="res://Scripts/Enemies/EnemyBase.gd" type="Script" id=1]
-[ext_resource path="res://Graphics/Enemies/orbinaut.png" type="Texture2D" id=2]
+[ext_resource type="Script" path="res://Scripts/Enemies/EnemyBase.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://ca8c5sryvf1j2" path="res://Graphics/Enemies/orbinaut.png" id="2"]
+[ext_resource type="Script" path="res://Scripts/Misc/Targetable.gd" id="3_brpry"]
 
-[sub_resource type="RectangleShape2D" id=1]
-size = Vector2( 8, 8 )
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(8, 8)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jg6lv"]
 
 [node name="EnemyBase" type="CharacterBody2D" groups=["Enemy"]]
 collision_layer = 16384
 collision_mask = 0
-script = ExtResource( 1 )
+script = ExtResource("1")
 
 [node name="CollissionMask" type="CollisionShape2D" parent="."]
-shape = SubResource( 1 )
+shape = SubResource("1")
 
 [node name="DamageArea" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 528384
 
 [node name="HitBox" type="CollisionShape2D" parent="DamageArea"]
-modulate = Color( 1, 0, 0, 1 )
-shape = SubResource( 1 )
+modulate = Color(1, 0, 0, 1)
+shape = SubResource("1")
 
 [node name="orbinaut" type="Sprite2D" parent="."]
-texture = ExtResource( 2 )
+texture = ExtResource("2")
 hframes = 2
 vframes = 2
 
 [node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
-position = Vector2( 1.90735e-06, -1.90735e-06 )
-scale = Vector2( 6.4, 6.4 )
-process_parent = true
-physics_process_parent = true
+position = Vector2(1.90735e-06, -1.90735e-06)
+scale = Vector2(6.4, 6.4)
+
+[node name="HomingAttackTarget" type="StaticBody2D" parent="."]
+editor_description = "Note: This is not a guaranteed part of an enemy. It's here in EnemyBase so that EnemyBase can serve as a good example."
+collision_layer = 8388608
+collision_mask = 0
+script = ExtResource("3_brpry")
+target_tags = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HomingAttackTarget"]
+shape = SubResource("CircleShape2D_jg6lv")
 
 [connection signal="area_entered" from="DamageArea" to="." method="_on_DamageArea_area_entered"]
 [connection signal="body_entered" from="DamageArea" to="." method="_on_body_entered"]

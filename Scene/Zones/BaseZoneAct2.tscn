@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=4 uid="uid://bjavywoj00j1j"]
+[gd_scene load_steps=52 format=4 uid="uid://bjavywoj00j1j"]
 
 [ext_resource type="Script" path="res://Scripts/Level/Level.gd" id="2"]
 [ext_resource type="Script" path="res://Scripts/Objects/StateMovers/StateMoverPositional.gd" id="3"]
@@ -16,13 +16,13 @@
 [ext_resource type="PackedScene" uid="uid://blwewyk2fnrew" path="res://Entities/Gimmicks/Shutter.tscn" id="12"]
 [ext_resource type="PackedScene" uid="uid://dvmttrmkfraht" path="res://Entities/Gimmicks/CNZTrampolineBarrel.tscn" id="13"]
 [ext_resource type="Texture2D" uid="uid://dwvek120iiiv" path="res://Graphics/Obstacles/Walls/shutterCNZ.png" id="14"]
-[ext_resource type="PackedScene" uid="uid://gklj3ebdwveu" path="res://Entities/Items/Monitor.tscn" id="15"]
+[ext_resource type="PackedScene" uid="uid://6jcbvra64ero" path="res://Entities/Items/Monitor.tscn" id="15"]
 [ext_resource type="PackedScene" uid="uid://b2n5ptpbq5ysg" path="res://Tools/Debug/DWDebugTool.tscn" id="17_f05cn"]
 [ext_resource type="PackedScene" uid="uid://cioq5saowvqxj" path="res://Entities/MainObjects/Player.tscn" id="18"]
 [ext_resource type="Script" path="res://Scripts/Objects/CollapseLayer.gd" id="21_fdxp4"]
 [ext_resource type="PackedScene" uid="uid://urapmknlu0s5" path="res://Entities/Gimmicks/HorizontalBar.tscn" id="22_ethvu"]
-[ext_resource type="PackedScene" uid="uid://blfw540cqicg3" path="res://Entities/Gimmicks/CatapultDEZ.tscn" id="23_6d3ti"]
-[ext_resource type="PackedScene" uid="uid://4q0hpddgto2k" path="res://Entities/Gimmicks/Spring.tscn" id="23_n1r7l"]
+[ext_resource type="PackedScene" path="res://Entities/Gimmicks/CatapultDEZ.tscn" id="23_6d3ti"]
+[ext_resource type="PackedScene" uid="uid://bm2mgssk56vtn" path="res://Entities/Gimmicks/Spring.tscn" id="23_n1r7l"]
 [ext_resource type="PackedScene" uid="uid://ctg1aeiewvyvj" path="res://Entities/Gimmicks/ForceRoll.tscn" id="23_nxyu5"]
 [ext_resource type="Texture2D" uid="uid://b4cw5q2u4jyb8" path="res://Graphics/Gimmicks/HorizontalBarAlt.png" id="24_ipqgj"]
 [ext_resource type="Texture2D" uid="uid://bemwlrblbgn23" path="res://Graphics/Backgrounds/WorldsBackground.png" id="25"]
@@ -38,12 +38,13 @@
 [ext_resource type="PackedScene" uid="uid://xpsg8eoppqbo" path="res://Entities/Gimmicks/MonkeyBar/Hook.tscn" id="33_ix8uv"]
 [ext_resource type="PackedScene" uid="uid://c2esop5orct10" path="res://Entities/MainObjects/GoalPost.tscn" id="34"]
 [ext_resource type="PackedScene" uid="uid://chyrwm1qwvlyt" path="res://Entities/Gimmicks/Switch.tscn" id="36_bann4"]
-[ext_resource type="PackedScene" uid="uid://cbix8ljuynffp" path="res://Entities/Gimmicks/CatapultWFZ.tscn" id="37_rbgxl"]
+[ext_resource type="PackedScene" path="res://Entities/Gimmicks/CatapultWFZ.tscn" id="37_rbgxl"]
 [ext_resource type="PackedScene" uid="uid://dasp221fqgrno" path="res://Entities/Obstacles/Platform.tscn" id="38"]
 [ext_resource type="PackedScene" uid="uid://cfteqnft5ynr7" path="res://Entities/Hazards/Spikes.tscn" id="39_13rhf"]
 [ext_resource type="PackedScene" uid="uid://c1n8wnllp8pk2" path="res://Entities/Items/SpecialStageRing.tscn" id="40_mjl70"]
 [ext_resource type="PackedScene" path="res://Entities/Backgrounds/GHZWaterfall.tscn" id="41_mosa4"]
-[ext_resource type="PackedScene" uid="uid://dneumyovipdy3" path="res://Entities/Gimmicks/CatapultFBZ.tscn" id="41_w8bgu"]
+[ext_resource type="PackedScene" path="res://Entities/Gimmicks/CatapultFBZ.tscn" id="41_w8bgu"]
+[ext_resource type="PackedScene" uid="uid://nxkh848r38b0" path="res://Entities/Enemies/EnemyBase.tscn" id="45_tc4xl"]
 
 [sub_resource type="Animation" id="1"]
 resource_name = "Glow"
@@ -98,9 +99,8 @@ point_count = 4
 size = Vector2(128, 24)
 
 [node name="BaseZoneAct2" type="Node2D"]
-position = Vector2(1, -1)
 script = ExtResource("2")
-nextZone = "res://Scene/Zones/emerald_hill_zone.tscn"
+nextZone = "res://Scene/Zones/EmeraldHillZone.tscn"
 animal1 = 2
 animal2 = 3
 defaultLeftBoundry = 0
@@ -351,10 +351,10 @@ scale = Vector2(2, 9)
 [node name="HorizontalBar" parent="." instance=ExtResource("22_ethvu")]
 position = Vector2(864, 235)
 width = 320
-allowBrake = true
-allowDownwardDetach = true
-drawLeftAnchor = false
-drawRightAnchor = false
+draw_left_anchor = false
+draw_right_anchor = false
+allow_brake = true
+allow_downward_detach = true
 
 [node name="Spring" parent="." instance=ExtResource("23_n1r7l")]
 z_index = -99
@@ -363,54 +363,54 @@ position = Vector2(938, 360)
 [node name="HorizontalBar2" parent="." instance=ExtResource("22_ethvu")]
 position = Vector2(3044, 893)
 width = 60
-allowBrake = true
-drawRightAnchor = false
-maxSwingSpeed = 900
-multiplySwingSpeed = 1.4
+draw_right_anchor = false
+allow_brake = true
+max_swing_speed = 900.0
+multiply_swing_speed = 1.4
 
 [node name="HorizontalBar3" parent="." instance=ExtResource("22_ethvu")]
 position = Vector2(2864, 667)
-spriteTexture = ExtResource("24_ipqgj")
+sprite_texture = ExtResource("24_ipqgj")
 width = 240
-shimmySpeed = 120.0
-drawRightAnchor = false
-swingContactSpeed = 2000.0
-launchSpeedMode = 1
-swingSpeedConstant = 0
+draw_right_anchor = false
+shimmy_speed = 120.0
+swing_contact_speed = 2000.0
+launch_speed_mode = 1
+swing_speed_constant = 0.0
 
 [node name="Spring2" parent="." instance=ExtResource("23_n1r7l")]
 position = Vector2(3088, 1048)
 
 [node name="HorizontalBar4" parent="." instance=ExtResource("22_ethvu")]
 position = Vector2(2720, 799)
-spriteTexture = ExtResource("24_ipqgj")
+sprite_texture = ExtResource("24_ipqgj")
 width = 59
-shimmySpeed = 120.0
-drawLeftAnchor = false
-swingContactSpeed = 3000.0
+draw_left_anchor = false
+shimmy_speed = 120.0
+swing_contact_speed = 3000.0
 
 [node name="Spring3" parent="." instance=ExtResource("23_n1r7l")]
 position = Vector2(2368, 824)
 
 [node name="HorizontalBar5" parent="." instance=ExtResource("22_ethvu")]
 position = Vector2(2324, 705)
-allowBrake = true
+allow_brake = true
 
 [node name="HorizontalBar6" parent="." instance=ExtResource("22_ethvu")]
 position = Vector2(2325, 599)
-allowBrake = true
+allow_brake = true
 
 [node name="HorizontalBar7" parent="." instance=ExtResource("22_ethvu")]
 position = Vector2(2325, 501)
-allowBrake = true
+allow_brake = true
 
 [node name="HorizontalBar8" parent="." instance=ExtResource("22_ethvu")]
 position = Vector2(2984, 442)
-spriteTexture = ExtResource("24_ipqgj")
+sprite_texture = ExtResource("24_ipqgj")
 width = 120
-shimmySpeed = 180.0
-drawRightAnchor = false
-swingContactSpeed = 3000.0
+draw_right_anchor = false
+shimmy_speed = 180.0
+swing_contact_speed = 3000.0
 
 [node name="ChainedMonkeyBar2" parent="." instance=ExtResource("27_obgon")]
 z_index = 5
@@ -1173,6 +1173,15 @@ travelDistance = 252
 [node name="DWDebugTool" parent="." instance=ExtResource("17_f05cn")]
 position = Vector2(-134, 546)
 
+[node name="EnemyBase" parent="." instance=ExtResource("45_tc4xl")]
+position = Vector2(4558, 352)
+
+[node name="EnemyBase2" parent="." instance=ExtResource("45_tc4xl")]
+position = Vector2(4685, 316)
+
+[node name="EnemyBase3" parent="." instance=ExtResource("45_tc4xl")]
+position = Vector2(4812, 272)
+
 [connection signal="body_entered" from="Entities/AdvancedPlatform" to="Entities/AdvancedPlatform" method="_on_body_entered"]
 [connection signal="body_exited" from="Entities/AdvancedPlatform" to="Entities/AdvancedPlatform" method="_on_body_exited"]
 [connection signal="target_reached" from="ChainedMonkeyBar9/RetractibleChain" to="ChainedMonkeyBar9/SwitchPlayer" method="do_play"]
@@ -1183,11 +1192,11 @@ position = Vector2(-134, 546)
 [connection signal="pressed" from="HookSliderAssembly/MiddleSwitch" to="HookSliderAssembly/HookSlider" method="send_to_target" binds= [0]]
 [connection signal="pressed" from="HookSliderAssembly/MiddleSwitch" to="HookSliderAssembly/HookSlider/MobileHook/RetractibleChain" method="send_to_height" binds= [120]]
 [connection signal="target_reached" from="HookSliderAssembly/HookSlider/MobileHook/RetractibleChain" to="HookSliderAssembly/HookSlider" method="send_to_target" binds= [615]]
-[connection signal="pressed" from="Switch" to="ChainedMonkeyBar/RetractibleChain" method="set_default_target" binds= [170]]
 [connection signal="pressed" from="Switch" to="ChainedMonkeyBar/RetractibleChain" method="send_to_height" binds= [609]]
+[connection signal="pressed" from="Switch" to="ChainedMonkeyBar/RetractibleChain" method="set_default_target" binds= [170]]
+[connection signal="pressed" from="Switch2" to="ChainedMonkeyBar/RetractibleChain" method="send_to_height" binds= [170]]
 [connection signal="pressed" from="Switch2" to="ChainedMonkeyBar/RetractibleChain" method="set_home_height" binds= [170]]
 [connection signal="pressed" from="Switch2" to="ChainedMonkeyBar/RetractibleChain" method="set_default_target" binds= [0]]
-[connection signal="pressed" from="Switch2" to="ChainedMonkeyBar/RetractibleChain" method="send_to_height" binds= [170]]
 
 [editable path="ChainedMonkeyBar2"]
 [editable path="ChainedMonkeyBar3"]

@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://cd3sr4h67o5cv"]
+
+[ext_resource type="Script" path="res://Scripts/Objects/ForceRollWJump.gd" id="1_w0cos"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(16, 16)
+
+[node name="ForceRoll" type="Area2D"]
+collision_layer = 0
+collision_mask = 4096
+script = ExtResource("1_w0cos")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("1")
+
+[connection signal="body_entered" from="." to="." method="_on_ForceRoll_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_ForceRoll_body_exited"]

@@ -97,7 +97,7 @@ func _process(delta):
 		var horizontal_hitbox: Vector2 = player.get_predefined_hitbox(PlayerChar.HITBOXES.HORIZONTAL)
 		player.set_hitbox(horizontal_hitbox)
 		player.set_state(PlayerChar.STATES.GIMMICK, horizontal_hitbox)
-		player.avatar.get_animator().play(&"clingVerticalBar")
+		avatar.get_animator().play(&"clingVerticalBar")
 		
 		player.set_movement(Vector2(0.0, 0.0))
 		

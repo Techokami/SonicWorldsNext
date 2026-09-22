@@ -186,7 +186,7 @@ func state_process(delta: float) -> void:
 	if parent.inputs[parent.INPUTS.XINPUT] != 0 and !skid:
 		parent.set_direction_signed(parent.inputs[parent.INPUTS.XINPUT], false)
 	elif parent.movement.x != 0 and skid:
-		parent.set_direction_signed(signf(parent.movement.x), false)
+		parent.set_direction_signed(parent.movement.x, false)
 	
 	# water running
 	parent.action_water_run_handle()

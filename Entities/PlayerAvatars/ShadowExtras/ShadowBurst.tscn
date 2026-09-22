@@ -1,0 +1,72 @@
+[gd_scene load_steps=11 format=3 uid="uid://qoi31pj80g6r"]
+
+[ext_resource type="Texture2D" uid="uid://br327t4aei6bn" path="res://Graphics/Players/ShadowExtras/shadow_burst.png" id="1_1ext4"]
+[ext_resource type="Script" path="res://Scripts/Misc/FreeOnAnimationCompletion.gd" id="2_1mvux"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e5r8f"]
+atlas = ExtResource("1_1ext4")
+region = Rect2(0, 0, 54, 54)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_odrrd"]
+atlas = ExtResource("1_1ext4")
+region = Rect2(54, 0, 54, 54)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o4vfd"]
+atlas = ExtResource("1_1ext4")
+region = Rect2(108, 0, 54, 54)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1rwt2"]
+atlas = ExtResource("1_1ext4")
+region = Rect2(162, 0, 54, 54)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ylhhp"]
+atlas = ExtResource("1_1ext4")
+region = Rect2(216, 0, 54, 54)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n15v8"]
+atlas = ExtResource("1_1ext4")
+region = Rect2(270, 0, 54, 54)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_adn88"]
+atlas = ExtResource("1_1ext4")
+region = Rect2(324, 0, 54, 54)
+
+[sub_resource type="SpriteFrames" id="27"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e5r8f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_odrrd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o4vfd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1rwt2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ylhhp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n15v8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_adn88")
+}],
+"loop": false,
+"name": &"ShadowBurst",
+"speed": 20.0
+}]
+
+[node name="ShadowBurst" type="AnimatedSprite2D"]
+modulate = Color(1, 1, 1, 0.666667)
+sprite_frames = SubResource("27")
+animation = &"ShadowBurst"
+autoplay = "ShadowBurst"
+frame = 6
+frame_progress = 1.0
+script = ExtResource("2_1mvux")
+
+[connection signal="animation_finished" from="." to="." method="_on_animation_finished"]

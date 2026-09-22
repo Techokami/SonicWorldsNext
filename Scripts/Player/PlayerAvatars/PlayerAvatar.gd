@@ -118,6 +118,13 @@ func get_hands_offset() -> Vector2:
 func prep_super_material():
 	pass
 
+## Adds functionality that is used any time a player bounces off of something.
+## This is currently only used to let Shadow override this behavior to reset his air abilities.
+## NOTE: States can also specify their own bounce reactions, but this is only tangentially
+## related to that.
+func handle_bounce():
+	pass
+
 
 ## Used to send the avatar sprite into super mode
 ## note: No actual impact on abilities or invincible status -- that's handled in PlayerChar
@@ -171,3 +178,8 @@ func get_break_power(player: PlayerChar) -> int:
 		return 1
 		
 	return 0
+
+## Use to reset one-use-per-jump aerial abilities of a character. This mostly exists because Shadow
+## is more complicated than everyone else.
+func reset_air_abilities() -> void:
+	pass
