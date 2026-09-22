@@ -1,74 +1,18 @@
-extends Node2D
+extends ConnectableGimmick
 
-# Array of Arrays for each player interacting with the gimmick...
-# Please don't access/mutate this array directly, use the relevant functions
-# or add new ones where needed.
-#
-# [n][0] - player's object id
-#
-# [n][1] - player's phase - This is their current angle spinning around the top of the barrel
-#
-# [n][2] - player's radius - The radius of their spinning - if they jump on the barrel closer to the
-#          edge, their radius will be larger. If they jump on the barrel dead center, their radius
-#          will be zero.
-#
-# [n][3] - player's z level - the z level index that the player originally entered the gimmick on.
-#          Needs to be restored after disconnecting from the gimmick. While on the gimmick, the
-#          player's z level index will be shifted every frame according to their radius and phase.
-#
-# XXX - consider a statically sized array that knows the count of players at the start (possibly stored in globals?)
-# for optimal efficiency.
-var players = []
+## We want to bring the player back in a little if they are on the extreme overhang of the radius.
+const MAX_RADIUS: float = 30.0
 
-# The portions of the gimmick that are AnimatableBody need to be manually repositioned
-# once we move the the barrel due to an annoying glitch in Godot.
-# See: https://github.com/godotengine/godot/issues/58269
-var bodies_to_update = []
+## The animation offset makes it so that you aren't exactly synchronized
+## with the rotation around the barrel. The default value advances the animation
+## by 0.03 seconds to try to closely synchronize the camera facing frame
+## with where it would pop up if you were on the actual barrel from CNZ.
+const ANIMATION_OFFSET: float = -0.02
 
-# Use to find the index of the player using the player's object ID
-# Return values are the Same as Array.find(obj), but this function takes into
-# account the specific nesting of the array and treats players[n][0] as the key
-func find_player(player):
-	for i in players.size():
-		if players[i][0] == player:
-			return i
-	return -1
-
-# Use to get the player at the index of the array.
-# Returns the player if the index isn't out of bounds, otherwise returns null.
-func get_player(index):
-	if players.size() >= index + 1:
-		return players[index][0]
-	return null
-	
-#func append_player(player, phase, radius, z_level):
-#	players.append([player, phase, radius, z_level])
-	
-func get_player_phase(index):
-	return players[index][1]
-
-func set_player_phase(index, value):
-	players[index][1] = value
-	
-func get_player_radius(index):
-	return players[index][2]
-	
-func get_player_z_level(index):
-	return players[index][3]
-
-# We want to bring the player back in a little if they are on the extreme overhang of the radius
-var max_radius = 30
-
-# The animation offset makes it so that you aren't exactly synchronized with the
-# rotation around the barrel. The default value advances the animation by 0.03
-# seconds to try to closely synchronize the camera facing frame with where it would
-# pop up if you were on the actual barrel from CNZ
-var animation_offset = -0.02
-
-# how many seconds (should be expressed as frames / 60.0) it takes to go around the platform
-# Note that this is the same as the number of frames in the yRotation animation and changing
-# this will mean throwing off a bunch of stuff.
-var spinning_period = 128.0 / 60.0
+## How many seconds (should be expressed as frames / 60.0) it takes to go around the platform.
+## Note that this is the same as the number of frames in the yRotation animation and changing
+## this will mean throwing off a bunch of stuff.
+const SPINNING_PERIOD: float = 128.0 / 60.0
 
 ## Enable the trampoline mode. Needs to be combined with a maxVel to limit the maximum distance traveled.
 ## MaxVel affects the maximum velocity that can be held at any time which effectively limits the maximum
@@ -95,50 +39,85 @@ var spinning_period = 128.0 / 60.0
 # Calcuated based on max velocity, load energy is the amount of energy at which the Loaded constants have full influence
 var loadEnergy
 
-# Were one or more players holding up on the last pass through process
-var upHeld = false
-# Were one or more players holding down on the last pass through process
-var downHeld = false
+# Vertical _look_direction; depends on how many players are holding up/down (0.0 / 1.0 / -1.0)
+var _look_direction: float = 0.0
 # origin point of the platform, used for spring calculations... should probably always be 0
 #var _origin = 0 #currently unused
 # y velocity of the platform, moves the platform, determines current energy in the platform when combined with difference between current position and origin
 var _yVel = 0
 # where the platform is in relation to its origin as a float value. Maybe unnecessary? Either way I'm using it.
 var _realY = 0.0
-# The physical parts of the body that move separate from the main node
+# The physical parts of the bodies that move separate from the main node
 @onready var body = $Bodies
 
-# Called when the node enters the scene tree for the first time.
+# The portions of the gimmick that are AnimatableBody2D need to be manually
+# repositioned once we move the the barrel due to an annoying glitch in Godot.
+# See: https://github.com/godotengine/godot/issues/58269
+@onready var bodies_to_update: Array[AnimatableBody2D] = [$Bodies/ActiveBody, $Bodies/InactiveBody]
+
+var _players: Array[PlayerChar] = []
+
+const _GIMMICK_VAR_Z_INDEX: String = "CNZBarrel_z_height"
+const _GIMMICK_VAR_RADIUS: String = "CNZBarrel_radius"
+const _GIMMICK_VAR_PHASE: String = "CNZBarrel_phase"
+
+class _ActiveBody extends AnimatableBody2D:
+	func physics_collision(player: PlayerChar, hit_vector: Vector2) -> void:
+		if hit_vector.y > 0.0 and player.ground:
+			get_parent().get_parent().attach_player(player)
+
+
 func _ready():
-	loadEnergy = 0.25 * maxVel * maxVel
+	bodies_to_update[0].set_script(_ActiveBody)
+	loadEnergy = 0.25 * (maxVel ** 2)
 	
-	for my_node in body.get_children():
-		if my_node is AnimatableBody2D:
-			bodies_to_update.append(my_node)
+	# Sanity checks (the outer assert is there so that in release builds
+	# the whole code inside of it doesn't get emitted as bytecode at all)
+	assert((func() -> bool:
+		var frames: SpriteFrames = $Bodies/AnimatedSprite2D.sprite_frames
+		var sprite_size: Vector2 = frames.get_frame_texture(&"default", 0).get_size()
+		
+		# Make sure all frames are of the same size
+		for i: int in range(1, frames.get_frame_count(&"default")):
+			assert(frames.get_frame_texture(&"default", i).get_size() == sprite_size)
+		
+		# Make sure `MAX_RADIUS` corresponds with the actual sprite width
+		assert((MAX_RADIUS + 2.0) * 2 == sprite_size.x)
+		
+		# Make sure body sizes correspond with the sprite size
+		var active_body_size: Vector2 = (($Bodies/ActiveBody/CollisionShape2D as CollisionShape2D).shape as RectangleShape2D).size
+		var inactive_body_size: Vector2 = (($Bodies/InactiveBody/CollisionShape2D as CollisionShape2D).shape as RectangleShape2D).size
+		assert(active_body_size.x == sprite_size.x)
+		assert(inactive_body_size.x == sprite_size.x)
+		assert(active_body_size.y + inactive_body_size.y == sprite_size.y)
+		
+		return true
+	).call())
 
 func impart_force(velocityChange):
-	_yVel += velocityChange
-	_yVel = clamp(_yVel, -maxVel, maxVel)
+	_yVel = clamp(_yVel + velocityChange, -maxVel, maxVel)
 
 func attach_player(player: PlayerChar):
-	var animator: PlayerCharAnimationPlayer = player.get_avatar().get_animator()
-	
 	# If the player is already in the array, reject the attachment attempt.
-	if find_player(player) >= 0:
+	if player in _players:
 		return
-
-	player.set_state(PlayerChar.STATES.GIMMICK)	
-	var player_z_level = player.get_z_index()
-	var player_radius = clamp(player.global_position.x - global_position.x, -max_radius, max_radius)
-	var player_phase = 0
-	animator.play("yRotation")
-	if (player_radius < 0):
-		player_radius = player_radius * -1.0
+	
+	_players.append(player)
+	player.set_active_gimmick(self)
+	
+	player.set_state(PlayerChar.STATES.GIMMICK)
+	var animator: PlayerCharAnimationPlayer = player.get_avatar().get_animator()
+	var player_radius: float = clampf(player.global_position.x - body.global_position.x, -MAX_RADIUS, MAX_RADIUS)
+	var player_phase: float = 0.0
+	animator.play(&"yRotation")
+	if player_radius < 0.0:
+		player_radius = -player_radius
 		player_phase = PI
-		animator.advance(animation_offset)
-
-	players.append([player, player_phase, player_radius, player_z_level])
-
+		animator.advance(ANIMATION_OFFSET)
+	player.set_gimmick_var(_GIMMICK_VAR_Z_INDEX, z_index)
+	player.set_gimmick_var(_GIMMICK_VAR_RADIUS, player_radius)
+	player.set_gimmick_var(_GIMMICK_VAR_PHASE, player_phase)
+	
 	if trampolineMode:
 		# Believe it or not, it really is this simple.
 		impart_force(110.0)
@@ -148,65 +127,57 @@ func attach_player(player: PlayerChar):
 	# Prevents player from clipping on walls while they are on the fringes of the gimmick
 	player.allowTranslate = true
 
-func detach_player(player: PlayerChar, index):
-	player.set_z_index(get_player_z_level(index))
-	players.remove_at(index)
+func detach_player(player: PlayerChar, index: int):
+	player.set_z_index(player.get_gimmick_var(_GIMMICK_VAR_Z_INDEX))
+	_players.remove_at(index)
 	
 	if player.get_state() == PlayerChar.STATES.DIE:
-		player.get_avatar().get_animator().play("die")
-
-	# Clamp position on exit to prevent zips on exit -- probably shouldn't use magic numbers though.
-	player.global_position.x = clamp(player.global_position.x, global_position.x - 22, global_position.x + 22)
-
-	if player.get_state() != PlayerChar.STATES.DIE:
+		player.get_avatar().get_animator().play(&"die")
+	else:
 		player.allowTranslate = false
-		
-func set_anim(player: PlayerChar, lookUp, lookDown):
+	
+	player.unset_active_gimmick()
+	
+	# Clamp position to prevent zips on exit
+	var radius: float = MAX_RADIUS - player.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL).x / 2.0
+	var bodies_x: float = body.global_position.x
+	player.global_position.x = clampf(player.global_position.x, bodies_x - radius, bodies_x + radius)
+
+func set_anim(player: PlayerChar, look_direction: float):
 	var animator = player.get_avatar().get_animator()
 	var curAnim = animator.get_assigned_animation()
-	var targetAnim
 	
-	if lookUp and !lookDown:
-		targetAnim = "yRotationLookUp"
-	elif lookDown and !lookUp:
-		targetAnim = "yRotationLookDown"
-	else:
-		targetAnim = "yRotation"
-		
+	var targetAnim: StringName = [&"yRotationLookUp", &"yRotation", &"yRotationLookDown"][int(look_direction) + 1]
 	if targetAnim != curAnim:
 		var seekTime = animator.get_current_animation_position()
 		animator.play(targetAnim)
 		animator.advance(seekTime)
-		if targetAnim == "yRotationLookDown":
+		if look_direction > 0.0:
 			player.set_predefined_hitbox(PlayerChar.HITBOXES.CROUCH)
-			player.get_node("HitBox").position = player.hitBoxOffset.crouch
+			# TODO: Perhaps we should add a method in `PlayerChar` to access the hitbox body
+			player.get_node(^"HitBox").position = player.hitBoxOffset.crouch
 		else:
-			player.get_node("HitBox").position = player.hitBoxOffset.normal
+			player.get_node(^"HitBox").position = player.hitBoxOffset.normal
 			player.set_predefined_hitbox(PlayerChar.HITBOXES.NORMAL)
 
 func _process(delta):
-	upHeld = false
-	downHeld = false
+	_look_direction = 0.0
 
 	# We loop backwards so that if we detach a player, they won't affect the index of the next player	
-	for index in range(players.size() - 1, -1, -1):
+	for index: int in range(_players.size() - 1, -1, -1):
 		# Determine inputs, once it's available change player animations
-		# Note that we only care if one player is holding a direction even if they
-		# are fighting eachother and only the direction of current travel matters.
-		var player = get_player(index)
-		var playerHeldUp = false
-		var playerHeldDown = false
-		if player.inputs[player.INPUTS.YINPUT] < 0:
-			upHeld = true
-			playerHeldUp = true
-		elif player.inputs[player.INPUTS.YINPUT] > 0:
-			downHeld = true
-			playerHeldDown = true
+		# Note that we only care if one player is holding a _look_direction even if they
+		# are fighting eachother and only the _look_direction of current travel matters.
+		var player: PlayerChar = _players[index]
+		var player_look_direction: float = signf(player.get_y_input())
 		
-		set_anim(player, playerHeldUp, playerHeldDown)
-
+		set_anim(player, player_look_direction)
+		# Don't let AI players conflict with human player inputs
+		if player.playerControl != 0:
+			_look_direction += player_look_direction
+		
 		# If the player is closer to the center, the influence of their phase is diminished.
-		player.set_z_index(get_z_index() + 2 * get_player_radius(index) * -sin(get_player_phase(index)))
+		player.z_index = z_index + 2.0 * player.get_gimmick_var(_GIMMICK_VAR_RADIUS) * -sin(player.get_gimmick_var(_GIMMICK_VAR_PHASE))
 
 		if player.any_action_pressed():
 			detach_player(player, index)
@@ -214,73 +185,68 @@ func _process(delta):
 			player.action_jump("roll", true, false)
 			
 			# Jump should never go downwards
-			player.movement.y = min(player.movement.y + _yVel * impartFactor, 0)
+			player.movement.y = minf(player.movement.y + _yVel * impartFactor, 0.0)
 			# pop the player up a bit to make sure they don't make immediate contact again.
-			if _yVel > 0:
-				player.position.y -= _yVel * delta + 10
+			if _yVel > 0.0:
+				player.position.y -= _yVel * delta + 10.0
 			player.queue_redraw()
-			continue
-			
-		if player.get_state() != PlayerChar.STATES.GIMMICK:
+		
+		elif player.get_state() != PlayerChar.STATES.GIMMICK:
 			detach_player(player, index)
 	
 	for anim_body in bodies_to_update:
 		anim_body.global_position = body.global_position
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-var skipFrames = 0
-
-# Invoked if this gimmick operates as a trampoline.
-func physics_process_trampoline_mode(delta, isUpHeld, isDownHeld):
-	# Energy is the velocity energy plus the spring potential energy
-	var energy = 0.25 * (_yVel * _yVel) + _realY * _realY
-	var pivot = 0
-	var accelerationFactor
-	# in a zero energy system, the unloaded values are used
-	# in a max energy system, the loaded values are used
-	# anywhere in the middle, we use the weighted average
-	var loadFactor = min(energy / loadEnergy, 1.0)
-	var springConstant = springConstantLoaded * loadFactor + springConstantUnloaded * (1.0 - loadFactor)
-	var decay = decayLoaded * loadFactor + decayUnloaded * (1.0 - loadFactor)
-
-	# The further away from the pivot we are, the stronger the acceleration from the spring force
-	accelerationFactor = (pivot - _realY) * springConstant
-
-	# We don't apply decay if player influence was applied
-	var influenced = false
-
-	# The players only have influence while acceleration and velocity are working together
-	# Also, holding against the direction of travel has no effect
-	if _realY > 0 and _yVel < 0 and isUpHeld:
-		_yVel = clamp(_yVel - (180.0 * delta), -maxVel, maxVel)
-		influenced = true
-	elif _realY < 0 and _yVel > 0 and isDownHeld:
-		_yVel = clamp(_yVel * (1 + (influence * delta)), -maxVel, maxVel)
-		_yVel = clamp(_yVel + (180.0 * delta), -maxVel, maxVel)
-		influenced = true
-
-	_yVel += accelerationFactor * delta
-	_realY += _yVel * delta
-
-	if !influenced:
-		_yVel = _yVel * (1 - (decay * delta))
-
-	# We move the body rather than the node. The body has all the physical components of the gimmick,
-	body.position.y = floor(_realY)
-
 func _physics_process(delta):
 	if trampolineMode:
-		physics_process_trampoline_mode(delta, upHeld, downHeld)
+		# Energy is the velocity energy plus the spring potential energy
+		var energy = 0.25 * (_yVel * _yVel) + _realY * _realY
+		var pivot = 0
+		var accelerationFactor
+		# in a zero energy system, the unloaded values are used
+		# in a max energy system, the loaded values are used
+		# anywhere in the middle, we use the weighted average
+		var loadFactor = min(energy / loadEnergy, 1.0)
+		var springConstant = springConstantLoaded * loadFactor + springConstantUnloaded * (1.0 - loadFactor)
+		var decay = decayLoaded * loadFactor + decayUnloaded * (1.0 - loadFactor)
 
-	for index in range(players.size()):
-		var player: PlayerChar = get_player(index)
+		# The further away from the pivot we are, the stronger the acceleration from the spring force
+		accelerationFactor = (pivot - _realY) * springConstant
+
+		# We don't apply decay if player influence was applied
+		var influenced = false
+
+		# The players only have influence while acceleration and velocity are working together
+		# Also, holding against the _look_direction of travel has no effect
+		if _realY > 0.0 and _yVel < 0.0 and _look_direction < 0.0:
+			_yVel = clampf(_yVel - (180.0 * delta), -maxVel, maxVel)
+			influenced = true
+		elif _realY < 0 and _yVel > 0 and _look_direction > 0.0:
+			_yVel = clampf(_yVel * (1 + (influence * delta)), -maxVel, maxVel)
+			_yVel = clampf(_yVel + (180.0 * delta), -maxVel, maxVel)
+			influenced = true
+
+		_yVel += accelerationFactor * delta
+		_realY += _yVel * delta
+
+		if !influenced:
+			_yVel = _yVel * (1 - (decay * delta))
+
+		# We move the bodies rather than the node. The bodies has all the physical components of the gimmick,
+		body.position.y = floorf(_realY)
+	
+	for player: PlayerChar in _players:
+		var phase: float = player.get_gimmick_var(_GIMMICK_VAR_PHASE) + (delta / SPINNING_PERIOD) * 2.0 * PI
 		player.set_direction_signed(1.0, false)
-		set_player_phase(index, get_player_phase(index) + (delta / spinning_period) * 2.0 * PI)
-		player.global_position.x = floor(body.global_position.x + get_player_radius(index) * cos(get_player_phase(index)))
-		player.global_position.y = floor(body.global_position.y - player.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL).y / 2.0 - 1)
-		if player.get_state() != PlayerChar.STATES.DIE:
-			player.movement = Vector2.ZERO
+		player.set_gimmick_var(_GIMMICK_VAR_PHASE, phase)
+		player.global_position = Vector2(
+			floorf(body.global_position.x + player.get_gimmick_var(_GIMMICK_VAR_RADIUS) * cos(phase)),
+			floorf(body.global_position.y - player.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL).y / 2.0 - 1.0))
+		match player.get_state():
+			PlayerChar.STATES.DIE, PlayerChar.STATES.HIT:
+				pass
+			_:
+				player.movement = Vector2.ZERO
 		# XXX need to figure out why player 2 is mispositioned while this gimmick is moving quickly
 		player.get_camera().update()
 	
