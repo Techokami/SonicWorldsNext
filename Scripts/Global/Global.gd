@@ -378,3 +378,10 @@ func set_multimode(new_multimode: MULTIMODE) -> void:
 ## Cycles the multiplayer mode
 func cycle_multimode() -> void:
 	self.multiplayer_mode = (self.multiplayer_mode + 1) % MULTIMODE.size() as MULTIMODE
+
+# Cheat related
+
+## Since Shadow is an in development character, he has been disabled by default and must be turned
+## on via a cheat code from the character select screen. Set this to true in order to enable Shadow
+## as a character by default.
+var shadow_enabled := false
