@@ -64,6 +64,9 @@ func _process(_delta):
 func _input(event):
 	# check if paused and visible, otherwise cancel it out
 	if !get_tree().paused or !visible:
+		# Reset menu when the menu is removed but the menu isn't in action
+		if !visible and menu != 0:
+			set_menu(0)
 		return
 
 	# menu button activate
