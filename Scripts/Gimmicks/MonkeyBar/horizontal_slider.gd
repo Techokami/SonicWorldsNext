@@ -144,11 +144,11 @@ func process_move_brake(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	match state:
 		STATE.IDLE:
-			return(process_idle(delta))
+			process_idle(delta)
 		STATE.MOVE_START:
-			return(process_move_start(delta))
+			process_move_start(delta)
 		STATE.MOVE_BRAKE:
-			return(process_move_brake(delta))
+			process_move_brake(delta)
 	
 
 ## Sets the target X position of the slider

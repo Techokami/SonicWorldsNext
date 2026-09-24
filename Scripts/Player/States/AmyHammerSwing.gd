@@ -7,8 +7,8 @@ func _physics_process(delta):
 	if !parent.ground or hammerTime <= 0 or !parent.animator.is_playing() or parent.horizontalLockTimer > 0:
 		parent.set_state(parent.STATES.AIR)
 		parent.animator.play("walk")
-		# return null to cancel script
-		return null
+		# cancel the rest of this step
+		return
 	
 	# set direction
 	if parent.inputs[parent.INPUTS.XINPUT] != 0:

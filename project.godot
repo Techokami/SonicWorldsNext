@@ -8,11 +8,15 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="Sonic Worlds Next"
 run/main_scene="res://Scene/Presentation/PoweredByWorlds.tscn"
-config/features=PackedStringArray("4.3")
+config/features=PackedStringArray("4.7")
 boot_splash/bg_color=Color(1, 1, 1, 1)
 boot_splash/image="res://icon.png"
 config/icon="res://icon.png"

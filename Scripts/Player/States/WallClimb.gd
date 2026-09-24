@@ -35,7 +35,7 @@ func _physics_process(delta):
 			parent.groundSpeed = 1
 			parent.disconect_from_floor()
 			parent.set_state(parent.STATES.AIR,parent.currentHitbox.NORMAL)
-			return false
+			return
 		
 		# check for wall using the wall sensors
 
@@ -49,7 +49,7 @@ func _physics_process(delta):
 			parent.movement = Vector2.ZERO
 			parent.animator.speed_scale = 1
 			parent.set_state(parent.STATES.GLIDE,parent.currentHitbox.NORMAL)
-			return false
+			return
 		
 		# climbing edge
 		# move sensor to the top

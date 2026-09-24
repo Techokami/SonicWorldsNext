@@ -39,7 +39,7 @@ func _process(delta):
 				i.enemyCounter += 1
 				destroy()
 				# cut the script short
-				return false
+				return
 			# if destroying the enemy fails and hit player exists then hit player
 			if (i.has_method("hit_player")):
 				i.hit_player(global_position,damageType)
