@@ -11,3 +11,5 @@ This uses [Godot 4.3](https://godotengine.org/) to implement a 2D Sonic the Hedg
 Found a problem with the code? Please use the Issues tab! But see if it hasn't been reported yet to prevent duplicate reports.
 
 Want to discuss the project and ask questions? Please use the [Discussions](https://github.com/Techokami/SonicWorldsNext/discussions) tab, or ask in the official threads on SFGHQ or Sonic Retro.
+
+Please note that **we do NOT allow the use of generative AI in this project, period.** If you try to submit such material to this project, it will be denied, and repeated offenses will result in a ban. *This is non-negotiable!*
