@@ -252,7 +252,7 @@ func check_brachiate(player : PlayerChar):
 		return false
 
 	# TODO It's a small code smell, but it's still a code smell. Too much duplicated code here.
-	var brachiate_target_right = player.get_gimmick_var("brachiate_target_right")
+	var brachiate_target_right = player.get_gimmick_var("_brachiate_target_right")
 	if player.is_right_held() and brachiate_target_right != null and brachiate_target_right.size():
 		# Fail safe to prevent a bug where the player just lands on a monkey bar and attempts to go to itself
 		if brachiate_target_right[-1] == self:
@@ -263,7 +263,7 @@ func check_brachiate(player : PlayerChar):
 		brachiate_connect(player, brachiate_target_right[-1])
 		return true
 
-	var brachiate_target_left = player.get_gimmick_var("brachiate_target_left")
+	var brachiate_target_left = player.get_gimmick_var("_brachiate_target_left")
 	if player.is_left_held() and brachiate_target_left != null and brachiate_target_left.size():
 		# Fail safe to prevent a bug where the player just lands on a monkey bar and attempts to go to itself
 		if brachiate_target_left[-1] == self:
@@ -303,31 +303,37 @@ func set_brachiate_speed(new_speed):
 
 ## Sets the right brachiation target for a player to touches the left side linker
 func _on_left_linker_body_entered(body: Node2D) -> void:
-	var brachiate_targets_right = body.get_gimmick_var("brachiate_target_right")
+	var brachiate_targets_right = body.get_gimmick_var("_brachiate_target_right")
 	if brachiate_targets_right == null:
-		body.set_gimmick_var("brachiate_target_right", [self])
+		body.set_gimmick_var("_brachiate_target_right", [self])
 	else:
 		brachiate_targets_right.append(self)
 
 ## Sets the left brachiation target for a player to touches the right side linker
 func _on_right_linker_body_entered(body: Node2D) -> void:
-	var brachiate_targets_left = body.get_gimmick_var("brachiate_target_left")
+	var brachiate_targets_left = body.get_gimmick_var("_brachiate_target_left")
 	if brachiate_targets_left == null:
-		body.set_gimmick_var("brachiate_target_left", [self])
+		body.set_gimmick_var("_brachiate_target_left", [self])
 	else:
 		brachiate_targets_left.append(self)
 
 ## Disconnects the right brachiation target for a player that leaves the left side linker
 func _on_left_linker_body_exited(body: Node2D) -> void:
-	var brachiate_targets_right = body.get_gimmick_var("brachiate_target_right")
+	var brachiate_targets_right = body.get_gimmick_var("_brachiate_target_right")
 	if brachiate_targets_right != null:
-		brachiate_targets_right.erase(self)
+		if brachiate_targets_right.size() > 1:
+			brachiate_targets_right.erase(self)
+		else:
+			body.unset_gimmick_var("_brachiate_target_right")
 
 ## Disconnects the left brachiation target for a player that leaves the right side linker
 func _on_right_linker_body_exited(body: Node2D) -> void:
-	var brachiate_targets_left = body.get_gimmick_var("brachiate_target_left")
+	var brachiate_targets_left = body.get_gimmick_var("_brachiate_target_left")
 	if brachiate_targets_left != null:
-		brachiate_targets_left.erase(self)
+		if brachiate_targets_left.size() > 1:
+			brachiate_targets_left.erase(self)
+		else:
+			body.unset_gimmick_var("_brachiate_target_left")
 
 ## Locks the gimmick for the player - used if the player is forced off the
 ## gimmick in a way that might be likely to result in immediate reconnection.
