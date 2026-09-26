@@ -16,11 +16,11 @@ func _physics_process(delta):
 	# Set air if not on floor
 	if (!parent.ground):
 		parent.set_state(parent.STATES.AIR,parent.currentHitbox.ROLL)
-		return null
+		return
 	# Set normal if speed is 0
 	if (parent.movement.x == 0):
 		parent.set_state(parent.STATES.NORMAL)
-		return null
+		return
 	
 	# Lock vertical movement
 	parent.movement.y = min(parent.movement.y,0)

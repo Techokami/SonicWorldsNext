@@ -38,8 +38,7 @@ func _process(delta):
 				Global.add_score(global_position,Global.SCORE_COMBO[min(Global.SCORE_COMBO.size()-1,i.enemyCounter)])
 				i.enemyCounter += 1
 				destroy()
-				# cut the script short
-				return false
+				return
 			# if destroying the enemy fails and hit player exists then hit player
 			if (i.has_method("hit_player")):
 				i.hit_player(global_position,damageType)

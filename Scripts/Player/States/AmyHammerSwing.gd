@@ -8,7 +8,7 @@ func _physics_process(delta):
 		parent.set_state(parent.STATES.AIR)
 		parent.animator.play("walk")
 		# return null to cancel script
-		return null
+		return
 	
 	# set direction
 	if parent.inputs[parent.INPUTS.XINPUT] != 0:

@@ -945,7 +945,7 @@ func is_right_held():
 func get_state():
 	return currentState
 
-func set_state(newState, forceMask = Vector2.ZERO):	
+func set_state(newState, forceMask = Vector2.ZERO):
 	defaultHitBoxPos = hitBoxOffset.normal
 	$HitBox.position = defaultHitBoxPos
 	# reset the center offset

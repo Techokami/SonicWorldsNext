@@ -56,7 +56,7 @@ func _process(delta):
 				parent.animator.play("RESET")
 				parent.action_jump()
 				parent.set_state(parent.STATES.JUMP)
-		return null
+		return
 	
 	if parent.ground and !skid:
 		if parent.movement.x == 0:
@@ -186,13 +186,12 @@ func _physics_process(delta):
 		parent.set_state(parent.STATES.ROLL)
 		parent.animator.play("roll")
 		parent.sfx[1].play()
-		return null
+		return
 	
 	# set air state
 	if (!parent.ground):
 		parent.set_state(parent.STATES.AIR)
-		#Stop script
-		return null
+		return
 	
 	# skidding
 	if !skid and sign(parent.inputs[parent.INPUTS.XINPUT]) != sign(parent.movement.x) and abs(parent.movement.x) >= 5*60 and parent.inputs[parent.INPUTS.XINPUT] != 0 and parent.horizontalLockTimer <= 0:

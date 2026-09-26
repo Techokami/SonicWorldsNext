@@ -167,7 +167,8 @@ func draw_tool():
 
 func _draw():
 	if Engine.is_editor_hint():
-		return draw_tool()
+		draw_tool()
+		return
 
 	for n in range(cur_height, 0, -link_texture.get_height()):
 		draw_texture(link_texture, Vector2(-link_texture.get_width() / 2.0, n - link_texture.get_height()))
