@@ -152,13 +152,8 @@ func set_anim(player: PlayerChar, look_direction: float):
 		var seekTime = animator.get_current_animation_position()
 		animator.play(targetAnim)
 		animator.advance(seekTime)
-		if look_direction > 0.0:
-			player.set_predefined_hitbox(PlayerChar.HITBOXES.CROUCH)
-			# TODO: Perhaps we should add a method in `PlayerChar` to access the hitbox body
-			player.get_node(^"HitBox").position = player.hitBoxOffset.crouch
-		else:
-			player.get_node(^"HitBox").position = player.hitBoxOffset.normal
-			player.set_predefined_hitbox(PlayerChar.HITBOXES.NORMAL)
+		player.set_predefined_hitbox(
+			PlayerChar.HITBOXES.CROUCH if look_direction > 0.0 else PlayerChar.HITBOXES.NORMAL, true)
 
 func _process(delta):
 	_look_direction = 0.0
