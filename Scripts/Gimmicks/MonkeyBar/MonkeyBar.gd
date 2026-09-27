@@ -250,29 +250,21 @@ func check_brachiate(player : PlayerChar):
 	# If the player isn't brachiating, they might not be allowed to depending on gimmick configuration and status.
 	if depart_locked:
 		return false
-
-	# TODO It's a small code smell, but it's still a code smell. Too much duplicated code here.
-	var brachiate_target_right = player.get_gimmick_var("_brachiate_target_right")
-	if player.is_right_held() and brachiate_target_right != null and brachiate_target_right.size():
-		# Fail safe to prevent a bug where the player just lands on a monkey bar and attempts to go to itself
-		if brachiate_target_right[-1] == self:
-			return false
-		if brachiate_target_right[-1].impart_locked == true:
-			return false
-		player.set_direction(player.DIRECTIONS.RIGHT)
-		brachiate_connect(player, brachiate_target_right[-1])
-		return true
-
-	var brachiate_target_left = player.get_gimmick_var("_brachiate_target_left")
-	if player.is_left_held() and brachiate_target_left != null and brachiate_target_left.size():
-		# Fail safe to prevent a bug where the player just lands on a monkey bar and attempts to go to itself
-		if brachiate_target_left[-1] == self:
-			return false
-		if brachiate_target_left[-1].impart_locked == true:
-			return false
-		player.set_direction(player.DIRECTIONS.LEFT)
-		brachiate_connect(player, brachiate_target_left[-1])
-		return true
+	
+	var x_input: float = player.get_x_input()
+	if x_input != 0.0:
+		var brachiate_targets: Variant = player.get_gimmick_var(
+			"_brachiate_target_right" if x_input > 0.0 else "_brachiate_target_left")
+		if brachiate_targets is Array and brachiate_targets.size() != 0:
+			var target: Brachiatable = brachiate_targets[-1]
+			# Fail safe to prevent a bug where the player just lands on a monkey bar and attempts to go to itself
+			if target == self:
+				return false
+			if target.impart_locked == true:
+				return false
+			player.set_direction_signed(signf(x_input))
+			brachiate_connect(player, target)
+			return true
 	
 	return false
 
