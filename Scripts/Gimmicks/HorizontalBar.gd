@@ -122,6 +122,7 @@ func _add_player(player: PlayerChar) -> void:
 	var animator: PlayerCharAnimationPlayer = player.get_avatar().get_animator()
 	if absf(player.movement.y) >= swing_contact_speed:
 		# This is ok for now, but we need to clean it up.
+		animator.reset_loops() # We need to count loops, so it's time to reset them.
 		animator.play(&"swingHorizontalBarMHZ", -1.0, 1.0, false)
 		player.set_gimmick_var(_GIMMICK_VAR_IS_SWINGING, true)
 		player.set_gimmick_var(_GIMMICK_VAR_ENTRY_VELOCITY, player.movement.y)
@@ -286,14 +287,15 @@ func _process_player_launch(player: PlayerChar) -> void:
 	
 	# If brakes are allowed, we want to allow slamming the breaks
 	# a little faster than the upward animation normally plays out.
-	if anim_pos >= 0.91 and player.get_y_input() * entry_vel < 0.0 and allow_brake:
+	var num_loops: int = animator.get_loops()
+	if (anim_pos >= 0.91 or num_loops > 0) and player.get_y_input() * entry_vel < 0.0 and allow_brake:
 		player.set_gimmick_var(_GIMMICK_VAR_IS_SWINGING, false)
 		animator.play(&"hangShimmy", -1.0, shimmy_speed / 60.0, false)
 	
 	# Otherwise we just launch the player on out of the gimmick.
 	# DW's note ‒ this multiplication stuff with the length was stupid of me
 	# and I really should have been relying on signals.
-	if anim_pos >= 0.97:
+	if num_loops > 0:
 		_remove_player(player, true, entry_vel < 0.0)
 		player.movement.y = (
 				swing_speed_constant if launch_speed_mode == _LAUNCH_SPEED_MODE.CONSTANT else
