@@ -126,7 +126,7 @@ func _add_player(player: PlayerChar) -> void:
 	if absf(player.movement.y) >= swing_contact_speed:
 		# This is ok for now, but we need to clean it up.
 		animator.reset_loops() # We need to count loops, so it's time to reset them.
-		animator.play(&"swingHorizontalBarMHZ", -1.0, 1.0, false)
+		animator.play(&"grabHorizontalBar", -1.0, 1.0, false)
 		player.set_gimmick_var(_GIMMICK_VAR_IS_SWINGING, true)
 		player.set_gimmick_var(_GIMMICK_VAR_ENTRY_VELOCITY, player.movement.y)
 	
