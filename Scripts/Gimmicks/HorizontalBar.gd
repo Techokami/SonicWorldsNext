@@ -103,6 +103,9 @@ enum _LAUNCH_SPEED_MODE { MULTIPLY, CONSTANT }
 ## When [member launch_speed_mode] is [code]MULTIPLY[/code], this is the value that multiplies against the player's entry speed.
 @export var multiply_swing_speed: float = 1.2
 
+## How many times to spin around the bar before launching.
+@export_range(1, 1, 1, "or_greater") var rotations: int = 1
+
 const _GIMMICK_VAR_ENTRY_VELOCITY: String = "entry_velocity"
 const _GIMMICK_VAR_IS_SWINGING: String = "is_swinging"
 const _GIMMICK_VAR_IS_MOVING: String = "is_moving"
@@ -288,14 +291,14 @@ func _process_player_launch(player: PlayerChar) -> void:
 	# If brakes are allowed, we want to allow slamming the breaks
 	# a little faster than the upward animation normally plays out.
 	var num_loops: int = animator.get_loops()
-	if (anim_pos >= 0.91 or num_loops > 0) and player.get_y_input() * entry_vel < 0.0 and allow_brake:
+	if anim_pos >= 0.91 and player.get_y_input() * entry_vel < 0.0 and allow_brake:
 		player.set_gimmick_var(_GIMMICK_VAR_IS_SWINGING, false)
 		animator.play(&"hangShimmy", -1.0, shimmy_speed / 60.0, false)
 	
 	# Otherwise we just launch the player on out of the gimmick.
 	# DW's note ‒ this multiplication stuff with the length was stupid of me
 	# and I really should have been relying on signals.
-	if num_loops > 0:
+	if num_loops >= rotations:
 		_remove_player(player, true, entry_vel < 0.0)
 		player.movement.y = (
 				swing_speed_constant if launch_speed_mode == _LAUNCH_SPEED_MODE.CONSTANT else

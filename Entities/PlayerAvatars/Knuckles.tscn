@@ -1013,6 +1013,7 @@ tracks/1/keys = {
 [sub_resource type="Animation" id="Animation_3djeu"]
 resource_name = "swingHorizontalBarMHZ"
 length = 0.400002
+loop_mode = 1
 step = 0.0166667
 tracks/0/type = "value"
 tracks/0/imported = false
