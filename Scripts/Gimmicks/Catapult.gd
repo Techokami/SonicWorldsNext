@@ -70,11 +70,6 @@ enum _DIRECTIONS { LEFT, RIGHT }
 # List of affected players
 var _players: Array[PlayerChar] = []
 
-# Set to true when the player is attached to the catapult. This is used
-# to ignore the collision if the player was colliding with a wall
-# starting from the 1'st frame
-var _colliding_from_1st_frame: Array[bool] = []
-
 # Is the catapult moving forward?
 var _launching: bool = false
 
@@ -85,6 +80,11 @@ var _velocity: float = 0.0
 # so the user would be able to see the value of that variable
 # in the editor, but wouldn't be able to tamper with it
 var _allow_launch_velocity_change: bool = true
+
+# Set to true when the player is attached to the catapult. This is used
+# to ignore the collision if the player was colliding with a wall
+# starting from the 1'st frame
+const _GIMMICK_VAR_COLLIDING_FROM_1ST_FRAME: String = "catapult_colliding_from_1st_frame"
 
 # This class is assigned to the $Platform node via `set_script()`,
 # so the latter could detect a player colliding with it
@@ -146,8 +146,7 @@ func _physics_process(delta: float) -> void:
 		var attachment_pivot_pos: Vector2 = $Platform/AttachmentPivot.global_position
 		
 		# Loop through all affected players
-		for i: int in _players.size():
-			var player = _players[i]
+		for player: PlayerChar in _players:
 			if player.get_active_gimmick() != self:
 				continue
 			
@@ -159,13 +158,13 @@ func _physics_process(delta: float) -> void:
 			# if the player collides with something
 			if player.check_for_ceiling() or player.check_for_front_wall() or player.check_for_back_wall():
 				# Don't abort if the player was colliding starting from the 1'st frame
-				if _colliding_from_1st_frame[i]:
+				if player.get_gimmick_var(_GIMMICK_VAR_COLLIDING_FROM_1ST_FRAME):
 					pass # Do nothing
 				else:
 					_abort_launch = true
 					player.global_position = old_position
 			else:
-				_colliding_from_1st_frame[i] = false
+				player.set_gimmick_var(_GIMMICK_VAR_COLLIDING_FROM_1ST_FRAME, false)
 		
 		# If we are at the destination point, then we need to launch
 		# all affected players forward.
@@ -195,9 +194,7 @@ func _physics_process(delta: float) -> void:
 				# Lock for 15 frames
 				player.set_horizontal_lock_timer(15.0 / 60.0)
 			
-			# Clear player arrays
 			_players.clear()
-			_colliding_from_1st_frame.clear()
 			
 			# Unset the launching state, so the catapult
 			# can move back to the initial position
@@ -249,7 +246,7 @@ func _player_collision(player: PlayerChar) -> void:
 	# Assume the player to be colliding with a wall from the start,
 	# so this can be ignored for the first few frames until the player
 	# doesn't collide with anything
-	_colliding_from_1st_frame.append(true)
+	player.set_gimmick_var(_GIMMICK_VAR_COLLIDING_FROM_1ST_FRAME, true)
 	
 	# Attach the player to the gimmick
 	player.set_direction_signed(scale.x)
