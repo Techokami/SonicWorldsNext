@@ -97,13 +97,7 @@ func disconnect_player(player: PlayerChar):
 		player.set_state(PlayerChar.STATES.JUMP)
 		player.get_avatar().get_animator().play("roll")
 	
-	var unlock_func = func ():
-		player.clear_single_locked_gimmick(self)
-	
-	var timer:SceneTreeTimer = get_tree().create_timer(0.25, false)
-	timer.timeout.connect(unlock_func, CONNECT_DEFERRED)
-	player.add_locked_gimmick(self)
-	pass
+	player.timed_gimmick_lock(self, 0.25)
 
 func process_game(delta):
 	var players_to_check = $FBZ_Pylon_Area.get_overlapping_bodies()

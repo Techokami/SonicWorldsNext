@@ -62,18 +62,6 @@ func connect_player(player: PlayerChar):
 	player.global_position.x = get_global_position().x
 	
 	player.set_active_gimmick(self)
-	
-## Locks the gimmick for the player - prevents the player from immediately
-## reconnecting after launching off the gimmick.
-func temp_lock_gimmick(player: PlayerChar) -> void:
-	var unlock_func = func ():
-		player.clear_single_locked_gimmick(self)
-	
-	var timer:SceneTreeTimer = get_tree().create_timer(0.25, false)
-	timer.timeout.connect(unlock_func, CONNECT_DEFERRED)
-	
-	player.add_locked_gimmick(self)
-	pass
 
 ## Disconnects the player from the bar. If we came in here due to the end
 ## of the animation, 
@@ -90,7 +78,7 @@ func disconnect_player(player: PlayerChar, do_launch: bool = true):
 	
 	player.unset_active_gimmick()
 	# Lock the gimmick for a short bit now so that the player can slip past if it fthey launched
-	temp_lock_gimmick(player)
+	player.timed_gimmick_lock(self, 0.25)
 
 ## Disconnects either on animation or when the player attempts to jump off
 func player_process(player : PlayerChar, _delta : float):

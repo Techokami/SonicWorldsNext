@@ -324,18 +324,6 @@ func _on_right_linker_body_exited(body: Node2D) -> void:
 		else:
 			body.unset_gimmick_var("_brachiate_target_left")
 
-## Locks the gimmick for the player - used if the player is forced off the
-## gimmick in a way that might be likely to result in immediate reconnection.
-func temp_lock_gimmick(player) -> void:
-	var unlock_func = func ():
-		player.clear_single_locked_gimmick(self)
-	
-	var timer:SceneTreeTimer = get_tree().create_timer(0.5, false)
-	timer.timeout.connect(unlock_func, CONNECT_DEFERRED)
-	
-	player.add_locked_gimmick(self)
-	pass
-
 func player_process(player: PlayerChar, _delta):
 	if player.any_action_pressed():
 		player.reset_double_jump_action()
@@ -354,7 +342,7 @@ func player_process(player: PlayerChar, _delta):
 		
 	if player.ground or player.check_for_ceiling() or \
 			player.check_for_back_wall() or player.check_for_front_wall():
-		temp_lock_gimmick(player)
+		player.timed_gimmick_lock(self, 0.5)
 		disconnect_player(player)
 		return
 		
@@ -383,6 +371,6 @@ func handle_animation_finished(player : PlayerChar, animation):
 # grabbed if the player is launched off with a spring or something.
 func player_force_detach_callback(player : PlayerChar):
 	# note: it might be more performant to set to null instead.
-	temp_lock_gimmick(player)
+	player.timed_gimmick_lock(self, 0.5)
 	disconnect_player(player)
 	pass
