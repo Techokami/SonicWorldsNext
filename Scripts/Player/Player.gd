@@ -1571,7 +1571,17 @@ func set_air_control(control: bool) -> void:
 # Also be aware that failing to disconnect a gimmick when you should is going to cause lots of
 # problems with other gimmick interactions.
 
-## Binds the player to the requested gimmick.[br]
+func _clean_up_gimmick_vars() -> void:
+	var new_variables: Dictionary = {}
+	for var_name: StringName in gimmick_variables:
+		if var_name.begins_with("_"):
+			new_variables[var_name] = gimmick_variables[var_name]
+	gimmick_variables = new_variables
+
+
+## Binds the player to the requested gimmick. Cleans up all [i]non-persistent[/i]
+## gimmick variables (see [method set_gimmick_var] for the definition of
+## [i]persistent[/i] variables).[br]
 ## [param gimmick] — gimmick to bind the player to.[br]
 ## [param allowSwap] — enable to make the old gimmick execute its own
 ##        [method ConnectableGimmick.player_force_detach_callback] and to
@@ -1589,21 +1599,28 @@ func set_active_gimmick(gimmick : ConnectableGimmick, allowSwap : bool=false) ->
 		# to run that gimmick's player forced detached callback
 		active_gimmick.player_force_detach_callback(self)
 	
+	_clean_up_gimmick_vars()
 	active_gimmick = gimmick
 	return true
 
 
-## Unbinds the gimmick from the player.
+## Unbinds the gimmick from the player. Cleans up all [i]"non-persistent"[/i]
+## gimmick variables (see [method set_gimmick_var] for the definition of
+## [i]persistent[/i] variables).
 func unset_active_gimmick() -> void:
+	_clean_up_gimmick_vars()
 	active_gimmick = null
 
 
 ## Unbinds the player from its current gimmick, but only after running its force detach callback.
+## Cleans up all [i]"non-persistent"[/i] gimmick variables (see [method set_gimmick_var]
+## for the definition of [i]persistent[/i] variables).
 func force_detach() -> void:
 	if active_gimmick == null:
 		return
 
 	active_gimmick.player_force_detach_callback(self)
+	_clean_up_gimmick_vars()
 	active_gimmick = null
 
 
@@ -1614,12 +1631,23 @@ func get_active_gimmick() -> ConnectableGimmick:
 	return active_gimmick
 
 
-## Sets a value in the player's gimmick variable dictionary. Uses a key-value pair.
+## Sets a value in the player's gimmick variable dictionary. Uses a key-value pair.[br]
+## [b]Note:[/b] Prefixing the name with [code]"_"[/code] would make the variable
+## [i]"persistent"[/i]: [method set_active_gimmick], [method unset_active_gimmick]
+## and [method force_detach] won't remove it automatically, so you'll need
+## to clean it up manually using [method unset_gimmick var].[br]
+## [b]Note (2):[/b] creating a gimmick variable right before calling [method set_active_gimmick]
+## would result in the variable getting immediately removed by the latter, if the variable wasn't
+## [i]"presistent[/i] (see above).
 func set_gimmick_var(gimmickVarName: String, gimmickVarValue) -> void:
 	gimmick_variables[gimmickVarName] = gimmickVarValue
 
 
-## Removes a variable from the player's gimmick variable dictionary. Provide a key.
+## Removes a variable from the player's gimmick variable dictionary. Provide a key.[br]
+## [b]Note:[/b] There's no need to call this function when using
+## [member set_active_gimmick] or [member unset_active_gimmick], as these
+## functions automatically clean up all [i]"non-persistent"[/i] gimmick variables
+## (see [method set_gimmick_var] for the definition of [i]persistent[/i] variables).
 func unset_gimmick_var(gimmickVarName) -> void:
 	gimmick_variables.erase(gimmickVarName)
 
