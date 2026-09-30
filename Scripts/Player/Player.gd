@@ -1579,17 +1579,15 @@ func set_air_control(control: bool) -> void:
 ## Returns [code]true[/code] if gimmick was able to be connected, [code]false[/code] otherwise.[br]
 ## Note: Never returns [code]false[/code] if [param allowSwap] is set.
 func set_active_gimmick(gimmick : ConnectableGimmick, allowSwap : bool=false) -> bool:
-	if allowSwap:
-		if active_gimmick != null: # if there is already an active gimmick, we need to run that
-								  # gimmicks player forced detached callback.
-			active_gimmick.player_force_detach_callback(self)
-		
-		active_gimmick = gimmick
-		return true
-	
-	# when swap is not allowed, we only set it if the player isn't already attached to another gimmick.
 	if active_gimmick != null:
-		return false
+		# when swap is not allowed, we only set it if the player
+		# isn't already attached to another gimmick
+		if not allowSwap:
+			return false
+		
+		# if there is already an active gimmick, we need
+		# to run that gimmick's player forced detached callback
+		active_gimmick.player_force_detach_callback(self)
 	
 	active_gimmick = gimmick
 	return true
