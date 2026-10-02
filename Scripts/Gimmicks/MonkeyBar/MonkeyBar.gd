@@ -105,6 +105,11 @@ func connect_player(player : PlayerChar, allowSwap: bool = false) -> void:
 	pass
 	
 func disconnect_player(player : PlayerChar) -> void:
+	# If the player is not switching to the next monkeybar, then we don't need
+	# the brachiate arm variable anymore; unset it.
+	if player.get_gimmick_var("brachiate_switching_to_next") == null:
+		player.unset_gimmick_var("_brachiate_arm")
+	
 	player.unset_active_gimmick()
 	
 	if player.get_state() == PlayerChar.STATES.GIMMICK:
@@ -221,15 +226,15 @@ func brachiate_connect(player : PlayerChar, brachiate_target : Brachiatable) -> 
 	# Pick an arm... we should alternate arms until the player gets off. All characters
 	# Start off with their right arm... though you could reverse this by changing the
 	# brachiate_right animation or by tweaking this code of course.
-	var last_arm = player.get_gimmick_var("brachiate_arm")
+	var last_arm = player.get_gimmick_var("_brachiate_arm")
 	var next_arm = ARM_SELECTION.RIGHT
 	if last_arm == null:
-		player.set_gimmick_var("brachiate_arm", ARM_SELECTION.RIGHT)
+		player.set_gimmick_var("_brachiate_arm", ARM_SELECTION.RIGHT)
 	elif last_arm == ARM_SELECTION.RIGHT:
-		player.set_gimmick_var("brachiate_arm", ARM_SELECTION.LEFT)
+		player.set_gimmick_var("_brachiate_arm", ARM_SELECTION.LEFT)
 		next_arm = ARM_SELECTION.LEFT
 	else:
-		player.set_gimmick_var("brachiate_arm", ARM_SELECTION.RIGHT)
+		player.set_gimmick_var("_brachiate_arm", ARM_SELECTION.RIGHT)
 
 	# Play the animation associated with your current brachiation arm
 	if next_arm == ARM_SELECTION.RIGHT:
@@ -373,7 +378,11 @@ func handle_animation_finished(player : PlayerChar, animation):
 	if !brachiate_target:
 		# This also shouldn't happen. But I'm too lazy to use asserts.
 		return
-
+	
+	# Let `disconnect_player()` know that we need to keep gimmick variables,
+	# as they will be reused by the next Brachiatable gimmick.
+	player.set_gimmick_var("brachiate_switching_to_next", true)
+	
 	brachiate_target.connect_player(player, true)
 		
 	pass
