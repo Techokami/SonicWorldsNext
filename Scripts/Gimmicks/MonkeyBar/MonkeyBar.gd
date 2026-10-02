@@ -224,25 +224,17 @@ func brachiate_connect(player : PlayerChar, brachiate_target : Brachiatable) -> 
 	player.set_gimmick_var("brachiate_target_cur", brachiate_target)
 	
 	# Pick an arm... we should alternate arms until the player gets off. All characters
-	# Start off with their right arm... though you could reverse this by changing the
+	# start off with their right arm... though you could reverse this by changing the
 	# brachiate_right animation or by tweaking this code of course.
-	var last_arm = player.get_gimmick_var("_brachiate_arm")
-	var next_arm = ARM_SELECTION.RIGHT
-	if last_arm == null:
-		player.set_gimmick_var("_brachiate_arm", ARM_SELECTION.RIGHT)
-	elif last_arm == ARM_SELECTION.RIGHT:
-		player.set_gimmick_var("_brachiate_arm", ARM_SELECTION.LEFT)
-		next_arm = ARM_SELECTION.LEFT
-	else:
-		player.set_gimmick_var("_brachiate_arm", ARM_SELECTION.RIGHT)
-
+	var last_arm: ARM_SELECTION = player.get_gimmick_var("_brachiate_arm", ARM_SELECTION.LEFT)
+	assert(ARM_SELECTION.size() == 2)
+	var next_arm: ARM_SELECTION = ((last_arm + 1) & 1) as ARM_SELECTION
+	player.set_gimmick_var("_brachiate_arm", next_arm)
+	
 	# Play the animation associated with your current brachiation arm
-	if next_arm == ARM_SELECTION.RIGHT:
-		player.get_avatar().get_animator().play("brachiateRight", -1,
-		                                        brachiate_target.brachiate_speed)
-	else:
-		player.get_avatar().get_animator().play("brachiateLeft", -1,
-		                                        brachiate_target.brachiate_speed)
+	player.get_avatar().get_animator().play(
+		"brachiateRight" if next_arm == ARM_SELECTION.RIGHT else "brachiateLeft",
+		-1, brachiate_target.brachiate_speed)
 
 ## Checks if the player can swing like a monkey from one monkeybar to another
 ## and if so, starts the process.
