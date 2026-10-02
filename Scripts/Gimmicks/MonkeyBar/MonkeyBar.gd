@@ -116,7 +116,6 @@ func disconnect_player(player : PlayerChar) -> void:
 		player.get_avatar().get_animator().play("roll")
 		player.set_state(player.STATES.JUMP)
 		
-	player.unset_gimmick_var("brachiate_target_cur")
 	player_dismounted.emit(player)
 	pass
 

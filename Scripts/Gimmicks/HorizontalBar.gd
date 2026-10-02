@@ -163,11 +163,6 @@ func _remove_player(player: PlayerChar, eject: bool = false, upwards: bool = fal
 		else:
 			animator.play(&"walk", -1.0, 1.0, false)
 	
-	# clean up
-	player.unset_gimmick_var(_GIMMICK_VAR_IS_JUMP_OFF_PRESSED)
-	player.unset_gimmick_var(_GIMMICK_VAR_IS_MOVING)
-	player.unset_gimmick_var(_GIMMICK_VAR_ENTRY_VELOCITY)
-	player.unset_gimmick_var(_GIMMICK_VAR_IS_SWINGING)
 	player.unset_active_gimmick()
 
 func _clamp_player_x_position(player: PlayerChar) -> void:
