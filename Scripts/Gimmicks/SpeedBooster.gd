@@ -17,7 +17,8 @@ func _ready():
 func _on_SpeedBooster_body_entered(body: PlayerChar):
 	# DO THE BOOST, WHOOOOOSH!!!!!!!
 	body.movement.x = speed*(-1+(boostDirection*2))*60
-	body.horizontalLockTimer = (15.0/60.0) # lock for 15 frames
+	body.set_horizontal_lock_timer(15.0/60.0) # lock for 15 frames
+	body.set_direction(boostDirection as PlayerChar.DIRECTIONS)
 	$sfxSpring.play()
 	# exit out of state on certain states
 	match(body.get_state()):
