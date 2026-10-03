@@ -1507,9 +1507,9 @@ enum BOUNCE_MODES {
 ## [param bounce_mode] - What the bounce mode should be - see BOUNCE_MODES enum for list of available modes
 ##                Note that not every state is necessarily going to care what the bounce mode is.
 func player_bounce(source: Node2D, bounce_mode: PlayerChar.BOUNCE_MODES) -> void:
-	var current_state: PlayerState = get_state_object(current_state)
+	var current_state_obj: PlayerState = get_state_object(current_state)
 	player_avatar.handle_bounce()
-	current_state.state_player_bounce(source, bounce_mode)
+	current_state_obj.state_player_bounce(source, bounce_mode)
 
 
 ## Gets the player's direction using the [enum DIRECTIONS] enum.
