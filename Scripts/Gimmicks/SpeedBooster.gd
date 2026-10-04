@@ -6,7 +6,8 @@ enum DIRECTION { LEFT, RIGHT }
 @export var boostDirection: DIRECTION = DIRECTION.RIGHT:
 	set(value):
 		boostDirection = value
-		$Booster.flip_h = (boostDirection == DIRECTION.RIGHT)
+		if is_node_ready():
+			$Booster.flip_h = (boostDirection == DIRECTION.RIGHT)
 
 @export var speed = 16
 
