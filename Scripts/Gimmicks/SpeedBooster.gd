@@ -3,7 +3,7 @@ extends Area2D
 
 
 enum DIRECTION { LEFT, RIGHT }
-@export var boostDirection: DIRECTION = DIRECTION.LEFT:
+@export var boostDirection: DIRECTION = DIRECTION.RIGHT:
 	set(value):
 		boostDirection = value
 		$Booster.flip_h = (boostDirection == DIRECTION.RIGHT)
