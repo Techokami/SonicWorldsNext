@@ -1,4 +1,4 @@
-[gd_scene load_steps=69 format=3 uid="uid://d3vtvdbdn6g8v"]
+[gd_scene load_steps=70 format=3 uid="uid://d3vtvdbdn6g8v"]
 
 [ext_resource type="Script" path="res://Scripts/Player/PlayerAvatars/AmyAvatar.gd" id="1_onyi3"]
 [ext_resource type="Script" path="res://Scripts/Player/PlayerAnimation.gd" id="1_x2red"]
@@ -386,6 +386,61 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [96, 97, 98, 99]
+}
+
+[sub_resource type="Animation" id="Animation_bp5yl"]
+resource_name = "grabHorizontalBar"
+length = 0.0167
+step = 0.0166667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Amy/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [106]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Amy/Sprite2D:offset")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(0, 16)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Amy/CenterReference:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(0, 17)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Amy/PlayerAnimation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"swingHorizontalBar"],
+"method": &"queue"
+}]
 }
 
 [sub_resource type="Animation" id="123"]
@@ -884,7 +939,7 @@ tracks/1/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_jkllx"]
-resource_name = "swingHorizontalBarMHZ"
+resource_name = "swingHorizontalBar"
 length = 0.400002
 loop_mode = 1
 step = 0.0166667
@@ -895,10 +950,10 @@ tracks/0/path = NodePath("Amy/Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0166667, 0.05, 0.116667, 0.2, 0.266667, 0.316667, 0.366667),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.05, 0.116667, 0.2, 0.266667, 0.316667, 0.366667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [106, 101, 102, 103, 104, 105, 106, 101]
+"values": [101, 102, 103, 104, 105, 106, 101]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -907,10 +962,10 @@ tracks/1/path = NodePath("Amy/Sprite2D:offset")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.0166667, 0.05, 0.116667, 0.2, 0.266667, 0.316667, 0.366667),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.05, 0.116667, 0.2, 0.266667, 0.316667, 0.366667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [Vector2(0, 16), Vector2(0, 0), Vector2(0, -20), Vector2(0, -20), Vector2(0, -19), Vector2(0, 8), Vector2(0, 16), Vector2(0, 0)]
+"values": [Vector2(0, 0), Vector2(0, -20), Vector2(0, -20), Vector2(0, -19), Vector2(0, 8), Vector2(0, 16), Vector2(0, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -919,10 +974,24 @@ tracks/2/path = NodePath("Amy/CenterReference:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.0167, 0.0500001, 0.116667, 0.2, 0.266667, 0.316667, 0.366667),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.0500001, 0.116667, 0.2, 0.266667, 0.316667, 0.366667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [Vector2(0, 17), Vector2(0, 9), Vector2(0, -14), Vector2(0, -17), Vector2(0, -14), Vector2(0, 1), Vector2(0, 17), Vector2(0, 9)]
+"values": [Vector2(0, 9), Vector2(0, -14), Vector2(0, -17), Vector2(0, -14), Vector2(0, 1), Vector2(0, 17), Vector2(0, 9)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Amy/PlayerAnimation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.3841),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"increment_loops"
+}]
 }
 
 [sub_resource type="Animation" id="121"]
@@ -1167,6 +1236,7 @@ _data = {
 "edge1": SubResource("104"),
 "edge2": SubResource("105"),
 "edge3": SubResource("106"),
+"grabHorizontalBar": SubResource("Animation_bp5yl"),
 "grabVerticalBar": SubResource("123"),
 "grabVerticalBarOffset": SubResource("124"),
 "hammerSwing": SubResource("Animation_eeuda"),
@@ -1189,7 +1259,7 @@ _data = {
 "spring": SubResource("84"),
 "springScrew": SubResource("119"),
 "super": SubResource("97"),
-"swingHorizontalBarMHZ": SubResource("Animation_jkllx"),
+"swingHorizontalBar": SubResource("Animation_jkllx"),
 "swingVerticalBar": SubResource("121"),
 "swingVerticalBarManaged": SubResource("125"),
 "swingVerticalBarOffset": SubResource("122"),

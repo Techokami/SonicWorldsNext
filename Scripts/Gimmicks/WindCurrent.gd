@@ -90,7 +90,6 @@ func _add_player(player: PlayerChar) -> void:
 		return
 
 	players.append(player)
-	player.set_gimmick_var("ActiveCurrent", self)
 	player_entered.emit()
 	player_count += 1
 
@@ -99,8 +98,6 @@ func _remove_player(player: PlayerChar) -> void:
 		return
 
 	players.erase(player)
-	if player.get_gimmick_var("ActiveCurrent") == self:
-		player.unset_gimmick_var("ActiveCurrent")
 	if normal_state_on_exit and player.get_state() == PlayerChar.STATES.GIMMICK:
 		player.set_state(PlayerChar.STATES.NORMAL, player.get_predefined_hitbox(PlayerChar.HITBOXES.HORIZONTAL))
 

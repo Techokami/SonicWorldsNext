@@ -105,13 +105,17 @@ func connect_player(player : PlayerChar, allowSwap: bool = false) -> void:
 	pass
 	
 func disconnect_player(player : PlayerChar) -> void:
+	# If the player is not switching to the next monkeybar, then we don't need
+	# the brachiate arm variable anymore; unset it.
+	if player.get_gimmick_var("brachiate_switching_to_next") == null:
+		player.unset_gimmick_var("_brachiate_arm")
+	
 	player.unset_active_gimmick()
 	
 	if player.get_state() == PlayerChar.STATES.GIMMICK:
 		player.get_avatar().get_animator().play("roll")
 		player.set_state(player.STATES.JUMP)
 		
-	player.unset_gimmick_var("brachiate_target_cur")
 	player_dismounted.emit(player)
 	pass
 
@@ -219,25 +223,17 @@ func brachiate_connect(player : PlayerChar, brachiate_target : Brachiatable) -> 
 	player.set_gimmick_var("brachiate_target_cur", brachiate_target)
 	
 	# Pick an arm... we should alternate arms until the player gets off. All characters
-	# Start off with their right arm... though you could reverse this by changing the
+	# start off with their right arm... though you could reverse this by changing the
 	# brachiate_right animation or by tweaking this code of course.
-	var last_arm = player.get_gimmick_var("brachiate_arm")
-	var next_arm = ARM_SELECTION.RIGHT
-	if last_arm == null:
-		player.set_gimmick_var("brachiate_arm", ARM_SELECTION.RIGHT)
-	elif last_arm == ARM_SELECTION.RIGHT:
-		player.set_gimmick_var("brachiate_arm", ARM_SELECTION.LEFT)
-		next_arm = ARM_SELECTION.LEFT
-	else:
-		player.set_gimmick_var("brachiate_arm", ARM_SELECTION.RIGHT)
-
+	var last_arm: ARM_SELECTION = player.get_gimmick_var("_brachiate_arm", ARM_SELECTION.LEFT)
+	assert(ARM_SELECTION.size() == 2)
+	var next_arm: ARM_SELECTION = ((last_arm + 1) & 1) as ARM_SELECTION
+	player.set_gimmick_var("_brachiate_arm", next_arm)
+	
 	# Play the animation associated with your current brachiation arm
-	if next_arm == ARM_SELECTION.RIGHT:
-		player.get_avatar().get_animator().play("brachiateRight", -1,
-		                                        brachiate_target.brachiate_speed)
-	else:
-		player.get_avatar().get_animator().play("brachiateLeft", -1,
-		                                        brachiate_target.brachiate_speed)
+	player.get_avatar().get_animator().play(
+		"brachiateRight" if next_arm == ARM_SELECTION.RIGHT else "brachiateLeft",
+		-1, brachiate_target.brachiate_speed)
 
 ## Checks if the player can swing like a monkey from one monkeybar to another
 ## and if so, starts the process.
@@ -250,29 +246,21 @@ func check_brachiate(player : PlayerChar):
 	# If the player isn't brachiating, they might not be allowed to depending on gimmick configuration and status.
 	if depart_locked:
 		return false
-
-	# TODO It's a small code smell, but it's still a code smell. Too much duplicated code here.
-	var brachiate_target_right = player.get_gimmick_var("brachiate_target_right")
-	if player.is_right_held() and brachiate_target_right != null and brachiate_target_right.size():
-		# Fail safe to prevent a bug where the player just lands on a monkey bar and attempts to go to itself
-		if brachiate_target_right[-1] == self:
-			return false
-		if brachiate_target_right[-1].impart_locked == true:
-			return false
-		player.set_direction(player.DIRECTIONS.RIGHT)
-		brachiate_connect(player, brachiate_target_right[-1])
-		return true
-
-	var brachiate_target_left = player.get_gimmick_var("brachiate_target_left")
-	if player.is_left_held() and brachiate_target_left != null and brachiate_target_left.size():
-		# Fail safe to prevent a bug where the player just lands on a monkey bar and attempts to go to itself
-		if brachiate_target_left[-1] == self:
-			return false
-		if brachiate_target_left[-1].impart_locked == true:
-			return false
-		player.set_direction(player.DIRECTIONS.LEFT)
-		brachiate_connect(player, brachiate_target_left[-1])
-		return true
+	
+	var x_input: float = player.get_x_input()
+	if x_input != 0.0:
+		var brachiate_targets: Variant = player.get_gimmick_var(
+			"_brachiate_target_right" if x_input > 0.0 else "_brachiate_target_left")
+		if brachiate_targets is Array and brachiate_targets.size() != 0:
+			var target: Brachiatable = brachiate_targets[-1]
+			# Fail safe to prevent a bug where the player just lands on a monkey bar and attempts to go to itself
+			if target == self:
+				return false
+			if target.impart_locked == true:
+				return false
+			player.set_direction_signed(signf(x_input))
+			brachiate_connect(player, target)
+			return true
 	
 	return false
 
@@ -303,43 +291,37 @@ func set_brachiate_speed(new_speed):
 
 ## Sets the right brachiation target for a player to touches the left side linker
 func _on_left_linker_body_entered(body: Node2D) -> void:
-	var brachiate_targets_right = body.get_gimmick_var("brachiate_target_right")
+	var brachiate_targets_right = body.get_gimmick_var("_brachiate_target_right")
 	if brachiate_targets_right == null:
-		body.set_gimmick_var("brachiate_target_right", [self])
+		body.set_gimmick_var("_brachiate_target_right", [self])
 	else:
 		brachiate_targets_right.append(self)
 
 ## Sets the left brachiation target for a player to touches the right side linker
 func _on_right_linker_body_entered(body: Node2D) -> void:
-	var brachiate_targets_left = body.get_gimmick_var("brachiate_target_left")
+	var brachiate_targets_left = body.get_gimmick_var("_brachiate_target_left")
 	if brachiate_targets_left == null:
-		body.set_gimmick_var("brachiate_target_left", [self])
+		body.set_gimmick_var("_brachiate_target_left", [self])
 	else:
 		brachiate_targets_left.append(self)
 
 ## Disconnects the right brachiation target for a player that leaves the left side linker
 func _on_left_linker_body_exited(body: Node2D) -> void:
-	var brachiate_targets_right = body.get_gimmick_var("brachiate_target_right")
+	var brachiate_targets_right = body.get_gimmick_var("_brachiate_target_right")
 	if brachiate_targets_right != null:
-		brachiate_targets_right.erase(self)
+		if brachiate_targets_right.size() > 1:
+			brachiate_targets_right.erase(self)
+		else:
+			body.unset_gimmick_var("_brachiate_target_right")
 
 ## Disconnects the left brachiation target for a player that leaves the right side linker
 func _on_right_linker_body_exited(body: Node2D) -> void:
-	var brachiate_targets_left = body.get_gimmick_var("brachiate_target_left")
+	var brachiate_targets_left = body.get_gimmick_var("_brachiate_target_left")
 	if brachiate_targets_left != null:
-		brachiate_targets_left.erase(self)
-
-## Locks the gimmick for the player - used if the player is forced off the
-## gimmick in a way that might be likely to result in immediate reconnection.
-func temp_lock_gimmick(player) -> void:
-	var unlock_func = func ():
-		player.clear_single_locked_gimmick(self)
-	
-	var timer:SceneTreeTimer = get_tree().create_timer(0.5, false)
-	timer.timeout.connect(unlock_func, CONNECT_DEFERRED)
-	
-	player.add_locked_gimmick(self)
-	pass
+		if brachiate_targets_left.size() > 1:
+			brachiate_targets_left.erase(self)
+		else:
+			body.unset_gimmick_var("_brachiate_target_left")
 
 func player_process(player: PlayerChar, _delta):
 	if player.any_action_pressed():
@@ -359,7 +341,7 @@ func player_process(player: PlayerChar, _delta):
 		
 	if player.ground or player.check_for_ceiling() or \
 			player.check_for_back_wall() or player.check_for_front_wall():
-		temp_lock_gimmick(player)
+		player.timed_gimmick_lock(self, 0.5)
 		disconnect_player(player)
 		return
 		
@@ -375,7 +357,11 @@ func handle_animation_finished(player : PlayerChar, animation):
 	if !brachiate_target:
 		# This also shouldn't happen. But I'm too lazy to use asserts.
 		return
-
+	
+	# Let `disconnect_player()` know that we need to keep gimmick variables,
+	# as they will be reused by the next Brachiatable gimmick.
+	player.set_gimmick_var("brachiate_switching_to_next", true)
+	
 	brachiate_target.connect_player(player, true)
 		
 	pass
@@ -384,6 +370,6 @@ func handle_animation_finished(player : PlayerChar, animation):
 # grabbed if the player is launched off with a spring or something.
 func player_force_detach_callback(player : PlayerChar):
 	# note: it might be more performant to set to null instead.
-	temp_lock_gimmick(player)
+	player.timed_gimmick_lock(self, 0.5)
 	disconnect_player(player)
 	pass

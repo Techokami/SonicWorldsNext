@@ -60,16 +60,12 @@ func _ready():
 func check_grab(player: PlayerChar):
 	if player.is_gimmick_locked_for_player(self):
 		return false
-	var player_state = player.get_state()
 	
-	if player_state == PlayerChar.STATES.RESPAWN:
-		return false
-		
-	if player_state == PlayerChar.STATES.DIE:
-		return false
-		
-	if player_state == PlayerChar.STATES.HIT:
-		return false
+	match player.get_state():
+		PlayerChar.STATES.RESPAWN, \
+		PlayerChar.STATES.DIE, \
+		PlayerChar.STATES.HIT:
+			return false
 	
 	return true
 
@@ -97,13 +93,7 @@ func disconnect_player(player: PlayerChar):
 		player.set_state(PlayerChar.STATES.JUMP)
 		player.get_avatar().get_animator().play("roll")
 	
-	var unlock_func = func ():
-		player.clear_single_locked_gimmick(self)
-	
-	var timer:SceneTreeTimer = get_tree().create_timer(0.25, false)
-	timer.timeout.connect(unlock_func, CONNECT_DEFERRED)
-	player.add_locked_gimmick(self)
-	pass
+	player.timed_gimmick_lock(self, 0.25)
 
 func process_game(delta):
 	var players_to_check = $FBZ_Pylon_Area.get_overlapping_bodies()
@@ -129,39 +119,28 @@ func process_game(delta):
 		# based on their relative position XXX TODO
 		var relative_y_pos = player.get_gimmick_var("VerticalPylonYPos")
 
-		var yInput = player.get_y_input()
-		if yInput > 0:
-			relative_y_pos -= climb_speed * delta
-		elif yInput < 0:
-			relative_y_pos += climb_speed * delta
+		var y_input: float = player.get_y_input()
+		if y_input != 0.0:
+			relative_y_pos -= climb_speed * delta * signf(y_input)
 			
 		# Clamp the player's veritcal position
-		if relative_y_pos > vert_size + 4:
-			relative_y_pos = vert_size + 4
-		elif relative_y_pos < 26:
-			relative_y_pos = 26
-			
+		relative_y_pos = clampf(relative_y_pos, 26.0, vert_size + 4.0)
+		
 		player.set_gimmick_var("VerticalPylonYPos", relative_y_pos)
 
 		player.global_position.y = global_position.y - relative_y_pos
 			
 		# Animate the player based on their position in rotation.
-		player.get_avatar().get_animator().seek(player_rotation / rotate_time)
+		var rotation_pos: float = player_rotation / rotate_time
+		player.get_avatar().get_animator().seek(rotation_pos)
 		
-		if fmod((player_rotation / rotate_time) - 0.25, 1.0) > 0.5:
-			player.set_z_index(get_z_index() - 100)
-		else:
-			player.set_z_index(get_z_index() + 100)
+		player.z_index = z_index + (-100 if fmod(rotation_pos - 0.25, 1.0) > 0.5 else 100)
 			
 		if (player.any_action_pressed()):
+			player.movement.x = -launch_speed if player.is_left_held() else launch_speed
 			player.movement.y = -launch_vertical_speed
-			if (player.is_left_held()):
-				player.movement.x = -launch_speed
-			else:
-				player.movement.x = launch_speed
 			disconnect_player(player)
-		
-		if player.get_state() != PlayerChar.STATES.GIMMICK:
+		elif player.get_state() != PlayerChar.STATES.GIMMICK:
 			disconnect_player(player)
 
 # Tool Function to reset the size and position of elements within the object based on vert_size	
