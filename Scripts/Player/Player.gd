@@ -1659,8 +1659,7 @@ func get_gimmick_var(gimmickVarName, default: Variant = null):
 
 ## Removes all currently locked gimmicks from the player's locked gimmick list.
 func clear_locked_gimmicks():
-	for i in range(max_locked_gimmicks):
-		locked_gimmicks[i] = null
+	locked_gimmicks.fill(null)
 	locked_gimmicks_index = 0
 
 
@@ -1668,14 +1667,9 @@ func clear_locked_gimmicks():
 ## [param gimmick] — which gimmick should be locked.[br]
 ## [param lock_time] — how long should the gimmick be locked in seconds.
 func timed_gimmick_lock(gimmick: ConnectableGimmick, lock_time: float) -> void:
-	var unlock_func = func ():
-		clear_single_locked_gimmick(gimmick)
-	
-	var timer:SceneTreeTimer = get_tree().create_timer(lock_time, false)
-	timer.timeout.connect(unlock_func, CONNECT_DEFERRED)
-	
 	add_locked_gimmick(gimmick)
-	pass
+	await get_tree().create_timer(lock_time, false).timeout
+	clear_single_locked_gimmick.call_deferred(gimmick)
 
 
 ## Removes a single locked gimmick from the player's locked gimmick list if
