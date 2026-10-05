@@ -183,7 +183,7 @@ func state_process(delta: float) -> void:
 		parent.get_node("HitBox").shape.size = parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL)
 		parent.get_node("HitBox").position = parent.hitBoxOffset.normal
 	
-	if parent.inputs[parent.INPUTS.XINPUT] != 0 and !skid:
+	if parent.inputs[parent.INPUTS.XINPUT] != 0 and !skid and parent.horizontalLockTimer <= 0.0:
 		parent.set_direction_signed(parent.inputs[parent.INPUTS.XINPUT], false)
 	elif parent.movement.x != 0 and skid:
 		parent.set_direction_signed(parent.movement.x, false)
