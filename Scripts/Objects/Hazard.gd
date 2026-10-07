@@ -10,7 +10,7 @@ class_name Hazard extends Area2D
 var entities_hit = []
 
 func _physics_process(_delta: float) -> void:
-	for item : Object in entities_hit:
+	for item: Node2D in entities_hit:
 		if item is PlayerChar:
 			var player: PlayerChar = item
 			player.hit_player(global_position, damage_type)
