@@ -9,7 +9,7 @@ class_name Hazard extends Area2D
 # enter while invincible or simply not exit before invincibility wears off.
 var entities_hit = []
 
-func _process(_delta):
+func _physics_process(_delta: float) -> void:
 	for item : Object in entities_hit:
 		if item is PlayerChar:
 			var player: PlayerChar = item
