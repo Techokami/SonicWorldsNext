@@ -6,7 +6,7 @@ var anim_type: ANIM_TYPE = ANIM_TYPE.FLAP
 enum ANIMAL_TYPE {BIRD,SQUIRREL,RABBIT,CHICKEN,PENGUIN,SEAL,PIG,EAGLE,MOUSE,MONKEY,TURTLE,BEAR}
 @export var type: ANIMAL_TYPE = ANIMAL_TYPE.BIRD
 
-var animal_data: Array[Dictionary] = [
+const animal_data: Array[Dictionary] = [
 # (Bird)
 	{ position=Vector2(0,32),   anim_type=ANIM_TYPE.FLAP,           physics=Vector2(3.0,4.0) },
 # (Squirrel)
