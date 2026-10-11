@@ -85,7 +85,7 @@ func activate_fireshield(_state: PlayerState, player: PlayerChar):
 		getTimer.start(0.5)
 		
 	# change orientation to match the movement
-	player.shieldSprite.flip_h = (player.get_direction() != PlayerChar.DIRECTIONS.RIGHT)
+	player.shieldSprite.flip_h = (player.get_direction() == Global.DIRECTIONS.LEFT)
 		# lock camera for a short time
 	player.get_camera().lock(16.0/60.0)
 

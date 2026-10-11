@@ -1,11 +1,12 @@
 extends Node2D
 
-var speed = 3
-var direction = Vector2.RIGHT
+const SPEED: float = 2.0 * 60.0
 
-func _process(delta):
-	translate(direction*speed)
-	if (speed > 0):
-		speed -= delta*10
-	else:
+var direction: Vector2 = Vector2.RIGHT
+var time: float = 1.0 / 60.0 * 22.0
+
+func _physics_process(delta: float) -> void:
+	global_position += direction * SPEED * delta
+	time -= delta
+	if time <= 0.0:
 		queue_free()

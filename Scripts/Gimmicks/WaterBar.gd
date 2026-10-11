@@ -145,8 +145,7 @@ func destroy_bar():
 	
 	# Remove all players
 	for player: PlayerChar in Global.get_players_on_gimmick(self):
-		if (player.get_direction() == PlayerChar.DIRECTIONS.LEFT):
-			release_direction = -1.0
+		release_direction = player.get_direction_multiplier()
 		remove_player(player)
 	
 	# Create debris sprites

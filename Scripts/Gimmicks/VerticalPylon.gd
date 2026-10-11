@@ -76,7 +76,7 @@ func connect_player(player: PlayerChar):
 
 	# XXX TODO: We need to clean up this hitbox setting stuff
 	player.set_state(PlayerChar.STATES.GIMMICK, player.get_predefined_hitbox(PlayerChar.HITBOXES.HORIZONTAL))
-	player.set_direction(PlayerChar.DIRECTIONS.RIGHT)
+	player.set_direction(Global.DIRECTIONS.RIGHT)
 	player.get_avatar().get_animator().play("swingVerticalBarManaged", -1, 0.0)
 	player.set_gimmick_var("VerticalPylonRotationTimer", 0.0)
 	player.set_gimmick_var("VerticalPylonYPos", global_position.y - player.global_position.y)

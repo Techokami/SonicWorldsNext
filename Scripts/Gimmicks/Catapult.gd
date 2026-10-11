@@ -4,13 +4,11 @@
 class_name CatapultGimmick extends ConnectableGimmick
 
 
-# TODO: Maybe move this enum into `Global` and reuse it for `PlayerChar` and other gimmicks?
-enum _DIRECTIONS { LEFT, RIGHT }
 ## Direction the catapult faces and launches the player in.
-@export var direction: _DIRECTIONS = _DIRECTIONS.RIGHT:
+@export var direction: Global.DIRECTIONS = Global.DIRECTIONS.RIGHT:
 	set(value):
 		direction = value
-		scale.x = 1.0 if value == _DIRECTIONS.RIGHT else -1.0
+		scale.x = Global.DIRECTION_MULTIPLIERS[value]
 		_calculate_launch_velocity()
 
 ## Velocity the catapult starts moving with.[br]

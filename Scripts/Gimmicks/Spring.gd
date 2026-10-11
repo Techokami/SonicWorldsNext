@@ -97,10 +97,8 @@ func physics_collision(body: PlayerChar, hitVector: Vector2):
 			# set horizontal speed
 			body.movement.x = setMove.x
 			body.set_horizontal_lock_timer(15.0/60.0) # lock for 15 frames
-			if sign(setMove.x) > 0:
-				body.set_direction(PlayerChar.DIRECTIONS.RIGHT)
-			else:
-				body.set_direction(PlayerChar.DIRECTIONS.LEFT)
+			if absf(setMove.x) != 0.0:
+				body.set_direction_signed(signf(setMove.x))
 		$SpringAnimator.play(animList[animID])
 		Global.play_sound(springSound)
 		

@@ -44,11 +44,11 @@ func connect_player(player: PlayerChar):
 
 	$Grab.play()
 	if player.movement.x > 0:
-		player.set_direction(PlayerChar.DIRECTIONS.RIGHT)
+		player.set_direction(Global.DIRECTIONS.RIGHT)
 		animator.reset_loops() # We need to count loops, so it's time to reset them.
 		animator.play("grabVerticalBar")
 	else:
-		player.set_direction(PlayerChar.DIRECTIONS.LEFT)
+		player.set_direction(Global.DIRECTIONS.LEFT)
 		animator.reset_loops() # We need to count loops, so it's time to reset them.
 		animator.play("grabVerticalBarOffset")
 

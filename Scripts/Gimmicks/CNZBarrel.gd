@@ -122,7 +122,7 @@ func attach_player(player: PlayerChar):
 		# Believe it or not, it really is this simple.
 		impart_force(110.0)
 
-	player.set_direction(PlayerChar.DIRECTIONS.RIGHT)
+	player.set_direction(Global.DIRECTIONS.RIGHT)
 
 	# Prevents player from clipping on walls while they are on the fringes of the gimmick
 	player.allowTranslate = true

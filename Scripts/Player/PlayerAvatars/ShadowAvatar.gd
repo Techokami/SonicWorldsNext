@@ -90,14 +90,10 @@ func _process(delta: float) -> void:
 	# Allow the player to adjust the collision box direction
 	# XXX Consider moving homing attack field stuff to jump process
 	homing_tracker.set_rotation(0)
-	if parent.get_direction() == PlayerChar.DIRECTIONS.RIGHT:
-		homing_tracker.scale.x = 1.0
-		if controller_direction.length() > 0:
-			homing_tracker.set_rotation(controller_direction.angle())
-	else:
-		homing_tracker.scale.x = -1.0
-		if controller_direction.length() > 0:
-			homing_tracker.set_rotation(controller_direction.angle() + PI)
+	var direction_sign: float = parent.get_direction_multiplier()
+	homing_tracker.scale.x = direction_sign
+	if controller_direction.length() > 0:
+		homing_tracker.set_rotation((controller_direction * direction_sign).angle())
 			
 	# If grounded, go ahead and set the current target for the homing attack tracker off
 	if parent.is_on_ground() and homing_reticle.current_target != null:

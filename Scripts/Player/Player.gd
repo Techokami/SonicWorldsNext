@@ -1454,18 +1454,11 @@ func get_avatar() -> PlayerAvatar:
 	return self.player_avatar
 
 
-## Available directions for the player to use when using [method set_direction].
-enum DIRECTIONS {LEFT, RIGHT} # I'd wager there is already something more appropriate
-
-
-## Sets the direction of the player's sprite and direction value.
-func set_direction(new_direction: PlayerChar.DIRECTIONS) -> void:
-	if new_direction == DIRECTIONS.LEFT:
-		_direction = -1.0
-		sprite.flip_h = true
-		return
-	_direction = 1.0
-	sprite.flip_h = false
+## Sets the direction of the player's sprite and direction value
+## using the [enum Global.DIRECTIONS] enum.
+func set_direction(new_direction: Global.DIRECTIONS) -> void:
+	_direction = Global.DIRECTION_MULTIPLIERS[new_direction]
+	sprite.flip_h = (new_direction == Global.DIRECTIONS.LEFT)
 
 
 ## Analog of [member set_direction], but works based on a signed floating-point value.
@@ -1478,7 +1471,7 @@ func set_direction(new_direction: PlayerChar.DIRECTIONS) -> void:
 ## [param change_sprite_direction] - if [code]false[/code], only the movement direction
 ## is changed, and the sprite direction ([code]sprite.flip_h[/code]) is kept the same.
 func set_direction_signed(new_direction: float, change_sprite_direction: bool = true) -> void:
-	if new_direction != 0.0:
+	if absf(new_direction) != 0.0:
 		_direction = signf(new_direction)
 		if change_sprite_direction:
 			sprite.flip_h = (_direction < 0.0)
@@ -1512,9 +1505,9 @@ func player_bounce(source: Node2D, bounce_mode: PlayerChar.BOUNCE_MODES) -> void
 	current_state_obj.state_player_bounce(source, bounce_mode)
 
 
-## Gets the player's direction using the [enum DIRECTIONS] enum.
-func get_direction() -> PlayerChar.DIRECTIONS:
-	return DIRECTIONS.RIGHT if _direction > 0.0 else DIRECTIONS.LEFT
+## Gets the player's direction using the [enum Global.DIRECTIONS] enum.
+func get_direction() -> Global.DIRECTIONS:
+	return Global.DIRECTIONS.RIGHT if _direction > 0.0 else Global.DIRECTIONS.LEFT
 
 
 ## Gets the player's direction in a way that is useful for calculations.[br]
