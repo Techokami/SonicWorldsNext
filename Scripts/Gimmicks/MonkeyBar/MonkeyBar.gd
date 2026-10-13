@@ -40,16 +40,16 @@ class_name Brachiatable extends ConnectableGimmick
 # fun for a puzzle game like Lost Vikings.
 
 # How many players are currently on this monkeybar
-var num_mounted = 0
+var mounted_count: int = 0
 
-## Raised when num_mounted goes from 0 to 1+
+## Raised when [member mounted_count] goes from 0 to 1+
 signal became_mounted
 
-## Raised when num_mounted goes from 1+ to 0
+## Raised when [member mounted_count] goes from 1+ to 0
 signal became_unmounted
 
-## Raised every time the number mounted changes regarldess of count
-signal num_mounted_changed(num_mounted : int)
+## Raised every time [member mounted_count] changes regarldess of count
+signal mounted_count_changed(mounted_count: int)
 
 ## Raised any time a player connects to the monkeybar
 signal player_mounted(player : PlayerChar)
@@ -190,16 +190,16 @@ func _physics_process(_delta: float) -> void:
 
 ## Checks to see if number of mounted players has changed and sends relevant
 ## signals if so.
-func calculate_mount_signals(old_num_mounted : int, new_num_mounted : int) -> void:
-	if old_num_mounted == new_num_mounted:
+func calculate_mount_signals(old_mounted_count: int, new_mounted_count: int) -> void:
+	if old_mounted_count == new_mounted_count:
 		return
 	
-	if old_num_mounted == 0 and new_num_mounted > 0:
+	if old_mounted_count == 0 and new_mounted_count > 0:
 		became_mounted.emit()
-	elif old_num_mounted > 0 and new_num_mounted == 0:
+	elif old_mounted_count > 0 and new_mounted_count == 0:
 		became_unmounted.emit()
 
-	num_mounted_changed.emit(new_num_mounted)
+	mounted_count_changed.emit(new_mounted_count)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -212,8 +212,8 @@ func _process(_delta: float) -> void:
 	# Calculate the number of players mounted on the gimmick and send signals
 	# accordingly.
 	var players_on_gimmick = Global.get_players_on_gimmick(self)
-	calculate_mount_signals(num_mounted, players_on_gimmick.size())
-	num_mounted = players_on_gimmick.size()
+	calculate_mount_signals(mounted_count, players_on_gimmick.size())
+	mounted_count = players_on_gimmick.size()
 
 #enum for arm selection
 enum ARM_SELECTION {LEFT, RIGHT}
