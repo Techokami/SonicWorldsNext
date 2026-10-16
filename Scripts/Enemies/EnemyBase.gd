@@ -14,7 +14,7 @@ signal destroyed
 
 func _ready() -> void:
 	# Check if the badnik was previously destroyed.
-	if Global.nodeMemory.has(get_path()):
+	if not Engine.is_editor_hint() and Global.nodeMemory.has(get_path()):
 		queue_free()
 		return
 		
