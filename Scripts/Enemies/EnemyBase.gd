@@ -7,9 +7,6 @@ var Explosion = preload("res://Entities/Misc/BadnickSmoke.tscn")
 var forceDamage = false
 var defaultMovement = true
 
-# We want to know about any collision objects so that we can turn them off when the enemy is killed
-var collision_objects = []
-
 signal destroyed
 
 func _ready() -> void:
@@ -17,8 +14,6 @@ func _ready() -> void:
 	if not Engine.is_editor_hint() and Global.nodeMemory.has(get_path()):
 		queue_free()
 		return
-		
-	collision_objects = find_children("*", "CollisionObject2D", true)
 
 func _process(delta):
 	# loop through players as i
@@ -89,7 +84,7 @@ func destroy():
 	set_deferred("collision_mask", 0)
 	
 	# Turn off collision for any Area2D within the enemy
-	for area: CollisionObject2D in collision_objects:
+	for area: CollisionObject2D in find_children("*", "CollisionObject2D", true):
 		#print("disabling %s" % area)
 		area.set_deferred("collision_layer", 0)
 		area.set_deferred("collision_mask", 0)
