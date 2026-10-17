@@ -10,12 +10,16 @@ var defaultMovement = true
 signal destroyed
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		set_physics_process(false)
+		return
+	
 	# Check if the badnik was previously destroyed.
-	if not Engine.is_editor_hint() and Global.nodeMemory.has(get_path()):
+	if Global.nodeMemory.has(get_path()):
 		queue_free()
 		return
 
-func _process(delta):
+func _physics_process(delta: float) -> void:
 	# loop through players as i
 	for i: PlayerChar in playerHit:
 		# check if damage entity is on or supertime is bigger then 0
