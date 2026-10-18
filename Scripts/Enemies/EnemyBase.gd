@@ -34,10 +34,8 @@ func _physics_process(delta: float) -> void:
 			# cut the script short
 			return
 		
-		# if destroying the enemy fails and hit player exists then hit player
-		# NOTE: Isn't hit_player always going to exist? We are talkign about PlayerChar objects only.
-		if (i.has_method("hit_player")):
-			i.hit_player(global_position,damage_type)
+		# if destroying the enemy fails then hit player
+		i.hit_player(global_position, damage_type)
 		
 	# move
 	if defaultMovement:

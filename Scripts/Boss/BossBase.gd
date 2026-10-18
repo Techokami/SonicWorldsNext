@@ -52,10 +52,9 @@ func _physics_process(delta):
 					for target: Targetable in find_children("*", "Targetable", true):
 						target.set_deferred(&"collision_layer", 0)
 					defeated.emit()
-			# if destroying the enemy fails and hit player exists then hit player
-			elif (i.has_method("hit_player")):
-				if i.hit_player(global_position,damage_type):
-					hit_player.emit()
+			# if destroying the enemy fails then hit player
+			elif i.hit_player(global_position, damage_type):
+				hit_player.emit()
 
 func _on_body_entered(body):
 	# add to player list
