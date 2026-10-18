@@ -118,13 +118,13 @@ const MAX_CHEAT_BUFFER_SIZE: int = 8
 # Shadow isn't incldued by default, so we need a dict for him.
 var CHARACTER_SHADOW := { label="Shadow (PREVIEW)", char1=Global.CHARACTERS.SHADOW, char2=Global.CHARACTERS.NONE }
 # Cheat tracking dictionary
-# Structure: "sequence_string": {"function": String, "state": int}
+# Structure: "sequence_string": { "activated": bool, "function": String }
 var cheats: Dictionary = {
-	"19910623": { "function": sonic_cheat },
-	"19921124": { "function": tails_cheat },
-	"19931119": { "function": amy_cheat },
-	"19941019": { "function": knuckles_cheat },
-	"20010619": { "function": shadow_cheat },
+	"19910623": { "activated": false, "function": sonic_cheat },
+	"19921124": { "activated": false, "function": tails_cheat },
+	"19931119": { "activated": false, "function": amy_cheat },
+	"19941019": { "activated": false, "function": knuckles_cheat },
+	"20010619": { "activated": false, "function": shadow_cheat },
 }
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -149,11 +149,13 @@ func _add_to_cheat_buffer(digit: String) -> void:
 	# Check if the sequence exists in our dictionary
 	if entered_sequence in cheats:
 		var cheat_data: Dictionary = cheats[entered_sequence]
-		cheat_data["function"].call(cheat_data)
-		
-		# Optional: Clear the buffer after a successful activation 
-		# so the user doesn't accidentally trigger things repeatedly
-		entered_sequence = ""
+		if not cheat_data.activated:
+			cheat_data.activated = true
+			cheat_data.function.call(cheat_data)
+			
+			# Optional: Clear the buffer after a successful activation 
+			# so the user doesn't accidentally trigger things repeatedly
+			entered_sequence = ""
 
 func set_all_partners(character: Global.CHARACTERS) -> void:
 	for i in range(1, characters.size()):
@@ -187,7 +189,10 @@ func shadow_cheat(cheat: Dictionary) -> void:
 		Global.shadow_enabled = true
 		characters.append(CHARACTER_SHADOW)
 		characterID = characterSprites.size() - 1
-
+		
+		# Allow activating this cheat for a second time
+		cheat.activated = false
+	
 	# If activated a second time or developer has defaulted Shadow to enabled, we set the partner
 	# character for all normally solo options to Shadow instead
 	else:
