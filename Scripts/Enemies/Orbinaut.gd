@@ -33,7 +33,7 @@ func _ready():
 			add_child(newOrb)
 			orbList.append(newOrb)
 
-func _process(delta):
+func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
 		$orbinaut.frame = int(classicOrbi)*2
 		$Orb/orb.frame = 1+int(classicOrbi)*2
