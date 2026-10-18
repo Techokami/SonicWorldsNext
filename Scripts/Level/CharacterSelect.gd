@@ -106,22 +106,17 @@ func change_multiplayer_mode():
 	$UI/Labels/Control/MutliplayerMode.text = Global.MULTIMODE.find_key(Global.get_multimode())
 
 
-
 # CHEATS SECTION
 # Code below this point is just used for cheat codes
 # Player Select Screen cheats are currently entered via pressing the normal number keys. They might
 # fail if you bind these keys for some reason. No idea if the numpad works or not.
 # Dynamic buffer storing current cheat code input
-
 var entered_sequence: String = ""
 # Maximum length of cheat buffer currently large enough to store a date in YYYYMMDD format
 const CHEAT_SEQUENCE_SIZE: int = 8
-
 # Shadow isn't incldued by default, so we need a dict for him.
 var CHARACTER_SHADOW := { label="Shadow (PREVIEW)", char1=Global.CHARACTERS.SHADOW, char2=Global.CHARACTERS.NONE }
-
 # Cheat tracking dictionary
-
 # Structure: "sequence_string": { "activated": bool, "function": String }
 var cheats: Dictionary = {
 	"19910623": { "activated": false, "function": sonic_cheat },
