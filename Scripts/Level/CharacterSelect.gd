@@ -114,7 +114,7 @@ func change_multiplayer_mode():
 # Dynamic buffer storing current cheat code input
 var entered_sequence: String = ""
 # Maximum length of cheat buffer currently large enough to store a date in YYYYMMDD format
-const MAX_CHEAT_BUFFER_SIZE: int = 8
+const CHEAT_SEQUENCE_SIZE: int = 8
 # Shadow isn't incldued by default, so we need a dict for him.
 var CHARACTER_SHADOW := { label="Shadow (PREVIEW)", char1=Global.CHARACTERS.SHADOW, char2=Global.CHARACTERS.NONE }
 # Cheat tracking dictionary
@@ -144,7 +144,7 @@ func _add_to_cheat_buffer(digit: String) -> void:
 	entered_sequence += digit
 	
 	# Drop the oldest entry if size exceeds 8
-	entered_sequence = entered_sequence.right(MAX_CHEAT_BUFFER_SIZE)
+	entered_sequence = entered_sequence.right(CHEAT_SEQUENCE_SIZE)
 	
 	# Check if the sequence exists in our dictionary
 	if entered_sequence in cheats:
@@ -163,6 +163,11 @@ func set_all_partners(character: Global.CHARACTERS) -> void:
 
 ## If anything cheat related needs to be set on scene ready, do it here.
 func cheats_ready():
+	# Make sure all cheats have the correct length
+	assert(cheats.keys().all(
+		func(key: String) -> bool:
+			return key.length() == CHEAT_SEQUENCE_SIZE))
+	
 	if Global.shadow_enabled:
 		characters.append(CHARACTER_SHADOW)
 
