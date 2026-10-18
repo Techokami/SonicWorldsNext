@@ -166,19 +166,19 @@ func cheats_ready():
 	if Global.shadow_enabled:
 		characters.append(CHARACTER_SHADOW)
 
-func sonic_cheat(cheat: Dictionary) -> void:
+func sonic_cheat(_cheat: Dictionary) -> void:
 	$Cheats/SonicCheat.play()
 	set_all_partners(Global.CHARACTERS.SONIC)
 	
-func tails_cheat(cheat: Dictionary) -> void:
+func tails_cheat(_cheat: Dictionary) -> void:
 	$Cheats/TailsCheat.play()
 	set_all_partners(Global.CHARACTERS.TAILS)
 
-func amy_cheat(cheat: Dictionary) -> void:
+func amy_cheat(_cheat: Dictionary) -> void:
 	$Cheats/AmyCheat.play()
 	set_all_partners(Global.CHARACTERS.AMY)
 
-func knuckles_cheat(cheat: Dictionary) -> void:
+func knuckles_cheat(_cheat: Dictionary) -> void:
 	$Cheats/KnucklesCheat.play()
 	set_all_partners(Global.CHARACTERS.KNUCKLES)
 
