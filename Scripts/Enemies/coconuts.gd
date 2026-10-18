@@ -24,6 +24,8 @@ func _ready() -> void:
 	super()
 
 func _physics_process(delta: float) -> void:
+	super(delta)
+	
 	if state == STATE.CLIMB:
 		global_position.y = move_toward(global_position.y,y_target,move_speed*delta)
 		if global_position.y == y_target:

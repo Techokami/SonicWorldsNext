@@ -7,20 +7,19 @@ var Explosion = preload("res://Entities/Misc/BadnickSmoke.tscn")
 var forceDamage = false
 var defaultMovement = true
 
-# We want to know about any collision objects so that we can turn them off when the enemy is killed
-var collision_objects = []
-
 signal destroyed
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		set_physics_process(false)
+		return
+	
 	# Check if the badnik was previously destroyed.
 	if Global.nodeMemory.has(get_path()):
 		queue_free()
 		return
-		
-	collision_objects = find_children("*", "CollisionObject2D", true)
 
-func _process(delta):
+func _physics_process(delta: float) -> void:
 	# loop through players as i
 	for i: PlayerChar in playerHit:
 		# check if damage entity is on or supertime is bigger then 0
@@ -35,10 +34,8 @@ func _process(delta):
 			# cut the script short
 			return
 		
-		# if destroying the enemy fails and hit player exists then hit player
-		# NOTE: Isn't hit_player always going to exist? We are talkign about PlayerChar objects only.
-		if (i.has_method("hit_player")):
-			i.hit_player(global_position,damage_type)
+		# if destroying the enemy fails then hit player
+		i.hit_player(global_position, damage_type)
 		
 	# move
 	if defaultMovement:
@@ -89,7 +86,7 @@ func destroy():
 	set_deferred("collision_mask", 0)
 	
 	# Turn off collision for any Area2D within the enemy
-	for area: CollisionObject2D in collision_objects:
+	for area: CollisionObject2D in find_children("*", "CollisionObject2D", true):
 		#print("disabling %s" % area)
 		area.set_deferred("collision_layer", 0)
 		area.set_deferred("collision_mask", 0)

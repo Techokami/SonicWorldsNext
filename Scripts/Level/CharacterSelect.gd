@@ -112,29 +112,19 @@ func change_multiplayer_mode():
 # Player Select Screen cheats are currently entered via pressing the normal number keys. They might
 # fail if you bind these keys for some reason. No idea if the numpad works or not.
 # Dynamic buffer storing current cheat code input
-var cheat_buffer: Array[String] = []
+var entered_sequence: String = ""
 # Maximum length of cheat buffer currently large enough to store a date in YYYYMMDD format
-const MAX_CHEAT_BUFFER_SIZE: int = 8
+const CHEAT_SEQUENCE_SIZE: int = 8
 # Shadow isn't incldued by default, so we need a dict for him.
 var CHARACTER_SHADOW := { label="Shadow (PREVIEW)", char1=Global.CHARACTERS.SHADOW, char2=Global.CHARACTERS.NONE }
 # Cheat tracking dictionary
-# Structure: "sequence_string": {"function": String, "state": int}
+# Structure: "sequence_string": { "activated": bool, "function": String }
 var cheats: Dictionary = {
-	"19910623": {
-		"function": "sonic_cheat",
-	},
-	"19921124": {
-		"function": "tails_cheat",
-	},
-	"19931119": {
-		"function": "amy_cheat",
-	},
-	"19941019": {
-		"function": "knuckles_cheat",
-	},
-	"20010619": {
-		"function": "shadow_cheat",
-	},
+	"19910623": { "activated": false, "function": sonic_cheat },
+	"19921124": { "activated": false, "function": tails_cheat },
+	"19931119": { "activated": false, "function": amy_cheat },
+	"19941019": { "activated": false, "function": knuckles_cheat },
+	"20010619": { "activated": false, "function": shadow_cheat },
 }
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -151,49 +141,49 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _add_to_cheat_buffer(digit: String) -> void:
 	# Add the new digit to the end
-	cheat_buffer.append(digit)
+	entered_sequence += digit
 	
 	# Drop the oldest entry if size exceeds 8
-	if cheat_buffer.size() > MAX_CHEAT_BUFFER_SIZE:
-		cheat_buffer.pop_front()
-	
-    # Flatten the array of strings into a single string sequence
-	var entered_sequence: String = "".join(cheat_buffer)
+	entered_sequence = entered_sequence.right(CHEAT_SEQUENCE_SIZE)
 	
 	# Check if the sequence exists in our dictionary
-	if cheats.has(entered_sequence):
+	if entered_sequence in cheats:
 		var cheat_data: Dictionary = cheats[entered_sequence]
-		var function_name: String = cheat_data["function"]
-		
-		if has_method(function_name):
-			Callable(self, function_name).call(cheats[entered_sequence])
+		if not cheat_data.activated:
+			cheat_data.activated = true
+			cheat_data.function.call(cheat_data)
 			
 			# Optional: Clear the buffer after a successful activation 
 			# so the user doesn't accidentally trigger things repeatedly
-			cheat_buffer.clear()
-			
+			entered_sequence = ""
+
 func set_all_partners(character: Global.CHARACTERS) -> void:
 	for i in range(1, characters.size()):
 		characters[i].char2 = character
 
 ## If anything cheat related needs to be set on scene ready, do it here.
 func cheats_ready():
+	# Make sure all cheats have the correct length
+	assert(cheats.keys().all(
+		func(key: String) -> bool:
+			return key.length() == CHEAT_SEQUENCE_SIZE))
+	
 	if Global.shadow_enabled:
 		characters.append(CHARACTER_SHADOW)
 
-func sonic_cheat(cheat: Dictionary) -> void:
+func sonic_cheat(_cheat: Dictionary) -> void:
 	$Cheats/SonicCheat.play()
 	set_all_partners(Global.CHARACTERS.SONIC)
 	
-func tails_cheat(cheat: Dictionary) -> void:
+func tails_cheat(_cheat: Dictionary) -> void:
 	$Cheats/TailsCheat.play()
 	set_all_partners(Global.CHARACTERS.TAILS)
 
-func amy_cheat(cheat: Dictionary) -> void:
+func amy_cheat(_cheat: Dictionary) -> void:
 	$Cheats/AmyCheat.play()
 	set_all_partners(Global.CHARACTERS.AMY)
 
-func knuckles_cheat(cheat: Dictionary) -> void:
+func knuckles_cheat(_cheat: Dictionary) -> void:
 	$Cheats/KnucklesCheat.play()
 	set_all_partners(Global.CHARACTERS.KNUCKLES)
 
@@ -204,7 +194,10 @@ func shadow_cheat(cheat: Dictionary) -> void:
 		Global.shadow_enabled = true
 		characters.append(CHARACTER_SHADOW)
 		characterID = characterSprites.size() - 1
-
+		
+		# Allow activating this cheat for a second time
+		cheat.activated = false
+	
 	# If activated a second time or developer has defaulted Shadow to enabled, we set the partner
 	# character for all normally solo options to Shadow instead
 	else:
