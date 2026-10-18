@@ -120,21 +120,11 @@ var CHARACTER_SHADOW := { label="Shadow (PREVIEW)", char1=Global.CHARACTERS.SHAD
 # Cheat tracking dictionary
 # Structure: "sequence_string": {"function": String, "state": int}
 var cheats: Dictionary = {
-	"19910623": {
-		"function": "sonic_cheat",
-	},
-	"19921124": {
-		"function": "tails_cheat",
-	},
-	"19931119": {
-		"function": "amy_cheat",
-	},
-	"19941019": {
-		"function": "knuckles_cheat",
-	},
-	"20010619": {
-		"function": "shadow_cheat",
-	},
+	"19910623": { "function": sonic_cheat },
+	"19921124": { "function": tails_cheat },
+	"19931119": { "function": amy_cheat },
+	"19941019": { "function": knuckles_cheat },
+	"20010619": { "function": shadow_cheat },
 }
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -163,15 +153,12 @@ func _add_to_cheat_buffer(digit: String) -> void:
 	# Check if the sequence exists in our dictionary
 	if cheats.has(entered_sequence):
 		var cheat_data: Dictionary = cheats[entered_sequence]
-		var function_name: String = cheat_data["function"]
+		cheat_data["function"].call(cheat_data)
 		
-		if has_method(function_name):
-			Callable(self, function_name).call(cheats[entered_sequence])
-			
-			# Optional: Clear the buffer after a successful activation 
-			# so the user doesn't accidentally trigger things repeatedly
-			cheat_buffer.clear()
-			
+		# Optional: Clear the buffer after a successful activation 
+		# so the user doesn't accidentally trigger things repeatedly
+		cheat_buffer.clear()
+		
 func set_all_partners(character: Global.CHARACTERS) -> void:
 	for i in range(1, characters.size()):
 		characters[i].char2 = character
