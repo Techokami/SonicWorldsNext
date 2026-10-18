@@ -27,8 +27,9 @@ var fire = null
 func _ready():
 	# Check if the badnik was previously destroyed.
 	super()
+	
 	# clear fire if destroyed before shooting
-	var _con = connect("destroyed",Callable(self,"clear_fire"))
+	destroyed.connect(clear_fire)
 
 func _process(delta):
 	if Engine.is_editor_hint():
@@ -39,32 +40,31 @@ func _process(delta):
 			editorOffset -= (speed*delta/travelDistance)*2
 		else:
 			editorOffset = 1
-	else:
-		super(delta)
 
 func _physics_process(delta):
-	if !Engine.is_editor_hint():
-		# move if not firing
-		if !isFiring:
-			# move position toward origin point with the travel distance
-			position = position.move_toward(origin+Vector2(travelDistance*side,0).rotated(deg_to_rad(flyDirection)),speed*delta)
-			# if at the destination point then turn around
-			if position.distance_to(origin+Vector2(travelDistance*side,0).rotated(deg_to_rad(flyDirection))) <= 1:
-				$Sprite2D.scale.x = -$Sprite2D.scale.x
-				side = -side
-				# pause during turn
-				$Sprite2D/Fire.visible = false
-				isFiring = true
-				$Timer.start(1)
-				await $Timer.timeout
-				# resume movement
-				isFiring = false
-				$Sprite2D/Fire.visible = true
-			else:
-				calc_dir()
-			# count down cool down
-			if coolDown > 0:
-				coolDown -= delta
+	super(delta)
+	
+	# move if not firing
+	if !isFiring:
+		# move position toward origin point with the travel distance
+		position = position.move_toward(origin + Vector2(travelDistance * side, 0.0).rotated(deg_to_rad(flyDirection)), speed * delta)
+		# if at the destination point then turn around
+		if position.distance_to(origin + Vector2(travelDistance * side, 0.0).rotated(deg_to_rad(flyDirection))) <= 1.0:
+			$Sprite2D.scale.x = -$Sprite2D.scale.x
+			side = -side
+			# pause during turn
+			$Sprite2D/Fire.visible = false
+			isFiring = true
+			$Timer.start(1.0)
+			await $Timer.timeout
+			# resume movement
+			isFiring = false
+			$Sprite2D/Fire.visible = true
+		else:
+			calc_dir()
+		# count down cool down
+		if coolDown > 0.0:
+			coolDown -= delta
 
 func calc_dir():
 	# calculate direction based on side movement and rotation

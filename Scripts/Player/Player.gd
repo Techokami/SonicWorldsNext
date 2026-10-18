@@ -1437,18 +1437,11 @@ func get_avatar() -> PlayerAvatar:
 	return self.player_avatar
 
 
-## Available directions for the player to use when using [method set_direction].
-enum DIRECTIONS {LEFT, RIGHT} # I'd wager there is already something more appropriate
-
-
-## Sets the direction of the player's sprite and direction value.
-func set_direction(new_direction: PlayerChar.DIRECTIONS) -> void:
-	if new_direction == DIRECTIONS.LEFT:
-		_direction = -1.0
-		sprite.flip_h = true
-		return
-	_direction = 1.0
-	sprite.flip_h = false
+## Sets the direction of the player's sprite and direction value
+## using the [enum Global.DIRECTIONS] enum.
+func set_direction(new_direction: Global.DIRECTIONS) -> void:
+	_direction = Global.DIRECTION_MULTIPLIERS[new_direction]
+	sprite.flip_h = (new_direction == Global.DIRECTIONS.LEFT)
 
 
 ## Analog of [member set_direction], but works based on a signed floating-point value.
@@ -1461,7 +1454,7 @@ func set_direction(new_direction: PlayerChar.DIRECTIONS) -> void:
 ## [param change_sprite_direction] - if [code]false[/code], only the movement direction
 ## is changed, and the sprite direction ([code]sprite.flip_h[/code]) is kept the same.
 func set_direction_signed(new_direction: float, change_sprite_direction: bool = true) -> void:
-	if new_direction != 0.0:
+	if absf(new_direction) != 0.0:
 		_direction = signf(new_direction)
 		if change_sprite_direction:
 			sprite.flip_h = (_direction < 0.0)
@@ -1495,9 +1488,9 @@ func player_bounce(source: Node2D, bounce_mode: PlayerChar.BOUNCE_MODES) -> void
 	true_current_state.state_player_bounce(source, bounce_mode)
 
 
-## Gets the player's direction using the [enum DIRECTIONS] enum.
-func get_direction() -> PlayerChar.DIRECTIONS:
-	return DIRECTIONS.RIGHT if _direction > 0.0 else DIRECTIONS.LEFT
+## Gets the player's direction using the [enum Global.DIRECTIONS] enum.
+func get_direction() -> Global.DIRECTIONS:
+	return Global.DIRECTIONS.RIGHT if _direction > 0.0 else Global.DIRECTIONS.LEFT
 
 
 ## Gets the player's direction in a way that is useful for calculations.[br]
@@ -1554,7 +1547,17 @@ func set_air_control(control: bool) -> void:
 # Also be aware that failing to disconnect a gimmick when you should is going to cause lots of
 # problems with other gimmick interactions.
 
-## Binds the player to the requested gimmick.[br]
+func _clean_up_gimmick_vars() -> void:
+	var new_variables: Dictionary = {}
+	for var_name: StringName in gimmick_variables:
+		if var_name.begins_with("_"):
+			new_variables[var_name] = gimmick_variables[var_name]
+	gimmick_variables = new_variables
+
+
+## Binds the player to the requested gimmick. Cleans up all [i]non-persistent[/i]
+## gimmick variables (see [method set_gimmick_var] for the definition of
+## [i]persistent[/i] variables).[br]
 ## [param gimmick] — gimmick to bind the player to.[br]
 ## [param allowSwap] — enable to make the old gimmick execute its own
 ##        [method ConnectableGimmick.player_force_detach_callback] and to
@@ -1562,33 +1565,38 @@ func set_air_control(control: bool) -> void:
 ## Returns [code]true[/code] if gimmick was able to be connected, [code]false[/code] otherwise.[br]
 ## Note: Never returns [code]false[/code] if [param allowSwap] is set.
 func set_active_gimmick(gimmick : ConnectableGimmick, allowSwap : bool=false) -> bool:
-	if allowSwap:
-		if active_gimmick != null: # if there is already an active gimmick, we need to run that
-								  # gimmicks player forced detached callback.
-			active_gimmick.player_force_detach_callback(self)
-		
-		active_gimmick = gimmick
-		return true
-	
-	# when swap is not allowed, we only set it if the player isn't already attached to another gimmick.
 	if active_gimmick != null:
-		return false
+		# when swap is not allowed, we only set it if the player
+		# isn't already attached to another gimmick
+		if not allowSwap:
+			return false
+		
+		# if there is already an active gimmick, we need
+		# to run that gimmick's player forced detached callback
+		active_gimmick.player_force_detach_callback(self)
 	
+	_clean_up_gimmick_vars()
 	active_gimmick = gimmick
 	return true
 
 
-## Unbinds the gimmick from the player.
+## Unbinds the gimmick from the player. Cleans up all [i]"non-persistent"[/i]
+## gimmick variables (see [method set_gimmick_var] for the definition of
+## [i]persistent[/i] variables).
 func unset_active_gimmick() -> void:
+	_clean_up_gimmick_vars()
 	active_gimmick = null
 
 
 ## Unbinds the player from its current gimmick, but only after running its force detach callback.
+## Cleans up all [i]"non-persistent"[/i] gimmick variables (see [method set_gimmick_var]
+## for the definition of [i]persistent[/i] variables).
 func force_detach() -> void:
 	if active_gimmick == null:
 		return
 
 	active_gimmick.player_force_detach_callback(self)
+	_clean_up_gimmick_vars()
 	active_gimmick = null
 
 
@@ -1599,12 +1607,23 @@ func get_active_gimmick() -> ConnectableGimmick:
 	return active_gimmick
 
 
-## Sets a value in the player's gimmick variable dictionary. Uses a key-value pair.
+## Sets a value in the player's gimmick variable dictionary. Uses a key-value pair.[br]
+## [b]Note:[/b] Prefixing the name with [code]"_"[/code] would make the variable
+## [i]"persistent"[/i]: [method set_active_gimmick], [method unset_active_gimmick]
+## and [method force_detach] won't remove it automatically, so you'll need
+## to clean it up manually using [method unset_gimmick var].[br]
+## [b]Note (2):[/b] creating a gimmick variable right before calling [method set_active_gimmick]
+## would result in the variable getting immediately removed by the latter, if the variable wasn't
+## [i]"presistent[/i] (see above).
 func set_gimmick_var(gimmickVarName: String, gimmickVarValue) -> void:
 	gimmick_variables[gimmickVarName] = gimmickVarValue
 
 
-## Removes a variable from the player's gimmick variable dictionary. Provide a key.
+## Removes a variable from the player's gimmick variable dictionary. Provide a key.[br]
+## [b]Note:[/b] There's no need to call this function when using
+## [member set_active_gimmick] or [member unset_active_gimmick], as these
+## functions automatically clean up all [i]"non-persistent"[/i] gimmick variables
+## (see [method set_gimmick_var] for the definition of [i]persistent[/i] variables).
 func unset_gimmick_var(gimmickVarName) -> void:
 	gimmick_variables.erase(gimmickVarName)
 
@@ -1616,8 +1635,7 @@ func get_gimmick_var(gimmickVarName, default: Variant = null):
 
 ## Removes all currently locked gimmicks from the player's locked gimmick list.
 func clear_locked_gimmicks():
-	for i in range(max_locked_gimmicks):
-		locked_gimmicks[i] = null
+	locked_gimmicks.fill(null)
 	locked_gimmicks_index = 0
 
 
@@ -1625,14 +1643,9 @@ func clear_locked_gimmicks():
 ## [param gimmick] — which gimmick should be locked.[br]
 ## [param lock_time] — how long should the gimmick be locked in seconds.
 func timed_gimmick_lock(gimmick: ConnectableGimmick, lock_time: float) -> void:
-	var unlock_func = func ():
-		clear_single_locked_gimmick(gimmick)
-	
-	var timer:SceneTreeTimer = get_tree().create_timer(lock_time, false)
-	timer.timeout.connect(unlock_func, CONNECT_DEFERRED)
-	
 	add_locked_gimmick(gimmick)
-	pass
+	await get_tree().create_timer(lock_time, false).timeout
+	clear_single_locked_gimmick.call_deferred(gimmick)
 
 
 ## Removes a single locked gimmick from the player's locked gimmick list if

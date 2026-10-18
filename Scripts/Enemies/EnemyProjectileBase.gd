@@ -31,7 +31,7 @@ var force_reflect
 func _ready():
 	$projectile.frame = 0
 
-func _process(delta):
+func _physics_process(delta: float) -> void:
 	for item in entities_hit:
 		if item is PlayerChar and !reflected:
 			var player : PlayerChar = item

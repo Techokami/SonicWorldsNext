@@ -14,6 +14,8 @@ func _ready():
 	direction = -sign(scale.x)
 
 func _physics_process(delta):
+	super(delta)
+	
 	# Dirction checks
 	$Motobug.scale.x = abs($Motobug.scale.x)*-direction
 	$FloorCheck.position.x = abs($FloorCheck.position.x)*direction
@@ -58,4 +60,3 @@ func _physics_process(delta):
 		get_parent().add_child(part)
 		part.global_position = global_position-(Vector2(24,-2)*direction)
 		part.play("MotoBugSmoke")
-	

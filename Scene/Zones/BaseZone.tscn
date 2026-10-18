@@ -767,19 +767,15 @@ bottom = 9
 
 [node name="SpeedBooster4" parent="Entity" instance=ExtResource("22_8mfa6")]
 position = Vector2(8456, 1592)
-boostDirection = 1
 
 [node name="SpeedBooster2" parent="Entity" instance=ExtResource("22_8mfa6")]
 position = Vector2(5504, 696)
-boostDirection = 1
 
 [node name="SpeedBooster3" parent="Entity" instance=ExtResource("22_8mfa6")]
 position = Vector2(5664, 696)
-boostDirection = 1
 
 [node name="SpeedBooster5" parent="Entity" instance=ExtResource("22_8mfa6")]
 position = Vector2(6088, 344)
-boostDirection = 1
 
 [node name="CorkscrewLoop" parent="Entity" instance=ExtResource("23_tu8k4")]
 position = Vector2(3456, 816)

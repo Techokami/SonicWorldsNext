@@ -399,10 +399,12 @@ allow_brake = true
 [node name="HorizontalBar6" parent="." instance=ExtResource("22_ethvu")]
 position = Vector2(2325, 599)
 allow_brake = true
+rotations = 2
 
 [node name="HorizontalBar7" parent="." instance=ExtResource("22_ethvu")]
 position = Vector2(2325, 501)
 allow_brake = true
+rotations = 3
 
 [node name="HorizontalBar8" parent="." instance=ExtResource("22_ethvu")]
 position = Vector2(2984, 442)

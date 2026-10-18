@@ -7,7 +7,10 @@ extends EnemyBase
 ## The height for the Chopper to jump at after the first time.
 @export var jump_height: float = 7.0
 ## The sprite graphic to use.
-@export var sprite_image: Texture2D = preload("res://Graphics/Enemies/chomper.png")
+@export var sprite_image: Texture2D = preload("res://Graphics/Enemies/chomper.png"):
+	set(value):
+		sprite_image = value
+		$Chomper.set_deferred(&"texture", sprite_image)
 
 @onready var _initial_pos_y: float = position.y
 
@@ -15,19 +18,21 @@ extends EnemyBase
 var animFrame = 0.0
 
 func _ready():
+	super()
+	
+	set_physics_process(false)
+	set_process(false)
+	
 	if Engine.is_editor_hint():
 		return
+	
 	# initial velocity
 	jump_height = -jump_height
 	$Chomper.texture = sprite_image
 	velocity.y = -first_jump_height
-	set_physics_process(false)
-	set_process(false)
 
 func _physics_process(delta):
-	if Engine.is_editor_hint():
-		$Chomper.texture = sprite_image
-		return
+	super(delta)
 	
 	# gravity
 	velocity.y += 0.09375/GlobalFunctions.div_by_delta(delta)
@@ -38,9 +43,7 @@ func _physics_process(delta):
 		velocity.y = jump_height * 60.0
 
 func _process(delta):
-	if Engine.is_editor_hint():
-		return
-	super(delta)
+	
 	# animation states
 	if position.y > _initial_pos_y - 192.0:
 		if velocity.y > 0:

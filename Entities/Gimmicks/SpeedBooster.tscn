@@ -37,6 +37,7 @@ shape = SubResource("1")
 z_index = 10
 position = Vector2(0, -4)
 texture = ExtResource("2")
+flip_h = true
 vframes = 2
 
 [node name="ShineAnimator" type="AnimatedSprite2D" parent="Booster"]
