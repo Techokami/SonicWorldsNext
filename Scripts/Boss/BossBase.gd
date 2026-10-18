@@ -49,6 +49,8 @@ func _physics_process(delta):
 						i.get_state_object(PlayerChar.STATES.GLIDE).is_fall = true
 				# check if dead
 				if hp <= 0:
+					for target: Targetable in find_children("*", "Targetable", true):
+						target.set_deferred(&"collision_layer", 0)
 					defeated.emit()
 			# if destroying the enemy fails and hit player exists then hit player
 			elif (i.has_method("hit_player")):
