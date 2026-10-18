@@ -191,7 +191,7 @@ func knuckles_cheat(_cheat: Dictionary) -> void:
 	$Cheats/KnucklesCheat.play()
 	set_all_partners(Global.CHARACTERS.KNUCKLES)
 
-func shadow_cheat(_cheat: Dictionary) -> void:
+func shadow_cheat(cheat: Dictionary) -> void:
 	# If the cheat hasn't been activated before, we need to add Shadow to selectable characters
 	if !(Global.shadow_enabled):
 		$Cheats/ShadowCheat.play()
