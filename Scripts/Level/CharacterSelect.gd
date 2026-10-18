@@ -112,7 +112,7 @@ func change_multiplayer_mode():
 # Player Select Screen cheats are currently entered via pressing the normal number keys. They might
 # fail if you bind these keys for some reason. No idea if the numpad works or not.
 # Dynamic buffer storing current cheat code input
-var cheat_buffer: Array[String] = []
+var entered_sequence: String = ""
 # Maximum length of cheat buffer currently large enough to store a date in YYYYMMDD format
 const MAX_CHEAT_BUFFER_SIZE: int = 8
 # Shadow isn't incldued by default, so we need a dict for him.
@@ -141,24 +141,20 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _add_to_cheat_buffer(digit: String) -> void:
 	# Add the new digit to the end
-	cheat_buffer.append(digit)
+	entered_sequence += digit
 	
 	# Drop the oldest entry if size exceeds 8
-	if cheat_buffer.size() > MAX_CHEAT_BUFFER_SIZE:
-		cheat_buffer.pop_front()
-	
-    # Flatten the array of strings into a single string sequence
-	var entered_sequence: String = "".join(cheat_buffer)
+	entered_sequence = entered_sequence.right(MAX_CHEAT_BUFFER_SIZE)
 	
 	# Check if the sequence exists in our dictionary
-	if cheats.has(entered_sequence):
+	if entered_sequence in cheats:
 		var cheat_data: Dictionary = cheats[entered_sequence]
 		cheat_data["function"].call(cheat_data)
 		
 		# Optional: Clear the buffer after a successful activation 
 		# so the user doesn't accidentally trigger things repeatedly
-		cheat_buffer.clear()
-		
+		entered_sequence = ""
+
 func set_all_partners(character: Global.CHARACTERS) -> void:
 	for i in range(1, characters.size()):
 		characters[i].char2 = character
