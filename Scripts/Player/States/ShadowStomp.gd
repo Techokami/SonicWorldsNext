@@ -22,8 +22,6 @@ func state_process(_delta: float) -> void:
 
 func state_physics_process(delta: float) -> void:
 	var physics = parent.get_physics()
-	var top_speed = physics.top_speed
-	var air_accel = physics.air_acceleration
 	var release_jump = physics.release_jump
 
 	# air movement

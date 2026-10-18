@@ -1730,6 +1730,7 @@ _data = {
 
 [node name="Tails" type="Node2D"]
 script = ExtResource("1_ifxof")
+normal_sprite = ExtResource("2")
 metadata/_edit_horizontal_guides_ = [-22.0]
 
 [node name="PlayerAnimation" type="AnimationPlayer" parent="."]
@@ -1748,7 +1749,6 @@ texture = ExtResource("2")
 offset = Vector2(0, -5)
 hframes = 16
 vframes = 18
-frame = 27
 script = ExtResource("5")
 
 [node name="DashDust" type="AnimatedSprite2D" parent="Sprite2D"]

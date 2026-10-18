@@ -26,7 +26,6 @@ func _process(delta):
 		# check if damage entity is on or supertime is bigger then 0
 		if (i.get_collision_layer_value(20) or i.supTime > 0 or forceDamage):
 			# Invoke player bounce checks and logic
-			print("Invoking player bounce")
 			i.player_bounce(self, PlayerChar.BOUNCE_MODES.NORMAL)
 			# destroy
 			Score.create(get_parent(), global_position, Global.SCORE_COMBO[min(Global.SCORE_COMBO.size()-1,i.enemyCounter)])

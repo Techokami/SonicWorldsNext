@@ -1,7 +1,5 @@
-## The PlayerAvatar class contains the specific attributes of your character.
-## For now this just contains the specific attributes and collision boxes for the character,
-## but with future refactoring this could include things like input mappings and per state
-## character code.
+@tool
+## Character specific Avatar for Knuckles
 class_name KnucklesAvatar extends PlayerAvatar
 
 ## Order of CHAR_STATES should be the same as the order of nodes under CharacterStates in

@@ -1,3 +1,4 @@
+@tool
 ## Character specific Avatar for Amy Rose
 class_name AmyAvatar extends PlayerAvatar
 

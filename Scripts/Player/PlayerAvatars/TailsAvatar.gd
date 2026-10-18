@@ -1,7 +1,5 @@
-## The PlayerAvatar class contains the specific attributes of your character.
-## For now this just contains the specific attributes and collision boxes for the character,
-## but with future refactoring this could include things like input mappings and per state
-## character code.
+@tool
+## Character specific Avatar for Tails
 extends PlayerAvatar
 
 # All attributes for this base class are used by Tails

@@ -1681,6 +1681,7 @@ item = 7
 [node name="Monitor24" parent="Monitors" instance=ExtResource("8_8svvy")]
 position = Vector2(201, 752)
 item = 7
+item = 2
 
 [node name="Hazards" type="Node2D" parent="."]
 

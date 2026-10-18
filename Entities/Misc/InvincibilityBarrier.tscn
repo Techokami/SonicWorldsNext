@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dy03hevqparlx"]
+
+[ext_resource type="Script" path="res://Scripts/Misc/InvincibilityBarrier.gd" id="1_4w8a1"]
+
+[node name="InvincibilityBarrier" type="Node2D"]
+top_level = true
+script = ExtResource("1_4w8a1")
+base_radius = 14.0

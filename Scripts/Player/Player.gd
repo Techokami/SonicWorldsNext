@@ -469,27 +469,10 @@ func _process(delta):
 			visible = true
 	if (ringDisTime > 0) and current_state != STATES.HIT:
 		ringDisTime -= delta
-
-	#Rotating stars
-	if ($InvincibilityBarrier.visible):
-		var stars = $InvincibilityBarrier.get_children()
-		var rot_angle: float = deg_to_rad(360.0*delta*4.0)
-		for i in stars:
-			i.position = i.position.rotated(rot_angle)
-			i.visible = visible
-
-		if (fmod(Global.globalTimer,0.1)+delta > 0.1) and visible:
-			var star = RotatingParticle.instantiate()
-			var starPart = star.get_node("GenericParticle")
-			star.global_position = global_position
-			starPart.getTarget = self
-			starPart.direction = -_direction
-			get_parent().add_child(star)
-			var options = ["StarSingle","StarSinglePat2","default"]
-			starPart.play(options[round(randf()*2)])
-			starPart.frame = randf_range(0,2)
-			starPart.velocity = velocity
-			starPart.position = stars[0].global_position-global_position
+		
+	# Rotating Stars
+	if $InvincibilityBarrier.visible:
+		$InvincibilityBarrier.right_direction = true if get_direction_multiplier() == 1 else false
 
 	# Animator
 	if current_state != STATES.PEELOUT:
@@ -1507,9 +1490,9 @@ enum BOUNCE_MODES {
 ## [param bounce_mode] - What the bounce mode should be - see BOUNCE_MODES enum for list of available modes
 ##                Note that not every state is necessarily going to care what the bounce mode is.
 func player_bounce(source: Node2D, bounce_mode: PlayerChar.BOUNCE_MODES) -> void:
-	var current_state: PlayerState = get_state_object(current_state)
+	var true_current_state: PlayerState = get_state_object(current_state)
 	player_avatar.handle_bounce()
-	current_state.state_player_bounce(source, bounce_mode)
+	true_current_state.state_player_bounce(source, bounce_mode)
 
 
 ## Gets the player's direction using the [enum DIRECTIONS] enum.

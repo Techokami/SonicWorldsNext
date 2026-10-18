@@ -113,12 +113,18 @@ func change_multiplayer_mode():
 # fail if you bind these keys for some reason. No idea if the numpad works or not.
 # Dynamic buffer storing current cheat code input
 var cheat_buffer: Array[String] = []
+
 # Maximum length of cheat buffer currently large enough to store a date in YYYYMMDD format
 const MAX_CHEAT_BUFFER_SIZE: int = 8
+
 # Shadow isn't incldued by default, so we need a dict for him.
 var CHARACTER_SHADOW := { label="Shadow (PREVIEW)", char1=Global.CHARACTERS.SHADOW, char2=Global.CHARACTERS.NONE }
+
 # Cheat tracking dictionary
-# Structure: "sequence_string": {"function": String, "state": int}
+# Structure: "sequence_string": {"function": String, ...}
+# the function string is mandatory
+# Other values can be stuffed into the entries for each cheat
+# for the sake of tracking the cheat state
 var cheats: Dictionary = {
 	"19910623": {
 		"function": "sonic_cheat",
@@ -181,23 +187,23 @@ func cheats_ready():
 	if Global.shadow_enabled:
 		characters.append(CHARACTER_SHADOW)
 
-func sonic_cheat(cheat: Dictionary) -> void:
+func sonic_cheat(_cheat: Dictionary) -> void:
 	$Cheats/SonicCheat.play()
 	set_all_partners(Global.CHARACTERS.SONIC)
 	
-func tails_cheat(cheat: Dictionary) -> void:
+func tails_cheat(_cheat: Dictionary) -> void:
 	$Cheats/TailsCheat.play()
 	set_all_partners(Global.CHARACTERS.TAILS)
 
-func amy_cheat(cheat: Dictionary) -> void:
+func amy_cheat(_cheat: Dictionary) -> void:
 	$Cheats/AmyCheat.play()
 	set_all_partners(Global.CHARACTERS.AMY)
 
-func knuckles_cheat(cheat: Dictionary) -> void:
+func knuckles_cheat(_cheat: Dictionary) -> void:
 	$Cheats/KnucklesCheat.play()
 	set_all_partners(Global.CHARACTERS.KNUCKLES)
 
-func shadow_cheat(cheat: Dictionary) -> void:
+func shadow_cheat(_cheat: Dictionary) -> void:
 	# If the cheat hasn't been activated before, we need to add Shadow to selectable characters
 	if !(Global.shadow_enabled):
 		$Cheats/ShadowCheat.play()
