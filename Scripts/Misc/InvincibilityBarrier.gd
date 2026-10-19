@@ -1,7 +1,7 @@
 @tool
 
 ## Controls the rotating star pattern that follows the player when they get an invincibility
-## monitor
+## monitor.
 
 extends Node2D
 
@@ -17,19 +17,19 @@ extends Node2D
 ## Duration of each individual animation frame in seconds (defaults to 1/60th of a second).
 @export var frame_duration: float = 1.0 / 60.0
 
-## If true, the animation bounces back and forth between min_frame and max_frame. 
-## If false, it loops.
+## If [code]true[/code], the animation bounces back and forth between [code]min_frame[/code] and [code]max_frame[/code].[br]
+## If [code]false[/code], it loops.
 @export var ping_pong: bool = true
 
-## Enables standalone scene testing (F6) with automatic camera creation and mouse tracking.
+## Enables standalone scene testing ([kbd]F6[/kbd]) with automatic camera creation and mouse tracking.
 @export var test_mode: bool = false
 
 ## Standard base radius distance at which orbiters rotate around their 
 ## tracked position history points.
 @export var base_radius: float = 17.0
 
-## Global rotation direction for orbiters (true for clockwise, false for counter-clockwise). 
-## Automatically updated by horizontal mouse movement when test_mode is active.
+## Global rotation direction for orbiters ([code]true[/code] for clockwise, [code]false[/code] for counter-clockwise). 
+## Automatically updated by horizontal mouse movement when [member test_mode] is active.
 @export var right_direction: bool = true
 
 ## Array of configuration dictionaries defining each trail/marker level (delay, 
