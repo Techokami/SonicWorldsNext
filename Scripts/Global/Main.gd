@@ -2,7 +2,7 @@ class_name MainGameScene
 extends Node2D
 
 # this gets emited when the scene fades, used to load in level details and data to hide it from the player
-# signal scene_faded
+signal scene_faded
 
 # was paused enables menu control when the player pauses manually so they don't get stuck (get_tree().paused may want to be used by other intances)
 var wasPaused = false

@@ -69,6 +69,9 @@ func _ready() -> void:
 	]
 
 func _process(delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
+	
 	# Copy orientational properties of the player srite to the flame sprite
 	$Sprite2D/Flames.flip_h = $Sprite2D.flip_h
 	$Sprite2D/Flames.flip_v = $Sprite2D.flip_v

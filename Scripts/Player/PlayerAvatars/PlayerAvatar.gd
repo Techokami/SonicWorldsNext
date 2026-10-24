@@ -10,7 +10,7 @@ func _get_configuration_warnings() -> PackedStringArray:
 	if Engine.is_editor_hint():
 		# Change your variable here!
 		test_super = false
-	return [] # Return empty because we aren't actually making a warning
+	return PackedStringArray() # Returns an empty PackedStringArray
 
 # All attributes for this base class are used by Sonic
 var hitboxes: Array[Vector2] = [
@@ -47,28 +47,34 @@ var hitboxes: Array[Vector2] = [
 @export var normal_sprite: Texture2D = preload("res://Graphics/Players/Sonic.png"):
 	set(value):
 		normal_sprite = value
-		if !test_super:
-			$Sprite2D.set_deferred(&"texture", normal_sprite)
+		var sprite = get_node_or_null("Sprite2D")
+		if !test_super and sprite != null:
+			sprite.set_deferred(&"texture", normal_sprite)
 
 @export var super_sprite: Texture2D = null: # A super sprite isn't mandatory.
 	set(value):
 		super_sprite = value
-		if test_super and super_sprite != null and $Sprite2D != null:
-			$Sprite2D.set_deferred(&"texture", super_sprite)
+		var sprite = get_node_or_null("Sprite2D")
+		if test_super and super_sprite != null and sprite != null:
+			sprite.set_deferred(&"texture", super_sprite)
 
 ## Toggles between normal and super form view in the scene editor
 @export var test_super: bool = false:
 	set(value):
 		test_super = value
+		var sprite = get_node_or_null("Sprite2D")
+		var palette = get_node_or_null("SuperPalette")
+		
 		if value == true:
-			if super_sprite != null:
-				$Sprite2D.set_deferred(&"texture", super_sprite)
-			$SuperPalette.call_deferred("play", &"Flash")
-			pass
+			if super_sprite != null and sprite != null:
+				sprite.set_deferred(&"texture", super_sprite)
+			if palette != null:
+				palette.call_deferred("play", &"Flash")
 		else:
-			$Sprite2D.set_deferred(&"texture", normal_sprite)
-			$SuperPalette.call_deferred("play", &"RESET")
-			pass
+			if sprite != null:
+				sprite.set_deferred(&"texture", normal_sprite)
+			if palette != null:
+				palette.call_deferred("play", &"RESET")
 
 
 ## This swill slurp up CharacterStates from your PlayerAvatar and turn them into a list

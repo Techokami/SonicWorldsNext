@@ -78,6 +78,8 @@ var reflective = false # used for reflecting projectiles
 # State array
 @onready var state_list = $States.get_children()
 
+@onready var invincibility_barrier: InvincibilityBarrier = $InvincibilityBarrier
+
 # Animation related
 # XXX This will all be deprecated soon. Use get_avatar() to get at all the sprite/animation stuff instead.
 @onready var _animator: PlayerCharAnimationPlayer = $Sonic/PlayerAnimation 
@@ -427,7 +429,7 @@ func _process(delta):
 		if !isSuper:
 			supTime -= delta
 		else:
-			$InvincibilityBarrier.visible = false
+			invincibility_barrier.visible = false
 			# Animate Palette
 			# check if ring count is greater then 0
 			# deactivate if stage cleared
@@ -442,7 +444,7 @@ func _process(delta):
 		if (supTime <= 0):
 			if (_shield != SHIELDS.NONE):
 				shieldSprite.visible = true
-			$InvincibilityBarrier.visible = false
+			invincibility_barrier.visible = false
 			# turn off super palette and physics (if super)
 			if is_instance_valid(superAnimator) and isSuper:
 				isSuper = false
@@ -471,8 +473,8 @@ func _process(delta):
 		ringDisTime -= delta
 		
 	# Rotating Stars
-	if $InvincibilityBarrier.visible:
-		$InvincibilityBarrier.right_direction = true if get_direction_multiplier() == 1 else false
+	if invincibility_barrier.visible:
+		invincibility_barrier.right_direction = true if get_direction_multiplier() == 1 else false
 
 	# Animator
 	if current_state != STATES.PEELOUT:

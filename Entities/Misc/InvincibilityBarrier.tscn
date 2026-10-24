@@ -5,4 +5,3 @@
 [node name="InvincibilityBarrier" type="Node2D"]
 top_level = true
 script = ExtResource("1_4w8a1")
-base_radius = 14.0
