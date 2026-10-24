@@ -39,11 +39,11 @@ enum CHAR_STATES {
 # Prevents Shadow from using abilities too soon after a bounce
 var ability_lock_timer := 0.0
 
-@onready var sfx = $SFX.get_children()
+@onready var sfx: Array[Node] = $SFX.get_children()
 @onready var vfx_animator: AnimationPlayer = $Sprite2D/VFXAnimator
 @onready var homing_tracker: TargetTracker = $HomingAttackArea
 @onready var homing_reticle: HomingAttackReticle = $HomingAttackReticle
-@onready var parent: PlayerChar = get_parent()
+@onready var parent: PlayerChar = null
 @onready var homing_attack_state: HomingAttackState = $CharacterStates/ShadowHomingAttack
 @onready var stomp_state: PlayerState = $CharacterStates/ShadowStomp
 
@@ -59,6 +59,9 @@ func get_hitbox(hitbox_type: PlayerChar.HITBOXES):
 func _ready() -> void:
 	normal_sprite = preload("res://Graphics/Players/Shadow.png")
 	super_sprite = null
+	
+	if !Engine.is_editor_hint():
+		parent = get_parent()
 	
 	hitboxes = [
 		Vector2(9,19)*2,  # NORMAL
@@ -169,7 +172,7 @@ func shadow_boost_pressed_or_held(player: PlayerChar) -> bool:
 
 func shadow_jump_dash(player: PlayerChar):
 	# Spawn effect
-	var new_burst = burst.instantiate()
+	var new_burst: Node2D = burst.instantiate()
 	Global.get_level().add_child(new_burst)
 	new_burst.global_position = global_position
 	

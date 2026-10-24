@@ -112,6 +112,234 @@ class_name InvincibilityBarrier extends Node2D
 		if Engine.is_editor_hint():
 			_initialize_animation_arrays()
 
+## Presets containing predefined marker configurations.
+const MARKER_CONFIG_PRESETS: Dictionary = {
+	"[]": [
+		{
+		}
+	],
+	# If we make any changes to the actual marker_configs default, they should be reflected in
+	# S2 Default
+	"S2 Default": [
+		{ 
+			"delay": 0.0, 
+			"radius_multiplier": 1.0, 
+			"orbiter_count": 2, 
+			"orbiter_period": 32.0 / 60.0, 
+			"orbiter_offset": 0.0,
+			"animation_indices": [
+				[7, 4, 6, 4, 4, 6, 4, 7, 4, 6, 6, 4],
+				[7, 4, 6, 4, 4, 6, 4, 7, 4, 6, 6, 4]
+			],
+			"alpha": 1.0,
+			"off_frame_phase_offset": PI / 2.0
+		},
+		{ 
+			"delay": (3.0 / 60.0), 
+			"radius_multiplier": 1.0, 
+			"orbiter_count": 2, 
+			"orbiter_period": 32.0 / 60.0, 
+			"orbiter_offset": PI / 4.0,
+			"animation_indices": [
+				[2, 3, 4, 5, 6, 7, 6, 5, 4, 3],
+				[7, 6, 5, 4, 3, 2, 3, 4, 5, 6]
+			],
+			"alpha": 1.0,
+			"off_frame_phase_offset": 0.0
+		},
+		{ 
+			"delay": (6.0 / 60.0), 
+			"radius_multiplier": 1.0, 
+			"orbiter_count": 2, 
+			"orbiter_period": 32.0 / 60.0, 
+			"orbiter_offset": 2.0 * PI / 4.0,
+			"animation_indices": [
+				[7, 6, 5, 4, 3, 2, 1, 2, 3, 4, 5, 6],
+				[1, 2, 3, 4, 5, 6, 7, 6, 5, 4, 3, 2]
+			],
+			"alpha": 1.0,
+			"off_frame_phase_offset": 0.0
+		},
+		{ 
+			"delay": (9.0 / 60.0), 
+			"radius_multiplier": 1.0, 
+			"orbiter_count": 2, 
+			"orbiter_period": 32.0 / 60.0, 
+			"orbiter_offset": 3.0 * PI / 4.0,
+			"animation_indices": [
+				[0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1],
+				[6, 5, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5]
+			],
+			"alpha": 1.0,
+			"off_frame_phase_offset": 0.0
+		}
+	],
+	"example_2": [
+		{ 
+			"delay": 0.0, 
+			"radius_multiplier": 1.2, 
+			"orbiter_count": 6, 
+			"orbiter_period": -24.0 / 60.0, 
+			"orbiter_offset": 0.0,
+			"animation_indices": [
+				[0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1],
+				[6, 5, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5],
+				[0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1],
+				[6, 5, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5],
+				[0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1],
+				[6, 5, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5]
+			],
+			"alpha": 1.0,
+			"off_frame_phase_offset": 0.0
+		},
+		{ 
+			"delay": (4.0 / 60.0), 
+			"radius_multiplier": 1.0, 
+			"orbiter_count": 4, 
+			"orbiter_period": 32.0 / 60.0, 
+			"orbiter_offset": PI / 6.0,
+			"animation_indices": [
+				[6, 5, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5],
+				[0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1],
+				[6, 5, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5],
+				[0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1],
+			],
+			"alpha": 0.85,
+			"off_frame_phase_offset": PI / 4.0
+		},
+		{ 
+			"delay": (8.0 / 60.0), 
+			"radius_multiplier": 0.8, 
+			"orbiter_count": 2, 
+			"orbiter_period": 48.0 / 60.0, 
+			"orbiter_offset": PI / 3.0,
+			"animation_indices": [
+				[0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1],
+				[6, 5, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5],
+			],
+			"alpha": 0.6,
+			"off_frame_phase_offset": 0.0
+		}
+	],
+	"example_3": [
+		{ 
+			"delay": 0.0, 
+			"radius_multiplier": 0.6, 
+			"orbiter_count": 3, 
+			"orbiter_period": -16.0 / 60.0, 
+			"orbiter_offset": 0.0,
+			"animation_indices": [], # Leaving a preset blank here just uses the default anim string
+			"alpha": 1.0,
+			"off_frame_phase_offset": 0.0
+		},
+		{ 
+			"delay": (3.0 / 60.0), 
+			"radius_multiplier": 0.9, 
+			"orbiter_count": 3, 
+			"orbiter_period": 24.0 / 60.0, 
+			"orbiter_offset": PI / 3.0,
+			"animation_indices": [],
+			"alpha": 1.0,
+			"off_frame_phase_offset": PI / 3.0
+		},
+		{ 
+			"delay": (6.0 / 60.0), 
+			"radius_multiplier": 1.3, 
+			"orbiter_count": 3, 
+			"orbiter_period": -36.0 / 60.0, 
+			"orbiter_offset": 2.0 * PI / 3.0,
+			"animation_indices": [],
+			"alpha": 1.0,
+			"off_frame_phase_offset": 0.0
+		},
+		{ 
+			"delay": (9.0 / 60.0), 
+			"radius_multiplier": 1.8, 
+			"orbiter_count": 3, 
+			"orbiter_period": 48.0 / 60.0, 
+			"orbiter_offset": PI,
+			"animation_indices": [],
+			"alpha": 1.0,
+			"off_frame_phase_offset": PI / 6.0
+		}
+	],
+	"example_4": [
+		{ 
+			"delay": 0.0, 
+			"radius_multiplier": 1.0, 
+			"orbiter_count": 2, 
+			"orbiter_period": -20.0 / 60.0, 
+			"orbiter_offset": 0.0,
+			"animation_indices": [],
+			"alpha": 1.0,
+			"off_frame_phase_offset": PI / 2.0
+		},
+		{ 
+			"delay": (2.0 / 60.0), 
+			"radius_multiplier": 1.05, 
+			"orbiter_count": 2, 
+			"orbiter_period": -24.0 / 60.0, 
+			"orbiter_offset": PI / 5.0,
+			"animation_indices": [],
+			"alpha": 0.8,
+			"off_frame_phase_offset": PI / 3.0
+		},
+		{ 
+			"delay": (4.0 / 60.0), 
+			"radius_multiplier": 1.1, 
+			"orbiter_count": 2, 
+			"orbiter_period": -28.0 / 60.0, 
+			"orbiter_offset": 2.0 * PI / 5.0,
+			"animation_indices": [],
+			"alpha": 0.6,
+			"off_frame_phase_offset": PI / 4.0
+		},
+		{ 
+			"delay": (6.0 / 60.0), 
+			"radius_multiplier": 1.15, 
+			"orbiter_count": 2, 
+			"orbiter_period": -32.0 / 60.0, 
+			"orbiter_offset": 3.0 * PI / 5.0,
+			"animation_indices": [],
+			"alpha": 0.4,
+			"off_frame_phase_offset": PI / 5.0
+		},
+		{ 
+			"delay": (8.0 / 60.0), 
+			"radius_multiplier": 1.2, 
+			"orbiter_count": 2, 
+			"orbiter_period": -36.0 / 60.0, 
+			"orbiter_offset": 4.0 * PI / 5.0,
+			"animation_indices": [],
+			"alpha": 0.2,
+			"off_frame_phase_offset": PI / 6.0
+		}
+	]
+}
+
+## Select a preset configuration to populate marker_configs.
+@export_enum("[]", "S2 Default", "example_2", "example_3", "example_4") \
+		var marker_config_preset: String = "[]":
+	set(val):
+		if val == "[]":
+			return
+		
+		if MARKER_CONFIG_PRESETS.has(val):
+			_apply_preset(val)
+			marker_config_preset = "[]" # Reset back to blank after applying
+
+## Rebuilds the marker_configs array based on the selected preset key.
+func _apply_preset(preset_name: String) -> void:
+	if not MARKER_CONFIG_PRESETS.has(preset_name):
+		return
+		
+	var new_configs: Array[Dictionary] = []
+	for config in MARKER_CONFIG_PRESETS[preset_name]:
+		new_configs.append(config.duplicate(true))
+		
+	marker_configs = new_configs
+	notify_property_list_changed()
+
 # Used to adjust the default draw pos when running in test mode
 var custom_draw_pos: Vector2 = Vector2.ZERO
 # Used to track direction when running in test mode
