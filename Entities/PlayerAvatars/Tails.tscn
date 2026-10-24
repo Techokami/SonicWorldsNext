@@ -1800,6 +1800,7 @@ _data = {
 
 [node name="Tails" type="Node2D"]
 script = ExtResource("1_ifxof")
+normal_sprite = ExtResource("2")
 metadata/_edit_horizontal_guides_ = [-22.0]
 
 [node name="PlayerAnimation" type="AnimationPlayer" parent="."]

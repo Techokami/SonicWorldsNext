@@ -1,7 +1,5 @@
-## The PlayerAvatar class contains the specific attributes of your character.
-## For now this just contains the specific attributes and collision boxes for the character,
-## but with future refactoring this could include things like input mappings and per state
-## character code.
+@tool
+## Character specific Avatar for Shadow
 class_name ShadowAvatar extends PlayerAvatar
 
 # homing attack is available while airborn -- reset when landing, switching to climb, or bouncing
@@ -41,11 +39,11 @@ enum CHAR_STATES {
 # Prevents Shadow from using abilities too soon after a bounce
 var ability_lock_timer := 0.0
 
-@onready var sfx = $SFX.get_children()
+@onready var sfx: Array[Node] = $SFX.get_children()
 @onready var vfx_animator: AnimationPlayer = $Sprite2D/VFXAnimator
 @onready var homing_tracker: TargetTracker = $HomingAttackArea
 @onready var homing_reticle: HomingAttackReticle = $HomingAttackReticle
-@onready var parent: PlayerChar = get_parent()
+@onready var parent: PlayerChar = null
 @onready var homing_attack_state: HomingAttackState = $CharacterStates/ShadowHomingAttack
 @onready var stomp_state: PlayerState = $CharacterStates/ShadowStomp
 
@@ -62,6 +60,9 @@ func _ready() -> void:
 	normal_sprite = preload("res://Graphics/Players/Shadow.png")
 	super_sprite = null
 	
+	if !Engine.is_editor_hint():
+		parent = get_parent()
+	
 	hitboxes = [
 		Vector2(9,19)*2,  # NORMAL
 		Vector2(7,14)*2,  # ROLL
@@ -71,6 +72,9 @@ func _ready() -> void:
 	]
 
 func _process(delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
+	
 	# Copy orientational properties of the player srite to the flame sprite
 	$Sprite2D/Flames.flip_h = $Sprite2D.flip_h
 	$Sprite2D/Flames.flip_v = $Sprite2D.flip_v
@@ -81,7 +85,7 @@ func _process(delta: float) -> void:
 	controller_direction = Vector2(parent.get_x_input(), parent.get_y_input())
 	
 	# Used for determining best angle only, does not impact collision box orientation
-	var preferred_angle = controller_direction
+	#var preferred_angle = controller_direction
 	
 	# If the player is holding in an upward direction, this does not control
 	if controller_direction.y < 0:
@@ -168,9 +172,9 @@ func shadow_boost_pressed_or_held(player: PlayerChar) -> bool:
 
 func shadow_jump_dash(player: PlayerChar):
 	# Spawn effect
-	var burst = burst.instantiate()
-	Global.get_level().add_child(burst)
-	burst.global_position = global_position
+	var new_burst: Node2D = burst.instantiate()
+	Global.get_level().add_child(new_burst)
+	new_burst.global_position = global_position
 	
 	# play sound
 	sfx[2].play() # Jump Dash Sound
@@ -233,9 +237,10 @@ func shadow_jump_actions_callback(_state: PlayerState, player: PlayerChar, _delt
 	
 	return true
 	
-func shadow_ground_actions_callback(_state: PlayerState, player: PlayerChar, _delta: float) -> bool:
+func shadow_ground_actions_callback(_state: PlayerState, _player: PlayerChar, _delta: float) -> bool:
 	# I think we need a horrible hack right here for now... or to postpone it for later.
 	return true
+	
 #endregion
 
 func reset_air_abilities():

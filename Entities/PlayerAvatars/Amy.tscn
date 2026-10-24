@@ -1386,6 +1386,7 @@ _data = {
 
 [node name="Amy" type="Node2D"]
 script = ExtResource("1_onyi3")
+normal_sprite = ExtResource("2_vki44")
 metadata/_edit_horizontal_guides_ = [-23.0]
 
 [node name="PlayerAnimation" type="AnimationPlayer" parent="."]
