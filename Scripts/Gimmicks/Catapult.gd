@@ -8,7 +8,7 @@ class_name CatapultGimmick extends ConnectableGimmick
 @export var direction: Global.DIRECTIONS = Global.DIRECTIONS.RIGHT:
 	set(value):
 		direction = value
-		scale.x = Global.DIRECTION_MULTIPLIERS[value]
+		scale.x = direction
 		_calculate_launch_velocity()
 
 ## Velocity the catapult starts moving with.[br]
