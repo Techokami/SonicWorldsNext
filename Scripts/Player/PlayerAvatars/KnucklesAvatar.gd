@@ -33,7 +33,7 @@ func knuckles_jump_glide_callback(_state: PlayerState, player: PlayerChar, _delt
 	
 	if player.any_action_pressed():
 		player.movement = Vector2(player.get_direction() * 4.0 * 60.0, maxf(player.movement.y, 0.0))
-		player.set_state(PlayerChar.STATES.GLIDE, hitboxes[3])
+		player.set_state(PlayerChar.STATES.GLIDE, hitboxes[PlayerChar.HITBOXES.GLIDE])
 	
 	return true
 
