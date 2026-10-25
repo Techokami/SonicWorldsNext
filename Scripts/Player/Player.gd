@@ -1514,12 +1514,6 @@ func get_direction() -> Global.DIRECTIONS:
 	return Global.DIRECTIONS.RIGHT if _direction > 0.0 else Global.DIRECTIONS.LEFT
 
 
-## Gets the player's direction in a way that is useful for calculations.[br]
-## Returns [code]-1.0[/code] if left, or [code]1.0[/code] if right.
-func get_direction_multiplier() -> float:
-	return _direction
-
-
 ## Gets the player's ground speed.
 func get_ground_speed() -> float:
 	return _ground_speed

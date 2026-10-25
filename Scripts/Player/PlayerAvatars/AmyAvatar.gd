@@ -106,7 +106,7 @@ func amy_exit_jump_dropdash_callback(_exit_state: PlayerState,
 	# Check if moving forward or back
 	# Forward landing
 	var is_super := int(player.isSuper)
-	var direction := player.get_direction_multiplier()
+	var direction: float = player.get_direction()
 	var drop_speed: int = DROP_SPEED[is_super] * 60
 	var drop_max: int = DROP_MAX[is_super] * 60
 

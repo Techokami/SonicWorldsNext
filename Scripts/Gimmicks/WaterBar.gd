@@ -130,7 +130,7 @@ func destroy_bar():
 	var mid_sprite: Sprite2D = $VerticalBarSpriteMiddle
 	var top_sprite: Sprite2D = $VerticalBarSpriteTop
 	var collider: Area2D = $VerticalBarArea
-	var release_direction = 1.0
+	var release_direction: Global.DIRECTIONS = Global.DIRECTIONS.RIGHT
 	
 	# Play the destroy sound
 	Global.play_sound(collapseSFX)
@@ -145,7 +145,7 @@ func destroy_bar():
 	
 	# Remove all players
 	for player: PlayerChar in Global.get_players_on_gimmick(self):
-		release_direction = player.get_direction_multiplier()
+		release_direction = player.get_direction()
 		remove_player(player)
 	
 	# Create debris sprites
