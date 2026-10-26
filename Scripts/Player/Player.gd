@@ -66,10 +66,8 @@ var current_state = STATES.AIR
 @onready var defaultHitBoxPos = $HitBox.position
 var crouchBox = null
 
-## Shield enumerator.[br]
-## Note: Keep [constant COUNT] as the last entry since it is used to know how
-## many options there are.
-enum SHIELDS {NONE, NORMAL, FIRE, ELEC, BUBBLE, COUNT}
+## Shield enumerator.
+enum SHIELDS { NONE, NORMAL, FIRE, ELEC, BUBBLE }
 var _shield: SHIELDS = SHIELDS.NONE
 @onready var magnetShape = $RingMagnet/CollisionShape2D
 @onready var shieldSprite: AnimatedSprite2D = $Shields
