@@ -5,7 +5,7 @@ extends StaticBody2D
 
 func physics_collision(body, hitVector):
 	# check if physics object is coming down and check for a bit where the player isn't on floor
-	if hitVector == Vector2.DOWN and body.get_collision_layer_value(20):
+	if hitVector == Vector2.DOWN and body.get_collision_layer_value(Global.COLLISION_LAYERS.DAMAGE_ENTITIES):
 		var parent: Node = get_parent()
 		
 		# disable collision

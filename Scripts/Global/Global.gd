@@ -175,6 +175,40 @@ enum HAZARDS {NORMAL, FIRE, ELEC, WATER}
 # Layers references
 enum LAYERS {LOW, HIGH}
 
+# Collision layer constants.
+# The layer names in project settings are automatically updated to the names from these constants
+# by using method `String.capitalize()` on each enum member.
+# For some constants `String.capitalize()` doesn't give the desired result (for example,
+# `"TOP_SOLID_LOW".capitalize()` results in "Top Solid Low" instead of "Top Solid (Low)",
+# as there's no way to put parentheses into an identifier name), but this can be overridden
+# by leaving a comment to the right from the identifier itself, on the same line. These comments
+# are parsed in `SetProjectSettings.gd` each time the project is opened in Godot Editor.
+enum COLLISION_LAYERS {
+	TOP_SOLID = 1,
+	LEFT_SOLID,
+	RIGHT_SOLID,
+	BOTTOM_SOLID,
+	TOP_SOLID_LOW, # Top Solid (Low)
+	LEFT_SOLID_LOW, # Left Solid (Low)
+	RIGHT_SOLID_LOW, # Right Solid (Low)
+	BOTTOM_SOLID_LOW, # Bottom Solid (Low)
+	TOP_SOLID_HIGH, # Top Solid (High)
+	LEFT_SOLID_HIGH, # Left Solid (High)
+	RIGHT_SOLID_HIGH, # Right Solid (High)
+	BOTTOM_SOLID_HIGH, # Bottom Solid (High)
+	PLAYER,
+	OBJECT,
+	ENEMY,
+	SOLID_IF_NOT_ROLLING, # Solid if not Rolling
+	BLOCK_PLAYER_NO_PHYSICS_CHANGE, # Block Player (no physics change)
+	SOLID_IF_NOT_ON_FLOOR, # Solid if not on Floor
+	SOLID_IF_NOT_KNUCKLES, # Solid if not Knuckles
+	DAMAGE_ENTITIES,
+	SOLID_IF_NOT_ROLLING_OR_NOT_KNUCKLES, # Solid if not Rolling or not Knuckles
+	CRUSHER,
+	WATER_SURFACE,
+}
+
 # Debugging
 var is_main_loaded = false
 
