@@ -42,10 +42,10 @@ func state_physics_process(delta: float) -> void:
 	
 	var layerMemory = parent.collision_layer
 	# set parent layer to collide with terrain
-	parent.set_collision_layer_value(1,true)
-	parent.set_collision_layer_value(2,true)
-	parent.set_collision_layer_value(3,true)
-	parent.set_collision_layer_value(4,true)
+	parent.set_collision_layer_value(Global.COLLISION_LAYERS.TOP_SOLID, true)
+	parent.set_collision_layer_value(Global.COLLISION_LAYERS.LEFT_SOLID, true)
+	parent.set_collision_layer_value(Global.COLLISION_LAYERS.RIGHT_SOLID, true)
+	parent.set_collision_layer_value(Global.COLLISION_LAYERS.BOTTOM_SOLID, true)
 	
 	# Do a test move to make sure we aren't inside an object, if not in a free location then just do fly logic
 	if !goToNormal or parent.test_move(parent.global_transform,Vector2.ZERO):

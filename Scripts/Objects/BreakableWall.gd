@@ -16,8 +16,8 @@ enum TYPE {
 ## Breaks the wall, plays the break sound and creates broken pieces.
 func break_wall(player: PlayerChar, hitVector):
 	# disable physics altering masks
-	set_collision_layer_value(16,false)
-	set_collision_mask_value(14,false)
+	set_collision_layer_value(Global.COLLISION_LAYERS.SOLID_IF_NOT_ROLLING, false)
+	set_collision_mask_value(Global.COLLISION_LAYERS.OBJECT, false)
 	# give frame buffer
 	await get_tree().process_frame
 	$CollisionShape2D.disabled = true
@@ -49,7 +49,7 @@ func physics_collision(body: PlayerChar, hitVector):
 		#XXX TODO Need to fix this script to use character break force for all checks
 		
 		# Non-Knuckles characters can't break
-		if get_collision_layer_value(19):
+		if get_collision_layer_value(Global.COLLISION_LAYERS.SOLID_IF_NOT_KNUCKLES):
 			# If they are moving against it, they also get stopped
 			if sign(body.movement.x) == sign(hitVector.x):
 				body.movement.x = 0

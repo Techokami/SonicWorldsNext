@@ -85,8 +85,8 @@ func state_process(delta: float) -> void:
 				# set vertical sensors to check for objects
 				
 				var maskMemory = [parent.verticalSensorLeft.collision_mask,parent.verticalSensorRight.collision_mask]
-				parent.verticalSensorLeft.set_collision_mask_value(13,true)
-				parent.verticalSensorRight.set_collision_mask_value(13,true)
+				parent.verticalSensorLeft.set_collision_mask_value(Global.COLLISION_LAYERS.PLAYER, true)
+				parent.verticalSensorRight.set_collision_mask_value(Global.COLLISION_LAYERS.PLAYER, true)
 				#parent.verticalSensorLeft.force_raycast_update()
 				#parent.verticalSensorRight.force_raycast_update()
 				#parent.verticalSensorMiddle.force_raycast_update()

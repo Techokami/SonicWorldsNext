@@ -30,7 +30,7 @@ func _physics_process(delta):
 		# loop through players as i
 		for i: PlayerChar in playerHit:
 			# check if damage entity is on or supertime is bigger then 0
-			if (i.get_collision_layer_value(20) or i.supTime > 0 or forceDamage):
+			if i.get_collision_layer_value(Global.COLLISION_LAYERS.DAMAGE_ENTITIES) or i.supTime > 0 or forceDamage:
 				i.player_bounce(self, PlayerChar.BOUNCE_MODES.BOSS)
 				# hit
 				if hp > 0:
@@ -69,7 +69,7 @@ func _on_body_exited(body):
 
 func _on_DamageArea_area_entered(area):
 	# damage checking
-	if area.get("parent") != null and area.get_collision_layer_value(20):
+	if area.get(&"parent") != null and area.get_collision_layer_value(Global.COLLISION_LAYERS.DAMAGE_ENTITIES):
 		if !playerHit.has(area.parent):
 			forceDamage = true
 			playerHit.append(area.parent)
