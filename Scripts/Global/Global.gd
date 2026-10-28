@@ -96,15 +96,12 @@ var waterLevel = null
 var setWaterLevel = 0 # used by other nodes to change the water level
 var waterScrollSpeed = 64 # used by other nodes for how fast to move the water to different levels
 
-## Horizontal directions.
-enum DIRECTIONS { LEFT, RIGHT }
-## Multipliers for use in calculations. Meant to be used in conjunction with [enum DIRECTIONS].[br]
-## Example:
+## Horizontal directions.[br]
+## Aside from being enum members, they can also be used in calculations, e.g.:
 ## [codeblock]
-## var direction: Global.DIRECTIONS = get_direction()
-## offset = 10.0 * Global.DIRECTION_MULTIPLIERS[direction]
+## offset = 10.0 * player.get_direction()
 ## [/codeblock]
-const DIRECTION_MULTIPLIERS: Array[float] = [ -1.0, 1.0 ]
+enum DIRECTIONS { LEFT = -1, RIGHT = 1 }
 
 # characters (if you want more you should add one here, see the player script too for more settings)
 enum CHARACTERS {NONE,SONIC,TAILS,KNUCKLES,AMY,SHADOW}

@@ -66,10 +66,8 @@ var current_state = STATES.AIR
 @onready var defaultHitBoxPos = $HitBox.position
 var crouchBox = null
 
-## Shield enumerator.[br]
-## Note: Keep [constant COUNT] as the last entry since it is used to know how
-## many options there are.
-enum SHIELDS {NONE, NORMAL, FIRE, ELEC, BUBBLE, COUNT}
+## Shield enumerator.
+enum SHIELDS { NONE, NORMAL, FIRE, ELEC, BUBBLE }
 var _shield: SHIELDS = SHIELDS.NONE
 @onready var magnetShape = $RingMagnet/CollisionShape2D
 @onready var shieldSprite: AnimatedSprite2D = $Shields
@@ -1457,7 +1455,7 @@ func get_avatar() -> PlayerAvatar:
 ## Sets the direction of the player's sprite and direction value
 ## using the [enum Global.DIRECTIONS] enum.
 func set_direction(new_direction: Global.DIRECTIONS) -> void:
-	_direction = Global.DIRECTION_MULTIPLIERS[new_direction]
+	_direction = new_direction
 	sprite.flip_h = (new_direction == Global.DIRECTIONS.LEFT)
 
 
@@ -1486,12 +1484,12 @@ func flip_movement_direction() -> void:
 
 enum BOUNCE_MODES {
 	NORMAL,   ## For a normal aerial bounce, player will go through the enemy if hit from below,
-	          ## bounce off the top of the enemy if hit from above
+			  ## bounce off the top of the enemy if hit from above
 	BOSS,     ## Bouncing off of a boss normally means the player bounces back in the direction they
-	          ## came from regardless if it's from above or below.
+			  ## came from regardless if it's from above or below.
 	GIMMICK,  ## Let the gimmick decide the motion of the bounce, any animations, while the state is
-	          ## responsible for whatever other cleanup is involved (like resetting abilities in the
-	          ## case of Shadow's homing attack
+			  ## responsible for whatever other cleanup is involved (like resetting abilities in the
+			  ## case of Shadow's homing attack
 }
 ## Invokes the current bounce behavior of the player (state dependent) -- used to handle
 ## the behaviors associated with the player jumping on top of enemies and monitors, possibly some
@@ -1505,15 +1503,13 @@ func player_bounce(source: Node2D, bounce_mode: PlayerChar.BOUNCE_MODES) -> void
 	current_state_obj.state_player_bounce(source, bounce_mode)
 
 
-## Gets the player's direction using the [enum Global.DIRECTIONS] enum.
+## Gets the player's direction using the [enum Global.DIRECTIONS] enum.[br]
+## The value returned by this function can also be used in calculations, e.g.:
+## [codeblock]
+## offset = 10.0 * player.get_direction()
+## [/codeblock]
 func get_direction() -> Global.DIRECTIONS:
 	return Global.DIRECTIONS.RIGHT if _direction > 0.0 else Global.DIRECTIONS.LEFT
-
-
-## Gets the player's direction in a way that is useful for calculations.[br]
-## Returns [code]-1.0[/code] if left, or [code]1.0[/code] if right.
-func get_direction_multiplier() -> float:
-	return _direction
 
 
 ## Gets the player's ground speed.

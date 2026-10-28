@@ -280,6 +280,9 @@ func _process_player_shimmy_animation(player: PlayerChar) -> void:
 
 func _process_player_launch(player: PlayerChar) -> void:
 	var animator: PlayerCharAnimationPlayer = player.get_avatar().get_animator()
+	if animator.current_animation == "grabHorizontalBar":
+		return
+	
 	var anim_pos: float = animator.get_current_animation_position() / animator.get_current_animation_length()
 	var entry_vel: float = player.get_gimmick_var(_GIMMICK_VAR_ENTRY_VELOCITY)
 	

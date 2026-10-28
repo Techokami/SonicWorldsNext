@@ -90,7 +90,7 @@ func _process(delta: float) -> void:
 	# Allow the player to adjust the collision box direction
 	# XXX Consider moving homing attack field stuff to jump process
 	homing_tracker.set_rotation(0)
-	var direction_sign: float = parent.get_direction_multiplier()
+	var direction_sign: float = parent.get_direction()
 	homing_tracker.scale.x = direction_sign
 	if controller_direction.length() > 0:
 		homing_tracker.set_rotation((controller_direction * direction_sign).angle())
@@ -178,7 +178,7 @@ func shadow_jump_dash(player: PlayerChar):
 	# enable wall cling
 	cling_enabled = true
 	
-	player.movement = Vector2(6 * player.get_direction_multiplier() * 60, -2 * 60)
+	player.movement = Vector2(6.0 * player.get_direction(), -2.0) * 60.0
 	homing_attack_available = false
 	
 	# Mostly only needed in case we have to cancel the stomp state
