@@ -27,6 +27,7 @@ ProjectSettingsUpdater="*res://Scripts/Global/ProjectSettingsUpdater.gd"
 
 [debug]
 
+gdscript/warnings/unused_signal=0
 gdscript/warnings/integer_division=0
 shapes/collision/shape_color=Color(1, 1, 1, 0.501961)
 

@@ -1740,6 +1740,7 @@ _data = {
 [node name="Shadow" type="Node2D"]
 script = ExtResource("1_ual21")
 super_physics = ExtResource("2_jav52")
+normal_sprite = ExtResource("4_0t11s")
 metadata/_edit_horizontal_guides_ = [-18.0, 19.0]
 metadata/_edit_vertical_guides_ = [-20.0, -141.0]
 

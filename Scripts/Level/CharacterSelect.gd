@@ -106,7 +106,6 @@ func change_multiplayer_mode():
 	$UI/Labels/Control/MutliplayerMode.text = Global.MULTIMODE.find_key(Global.get_multimode())
 
 
-
 # CHEATS SECTION
 # Code below this point is just used for cheat codes
 # Player Select Screen cheats are currently entered via pressing the normal number keys. They might
