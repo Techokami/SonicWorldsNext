@@ -1508,6 +1508,7 @@ power_sneakers_physics = SubResource("Resource_euol4")
 water_physics = SubResource("Resource_r4arn")
 super_physics = SubResource("Resource_b1qk1")
 super_water_physics = SubResource("Resource_b045f")
+normal_sprite = ExtResource("2")
 metadata/_edit_horizontal_guides_ = [-18.0]
 
 [node name="PlayerAnimation" type="AnimationPlayer" parent="."]
