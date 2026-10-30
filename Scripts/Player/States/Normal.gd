@@ -85,8 +85,8 @@ func state_process(delta: float) -> void:
 				# set vertical sensors to check for objects
 				
 				var maskMemory = [parent.verticalSensorLeft.collision_mask,parent.verticalSensorRight.collision_mask]
-				parent.verticalSensorLeft.set_collision_mask_value(13,true)
-				parent.verticalSensorRight.set_collision_mask_value(13,true)
+				parent.verticalSensorLeft.set_collision_mask_value(Global.COLLISION_LAYERS.PLAYER, true)
+				parent.verticalSensorRight.set_collision_mask_value(Global.COLLISION_LAYERS.PLAYER, true)
 				#parent.verticalSensorLeft.force_raycast_update()
 				#parent.verticalSensorRight.force_raycast_update()
 				#parent.verticalSensorMiddle.force_raycast_update()
@@ -100,9 +100,11 @@ func state_process(delta: float) -> void:
 				parent.verticalSensorRight.collision_mask = maskMemory[1]
 				
 				# flip sensors
-				if parent.get_direction_multiplier() < 0.0:
+				if parent.get_direction() == Global.DIRECTIONS.LEFT:
+					var tmp: bool = getL
 					getL = getR
-					getR = parent.verticalSensorLeft.is_colliding()
+					getR = tmp
+				
 				# No edge detected
 				if getM or !parent.ground or parent.angle != parent.gravityAngle:
 					# Play default idle animation
@@ -224,7 +226,7 @@ func state_physics_process(delta: float) -> void:
 		if !animator.is_playing() or inputX == sign(parent.movement.x):
 			skid = (round(parent.movement.x) != 0 and inputX != sign(parent.movement.x) and inputX != 0)
 		
-	parent.sprite.flip_h = (parent.get_direction_multiplier() < 0.0)
+	parent.sprite.flip_h = (parent.get_direction() == Global.DIRECTIONS.LEFT)
 	
 	parent.movement.y = min(parent.movement.y,0)
 	

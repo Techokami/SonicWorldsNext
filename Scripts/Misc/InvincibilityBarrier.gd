@@ -24,7 +24,7 @@ class_name InvincibilityBarrier extends Node2D
 ## Global rotation direction for orbiters ([code]true[/code] for clockwise, [code]false[/code] for
 ## counter-clockwise). Automatically updated by horizontal mouse movement when [member test_mode]
 ## is active.
-@export var right_direction: bool = true
+@export var rotation_direction: Global.DIRECTIONS = Global.DIRECTIONS.RIGHT
 
 ## Array of configuration dictionaries defining each trail/marker level (delay, 
 ## sprite frame offsets, radius multipliers, orbiter counts, periods, phase offsets, 
@@ -437,7 +437,10 @@ func _process(delta: float) -> void:
 	if test_mode:
 		var current_mouse_pos = get_local_mouse_position()
 		if current_mouse_pos.x != last_mouse_pos.x:
-			right_direction = (current_mouse_pos.x > last_mouse_pos.x)
+			if current_mouse_pos.x > last_mouse_pos.x:
+				rotation_direction = Global.DIRECTIONS.RIGHT
+			else:
+				rotation_direction = Global.DIRECTIONS.LEFT
 		last_mouse_pos = current_mouse_pos
 		custom_draw_pos = current_mouse_pos
 	else:
@@ -533,7 +536,6 @@ func _draw() -> void:
 	var frame_height: float = texture_height
 	
 	var current_time: float = accumulated_time
-	var dir_sign: float = 1.0 if right_direction else -1.0
 	
 	if marker_frames.size() != marker_configs.size():
 		_initialize_animation_arrays()
@@ -564,7 +566,7 @@ func _draw() -> void:
 		
 		for j: int in range(orbiter_count):
 			var angle: float = orbiter_offset + frame_phase_shift \
-					+ dir_sign * (2.0 * PI * current_time / orbiter_period) \
+					+ rotation_direction * (2.0 * PI * current_time / orbiter_period) \
 					+ (2.0 * PI * j / orbiter_count)
 			
 			var offset_vector: Vector2 = Vector2.from_angle(angle) * radius

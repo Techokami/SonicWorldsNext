@@ -53,7 +53,7 @@ func _physics_process(_delta):
 			i.set_state(PlayerChar.STATES.CORKSCREW)
 			# Animation check
 			if animator.get_current_animation() != "roll":
-				if i.get_direction_multiplier() > 0.0:
+				if i.get_direction() == Global.DIRECTIONS.RIGHT:
 					animator.play("corkScrew")
 				else:
 					animator.play("corkScrewOffset")

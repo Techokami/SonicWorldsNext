@@ -69,7 +69,7 @@ func state_process(_delta: float) -> void:
 		if !parent.inputs[parent.INPUTS.ACTION] and !parent.inputs[parent.INPUTS.ACTION2] and !parent.inputs[parent.INPUTS.ACTION3]:
 			parent.movement.x *= 0.25
 			animator.play("glideFall")
-			parent.sprite.flip_h = (parent.get_direction_multiplier() < 0.0)
+			parent.sprite.flip_h = (parent.get_direction() == Global.DIRECTIONS.LEFT)
 			# reset hitbox
 			parent.set_hitbox(parent.get_predefined_hitbox(PlayerChar.HITBOXES.NORMAL))
 			is_fall = true
@@ -93,16 +93,16 @@ func state_physics_process(delta: float) -> void:
 	# check if not falling, if not then do glide routine
 	if !is_fall and !sliding:
 		# Turning
-		var direction: float = parent.get_direction_multiplier()
+		var direction: Global.DIRECTIONS = parent.get_direction()
 		# left
-		if direction > 0.0:
+		if direction == Global.DIRECTIONS.RIGHT:
 			if turnTimer >= 180:
 				speedPreservation = abs(parent.movement.x)
 			if turnTimer > 0:
 				turnTimer -= 2.8125*delta*60
 				parent.movement.x = speedPreservation*cos(deg_to_rad(turnTimer))
 		# right
-		elif direction < 0.0:
+		else: ## direction == Global.DIRECTIONS.LEFT
 			if turnTimer <= 0:
 				speedPreservation = abs(parent.movement.x)
 			if turnTimer < 180:
@@ -122,7 +122,7 @@ func state_physics_process(delta: float) -> void:
 		
 		# air movement
 		if parent.pushingWall == 0:
-			parent.movement.x = clampf(parent.movement.x+(glideAccel[int(parent.isSuper)]/GlobalFunctions.div_by_delta(delta)*parent.get_direction_multiplier()),-speedClamp,speedClamp)
+			parent.movement.x = clampf(parent.movement.x + (glideAccel[int(parent.isSuper)] / GlobalFunctions.div_by_delta(delta) * direction), -speedClamp, speedClamp)
 		
 		# Limit vertical movement
 		if parent.movement.y < 0.5*60:
@@ -169,7 +169,7 @@ func state_physics_process(delta: float) -> void:
 			#
 			# This modification will be revisited later.
 			parent.set_direction_signed(parent.movement.x)
-			parent.sprite.flip_h = (parent.get_direction_multiplier() < 0.0)
+			parent.sprite.flip_h = (parent.get_direction() == Global.DIRECTIONS.LEFT)
 			
 			parent.set_character_action_state(KnucklesAvatar.CHAR_STATES.KNUCKLES_CLIMB,
 							 parent.get_predefined_hitbox(PlayerChar.HITBOXES.GLIDE),
@@ -188,7 +188,6 @@ func state_physics_process(delta: float) -> void:
 	
 	# if sliding then do sliding routine
 	elif sliding:
-		
 		parent.set_direction_signed(parent.movement.x)
 		parent.movement.x = move_toward(parent.movement.x,0,friction/GlobalFunctions.div_by_delta(delta))
 		
@@ -210,7 +209,7 @@ func state_physics_process(delta: float) -> void:
 		if !parent.ground and groundBuffer >= 1:
 			sliding = false
 			animator.play("glideFall")
-			parent.sprite.flip_h = (parent.get_direction_multiplier() < 0.0)
+			parent.sprite.flip_h = (parent.get_direction() == Global.DIRECTIONS.LEFT)
 			# reset hitbox
 			parent.set_predefined_hitbox(PlayerChar.HITBOXES.NORMAL)
 			is_fall = true
@@ -232,7 +231,7 @@ func state_physics_process(delta: float) -> void:
 					var air_accel = parent.get_physics().air_acceleration
 					parent.movement.x = clamp(parent.movement.x + air_accel / GlobalFunctions.div_by_delta(delta) * parent.inputs[parent.INPUTS.XINPUT], -top_speed, top_speed)
 			# set direction
-			parent.sprite.flip_h = (parent.get_direction_multiplier() < 0.0)
+			parent.sprite.flip_h = (parent.get_direction() == Global.DIRECTIONS.LEFT)
 			
 		# landing
 		if parent.ground and !landed:

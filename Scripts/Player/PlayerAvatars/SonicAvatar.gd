@@ -72,7 +72,7 @@ func activate_fireshield(_state: PlayerState, player: PlayerChar):
 	player.abilityUsed = true
 	
 	player.sfx[14].play()
-	player.movement = Vector2(8*60*player.get_direction_multiplier(),0)
+	player.movement = Vector2(8.0 * 60.0 * player.get_direction(), 0.0)
 	player.shieldSprite.play("FireAction")
 	
 	# set timer for animation related resets
@@ -188,7 +188,7 @@ func sonic_exit_jump_dropdash_callback(_exit_state: PlayerState,
 	drop_timer = 0
 	
 	var is_super := int(player.isSuper)
-	var direction := player.get_direction_multiplier()
+	var direction: float = player.get_direction()
 	var drop_speed: int = DROP_SPEED[is_super] * 60
 	var drop_max: int = DROP_MAX[is_super] * 60
 	
@@ -228,7 +228,7 @@ func sonic_exit_jump_dropdash_callback(_exit_state: PlayerState,
 	var dust = player.Particle.instantiate()
 	dust.play("DropDash")
 	dust.global_position = player.global_position+Vector2(0,2).rotated(player.rotation)
-	dust.scale.x = player.get_direction_multiplier()
+	dust.scale.x = direction
 	player.get_parent().add_child(dust)
 	
 	# Don't allow the regular transition to continue! We want the player to stay in roll!

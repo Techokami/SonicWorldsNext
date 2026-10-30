@@ -160,7 +160,7 @@ func physics_collision(body: PlayerChar, hitVector):
 		if body.movement.y < 0:
 			body.movement.y *= -1
 	# check that player has the rolling layer bit set
-	elif body.get_collision_layer_value(20):
+	elif body.get_collision_layer_value(Global.COLLISION_LAYERS.DAMAGE_ENTITIES):
 		body.player_bounce(self, PlayerChar.BOUNCE_MODES.GIMMICK)
 		# Bounce from below
 		if hitVector.x != 0:

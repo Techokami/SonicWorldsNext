@@ -66,20 +66,20 @@ func _ready():
 	#	i.enabled = true
 	update_sensors()
 	# Object check only needs to be set once
-	objectCheck.set_collision_mask_value(1,false)
-	objectCheck.set_collision_mask_value(14,true)
-	objectCheck.set_collision_mask_value(16,true)
-	objectCheck.set_collision_mask_value(17,true)
+	objectCheck.set_collision_mask_value(Global.COLLISION_LAYERS.TOP_SOLID, false)
+	objectCheck.set_collision_mask_value(Global.COLLISION_LAYERS.OBJECT, true)
+	objectCheck.set_collision_mask_value(Global.COLLISION_LAYERS.SOLID_IF_NOT_ROLLING, true)
+	objectCheck.set_collision_mask_value(Global.COLLISION_LAYERS.BLOCK_PLAYER_NO_PHYSICS_CHANGE, true)
 	objectCheck.hit_from_inside = true
-	verticalObjectCheck.set_collision_mask_value(1,false)
-	verticalObjectCheck.set_collision_mask_value(14,true)
+	verticalObjectCheck.set_collision_mask_value(Global.COLLISION_LAYERS.TOP_SOLID, false)
+	verticalObjectCheck.set_collision_mask_value(Global.COLLISION_LAYERS.OBJECT, true)
 	#objectCheck.enabled = true
 	#verticalObjectCheck.enabled = true
 	# middle should also check for objects
-	verticalSensorMiddle.set_collision_mask_value(14,true)
-	verticalSensorMiddleEdge.set_collision_mask_value(14,true)
-	verticalSensorMiddle.set_collision_mask_value(17,true)
-	verticalSensorMiddleEdge.set_collision_mask_value(17,true)
+	verticalSensorMiddle.set_collision_mask_value(Global.COLLISION_LAYERS.OBJECT, true)
+	verticalSensorMiddleEdge.set_collision_mask_value(Global.COLLISION_LAYERS.OBJECT, true)
+	verticalSensorMiddle.set_collision_mask_value(Global.COLLISION_LAYERS.BLOCK_PLAYER_NO_PHYSICS_CHANGE, true)
+	verticalSensorMiddleEdge.set_collision_mask_value(Global.COLLISION_LAYERS.BLOCK_PLAYER_NO_PHYSICS_CHANGE, true)
 
 ## Resets the position of the PhysicsObject's sensor objects and reruns all collision
 ## checks.
@@ -167,26 +167,38 @@ func update_sensors():
 	
 	# set collission mask values
 	for i in sensorList:
-		i.set_collision_mask_value(1,i.target_position.rotated(rotationSnap).y > 0)
-		i.set_collision_mask_value(2,i.target_position.rotated(rotationSnap).x > 0)
-		i.set_collision_mask_value(3,i.target_position.rotated(rotationSnap).x < 0)
-		i.set_collision_mask_value(4,i.target_position.rotated(rotationSnap).y < 0)
+		i.set_collision_mask_value(Global.COLLISION_LAYERS.TOP_SOLID, i.target_position.rotated(rotationSnap).y > 0)
+		i.set_collision_mask_value(Global.COLLISION_LAYERS.LEFT_SOLID, i.target_position.rotated(rotationSnap).x > 0)
+		i.set_collision_mask_value(Global.COLLISION_LAYERS.RIGHT_SOLID, i.target_position.rotated(rotationSnap).x < 0)
+		i.set_collision_mask_value(Global.COLLISION_LAYERS.BOTTOM_SOLID, i.target_position.rotated(rotationSnap).y < 0)
+		
+		# make sure directional solidity constants have consecutive values,
+		# as the tricks below depend on that
+		const _static_check_consecutive_values: int = 1 / int(
+			Global.COLLISION_LAYERS.LEFT_SOLID == Global.COLLISION_LAYERS.TOP_SOLID + 1 and
+			Global.COLLISION_LAYERS.RIGHT_SOLID == Global.COLLISION_LAYERS.TOP_SOLID + 2 and
+			Global.COLLISION_LAYERS.BOTTOM_SOLID == Global.COLLISION_LAYERS.TOP_SOLID + 3 and
+			Global.COLLISION_LAYERS.TOP_SOLID_LOW == Global.COLLISION_LAYERS.TOP_SOLID + 4 and
+			Global.COLLISION_LAYERS.LEFT_SOLID_LOW == Global.COLLISION_LAYERS.TOP_SOLID + 5 and
+			Global.COLLISION_LAYERS.RIGHT_SOLID_LOW == Global.COLLISION_LAYERS.TOP_SOLID + 6 and
+			Global.COLLISION_LAYERS.BOTTOM_SOLID_LOW == Global.COLLISION_LAYERS.TOP_SOLID + 7 and
+			Global.COLLISION_LAYERS.TOP_SOLID_HIGH == Global.COLLISION_LAYERS.TOP_SOLID + 8 and
+			Global.COLLISION_LAYERS.LEFT_SOLID_HIGH == Global.COLLISION_LAYERS.TOP_SOLID + 9 and
+			Global.COLLISION_LAYERS.RIGHT_SOLID_HIGH == Global.COLLISION_LAYERS.TOP_SOLID + 10 and
+			Global.COLLISION_LAYERS.BOTTOM_SOLID_HIGH == Global.COLLISION_LAYERS.TOP_SOLID + 11)
+		
 		# reset layer masks
-		i.set_collision_mask_value(5,false)
-		i.set_collision_mask_value(6,false)
-		i.set_collision_mask_value(7,false)
-		i.set_collision_mask_value(8,false)
-		i.set_collision_mask_value(9,false)
-		i.set_collision_mask_value(10,false)
-		i.set_collision_mask_value(11,false)
-		i.set_collision_mask_value(12,false)
+		i.collision_mask &= ~(
+			1 << (Global.COLLISION_LAYERS.TOP_SOLID_LOW - 1) | 1 << (Global.COLLISION_LAYERS.LEFT_SOLID_LOW - 1) |
+			1 << (Global.COLLISION_LAYERS.RIGHT_SOLID_LOW - 1) | 1 << (Global.COLLISION_LAYERS.BOTTOM_SOLID_LOW - 1) |
+			1 << (Global.COLLISION_LAYERS.TOP_SOLID_HIGH - 1) | 1 << (Global.COLLISION_LAYERS.LEFT_SOLID_HIGH - 1) |
+			1 << (Global.COLLISION_LAYERS.RIGHT_SOLID_HIGH - 1) | 1 << (Global.COLLISION_LAYERS.BOTTOM_SOLID_HIGH - 1))
 		
 		# set layer masks
-		i.set_collision_mask_value(1+((collissionLayer+1)*4),i.get_collision_mask_value(1))
-		i.set_collision_mask_value(2+((collissionLayer+1)*4),i.get_collision_mask_value(2))
-		i.set_collision_mask_value(3+((collissionLayer+1)*4),i.get_collision_mask_value(3))
-		i.set_collision_mask_value(4+((collissionLayer+1)*4),i.get_collision_mask_value(4))
-	
+		var directional_collisions: int = (i.collision_mask &
+			1 << (Global.COLLISION_LAYERS.TOP_SOLID - 1) | 1 << (Global.COLLISION_LAYERS.LEFT_SOLID - 1) |
+			1 << (Global.COLLISION_LAYERS.RIGHT_SOLID - 1) | 1 << (Global.COLLISION_LAYERS.BOTTOM_SOLID - 1))
+		i.collision_mask |= directional_collisions << (4 * (collissionLayer + 1))
 	
 	horizontalSensor.force_raycast_update()
 	backSensor.force_raycast_update()
@@ -330,7 +342,7 @@ func _physics_process(delta):
 		var maskMemory = collision_mask
 		
 		# move in place to make sure the player doesn't clip into objects
-		set_collision_mask_value(17,true)
+		set_collision_mask_value(Global.COLLISION_LAYERS.BLOCK_PLAYER_NO_PHYSICS_CHANGE, true)
 		var _col = move_and_collide(Vector2.ZERO)
 		
 		var dirList = [Vector2.UP,Vector2.DOWN,Vector2.LEFT,Vector2.RIGHT]
@@ -444,12 +456,10 @@ func check_for_ceiling():
 	# Create and set up a temporary Raycast
 	var ceilChecker = RayCast2D.new()
 	$HitBox.add_child(ceilChecker)
-	ceilChecker.collision_mask = 2184
 	
-	if collissionLayer == 0:
-		ceilChecker.set_collision_mask_value(12,false)
-	else:
-		ceilChecker.set_collision_mask_value(8,false)
+	ceilChecker.set_collision_mask_value(Global.COLLISION_LAYERS.BOTTOM_SOLID, true)
+	ceilChecker.set_collision_mask_value(Global.COLLISION_LAYERS.BOTTOM_SOLID_LOW, (collissionLayer == 0))
+	ceilChecker.set_collision_mask_value(Global.COLLISION_LAYERS.BOTTOM_SOLID_HIGH, (collissionLayer != 0))
 	
 	ceilChecker.target_position.y = 0-verticalSensorLeft.target_position.y
 	ceilChecker.force_raycast_update()

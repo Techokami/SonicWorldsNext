@@ -60,7 +60,7 @@ func _on_body_exited(body):
 
 
 func _on_DamageArea_area_entered(area):
-	if area.get("parent") != null and area.get_collision_layer_value(20):
+	if area.get(&"parent") != null and area.get_collision_layer_value(Global.COLLISION_LAYERS.DAMAGE_ENTITIES):
 		if !entities_hit.has(area.parent):
 			force_reflect = true
 			entities_hit.append(area.parent)

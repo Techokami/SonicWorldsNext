@@ -66,10 +66,8 @@ var current_state = STATES.AIR
 @onready var defaultHitBoxPos = $HitBox.position
 var crouchBox = null
 
-## Shield enumerator.[br]
-## Note: Keep [constant COUNT] as the last entry since it is used to know how
-## many options there are.
-enum SHIELDS {NONE, NORMAL, FIRE, ELEC, BUBBLE, COUNT}
+## Shield enumerator.
+enum SHIELDS { NONE, NORMAL, FIRE, ELEC, BUBBLE }
 var _shield: SHIELDS = SHIELDS.NONE
 @onready var magnetShape = $RingMagnet/CollisionShape2D
 @onready var shieldSprite: AnimatedSprite2D = $Shields
@@ -474,7 +472,7 @@ func _process(delta):
 		
 	# Rotating Stars
 	if invincibility_barrier.visible:
-		invincibility_barrier.right_direction = true if get_direction_multiplier() == 1 else false
+		invincibility_barrier.rotation_direction = get_direction()
 
 	# Animator
 	if current_state != STATES.PEELOUT:
@@ -566,15 +564,15 @@ func _physics_process(delta):
 	
 	# physics sets
 	# collide with solids if not rolling layer
-	set_collision_mask_value(16,!attacking)
+	set_collision_mask_value(Global.COLLISION_LAYERS.SOLID_IF_NOT_ROLLING, not attacking)
 	# collide with solids if not knuckles layer
-	set_collision_mask_value(19,!character == Global.CHARACTERS.KNUCKLES)
+	set_collision_mask_value(Global.COLLISION_LAYERS.SOLID_IF_NOT_KNUCKLES, (character != Global.CHARACTERS.KNUCKLES))
 	# collide with solids if not rolling or not knuckles layer
-	set_collision_mask_value(21,(character != Global.CHARACTERS.KNUCKLES and !attacking))
+	set_collision_mask_value(Global.COLLISION_LAYERS.SOLID_IF_NOT_ROLLING_OR_NOT_KNUCKLES, (character != Global.CHARACTERS.KNUCKLES and not attacking))
 	# damage mask bit
-	set_collision_layer_value(20,attacking)
+	set_collision_layer_value(Global.COLLISION_LAYERS.DAMAGE_ENTITIES, attacking)
 	# water surface running
-	set_collision_mask_value(23,ground and absf(_ground_speed) >= 7.0*60 and !water)
+	set_collision_mask_value(Global.COLLISION_LAYERS.WATER_SURFACE, ground and absf(_ground_speed) >= 7.0 * 60 and not water)
 	
 	if (ground):
 		_ground_speed = movement.x
@@ -1186,15 +1184,15 @@ func action_water_run_handle():
 	var touchWater = false
 	var colCheck = move_and_collide(Vector2.DOWN.rotated(rotation),true)
 	if colCheck:
-		touchWater = colCheck.get_collider().get_collision_layer_value(23)
+		touchWater = colCheck.get_collider().get_collision_layer_value(Global.COLLISION_LAYERS.WATER_SURFACE)
 	
 	# enable dash dust if touching water
-	dash.visible = (get_collision_mask_value(23) and touchWater and ground)
+	dash.visible = (get_collision_mask_value(Global.COLLISION_LAYERS.WATER_SURFACE) and touchWater and ground)
 	dash.scale.x = sign(movement.x)
 	dash.position.y = $HitBox.shape.size.y/2.0
 
 	# play water run sound
-	if get_collision_mask_value(23) and touchWater and ground:
+	if get_collision_mask_value(Global.COLLISION_LAYERS.WATER_SURFACE) and touchWater and ground:
 		if !sfx[29].playing:
 			sfx[29].play()
 	else:
@@ -1442,7 +1440,7 @@ func get_avatar() -> PlayerAvatar:
 ## Sets the direction of the player's sprite and direction value
 ## using the [enum Global.DIRECTIONS] enum.
 func set_direction(new_direction: Global.DIRECTIONS) -> void:
-	_direction = Global.DIRECTION_MULTIPLIERS[new_direction]
+	_direction = new_direction
 	sprite.flip_h = (new_direction == Global.DIRECTIONS.LEFT)
 
 
@@ -1471,12 +1469,12 @@ func flip_movement_direction() -> void:
 
 enum BOUNCE_MODES {
 	NORMAL,   ## For a normal aerial bounce, player will go through the enemy if hit from below,
-	          ## bounce off the top of the enemy if hit from above
+			  ## bounce off the top of the enemy if hit from above
 	BOSS,     ## Bouncing off of a boss normally means the player bounces back in the direction they
-	          ## came from regardless if it's from above or below.
+			  ## came from regardless if it's from above or below.
 	GIMMICK,  ## Let the gimmick decide the motion of the bounce, any animations, while the state is
-	          ## responsible for whatever other cleanup is involved (like resetting abilities in the
-	          ## case of Shadow's homing attack
+			  ## responsible for whatever other cleanup is involved (like resetting abilities in the
+			  ## case of Shadow's homing attack
 }
 ## Invokes the current bounce behavior of the player (state dependent) -- used to handle
 ## the behaviors associated with the player jumping on top of enemies and monitors, possibly some
@@ -1490,15 +1488,13 @@ func player_bounce(source: Node2D, bounce_mode: PlayerChar.BOUNCE_MODES) -> void
 	true_current_state.state_player_bounce(source, bounce_mode)
 
 
-## Gets the player's direction using the [enum Global.DIRECTIONS] enum.
+## Gets the player's direction using the [enum Global.DIRECTIONS] enum.[br]
+## The value returned by this function can also be used in calculations, e.g.:
+## [codeblock]
+## offset = 10.0 * player.get_direction()
+## [/codeblock]
 func get_direction() -> Global.DIRECTIONS:
 	return Global.DIRECTIONS.RIGHT if _direction > 0.0 else Global.DIRECTIONS.LEFT
-
-
-## Gets the player's direction in a way that is useful for calculations.[br]
-## Returns [code]-1.0[/code] if left, or [code]1.0[/code] if right.
-func get_direction_multiplier() -> float:
-	return _direction
 
 
 ## Gets the player's ground speed.

@@ -23,6 +23,7 @@ Global="*res://Scripts/Global/Global.gd"
 GlobalFunctions="*res://Scripts/Global/GlobalFunctions.gd"
 MusicController="*res://Scripts/Global/MusicController.gd"
 Main="*res://Scene/Main.tscn"
+ProjectSettingsUpdater="*res://Scripts/Global/ProjectSettingsUpdater.gd"
 
 [debug]
 
@@ -228,7 +229,7 @@ ui_reset={
 2d_physics/layer_20="Damage Entities"
 2d_physics/layer_21="Solid if not Rolling or not Knuckles"
 2d_physics/layer_22="Crusher"
-2d_physics/layer_23="WaterSurface"
+2d_physics/layer_23="Water Surface"
 
 [rendering]
 

@@ -32,7 +32,7 @@ func _ready():
 	enteranceArea.add_child(hitbox)
 	enteranceArea.collision_layer = 0
 	enteranceArea.collision_mask = 0
-	enteranceArea.set_collision_mask_value(13,true)
+	enteranceArea.set_collision_mask_value(Global.COLLISION_LAYERS.PLAYER, true)
 	enteranceArea.connect("body_entered",Callable(self,"_on_hitbox_enter"))
 	enteranceArea.global_position = global_position+get_point_position(0)
 	

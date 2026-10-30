@@ -65,11 +65,13 @@ func try_cheat() -> Key:
 	if Input.is_key_pressed(KEY_COMMA):
 		if Global.players[0].is_in_water():
 			# if the player is in water, the only bubble and normal shield are useful. We'll just
-			# always go with water to avoid extra conditions.
-			Global.players[0].set_shield(PlayerChar.SHIELDS.BUBBLE)
+			# switch between bubble and none to avoid extra conditions.
+			Global.players[0].set_shield(
+				PlayerChar.SHIELDS.NONE if Global.players[0].get_shield() == PlayerChar.SHIELDS.BUBBLE
+				else PlayerChar.SHIELDS.BUBBLE)
 		else:
 			# Otherwise cycle the shields in order
-			Global.players[0].set_shield((Global.players[0].get_shield() + 1) % PlayerChar.SHIELDS.COUNT)
+			Global.players[0].set_shield((Global.players[0].get_shield() + 1) % PlayerChar.SHIELDS.size())
 		return KEY_COMMA
 		
 	# Place the test block below the player and make it move upwards
