@@ -472,7 +472,7 @@ func _process(delta):
 		
 	# Rotating Stars
 	if invincibility_barrier.visible:
-		invincibility_barrier.right_direction = true if get_direction_multiplier() == 1 else false
+		invincibility_barrier.rotation_direction = get_direction()
 
 	# Animator
 	if current_state != STATES.PEELOUT:
