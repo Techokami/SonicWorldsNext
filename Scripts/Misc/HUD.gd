@@ -23,8 +23,9 @@ static var lives_textures: Array[Texture2D] = []
 # used for flashing UI elements (rings, time)
 var flashTimer = 0
 
-# isStageEnding is used for level completion, stop loop recursions
+# `isStageEnding` and `tallying` are used for level completion
 var isStageEnding = false
+var tallying: bool = false
 
 # level clear bonuses (check _on_CounterCount_timeout)
 var timeBonus = 0
@@ -251,17 +252,41 @@ func _process(delta):
 			# wait for counter wait time to count down
 			$LevelClear/CounterWait.start()
 			await $LevelClear/CounterWait.timeout
-			# start the level counter tally (see _on_CounterCount_timeout)
-			$LevelClear/CounterCount.start()
+			# start the level counter tally
+			tallying = true
 			# initially the tick sound isn't looped, so let's make it loop
 			tick_looped.loop_mode = AudioStreamWAV.LOOP_FORWARD
 			$LevelClear/Counter.play()
 			await self.tally_clear
+			# Don't stop the tick sound abruptly, just disable looping,
+			# so it stops by itself after it plays until the end once
+			tick_looped.loop_mode = AudioStreamWAV.LOOP_DISABLED
+			# stop the score tally and play score sound
+			tallying = false
+			$LevelClear/Score.play()
 			# wait 2 seconds (reuse timer)
 			$LevelClear/CounterWait.start(2)
 			await $LevelClear/CounterWait.timeout
 			# after clear, change to next level in Global.nextZone (you can set the next zone in the level script node)
 			Main.change_scene(Global.nextZone)
+		
+		# counter countdown
+		if tallying:
+			# reset air in case we are under water
+			_reset_air()
+			# decrease bonuses in order, if time bonus not 0 then count time down, then do the same for rings
+			# if you add other bonuses (like perfect bonus) you'll want to add it to the end of the sequence before the end
+			if timeBonus > 0:
+				timeBonus = _add_score(timeBonus,delta)
+			elif ringBonus > 0:
+				ringBonus = _add_score(ringBonus,delta)
+			else:
+				# emit tally clear signal
+				emit_signal("tally_clear")
+			# set the level clear strings to the bonuses
+			$LevelClear/Tally/ScoreNumber.text = scoreText.text
+			$LevelClear/Tally/TimeNumbers.text = "%6d" % timeBonus
+			$LevelClear/Tally/RingNumbers.text = "%6d" % ringBonus
 	
 	# game over sequence
 	elif Global.gameOver and !gameOver:
@@ -307,28 +332,3 @@ func _add_score(subtractFrom,delta):
 	subtractFrom -= points
 	Global.score += points
 	return subtractFrom
-
-# counter count down
-func _on_CounterCount_timeout(delta):
-	# reset air in case we are under water
-	_reset_air()
-	# decrease bonuses in order, if time bonus not 0 then count time down, then do the same for rings
-	# if you add other bonuses (like perfect bonus) you'll want to add it to the end of the sequence before the end
-	if timeBonus > 0:
-		timeBonus = _add_score(timeBonus,delta)
-	elif ringBonus > 0:
-		ringBonus = _add_score(ringBonus,delta)
-	else:
-		# Don't stop the tick sound abruptly, just disable looping,
-		# so it stops by itself after it plays until the end once
-		tick_looped.loop_mode = AudioStreamWAV.LOOP_DISABLED
-		# stop counter timer and play score sound
-		$LevelClear/CounterCount.stop()
-		$LevelClear/Score.play()
-		# emit tally clear signal
-		emit_signal("tally_clear")
-	# set the level clear strings to the bonuses
-	$LevelClear/Tally/ScoreNumber.text = scoreText.text
-	$LevelClear/Tally/TimeNumbers.text = "%6d" % timeBonus
-	$LevelClear/Tally/RingNumbers.text = "%6d" % ringBonus
-	

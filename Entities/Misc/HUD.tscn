@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://c30uceea18q1w"]
+[gd_scene load_steps=31 format=3 uid="uid://c30uceea18q1w"]
 
 [ext_resource type="Material" uid="uid://bveqi5m5ihsgj" path="res://Shaders/PlayerPalette.tres" id="2_xy7bp"]
 [ext_resource type="FontFile" uid="uid://cj70hn8i05uo5" path="res://Graphics/HUD/hud_lives_numerals.png" id="3_eauoj"]
@@ -14,7 +14,6 @@
 [ext_resource type="Texture2D" uid="uid://bn4id4yr1lron" path="res://Graphics/HUD/hud_results_text.png" id="10_ddlv5"]
 [ext_resource type="Texture2D" uid="uid://bbm5bncrd1o4k" path="res://Graphics/HUD/LevelCards/EdgePattern.png" id="10_xpi0a"]
 [ext_resource type="Material" uid="uid://uh2c8jbp8qwd" path="res://Shaders/WaterPalette.tres" id="13_1ly2g"]
-[ext_resource type="PackedScene" uid="uid://bass3w6af55vw" path="res://Tools/Timing/ProcessTimer.tscn" id="13_g84gd"]
 [ext_resource type="Texture2D" uid="uid://60ak1q0xrn1s" path="res://Graphics/HUD/hud_gametimeover.png" id="15_oja0m"]
 [ext_resource type="AudioStream" uid="uid://dh4rsaka62ph4" path="res://Audio/SFX/Gimmicks/Switch.wav" id="16"]
 [ext_resource type="AudioStream" uid="uid://clgobastngtvy" path="res://Audio/SFX/Misc/Score.wav" id="17"]
@@ -831,8 +830,7 @@ vframes = 2
 [node name="PatternLeft" type="Control" parent="LevelCard"]
 anchors_preset = 0
 anchor_bottom = 1.0
-offset_top = -32.0
-offset_bottom = 14784.0
+offset_bottom = 14816.0
 
 [node name="PatternLeft" type="TextureRect" parent="LevelCard/PatternLeft"]
 layout_mode = 1
@@ -865,9 +863,8 @@ anchor_left = 1.0
 anchor_top = 0.003
 anchor_right = 1.0
 anchor_bottom = 0.003
-offset_left = -32.0
 offset_top = -12.352
-offset_right = 5216.0
+offset_right = 5248.0
 offset_bottom = 243.648
 grow_horizontal = 0
 grow_vertical = 2
@@ -901,9 +898,9 @@ size_flags_vertical = 2
 [node name="Passed" type="Label" parent="LevelClear"]
 layout_mode = 0
 offset_left = -256.0
-offset_top = 64.0
+offset_top = 56.0
 offset_right = -103.0
-offset_bottom = 90.0
+offset_bottom = 82.0
 theme_override_fonts/font = ExtResource("10_8dyi8")
 text = "SONIC got"
 uppercase = true
@@ -911,9 +908,9 @@ uppercase = true
 [node name="Through" type="Label" parent="LevelClear"]
 layout_mode = 0
 offset_left = -256.0
-offset_top = 108.0
+offset_top = 80.0
 offset_right = -137.0
-offset_bottom = 134.0
+offset_bottom = 106.0
 theme_override_fonts/font = ExtResource("10_8dyi8")
 text = "through"
 uppercase = true
@@ -971,8 +968,6 @@ text = "0"
 wait_time = 6.0
 one_shot = true
 
-[node name="CounterCount" parent="LevelClear" instance=ExtResource("13_g84gd")]
-
 [node name="Counter" type="AudioStreamPlayer" parent="LevelClear"]
 stream = ExtResource("16")
 bus = &"SFX"
@@ -1027,5 +1022,3 @@ visible = false
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-
-[connection signal="timeout" from="LevelClear/CounterCount" to="." method="_on_CounterCount_timeout"]
