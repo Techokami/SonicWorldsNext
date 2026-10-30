@@ -280,9 +280,9 @@ func _process(delta):
 				timeBonus = _add_score(timeBonus,delta)
 			elif ringBonus > 0:
 				ringBonus = _add_score(ringBonus,delta)
-			else:
-				# emit tally clear signal
-				emit_signal("tally_clear")
+			# emit tally clear signal
+			if timeBonus == 0 and ringBonus == 0:
+				tally_clear.emit()
 			# set the level clear strings to the bonuses
 			$LevelClear/Tally/ScoreNumber.text = scoreText.text
 			$LevelClear/Tally/TimeNumbers.text = "%6d" % timeBonus
