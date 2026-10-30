@@ -322,11 +322,11 @@ func _add_score(subtractFrom,delta):
 	# be different. To accommodate for that, we count the number of points based
 	# on time passed since the previous frame.
 	accumulatedDelta += delta
-	var standardDelta = 1.0 / 60.0
-	var points = floor(accumulatedDelta / standardDelta) * 100
+	const STANDARD_DELTA: float = 1.0 / 60.0
+	var points: int = floori(accumulatedDelta / STANDARD_DELTA) * 100
 	if (points > subtractFrom):
 		points = subtractFrom
-	accumulatedDelta -= points / 100 * standardDelta
+	accumulatedDelta -= points / 100.0 * STANDARD_DELTA
 	# check if adding score would hit the life bonus
 	Global.check_score_life(points)
 	subtractFrom -= points
