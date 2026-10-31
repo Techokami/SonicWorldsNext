@@ -488,27 +488,27 @@ shape = SubResource("RectangleShape2D_2ojop")
 
 [node name="LayerSwitcher" parent="Entity" instance=ExtResource("14_wjddb")]
 position = Vector2(2992, 560)
-size = Vector2(2, 6)
+size = Vector2i(2, 6)
 leftLayer = 0
 
 [node name="LayerSwitcher19" parent="Entity" instance=ExtResource("14_wjddb")]
 position = Vector2(1840, 832)
-size = Vector2(2, 4)
+size = Vector2i(2, 4)
 rightLayer = 1
 
 [node name="LayerSwitcher20" parent="Entity" instance=ExtResource("14_wjddb")]
 position = Vector2(1752, 832)
-size = Vector2(1, 4)
+size = Vector2i(1, 4)
 leftLayer = 0
 
 [node name="LayerSwitcher21" parent="Entity" instance=ExtResource("14_wjddb")]
 position = Vector2(1776, 792)
-size = Vector2(2, 1)
+size = Vector2i(2, 1)
 leftLayer = 0
 
 [node name="LayerSwitcher2" parent="Entity" instance=ExtResource("14_wjddb")]
 position = Vector2(3088, 656)
-size = Vector2(6, 2)
+size = Vector2i(6, 2)
 orientation = 1
 rightLayer = 1
 
@@ -517,12 +517,12 @@ position = Vector2(3136, 440)
 
 [node name="LayerSwitcher4" parent="Entity" instance=ExtResource("14_wjddb")]
 position = Vector2(4864, 304)
-size = Vector2(2, 6)
+size = Vector2i(2, 6)
 rightLayer = 1
 
 [node name="LayerSwitcher5" parent="Entity" instance=ExtResource("14_wjddb")]
 position = Vector2(4752, 416)
-size = Vector2(6, 2)
+size = Vector2i(6, 2)
 orientation = 1
 leftLayer = 0
 
@@ -531,57 +531,57 @@ position = Vector2(4704, 184)
 
 [node name="LayerSwitcher7" parent="Entity" instance=ExtResource("14_wjddb")]
 position = Vector2(5584, 304)
-size = Vector2(2, 6)
+size = Vector2i(2, 6)
 rightLayer = 1
 
 [node name="LayerSwitcher9" parent="Entity" instance=ExtResource("14_wjddb")]
 position = Vector2(5296, 304)
-size = Vector2(2, 6)
+size = Vector2i(2, 6)
 leftLayer = 0
 
 [node name="LayerSwitcher10" parent="Entity" instance=ExtResource("14_wjddb")]
 position = Vector2(6256, 160)
-size = Vector2(2, 20)
+size = Vector2i(2, 20)
 rightLayer = 1
 
 [node name="LayerSwitcher14" parent="Entity" instance=ExtResource("14_wjddb")]
 position = Vector2(6264, 512)
-size = Vector2(1, 8)
+size = Vector2i(1, 8)
 leftLayer = 0
 
 [node name="LayerSwitcher11" parent="Entity" instance=ExtResource("14_wjddb")]
 position = Vector2(8136, 192)
-size = Vector2(1, 24)
+size = Vector2i(1, 24)
 rightLayer = 1
 
 [node name="LayerSwitcher15" parent="Entity" instance=ExtResource("14_wjddb")]
 position = Vector2(7288, 752)
-size = Vector2(1, 18)
+size = Vector2i(1, 18)
 rightLayer = 1
 
 [node name="LayerSwitcher16" parent="Entity" instance=ExtResource("14_wjddb")]
 position = Vector2(6680, 864)
-size = Vector2(1, 20)
+size = Vector2i(1, 20)
 rightLayer = 1
 
 [node name="LayerSwitcher17" parent="Entity" instance=ExtResource("14_wjddb")]
 position = Vector2(5736, 912)
-size = Vector2(1, 6)
+size = Vector2i(1, 6)
 rightLayer = 1
 
 [node name="LayerSwitcher18" parent="Entity" instance=ExtResource("14_wjddb")]
 position = Vector2(5496, 1024)
-size = Vector2(1, 8)
+size = Vector2i(1, 8)
 leftLayer = 0
 
 [node name="LayerSwitcher13" parent="Entity" instance=ExtResource("14_wjddb")]
 position = Vector2(8760, 384)
-size = Vector2(1, 48)
+size = Vector2i(1, 48)
 leftLayer = 0
 
 [node name="LayerSwitcher12" parent="Entity" instance=ExtResource("14_wjddb")]
 position = Vector2(8080, 392)
-size = Vector2(6, 1)
+size = Vector2i(6, 1)
 orientation = 1
 rightLayer = 1
 

@@ -170,7 +170,7 @@ var time_tracking:TIME_TRACKING_MODES = TIME_TRACKING_MODES.STANDARD
 enum HAZARDS {NORMAL, FIRE, ELEC, WATER}
 
 # Layers references
-enum LAYERS {LOW, HIGH}
+enum COLLISION_PLANES { LOW, HIGH }
 
 # Collision layer constants.
 # The layer names in project settings are automatically updated to the names from these constants

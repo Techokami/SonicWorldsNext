@@ -33,8 +33,8 @@ var moveStepLength: int = 8*60
 # angle is the rotation based on the floor normal
 var angle: float = 0.0
 var gravityAngle: float = 0.0
-# the collission layer, 0 for low, 1 for high
-var collissionLayer: int = 0
+# the collission plane
+var collision_plane: Global.COLLISION_PLANES = Global.COLLISION_PLANES.LOW
 
 # translate, (ignores physics)
 var allowTranslate: bool = false
@@ -198,7 +198,7 @@ func update_sensors():
 		var directional_collisions: int = (i.collision_mask &
 			1 << (Global.COLLISION_LAYERS.TOP_SOLID - 1) | 1 << (Global.COLLISION_LAYERS.LEFT_SOLID - 1) |
 			1 << (Global.COLLISION_LAYERS.RIGHT_SOLID - 1) | 1 << (Global.COLLISION_LAYERS.BOTTOM_SOLID - 1))
-		i.collision_mask |= directional_collisions << (4 * (collissionLayer + 1))
+		i.collision_mask |= directional_collisions << (4 * (collision_plane + 1))
 	
 	horizontalSensor.force_raycast_update()
 	backSensor.force_raycast_update()
@@ -458,8 +458,8 @@ func check_for_ceiling():
 	$HitBox.add_child(ceilChecker)
 	
 	ceilChecker.set_collision_mask_value(Global.COLLISION_LAYERS.BOTTOM_SOLID, true)
-	ceilChecker.set_collision_mask_value(Global.COLLISION_LAYERS.BOTTOM_SOLID_LOW, (collissionLayer == 0))
-	ceilChecker.set_collision_mask_value(Global.COLLISION_LAYERS.BOTTOM_SOLID_HIGH, (collissionLayer != 0))
+	ceilChecker.set_collision_mask_value(Global.COLLISION_LAYERS.BOTTOM_SOLID_LOW, (collision_plane == Global.COLLISION_PLANES.LOW))
+	ceilChecker.set_collision_mask_value(Global.COLLISION_LAYERS.BOTTOM_SOLID_HIGH, (collision_plane != Global.COLLISION_PLANES.LOW))
 	
 	ceilChecker.target_position.y = 0-verticalSensorLeft.target_position.y
 	ceilChecker.force_raycast_update()

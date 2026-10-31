@@ -88,7 +88,7 @@ func state_physics_process(delta: float) -> void:
 				parent.collision_mask = parent.defaultMask
 				parent.set_state(parent.STATES.AIR)
 				parent.movement = Vector2.ZERO
-				parent.collissionLayer = partner.collissionLayer
+				parent.collision_plane = partner.collision_plane
 				# copy limits to avoid out of bounds errors
 				var camera: PlayerCamera = parent.get_camera()
 				var partner_camera: PlayerCamera = partner.get_camera()
