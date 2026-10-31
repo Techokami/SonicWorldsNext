@@ -115,7 +115,7 @@ func state_physics_process(delta: float) -> void:
 	if (x_input != 0.0):
 		parent.set_direction_signed(x_input)
 		if carriedPlayer != null:
-			carriedPlayer.set_direction(parent.get_direction(),false)
+			carriedPlayer.set_direction_signed(x_input, false)
 	
 	# Flight logic
 	parent.movement.y += flyGrav/GlobalFunctions.div_by_delta(delta)

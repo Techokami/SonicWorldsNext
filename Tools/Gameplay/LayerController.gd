@@ -5,13 +5,13 @@ extends Node
 
 
 func move_player_high(player):
-	player.collissionLayer = Global.LAYERS.HIGH
+	player.collision_plane = Global.COLLISION_PLANES.HIGH
 
 func move_player_low(player):
-	player.collissionLayer = Global.LAYERS.LOW
+	player.collision_plane = Global.COLLISION_PLANES.LOW
 
 func switch_player(player):
-	if player.collisionLayer == Global.LAYERS.LOW:
-		player.collisionLayer = Global.LAYERS.HIGH
+	if player.collision_plane == Global.COLLISION_PLANES.LOW:
+		player.collision_plane = Global.COLLISION_PLANES.HIGH
 		return
-	player.collisionLayer = Global.Layers.LOW
+	player.collision_plane = Global.COLLISION_PLANES.LOW
