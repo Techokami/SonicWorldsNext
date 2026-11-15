@@ -97,9 +97,9 @@ var setWaterLevel = 0 # used by other nodes to change the water level
 var waterScrollSpeed = 64 # used by other nodes for how fast to move the water to different levels
 
 ## Horizontal directions.[br]
-## Aside from being enum members, they can also be used in calculations, e.g.:
+## The values of this type can also be used in calculations, e.g.:
 ## [codeblock]
-## offset = 10.0 * player.get_direction()
+## offset = 10.0 * player.get_direction() # get_direction() returns a value of type Global.DIRECTIONS
 ## [/codeblock]
 enum DIRECTIONS { LEFT = -1, RIGHT = 1 }
 
@@ -170,7 +170,7 @@ var time_tracking:TIME_TRACKING_MODES = TIME_TRACKING_MODES.STANDARD
 enum HAZARDS {NORMAL, FIRE, ELEC, WATER}
 
 # Layers references
-enum LAYERS {LOW, HIGH}
+enum COLLISION_PLANES { LOW, HIGH }
 
 # Collision layer constants.
 # The layer names in project settings are automatically updated to the names from these constants

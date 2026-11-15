@@ -94,7 +94,7 @@ func _add_player(player: PlayerChar) -> void:
 	player_count += 1
 
 func _remove_player(player: PlayerChar) -> void:
-	if not player in players:
+	if player not in players:
 		return
 
 	players.erase(player)
